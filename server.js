@@ -11,6 +11,10 @@ var Server = IgeClass.extend({
 			.box2d.createWorld()
 			.box2d.start();
 
+    // Add the server-side game methods / event handlers
+		this.implement(ServerNetworkEvents);
+		
+
 		// Add the networking component
 		ige.addComponent(IgeNetIoComponent)
 			// Start the network server

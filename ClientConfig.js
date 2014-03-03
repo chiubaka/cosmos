@@ -5,7 +5,8 @@ var igeClientConfig = {
 		
 		/* Standard game scripts */
 		'./client.js',
-		'./index.js'
+		'./index.js',
+    './block.js'
 	]
 };
 
