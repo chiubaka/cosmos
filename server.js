@@ -66,7 +66,7 @@ var Server = IgeClass.extend({
 						// it will "look" at as the new scene1 we just
 						// created above
 						self.vp1 = new IgeViewport()
-							.id('vp1')
+							.id('vp2')
 							.autoSize(true)
 							.scene(self.mainScene)
 							.drawBounds(true)
