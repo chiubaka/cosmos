@@ -1,0 +1,1 @@
+var Game=IgeClass.extend({classId:"Game",init:function(e,t){ige=new IgeEngine;ige.isServer||(ige.client=new e);ige.isServer&&(ige.server=new e(t))}});if(typeof module!="undefined"&&typeof module.exports!="undefined")module.exports=Game;else var game=new Game(Client);
