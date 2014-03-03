@@ -1,0 +1,1 @@
+var igeClientConfig={include:["./client.js","./index.js","./block.js"]};typeof module!="undefined"&&typeof module.exports!="undefined"&&(module.exports=igeClientConfig);
