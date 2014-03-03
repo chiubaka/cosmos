@@ -52,6 +52,9 @@ var Server = IgeClass.extend({
 
 						// Load the base scene data
 						ige.addGraph('IgeBaseScene');
+
+						new Block()
+							.mount(ige.$('IgeBaseScene'));
 					}
 				});
 			});
