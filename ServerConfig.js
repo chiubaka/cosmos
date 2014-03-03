@@ -1,6 +1,7 @@
 var config = {
 	include: [
-		//{name: 'MyClassName', path: './gameClasses/MyClassFileName'},
+		{name: 'ServerNetworkEvents', path: './gameClasses/ServerNetworkEvents'},
+		{name: 'Block', path: './gameClasses/Block'}
 	]
 };
 
