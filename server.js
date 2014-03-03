@@ -4,6 +4,12 @@ var Server = IgeClass.extend({
 
 	init: function (options) {
 		var self = this;
+	
+		// Add physics and setup physics world
+		ige.addComponent(IgeBox2dComponent)
+			.box2d.sleep(true)
+			.box2d.createWorld()
+			.box2d.start();
 
 		// Add the networking component
 		ige.addComponent(IgeNetIoComponent)
