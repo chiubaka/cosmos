@@ -4,8 +4,11 @@ var Server = IgeClass.extend({
 
 	init: function (options) {
 		var self = this;
-
-		// Add the networking component
+		
+    // Add the server-side game methods / event handlers
+		this.implement(ServerNetworkEvents);
+		
+    // Add the networking component
 		ige.addComponent(IgeNetIoComponent)
 			// Start the network server
 			.network.start(2000, function () {
@@ -15,6 +18,8 @@ var Server = IgeClass.extend({
 					if (success) {
 						ige.network.on('connect', function () {});
 						ige.network.on('disconnect', function () {});
+
+           
 
 						// Add the network stream component
 						ige.network.addComponent(IgeStreamComponent)
