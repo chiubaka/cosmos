@@ -25,6 +25,16 @@ var Server = IgeClass.extend({
 					if (success) {
 						ige.network.on('connect', function () {});
 						ige.network.on('disconnect', function () {});
+ 
+            ige.network.define('playerEntity', self._onPlayerEntity);
+
+						ige.network.define('playerControlLeftDown', self._onPlayerLeftDown);
+						ige.network.define('playerControlRightDown', self._onPlayerRightDown);
+						ige.network.define('playerControlThrustDown', self._onPlayerThrustDown);
+
+						ige.network.define('playerControlLeftUp', self._onPlayerLeftUp);
+						ige.network.define('playerControlRightUp', self._onPlayerRightUp);
+						ige.network.define('playerControlThrustUp', self._onPlayerThrustUp);
 
 						// Add the network stream component
 						ige.network.addComponent(IgeStreamComponent)
