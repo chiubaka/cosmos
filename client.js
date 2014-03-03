@@ -16,7 +16,10 @@ var Client = IgeClass.extend({
 
 		// Load the textures we want to use
 		this.textures = {
-			ship: new IgeTexture('./assets/PlayerTexture.js')
+			ship: new IgeTexture('./assets/PlayerTexture.js'),
+			block_cargo: new IgeTexture('./assets/blocks/cargo.png'),
+			block_power_gold: new IgeTexture('./assets/blocks/power_gold.png'),
+			sprite_rocket_flame: new IgeTexture('./assets/blocks/rocket_flame.png')
 		};
 
 		ige.on('texturesLoaded', function () {

@@ -4,6 +4,10 @@ var Server = IgeClass.extend({
 
 	init: function (options) {
 		var self = this;
+		
+		// Load our blocks
+		self.obj = [];
+
 	
 		
 		// Add physics and setup physics world
@@ -13,7 +17,7 @@ var Server = IgeClass.extend({
 			.box2d.start();
 
     	
-    	// Add the server-side game methods / event handlers
+    // Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);
 
 
@@ -29,7 +33,7 @@ var Server = IgeClass.extend({
 				ige.start(function (success) {
 					// Check if the engine started successfully
 					if (success) {
-            			ige.network.define('playerEntity', self._onPlayerEntity);
+						ige.network.define('playerEntity', self._onPlayerEntity);
 
 						ige.network.define('playerControlLeftDown', self._onPlayerLeftDown);
 						ige.network.define('playerControlRightDown', self._onPlayerRightDown);
@@ -42,7 +46,7 @@ var Server = IgeClass.extend({
 						ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js
 						ige.network.on('disconnect', self._onPlayerDisconnect); // Defined in ./gameClasses/ServerNetworkEvents.js
 			
-       					// Add the network stream component
+						// Add the network stream component
 						ige.network.addComponent(IgeStreamComponent)
 							.stream.sendInterval(30) // Send a stream update once every 30 milliseconds
 							.stream.start(); // Start the stream
@@ -50,31 +54,15 @@ var Server = IgeClass.extend({
 						// Accept incoming network connections
 						ige.network.acceptConnections(true);
 
-						// Load the base scene data
+						// Load the base scene data, this creates a 2d scene and a
+						// viewport, vp1
 						ige.addGraph('IgeBaseScene');
-
- 						// Create the scene
-						self.mainScene = new IgeScene2d()
-							.id('mainScene');
-
-						// Create the scene
-						self.scene1 = new IgeScene2d()
-							.id('scene1')
-							.mount(self.mainScene);
-
-						// Create the main viewport and set the scene
-						// it will "look" at as the new scene1 we just
-						// created above
-						self.vp1 = new IgeViewport()
-							.id('vp2')
-							.autoSize(true)
-							.scene(self.mainScene)
-							.drawBounds(true)
-							.mount(ige);
-
-
+						
 						new Block()
-							.mount(self.scene1);
+							.id('block1')
+							.streamMode(1)
+							.mount(ige.$('baseScene'));
+
 					}
 				});
 			});
