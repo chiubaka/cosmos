@@ -23,9 +23,6 @@ var Server = IgeClass.extend({
 				ige.start(function (success) {
 					// Check if the engine started successfully
 					if (success) {
-						ige.network.on('connect', function () {});
-						ige.network.on('disconnect', function () {});
- 
             ige.network.define('playerEntity', self._onPlayerEntity);
 
 						ige.network.define('playerControlLeftDown', self._onPlayerLeftDown);
