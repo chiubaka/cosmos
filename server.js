@@ -5,15 +5,21 @@ var Server = IgeClass.extend({
 	init: function (options) {
 		var self = this;
 	
+		
 		// Add physics and setup physics world
 		ige.addComponent(IgeBox2dComponent)
 			.box2d.sleep(true)
 			.box2d.createWorld()
 			.box2d.start();
 
-    // Add the server-side game methods / event handlers
+    	
+    	// Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);
-		
+
+
+		// Define an object to hold references to our player entities
+		this.players = {};
+
 
 		// Add the networking component
 		ige.addComponent(IgeNetIoComponent)
@@ -23,10 +29,7 @@ var Server = IgeClass.extend({
 				ige.start(function (success) {
 					// Check if the engine started successfully
 					if (success) {
-						ige.network.on('connect', function () {});
-						ige.network.on('disconnect', function () {});
- 
-            ige.network.define('playerEntity', self._onPlayerEntity);
+            			ige.network.define('playerEntity', self._onPlayerEntity);
 
 						ige.network.define('playerControlLeftDown', self._onPlayerLeftDown);
 						ige.network.define('playerControlRightDown', self._onPlayerRightDown);
@@ -39,7 +42,7 @@ var Server = IgeClass.extend({
 						ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js
 						ige.network.on('disconnect', self._onPlayerDisconnect); // Defined in ./gameClasses/ServerNetworkEvents.js
 						
-            // Add the network stream component
+            			// Add the network stream component
 						ige.network.addComponent(IgeStreamComponent)
 							.stream.sendInterval(30) // Send a stream update once every 30 milliseconds
 							.stream.start(); // Start the stream
