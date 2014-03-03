@@ -41,8 +41,8 @@ var Server = IgeClass.extend({
 
 						ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js
 						ige.network.on('disconnect', self._onPlayerDisconnect); // Defined in ./gameClasses/ServerNetworkEvents.js
-						
-            			// Add the network stream component
+			
+       					// Add the network stream component
 						ige.network.addComponent(IgeStreamComponent)
 							.stream.sendInterval(30) // Send a stream update once every 30 milliseconds
 							.stream.start(); // Start the stream
@@ -53,8 +53,28 @@ var Server = IgeClass.extend({
 						// Load the base scene data
 						ige.addGraph('IgeBaseScene');
 
+ 						// Create the scene
+						self.mainScene = new IgeScene2d()
+							.id('mainScene');
+
+						// Create the scene
+						self.scene1 = new IgeScene2d()
+							.id('scene1')
+							.mount(self.mainScene);
+
+						// Create the main viewport and set the scene
+						// it will "look" at as the new scene1 we just
+						// created above
+						self.vp1 = new IgeViewport()
+							.id('vp1')
+							.autoSize(true)
+							.scene(self.mainScene)
+							.drawBounds(true)
+							.mount(ige);
+
+
 						new Block()
-							.mount(ige.$('IgeBaseScene'));
+							.mount(self.scene1);
 					}
 				});
 			});
