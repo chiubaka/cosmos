@@ -4,6 +4,10 @@ var Server = IgeClass.extend({
 
 	init: function (options) {
 		var self = this;
+
+		self.LAYER_BACKGROUND = 10;
+		self.LAYER_MIDDLE = 50;
+		self.LAYER_FOREGROUND = 90;
 		
 		// Load our blocks
 		self.obj = [];
@@ -57,12 +61,17 @@ var Server = IgeClass.extend({
 						// Load the base scene data, this creates a 2d scene and a
 						// viewport, vp1
 						ige.addGraph('IgeBaseScene');
-						
+						new Background()
+							.id('helix_nebula_background')
+							.streamMode(1)
+							.mount(ige.$('baseScene'))
+							.layer(self.LAYER_BACKGROUND);
+					
 						new Block()
 							.id('block1')
 							.streamMode(1)
-							.mount(ige.$('baseScene'));
-
+							.mount(ige.$('baseScene'))
+							.layer(self.LAYER_FOREGROUND);
 					}
 				});
 			});

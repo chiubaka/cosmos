@@ -6,7 +6,8 @@ var config = {
 
 		/* Our custom classes */
 		{name: 'Block', path: './gameClasses/Block'},
-		{name: 'Player', path: './gameClasses/Player'}
+		{name: 'Player', path: './gameClasses/Player'},
+		{name: 'Background', path: './gameClasses/Background'}
 	]
 };
 

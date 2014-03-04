@@ -8,6 +8,7 @@ var Block = IgeEntity.extend({
 			this.texture(ige.client.textures.block_power_gold)
 					.width(100)
 					.height(100);
+
 		}
 	}
 });
