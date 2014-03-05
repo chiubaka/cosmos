@@ -4,10 +4,14 @@ var Client = IgeClass.extend({
 	init: function () {
 		//ige.timeScale(0.1);
 		ige.showStats(1);
+		ige.setFps(60);
 
 		// Load our textures
 		var self = this;
 
+		self.LAYER_BACKGROUND = 10;
+		self.LAYER_MIDDLE = 50;
+		self.LAYER_FOREGROUND = 90;
 		// Enable networking
 		ige.addComponent(IgeNetIoComponent);
 
@@ -68,11 +72,33 @@ var Client = IgeClass.extend({
 						ige.network.debug(true);
 
 						// Load the base scene data
-						ige.addGraph('IgeBaseScene');
+						self.mainScene = new IgeScene2d()
+							.id('mainScene');
+
+						self.backgroundScene = new IgeScene2d()
+							.id('backgroundScene')
+							.layer(self.LAYER_BACKGROUND)
+							.mount(self.mainScene);
+						
+						self.foregroundScene = new IgeScene2d()
+							.id('foregroundScene')
+							.layer(self.LAYER_FOREGROUND)
+							.mount(self.mainScene);
+
+						// Create the main viewport and set the scene
+						// it will "look" at as the new scene1 we just
+						// created above
+						self.vp1 = new IgeViewport()
+							.id('vp1')
+							.autoSize(true)
+							.scene(self.mainScene)
+							.drawBounds(true)
+							.mount(ige);
+
 						self.uiScene = new IgeScene2d()
 							.id('uiScene')
 							.ignoreCamera(true)
-							.mount(ige.$('baseScene'));
+							.mount(ige.client.foregroundScene);
 
 						// Create an IgeUiTimeStream entity that will allow us to "visualise" the
 						// timestream data being interpolated by the player entity
