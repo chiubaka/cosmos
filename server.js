@@ -21,7 +21,7 @@ var Server = IgeClass.extend({
 			.box2d.start();
 
     	
-    // Add the server-side game methods / event handlers
+    	// Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);
 
 
