@@ -22,7 +22,8 @@ var Player = IgeEntity.extend({
 		if (!ige.isServer) {
 			self.texture(ige.client.textures.ship)
 			.width(20)
-			.height(20);
+			.height(20)
+			.depth(1);
 		}
 
 		// Define the data sections that will be included in the stream
