@@ -1,16 +1,15 @@
-var Block = IgeEntity.extend({
-	classId: 'Block',
-	
+/**
+Consider deprecating this class. Is a ship actually anything but a grid of blocks (with a player componenet)? 
+*/
+
+var Ship = BlockGrid.extend({
+	classId: 'Ship',
+
 	init: function () {
+		this.connectAdjacentBlocks();
+
 		IgeEntity.prototype.init.call(this);
-
-		if (!ige.isServer) {
-			this.texture(ige.client.textures.block_power_gold)
-					.width(100)
-					.height(100);
-
-		}
 	}
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Block; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Ship; }
