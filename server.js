@@ -96,6 +96,11 @@ var Server = IgeClass.extend({
 							.mount(self.foregroundScene)
 							.depth(100)
 
+						new BlockGrid([[new Block()],[new Block()]])
+							.id('blockGrid1')
+							.streamMode(1)
+							.mount(self.foregroundScene)
+							.depth(100)
 					}
 				});
 			});
