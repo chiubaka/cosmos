@@ -1,4 +1,4 @@
-var Player = IgeEntity.extend({
+var Player = IgeEntityBox2d.extend({
 	classId: 'Player',
 
 	init: function () {
@@ -14,17 +14,39 @@ var Player = IgeEntity.extend({
 			right: false,
 			thrust: false
 		};
+		this.width(20);
+		this.height(20);
 
 		if (ige.isServer) {
+			// TODO: Remove velocity component after adding physics
 			this.addComponent(IgeVelocityComponent);
+			// Rotate ship to match with physics simulation start angle
+			//this.rotateTo(0,0,Math.PI/2);
+			this.box2dBody({
+				type: 'dynamic',
+				linearDamping: 1,
+				angularDamping: 0.5,
+				allowSleep: true,
+				bullet: true,
+				gravitic: true,
+				fixedRotation: false,
+				fixtures: [{
+					density: 1.0,
+					friction: 0.5,
+					restitution: 0.2,
+					shape: {
+						type: 'rectangle'
+					}
+				}]
+			})
 		}
 
 		if (!ige.isServer) {
 			self.texture(ige.client.textures.ship)
-			.width(20)
-			.height(20)
+
 			.depth(1);
 		}
+
 
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);
@@ -69,18 +91,32 @@ var Player = IgeEntity.extend({
 		/* CEXCLUDE */
 		if (ige.isServer) {
 			if (this.controls.left) {
-				this.rotateBy(0, 0, Math.radians(-0.2 * ige._tickDelta));
+				//this.rotateBy(0, 0, Math.radians(-0.2 * ige._tickDelta));
+				var impulse = -0.1;
+				this._box2dBody.ApplyTorque(impulse);
 			}
 
 			if (this.controls.right) {
-				this.rotateBy(0, 0, Math.radians(0.2 * ige._tickDelta));
+				//this.rotateBy(0, 0, Math.radians(0.2 * ige._tickDelta));
+				var impulse = 0.1;
+				this._box2dBody.ApplyTorque(impulse);
+
 			}
 
+			// TODO: Make spaceship go backwards
 			if (this.controls.thrust) {
-				this.velocity.byAngleAndPower(this._rotate.z + Math.radians(-90), 0.1);
+				var vel = this._box2dBody.GetLinearVelocity();
+				var angle = this._box2dBody.GetAngle();
+				var x_comp = Math.cos(angle);
+				var y_comp = Math.sin(angle);
+				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
+				impulse.Multiply(0.1);
+				var location = this._box2dBody.GetWorldCenter();
+				
+				this._box2dBody.ApplyImpulse(impulse, location);
 			} else {
-				this.velocity.x(0);
-				this.velocity.y(0);
+				//this.velocity.x(0);
+				//this.velocity.y(0);
 			}
 		}
 		/* CEXCLUDE */

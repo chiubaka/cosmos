@@ -102,6 +102,60 @@ var Server = IgeClass.extend({
 							.streamMode(1)
 							.mount(self.foregroundScene)
 							.depth(100)
+
+			
+						new IgeEntityBox2d()
+						.box2dBody({
+							type: 'dynamic',
+							linearDamping: 0.0,
+							angularDamping: 0.1,
+							allowSleep: true,
+							bullet: false,
+							gravitic: true,
+							fixedRotation: false,
+							fixtures: [{
+								density: 1.0,
+								friction: 0.5,
+								restitution: 0.5,
+								shape: {
+									type: 'circle',
+									data: {
+										// The position of the fixture relative to the body
+										x: 0,
+										y: 0
+									}
+								}
+							}]
+						})
+					.id('ball1')
+					.translateTo(4, -300, 0)
+					.drawBounds(true)
+					.mount(self.foregroundScene)
+					.streamMode(1);
+
+					// Create the room boundaries in box2d
+					new IgeEntityBox2d()
+						.translateTo(0, 50, 0)
+						.width(880)
+						.height(20)
+						.drawBounds(true)
+						//.mount(self.scene1)
+						.box2dBody({
+							type: 'static',
+							allowSleep: true,
+							fixtures: [{
+								shape: {
+									type: 'rectangle'
+								}
+							}]
+						})
+						.streamMode(1);
+					// Add the box2d debug painter entity to the
+					// scene to show the box2d body outlines
+
+					//ige.box2d.enableDebug(self.foregroundScene);
+
+
 					}
 				});
 			});

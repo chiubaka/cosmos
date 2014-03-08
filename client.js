@@ -23,7 +23,8 @@ var Client = IgeClass.extend({
 
 		// Load the textures we want to use
 		this.textures = {
-			ship: new IgeTexture('./assets/PlayerTexture.js'),
+			// TODO: Write a texture filter to rotate texture to correct orientation
+			ship: new IgeTexture('./assets/blocks/rocket_flame_rot.png'),
 			block_cargo: new IgeTexture('./assets/blocks/cargo.png'),
 			block_power_gold: new IgeTexture('./assets/blocks/power_gold.png'),
 			sprite_rocket_flame: new IgeTexture('./assets/blocks/rocket_flame.png'),
