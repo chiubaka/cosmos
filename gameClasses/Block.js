@@ -4,6 +4,8 @@ var Block = IgeEntityBox2d.extend({
 	init: function () {
 		IgeEntity.prototype.init.call(this);
 
+		this.width(100).height(100);
+
 		if (ige.isServer) {
 			this.box2dBody({
 				type: 'dynamic',
@@ -25,9 +27,7 @@ var Block = IgeEntityBox2d.extend({
 			})
 		}
 		else {
-			this.texture(ige.client.textures.block_power_gold)
-					.width(100)
-					.height(100);
+			this.texture(ige.client.textures.block_power_gold);
 		}
 
 	}
