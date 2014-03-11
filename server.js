@@ -9,19 +9,18 @@ var Server = IgeClass.extend({
 		self.LAYER_MIDDLE = 50;
 		self.LAYER_FOREGROUND = 90;
 		self.DEPTH_PLAYER = 90;
-		
+
 		// Load our blocks
 		self.obj = [];
 
 		ige.setFps(60);
-		
+
 		// Add physics and setup physics world
 		ige.addComponent(IgeBox2dComponent)
 			.box2d.sleep(true)
 			.box2d.createWorld()
 			.box2d.start();
 
-    	
     	// Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);
 
@@ -50,7 +49,7 @@ var Server = IgeClass.extend({
 
 						ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js
 						ige.network.on('disconnect', self._onPlayerDisconnect); // Defined in ./gameClasses/ServerNetworkEvents.js
-			
+
 						// Add the network stream component
 						ige.network.addComponent(IgeStreamComponent)
 							.stream.sendInterval(30) // Send a stream update once every 30 milliseconds
@@ -70,7 +69,7 @@ var Server = IgeClass.extend({
 							.id('backgroundScene')
 							.layer(self.LAYER_BACKGROUND)
 							.mount(self.mainScene);
-						
+
 						self.foregroundScene = new IgeScene2d()
 							.id('foregroundScene')
 							.layer(self.LAYER_FOREGROUND)
@@ -89,21 +88,21 @@ var Server = IgeClass.extend({
 						new Background()
 							.id('helix_nebula_background')
 							.streamMode(1)
-							.mount(self.backgroundScene)
-					
+							.mount(self.backgroundScene);
+						/*
 						new Block()
 							.id('block1')
 							.streamMode(1)
 							.mount(self.foregroundScene)
-							.depth(100)
-
-						new BlockGrid([[new Block()],[new Block()]])
+							.depth(100);
+						*/
+						new BlockGrid()
 							.id('blockGrid1')
 							.streamMode(1)
 							.mount(self.foregroundScene)
 							.depth(100)
-
-			
+							.setGrid([[new Block()],[new Block()],[new Block()],[new Block()]]);
+						/*
 						new IgeEntityBox2d()
 						.box2dBody({
 							type: 'dynamic',
@@ -132,14 +131,12 @@ var Server = IgeClass.extend({
 					.drawBounds(true)
 					.mount(self.foregroundScene)
 					.streamMode(1);
-
+					*/
 
 					// Add the box2d debug painter entity to the
 					// scene to show the box2d body outlines
 
 					//ige.box2d.enableDebug(self.foregroundScene);
-
-
 					}
 				});
 			});

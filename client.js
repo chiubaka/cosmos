@@ -18,6 +18,12 @@ var Client = IgeClass.extend({
 		// Implement our game methods
 		this.implement(ClientNetworkEvents);
 
+		// Add physics and setup physics world
+		ige.addComponent(IgeBox2dComponent)
+			.box2d.sleep(true)
+			.box2d.createWorld()
+			.box2d.start();
+
 		// Create the HTML canvas
 		ige.createFrontBuffer(true);
 
@@ -82,7 +88,7 @@ var Client = IgeClass.extend({
 							.id('backgroundScene')
 							.layer(self.LAYER_BACKGROUND)
 							.mount(self.mainScene);
-						
+
 						self.foregroundScene = new IgeScene2d()
 							.id('foregroundScene')
 							.layer(self.LAYER_FOREGROUND)
@@ -136,8 +142,6 @@ var Client = IgeClass.extend({
 						ige.watchStart(self.custom2);
 						ige.watchStart(self.custom3);
 						ige.watchStart(self.custom4);
-						
-
 					});
 				}
 			});
