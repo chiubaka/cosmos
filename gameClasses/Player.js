@@ -25,7 +25,7 @@ var Player = IgeEntityBox2d.extend({
 			this.box2dBody({
 				type: 'dynamic',
 				linearDamping: 1,
-				angularDamping: 0.5,
+				angularDamping: 1.5,
 				allowSleep: true,
 				bullet: true,
 				gravitic: true,
@@ -92,13 +92,13 @@ var Player = IgeEntityBox2d.extend({
 		if (ige.isServer) {
 			if (this.controls.left) {
 				//this.rotateBy(0, 0, Math.radians(-0.2 * ige._tickDelta));
-				var impulse = -0.1;
+				var impulse = -0.2;
 				this._box2dBody.ApplyTorque(impulse);
 			}
 
 			if (this.controls.right) {
 				//this.rotateBy(0, 0, Math.radians(0.2 * ige._tickDelta));
-				var impulse = 0.1;
+				var impulse = 0.2;
 				this._box2dBody.ApplyTorque(impulse);
 
 			}

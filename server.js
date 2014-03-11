@@ -133,23 +133,7 @@ var Server = IgeClass.extend({
 					.mount(self.foregroundScene)
 					.streamMode(1);
 
-					// Create the room boundaries in box2d
-					new IgeEntityBox2d()
-						.translateTo(0, 50, 0)
-						.width(880)
-						.height(20)
-						.drawBounds(true)
-						//.mount(self.scene1)
-						.box2dBody({
-							type: 'static',
-							allowSleep: true,
-							fixtures: [{
-								shape: {
-									type: 'rectangle'
-								}
-							}]
-						})
-						.streamMode(1);
+
 					// Add the box2d debug painter entity to the
 					// scene to show the box2d body outlines
 

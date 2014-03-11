@@ -23,15 +23,18 @@ var Client = IgeClass.extend({
 
 		// Load the textures we want to use
 		this.textures = {
-			// TODO: Write a texture filter to rotate texture to correct orientation
-			ship: new IgeTexture('./assets/blocks/rocket_flame_rot.png'),
+			ship: new IgeTexture('./assets/blocks/rocket_flame.png'),
 			block_cargo: new IgeTexture('./assets/blocks/cargo.png'),
 			block_power_gold: new IgeTexture('./assets/blocks/power_gold.png'),
 			sprite_rocket_flame: new IgeTexture('./assets/blocks/rocket_flame.png'),
 			background_helix_nebula: new IgeTexture('./assets/backgrounds/helix_nebula.jpg')
 		};
 
+
+
 		ige.on('texturesLoaded', function () {
+			// Apply rotate filter to player ship
+			ige.client.textures.ship.applyFilter(IgeFilters.rotate, {value: 90});
 			// Ask the engine to start
 			ige.start(function (success) {
 				// Check if the engine started successfully
