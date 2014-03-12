@@ -34,7 +34,7 @@
   },
   "scripts": 
   {
-    "main": "node azure-server.js"
+    "start": "node azure-server.js"
   },
   "engines": {
     "node": ">=0.8.3"
