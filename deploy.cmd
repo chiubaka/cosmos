@@ -89,8 +89,10 @@ goto :EOF
 echo Handling node.js deployment.
 
 :: 0. Update remote submodules 
+pushd "%DEPLOYMENT_SOURCE%" 
 echo Updating remote submodules before Kudu synchro...
-call :ExecuteCmd git submodule update --recursive --remote
+call :ExecuteCmd git submodule update --init --recursive --remote
+popd
 
 :: 1. KuduSync
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
