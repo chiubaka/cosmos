@@ -50,7 +50,7 @@ var Client = IgeClass.extend({
 					// than before the scene etc are created... maybe you want
 					// a splash screen or a menu first? Then connect after you've
 					// got a username or something?
-					ige.network.start('http://localhost:2000', function () {
+					ige.network.start('http://tl-cosmos-server-stg.azurewebsites.net', function () {
 						// Setup the network command listeners
 						ige.network.define('playerEntity', self._onPlayerEntity);
 						// Setup the network stream handler
