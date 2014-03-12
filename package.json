@@ -1,0 +1,29 @@
+{
+  "name": "Cosmos-Server",
+  "version": "0.0.1",
+  "author": "Team Leonine",
+  "contributors": 
+  [
+    {
+      "name": "Daniel Chiu",
+      "email": "dwchiu@stanford.edu"
+    },
+    {
+      "name": "Rafael Cosman",
+      "email": "rafaelc@stanford.edu"
+    },
+    {
+      "name": "Derrick Liu",
+      "email": "derrick.liu@stanford.edu"
+    },
+    {
+      "name": "Eric Thong",
+      "email": "ethong@stanford.edu"
+    }
+  ],
+  "private": true,
+  "scripts": 
+  {
+    "start": "node ige/server/ige.js -g ."
+  }
+}
