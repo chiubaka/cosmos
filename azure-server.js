@@ -2,7 +2,7 @@ console.log('Azure - launching Cosmos server on node.js ' + process.version);
 
 // Set a global variable for the location of
 // the node_modules folder
-modulePath = 'node_modules';
+modulePath = 'node_modules/';
 
 // Load the CoreConfig.js file
 igeCoreConfig = require('./ige/engine/CoreConfig.js');
