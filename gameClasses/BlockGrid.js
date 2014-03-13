@@ -10,18 +10,18 @@ var BlockGrid = IgeEntityBox2d.extend({
 	setGrid: function(newGrid) {
 		this.grid = newGrid;
 
-		console.log("Here's the grid:");
-		console.log(this.grid);
+		//console.log("Here's the grid:");
+		//console.log(this.grid);
 		for(var row = 0; row < this.grid.length; row++)
 		{
 			var blockList = this.grid[row];
-			console.log("Here's the list:");
-			console.log(blockList);
+			//console.log("Here's the list:");
+			//console.log(blockList);
 			for(var col = 0; col < blockList.length; col++)
 			{
 				var block = blockList[col];
-				console.log("Here's the block:");
-				console.log(block);
+				//console.log("Here's the block:");
+				//console.log(block);
 				block.mount(this);
 				block.streamMode(1);
 			}
