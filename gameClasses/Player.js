@@ -43,8 +43,7 @@ var Player = IgeEntityBox2d.extend({
 
 		if (!ige.isServer) {
 			self.texture(ige.client.textures.ship)
-
-			.depth(1);
+					.depth(1);
 		}
 
 

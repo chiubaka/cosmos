@@ -97,42 +97,9 @@ var Server = IgeClass.extend({
 							.mount(self.foregroundScene)
 							.depth(100)
 
-						new BlockGrid([[new Block()],[new Block()]])
-							.id('blockGrid1')
-							.streamMode(1)
-							.mount(self.foregroundScene)
-							.depth(100)
+
 
 			
-						new IgeEntityBox2d()
-						.box2dBody({
-							type: 'dynamic',
-							linearDamping: 0.0,
-							angularDamping: 0.1,
-							allowSleep: true,
-							bullet: false,
-							gravitic: true,
-							fixedRotation: false,
-							fixtures: [{
-								density: 1.0,
-								friction: 0.5,
-								restitution: 0.5,
-								shape: {
-									type: 'circle',
-									data: {
-										// The position of the fixture relative to the body
-										x: 0,
-										y: 0
-									}
-								}
-							}]
-						})
-					.id('ball1')
-					.translateTo(4, -300, 0)
-					.drawBounds(true)
-					.mount(self.foregroundScene)
-					.streamMode(1);
-
 
 					// Add the box2d debug painter entity to the
 					// scene to show the box2d body outlines
