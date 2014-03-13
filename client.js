@@ -40,11 +40,12 @@ var Client = IgeClass.extend({
 
 		ige.on('texturesLoaded', function () {
 			// Apply rotate filter to player ship
-			ige.client.textures.ship.applyFilter(IgeFilters.drawBlockBackground)
-															.applyFilter(IgeFilters.rotate, {value: 90});
+			ige.client.textures.ship.applyFilter(IgeFilters.rotate, {value: 90})
+															.applyFilter(IgeFilters.drawBlockBackground);
+
 			ige.client.textures.block_power_gold
-				.applyFilter(IgeFilters.drawBlockBackground)
-				.applyFilter(IgeFilters.rotate, {value: 0});
+				.applyFilter(IgeFilters.rotate, {value: 0})
+				.applyFilter(IgeFilters.drawBlockBackground);
 
 			// Ask the engine to start
 			ige.start(function (success) {
