@@ -1,8 +1,8 @@
-var Player = IgeEntityBox2d.extend({
+var Player = BlockGrid.extend({
 	classId: 'Player',
 
 	init: function () {
-		IgeEntity.prototype.init.call(this);
+		BlockGrid.prototype.init.call(this);
 
 		var self = this;
 
@@ -16,37 +16,13 @@ var Player = IgeEntityBox2d.extend({
 		};
 		this.width(20);
 		this.height(20);
-
-		if (ige.isServer) {
-			// TODO: Remove velocity component after adding physics
-			this.addComponent(IgeVelocityComponent);
-			// Rotate ship to match with physics simulation start angle
-			//this.rotateTo(0,0,Math.PI/2);
-			this.box2dBody({
-				type: 'dynamic',
-				linearDamping: 1,
-				angularDamping: 1.5,
-				allowSleep: true,
-				bullet: true,
-				gravitic: true,
-				fixedRotation: false,
-				fixtures: [{
-					density: 1.0,
-					friction: 0.5,
-					restitution: 0.2,
-					shape: {
-						type: 'rectangle'
-					}
-				}]
-			})
-		}
+		this.translateTo(100, 100, 0);
 
 		if (!ige.isServer) {
-			self.texture(ige.client.textures.ship)
-
-			.depth(1);
+			this.depth(1);
 		}
 
+		this.setGrid([[new Block(), new Block()]]);
 
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);
@@ -112,7 +88,7 @@ var Player = IgeEntityBox2d.extend({
 				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
 				impulse.Multiply(0.1);
 				var location = this._box2dBody.GetWorldCenter();
-				
+
 				this._box2dBody.ApplyImpulse(impulse, location);
 			} else {
 				//this.velocity.x(0);
