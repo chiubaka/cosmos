@@ -10,22 +10,46 @@ var BlockGrid = IgeEntityBox2d.extend({
 	setGrid: function(newGrid) {
 		this.grid = newGrid;
 
-		console.log("Here's the grid:");
-		console.log(this.grid);
+		fixtures = [];
+
+		this.width(500);
+		this.height(500);
+
+		var width = 50;
+
 		for(var row = 0; row < this.grid.length; row++)
 		{
 			var blockList = this.grid[row];
-			console.log("Here's the list:");
-			console.log(blockList);
 			for(var col = 0; col < blockList.length; col++)
 			{
 				var block = blockList[col];
-				console.log("Here's the block:");
-				console.log(block);
 				block.mount(this);
 				block.streamMode(1);
+
+				var x = width * col;
+				var y = width * row;
+
+				block.translateTo(x, y, 0);
+
+				fixtures.push({
+					density: 1.0,
+					friction: 0.5,
+					restitution: 0.5,
+					shape: {
+						type: 'rectangle',
+						data: {
+							// The position of the fixture relative to the body
+							x: x,
+							y: y,
+							width: width,
+							height: width
+						}
+					}
+				});
 			}
 		}
+
+		console.log(fixtures);
 
 		this.box2dBody({
 			type: 'dynamic',
@@ -35,19 +59,16 @@ var BlockGrid = IgeEntityBox2d.extend({
 			bullet: false,
 			gravitic: true,
 			fixedRotation: false,
-			fixtures: [{
+			fixtures: fixtures
+			/*fixtures: [{
 				density: 1.0,
 				friction: 0.5,
-				restitution: 0.5,
+				restitution: 0.2,
 				shape: {
-					type: 'square',
-					data: {
-						// The position of the fixture relative to the body
-						x: 0,
-						y: 0
-					}
+					type: 'rectangle',
+					data: {x:700, y:0}
 				}
-			}]
+			}]*/
 		});
 	}
 });
