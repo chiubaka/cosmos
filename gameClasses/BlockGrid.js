@@ -12,11 +12,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		fixtures = [];
 
-		this.width(500);
-		this.height(500);
-
-		var width = 50;
-
 		for(var row = 0; row < this.grid.length; row++)
 		{
 			var blockList = this.grid[row];
@@ -25,6 +20,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 				var block = blockList[col];
 				block.mount(this);
 				block.streamMode(1);
+
+				var width = block._width;
 
 				var x = width * col;
 				var y = width * row;
@@ -41,8 +38,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 							// The position of the fixture relative to the body
 							x: x,
 							y: y,
-							width: width,
-							height: width
+							width: width / 2, //I don't know why we have to devide by two here to make this come out right : (
+							height: width / 2
 						}
 					}
 				});
@@ -53,22 +50,13 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		this.box2dBody({
 			type: 'dynamic',
-			linearDamping: 0.0,
-			angularDamping: 0.1,
+			linearDamping: 0.4,
+			angularDamping: 0.3,
 			allowSleep: true,
 			bullet: false,
 			gravitic: true,
 			fixedRotation: false,
 			fixtures: fixtures
-			/*fixtures: [{
-				density: 1.0,
-				friction: 0.5,
-				restitution: 0.2,
-				shape: {
-					type: 'rectangle',
-					data: {x:700, y:0}
-				}
-			}]*/
 		});
 	}
 });
