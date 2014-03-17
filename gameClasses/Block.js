@@ -6,13 +6,9 @@ var Block = IgeEntity.extend({
 
 		this.width(100).height(100);
 
-		if (ige.isServer) {
-			;
-		}
-		else {
+		if (!ige.isServer) {
 			this.texture(ige.client.textures.block_power_gold);
 		}
-
 	}
 });
 
