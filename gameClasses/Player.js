@@ -22,7 +22,7 @@ var Player = BlockGrid.extend({
 			this.depth(1);
 		}
 
-		this.setGrid([[new Block(), new Block()]]);
+		this.setGrid([[new PowerBlock(), new EngineBlock()]]);
 
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);
