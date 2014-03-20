@@ -8,6 +8,10 @@ var igeClientConfig = {
 		'./gameClasses/Player.js',
 		'./gameClasses/Background.js',
 
+		/* Blocks */
+		'./gameClasses/blocks/EngineBlock.js',
+		'./gameClasses/blocks/PowerBlock.js',
+
 		/* Standard game scripts */
 		'./client.js',
 		'./index.js'

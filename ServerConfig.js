@@ -8,6 +8,11 @@ var config = {
 		{name: 'Block', path: './gameClasses/Block'},
 		{name: 'BlockGrid', path: './gameClasses/BlockGrid'},
 
+		/* Blocks */
+		{name: 'PowerBlock', path: './gameClasses/blocks/PowerBlock'},
+		{name: 'EngineBlock', path: './gameClasses/blocks/EngineBlock'},
+
+		/* Other classes */
 		{name: 'Player', path: './gameClasses/Player'},
 		{name: 'Background', path: './gameClasses/Background'}
 	]
