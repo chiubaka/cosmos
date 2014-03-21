@@ -4,11 +4,12 @@ var Block = IgeEntity.extend({
 	init: function () {
 		IgeEntity.prototype.init.call(this);
 
-		this.width(100).height(100);
+		this.width(25).height(25);
 
 		this.hp = 10; //this is the default hp of all blocks. Subclasses of block can have a different hp.
 
 		if (!ige.isServer) {
+
 		}
 	},
 
