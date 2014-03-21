@@ -10,7 +10,7 @@ var Block = IgeEntity.extend({
 
 		if (!ige.isServer) {
 		}
-	}
+	},
 
 	damage: function(amount) {
 		this.hp -= amount;
