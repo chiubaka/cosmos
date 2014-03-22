@@ -3,8 +3,15 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	grid: [], //this will be a grid of blocks
 
+	fixtures: [],
+
 	init: function () {
 		IgeEntityBox2d.prototype.init.call(this);
+	},
+
+	remove: function(block, fixture) {
+		this.grid.splice(this.grid.indexOf(block), 1);
+		this.box2DBody().fixtures.splice(this.box2Dbody().fixtures.indexOf(fixture), 1);
 	},
 
 	setGrid: function(newGrid) {
@@ -28,7 +35,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 				block.translateTo(x, y, 0);
 
-				fixtures.push({
+				fixture = {
 					density: 1.0,
 					friction: 0.5,
 					restitution: 0.5,
@@ -42,7 +49,13 @@ var BlockGrid = IgeEntityBox2d.extend({
 							height: width / 2
 						}
 					}
-				});
+				}
+
+				fixtures.push(fixture);
+
+				block.onDeath = function() {
+					this.remove(block, fixture)
+				};
 			}
 		}
 
