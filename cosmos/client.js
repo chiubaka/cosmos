@@ -71,8 +71,12 @@ var Client = IgeClass.extend({
 						ige.input.mapAction('key.up', ige.input.key.up);
 						ige.input.mapAction('key.down', ige.input.key.down);
 
-						ige.input.mapAction('mouse.left', ige.input.mouse.left);
-						ige.input.mapAction('mouse.right', ige.input.mouse.right);
+						ige.input.mapAction('mouse.button1', ige.input.mouse.button1);
+						ige.input.mapAction('mouse.button2', ige.input.mouse.button2);
+						ige.input.mapAction('mouse.button3', ige.input.mouse.button3);
+
+						console.log("TTTTTETAESAGHRESAHJTREAHTESHRTESNHTRSNTGRSJNTRSNT");
+						console.log(ige.input);
 
 						// Ask the server to create an entity for us
 						ige.network.send('playerEntity');
