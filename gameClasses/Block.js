@@ -9,7 +9,7 @@ var Block = IgeEntity.extend({
 		this.hp = 10; //this is the default hp of all blocks. Subclasses of block can have a different hp.
 
 		if (!ige.isServer) {
-
+			this.texture(ige.client.textures.block);
 		}
 	},
 

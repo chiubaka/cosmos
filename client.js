@@ -32,6 +32,7 @@ var Client = IgeClass.extend({
 			ship: new IgeTexture('./assets/blocks/rocket_flame.png'),
 
 			/* Block textures */
+			block: new IgeTexture('./assets/BlockTexture.js'),
 			block_cargo: new IgeTexture('./assets/blocks/cargo.png'),
 			block_power_gold: new IgeTexture('./assets/blocks/power_gold.png'),
 			block_engine: new IgeTexture('./assets/blocks/rocket.png'),
@@ -106,7 +107,7 @@ var Client = IgeClass.extend({
 							.id('vp1')
 							.autoSize(true)
 							.scene(self.mainScene)
-							.drawBounds(true)
+							.drawBounds(false)
 							.mount(ige);
 
 						self.uiScene = new IgeScene2d()
