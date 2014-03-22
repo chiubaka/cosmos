@@ -10,7 +10,7 @@ var Player = BlockGrid.extend({
 
 		// Rotate to point upwards //<--- what does this comment mean?
 		this.controls = {
-			keys: {
+			key: {
 				left: false,
 				right: false,
 				up: false,
@@ -79,15 +79,15 @@ var Player = BlockGrid.extend({
 
 			var impulse = -2000;// this determines how fast you can rotate your spaceship
 
-			if (this.controls.keys.left) {
+			if (this.controls.key.left) {
 				this._box2dBody.ApplyTorque(impulse);
 			}
-			if (this.controls.keys.right) {
+			if (this.controls.key.right) {
 				this._box2dBody.ApplyTorque(-impulse);
 			}
 
 			// TODO: Make spaceship go backwards
-			if (this.controls.keys.up) {
+			if (this.controls.key.up) {
 				var vel = this._box2dBody.GetLinearVelocity();
 				var angle = this._box2dBody.GetAngle();
 				var x_comp = Math.cos(angle);
@@ -102,7 +102,7 @@ var Player = BlockGrid.extend({
 				//this.velocity.y(0);
 			}
 
-			if (this.controls.keys.down) {
+			if (this.controls.key.down) {
 				console.log("Down is pressed");
 			}
 		}
@@ -118,25 +118,34 @@ var Player = BlockGrid.extend({
 
 		/* For the client: */
 		if (!ige.isServer) {
-			if (ige.input.actionState('up')) {
+			if (ige.input.actionState('key.up')) {
 				// Record the new state
-				this.controls.up = !this.controls.up;
-			}
-			if (ige.input.actionState('down')) {
-				// Record the new state
-				this.controls.down = !this.controls.down;
-			}
-			if (ige.input.actionState('left')) {
-				// Record the new state
-				this.controls.left = !this.controls.left;
-			}
-			if (ige.input.actionState('right')) {
-				// Record the new state
-				this.controls.right = !this.controls.right;
-			}
+				this.controls.key.up = !this.controls.key.up;
 
-			// Tell the server about our control change
-			ige.network.send('playerControlUpdate', this.controls);
+				// Tell the server about our control change
+				ige.network.send('playerControlUpdate', this.controls);
+			}
+			if (ige.input.actionState('key.down')) {
+				// Record the new state
+				this.controls.key.down = !this.controls.key.down;
+
+				// Tell the server about our control change
+				ige.network.send('playerControlUpdate', this.controls);
+			}
+			if (ige.input.actionState('key.left')) {
+				// Record the new state
+				this.controls.key.left = !this.controls.key.left;
+
+				// Tell the server about our control change
+				ige.network.send('playerControlUpdate', this.controls);
+			}
+			if (ige.input.actionState('key.right')) {
+				// Record the new state
+				this.controls.key.right = !this.controls.key.right;
+
+				// Tell the server about our control change
+				ige.network.send('playerControlUpdate', this.controls);
+			}
 		}
 
 		// Call the IgeEntity (super-class) tick() method

@@ -47,6 +47,7 @@ var ServerNetworkEvents = {
 	*/
 	_onPlayerControlUpdate: function (data, clientId) {
 		ige.server.players[clientId].controls = data;
+		console.log(data);
 	}
 };
 
