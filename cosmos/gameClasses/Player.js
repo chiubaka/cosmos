@@ -8,12 +8,21 @@ var Player = BlockGrid.extend({
 
 		this.drawBounds(false);
 
-		// Rotate to point upwards
+		// Rotate to point upwards //<--- what does this comment mean?
 		this.controls = {
-			left: false,
-			right: false,
-			thrust: false
+			keys: {
+				left: false,
+				right: false,
+				up: false,
+				down: false
+			},
+
+			mouse: {
+				left: false,
+				right: false
+			}
 		};
+
 		this.width(20);
 		this.height(20);
 		this.translateTo(100, 100, 0);
@@ -65,19 +74,20 @@ var Player = BlockGrid.extend({
 	 */
 	tick: function (ctx) {
 		/* CEXCLUDE */
+		/* For the server: */
 		if (ige.isServer) {
 
 			var impulse = -2000;// this determines how fast you can rotate your spaceship
 
-			if (this.controls.left) {
+			if (this.controls.keys.left) {
 				this._box2dBody.ApplyTorque(impulse);
 			}
-			if (this.controls.right) {
+			if (this.controls.keys.right) {
 				this._box2dBody.ApplyTorque(-impulse);
 			}
 
 			// TODO: Make spaceship go backwards
-			if (this.controls.thrust) {
+			if (this.controls.keys.up) {
 				var vel = this._box2dBody.GetLinearVelocity();
 				var angle = this._box2dBody.GetAngle();
 				var x_comp = Math.cos(angle);
@@ -91,63 +101,42 @@ var Player = BlockGrid.extend({
 				//this.velocity.x(0);
 				//this.velocity.y(0);
 			}
+
+			if (this.controls.keys.down) {
+				console.log("Down is pressed");
+			}
+		}
+
+		if (this.controls.mouse.left) {
+			console.log("Mouse left is down!");
+		}
+
+		if (this.controls.mouse.right) {
+			console.log("Mouse right is down");
 		}
 		/* CEXCLUDE */
 
+		/* For the client: */
 		if (!ige.isServer) {
+			if (ige.input.actionState('up')) {
+				// Record the new state
+				this.controls.up = !this.controls.up;
+			}
+			if (ige.input.actionState('down')) {
+				// Record the new state
+				this.controls.down = !this.controls.down;
+			}
 			if (ige.input.actionState('left')) {
-				if (!this.controls.left) {
-					// Record the new state
-					this.controls.left = true;
-
-					// Tell the server about our control change
-					ige.network.send('playerControlLeftDown');
-				}
-			} else {
-				if (this.controls.left) {
-					// Record the new state
-					this.controls.left = false;
-
-					// Tell the server about our control change
-					ige.network.send('playerControlLeftUp');
-				}
+				// Record the new state
+				this.controls.left = !this.controls.left;
 			}
-
 			if (ige.input.actionState('right')) {
-				if (!this.controls.right) {
-					// Record the new state
-					this.controls.right = true;
-
-					// Tell the server about our control change
-					ige.network.send('playerControlRightDown');
-				}
-			} else {
-				if (this.controls.right) {
-					// Record the new state
-					this.controls.right = false;
-
-					// Tell the server about our control change
-					ige.network.send('playerControlRightUp');
-				}
+				// Record the new state
+				this.controls.right = !this.controls.right;
 			}
 
-			if (ige.input.actionState('thrust')) {
-				if (!this.controls.thrust) {
-					// Record the new state
-					this.controls.thrust = true;
-
-					// Tell the server about our control change
-					ige.network.send('playerControlThrustDown');
-				}
-			} else {
-				if (this.controls.thrust) {
-					// Record the new state
-					this.controls.thrust = false;
-
-					// Tell the server about our control change
-					ige.network.send('playerControlThrustUp');
-				}
-			}
+			// Tell the server about our control change
+			ige.network.send('playerControlUpdate', this.controls);
 		}
 
 		// Call the IgeEntity (super-class) tick() method
