@@ -26,13 +26,13 @@ var Player = BlockGrid.extend({
 
 		this.width(20);
 		this.height(20);
-		this.translateTo(100, 100, 0);
+		this.translateTo(1000, 1000, 0);
 
 		if (!ige.isServer) {
 			this.depth(1);
 		}
 
-		this.setGrid([[new PowerBlock(), new EngineBlock()]]);
+		this.setGrid([[new PowerBlock(), new EngineBlock()], [new PowerBlock(), new EngineBlock]]);
 
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);
@@ -110,6 +110,11 @@ var Player = BlockGrid.extend({
 
 		if (this.controls.mouse.button1) {
 			console.log("Mouse button 1 is down!");
+
+			console.log(this.getGrid());
+			//if(this.grid[0][0]) {
+			//	this.grid[0][0].damage(1);
+			//}
 		}
 		if (this.controls.mouse.button2) {
 			console.log("Mouse button 2 is down");
@@ -136,8 +141,8 @@ var Player = BlockGrid.extend({
 				ige.network.send('playerControlUpdate', this.controls);
 		}
 
-		// Call the IgeEntity (super-class) tick() method
-		IgeEntity.prototype.tick.call(this, ctx);
+		// Call the BlockGrid (super-class) tick() method
+		BlockGrid.prototype.tick.call(this, ctx);
 	}
 });
 
