@@ -43,6 +43,7 @@ var Server = IgeClass.extend({
 						/* This is called when a player pushes down or releases a key */
 						ige.network.define('playerControlUpdate', self._onPlayerControlUpdate);
 
+						/* When a client connects or disconnects */
 						ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js
 						ige.network.on('disconnect', self._onPlayerDisconnect); // Defined in ./gameClasses/ServerNetworkEvents.js
 
@@ -87,43 +88,13 @@ var Server = IgeClass.extend({
 							.streamMode(1)
 							.mount(self.foregroundScene)
 							.depth(100)
-							.setGrid([[new PowerBlock(), new PowerBlock()], [new EngineBlock(), new EngineBlock()]]);
+							.setGrid([[new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock()], [new EngineBlock(), new EngineBlock()]]);
 
-							/*
-							new IgeEntityBox2d()
-							.box2dBody({
-								type: 'dynamic',
-								linearDamping: 0.0,
-								angularDamping: 0.1,
-								allowSleep: true,
-								bullet: false,
-								gravitic: true,
-								fixedRotation: false,
-								fixtures: [{
-									density: 1.0,
-									friction: 0.5,
-									restitution: 0.5,
-									shape: {
-										type: 'circle',
-										data: {
-											// The position of the fixture relative to the body
-											x: 0,
-											y: 0
-										}
-									}
-								}]
-							})
-						.id('ball1')
-						.translateTo(4, -300, 0)
-						.drawBounds(true)
-						.mount(self.foregroundScene)
-						.streamMode(1);
-						*/
-
-						// Add the box2d debug painter entity to the
-						// scene to show the box2d body outlines
-
-						//ige.box2d.enableDebug(self.foregroundScene);
+						BlockGrid.prototype.newBlockGridFromDimensions(3, 3)
+							.id('blockGrid2')
+							.streamMode(1)
+							.mount(self.foregroundScene)
+							.depth(100);
 					}
 				});
 			});
