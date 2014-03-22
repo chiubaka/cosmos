@@ -46,8 +46,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 			}
 		}
 
-		console.log(fixtures);
-
 		this.box2dBody({
 			type: 'dynamic',
 			linearDamping: 0.4,
