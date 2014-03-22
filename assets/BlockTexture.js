@@ -3,7 +3,7 @@ var image = {
 		ctx.globalCompositeOperation = "source-over";
 
 		// Width of the outline
-		ctx.lineWidth = entity.textureOutlineWidth || 2;
+		ctx.lineWidth = entity.textureOutlineWidth || 4;
 
 		// Draw block background
 		ctx.fillStyle = entity.textureBackground || "rgb(217, 217, 217)";
