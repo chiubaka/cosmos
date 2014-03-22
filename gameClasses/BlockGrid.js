@@ -5,15 +5,39 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	fixtures: [],
 
+	/**
+	Static function
+	Returns a new block grid with the given dimensions.
+	*/
+	newBlockGridFromDimensions: function(numCols, numRows) {
+		var blockGrid = new BlockGrid();
+		var grid = []
+
+		for (x = 0; x < numCols; x++) {
+			var gridCol = [];
+			for (y = 0; y < numRows; y++) {
+				gridCol.push(new EngineBlock());
+			}
+			grid.push(gridCol);
+		}
+
+		blockGrid.setGrid(grid);
+
+		return blockGrid;
+	},
+
 	init: function () {
 		IgeEntityBox2d.prototype.init.call(this);
 	},
 
 	remove: function(block, fixture) {
 		this.grid.splice(this.grid.indexOf(block), 1);
-		this.box2DBody().fixtures.splice(this.box2Dbody().fixtures.indexOf(fixture), 1);
+		//this.box2DBody().fixtures.splice(this.box2Dbody().fixtures.indexOf(fixture), 1);
 	},
 
+	getGrid: function() {
+		return this.grid;
+	},
 	setGrid: function(newGrid) {
 		this.grid = newGrid;
 
@@ -53,13 +77,12 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 				fixtures.push(fixture);
 
+				self = this;
 				block.onDeath = function() {
-					this.remove(block, fixture)
+					self.remove(block, fixture)
 				};
 			}
 		}
-
-		console.log(fixtures);
 
 		this.box2dBody({
 			type: 'dynamic',
@@ -71,6 +94,16 @@ var BlockGrid = IgeEntityBox2d.extend({
 			fixedRotation: false,
 			fixtures: fixtures
 		});
+	},
+
+	/**
+	* Called every frame by the engine when this entity is mounted to the
+	* scenegraph.
+	* @param ctx The canvas context to render to.
+	*/
+	tick: function (ctx) {
+		//Call the tick function of the super class, IgeEntityBox2d.
+		IgeEntityBox2d.prototype.tick.call(this, ctx);
 	}
 });
 
