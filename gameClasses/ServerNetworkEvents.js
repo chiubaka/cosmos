@@ -12,6 +12,10 @@ var ServerNetworkEvents = {
 		return false;
 	},
 
+	/**
+	A player has disconnected from the server
+	This function removes all trace of the player from the 'players' list
+	*/
 	_onPlayerDisconnect: function (clientId) {
 		if (ige.server.players[clientId]) {
 			// Remove the player from the game
@@ -23,40 +27,26 @@ var ServerNetworkEvents = {
 		}
 	},
 
+	/**
+	A player has connected to the server and asked for a player Entity to be created for him or her!
+	*/
 	_onPlayerEntity: function (data, clientId) {
 		if (!ige.server.players[clientId]) {
 			ige.server.players[clientId] = new Player(clientId)
 				.streamMode(1)
 				.mount(ige.server.foregroundScene)
 
-
 			// Tell the client to track their player entity
 			ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
 		}
 	},
 
-	_onPlayerLeftDown: function (data, clientId) {
-		ige.server.players[clientId].controls.left = true;
-	},
-
-	_onPlayerLeftUp: function (data, clientId) {
-		ige.server.players[clientId].controls.left = false;
-	},
-
-	_onPlayerRightDown: function (data, clientId) {
-		ige.server.players[clientId].controls.right = true;
-	},
-
-	_onPlayerRightUp: function (data, clientId) {
-		ige.server.players[clientId].controls.right = false;
-	},
-
-	_onPlayerThrustDown: function (data, clientId) {
-		ige.server.players[clientId].controls.thrust = true;
-	},
-
-	_onPlayerThrustUp: function (data, clientId) {
-		ige.server.players[clientId].controls.thrust = false;
+	/**
+	Called when the player updates the state of his control object
+	data in this case represents the *new* state of the player's controls
+	*/
+	_onPlayerControlUpdate: function (data, clientId) {
+		ige.server.players[clientId].controls = data;
 	}
 };
 

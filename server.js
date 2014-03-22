@@ -13,6 +13,7 @@ var Server = IgeClass.extend({
 		// Load our blocks
 		self.obj = [];
 
+		// set the framerate
 		ige.setFps(60);
 
 		// Add physics and setup physics world
@@ -21,9 +22,8 @@ var Server = IgeClass.extend({
 			.box2d.createWorld()
 			.box2d.start();
 
-    	// Add the server-side game methods / event handlers
+    // Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);
-
 
 		// Define an object to hold references to our player entities
 		this.players = {};
@@ -31,21 +31,17 @@ var Server = IgeClass.extend({
 
 		// Add the networking component
 		ige.addComponent(IgeNetIoComponent)
-			// Start the network server
+			// Start the network server on a particular port
 			.network.start(2000, function () {
 				// Networking has started so start the game engine
 				ige.start(function (success) {
 					// Check if the engine started successfully
 					if (success) {
+						/* This is called when a player connects to the server and asks for a player object to be made for them */
 						ige.network.define('playerEntity', self._onPlayerEntity);
 
-						ige.network.define('playerControlLeftDown', self._onPlayerLeftDown);
-						ige.network.define('playerControlRightDown', self._onPlayerRightDown);
-						ige.network.define('playerControlThrustDown', self._onPlayerThrustDown);
-
-						ige.network.define('playerControlLeftUp', self._onPlayerLeftUp);
-						ige.network.define('playerControlRightUp', self._onPlayerRightUp);
-						ige.network.define('playerControlThrustUp', self._onPlayerThrustUp);
+						/* This is called when a player pushes down or releases a key */
+						ige.network.define('playerControlUpdate', self._onPlayerControlUpdate);
 
 						ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js
 						ige.network.on('disconnect', self._onPlayerDisconnect); // Defined in ./gameClasses/ServerNetworkEvents.js
@@ -57,10 +53,6 @@ var Server = IgeClass.extend({
 
 						// Accept incoming network connections
 						ige.network.acceptConnections(true);
-
-						// Load the base scene data, this creates a 2d scene and a
-						// viewport, vp1
-						//ige.addGraph('IgeBaseScene');
 
 						self.mainScene = new IgeScene2d()
 							.id('mainScene');
@@ -89,54 +81,13 @@ var Server = IgeClass.extend({
 							.id('helix_nebula_background')
 							.streamMode(1)
 							.mount(self.backgroundScene);
-						/*
-						new Block()
-							.id('block1')
-							.streamMode(1)
-							.mount(self.foregroundScene)
-							.depth(100);
-						*/
+
 						new BlockGrid()
 							.id('blockGrid1')
 							.streamMode(1)
 							.mount(self.foregroundScene)
 							.depth(100)
 							.setGrid([[new PowerBlock(), new PowerBlock()], [new EngineBlock(), new EngineBlock()]]);
-						/*
-						new IgeEntityBox2d()
-						.box2dBody({
-							type: 'dynamic',
-							linearDamping: 0.0,
-							angularDamping: 0.1,
-							allowSleep: true,
-							bullet: false,
-							gravitic: true,
-							fixedRotation: false,
-							fixtures: [{
-								density: 1.0,
-								friction: 0.5,
-								restitution: 0.5,
-								shape: {
-									type: 'circle',
-									data: {
-										// The position of the fixture relative to the body
-										x: 0,
-										y: 0
-									}
-								}
-							}]
-						})
-					.id('ball1')
-					.translateTo(4, -300, 0)
-					.drawBounds(true)
-					.mount(self.foregroundScene)
-					.streamMode(1);
-					*/
-
-					// Add the box2d debug painter entity to the
-					// scene to show the box2d body outlines
-
-					//ige.box2d.enableDebug(self.foregroundScene);
 					}
 				});
 			});

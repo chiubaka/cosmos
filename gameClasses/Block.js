@@ -1,6 +1,10 @@
 var Block = IgeEntity.extend({
 	classId: 'Block',
 
+	/**
+	Construct a new block
+	Note that block doesn't have any texture. This is because subclasses of Block are expected to have their own textures.
+	*/
 	init: function () {
 		IgeEntity.prototype.init.call(this);
 
@@ -10,15 +14,26 @@ var Block = IgeEntity.extend({
 
 		if (!ige.isServer) {
 		}
-	}
+	},
 
+	/**
+	Decreases the block's health by the amount passed.
+	After health is decreased, the block may die.
+	*/
 	damage: function(amount) {
 		this.hp -= amount;
 
 		if (this.hp <= 0) {
-			//TODO break the block from its block grid if it is in a block grid
+			onDeath();
 		}
-	}
+	},
+
+	/**
+	onDeath will be called when the block reaches 0 or less hp
+	Objects that contain blocks should set the onDeath function to be something more useful.
+	For example, the blockGrid class should set the block's onDeath function to break off from the grid.
+	*/
+	onDeath: function() {}
 });
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Block; }
