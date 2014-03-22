@@ -78,13 +78,14 @@ var Player = BlockGrid.extend({
 		/* For the server: */
 		if (ige.isServer) {
 
-			var impulse = -500;// this determines how fast you can rotate your spaceship
+			// This determines how fast you can rotate your spaceship
+      var angularImpulse = -10;
 
 			if (this.controls.key.left) {
-				this._box2dBody.ApplyTorque(impulse);
+				this._box2dBody.ApplyTorque(angularImpulse);
 			}
 			if (this.controls.key.right) {
-				this._box2dBody.ApplyTorque(-impulse);
+				this._box2dBody.ApplyTorque(-angularImpulse);
 			}
 
 			// TODO: Make spaceship go backwards
@@ -94,7 +95,6 @@ var Player = BlockGrid.extend({
 				var x_comp = Math.cos(angle);
 				var y_comp = Math.sin(angle);
 				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
-				impulse.Multiply(3);//consider making the impulse for linear motion different from the impulse for linear motion...
 				var location = this._box2dBody.GetWorldCenter();
 
 				this._box2dBody.ApplyImpulse(impulse, location);
