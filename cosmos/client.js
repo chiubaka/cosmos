@@ -67,9 +67,13 @@ var Client = IgeClass.extend({
 								self.log('Stream entity created with ID: ' + entity.id());
 							});
 						// Define our player controls
-						ige.input.mapAction('left', ige.input.key.left);
-						ige.input.mapAction('right', ige.input.key.right);
-						ige.input.mapAction('thrust', ige.input.key.up);
+						ige.input.mapAction('key.left', ige.input.key.left);
+						ige.input.mapAction('key.right', ige.input.key.right);
+						ige.input.mapAction('key.up', ige.input.key.up);
+						ige.input.mapAction('key.down', ige.input.key.down);
+
+						ige.input.mapAction('mouse.left', ige.input.mouse.left);
+						ige.input.mapAction('mouse.right', ige.input.mouse.right);
 
 						// Ask the server to create an entity for us
 						ige.network.send('playerEntity');

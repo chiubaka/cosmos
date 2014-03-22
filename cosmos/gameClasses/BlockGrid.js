@@ -64,7 +64,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this.box2dBody({
 			type: 'dynamic',
 			linearDamping: 0.4,
-			angularDamping: 0.3,
+			angularDamping: 0.8,
 			allowSleep: true,
 			bullet: false,
 			gravitic: true,
