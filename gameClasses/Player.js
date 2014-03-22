@@ -77,7 +77,7 @@ var Player = BlockGrid.extend({
 		/* For the server: */
 		if (ige.isServer) {
 
-			var impulse = -2000;// this determines how fast you can rotate your spaceship
+			var impulse = -500;// this determines how fast you can rotate your spaceship
 
 			if (this.controls.key.left) {
 				this._box2dBody.ApplyTorque(impulse);
@@ -118,34 +118,13 @@ var Player = BlockGrid.extend({
 
 		/* For the client: */
 		if (!ige.isServer) {
-			if (ige.input.actionState('key.up')) {
-				// Record the new state
-				this.controls.key.up = !this.controls.key.up;
+				this.controls.key.up = ige.input.actionState('key.up');
+				this.controls.key.down = ige.input.actionState('key.down');
+				this.controls.key.left = ige.input.actionState('key.left');
+				this.controls.key.right = ige.input.actionState('key.right');
 
 				// Tell the server about our control change
 				ige.network.send('playerControlUpdate', this.controls);
-			}
-			if (ige.input.actionState('key.down')) {
-				// Record the new state
-				this.controls.key.down = !this.controls.key.down;
-
-				// Tell the server about our control change
-				ige.network.send('playerControlUpdate', this.controls);
-			}
-			if (ige.input.actionState('key.left')) {
-				// Record the new state
-				this.controls.key.left = !this.controls.key.left;
-
-				// Tell the server about our control change
-				ige.network.send('playerControlUpdate', this.controls);
-			}
-			if (ige.input.actionState('key.right')) {
-				// Record the new state
-				this.controls.key.right = !this.controls.key.right;
-
-				// Tell the server about our control change
-				ige.network.send('playerControlUpdate', this.controls);
-			}
 		}
 
 		// Call the IgeEntity (super-class) tick() method
