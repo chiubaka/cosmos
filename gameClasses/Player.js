@@ -18,8 +18,9 @@ var Player = BlockGrid.extend({
 			},
 
 			mouse: {
-				left: false,
-				right: false
+				button1: false,
+				button2: false,
+				button3: false
 			}
 		};
 
@@ -107,21 +108,29 @@ var Player = BlockGrid.extend({
 			}
 		}
 
-		if (this.controls.mouse.left) {
-			console.log("Mouse left is down!");
+		if (this.controls.mouse.button1) {
+			console.log("Mouse button 1 is down!");
 		}
-
-		if (this.controls.mouse.right) {
-			console.log("Mouse right is down");
+		if (this.controls.mouse.button2) {
+			console.log("Mouse button 2 is down");
+		}
+		if (this.controls.mouse.button3) {
+			console.log("Mouse button 3 is down");
 		}
 		/* CEXCLUDE */
 
 		/* For the client: */
 		if (!ige.isServer) {
+				/* Modify the KEYBOARD controls to reflect which keys the client currently is pushing */
 				this.controls.key.up = ige.input.actionState('key.up');
 				this.controls.key.down = ige.input.actionState('key.down');
 				this.controls.key.left = ige.input.actionState('key.left');
 				this.controls.key.right = ige.input.actionState('key.right');
+
+				/* Modify the MOUSE controls to reflect what buttons the client currently has down */
+				this.controls.mouse.button1 = ige.input.actionState('mouse.button1');
+				this.controls.mouse.button2 = ige.input.actionState('mouse.button2');
+				this.controls.mouse.button3 = ige.input.actionState('mouse.button3');
 
 				// Tell the server about our control change
 				ige.network.send('playerControlUpdate', this.controls);
