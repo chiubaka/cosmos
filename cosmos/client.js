@@ -39,8 +39,7 @@ var Client = IgeClass.extend({
 
 			background_helix_nebula: new IgeTexture('./assets/backgrounds/helix_nebula.jpg')
 		};
-
-
+		
 
 		ige.on('texturesLoaded', function () {
 			// Apply rotate filter to player ship
