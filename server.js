@@ -43,6 +43,7 @@ var Server = IgeClass.extend({
 						/* This is called when a player pushes down or releases a key */
 						ige.network.define('playerControlUpdate', self._onPlayerControlUpdate);
 
+						/* When a client connects or disconnects */
 						ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js
 						ige.network.on('disconnect', self._onPlayerDisconnect); // Defined in ./gameClasses/ServerNetworkEvents.js
 
@@ -87,7 +88,13 @@ var Server = IgeClass.extend({
 							.streamMode(1)
 							.mount(self.foregroundScene)
 							.depth(100)
-							.setGrid([[new PowerBlock(), new PowerBlock()], [new EngineBlock(), new EngineBlock()]]);
+							.setGrid([[new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock()], [new EngineBlock(), new EngineBlock()]]);
+
+						BlockGrid.prototype.newBlockGridFromDimensions(3, 3)
+							.id('blockGrid2')
+							.streamMode(1)
+							.mount(self.foregroundScene)
+							.depth(100);
 					}
 				});
 			});
