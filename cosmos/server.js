@@ -101,7 +101,7 @@ var Server = IgeClass.extend({
 							.streamMode(1)
 							.mount(self.foregroundScene)
 							.depth(100)
-							.setGrid([[new Block()],[new Block()],[new Block()],[new Block()]]);
+							.setGrid([[new PowerBlock(), new PowerBlock()], [new EngineBlock(), new EngineBlock()]]);
 						/*
 						new IgeEntityBox2d()
 						.box2dBody({

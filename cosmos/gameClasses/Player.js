@@ -1,8 +1,8 @@
-var Player = IgeEntityBox2d.extend({
+var Player = BlockGrid.extend({
 	classId: 'Player',
 
 	init: function () {
-		IgeEntity.prototype.init.call(this);
+		BlockGrid.prototype.init.call(this);
 
 		var self = this;
 
@@ -16,37 +16,13 @@ var Player = IgeEntityBox2d.extend({
 		};
 		this.width(20);
 		this.height(20);
-
-		if (ige.isServer) {
-			// TODO: Remove velocity component after adding physics
-			this.addComponent(IgeVelocityComponent);
-			// Rotate ship to match with physics simulation start angle
-			//this.rotateTo(0,0,Math.PI/2);
-			this.box2dBody({
-				type: 'dynamic',
-				linearDamping: 1,
-				angularDamping: 1.5,
-				allowSleep: true,
-				bullet: true,
-				gravitic: true,
-				fixedRotation: false,
-				fixtures: [{
-					density: 1.0,
-					friction: 0.5,
-					restitution: 0.2,
-					shape: {
-						type: 'rectangle'
-					}
-				}]
-			})
-		}
+		this.translateTo(100, 100, 0);
 
 		if (!ige.isServer) {
-			self.texture(ige.client.textures.ship)
-
-			.depth(1);
+			this.depth(1);
 		}
 
+		this.setGrid([[new PowerBlock(), new EngineBlock()]]);
 
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);
@@ -90,17 +66,15 @@ var Player = IgeEntityBox2d.extend({
 	tick: function (ctx) {
 		/* CEXCLUDE */
 		if (ige.isServer) {
+
+			// This determines how fast you can rotate your spaceship
+            var angularImpulse = -10;
+
 			if (this.controls.left) {
-				//this.rotateBy(0, 0, Math.radians(-0.2 * ige._tickDelta));
-				var impulse = -0.2;
-				this._box2dBody.ApplyTorque(impulse);
+				this._box2dBody.ApplyTorque(angularImpulse);
 			}
-
 			if (this.controls.right) {
-				//this.rotateBy(0, 0, Math.radians(0.2 * ige._tickDelta));
-				var impulse = 0.2;
-				this._box2dBody.ApplyTorque(impulse);
-
+				this._box2dBody.ApplyTorque(-angularImpulse);
 			}
 
 			// TODO: Make spaceship go backwards
@@ -110,9 +84,8 @@ var Player = IgeEntityBox2d.extend({
 				var x_comp = Math.cos(angle);
 				var y_comp = Math.sin(angle);
 				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
-				impulse.Multiply(0.1);
 				var location = this._box2dBody.GetWorldCenter();
-				
+
 				this._box2dBody.ApplyImpulse(impulse, location);
 			} else {
 				//this.velocity.x(0);

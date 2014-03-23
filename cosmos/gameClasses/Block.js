@@ -1,35 +1,29 @@
-var Block = IgeEntityBox2d.extend({
+var Block = IgeEntity.extend({
 	classId: 'Block',
-	
+
 	init: function () {
 		IgeEntity.prototype.init.call(this);
 
-		this.width(100).height(100);
+		// Use an even number so values don't have to become approximate when we divide by two
+		this.width(26).height(26);
 
-		if (ige.isServer) {
-			this.box2dBody({
-				type: 'dynamic',
-				linearDamping: 0.1,
-				angularDamping: 0.1,
-				allowSleep: true,
-				bullet: false,
-				gravitic: true,
-				fixedRotation: false,
-				fixtures: [{
-					density: 1.0,
-					friction: 0.5,
-					restitution: 0.2,
-					shape: {
-						type: 'rectangle'
-					}
-				}]
+		this.hp = 10; //this is the default hp of all blocks. Subclasses of block can have a different hp.
 
-			})
+		if (!ige.isServer) {
+			this.texture(ige.client.textures.block);
+
+			// Enable caching so that the smart textures aren't reevaluated every time.
+			this.compositeCache(true);
+			this.cacheSmoothing(true);
 		}
-		else {
-			this.texture(ige.client.textures.block_power_gold);
-		}
+	},
 
+	damage: function(amount) {
+		this.hp -= amount;
+
+		if (this.hp <= 0) {
+			//TODO break the block from its block grid if it is in a block grid
+		}
 	}
 });
 
