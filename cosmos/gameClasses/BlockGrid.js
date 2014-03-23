@@ -65,7 +65,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 							x: x,
 							y: y,
 							width: width / 2, //I don't know why we have to devide by two here to make this come out right : (
-							height: width / 2
+							height: height / 2
 						}
 					}
 				}
