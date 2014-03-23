@@ -96,7 +96,7 @@ var Player = BlockGrid.extend({
 				var x_comp = Math.cos(angle) * linearImpulse; //x component of the (unit?) direction vector
 				var y_comp = Math.sin(angle) * linearImpulse;
 				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
-				var location = this._box2dBody.GetWorldCenter();
+				var location = this._box2dBody.GetWorldCenter(); //center of gravity
 
 				this._box2dBody.ApplyImpulse(impulse, location);
 			}
@@ -109,12 +109,13 @@ var Player = BlockGrid.extend({
 				var x_comp = Math.cos(angle) * -linearImpulse; //x component of the (unit?) direction vector
 				var y_comp = Math.sin(angle) * -linearImpulse;
 				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
-				var location = this._box2dBody.GetWorldCenter();
+				var location = this._box2dBody.GetWorldCenter(); //center of gravity
 
 				this._box2dBody.ApplyImpulse(impulse, location);
 			}
 		}
 
+		/* Mouse buttons */
 		if (this.controls.mouse.button1) {
 			console.log("Mouse button 1 is down!");
 		}
