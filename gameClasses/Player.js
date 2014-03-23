@@ -26,13 +26,13 @@ var Player = BlockGrid.extend({
 
 		this.width(20);
 		this.height(20);
-		this.translateTo(1000, 1000, 0);
+		this.translateTo(-2000, -2000, 0);
 
 		if (!ige.isServer) {
 			this.depth(1);
 		}
 
-		this.setGrid([[new PowerBlock(), new EngineBlock()], [new PowerBlock(), new EngineBlock]]);
+		this.setGrid(BlockGrid.prototype.newGridFromDimensions(10, 10));//[[new PowerBlock(), new EngineBlock()], [new PowerBlock(), new EngineBlock]]);
 
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);
@@ -77,9 +77,8 @@ var Player = BlockGrid.extend({
 		/* CEXCLUDE */
 		/* For the server: */
 		if (ige.isServer) {
-
 			// This determines how fast you can rotate your spaceship
-      var angularImpulse = -10;
+      var angularImpulse = -5000;
 
 			if (this.controls.key.left) {
 				this._box2dBody.ApplyTorque(angularImpulse);
@@ -88,33 +87,36 @@ var Player = BlockGrid.extend({
 				this._box2dBody.ApplyTorque(-angularImpulse);
 			}
 
-			// TODO: Make spaceship go backwards
+			/* Linear motion */
+			var linearImpulse = 100;
+
+			var angle = this._box2dBody.GetAngle();
+
 			if (this.controls.key.up) {
-				var vel = this._box2dBody.GetLinearVelocity();
-				var angle = this._box2dBody.GetAngle();
-				var x_comp = Math.cos(angle);
-				var y_comp = Math.sin(angle);
+				var x_comp = Math.cos(angle) * linearImpulse; //x component of the (unit?) direction vector
+				var y_comp = Math.sin(angle) * linearImpulse;
 				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
 				var location = this._box2dBody.GetWorldCenter();
 
 				this._box2dBody.ApplyImpulse(impulse, location);
-			} else {
+			}
+			else {
+				/* Consider applying the breaks automatically when the up arrow is released */
 				//this.velocity.x(0);
 				//this.velocity.y(0);
 			}
-
 			if (this.controls.key.down) {
-				console.log("Down is pressed");
+				var x_comp = Math.cos(angle) * -linearImpulse; //x component of the (unit?) direction vector
+				var y_comp = Math.sin(angle) * -linearImpulse;
+				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
+				var location = this._box2dBody.GetWorldCenter();
+
+				this._box2dBody.ApplyImpulse(impulse, location);
 			}
 		}
 
 		if (this.controls.mouse.button1) {
 			console.log("Mouse button 1 is down!");
-
-			console.log(this.getGrid());
-			//if(this.grid[0][0]) {
-			//	this.grid[0][0].damage(1);
-			//}
 		}
 		if (this.controls.mouse.button2) {
 			console.log("Mouse button 2 is down");
@@ -126,19 +128,24 @@ var Player = BlockGrid.extend({
 
 		/* For the client: */
 		if (!ige.isServer) {
-				/* Modify the KEYBOARD controls to reflect which keys the client currently is pushing */
-				this.controls.key.up = ige.input.actionState('key.up');
-				this.controls.key.down = ige.input.actionState('key.down');
-				this.controls.key.left = ige.input.actionState('key.left');
-				this.controls.key.right = ige.input.actionState('key.right');
+			/* Save the old control state for comparison later */
+			oldControls = this.controls
 
-				/* Modify the MOUSE controls to reflect what buttons the client currently has down */
-				this.controls.mouse.button1 = ige.input.actionState('mouse.button1');
-				this.controls.mouse.button2 = ige.input.actionState('mouse.button2');
-				this.controls.mouse.button3 = ige.input.actionState('mouse.button3');
+			/* Modify the KEYBOARD controls to reflect which keys the client currently is pushing */
+			this.controls.key.up = ige.input.actionState('key.up');
+			this.controls.key.down = ige.input.actionState('key.down');
+			this.controls.key.left = ige.input.actionState('key.left');
+			this.controls.key.right = ige.input.actionState('key.right');
 
+			/* Modify the MOUSE controls to reflect what buttons the client currently has down */
+			this.controls.mouse.button1 = ige.input.actionState('mouse.button1');
+			this.controls.mouse.button2 = ige.input.actionState('mouse.button2');
+			this.controls.mouse.button3 = ige.input.actionState('mouse.button3');
+
+			//if (JSON.stringify(this.controls) !== JSON.stringify(oldControls)) { //this.controls !== oldControls) {
 				// Tell the server about our control change
 				ige.network.send('playerControlUpdate', this.controls);
+			//}
 		}
 
 		// Call the BlockGrid (super-class) tick() method
