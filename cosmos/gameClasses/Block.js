@@ -11,10 +11,6 @@ var Block = IgeEntity.extend({
 		this.width(25).height(25);
 
 		this.hp = 10; //this is the default hp of all blocks. Subclasses of block can have a different hp.
-
-		if (!ige.isServer) {
-
-		}
 	},
 
 	/**
@@ -25,7 +21,7 @@ var Block = IgeEntity.extend({
 		this.hp -= amount;
 
 		if (this.hp <= 0) {
-			onDeath();
+			this.onDeath();
 		}
 	},
 
