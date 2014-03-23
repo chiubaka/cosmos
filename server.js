@@ -90,11 +90,12 @@ var Server = IgeClass.extend({
 							.depth(100)
 							.setGrid([[new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock()], [new EngineBlock(), new EngineBlock()]]);
 
-						BlockGrid.prototype.newBlockGridFromDimensions(3, 3)
+						new BlockGrid()
 							.id('blockGrid2')
 							.streamMode(1)
 							.mount(self.foregroundScene)
-							.depth(100);
+							.depth(100)
+							.setGrid(BlockGrid.prototype.newGridFromDimensions(30, 10));
 					}
 				});
 			});
