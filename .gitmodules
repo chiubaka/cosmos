@@ -1,4 +1,4 @@
 [submodule "ige"]
 	path = ige
 	url = https://teamleonine:ixmN2PQ9ZUTnqySqCv7XEaS6CGBspzI8@bitbucket.org/teamleonine/ige.git
-	branch = staging
+	branch = master
