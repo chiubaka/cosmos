@@ -21,7 +21,7 @@ var Block = IgeEntity.extend({
 		this.hp -= amount;
 
 		if (this.hp <= 0) {
-			onDeath();
+			this.onDeath();
 		}
 	},
 
