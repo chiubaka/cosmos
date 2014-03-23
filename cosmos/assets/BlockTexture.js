@@ -30,7 +30,7 @@ var image = {
 			if (!entity.svg)
 			{
 				var image = new Image();
-				image.src = entity.textureSvgUrl;
+				image.src = gameRoot + entity.textureSvgUrl;
 
 				image.onload = function() {
 					image.width = entity.width();
