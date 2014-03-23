@@ -8,10 +8,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 	/**
 	Static function
 	Returns a new block grid with the given dimensions.
+
+	POTENTIAL BUG: are numCols and numRows swithed?
 	*/
-	newBlockGridFromDimensions: function(numCols, numRows) {
-		var blockGrid = new BlockGrid();
-		var grid = []
+	newGridFromDimensions: function (numCols, numRows) {
+		var grid = [];
 
 		for (x = 0; x < numCols; x++) {
 			var gridCol = [];
@@ -21,13 +22,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			grid.push(gridCol);
 		}
 
-		blockGrid.setGrid(grid);
-
-		return blockGrid;
-	},
-
-	init: function () {
-		IgeEntityBox2d.prototype.init.call(this);
+		return grid;
 	},
 
 	remove: function(block, fixture) {
@@ -90,7 +85,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			angularDamping: 0.8,
 			allowSleep: true,
 			bullet: false,
-			gravitic: true,
+			gravitic: false,
 			fixedRotation: false,
 			fixtures: fixtures
 		});
