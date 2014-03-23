@@ -7,7 +7,7 @@ var PowerBlock = Block.extend({
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(242, 242, 242)";
 			this.textureOutline = "rgb(255, 190, 13)";
-			this.textureSvgUrl = "./res/power/power.svg";
+			this.textureSvgUrl = "./assets/blocks/power/power.svg";
 		}
 	}
 });
