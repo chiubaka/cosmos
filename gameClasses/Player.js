@@ -77,8 +77,13 @@ var Player = BlockGrid.extend({
 		/* CEXCLUDE */
 		/* For the server: */
 		if (ige.isServer) {
+<<<<<<< Updated upstream
 			// This determines how fast you can rotate your spaceship
       var angularImpulse = -5000;
+=======
+
+			var impulse = -500000;// this determines how fast you can rotate your spaceship
+>>>>>>> Stashed changes
 
 			if (this.controls.key.left) {
 				this._box2dBody.ApplyTorque(angularImpulse);
@@ -96,7 +101,12 @@ var Player = BlockGrid.extend({
 				var x_comp = Math.cos(angle) * linearImpulse; //x component of the (unit?) direction vector
 				var y_comp = Math.sin(angle) * linearImpulse;
 				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
+<<<<<<< Updated upstream
 				var location = this._box2dBody.GetWorldCenter(); //center of gravity
+=======
+				impulse.Multiply(3000);//consider making the impulse for linear motion different from the impulse for linear motion...
+				var location = this._box2dBody.GetWorldCenter();
+>>>>>>> Stashed changes
 
 				this._box2dBody.ApplyImpulse(impulse, location);
 			}
