@@ -24,5 +24,26 @@ var image = {
 		ctx.lineTo(-entity._geometry.x2, entity._geometry.y2);
 		ctx.lineTo(-entity._geometry.x2, -entity._geometry.y2);
 		ctx.stroke();
+
+		if (entity.textureSvgUrl)
+		{
+			if (!entity.svg)
+			{
+				var image = new Image();
+				image.src = entity.textureSvgUrl;
+
+				image.onload = function() {
+					image.width = entity.width();
+					image.height = entity.height();
+					entity.svg = image;
+					console.log(entity.svg);
+					entity.cacheDirty(true);
+				}
+			}
+			else
+			{
+				ctx.drawImage(entity.svg, -entity._geometry.x2, -entity._geometry.y2, entity.width(), entity.height());
+			}
+		}
     }
 };
