@@ -1,0 +1,8 @@
+# WebStorm IDE project files
+.idea/
+
+# Vim swap files
+.*.sw?
+
+# Mac OS X
+.DS_Store
