@@ -130,7 +130,7 @@ var Player = BlockGrid.extend({
 		/* For the client: */
 		if (!ige.isServer) {
 			/* Save the old control state for comparison later */
-			oldControls = this.controls
+			oldControls = JSON.stringify(this.controls);
 
 			/* Modify the KEYBOARD controls to reflect which keys the client currently is pushing */
 			this.controls.key.up = ige.input.actionState('key.up');
@@ -143,10 +143,10 @@ var Player = BlockGrid.extend({
 			this.controls.mouse.button2 = ige.input.actionState('mouse.button2');
 			this.controls.mouse.button3 = ige.input.actionState('mouse.button3');
 
-			//if (JSON.stringify(this.controls) !== JSON.stringify(oldControls)) { //this.controls !== oldControls) {
+			if (JSON.stringify(this.controls) !== oldControls) { //this.controls !== oldControls) {
 				// Tell the server about our control change
 				ige.network.send('playerControlUpdate', this.controls);
-			//}
+			}
 		}
 
 		// Call the BlockGrid (super-class) tick() method
