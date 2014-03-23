@@ -7,7 +7,7 @@ var EngineBlock = Block.extend({
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(64, 64, 64)";
 			this.textureOutline = "rgb(255, 78, 0)";
-			this.textureSvgUrl = "./assets/blocks/rocket/rocket.svg";
+			this.textureSvg = ige.client.svgs.engine;
 		}
 	}
 });
