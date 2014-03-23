@@ -39,7 +39,8 @@ var Client = IgeClass.extend({
 				power: gameRoot + 'assets/blocks/power/power.svg',
 				engine: gameRoot + 'assets/blocks/rocket/rocket.svg',
 				fuel: gameRoot + 'assets/blocks/fuel/fuel.svg',
-				cargo: gameRoot + 'assets/blocks/cargo/cargo.svg'
+				cargo: gameRoot + 'assets/blocks/cargo/cargo.svg',
+				control: gameRoot + 'assets/blocks/playerctrl/playerctrl.svg'
 			}
 
 			// Loop through the svgs object and request each SVG
