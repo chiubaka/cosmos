@@ -35,6 +35,7 @@ var Client = IgeClass.extend({
 			block_cargo: new IgeTexture(gameRoot + 'assets/blocks/cargo.png'),
 			block_power_gold: new IgeTexture(gameRoot + 'assets/blocks/power_gold.png'),
 			block_engine: new IgeTexture(gameRoot + 'assets/blocks/rocket.png'),
+			playerControlBlock: new IgeTexture(gameRoot + 'assets/blocks/playerctrl.png'),
 
 			sprite_rocket_flame: new IgeTexture(gameRoot + 'assets/blocks/rocket_flame.png'),
 
@@ -74,9 +75,6 @@ var Client = IgeClass.extend({
 						ige.input.mapAction('mouse.button1', ige.input.mouse.button1);
 						ige.input.mapAction('mouse.button2', ige.input.mouse.button2);
 						ige.input.mapAction('mouse.button3', ige.input.mouse.button3);
-
-						console.log("TTTTTETAESAGHRESAHJTREAHTESHRTESNHTRSNTGRSJNTRSNT");
-						console.log(ige.input);
 
 						// Ask the server to create an entity for us
 						ige.network.send('playerEntity');
