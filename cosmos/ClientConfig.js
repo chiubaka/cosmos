@@ -11,6 +11,7 @@ var igeClientConfig = {
 		/* Blocks */
 		'./gameClasses/blocks/EngineBlock.js',
 		'./gameClasses/blocks/PowerBlock.js',
+		'./gameClasses/blocks/FuelBlock.js',
 
 		/* Standard game scripts */
 		'./client.js',
