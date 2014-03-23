@@ -32,7 +32,13 @@ var Player = BlockGrid.extend({
 			this.depth(1);
 		}
 
-		this.setGrid(BlockGrid.prototype.newGridFromDimensions(20, 20));//[[new PowerBlock(), new EngineBlock()], [new PowerBlock(), new EngineBlock]]);
+		//construct a large grid ship
+		grid = BlockGrid.prototype.newGridFromDimensions(10, 10);
+		grid[grid.length / 2][grid[0].length / 2] = new PlayerControlBlock();
+		this.setGrid(grid);
+
+		//Use a preset ship
+		//this.setGrid([[new PowerBlock(), new EngineBlock()], [new PowerBlock(), new EngineBlock]]);
 
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);
