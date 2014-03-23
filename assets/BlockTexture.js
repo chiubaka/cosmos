@@ -42,7 +42,8 @@ var image = {
 			}
 			else
 			{
-				ctx.drawImage(entity.svg, -entity._geometry.x2, -entity._geometry.y2, entity.width(), entity.height());
+				var iconScaleFactor = 0.8;
+				ctx.drawImage(entity.svg, -entity._geometry.x2 * iconScaleFactor, -entity._geometry.y2 * iconScaleFactor, entity.width() * iconScaleFactor, entity.height() * iconScaleFactor);
 			}
 		}
     }
