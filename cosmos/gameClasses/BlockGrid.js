@@ -48,9 +48,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 				block.streamMode(1);
 
 				var width = block._width;
+				var height = block._height;
 
 				var x = width * col;
-				var y = width * row;
+				var y = height * row;
 
 				block.translateTo(x, y, 0);
 
@@ -59,7 +60,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 					friction: 0.5,
 					restitution: 0.5,
 					shape: {
-						type: 'rectangle',
+						type: 'circle',
 						data: {
 							// The position of the fixture relative to the body
 							x: x,
