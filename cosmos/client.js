@@ -29,18 +29,18 @@ var Client = IgeClass.extend({
 
 		// Load the textures we want to use
 		this.textures = {
-			ship: new IgeTexture('./assets/blocks/rocket_flame.png'),
+			ship: new IgeTexture(gameRoot + 'assets/blocks/rocket_flame.png'),
 
 			/* Block textures */
-			block_cargo: new IgeTexture('./assets/blocks/cargo.png'),
-			block_power_gold: new IgeTexture('./assets/blocks/power_gold.png'),
-			block_engine: new IgeTexture('./assets/blocks/rocket.png'),
+			block_cargo: new IgeTexture(gameRoot + 'assets/blocks/cargo.png'),
+			block_power_gold: new IgeTexture(gameRoot + 'assets/blocks/power_gold.png'),
+			block_engine: new IgeTexture(gameRoot + 'assets/blocks/rocket.png'),
 
-			sprite_rocket_flame: new IgeTexture('./assets/blocks/rocket_flame.png'),
+			sprite_rocket_flame: new IgeTexture(gameRoot + 'assets/blocks/rocket_flame.png'),
 
-			background_helix_nebula: new IgeTexture('./assets/backgrounds/helix_nebula.jpg')
+			background_helix_nebula: new IgeTexture(gameRoot + 'assets/backgrounds/helix_nebula.jpg')
 		};
-		
+
 
 		ige.on('texturesLoaded', function () {
 			// Apply rotate filter to player ship
