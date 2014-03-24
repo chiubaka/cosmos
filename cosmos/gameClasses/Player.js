@@ -28,7 +28,7 @@ var Player = BlockGrid.extend({
 				[new Block(), new Block(), new Block()],
 				[new Block(), new ControlBlock(), new Block()],
 				[new Block(), new PowerBlock(), new Block()],
-				[new Block(), new CargoBlock, new Block()],
+				[new ThrusterBlock(), new Block(), new CargoBlock, new Block(), new ThrusterBlock()],
 				[new Block(), new CargoBlock, new Block()],
 				[new Block(), new FuelBlock, new Block()],
 				[new Block(), new EngineBlock(), new Block()]

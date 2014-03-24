@@ -15,6 +15,7 @@ var config = {
 		{name: 'CargoBlock', path: './gameClasses/blocks/CargoBlock'},
 		{name: 'ControlBlock', path: './gameClasses/blocks/ControlBlock'},
 		{name: 'MiningLaserBlock', path: './gameClasses/blocks/MiningLaserBlock'},
+		{name: 'ThrusterBlock', path: './gameClasses/blocks/ThrusterBlock'},
 
 		/* Other classes */
 		{name: 'Player', path: './gameClasses/Player'},
