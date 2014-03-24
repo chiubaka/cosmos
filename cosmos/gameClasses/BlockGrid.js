@@ -18,6 +18,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 			for(var col = 0; col < blockList.length; col++)
 			{
 				var block = blockList[col];
+				if (block === undefined)
+				{
+					continue;
+				}
 				block.mount(this);
 				block.streamMode(1);
 
