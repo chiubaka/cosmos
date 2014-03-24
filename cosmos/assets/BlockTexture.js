@@ -25,25 +25,26 @@ var image = {
 		ctx.lineTo(-entity._geometry.x2, -entity._geometry.y2);
 		ctx.stroke();
 
-		if (entity.textureSvgUrl)
+		// Draw block icon
+		if (entity.textureSvg)
 		{
-			if (!entity.svg)
-			{
-				var image = new Image();
-				image.src = entity.textureSvgUrl;
+			if (!entity.textureImage) {
+				// Convert the SVG XML into a data URI
+				var imageSrc = 'data:image/svg+xml;base64,' + btoa(entity.textureSvg);
 
+				var image = new Image();
+				image.src = imageSrc;
 				image.onload = function() {
-					image.width = entity.width();
-					image.height = entity.height();
-					entity.svg = image;
+					// Cache the image so we don't have to keep drawing it from the SVG
+					entity.textureImage = image;
+					// Tell the entity it should redraw itself
 					entity.cacheDirty(true);
 				}
 			}
-			else
-			{
+			else {
 				var iconScaleFactor = 0.8;
-				ctx.drawImage(entity.svg, -entity._geometry.x2 * iconScaleFactor, -entity._geometry.y2 * iconScaleFactor, entity.width() * iconScaleFactor, entity.height() * iconScaleFactor);
+				ctx.drawImage(entity.textureImage, -entity._geometry.x2 * iconScaleFactor, -entity._geometry.y2 * iconScaleFactor, entity.width() * iconScaleFactor, entity.height() * iconScaleFactor);
 			}
 		}
-    }
+  }
 };
