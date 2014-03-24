@@ -109,7 +109,8 @@ var Player = BlockGrid.extend({
 			/* Linear motion */
 			var linearImpulse = 100;
 
-			var angle = this._box2dBody.GetAngle();
+			// the "- Math.PI/2" below makes the ship move forward and backwards, instead of side to side.
+			var angle = this._box2dBody.GetAngle() - Math.PI/2;
 
 			if (this.controls.key.up) {
 				var x_comp = Math.cos(angle) * linearImpulse; //x component of the (unit?) direction vector
