@@ -94,6 +94,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 			fixedRotation: false,
 			fixtures: fixtures
 		});
+
+		return this;
 	},
 
 	/**
