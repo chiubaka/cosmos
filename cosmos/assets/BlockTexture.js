@@ -36,7 +36,6 @@ var image = {
 					image.width = entity.width();
 					image.height = entity.height();
 					entity.svg = image;
-					console.log(entity.svg);
 					entity.cacheDirty(true);
 				}
 			}
