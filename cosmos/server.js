@@ -97,7 +97,7 @@ var Server = IgeClass.extend({
 							.streamMode(1)
 							.mount(self.foregroundScene)
 							.depth(100)
-							.setGrid(BlockGrid.prototype.newGridFromDimensions(30, 10));
+							.setGrid(BlockGrid.prototype.newGridFromDimensions(10, 5));
 					}
 				});
 			});
