@@ -37,7 +37,11 @@ var Client = IgeClass.extend({
 			// Load the SVGs for the block icons from the game server
 			self.svgs = {
 				power: gameRoot + 'assets/blocks/power/power.svg',
-				engine: gameRoot + 'assets/blocks/rocket/rocket.svg'
+				engine: gameRoot + 'assets/blocks/rocket/rocket.svg',
+				fuel: gameRoot + 'assets/blocks/fuel/fuel.svg',
+				cargo: gameRoot + 'assets/blocks/cargo/cargo.svg',
+				control: gameRoot + 'assets/blocks/playerctrl/playerctrl.svg',
+				miningLaser: gameRoot + 'assets/blocks/laser/laser.svg'
 			}
 
 			// Loop through the svgs object and request each SVG
