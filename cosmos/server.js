@@ -20,6 +20,7 @@ var Server = IgeClass.extend({
 		ige.addComponent(IgeBox2dComponent)
 			.box2d.sleep(true)
 			.box2d.createWorld()
+			.box2d.scaleRatio(10)
 			.mode(1)//Sets the world interval mode. In mode 0 (zero) the box2d simulation is synced to the framerate of the engine's renderer. In mode 1 the box2d simulation is stepped at a constant speed regardless of the engine's renderer. This must be set *before* calling the start() method in order for the setting to take effect.
 			.box2d.start();// this should be the last thing called
 
