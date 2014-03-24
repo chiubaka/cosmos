@@ -8,9 +8,18 @@ var Block = IgeEntity.extend({
 	init: function () {
 		IgeEntity.prototype.init.call(this);
 
-		this.width(25).height(25);
+		// Use an even number so values don't have to become approximate when we divide by two
+		this.width(26).height(26);
 
 		this.hp = 10; //this is the default hp of all blocks. Subclasses of block can have a different hp.
+
+		if (!ige.isServer) {
+			this.texture(ige.client.textures.block);
+
+			// Enable caching so that the smart textures aren't reevaluated every time.
+			this.compositeCache(true);
+			this.cacheSmoothing(true);
+		}
 	},
 
 	/**

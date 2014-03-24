@@ -11,7 +11,11 @@ var igeClientConfig = {
 		/* Blocks */
 		'./gameClasses/blocks/EngineBlock.js',
 		'./gameClasses/blocks/PowerBlock.js',
-		'./gameClasses/blocks/PlayerControlBlock.js',
+		'./gameClasses/blocks/FuelBlock.js',
+		'./gameClasses/blocks/CargoBlock.js',
+		'./gameClasses/blocks/ControlBlock.js',
+		'./gameClasses/blocks/MiningLaserBlock.js',
+		'./gameClasses/blocks/ThrusterBlock.js',
 
 		/* Standard game scripts */
 		'./client.js',

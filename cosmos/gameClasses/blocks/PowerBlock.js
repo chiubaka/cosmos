@@ -1,13 +1,15 @@
 var PowerBlock = Block.extend({
-  classId: 'PowerBlock',
+	classId: 'PowerBlock',
 
-  init: function () {
-    Block.prototype.init.call(this);
+	init: function () {
+		Block.prototype.init.call(this);
 
-    if (!ige.isServer) {
-      this.texture(ige.client.textures.block_power_gold);
-    }
-  }
+		if (!ige.isServer) {
+			this.textureBackground = "rgb(242, 242, 242)";
+			this.textureOutline = "rgb(255, 190, 13)";
+			this.textureSvg = ige.client.svgs.power;
+		}
+	}
 });
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = PowerBlock; }

@@ -11,7 +11,11 @@ var config = {
 		/* Blocks */
 		{name: 'PowerBlock', path: './gameClasses/blocks/PowerBlock'},
 		{name: 'EngineBlock', path: './gameClasses/blocks/EngineBlock'},
-    {name: 'PlayerControlBlock', path: './gameClasses/blocks/PlayerControlBlock'},
+		{name: 'FuelBlock', path: './gameClasses/blocks/FuelBlock'},
+		{name: 'CargoBlock', path: './gameClasses/blocks/CargoBlock'},
+		{name: 'ControlBlock', path: './gameClasses/blocks/ControlBlock'},
+		{name: 'MiningLaserBlock', path: './gameClasses/blocks/MiningLaserBlock'},
+		{name: 'ThrusterBlock', path: './gameClasses/blocks/ThrusterBlock'},
 
 		/* Other classes */
 		{name: 'Player', path: './gameClasses/Player'},

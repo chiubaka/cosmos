@@ -29,23 +29,45 @@ var Client = IgeClass.extend({
 
 		// Load the textures we want to use
 		this.textures = {
-			ship: new IgeTexture(gameRoot + 'assets/blocks/rocket_flame.png'),
-
-			/* Block textures */
-			block_cargo: new IgeTexture(gameRoot + 'assets/blocks/cargo.png'),
-			block_power_gold: new IgeTexture(gameRoot + 'assets/blocks/power_gold.png'),
-			block_engine: new IgeTexture(gameRoot + 'assets/blocks/rocket.png'),
-			playerControlBlock: new IgeTexture(gameRoot + 'assets/blocks/playerctrl.png'),
-
-			sprite_rocket_flame: new IgeTexture(gameRoot + 'assets/blocks/rocket_flame.png'),
-
+			block: new IgeTexture(gameRoot + 'assets/BlockTexture.js'),
 			background_helix_nebula: new IgeTexture(gameRoot + 'assets/backgrounds/helix_nebula.jpg')
 		};
 
-
 		ige.on('texturesLoaded', function () {
-			// Apply rotate filter to player ship
-			ige.client.textures.ship.applyFilter(IgeFilters.rotate, {value: 90});
+			// Load the SVGs for the block icons from the game server
+			self.svgs = {
+				power: gameRoot + 'assets/blocks/power/power.svg',
+				engine: gameRoot + 'assets/blocks/rocket/rocket.svg',
+				fuel: gameRoot + 'assets/blocks/fuel/fuel.svg',
+				cargo: gameRoot + 'assets/blocks/cargo/cargo.svg',
+				control: gameRoot + 'assets/blocks/playerctrl/playerctrl.svg',
+				miningLaser: gameRoot + 'assets/blocks/laser/laser.svg'
+			}
+
+			// Loop through the svgs object and request each SVG
+			for (var key in self.svgs) {
+				if (self.svgs.hasOwnProperty(key)) {
+					var url = self.svgs[key];
+					var request = new XMLHttpRequest();
+					request.onreadystatechange = function() {
+						if (request.readyState == 4) {
+							if (request.status == 200) {
+								// Replace the value in the svgs object with the actual SVG XML data
+								self.svgs[key] = request.responseText;
+							}
+							else {
+								console.error("Received status code " + request.status + " when trying to load textures from server.");
+							}
+						}
+					};
+					// False here specifies a synchronous request, which simplifies concurrency here.
+					// May need to consider changing this if many SVGs need to be downloaded and load
+					// times are getting ridiculous.
+					request.open('GET', url, false);
+					request.send();
+				}
+			}
+
 			// Ask the engine to start
 			ige.start(function (success) {
 				// Check if the engine started successfully
@@ -111,7 +133,7 @@ var Client = IgeClass.extend({
 							.id('vp1')
 							.autoSize(true)
 							.scene(self.mainScene)
-							.drawBounds(true)
+							.drawBounds(false)
 							.mount(ige);
 
 						self.uiScene = new IgeScene2d()
