@@ -64,7 +64,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 					friction: 0.5,
 					restitution: 0.5,
 					shape: {
-						type: 'circle',
+						type: 'rectangle',
 						data: {
 							// The position of the fixture relative to the body
 							x: x,
