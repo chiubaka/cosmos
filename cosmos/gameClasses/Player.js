@@ -24,6 +24,7 @@ var Player = BlockGrid.extend({
 
 		this.setGrid(
 			[
+				[new MiningLaserBlock()],
 				[new Block(), new Block(), new Block()],
 				[new Block(), new ControlBlock(), new Block()],
 				[new Block(), new PowerBlock(), new Block()],
