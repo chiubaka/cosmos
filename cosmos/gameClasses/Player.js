@@ -26,7 +26,7 @@ var Player = BlockGrid.extend({
 
 		this.width(20);
 		this.height(20);
-		this.translateTo(-2000, -2000, 0);
+		this.translateTo(-200, -200, 0);
 
 		if (!ige.isServer) {
 			this.depth(1);
