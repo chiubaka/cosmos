@@ -24,14 +24,14 @@ var Player = BlockGrid.extend({
 
 		this.setGrid(
 			[
-				[new MiningLaserBlock()],
-				[new Block(), new Block(), new Block()],
-				[new Block(), new ControlBlock(), new Block()],
-				[new Block(), new PowerBlock(), new Block()],
+				[undefined, undefined, new MiningLaserBlock(), undefined, undefined],
+				[undefined, new Block(), new Block(), new Block(), undefined],
+				[undefined, new Block(), new ControlBlock(), new Block(), undefined],
+				[undefined, new Block(), new PowerBlock(), new Block(), undefined],
 				[new ThrusterBlock(), new Block(), new CargoBlock, new Block(), new ThrusterBlock()],
-				[new Block(), new CargoBlock, new Block()],
-				[new Block(), new FuelBlock, new Block()],
-				[new Block(), new EngineBlock(), new Block()]
+				[undefined, new Block(), new CargoBlock, new Block(), undefined],
+				[undefined, new Block(), new FuelBlock, new Block(), undefined],
+				[undefined, new Block(), new EngineBlock(), new Block(), undefined]
 			]
 		);
 
