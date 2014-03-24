@@ -85,19 +85,17 @@ var Server = IgeClass.extend({
 							.streamMode(1)
 							.mount(self.backgroundScene);
 
-						new BlockGrid()
-							.id('blockGrid1')
-							.streamMode(1)
-							.mount(self.foregroundScene)
-							.depth(100)
-							.setGrid([[new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock()], [new EngineBlock(), new EngineBlock()]]);
-
-						new BlockGrid()
-							.id('blockGrid2')
-							.streamMode(1)
-							.mount(self.foregroundScene)
-							.depth(100)
-							.setGrid(BlockGrid.prototype.newGridFromDimensions(10, 5));
+						var numAsteroids = 10;
+						var distance = 10000;
+						for (var asteroidNumber = 0; asteroidNumber < numAsteroids; asteroidNumber++) {
+							new BlockGrid()
+								.id('blockGrid' + asteroidNumber)
+								.streamMode(1)
+								.mount(self.foregroundScene)
+								.depth(100)
+								.setGrid(BlockGrid.prototype.newGridFromDimensions(10, 5))
+								.translateTo((Math.random()-.5) * distance, (Math.random()-.5) * distance, 0);
+						}
 					}
 				});
 			});
