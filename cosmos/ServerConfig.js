@@ -19,7 +19,8 @@ var config = {
 
 		/* Other classes */
 		{name: 'Player', path: './gameClasses/Player'},
-		{name: 'Background', path: './gameClasses/Background'}
+		{name: 'Background', path: './gameClasses/Background'},
+		{name: 'ExampleShips', path: './gameClasses/ExampleShips'}
 	]
 };
 
