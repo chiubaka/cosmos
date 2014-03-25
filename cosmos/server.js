@@ -65,9 +65,9 @@ var Server = IgeClass.extend({
 							.layer(self.LAYER_BACKGROUND)
 							.mount(self.mainScene);
 
-						self.foregroundScene = new IgeScene2d()
-							.id('foregroundScene')
-							.layer(self.LAYER_FOREGROUND)
+						self.gameScene = new IgeScene2d()
+							.id('gameScene')
+							.layer(self.LAYER_MIDDLE)
 							.mount(self.mainScene);
 
 						// Create the main viewport and set the scene
@@ -88,14 +88,14 @@ var Server = IgeClass.extend({
 						new BlockGrid()
 							.id('blockGrid1')
 							.streamMode(1)
-							.mount(self.foregroundScene)
+							.mount(self.gameScene)
 							.depth(100)
 							.setGrid([[new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock()], [new EngineBlock(), new EngineBlock()]]);
 
 						new BlockGrid()
 							.id('blockGrid2')
 							.streamMode(1)
-							.mount(self.foregroundScene)
+							.mount(self.gameScene)
 							.depth(100)
 							.setGrid(BlockGrid.prototype.newGridFromDimensions(10, 5));
 					}

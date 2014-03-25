@@ -123,9 +123,9 @@ var Client = IgeClass.extend({
 							.layer(self.LAYER_BACKGROUND)
 							.mount(self.mainScene);
 
-						self.foregroundScene = new IgeScene2d()
-							.id('foregroundScene')
-							.layer(self.LAYER_FOREGROUND)
+						self.gameScene = new IgeScene2d()
+							.id('gameScene')
+							.layer(self.LAYER_MIDDLE)
 							.mount(self.mainScene);
 
 						// Create the main viewport and set the scene
@@ -141,12 +141,13 @@ var Client = IgeClass.extend({
 						self.uiScene = new IgeScene2d()
 							.id('uiScene')
 							.ignoreCamera(true)
-							.mount(ige.client.foregroundScene);
+							.layer(self.LAYER_FOREGROUND)
+							.mount(self.mainScene);
 
 						self.minimapViewport = new IgeViewport()
 							.id('minimapViewport')
 							.autoSize(false)
-							.scene(self.uiScene)
+							.scene(self.mainScene)
 							.drawBounds(false)
 							.mount(ige);
 
