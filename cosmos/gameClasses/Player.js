@@ -119,6 +119,14 @@ var Player = BlockGrid.extend({
 				var location = this._box2dBody.GetWorldCenter(); //center of gravity
 
 				this._box2dBody.ApplyImpulse(impulse, location);
+
+				for (var blockRow in this.getGrid()) {
+					for (var block in blockRow) {
+						if (typeof(block) === "EngineBlock") {
+							this._box2dBody.ApplyImpulse(impulse, location);
+						}
+					}
+				}
 			}
 			else {
 				/* Consider applying the breaks automatically when the up arrow is released */
@@ -131,7 +139,13 @@ var Player = BlockGrid.extend({
 				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
 				var location = this._box2dBody.GetWorldCenter(); //center of gravity
 
-				this._box2dBody.ApplyImpulse(impulse, location);
+				for (var blockRow in this.getGrid()) {
+					for (var block in blockRow) {
+						if (typeof(block) === "EngineBlock") {
+							this._box2dBody.ApplyImpulse(impulse, location);
+						}
+					}
+				}
 			}
 		}
 
