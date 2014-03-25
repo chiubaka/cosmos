@@ -37,8 +37,8 @@ var Player = BlockGrid.extend({
 		grid[grid.length / 2][grid[0].length / 2] = new PlayerControlBlock();
 		this.setGrid(grid);
 		*/
-		
-		this.setGrid(ExampleShips.starterShip());
+
+		this.setGrid(ExampleShips.starterShipDoubleEngines());
 
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);
