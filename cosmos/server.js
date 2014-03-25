@@ -59,15 +59,19 @@ var Server = IgeClass.extend({
 						self.mainScene = new IgeScene2d()
 							.id('mainScene');
 
-						self.backgroundScene = new IgeScene2d()
-							.id('backgroundScene')
-							.layer(self.LAYER_BACKGROUND)
+						self.spaceScene = new IgeScene2d()
+							.id('spaceScene')
 							.mount(self.mainScene);
 
-						self.foregroundScene = new IgeScene2d()
-							.id('foregroundScene')
-							.layer(self.LAYER_FOREGROUND)
-							.mount(self.mainScene);
+						self.spaceBackgroundScene = new IgeScene2d()
+							.id('spaceBackgroundScene')
+							.layer(self.LAYER_BACKGROUND)
+							.mount(self.spaceScene);
+
+						self.spaceGameScene = new IgeScene2d()
+							.id('spaceGameScene')
+							.layer(self.LAYER_MIDDLE)
+							.mount(self.spaceScene);
 
 						// Create the main viewport and set the scene
 						// it will "look" at as the new scene1 we just
@@ -82,19 +86,19 @@ var Server = IgeClass.extend({
 						new Background()
 							.id('helix_nebula_background')
 							.streamMode(1)
-							.mount(self.backgroundScene);
+							.mount(self.spaceBackgroundScene);
 
 						new BlockGrid()
 							.id('blockGrid1')
 							.streamMode(1)
-							.mount(self.foregroundScene)
+							.mount(self.spaceGameScene)
 							.depth(100)
 							.setGrid([[new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock()], [new EngineBlock(), new EngineBlock()]]);
 
 						new BlockGrid()
 							.id('blockGrid2')
 							.streamMode(1)
-							.mount(self.foregroundScene)
+							.mount(self.spaceGameScene)
 							.depth(100)
 							.setGrid(BlockGrid.prototype.newGridFromDimensions(30, 10));
 					}

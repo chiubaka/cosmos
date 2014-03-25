@@ -116,16 +116,6 @@ var Client = IgeClass.extend({
 						self.mainScene = new IgeScene2d()
 							.id('mainScene');
 
-						self.backgroundScene = new IgeScene2d()
-							.id('backgroundScene')
-							.layer(self.LAYER_BACKGROUND)
-							.mount(self.mainScene);
-
-						self.foregroundScene = new IgeScene2d()
-							.id('foregroundScene')
-							.layer(self.LAYER_FOREGROUND)
-							.mount(self.mainScene);
-
 						// Create the main viewport and set the scene
 						// it will "look" at as the new scene1 we just
 						// created above
@@ -136,10 +126,24 @@ var Client = IgeClass.extend({
 							.drawBounds(false)
 							.mount(ige);
 
-						self.uiScene = new IgeScene2d()
-							.id('uiScene')
+						self.spaceScene = new IgeScene2d()
+							.id('spaceScene')
+							.mount(self.mainScene);
+
+						self.spaceBackgroundScene = new IgeScene2d()
+							.id('spaceBackgroundScene')
+							.layer(self.LAYER_BACKGROUND)
+							.mount(self.spaceScene);
+
+						self.spaceGameScene = new IgeScene2d()
+							.id('spaceGameScene')
+							.layer(self.LAYER_MIDDLE)
+							.mount(self.spaceScene);
+
+						self.spaceUiScene = new IgeScene2d()
+							.id('spaceUiScene')
 							.ignoreCamera(true)
-							.mount(ige.client.foregroundScene);
+							.mount(self.spaceScene);
 
 						// Create an IgeUiTimeStream entity that will allow us to "visualise" the
 						// timestream data being interpolated by the player entity
@@ -148,7 +152,7 @@ var Client = IgeClass.extend({
 							.width(400)
 							.top(0)
 							.center(0)
-							.mount(self.uiScene);
+							.mount(self.spaceUiScene);
 
 						self.custom1 = {
 							name: 'Delta',
