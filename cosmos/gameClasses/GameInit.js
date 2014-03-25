@@ -71,6 +71,7 @@ var GameInit = {
 
 			game.spaceUiScene = new IgeScene2d()
 				.id('spaceUiScene')
+				.layer(game.LAYER_FOREGROUND)
 				.ignoreCamera(true)
 				.mount(game.spaceScene);
 		}
