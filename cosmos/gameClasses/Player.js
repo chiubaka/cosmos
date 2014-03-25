@@ -37,21 +37,8 @@ var Player = BlockGrid.extend({
 		grid[grid.length / 2][grid[0].length / 2] = new PlayerControlBlock();
 		this.setGrid(grid);
 		*/
-		//Use a preset ship
-		//this.setGrid([[new PowerBlock(), new EngineBlock()], [new PowerBlock(), new EngineBlock]]);
 
-		this.setGrid(
-			[
-				[undefined, undefined, new MiningLaserBlock(), undefined, undefined],
-				[undefined, new Block(), new Block(), new Block(), undefined],
-				[undefined, new Block(), new ControlBlock(), new Block(), undefined],
-				[undefined, new Block(), new PowerBlock(), new Block(), undefined],
-				[new ThrusterBlock(), new Block(), new CargoBlock, new Block(), new ThrusterBlock()],
-				[undefined, new Block(), new CargoBlock, new Block(), undefined],
-				[undefined, new Block(), new FuelBlock, new Block(), undefined],
-				[undefined, new Block(), new EngineBlock(), new Block(), undefined]
-			]
-		);
+		this.setGrid(ExampleShips.starterShipSingleMisplacedEngine());
 
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);

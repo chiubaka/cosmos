@@ -5,8 +5,10 @@ var igeClientConfig = {
 		'./gameClasses/BlockGrid.js',
 
 		'./gameClasses/ClientNetworkEvents.js',
+
 		'./gameClasses/Player.js',
 		'./gameClasses/Background.js',
+		'./gameClasses/ExampleShips.js',
 
 		/* Blocks */
 		'./gameClasses/blocks/EngineBlock.js',
