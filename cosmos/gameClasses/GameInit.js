@@ -1,12 +1,21 @@
+/**
+ * This file contains functions important for game initialization. A lot of game initialization code is shared between
+ * the client and the server, so we've moved that code here to avoid code duplication.
+ * @type {{init: init, initScenes: initScenes, initSpaceScene: initSpaceScene, sharedInit: sharedInit, clientInit: clientInit, initPlayerControls: initPlayerControls, initTimeStream: initTimeStream, serverInit: serverInit}}
+ */
 var GameInit = {
+	/**
+	 * This is the function to call to initialize the game. It must be called on both the client and the server after
+	 * the networking has been setup.
+	 * @param game either ige.client or ige.server
+	 */
 	init: function(game) {
 		// Load the base scene data
 		game.mainScene = new IgeScene2d()
 			.id('mainScene');
 
-		// Create the main viewport and set the scene
-		// it will "look" at as the new scene1 we just
-		// created above
+		// Create the main viewport and set the scene it will "look" at as the new scene1 we just created above.
+		// Surprisingly, this must exist on both the client and the server, or a blank screen will be displayed.
 		game.vp1 = new IgeViewport()
 			.id('vp1')
 			.autoSize(true)
@@ -25,10 +34,23 @@ var GameInit = {
 		}
 	},
 
+	/**
+	 * Initializes the scene graph for the game. All scenes should be initialized here and both the server and the
+	 * client will run this code to construct the same or similar scene graphs. If either the client or the server alone
+	 * need to add some element to the scene graph, use ige.isServer.
+	 * @param game either ige.client or ige.server
+	 */
 	initScenes: function(game) {
 		this.initSpaceScene(game);
 	},
 
+	/**
+	 * Initializes the space scene. The space scene is the initial scene of the game, where the player is in space.
+	 * It contains three layers for the background, the actual game content, and the UI.
+	 * In general, the server needs to know about scenes so that it can attach entities to those scenes and stream them
+	 * to the clients. Scenes that are not associated with streamed entities can usually be loaded on just the client.
+	 * @param game either ige.client or ige.server
+	 */
 	initSpaceScene: function(game) {
 		game.spaceScene = new IgeScene2d()
 			.id('spaceScene')
@@ -39,6 +61,8 @@ var GameInit = {
 			.layer(game.LAYER_MIDDLE)
 			.mount(game.spaceScene);
 
+		// For now, the server does not need to know about the background scene.
+		// The server does not need to load the UI.
 		if (!ige.isServer) {
 			game.spaceBackgroundScene = new IgeScene2d()
 				.id('spaceBackgroundScene')
@@ -52,9 +76,17 @@ var GameInit = {
 		}
 	},
 
+	/**
+	 * Shared initialization code goes here.
+	 * @param game either ige.client or ige.server
+	 */
 	sharedInit: function(game) {
 	},
 
+	/**
+	 * Client only initialization. Will not be run by the server.
+	 * @param client the client (ige.client)
+	 */
 	clientInit: function(client) {
 		this.initPlayerControls(client);
 
@@ -65,6 +97,10 @@ var GameInit = {
 		this.initTimeStream(client);
 	},
 
+	/**
+	 * Sets up the player controls.
+	 * @param client the client (ige.client)
+	 */
 	initPlayerControls: function(client) {
 		// Define our player controls
 		ige.input.mapAction('key.left', ige.input.key.left);
@@ -77,6 +113,10 @@ var GameInit = {
 		ige.input.mapAction('mouse.button3', ige.input.mouse.button3);
 	},
 
+	/**
+	 * Initializes the time stream UI element for debugging.
+	 * @param client the client (ige.client)
+	 */
 	initTimeStream: function(client) {
 		// Create an IgeUiTimeStream entity that will allow us to "visualise" the
 		// timestream data being interpolated by the player entity
@@ -113,7 +153,14 @@ var GameInit = {
 		ige.watchStart(client.custom4);
 	},
 
+	/**
+	 * Server only initialization. Will not be run by the client.
+	 * @param server the server (ige.server)
+	 */
 	serverInit: function(server) {
+
+		// The server streams these entities to the client. Creating them on both the client AND the server may speed
+		// up initialization time.
 		new BlockGrid()
 			.id('blockGrid1')
 			.streamMode(1)
