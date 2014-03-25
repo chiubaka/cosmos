@@ -1,7 +1,7 @@
 var ExampleShips = {
 	/**
-	This is the ship in beginning of the video
-	*/
+	 * This is the ship in beginning of the video
+	 */
 	starterShip: function () {
 		return [
 			[undefined,           undefined,   new MiningLaserBlock(), undefined,   undefined],
@@ -16,8 +16,8 @@ var ExampleShips = {
 	},
 
 	/**
-	This is the ship in the middle of the video
-	*/
+	 * This is the ship in the middle of the video
+	 */
 	starterShipSingleMisplacedEngine: function () {
 		return [
 			[undefined,           undefined,         new MiningLaserBlock(), undefined,         undefined],
@@ -33,8 +33,8 @@ var ExampleShips = {
 	},
 
 	/**
-	This is the ship at the end of the video
-	*/
+	 * This is the ship at the end of the video
+	 */
 	starterShipDoubleEngines: function () {
 		return [
 			[undefined,           undefined,         new MiningLaserBlock(), undefined,         undefined],
