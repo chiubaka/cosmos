@@ -2,7 +2,7 @@ var config = {
 	include: [
 		/* Our custom game JS scripts */
 		{name: 'ServerNetworkEvents', path: './gameClasses/ServerNetworkEvents'},
-
+		{name: 'GameInit', path: './gameClasses/GameInit'},
 
 		/* Our custom classes */
 		{name: 'Block', path: './gameClasses/Block'},
@@ -19,7 +19,8 @@ var config = {
 
 		/* Other classes */
 		{name: 'Player', path: './gameClasses/Player'},
-		{name: 'Background', path: './gameClasses/Background'}
+		{name: 'Background', path: './gameClasses/Background'},
+		{name: 'ExampleShips', path: './gameClasses/ExampleShips'}
 	]
 };
 

@@ -9,7 +9,7 @@ var ClientNetworkEvents = {
 	 */
 	_onPlayerEntity: function (data) {
 		var cameraSmoothingAmount = 10;
-		
+
 		if (ige.$(data)) {
 			ige.$('vp1').camera.trackTranslate(ige.$(data), cameraSmoothingAmount);
 
