@@ -60,6 +60,7 @@ var Client = IgeClass.extend({
 							}
 						}
 					};
+
 					// False here specifies a synchronous request, which simplifies concurrency here.
 					// May need to consider changing this if many SVGs need to be downloaded and load
 					// times are getting ridiculous.
@@ -88,6 +89,7 @@ var Client = IgeClass.extend({
 							.stream.on('entityCreated', function (entity) {
 								self.log('Stream entity created with ID: ' + entity.id());
 							});
+
 						// Define our player controls
 						ige.input.mapAction('key.left', ige.input.key.left);
 						ige.input.mapAction('key.right', ige.input.key.right);
@@ -140,6 +142,13 @@ var Client = IgeClass.extend({
 							.id('uiScene')
 							.ignoreCamera(true)
 							.mount(ige.client.foregroundScene);
+
+						self.minimapViewport = new IgeViewport()
+							.id('minimapViewport')
+							.autoSize(false)
+							.scene(self.uiScene)
+							.drawBounds(false)
+							.mount(ige);
 
 						// Create an IgeUiTimeStream entity that will allow us to "visualise" the
 						// timestream data being interpolated by the player entity
