@@ -2,9 +2,9 @@ var Block = IgeEntity.extend({
 	classId: 'Block',
 
 	/**
-	Construct a new block
-	Note that block doesn't have any texture. This is because subclasses of Block are expected to have their own textures.
-	*/
+	 * Construct a new block
+	 * Note that block doesn't have any texture. This is because subclasses of Block are expected to have their own textures.
+	 */
 	init: function () {
 		IgeEntity.prototype.init.call(this);
 
@@ -23,9 +23,9 @@ var Block = IgeEntity.extend({
 	},
 
 	/**
-	Decreases the block's health by the amount passed.
-	After health is decreased, the block may die.
-	*/
+	 * Decreases the block's health by the amount passed.
+	 * After health is decreased, the block may die.
+	 */
 	damage: function(amount) {
 		this.hp -= amount;
 
