@@ -82,12 +82,8 @@ var Client = IgeClass.extend({
 						ige.network.define('playerEntity', self._onPlayerEntity);
 						// Setup the network stream handler
 						ige.network.addComponent(IgeStreamComponent)
-							.stream.renderLatency(80) // Render the simulation 160 milliseconds in the past
-							// Create a listener that will fire whenever an entity
-							// is created because of the incoming stream data
-							.stream.on('entityCreated', function (entity) {
-								self.log('Stream entity created with ID: ' + entity.id());
-							});
+							.stream.renderLatency(80); // Render the simulation 160 milliseconds in the past
+
 						// Define our player controls
 						ige.input.mapAction('key.left', ige.input.key.left);
 						ige.input.mapAction('key.right', ige.input.key.right);
