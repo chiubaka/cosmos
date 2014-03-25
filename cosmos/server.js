@@ -56,51 +56,7 @@ var Server = IgeClass.extend({
 						// Accept incoming network connections
 						ige.network.acceptConnections(true);
 
-						self.mainScene = new IgeScene2d()
-							.id('mainScene');
-
-						self.spaceScene = new IgeScene2d()
-							.id('spaceScene')
-							.mount(self.mainScene);
-
-						self.spaceBackgroundScene = new IgeScene2d()
-							.id('spaceBackgroundScene')
-							.layer(self.LAYER_BACKGROUND)
-							.mount(self.spaceScene);
-
-						self.spaceGameScene = new IgeScene2d()
-							.id('spaceGameScene')
-							.layer(self.LAYER_MIDDLE)
-							.mount(self.spaceScene);
-
-						// Create the main viewport and set the scene
-						// it will "look" at as the new scene1 we just
-						// created above
-						self.vp1 = new IgeViewport()
-							.id('vp1')
-							.autoSize(true)
-							.scene(self.mainScene)
-							.drawBounds(true)
-							.mount(ige);
-
-						new Background()
-							.id('helix_nebula_background')
-							.streamMode(1)
-							.mount(self.spaceBackgroundScene);
-
-						new BlockGrid()
-							.id('blockGrid1')
-							.streamMode(1)
-							.mount(self.spaceGameScene)
-							.depth(100)
-							.setGrid([[new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock()], [new EngineBlock(), new EngineBlock()]]);
-
-						new BlockGrid()
-							.id('blockGrid2')
-							.streamMode(1)
-							.mount(self.spaceGameScene)
-							.depth(100)
-							.setGrid(BlockGrid.prototype.newGridFromDimensions(30, 10));
+						GameInit.init(self);
 					}
 				});
 			});
