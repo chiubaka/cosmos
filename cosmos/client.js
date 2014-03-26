@@ -136,7 +136,9 @@ var Client = IgeClass.extend({
 							.autoSize(true)
 							.scene(self.mainScene)
 							.drawBounds(false)
-							.width(10)
+							.width(200)
+							.height(200)
+							.translateTo(300, 300, 0)
 							.mount(ige);
 
 						self.uiScene = new IgeScene2d()
@@ -144,9 +146,6 @@ var Client = IgeClass.extend({
 							.ignoreCamera(true)
 							.layer(self.LAYER_FOREGROUND)
 							.mount(self.mainScene);
-
-						new EngineBlock()
-							.mount(self.uiScene);
 
 						self.minimapViewport = new IgeViewport()
 							.id('minimapViewport')
