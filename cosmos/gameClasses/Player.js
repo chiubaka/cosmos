@@ -37,21 +37,8 @@ var Player = BlockGrid.extend({
 		grid[grid.length / 2][grid[0].length / 2] = new PlayerControlBlock();
 		this.setGrid(grid);
 		*/
-		//Use a preset ship
-		//this.setGrid([[new PowerBlock(), new EngineBlock()], [new PowerBlock(), new EngineBlock]]);
 
-		this.setGrid(
-			[
-				[undefined, undefined, new MiningLaserBlock(), undefined, undefined],
-				[undefined, new Block(), new Block(), new Block(), undefined],
-				[undefined, new Block(), new ControlBlock(), new Block(), undefined],
-				[undefined, new Block(), new PowerBlock(), new Block(), undefined],
-				[new ThrusterBlock(), new Block(), new CargoBlock, new Block(), new ThrusterBlock()],
-				[undefined, new Block(), new CargoBlock, new Block(), undefined],
-				[undefined, new Block(), new FuelBlock, new Block(), undefined],
-				[undefined, new Block(), new EngineBlock(), new Block(), undefined]
-			]
-		);
+		this.setGrid(ExampleShips.starterShipSingleMisplacedEngine());
 
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);
@@ -119,6 +106,14 @@ var Player = BlockGrid.extend({
 				var location = this._box2dBody.GetWorldCenter(); //center of gravity
 
 				this._box2dBody.ApplyImpulse(impulse, location);
+
+				for (var blockRow in this.getGrid()) {
+					for (var block in blockRow) {
+						if (typeof(block) === "EngineBlock") {
+							this._box2dBody.ApplyImpulse(impulse, location);
+						}
+					}
+				}
 			}
 			else {
 				/* Consider applying the breaks automatically when the up arrow is released */
@@ -131,7 +126,13 @@ var Player = BlockGrid.extend({
 				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
 				var location = this._box2dBody.GetWorldCenter(); //center of gravity
 
-				this._box2dBody.ApplyImpulse(impulse, location);
+				for (var blockRow in this.getGrid()) {
+					for (var block in blockRow) {
+						if (typeof(block) === "EngineBlock") {
+							this._box2dBody.ApplyImpulse(impulse, location);
+						}
+					}
+				}
 			}
 		}
 
