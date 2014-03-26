@@ -17,8 +17,8 @@ var GameInit = {
 		// Create the main viewport and set the scene it will "look" at as the new scene1 we just created above.
 		// Surprisingly, this must exist on both the client and the server, or a blank screen will be displayed.
     if (!ige.isServer) {
-      game.vp1 = new IgeViewport()
-        .id('vp1')
+      game.spaceViewport = new IgeViewport()
+        .id('spaceViewport')
         .autoSize(true)
         .scene(game.mainScene)
         .drawBounds(false)
