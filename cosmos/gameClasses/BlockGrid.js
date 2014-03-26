@@ -25,14 +25,25 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return grid;
 	},
 
+	/**
+	 * Remove is intended to remove the block from the grid,
+	 * and also remove the fixture from the list of fixtures in the box2D object.
+	 */
 	remove: function(block, fixture) {
 		this.grid.splice(this.grid.indexOf(block), 1);
 		//this.box2DBody().fixtures.splice(this.box2Dbody().fixtures.indexOf(fixture), 1);
 	},
 
+	/**
+	 * getGrid returns the array of arrays which represents the grid of blocks that this BlockGrid is composed of.
+	 */
 	getGrid: function() {
 		return this.grid;
 	},
+	/**
+	 * setGrid sets the grid of this BlockGrid. This both updates the grid property (accessible with getGrid()),
+	 * and also updates this BlockGrid's box2d object to have the appropriate fixtures.
+	 */
 	setGrid: function(newGrid) {
 		this.grid = newGrid;
 
