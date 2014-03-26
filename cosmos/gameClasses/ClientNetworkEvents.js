@@ -9,12 +9,15 @@ var ClientNetworkEvents = {
 	 */
 	_onPlayerEntity: function (data) {
 		var cameraSmoothingAmount = 10;
+		var minimapScale = .1;
 
 		if (ige.$(data)) {
+			// Tell the camera to track our player entity
 			ige.$('vp1').camera.trackTranslate(ige.$(data), cameraSmoothingAmount);
-			
+			ige.$('vp1').camera.scaleTo(minimapScale, minimapScale, 1);
+
+			// tell the minimap camera to track our player entity as well
 			ige.$('minimapViewport').camera.trackTranslate(ige.$(data), cameraSmoothingAmount);
-			ige.$('minimapViewport').camera.scale(10, 10, 1);
 
 			// Set the time stream UI entity to monitor our player entity
 			// time stream data
@@ -29,10 +32,10 @@ var ClientNetworkEvents = {
 				if (entity.id() === data) {
 					// Tell the camera to track our player entity
 					ige.$('vp1').camera.trackTranslate(ige.$(data), cameraSmoothingAmount);
+					ige.$('vp1').camera.scaleTo(minimapScale, minimapScale, 1);
 
 					// tell the minimap camera to track our player entity as well
 					ige.$('minimapViewport').camera.trackTranslate(ige.$(data), cameraSmoothingAmount);
-					ige.$('minimapViewport').camera.scale(10, 10, 1);
 
 					// Set the time stream UI entity to monitor our player entity
 					// time stream data
