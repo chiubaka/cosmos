@@ -13,6 +13,7 @@ Major Refacotring of how rendering works (daniel)
 
 chat (low priority)
 	there are already components for this in IGE
+	push this feature branch (rafael)
 
 Minimap
 	Review rafael's pull request for the minimap (daniel)
