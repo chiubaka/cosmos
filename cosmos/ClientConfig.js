@@ -3,6 +3,7 @@ var igeClientConfig = {
 		/* Our custom game JS scripts */
 		'./gameClasses/Block.js',
 		'./gameClasses/BlockGrid.js',
+		'./gameClasses/BlockGridRenderContainer.js',
 
 		'./gameClasses/GameInit.js',
 		'./gameClasses/ClientNetworkEvents.js',

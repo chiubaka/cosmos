@@ -1,9 +1,24 @@
 var BlockGrid = IgeEntityBox2d.extend({
 	classId: 'BlockGrid',
 
-	grid: [], //this will be a grid of blocks
+	/** Contains the grid of Block objects that make up this BlockGrid */
+	_grid: [],
+	/** Contains the Box2D physics fixtures for this block grid */
+	_fixtures: [],
+	/** The rendering container for this BlockGrid, which essentially provides a cacheable location for the BlockGrid's
+	 * texture. */
+	_renderContainer: undefined,
 
-	fixtures: [],
+	init: function() {
+		IgeEntityBox2d.prototype.init.call(this);
+
+		this._renderContainer = new BlockGridRenderContainer()
+			.streamMode(1)
+			.mount(this);
+
+		if (!ige.isServer) {
+		}
+	},
 
 	/**
 	Static function
@@ -30,7 +45,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * and also remove the fixture from the list of fixtures in the box2D object.
 	 */
 	remove: function(block, fixture) {
-		this.grid.splice(this.grid.indexOf(block), 1);
+		this._grid.splice(this._grid.indexOf(block), 1);
 		//this.box2DBody().fixtures.splice(this.box2Dbody().fixtures.indexOf(fixture), 1);
 	},
 
@@ -38,20 +53,21 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * getGrid returns the array of arrays which represents the grid of blocks that this BlockGrid is composed of.
 	 */
 	getGrid: function() {
-		return this.grid;
+		return this._grid;
 	},
+
 	/**
 	 * setGrid sets the grid of this BlockGrid. This both updates the grid property (accessible with getGrid()),
 	 * and also updates this BlockGrid's box2d object to have the appropriate fixtures.
 	 */
 	setGrid: function(newGrid) {
-		this.grid = newGrid;
+		this._grid = newGrid;
 
 		fixtures = [];
 
-		for(var row = 0; row < this.grid.length; row++)
+		for(var row = 0; row < this._grid.length; row++)
 		{
-			var blockList = this.grid[row];
+			var blockList = this._grid[row];
 			for(var col = 0; col < blockList.length; col++)
 			{
 				var block = blockList[col];
@@ -60,7 +76,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 					continue;
 				}
 
-				block.mount(this);
+				block.mount(this._renderContainer);
 				block.streamMode(1);
 
 				var width = block.width();
@@ -108,16 +124,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 		});
 
 		return this;
-	},
-
-	/**
-	* Called every frame by the engine when this entity is mounted to the
-	* scenegraph.
-	* @param ctx The canvas context to render to.
-	*/
-	tick: function (ctx) {
-		//Call the tick function of the super class, IgeEntityBox2d.
-		IgeEntityBox2d.prototype.tick.call(this, ctx);
 	}
 });
 
