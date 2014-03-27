@@ -1,8 +1,8 @@
-var EngineBlock = Block.extend({
+var EngineBlock = Part.extend({
 	classId: 'EngineBlock',
 
 	init: function () {
-		Block.prototype.init.call(this);
+		Part.prototype.init.call(this);
 
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(64, 64, 64)";

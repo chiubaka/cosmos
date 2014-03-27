@@ -11,14 +11,22 @@ var igeClientConfig = {
 		'./gameClasses/Background.js',
 		'./gameClasses/ExampleShips.js',
 
-		/* Blocks */
-		'./gameClasses/blocks/EngineBlock.js',
-		'./gameClasses/blocks/PowerBlock.js',
-		'./gameClasses/blocks/FuelBlock.js',
-		'./gameClasses/blocks/CargoBlock.js',
-		'./gameClasses/blocks/ControlBlock.js',
-		'./gameClasses/blocks/MiningLaserBlock.js',
-		'./gameClasses/blocks/ThrusterBlock.js',
+		/* Parts */
+		'./gameClasses/blocks/part.js',
+		//-------------
+		'./gameClasses/blocks/parts/EngineBlock.js',
+		'./gameClasses/blocks/parts/PowerBlock.js',
+		'./gameClasses/blocks/parts/FuelBlock.js',
+		'./gameClasses/blocks/parts/CargoBlock.js',
+		'./gameClasses/blocks/parts/ControlBlock.js',
+		'./gameClasses/blocks/parts/MiningLaserBlock.js',
+		'./gameClasses/blocks/parts/ThrusterBlock.js',
+
+		/* Elements */
+		'./gameClasses/blocks/element.js',
+		//--------------
+		'./gameClasses/blocks/elements/IronBlock.js',
+		'./gameClasses/blocks/elements/CarbonBlock.js',
 
 		/* Standard game scripts */
 		'./client.js',
