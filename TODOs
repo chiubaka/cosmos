@@ -32,4 +32,8 @@ Add asteroid generator (rafael)
 
 Add bounding box code to master for folks to use for debugging (Rafael)
 
-Client-side entity interpolation
+Client-side entity interpolation (rafael)
+
+improving streaming (long-term)
+
+refactor code to be consistent with IGE's getters and setters. This should be in an r/ branch.
