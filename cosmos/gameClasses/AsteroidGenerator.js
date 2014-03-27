@@ -4,8 +4,8 @@ var AsteroidGenerator = {
 	*/
 	littleAsteroid: function () {
 		return [
-			[new Carbon(), new Iron()],
-			[new Iron(),   new Carbon()]
+			[new CarbonBlock(), new IronBlock()],
+			[new IronBlock(),   new CarbonBlock()]
 		]
 	},
 
@@ -14,9 +14,9 @@ var AsteroidGenerator = {
 	 */
 	hollowAsteroid: function() {
 		return [
-			[new Carbon(), new Carbon(), new Iron()],
-			[new Iron(),   undefined,    new Carbon()],
-			[new Iron(),   new Iron(),   new Iron()]
+			[new CarbonBlock(), new CarbonBlock(), new IronBlock()],
+			[new IronBlock(),   undefined,         new CarbonBlock()],
+			[new IronBlock(),   new IronBlock(),   new IronBlock()]
 		]
 	},
 
@@ -36,7 +36,7 @@ var AsteroidGenerator = {
 					rowList.push(undefined);
 				}
 				else {
-					rowList.push(new Iron());
+					rowList.push(new IronBlock());
 				}
 			}
 			asteroid.push(rowList);
