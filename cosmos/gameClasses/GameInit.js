@@ -174,6 +174,13 @@ var GameInit = {
 			.mount(server.spaceGameScene)
 			.depth(100)
 			.setGrid(BlockGrid.prototype.newGridFromDimensions(30, 10));
+
+    new BlockGrid()
+      .id('randomAsteroid')
+      .streamMode(1)
+      .mount(server.spaceGameScene)
+      .depth(100)
+      .setGrid(AsteroidGenerator.randomAsteroid());
 	}
 };
 
