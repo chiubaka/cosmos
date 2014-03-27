@@ -25,5 +25,6 @@ It would be really nice if Master was automatically tested (Derrick?)
 Submit pull request from element blocks branch. It is ready for merge (rafael)
 
 Add asteroid generator (rafael)
+	submit pull request from asteroid generator branch (rafael)
 
 Add bounding box code to master for folks to use for debugging (Rafael)
