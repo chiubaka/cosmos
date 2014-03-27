@@ -23,5 +23,10 @@ It would be really nice if Master was automatically tested (Derrick?)
 Submit pull request from element blocks branch. It is ready for merge (rafael)
 
 Add asteroid generator (rafael)
+	submit pull request!!! (rafael)
+	blocks in the asteroid should be adjacent to other blocks : P
 
 Add bounding box code to master for folks to use for debugging (Rafael)
+
+Fix how gameInit is layed out (daniel)
+	It should probably just be one large function with a bunch of if(ige.isServer) statements
