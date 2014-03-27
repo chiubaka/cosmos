@@ -9,6 +9,8 @@ var config = {
 		{name: 'BlockGrid', path: './gameClasses/BlockGrid'},
 
 		/* Parts */
+		{name: 'Part', path: './gameClasses/blocks/Part'},
+		//-----------
 		{name: 'PowerBlock', path: './gameClasses/blocks/parts/PowerBlock'},
 		{name: 'EngineBlock', path: './gameClasses/blocks/parts/EngineBlock'},
 		{name: 'FuelBlock', path: './gameClasses/blocks/parts/FuelBlock'},
@@ -18,6 +20,8 @@ var config = {
 		{name: 'ThrusterBlock', path: './gameClasses/blocks/parts/ThrusterBlock'},
 
 		/* Elements */
+		{name: 'Element', path: './gameClasses/blocks/Element'},
+		//-------------
 		{name: 'CarbonBlock', path: './gameClasses/blocks/elements/CarbonBlock'},
 		{name: 'IronBlock', path: './gameClasses/blocks/elements/IronBlock'},
 

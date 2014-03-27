@@ -12,6 +12,8 @@ var igeClientConfig = {
 		'./gameClasses/ExampleShips.js',
 
 		/* Parts */
+		'./gameClasses/blocks/part.js',
+		//-------------
 		'./gameClasses/blocks/parts/EngineBlock.js',
 		'./gameClasses/blocks/parts/PowerBlock.js',
 		'./gameClasses/blocks/parts/FuelBlock.js',
@@ -21,6 +23,8 @@ var igeClientConfig = {
 		'./gameClasses/blocks/parts/ThrusterBlock.js',
 
 		/* Elements */
+		'./gameClasses/blocks/element.js',
+		//--------------
 		'./gameClasses/blocks/elements/Iron.js',
 		'./gameClasses/blocks/elements/Carbon.js',
 
