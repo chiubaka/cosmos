@@ -63,8 +63,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 				block.mount(this);
 				block.streamMode(1);
 
-				var width = block._width;
-				var height = block._height;
+				var width = block.width();
+				var height = block.height();
 
 				var x = width * col;
 				var y = height * row;
