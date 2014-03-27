@@ -23,11 +23,11 @@ It would be really nice if Master was automatically tested (Derrick?)
 	Like even just to see if the ige game server will successfully run the game.
 	We can add more fancy test scripts later.
 
-Submit pull request from element blocks branch. It is ready for merge (rafael)
-	SUBMITTED!
-	please review it (daniel)
+Element blocks
+	Review pull request (daniel)
 
 Add asteroid generator (rafael)
-	submit pull request from asteroid generator branch (rafael)
+	Accept the pull request (daniel)
+	blocks in the asteroid should be adjacent to other blocks : P
 
 Add bounding box code to master for folks to use for debugging (Rafael)
