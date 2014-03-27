@@ -18,8 +18,8 @@ var config = {
 		{name: 'ThrusterBlock', path: './gameClasses/blocks/parts/ThrusterBlock'},
 
 		/* Elements */
-		{name: 'CarbonBlock', path: './gameClasses/blocks/Elements/CarbonBlock'},
-		{name: 'IronBlock', path: './gameClasses/blocks/Elements/IronBlock'},
+		{name: 'CarbonBlock', path: './gameClasses/blocks/elements/CarbonBlock'},
+		{name: 'IronBlock', path: './gameClasses/blocks/elements/IronBlock'},
 
 		/* Other classes */
 		{name: 'Player', path: './gameClasses/Player'},
