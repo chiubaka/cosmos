@@ -1,4 +1,6 @@
-List of things TODO. If this gets to long or unweildy, we'll use something else. It works for now.
+List of things TODO.
+If this gets to long or unweildy, we'll use something else. It works for now.
+Please always commit this file directly to master.
 -----------------------------------------------------------------------------------------------
 Major Refactoring of how Physics works (rafael)
 	1st step is to make rows of blocks into fixtures. See if this works. t/ branch.
