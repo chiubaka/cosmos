@@ -13,3 +13,7 @@ chat (low priority)
 Minimap
 	Review rafael's pull request for the minimap (daniel)
 	make minimap show a stylized version of the world (low priority)
+
+It would be really nice if Master was automatically tested (Derrick?)
+	Like even just to see if the ige game server will successfully run the game.
+	We can add more fancy test scripts later.
