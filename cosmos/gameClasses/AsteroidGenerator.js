@@ -26,7 +26,7 @@ var AsteroidGenerator = {
 	randomAsteroid: function () {
 		asteroid = []
 
-		var maxSize = 10;
+		var maxSize = 40;
 		var probabilityOfHole = .2;
 
 		for(var x = 0; x < Math.random() * maxSize; x++) {
@@ -41,6 +41,8 @@ var AsteroidGenerator = {
 			}
 			asteroid.push(rowList);
 		}
+
+		return asteroid;
 	}
 };
 

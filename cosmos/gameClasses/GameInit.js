@@ -158,23 +158,8 @@ var GameInit = {
 	 * @param server the server (ige.server)
 	 */
 	serverInit: function(server) {
-
 		// The server streams these entities to the client. Creating them on both the client AND the server may speed
 		// up initialization time.
-		new BlockGrid()
-			.id('blockGrid1')
-			.streamMode(1)
-			.mount(server.spaceGameScene)
-			.depth(100)
-			.setGrid([[new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock()], [new EngineBlock(), new EngineBlock()]]);
-
-		new BlockGrid()
-			.id('blockGrid2')
-			.streamMode(1)
-			.mount(server.spaceGameScene)
-			.depth(100)
-			.setGrid(BlockGrid.prototype.newGridFromDimensions(30, 10));
-
     new BlockGrid()
       .id('randomAsteroid')
       .streamMode(1)
