@@ -1,8 +1,8 @@
-var ThrusterBlock = Block.extend({
+var ThrusterBlock = Part.extend({
 	classId: 'ThrusterBlock',
 
 	init: function () {
-		Block.prototype.init.call(this);
+		Part.prototype.init.call(this);
 
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(64, 64, 64)";

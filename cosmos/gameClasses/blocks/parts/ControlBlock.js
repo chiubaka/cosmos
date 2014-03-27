@@ -1,8 +1,8 @@
-var ControlBlock = Block.extend({
+var ControlBlock = Part.extend({
 	classId: 'ControlBlock',
 
 	init: function () {
-		Block.prototype.init.call(this);
+		Part.prototype.init.call(this);
 
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(242, 242, 242)";
