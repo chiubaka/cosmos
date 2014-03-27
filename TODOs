@@ -1,0 +1,19 @@
+Major Refactoring of how Physics works (rafael)
+	1st step is to make rows of blocks into fixtures. See if this works. t/ branch.
+
+Major Refacotring of how rendering works (daniel)
+	this should end up being a tree of caches with three layers:
+		the actual screen is the root
+		the block grid is the next layer
+		the blocks themselves are the lowest layer
+
+chat (low priority)
+	there are already components for this in IGE
+
+Minimap
+	Review rafael's pull request for the minimap (daniel)
+	make minimap show a stylized version of the world (low priority)
+
+It would be really nice if Master was automatically tested (Derrick?)
+	Like even just to see if the ige game server will successfully run the game.
+	We can add more fancy test scripts later.
