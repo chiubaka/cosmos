@@ -20,7 +20,7 @@ var GameInit = {
 			.id('vp1')
 			.autoSize(true)
 			.scene(game.mainScene)
-			.drawBounds(false)
+			.drawBounds(false) //draws the axis aligned bounding boxes. Set to true for debugging.
 			.mount(ige);
 
 		this.initScenes(game);
