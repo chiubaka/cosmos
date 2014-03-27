@@ -18,7 +18,7 @@ var AsteroidGenerator = {
 			[new Iron(),   undefined,    new Carbon()],
 			[new Iron(),   new Iron(),   new Iron()]
 		]
-	}
+	},
 
 	/**
 	* A random asteroid which may have holes in it
@@ -29,9 +29,9 @@ var AsteroidGenerator = {
 		var maxSize = 10;
 		var probabilityOfHole = .2;
 
-		for(var x = 0; x < Math.random() * maxSize) {
+		for(var x = 0; x < Math.random() * maxSize; x++) {
 			rowList = [];
-			for(var y = 0; y < Math.random() * maxSize) {
+			for(var y = 0; y < Math.random() * maxSize; y++) {
 				if(Math.random() < probabilityOfHole) {
 					rowList.push(undefined);
 				}
