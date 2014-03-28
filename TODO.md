@@ -39,4 +39,3 @@ improving streaming (long-term)
 refactor code to be consistent with IGE's getters and setters. This should be in an r/ branch.
 
 Mining (Daniel)
-	
