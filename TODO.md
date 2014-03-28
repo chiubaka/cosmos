@@ -5,11 +5,14 @@ Please always commit this file directly to master.
 Major Refactoring of how Physics works (rafael)
 	1st step is to make rows of blocks into fixtures. See if this works. t/ branch.
 
+LEO-256: Players should be able to mine blocks from asteroids (Daniel/Rafael)
+	LEO-257: Remove a block from the BlockGrid it is attached to when it is clicked
+    LEO-258: Move a block to its own BlockGrid when it is clicked (i.e. clicking a block in a BlockGrid causes it to break-off and form its own BlockGrid)
+    LEO-259: Modify the Box2D fixtures of a BlockGrid when a block is removed from it
+    LEO-260: Allow player to pick up single floating blocks if they are within a certain proximity of the player's ship
+
 Major Refacotring of how rendering works (daniel)
-	this should end up being a tree of caches with three layers:
-		the actual screen is the root
-		the block grid is the next layer
-		the blocks themselves are the lowest layer
+	Review pull request (Rafael)
 
 chat (low priority)
 	there are already components for this in IGE
