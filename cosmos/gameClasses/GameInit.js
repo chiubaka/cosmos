@@ -24,13 +24,35 @@ var GameInit = {
 			.mount(ige);
 
 		this.initScenes(game);
-		this.sharedInit(game);
 
 		if (ige.isServer) {
-			this.serverInit(game);
+			// The server streams these entities to the client. Creating them on both the client AND the server may speed
+			// up initialization time.
+			new BlockGrid()
+				.id('blockGrid1')
+				.streamMode(1)
+				.mount(game.spaceGameScene)
+				.depth(100)
+				.setGrid([
+					[new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock()],
+					[new EngineBlock(), new EngineBlock()]
+				]);
+
+			new BlockGrid()
+				.id('blockGrid2')
+				.streamMode(1)
+				.mount(game.spaceGameScene)
+				.depth(100)
+				.setGrid(BlockGrid.prototype.newGridFromDimensions(30, 10));
 		}
 		else {
-			this.clientInit(game);
+			this.initPlayerControls(game);
+
+			new Background()
+				.id('helix_nebula_background')
+				.mount(game.spaceBackgroundScene);
+
+			this.initTimeStream(game);
 		}
 	},
 
@@ -75,27 +97,6 @@ var GameInit = {
 				.ignoreCamera(true)
 				.mount(game.spaceScene);
 		}
-	},
-
-	/**
-	 * Shared initialization code goes here.
-	 * @param game either ige.client or ige.server
-	 */
-	sharedInit: function(game) {
-	},
-
-	/**
-	 * Client only initialization. Will not be run by the server.
-	 * @param client the client (ige.client)
-	 */
-	clientInit: function(client) {
-		this.initPlayerControls(client);
-
-		new Background()
-			.id('helix_nebula_background')
-			.mount(client.spaceBackgroundScene);
-
-		this.initTimeStream(client);
 	},
 
 	/**
@@ -152,29 +153,6 @@ var GameInit = {
 		ige.watchStart(client.custom2);
 		ige.watchStart(client.custom3);
 		ige.watchStart(client.custom4);
-	},
-
-	/**
-	 * Server only initialization. Will not be run by the client.
-	 * @param server the server (ige.server)
-	 */
-	serverInit: function(server) {
-
-		// The server streams these entities to the client. Creating them on both the client AND the server may speed
-		// up initialization time.
-		new BlockGrid()
-			.id('blockGrid1')
-			.streamMode(1)
-			.mount(server.spaceGameScene)
-			.depth(100)
-			.setGrid([[new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock()], [new EngineBlock(), new EngineBlock()]]);
-
-		new BlockGrid()
-			.id('blockGrid2')
-			.streamMode(1)
-			.mount(server.spaceGameScene)
-			.depth(100)
-			.setGrid(BlockGrid.prototype.newGridFromDimensions(30, 10));
 	}
 };
 
