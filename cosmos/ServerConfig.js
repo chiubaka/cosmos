@@ -7,7 +7,7 @@ var config = {
 		/* Our custom classes */
 		{name: 'Block', path: './gameClasses/Block'},
 		{name: 'BlockGrid', path: './gameClasses/BlockGrid'},
-		{name: 'AsteroidGenerator', path: './gameClasses/AsteroidGenerator'},
+		{name: 'BlockGridRenderContainer', path: './gameClasses/BlockGridRenderContainer'},
 
 		/* Parts */
 		{name: 'Part', path: './gameClasses/blocks/Part'},
@@ -29,7 +29,8 @@ var config = {
 		/* Other classes */
 		{name: 'Player', path: './gameClasses/Player'},
 		{name: 'Background', path: './gameClasses/Background'},
-		{name: 'ExampleShips', path: './gameClasses/ExampleShips'}
+		{name: 'ExampleShips', path: './gameClasses/ExampleShips'},
+		{name: 'AsteroidGenerator', path: './gameClasses/AsteroidGenerator'}
 	]
 };
 
