@@ -29,7 +29,8 @@ var config = {
 		/* Other classes */
 		{name: 'Player', path: './gameClasses/Player'},
 		{name: 'Background', path: './gameClasses/Background'},
-		{name: 'ExampleShips', path: './gameClasses/ExampleShips'}
+		{name: 'ExampleShips', path: './gameClasses/ExampleShips'},
+		{name: 'AsteroidGenerator', path: './gameClasses/AsteroidGenerator'}
 	]
 };
 
