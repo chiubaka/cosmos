@@ -2,7 +2,7 @@ var AsteroidGenerator = {
 	/**
 	 * A little tiny asteroid : )
 	 */
-	littleAsteroid: function () {
+	littleAsteroid: function() {
 		return [
 			[new CarbonBlock(), new IronBlock()],
 			[new IronBlock(),   new CarbonBlock()]
@@ -23,7 +23,7 @@ var AsteroidGenerator = {
 	/**
 	 * A random asteroid which may have holes in it
 	 */
-	randomAsteroid: function (maxSize, probabilityOfHole) {
+	randomAsteroid: function(maxSize, probabilityOfHole) {
 		asteroid = []
 
 		var maxSize = maxSize || 40;
