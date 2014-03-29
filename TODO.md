@@ -29,8 +29,7 @@ It would be really nice if Master was automatically tested (Derrick?)
 Element blocks
 	Review pull request (daniel)
 
-Add asteroid generator (rafael)
-	Accept the pull request (daniel)
+Asteroid generator (rafael)
 	blocks in the asteroid should be adjacent to other blocks : P
 
 Add bounding box code to master for folks to use for debugging (Rafael)
