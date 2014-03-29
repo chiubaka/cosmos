@@ -1,7 +1,7 @@
 var AsteroidGenerator = {
 	/**
-	* A little tiny asteroid : )
-	*/
+	 * A little tiny asteroid : )
+	 */
 	littleAsteroid: function () {
 		return [
 			[new CarbonBlock(), new IronBlock()],
@@ -21,13 +21,13 @@ var AsteroidGenerator = {
 	},
 
 	/**
-	* A random asteroid which may have holes in it
-	*/
-	randomAsteroid: function () {
+	 * A random asteroid which may have holes in it
+	 */
+	randomAsteroid: function (maxSize, probabilityOfHole) {
 		asteroid = []
 
-		var maxSize = 40;
-		var probabilityOfHole = .2;
+		var maxSize = maxSize || 40;
+		var probabilityOfHole = probabilityOfHole || .2;
 
 		for(var x = 0; x < Math.random() * maxSize; x++) {
 			rowList = [];
@@ -46,4 +46,6 @@ var AsteroidGenerator = {
 	}
 };
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = AsteroidGenerator; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
+	module.exports = AsteroidGenerator;
+}
