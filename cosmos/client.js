@@ -12,7 +12,7 @@ var Client = IgeClass.extend({
 		self.LAYER_BACKGROUND = 10;
 		self.LAYER_MIDDLE = 50;
 		self.LAYER_FOREGROUND = 90;
-		
+
 		// Enable networking
 		ige.addComponent(IgeNetIoComponent);
 
