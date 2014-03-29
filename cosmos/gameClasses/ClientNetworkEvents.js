@@ -8,10 +8,10 @@ var ClientNetworkEvents = {
 	 * @private
 	 */
 	_onPlayerEntity: function (data) {
-		var cameraSmoothingAmount = 10;
+		var self = this;
 
 		if (ige.$(data)) {
-			ige.$('vp1').camera.trackTranslate(ige.$(data), cameraSmoothingAmount);
+			ClientNetworkEvents.initCameras(ige.$(data));
 
 			// Set the time stream UI entity to monitor our player entity
 			// time stream data
@@ -21,11 +21,10 @@ var ClientNetworkEvents = {
 			// stream so lets ask the stream to tell us when it creates a
 			// new entity and then check if that entity is the one we
 			// should be tracking!
-			var self = this;
 			self._eventListener = ige.network.stream.on('entityCreated', function (entity) {
 				if (entity.id() === data) {
 					// Tell the camera to track out player entity
-					ige.$('vp1').camera.trackTranslate(ige.$(data), cameraSmoothingAmount);
+					ClientNetworkEvents.initCameras(ige.$(data));
 
 					// Set the time stream UI entity to monitor our player entity
 					// time stream data
@@ -41,6 +40,12 @@ var ClientNetworkEvents = {
 				}
 			});
 		}
+	},
+
+	initCameras: function(entityToTrack) {
+		var cameraSmoothingAmount = 10;
+
+		ige.$('vp1').camera.trackTranslate(entityToTrack, cameraSmoothingAmount);
 	}
 };
 
