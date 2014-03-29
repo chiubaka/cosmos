@@ -160,12 +160,12 @@ var GameInit = {
 	serverInit: function(server) {
 		// The server streams these entities to the client. Creating them on both the client AND the server may speed
 		// up initialization time.
-    new BlockGrid()
-      .id('randomAsteroid')
-      .streamMode(1)
-      .mount(server.spaceGameScene)
-      .depth(100)
-      .setGrid(AsteroidGenerator.randomAsteroid());
+		new BlockGrid()
+		  .id('randomAsteroid')
+		  .streamMode(1)
+		  .mount(server.spaceGameScene)
+		  .depth(100)
+		  .setGrid(AsteroidGenerator.randomAsteroid());
 	}
 };
 
