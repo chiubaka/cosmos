@@ -36,7 +36,11 @@ var AsteroidGenerator = {
 					rowList.push(undefined);
 				}
 				else {
-					rowList.push(new IronBlock());
+					if(Math.random() < .5) {
+						rowList.push(new IronBlock());
+					} else {
+						rowList.push(new CarbonBlock());
+					}
 				}
 			}
 			asteroid.push(rowList);
