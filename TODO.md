@@ -40,7 +40,8 @@ improving streaming (long-term)
 
 refactor code to be consistent with IGE's getters and setters. This should be in an r/ branch.
 
-you should be able to move backwards (Rafael)
+you should be able to move backwards
+	FInished! Submit the pull request (rafael)
 
 make many asteroids (that don't overlap)
 	submit pull request (rafael)
