@@ -40,3 +40,5 @@ refactor code to be consistent with IGE's getters and setters. This should be in
 Mining (Daniel)
 
 you should be able to move backwards (Rafael)
+
+make many asteroids (that don't overlap) (rafael)
