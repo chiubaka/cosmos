@@ -16,30 +16,12 @@ var GameInit = {
 
 		// Create the main viewport and set the scene it will "look" at as the new scene1 we just created above.
 		// Surprisingly, this must exist on both the client and the server, or a blank screen will be displayed.
-    if (!ige.isServer) {
-      game.minimapViewport = new IgeViewport()
-        .id('minimapViewport')
-        .autoSize(true)
-        .scene(game.mainScene)
-        .drawBounds(false)
-        .width(200)
-        .height(200)
-        .translateTo(300, 300, 0)
-        .mount(ige);
-    }
-
-    game.uiScene = new IgeScene2d()
-      .id('uiScene')
-      .ignoreCamera(true)
-      .layer(game.LAYER_FOREGROUND)
-      .mount(game.mainScene);
-
-    game.spaceViewport = new IgeViewport()
-      .id('spaceViewport')
-      .autoSize(false)
-      .scene(game.mainScene)
-      .drawBounds(false)
-      .mount(ige);
+		game.vp1 = new IgeViewport()
+			.id('vp1')
+			.autoSize(true)
+			.scene(game.mainScene)
+			.drawBounds(false) //draws the axis aligned bounding boxes. Set to true for debugging.
+			.mount(ige);
 
 		this.initScenes(game);
 		this.sharedInit(game);
@@ -89,6 +71,7 @@ var GameInit = {
 
 			game.spaceUiScene = new IgeScene2d()
 				.id('spaceUiScene')
+				.layer(game.LAYER_FOREGROUND)
 				.ignoreCamera(true)
 				.mount(game.spaceScene);
 		}
@@ -176,22 +159,14 @@ var GameInit = {
 	 * @param server the server (ige.server)
 	 */
 	serverInit: function(server) {
-
 		// The server streams these entities to the client. Creating them on both the client AND the server may speed
 		// up initialization time.
 		new BlockGrid()
-			.id('blockGrid1')
-			.streamMode(1)
-			.mount(server.spaceGameScene)
-			.depth(100)
-			.setGrid([[new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock(), new EngineBlock()], [new EngineBlock(), new EngineBlock()]]);
-
-		new BlockGrid()
-			.id('blockGrid2')
-			.streamMode(1)
-			.mount(server.spaceGameScene)
-			.depth(100)
-			.setGrid(BlockGrid.prototype.newGridFromDimensions(30, 10));
+		  .id('randomAsteroid')
+		  .streamMode(1)
+		  .mount(server.spaceGameScene)
+		  .depth(100)
+		  .setGrid(AsteroidGenerator.randomAsteroid());
 	}
 };
 
