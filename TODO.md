@@ -26,7 +26,7 @@ It would be really nice if Master was automatically tested (Derrick?)
 	We can add more fancy test scripts later.
 
 Element blocks
-	Review pull request (daniel)
+	make ice (Rafael)
 
 Asteroid generator (rafael)
 	blocks in the asteroid should be adjacent to other blocks : P
