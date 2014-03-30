@@ -83,7 +83,7 @@ var Player = BlockGrid.extend({
 		/* For the server: */
 		if (ige.isServer) {
 			// This determines how fast you can rotate your spaceship
-	  var angularImpulse = -5000;
+			var angularImpulse = -5000;
 
 			if (this.controls.key.left) {
 				this._box2dBody.ApplyTorque(angularImpulse);
