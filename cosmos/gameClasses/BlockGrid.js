@@ -124,6 +124,31 @@ var BlockGrid = IgeEntityBox2d.extend({
 		});
 
 		return this;
+	},
+
+	tick: function(ctx) {
+		var self = this;
+
+		if(ige.isServer) {
+			var players = ige.server.getPlayers();
+
+			for (var playerId in players) {
+				var player = players[playerId];
+
+				var linearImpulse = 1;
+
+				var x_comp = (player.translate().x() - self.translate().x()) * linearImpulse;
+				var y_comp = (player.translate().y() - self.translate().y()) * linearImpulse;
+				if (!x_comp) continue;
+				if (!y_comp) continue;
+				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
+				var location = this._box2dBody.GetWorldCenter(); //center of gravity
+
+					self._box2dBody.ApplyImpulse(impulse, location);
+			}
+		}
+
+		return IgeEntityBox2d.prototype.tick.call(this, ctx);
 	}
 });
 
