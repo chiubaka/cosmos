@@ -8,7 +8,6 @@ var Player = BlockGrid.extend({
 
 		this.drawBounds(false);
 
-		// Rotate to point upwards //<--- what does this comment mean?
 		this.controls = {
 			key: {
 				left: false,
