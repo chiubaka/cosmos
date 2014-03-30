@@ -47,3 +47,5 @@ make many asteroids (that don't overlap)
 	submit pull request (rafael)
 
 merge the approved pull request (Rafael)
+
+You should be able to Zoom with the mouse. To a certain extent.
