@@ -34,7 +34,7 @@ var GameInit = {
                     new BlockGrid()
                       .id('randomAsteroid' + x + "," + y)
                       .streamMode(1)
-                      .mount(server.spaceGameScene)
+                      .mount(game.spaceGameScene)
                       .depth(100)
                       .setGrid(AsteroidGenerator.randomAsteroid())
                       .translateTo(x * asteroidSpacing, y * asteroidSpacing, 0)
