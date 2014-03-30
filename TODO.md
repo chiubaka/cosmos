@@ -9,10 +9,10 @@ LEO-256: Players should be able to mine blocks from asteroids (Daniel/Rafael)
 	LEO-257: Remove a block from the BlockGrid it is attached to when it is clicked
     LEO-258: Move a block to its own BlockGrid when it is clicked (i.e. clicking a block in a BlockGrid causes it to break-off and form its own BlockGrid)
     LEO-259: Modify the Box2D fixtures of a BlockGrid when a block is removed from it
-    LEO-260: Allow player to pick up single floating blocks if they are within a certain proximity of the player's ship
+    LEO-260: Allow player to pick up single floating blocks if they are within a certain proximity of the player's ship (rafael)
 
-Major Refacotring of how rendering works (daniel)
-	Review pull request (Rafael)
+cargo hold
+	list of blocks (rafael)
 
 chat (low priority)
 	there are already components for this in IGE
@@ -26,18 +26,19 @@ It would be really nice if Master was automatically tested (Derrick?)
 	We can add more fancy test scripts later.
 
 Element blocks
-	make ice (Rafael)
+	review ice pull request (Daniel)
 
 Asteroid generator (rafael)
-	blocks in the asteroid should be adjacent to other blocks : P
+	blocks in the asteroid should be adjacent to other blocks, esp. of similar type
 
-Client-side entity interpolation (rafael)
+spec out the board game (Rafael)
+
+Client-side entity interpolation (long-term)
 
 improving streaming (long-term)
+	use stream mode 2 and static IGE entities
 
 refactor code to be consistent with IGE's getters and setters. This should be in an r/ branch.
-
-Mining (Daniel)
 
 you should be able to move backwards (Rafael)
 
