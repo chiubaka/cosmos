@@ -83,7 +83,7 @@ var Player = BlockGrid.extend({
 		/* For the server: */
 		if (ige.isServer) {
 			// This determines how fast you can rotate your spaceship
-      var angularImpulse = -5000;
+	  var angularImpulse = -5000;
 
 			if (this.controls.key.left) {
 				this._box2dBody.ApplyTorque(angularImpulse);
@@ -99,17 +99,19 @@ var Player = BlockGrid.extend({
 			var angle = this._box2dBody.GetAngle() - Math.PI/2;
 
 			if (this.controls.key.up) {
-				var x_comp = Math.cos(angle) * linearImpulse; //x component of the (unit?) direction vector
+				var x_comp = Math.cos(angle) * linearImpulse;
 				var y_comp = Math.sin(angle) * linearImpulse;
 				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
 				var location = this._box2dBody.GetWorldCenter(); //center of gravity
 
-				this._box2dBody.ApplyImpulse(impulse, location);
+				var grid = self.getGrid();
+				for (row = 0; row < grid.length; row++) {
+					var blockRow = grid[row];
+					for (col = 0; col < blockRow.length; col++) {
+						var block = blockRow[col];
 
-				for (var blockRow in this.getGrid()) {
-					for (var block in blockRow) {
-						if (typeof(block) === "EngineBlock") {
-							this._box2dBody.ApplyImpulse(impulse, location);
+						if(block && block.classId() === "EngineBlock") {
+							self._box2dBody.ApplyImpulse(impulse, location);
 						}
 					}
 				}
@@ -120,15 +122,19 @@ var Player = BlockGrid.extend({
 				//this.velocity.y(0);
 			}
 			if (this.controls.key.down) {
-				var x_comp = Math.cos(angle) * -linearImpulse; //x component of the (unit?) direction vector
+				var x_comp = Math.cos(angle) * -linearImpulse;
 				var y_comp = Math.sin(angle) * -linearImpulse;
 				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
 				var location = this._box2dBody.GetWorldCenter(); //center of gravity
 
-				for (var blockRow in this.getGrid()) {
-					for (var block in blockRow) {
-						if (typeof(block) === "EngineBlock") {
-							this._box2dBody.ApplyImpulse(impulse, location);
+				var grid = self.getGrid();
+				for (row = 0; row < grid.length; row++) {
+					var blockRow = grid[row];
+					for (col = 0; col < blockRow.length; col++) {
+						var block = blockRow[col];
+
+						if(block && block.classId() === "EngineBlock") {
+							self._box2dBody.ApplyImpulse(impulse, location);
 						}
 					}
 				}
