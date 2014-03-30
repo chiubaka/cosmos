@@ -49,3 +49,5 @@ make many asteroids (that don't overlap)
 merge the approved pull request (Rafael)
 
 You should be able to Zoom with the mouse. To a certain extent.
+
+Submit pull request for refactor game init (rafael)
