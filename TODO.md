@@ -43,3 +43,5 @@ you should be able to move backwards (Rafael)
 
 make many asteroids (that don't overlap)
 	submit pull request (rafael)
+
+merge the approved pull request (Rafael)
