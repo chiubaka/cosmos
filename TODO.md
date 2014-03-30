@@ -41,4 +41,5 @@ Mining (Daniel)
 
 you should be able to move backwards (Rafael)
 
-make many asteroids (that don't overlap) (rafael)
+make many asteroids (that don't overlap)
+	submit pull request (rafael)
