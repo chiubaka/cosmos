@@ -1,8 +1,8 @@
-var PowerBlock = Block.extend({
+var PowerBlock = Part.extend({
 	classId: 'PowerBlock',
 
 	init: function () {
-		Block.prototype.init.call(this);
+		Part.prototype.init.call(this);
 
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(242, 242, 242)";

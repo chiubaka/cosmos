@@ -1,8 +1,8 @@
-var CargoBlock = Block.extend({
+var CargoBlock = Part.extend({
 	classId: 'CargoBlock',
 
 	init: function () {
-		Block.prototype.init.call(this);
+		Part.prototype.init.call(this);
 
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(242, 242, 242)";

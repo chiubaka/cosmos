@@ -20,7 +20,7 @@ var GameInit = {
 			.id('vp1')
 			.autoSize(true)
 			.scene(game.mainScene)
-			.drawBounds(false)
+			.drawBounds(false) //draws the axis aligned bounding boxes. Set to true for debugging.
 			.mount(ige);
 
 		this.initScenes(game);
@@ -71,6 +71,7 @@ var GameInit = {
 
 			game.spaceUiScene = new IgeScene2d()
 				.id('spaceUiScene')
+				.layer(game.LAYER_FOREGROUND)
 				.ignoreCamera(true)
 				.mount(game.spaceScene);
 		}
@@ -158,20 +159,20 @@ var GameInit = {
 	 * @param server the server (ige.server)
 	 */
 	serverInit: function(server) {
-
 		// The server streams these entities to the client. Creating them on both the client AND the server may speed
 		// up initialization time.
-    var numAsteroids = 500;
-    var distance = 1000;
-    for (var asteroidNumber = 0; asteroidNumber < numAsteroids; asteroidNumber++) {
-      new BlockGrid()
-        .id('blockGrid' + asteroidNumber)
-        .streamMode(1)
-        .mount(server.spaceGameScene)
-        .depth(100)
-        .setGrid(BlockGrid.prototype.newGridFromDimensions(1, 2))
-        .translateTo((Math.random()-.5) * distance, (Math.random()-.5) * distance, 0);
-    }
+        var asteroidSpacing = 600;
+        for(var x = 0; x < 3; x++) {
+            for(var y = 0; y < 3; y++) {
+                new BlockGrid()
+                  .id('randomAsteroid' + x + "," + y)
+                  .streamMode(1)
+                  .mount(server.spaceGameScene)
+                  .depth(100)
+                  .setGrid(AsteroidGenerator.randomAsteroid())
+                  .translateTo(x * asteroidSpacing, y * asteroidSpacing, 0)
+            }
+        }
 	}
 };
 
