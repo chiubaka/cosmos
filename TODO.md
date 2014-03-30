@@ -18,8 +18,7 @@ chat (low priority)
 	there are already components for this in IGE
 	push this feature branch (rafael)
 
-Minimap
-	Review rafael's pull request for the minimap (daniel)
+Minimap (rafael)
 	make minimap show a stylized version of the world (low priority)
 
 It would be really nice if Master was automatically tested (Derrick?)
@@ -32,8 +31,6 @@ Element blocks
 Asteroid generator (rafael)
 	blocks in the asteroid should be adjacent to other blocks : P
 
-Add bounding box code to master for folks to use for debugging (Rafael)
-
 Client-side entity interpolation (rafael)
 
 improving streaming (long-term)
@@ -41,3 +38,5 @@ improving streaming (long-term)
 refactor code to be consistent with IGE's getters and setters. This should be in an r/ branch.
 
 Mining (Daniel)
+
+you should be able to move backwards (Rafael)
