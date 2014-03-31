@@ -24,13 +24,31 @@ var GameInit = {
 			.mount(ige);
 
 		this.initScenes(game);
-		this.sharedInit(game);
 
 		if (ige.isServer) {
-			this.serverInit(game);
+            // The server streams these entities to the client. Creating them on both the client AND the server may speed
+            // up initialization time.
+            var asteroidSpacing = 600;
+            for(var x = 0; x < 3; x++) {
+                for(var y = 0; y < 3; y++) {
+                    new BlockGrid()
+                      .id('randomAsteroid' + x + "," + y)
+                      .streamMode(1)
+                      .mount(game.spaceGameScene)
+                      .depth(100)
+                      .setGrid(AsteroidGenerator.randomAsteroid())
+                      .translateTo(x * asteroidSpacing, y * asteroidSpacing, 0)
+                }
+            }
 		}
 		else {
-			this.clientInit(game);
+			this.initPlayerControls(game);
+
+			new Background()
+				.id('helix_nebula_background')
+				.mount(game.spaceBackgroundScene);
+
+			this.initTimeStream(game);
 		}
 	},
 
@@ -75,27 +93,6 @@ var GameInit = {
 				.ignoreCamera(true)
 				.mount(game.spaceScene);
 		}
-	},
-
-	/**
-	 * Shared initialization code goes here.
-	 * @param game either ige.client or ige.server
-	 */
-	sharedInit: function(game) {
-	},
-
-	/**
-	 * Client only initialization. Will not be run by the server.
-	 * @param client the client (ige.client)
-	 */
-	clientInit: function(client) {
-		this.initPlayerControls(client);
-
-		new Background()
-			.id('helix_nebula_background')
-			.mount(client.spaceBackgroundScene);
-
-		this.initTimeStream(client);
 	},
 
 	/**
@@ -152,27 +149,6 @@ var GameInit = {
 		ige.watchStart(client.custom2);
 		ige.watchStart(client.custom3);
 		ige.watchStart(client.custom4);
-	},
-
-	/**
-	 * Server only initialization. Will not be run by the client.
-	 * @param server the server (ige.server)
-	 */
-	serverInit: function(server) {
-		// The server streams these entities to the client. Creating them on both the client AND the server may speed
-		// up initialization time.
-        var asteroidSpacing = 600;
-        for(var x = 0; x < 3; x++) {
-            for(var y = 0; y < 3; y++) {
-                new BlockGrid()
-                  .id('randomAsteroid' + x + "," + y)
-                  .streamMode(1)
-                  .mount(server.spaceGameScene)
-                  .depth(100)
-                  .setGrid(AsteroidGenerator.randomAsteroid())
-                  .translateTo(x * asteroidSpacing, y * asteroidSpacing, 0)
-            }
-        }
 	}
 };
 
