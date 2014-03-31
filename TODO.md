@@ -55,3 +55,5 @@ Submit pull request for refactor game init (rafael)
 make rotation impulse proportional to the number of ThrusterBlocks on your ship (Rafael)
 
 allow option for camera to track rotation as well?
+
+fix multiplayer (rafael)
