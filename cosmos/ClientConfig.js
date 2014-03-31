@@ -28,6 +28,7 @@ var igeClientConfig = {
 		//--------------
 		'./gameClasses/blocks/elements/IronBlock.js',
 		'./gameClasses/blocks/elements/CarbonBlock.js',
+		'./gameClasses/blocks/elements/IceBlock.js',
 
 		/* Standard game scripts */
 		'./client.js',

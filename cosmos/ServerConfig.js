@@ -25,6 +25,7 @@ var config = {
 		//-------------
 		{name: 'CarbonBlock', path: './gameClasses/blocks/elements/CarbonBlock'},
 		{name: 'IronBlock', path: './gameClasses/blocks/elements/IronBlock'},
+		{name: 'IceBlock', path:'./gameClasses/blocks/elements/IceBlock'},
 
 		/* Other classes */
 		{name: 'Player', path: './gameClasses/Player'},
