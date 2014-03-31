@@ -16,9 +16,9 @@ cargo hold
 
 chat (low priority)
 	there are already components for this in IGE
-	push this feature branch (rafael)
 
-Minimap (rafael)
+Minimap
+	seems to be more trouble than it's worth right now
 	make minimap show a stylized version of the world (low priority)
 
 It would be really nice if Master was automatically tested (Derrick?)
