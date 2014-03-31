@@ -61,6 +61,7 @@ var Client = IgeClass.extend({
 							}
 						}
 					};
+
 					// False here specifies a synchronous request, which simplifies concurrency here.
 					// May need to consider changing this if many SVGs need to be downloaded and load
 					// times are getting ridiculous.

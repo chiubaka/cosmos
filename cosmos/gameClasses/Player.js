@@ -8,7 +8,6 @@ var Player = BlockGrid.extend({
 
 		this.drawBounds(false);
 
-		// Rotate to point upwards //<--- what does this comment mean?
 		this.controls = {
 			key: {
 				left: false,
@@ -84,7 +83,7 @@ var Player = BlockGrid.extend({
 		/* For the server: */
 		if (ige.isServer) {
 			// This determines how fast you can rotate your spaceship
-      var angularImpulse = -5000;
+			var angularImpulse = -5000;
 
 			if (this.controls.key.left) {
 				this._box2dBody.ApplyTorque(angularImpulse);
@@ -94,42 +93,31 @@ var Player = BlockGrid.extend({
 			}
 
 			/* Linear motion */
-			var linearImpulse = 100;
-
-			// the "- Math.PI/2" below makes the ship move forward and backwards, instead of side to side.
-			var angle = this._box2dBody.GetAngle() - Math.PI/2;
-
-			if (this.controls.key.up) {
-				var x_comp = Math.cos(angle) * linearImpulse; //x component of the (unit?) direction vector
-				var y_comp = Math.sin(angle) * linearImpulse;
-				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
-				var location = this._box2dBody.GetWorldCenter(); //center of gravity
-
-				this._box2dBody.ApplyImpulse(impulse, location);
-
-				for (var blockRow in this.getGrid()) {
-					for (var block in blockRow) {
-						if (typeof(block) === "EngineBlock") {
-							this._box2dBody.ApplyImpulse(impulse, location);
-						}
-					}
+			if (this.controls.key.up || this.controls.key.down) {
+				var linearImpulse;
+				if (this.controls.key.up) {
+					linearImpulse = 100;
+				} else if (this.controls.key.down) {
+					linearImpulse = -100;
 				}
-			}
-			else {
-				/* Consider applying the breaks automatically when the up arrow is released */
-				//this.velocity.x(0);
-				//this.velocity.y(0);
-			}
-			if (this.controls.key.down) {
-				var x_comp = Math.cos(angle) * -linearImpulse; //x component of the (unit?) direction vector
-				var y_comp = Math.sin(angle) * -linearImpulse;
+
+				// the "- Math.PI/2" below makes the ship move forward and backwards, instead of side to side.
+				var angle = this._box2dBody.GetAngle() - Math.PI/2;
+
+				var x_comp = Math.cos(angle) * linearImpulse;
+				var y_comp = Math.sin(angle) * linearImpulse;
+
 				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
 				var location = this._box2dBody.GetWorldCenter(); //center of gravity
 
-				for (var blockRow in this.getGrid()) {
-					for (var block in blockRow) {
-						if (typeof(block) === "EngineBlock") {
-							this._box2dBody.ApplyImpulse(impulse, location);
+				var grid = self.getGrid();
+				for (row = 0; row < grid.length; row++) {
+					var blockRow = grid[row];
+					for (col = 0; col < blockRow.length; col++) {
+						var block = blockRow[col];
+
+						if(block && block.classId() === "EngineBlock") {
+							self._box2dBody.ApplyImpulse(impulse, location);
 						}
 					}
 				}
