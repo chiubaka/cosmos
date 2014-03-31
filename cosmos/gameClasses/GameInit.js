@@ -28,12 +28,18 @@ var GameInit = {
 		if (ige.isServer) {
             // The server streams these entities to the client. Creating them on both the client AND the server may speed
             // up initialization time.
-            new BlockGrid()
-              .id('randomAsteroid')
-              .streamMode(1)
-              .mount(game.spaceGameScene)
-              .depth(100)
-              .setGrid(AsteroidGenerator.randomAsteroid());
+            var asteroidSpacing = 600;
+            for(var x = 0; x < 3; x++) {
+                for(var y = 0; y < 3; y++) {
+                    new BlockGrid()
+                      .id('randomAsteroid' + x + "," + y)
+                      .streamMode(1)
+                      .mount(game.spaceGameScene)
+                      .depth(100)
+                      .setGrid(AsteroidGenerator.randomAsteroid())
+                      .translateTo(x * asteroidSpacing, y * asteroidSpacing, 0)
+                }
+            }
 		}
 		else {
 			this.initPlayerControls(game);
