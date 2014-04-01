@@ -9,16 +9,54 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * texture. */
 	_renderContainer: undefined,
 
-	init: function() {
+	init: function(data) {
 		IgeEntityBox2d.prototype.init.call(this);
 
-		this._renderContainer = new IgeEntity()
-			.streamMode(1)
-			.compositeCache(true)
-			.mount(this);
+		if (data !== undefined) {
+			this.gridFromStreamCreateData(data);
+			console.log(data);
+		}
 
 		if (!ige.isServer) {
+			this._renderContainer = new IgeEntity()
+				.compositeCache(true)
+				.mount(this);
 
+			this.mountGrid();
+		}
+	},
+
+	streamCreateData: function() {
+		return this.streamCreateDataFromGrid(this._grid);
+	},
+
+	streamCreateDataFromGrid: function(grid) {
+		var data = [];
+		for (var i = 0; i < grid.length; i++) {
+			var row = [];
+			for (var j = 0; j < grid[i].length; j++) {
+				var block = grid[i][j];
+
+				if (block === undefined) {
+					continue;
+				}
+
+				row.push(block.classId());
+			}
+			data.push(row);
+		}
+		return data;
+	},
+
+	gridFromStreamCreateData: function(data) {
+		this._grid = [];
+		for (var i = 0; i < data.length; i++) {
+			var row = [];
+			for (var j = 0; j < data[i].length; j++) {
+				var classId = data[i][j];
+				row.push(Block.prototype.blockFromClassId(classId));
+			}
+			this._grid.push(row);
 		}
 	},
 
@@ -78,16 +116,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 					continue;
 				}
 
-				block.mount(this._renderContainer);
-				block.streamMode(1);
-
-				var width = block.width();
-				var height = block.height();
+				var width = Block.prototype.WIDTH;
+				var height = Block.prototype.HEIGHT;
 
 				var x = width * col;
 				var y = height * row;
-
-				block.translateTo(x, y, 0);
 
 				fixture = {
 					density: 1.0,
@@ -126,6 +159,24 @@ var BlockGrid = IgeEntityBox2d.extend({
 		});
 
 		return this;
+	},
+
+	mountGrid: function() {
+		for (var row = 0; row < this._grid.length; row++) {
+			for (var col = 0; col < this._grid[row].length; col++) {
+				var block = this._grid[row][col];
+
+				if (block === undefined) {
+					continue;
+				}
+
+				var x = Block.prototype.WIDTH * col;
+				var y = Block.prototype.HEIGHT * row;
+
+				block.translateTo(x, y, 0);
+				block.mount(this._renderContainer);
+			}
+		}
 	}
 });
 
