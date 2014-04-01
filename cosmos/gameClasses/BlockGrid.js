@@ -171,8 +171,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 				var x = Block.prototype.WIDTH * col;
 				var y = Block.prototype.HEIGHT * row;
 
-				block.mount(this._renderContainer);
-				block.translateTo(x, y, 0);
+				block.translateTo(x, y, 0)
+					.mount(this._renderContainer);
 			}
 		}
 	}
