@@ -36,11 +36,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 			var row = [];
 			for (var j = 0; j < grid[i].length; j++) {
 				var block = grid[i][j];
-
 				if (block === undefined) {
+					row.push(undefined);
 					continue;
 				}
-
 				row.push(block.classId());
 			}
 			data.push(row);
@@ -173,8 +172,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 				var x = Block.prototype.WIDTH * col;
 				var y = Block.prototype.HEIGHT * row;
 
-				block.translateTo(x, y, 0);
 				block.mount(this._renderContainer);
+				block.translateTo(x, y, 0);
 			}
 		}
 	}
