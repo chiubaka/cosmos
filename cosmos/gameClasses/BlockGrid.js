@@ -103,6 +103,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		fixtures = [];
 
+		this.height(Block.prototype.HEIGHT * this._grid.length)
+			.width(Block.prototype.WIDTH * this._grid[0].length);
+
 		for(var row = 0; row < this._grid.length; row++)
 		{
 			var blockList = this._grid[row];
@@ -117,8 +120,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 				var width = Block.prototype.WIDTH;
 				var height = Block.prototype.HEIGHT;
 
-				var x = width * col;
-				var y = height * row;
+				var x = width * col - this._geometry.x2 + block._geometry.x2;
+				var y = height * row - this._geometry.y2 + block._geometry.y2;
 
 				fixture = {
 					density: 1.0,
@@ -160,6 +163,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	mountGrid: function() {
+		this.height(Block.prototype.HEIGHT * this._grid.length)
+			.width(Block.prototype.WIDTH * this._grid[0].length);
+		this._renderContainer.height(this.height())
+			.width(this.width());
+
 		for (var row = 0; row < this._grid.length; row++) {
 			for (var col = 0; col < this._grid[row].length; col++) {
 				var block = this._grid[row][col];
@@ -168,8 +176,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 					continue;
 				}
 
-				var x = Block.prototype.WIDTH * col;
-				var y = Block.prototype.HEIGHT * row;
+				var x = Block.prototype.WIDTH * col - this._geometry.x2 + block._geometry.x2;
+				var y = Block.prototype.HEIGHT * row - this._geometry.y2 + block._geometry.y2;
 
 				block.translateTo(x, y, 0)
 					.mount(this._renderContainer);
