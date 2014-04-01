@@ -12,11 +12,13 @@ var BlockGrid = IgeEntityBox2d.extend({
 	init: function() {
 		IgeEntityBox2d.prototype.init.call(this);
 
-		this._renderContainer = new BlockGridRenderContainer()
+		this._renderContainer = new IgeEntity()
 			.streamMode(1)
+			.compositeCache(true)
 			.mount(this);
 
 		if (!ige.isServer) {
+
 		}
 	},
 
