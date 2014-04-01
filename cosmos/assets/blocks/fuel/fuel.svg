@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 17.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 17.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Your_Icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
-<path fill="#00D30A" d="M51.5,7C36.4,7,23,13.3,23,22.3v54.7c0,9.1,13.4,16.4,28.5,16.4S80,86.1,80,77.1V22.3C80,13.3,66.6,7,51.5,7
-	z M51.5,29.1c-13.7,0-24.7-4.2-24.7-9.5S37.8,9.3,51.5,9.3s24.7,5.1,24.7,10.3S65.2,29.1,51.5,29.1z"/>
+	 width="500px" height="500px" viewBox="230 30 500 500" enable-background="new 230 30 500 500" xml:space="preserve">
+<path fill="#00D30A" d="M475.514,120.306c-56.21,0-106.092,23.452-106.092,56.955v203.623c0,33.875,49.882,61.05,106.092,61.05
+	s106.092-27.175,106.092-60.677V177.261C581.607,143.758,531.725,120.306,475.514,120.306z M475.514,202.574
+	c-50.999,0-91.947-15.635-91.947-35.364s40.948-38.342,91.947-38.342s91.947,18.985,91.947,38.342S526.513,202.574,475.514,202.574z
+	"/>
 </svg>
