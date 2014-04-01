@@ -14,7 +14,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		if (data !== undefined) {
 			this.gridFromStreamCreateData(data);
-			console.log(data);
 		}
 
 		if (!ige.isServer) {
