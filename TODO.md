@@ -9,17 +9,16 @@ LEO-256: Players should be able to mine blocks from asteroids (Daniel/Rafael)
 	LEO-257: Remove a block from the BlockGrid it is attached to when it is clicked
     LEO-258: Move a block to its own BlockGrid when it is clicked (i.e. clicking a block in a BlockGrid causes it to break-off and form its own BlockGrid)
     LEO-259: Modify the Box2D fixtures of a BlockGrid when a block is removed from it
-    LEO-260: Allow player to pick up single floating blocks if they are within a certain proximity of the player's ship
+    LEO-260: Allow player to pick up single floating blocks if they are within a certain proximity of the player's ship (rafael)
 
-Major Refacotring of how rendering works (daniel)
-	Review pull request (Rafael)
+cargo hold
+	list of blocks (rafael)
 
 chat (low priority)
 	there are already components for this in IGE
-	push this feature branch (rafael)
 
 Minimap
-	Review rafael's pull request for the minimap (daniel)
+	seems to be more trouble than it's worth right now
 	make minimap show a stylized version of the world (low priority)
 
 It would be really nice if Master was automatically tested (Derrick?)
@@ -27,19 +26,34 @@ It would be really nice if Master was automatically tested (Derrick?)
 	We can add more fancy test scripts later.
 
 Element blocks
-	Review pull request (daniel)
+	review ice pull request (Daniel)
 
-Add asteroid generator (rafael)
-	Accept the pull request (daniel)
-	blocks in the asteroid should be adjacent to other blocks : P
+Asteroid generator (rafael)
+	blocks in the asteroid should be adjacent to other blocks, esp. of similar type
 
-Add bounding box code to master for folks to use for debugging (Rafael)
+spec out the board game (Rafael)
 
-Client-side entity interpolation (rafael)
+Client-side entity interpolation (long-term)
 
 improving streaming (long-term)
+	use stream mode 2 and static IGE entities
 
 refactor code to be consistent with IGE's getters and setters. This should be in an r/ branch.
 
-Mining (Daniel)
-	
+you should be able to move backwards
+	FInished! Submit the pull request (rafael)
+
+make many asteroids (that don't overlap)
+	submit pull request (rafael)
+
+merge the approved pull request (Rafael)
+
+You should be able to Zoom with the mouse. To a certain extent.
+
+Submit pull request for refactor game init (rafael)
+
+make rotation impulse proportional to the number of ThrusterBlocks on your ship (Rafael)
+
+allow option for camera to track rotation as well?
+
+fix multiplayer (rafael)

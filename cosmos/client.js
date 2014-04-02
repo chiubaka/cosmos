@@ -12,7 +12,7 @@ var Client = IgeClass.extend({
 		self.LAYER_BACKGROUND = 10;
 		self.LAYER_MIDDLE = 50;
 		self.LAYER_FOREGROUND = 90;
-		
+
 		// Enable networking
 		ige.addComponent(IgeNetIoComponent);
 
@@ -61,6 +61,7 @@ var Client = IgeClass.extend({
 							}
 						}
 					};
+
 					// False here specifies a synchronous request, which simplifies concurrency here.
 					// May need to consider changing this if many SVGs need to be downloaded and load
 					// times are getting ridiculous.
