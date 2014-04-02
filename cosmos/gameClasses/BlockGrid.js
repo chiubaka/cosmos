@@ -103,8 +103,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		fixtures = [];
 
+		var maxRowLength = this.maxRowLengthForGrid(this._grid);
+
 		this.height(Block.prototype.HEIGHT * this._grid.length)
-			.width(Block.prototype.WIDTH * this._grid[0].length);
+			.width(Block.prototype.WIDTH * maxRowLength);
 
 		for(var row = 0; row < this._grid.length; row++)
 		{
@@ -163,8 +165,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	mountGrid: function() {
+		var maxRowLength = this.maxRowLengthForGrid(this._grid);
+
 		this.height(Block.prototype.HEIGHT * this._grid.length)
-			.width(Block.prototype.WIDTH * this._grid[0].length);
+			.width(Block.prototype.WIDTH * maxRowLength);
 		this._renderContainer.height(this.height())
 			.width(this.width());
 
@@ -183,6 +187,17 @@ var BlockGrid = IgeEntityBox2d.extend({
 					.mount(this._renderContainer);
 			}
 		}
+	},
+
+	maxRowLengthForGrid: function(grid) {
+		var maxRowLength = 0;
+		for (var row = 0; row < grid.length; row++) {
+			if (grid[row].length > maxRowLength) {
+				maxRowLength = grid[row].length;
+			}
+		}
+
+		return maxRowLength;
 	}
 });
 
