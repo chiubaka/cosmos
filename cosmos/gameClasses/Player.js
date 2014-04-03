@@ -102,7 +102,7 @@ var Player = BlockGrid.extend({
 				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
 				var location = this._box2dBody.GetWorldCenter(); //center of gravity
 
-				var grid = self.getGrid();
+				var grid = self.grid();
 				for (row = 0; row < grid.length; row++) {
 					var blockRow = grid[row];
 					for (col = 0; col < blockRow.length; col++) {

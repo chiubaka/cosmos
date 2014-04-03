@@ -88,67 +88,64 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	/**
-	 * getGrid returns the array of arrays which represents the grid of blocks that this BlockGrid is composed of.
+	 * Getter/setter for the grid property of the BlockGrid. If a parameter is passed, sets
+	 * the property and returns this. If not, returns the property.
+	 * @parameter grid the grid to set (optional)
+	 * @return this if we set the grid or the current grid otherwise
 	 */
-	getGrid: function() {
-		return this._grid;
-	},
+	grid: function(grid) {
+		if (grid !== undefined) {
+			this._grid = grid;
 
-	/**
-	 * setGrid sets the grid of this BlockGrid. This both updates the grid property (accessible with getGrid()),
-	 * and also updates this BlockGrid's box2d object to have the appropriate fixtures.
-	 */
-	setGrid: function(newGrid) {
-		this._grid = newGrid;
+			fixtures = [];
 
-		fixtures = [];
+			var maxRowLength = this.maxRowLengthForGrid(this._grid);
 
-		var maxRowLength = this.maxRowLengthForGrid(this._grid);
+			this.height(Block.prototype.HEIGHT * this._grid.length)
+				.width(Block.prototype.WIDTH * maxRowLength);
 
-		this.height(Block.prototype.HEIGHT * this._grid.length)
-			.width(Block.prototype.WIDTH * maxRowLength);
-
-		for(var row = 0; row < this._grid.length; row++)
-		{
-			var blockList = this._grid[row];
-			for(var col = 0; col < blockList.length; col++)
+			for(var row = 0; row < this._grid.length; row++)
 			{
-				var block = blockList[col];
+				var blockList = this._grid[row];
+				for(var col = 0; col < blockList.length; col++)
+				{
+					var block = blockList[col];
 
-				if (block === undefined) {
-					continue;
-				}
-
-				var width = Block.prototype.WIDTH;
-				var height = Block.prototype.HEIGHT;
-
-				var x = width * col - this._geometry.x2 + block._geometry.x2;
-				var y = height * row - this._geometry.y2 + block._geometry.y2;
-
-				fixture = {
-					density: 1.0,
-					friction: 0.5,
-					restitution: 0.5,
-					shape: {
-						type: 'rectangle',
-						data: {
-							// The position of the fixture relative to the body
-							x: x,
-							y: y,
-							width: width / 2, //I don't know why we have to devide by two here to make this come out right : (
-							height: height / 2
-						}
+					if (block === undefined) {
+						continue;
 					}
+
+
+					var width = Block.prototype.WIDTH;
+					var height = Block.prototype.HEIGHT;
+
+					var x = width * col - this._geometry.x2 + block._geometry.x2;
+					var y = height * row - this._geometry.y2 + block._geometry.y2;
+
+					fixture = {
+						density: 1.0,
+						friction: 0.5,
+						restitution: 0.5,
+						shape: {
+							type: 'rectangle',
+							data: {
+								// The position of the fixture relative to the body
+								x: x,
+								y: y,
+								width: width / 2, //I don't know why we have to devide by two here to make this come out right : (
+								height: height / 2
+							}
+						}
+					};
+
+					fixtures.push(fixture);
+
+					self = this;
+					block.onDeath = function () {
+						self.remove(block, fixture)
+					};
 				}
-
-				fixtures.push(fixture);
-
-				self = this;
-				block.onDeath = function() {
-					self.remove(block, fixture)
-				};
 			}
-		}
 
 		this.box2dBody({
 			type: 'dynamic',
@@ -161,7 +158,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 			fixtures: fixtures
 		});
 
-		return this;
+			return this;
+		}
+
+		return this._grid;
 	},
 
 	mountGrid: function() {

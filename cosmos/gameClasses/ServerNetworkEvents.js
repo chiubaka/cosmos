@@ -33,7 +33,7 @@ var ServerNetworkEvents = {
 	_onPlayerEntity: function (data, clientId) {
 		if (!ige.server.players[clientId]) {
 			ige.server.players[clientId] = new Player(clientId)
-				.setGrid(ExampleShips.starterShipSingleMisplacedEngine())
+				.grid(ExampleShips.starterShipSingleMisplacedEngine())
 				.streamMode(1)
 				.mount(ige.server.spaceGameScene);
 
