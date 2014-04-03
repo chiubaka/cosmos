@@ -42,15 +42,10 @@ var AsteroidGenerator = {
 		var asteroidDim = Math.floor(this.weightedRandom(maxSize, maxSize, 0.75));
 		var maxNumBlocks = (maxNumBlocks || asteroidDim * asteroidDim);
 
-		console.log("[DEBUG] Asteroid dimensions: " + asteroidDim);
-		console.log("[DEBUG] Max number of blocks: " + maxNumBlocks);
-
 		// Number of blocks that can be contained in this asteroid. Guaranteed to be at least 0.5 of the dimensions
 		// so we have some bulk in the asteroid.
 		var numBlocks = Math.floor(this.weightedRandom(maxNumBlocks, maxNumBlocks, 0.5));
 		var blocksRemaining = numBlocks;
-
-		console.log("[DEBUG] Number of blocks: " + numBlocks);
 
 		// The asteroid itself: a 2D array of blocks.
 		var asteroidConstr = [[]];
@@ -61,8 +56,6 @@ var AsteroidGenerator = {
 			y: Math.floor(asteroidDim / 2)
 		};
 
-		console.log("[DEBUG] Starting cell: " + startingCell.x + "," + startingCell.y);
-
 		// Initialize the block bag.
 		var blocksToPlace = [];
 		blocksToPlace.push(startingCell);
@@ -72,8 +65,6 @@ var AsteroidGenerator = {
 			// Randomly select a block to place.
 			var blockIndex = Math.floor(Math.random() * blocksToPlace.length);
 			var block = blocksToPlace[blockIndex];
-
-			console.log("[DEBUG] Placing block at: " + block.x + "," + block.y);
 
 			if (asteroidConstr[block.x] !== undefined && asteroidConstr[block.x][block.y] !== undefined) {
 				blocksToPlace.remove(blockIndex);

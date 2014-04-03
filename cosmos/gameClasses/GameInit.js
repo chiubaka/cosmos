@@ -31,8 +31,6 @@ var GameInit = {
 			var asteroidSpacing = 600;
 			for (var x = 0; x < 3; x++) {
 				for (var y = 0; y < 3; y++) {
-					console.log("[DEBUG] generating asteroid...");
-
 					new BlockGrid()
 						.id('genRandomAsteroid' + x + "," + y)
 						.streamMode(1)
