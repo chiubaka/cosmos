@@ -1,5 +1,7 @@
 var Block = IgeEntity.extend({
 	classId: 'Block',
+	WIDTH: 26,
+	HEIGHT: 26,
 
 	/**
 	 * Construct a new block
@@ -39,7 +41,36 @@ var Block = IgeEntity.extend({
 	Objects that contain blocks should set the onDeath function to be something more useful.
 	For example, the blockGrid class should set the block's onDeath function to break off from the grid.
 	*/
-	onDeath: function() {}
+	onDeath: function() {},
+
+	blockFromClassId: function(classId) {
+		switch (classId) {
+			case Block.prototype.classId():
+				return new Block();
+			case CargoBlock.prototype.classId():
+				return new CargoBlock();
+			case ControlBlock.prototype.classId():
+				return new ControlBlock();
+			case EngineBlock.prototype.classId():
+				return new EngineBlock();
+			case FuelBlock.prototype.classId():
+				return new FuelBlock();
+			case MiningLaserBlock.prototype.classId():
+				return new MiningLaserBlock();
+			case PowerBlock.prototype.classId():
+				return new PowerBlock();
+			case ThrusterBlock.prototype.classId():
+				return new ThrusterBlock();
+			case CarbonBlock.prototype.classId():
+				return new CarbonBlock();
+			case IceBlock.prototype.classId():
+				return new IceBlock();
+			case IronBlock.prototype.classId():
+				return new IronBlock();
+			default:
+				return undefined;
+		}
+	}
 });
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Block; }
