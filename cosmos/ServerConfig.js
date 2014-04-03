@@ -7,7 +7,6 @@ var config = {
 		/* Our custom classes */
 		{name: 'Block', path: './gameClasses/Block'},
 		{name: 'BlockGrid', path: './gameClasses/BlockGrid'},
-		{name: 'BlockGridRenderContainer', path: './gameClasses/BlockGridRenderContainer'},
 
 		/* Parts */
 		{name: 'Part', path: './gameClasses/blocks/Part'},

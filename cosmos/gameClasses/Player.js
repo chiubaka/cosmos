@@ -1,8 +1,8 @@
 var Player = BlockGrid.extend({
 	classId: 'Player',
 
-	init: function () {
-		BlockGrid.prototype.init.call(this);
+	init: function (data) {
+		BlockGrid.prototype.init.call(this, data);
 
 		var self = this;
 
@@ -36,8 +36,6 @@ var Player = BlockGrid.extend({
 		grid[grid.length / 2][grid[0].length / 2] = new PlayerControlBlock();
 		this.setGrid(grid);
 		*/
-
-		this.grid(ExampleShips.starterShipSingleMisplacedEngine());
 
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);

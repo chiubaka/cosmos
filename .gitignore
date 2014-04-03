@@ -5,6 +5,13 @@ npm-debug.log
 # WebStorm project files
 .idea/
 
+# Visual Studio project files
+*.njsproj
+*.sln
+*.suo
+WebEssentials-Settings.json
+obj/
+
 # Vim swap files
 .*.sw?
 
