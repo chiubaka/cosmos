@@ -38,8 +38,6 @@ var GameInit = {
 						.depth(100)
 						.setGrid(AsteroidGenerator.genProceduralAsteroid())
 						.translateTo(x * asteroidSpacing, y * asteroidSpacing, 0);
-
-					console.log("");
 				}
 			}
 		}
