@@ -50,80 +50,77 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	/**
-	 * getGrid returns the array of arrays which represents the grid of blocks that this BlockGrid is composed of.
+	 * Getter/setter for the grid property of the BlockGrid. If a parameter is passed, sets
+	 * the property and returns this. If not, returns the property.
+	 * @parameter grid the grid to set (optional)
+	 * @return this if we set the grid or the current grid otherwise
 	 */
-	getGrid: function() {
-		return this._grid;
-	},
+	grid: function(grid) {
+		if (grid !== undefined) {
+			this._grid = grid;
 
-	/**
-	 * setGrid sets the grid of this BlockGrid. This both updates the grid property (accessible with getGrid()),
-	 * and also updates this BlockGrid's box2d object to have the appropriate fixtures.
-	 */
-	setGrid: function(newGrid) {
-		this._grid = newGrid;
+			fixtures = [];
 
-		fixtures = [];
+			for (var row = 0; row < this._grid.length; row++) {
+				var blockList = this._grid[row];
+				for (var col = 0; col < blockList.length; col++) {
+					var block = blockList[col];
 
-		for(var row = 0; row < this._grid.length; row++)
-		{
-			var blockList = this._grid[row];
-			for(var col = 0; col < blockList.length; col++)
-			{
-				var block = blockList[col];
+					if (block === undefined) {
+						continue;
+					}
 
-				if (block === undefined) {
-					continue;
-				}
+					block.mount(this._renderContainer);
+					block.streamMode(1);
 
-				block.mount(this._renderContainer);
-				block.streamMode(1);
+					var width = block.width();
+					var height = block.height();
 
-				var width = block.width();
-				var height = block.height();
+					var x = width * col;
+					var y = height * row;
 
-				var x = width * col;
-				var y = height * row;
+					block.translateTo(x, y, 0);
 
-				block.translateTo(x, y, 0);
-
-				fixture = {
-					density: 1.0,
-					friction: 0.5,
-					restitution: 0.5,
-					shape: {
-						type: 'rectangle',
-						data: {
-							// The position of the fixture relative to the body
-							x: x,
-							y: y,
-							width: width / 2, //I don't know why we have to devide by two here to make this come out right : (
-							height: height / 2
+					fixture = {
+						density: 1.0,
+						friction: 0.5,
+						restitution: 0.5,
+						shape: {
+							type: 'rectangle',
+							data: {
+								// The position of the fixture relative to the body
+								x: x,
+								y: y,
+								width: width / 2, //I don't know why we have to devide by two here to make this come out right : (
+								height: height / 2
+							}
 						}
 					}
+
+					fixtures.push(fixture);
+
+					self = this;
+					block.onDeath = function () {
+						self.remove(block, fixture)
+					};
 				}
-
-				fixtures.push(fixture);
-
-				self = this;
-				block.onDeath = function() {
-					self.remove(block, fixture)
-				};
 			}
+
+			this.box2dBody({
+				type: 'dynamic',
+				linearDamping: 0.4,
+				angularDamping: 0.8,
+				allowSleep: true,
+				bullet: false,
+				gravitic: false,
+				fixedRotation: false,
+				fixtures: fixtures
+			});
+
+			return this;
 		}
 
-		this.box2dBody({
-			type: 'dynamic',
-			linearDamping: 0.4,
-			angularDamping: 0.8,
-			allowSleep: true,
-			bullet: false,
-			gravitic: false,
-			fixedRotation: false,
-			fixtures: fixtures
-		});
-
-		return this;
+		return this._grid;
 	}
 });
 
