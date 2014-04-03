@@ -1,29 +1,8 @@
 var AsteroidGenerator = {
 	/**
-	 * A little tiny asteroid : )
-	 */
-	littleAsteroid: function() {
-		return [
-			[new CarbonBlock(), new IronBlock()],
-			[new IronBlock(),   new CarbonBlock()]
-		]
-	},
-
-	/**
-	 * A hollow asteroid
-	 */
-	hollowAsteroid: function() {
-		return [
-			[new CarbonBlock(), new CarbonBlock(), new IronBlock()],
-			[new IronBlock(),   undefined,         new CarbonBlock()],
-			[new IronBlock(),   new IronBlock(),   new IronBlock()]
-		]
-	},
-
-	/**
 	 * A random asteroid which may have holes in it
 	 */
-	randomAsteroid: function(maxSize, probabilityOfHole) {
+	genRandomAsteroid: function(maxSize, probabilityOfHole) {
 		asteroid = []
 
 		var maxSize = maxSize || 40;
@@ -178,6 +157,28 @@ var AsteroidGenerator = {
 		return (Math.random() * (value)) * weight + (upperBound * (1 - weight));
 	},
 
+	prefabs: {
+		/**
+		 * A little tiny asteroid : )
+		 */
+		littleAsteroid: function() {
+			return [
+				[new CarbonBlock(), new IronBlock()],
+				[new IronBlock(), new CarbonBlock()]
+			];
+		},
+
+		/**
+		 * A hollow asteroid
+		 */
+		hollowAsteroid: function() {
+			return [
+				[new CarbonBlock(), new CarbonBlock(), new IronBlock()],
+				[new IronBlock(), undefined, new CarbonBlock()],
+				[new IronBlock(), new IronBlock(), new IronBlock()]
+			];
+		},
+	},
 
 	blockDistributions: {
 		STANDARD: {
