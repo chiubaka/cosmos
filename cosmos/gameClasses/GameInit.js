@@ -37,7 +37,7 @@ var GameInit = {
 						.mount(game.spaceGameScene)
 						.depth(100)
 						.setGrid(AsteroidGenerator.genProceduralAsteroid())
-						.translateTo(x * asteroidSpacing, y * asteroidSpacing, 0);
+						.translateTo(300 + x * asteroidSpacing, 300 + y * asteroidSpacing, 0);
 				}
 			}
 		}
