@@ -29,6 +29,7 @@ var GameInit = {
 			// The server streams these entities to the client. Creating them on both the client AND the server may speed
 			// up initialization time.
 			var asteroidSpacing = 1500;
+			var asteroidOffset = 500;
 			for (var x = 0; x < 3; x++) {
 				for (var y = 0; y < 3; y++) {
 					new BlockGrid()
@@ -37,7 +38,7 @@ var GameInit = {
 						.mount(game.spaceGameScene)
 						.depth(100)
 						.setGrid(AsteroidGenerator.genProceduralAsteroid())
-						.translateTo(300 + x * asteroidSpacing, 300 + y * asteroidSpacing, 0);
+						.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
 				}
 			}
 		}
