@@ -168,13 +168,13 @@ var BlockGrid = IgeEntityBox2d.extend({
 		var self = this;
 
 		if(ige.isServer) {
-			if (this.getGrid().length == 1 && this.getGrid[0].length == 1) {
+			if (this.getGrid().length == 1 && this.getGrid()[0].length == 1) {
 				var players = ige.server.getPlayers();
 
 				for (var playerId in players) {
 					var player = players[playerId];
 
-					var linearImpulse = 1;
+					var linearImpulse = .001;
 
 					var x_comp = (player.translate().x() - self.translate().x()) * linearImpulse;
 					var y_comp = (player.translate().y() - self.translate().y()) * linearImpulse;
@@ -183,7 +183,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 					var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
 					var location = this._box2dBody.GetWorldCenter(); //center of gravity
 
-						self._box2dBody.ApplyImpulse(impulse, location);
+					self._box2dBody.ApplyImpulse(impulse, location);
 				}
 			}
 		}
