@@ -1,8 +1,8 @@
 var Player = BlockGrid.extend({
 	classId: 'Player',
 
-	init: function () {
-		BlockGrid.prototype.init.call(this);
+	init: function (data) {
+		BlockGrid.prototype.init.call(this, data);
 
 		var self = this;
 
@@ -36,8 +36,6 @@ var Player = BlockGrid.extend({
 		grid[grid.length / 2][grid[0].length / 2] = new PlayerControlBlock();
 		this.setGrid(grid);
 		*/
-
-		this.setGrid(ExampleShips.starterShipSingleMisplacedEngine());
 
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);
@@ -83,7 +81,7 @@ var Player = BlockGrid.extend({
 		/* For the server: */
 		if (ige.isServer) {
 			// This determines how fast you can rotate your spaceship
-	  var angularImpulse = -5000;
+			var angularImpulse = -5000;
 
 			if (this.controls.key.left) {
 				this._box2dBody.ApplyTorque(angularImpulse);
@@ -93,37 +91,20 @@ var Player = BlockGrid.extend({
 			}
 
 			/* Linear motion */
-			var linearImpulse = 100;
+			if (this.controls.key.up || this.controls.key.down) {
+				var linearImpulse;
+				if (this.controls.key.up) {
+					linearImpulse = 100;
+				} else if (this.controls.key.down) {
+					linearImpulse = -100;
+				}
 
-			// the "- Math.PI/2" below makes the ship move forward and backwards, instead of side to side.
-			var angle = this._box2dBody.GetAngle() - Math.PI/2;
+				// the "- Math.PI/2" below makes the ship move forward and backwards, instead of side to side.
+				var angle = this._box2dBody.GetAngle() - Math.PI/2;
 
-			if (this.controls.key.up) {
 				var x_comp = Math.cos(angle) * linearImpulse;
 				var y_comp = Math.sin(angle) * linearImpulse;
-				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
-				var location = this._box2dBody.GetWorldCenter(); //center of gravity
 
-				var grid = self.getGrid();
-				for (row = 0; row < grid.length; row++) {
-					var blockRow = grid[row];
-					for (col = 0; col < blockRow.length; col++) {
-						var block = blockRow[col];
-
-						if(block && block.classId() === "EngineBlock") {
-							self._box2dBody.ApplyImpulse(impulse, location);
-						}
-					}
-				}
-			}
-			else {
-				/* Consider applying the breaks automatically when the up arrow is released */
-				//this.velocity.x(0);
-				//this.velocity.y(0);
-			}
-			if (this.controls.key.down) {
-				var x_comp = Math.cos(angle) * -linearImpulse;
-				var y_comp = Math.sin(angle) * -linearImpulse;
 				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
 				var location = this._box2dBody.GetWorldCenter(); //center of gravity
 

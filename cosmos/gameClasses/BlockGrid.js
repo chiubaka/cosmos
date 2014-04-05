@@ -9,14 +9,52 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * texture. */
 	_renderContainer: undefined,
 
-	init: function() {
+	init: function(data) {
 		IgeEntityBox2d.prototype.init.call(this);
 
-		this._renderContainer = new BlockGridRenderContainer()
-			.streamMode(1)
-			.mount(this);
+		if (data !== undefined) {
+			this.gridFromStreamCreateData(data);
+		}
 
 		if (!ige.isServer) {
+			this._renderContainer = new IgeEntity()
+				.compositeCache(true)
+				.mount(this);
+
+			this.mountGrid();
+		}
+	},
+
+	streamCreateData: function() {
+		return this.streamCreateDataFromGrid(this._grid);
+	},
+
+	streamCreateDataFromGrid: function(grid) {
+		var data = [];
+		for (var i = 0; i < grid.length; i++) {
+			var row = [];
+			for (var j = 0; j < grid[i].length; j++) {
+				var block = grid[i][j];
+				if (block === undefined) {
+					row.push(undefined);
+					continue;
+				}
+				row.push(block.classId());
+			}
+			data.push(row);
+		}
+		return data;
+	},
+
+	gridFromStreamCreateData: function(data) {
+		this._grid = [];
+		for (var i = 0; i < data.length; i++) {
+			var row = [];
+			for (var j = 0; j < data[i].length; j++) {
+				var classId = data[i][j];
+				row.push(Block.prototype.blockFromClassId(classId));
+			}
+			this._grid.push(row);
 		}
 	},
 
@@ -65,6 +103,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		fixtures = [];
 
+		var maxRowLength = this.maxRowLengthForGrid(this._grid);
+
+		this.height(Block.prototype.HEIGHT * this._grid.length)
+			.width(Block.prototype.WIDTH * maxRowLength);
+
 		for(var row = 0; row < this._grid.length; row++)
 		{
 			var blockList = this._grid[row];
@@ -76,16 +119,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 					continue;
 				}
 
-				block.mount(this._renderContainer);
-				block.streamMode(1);
+				var width = Block.prototype.WIDTH;
+				var height = Block.prototype.HEIGHT;
 
-				var width = block.width();
-				var height = block.height();
-
-				var x = width * col;
-				var y = height * row;
-
-				block.translateTo(x, y, 0);
+				var x = width * col - this._geometry.x2 + block._geometry.x2;
+				var y = height * row - this._geometry.y2 + block._geometry.y2;
 
 				fixture = {
 					density: 1.0,
@@ -130,25 +168,63 @@ var BlockGrid = IgeEntityBox2d.extend({
 		var self = this;
 
 		if(ige.isServer) {
-			var players = ige.server.getPlayers();
+			if (this.getGrid().length == 1 && this.getGrid[0].length == 1) {
+				var players = ige.server.getPlayers();
 
-			for (var playerId in players) {
-				var player = players[playerId];
+				for (var playerId in players) {
+					var player = players[playerId];
 
-				var linearImpulse = 1;
+					var linearImpulse = 1;
 
-				var x_comp = (player.translate().x() - self.translate().x()) * linearImpulse;
-				var y_comp = (player.translate().y() - self.translate().y()) * linearImpulse;
-				if (!x_comp) continue;
-				if (!y_comp) continue;
-				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
-				var location = this._box2dBody.GetWorldCenter(); //center of gravity
+					var x_comp = (player.translate().x() - self.translate().x()) * linearImpulse;
+					var y_comp = (player.translate().y() - self.translate().y()) * linearImpulse;
+					if (!x_comp) continue;
+					if (!y_comp) continue;
+					var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
+					var location = this._box2dBody.GetWorldCenter(); //center of gravity
 
-					self._box2dBody.ApplyImpulse(impulse, location);
+						self._box2dBody.ApplyImpulse(impulse, location);
+				}
 			}
 		}
 
 		return IgeEntityBox2d.prototype.tick.call(this, ctx);
+	},
+
+	mountGrid: function() {
+		var maxRowLength = this.maxRowLengthForGrid(this._grid);
+
+		this.height(Block.prototype.HEIGHT * this._grid.length)
+			.width(Block.prototype.WIDTH * maxRowLength);
+		this._renderContainer.height(this.height())
+			.width(this.width());
+
+		for (var row = 0; row < this._grid.length; row++) {
+			for (var col = 0; col < this._grid[row].length; col++) {
+				var block = this._grid[row][col];
+
+				if (block === undefined) {
+					continue;
+				}
+
+				var x = Block.prototype.WIDTH * col - this._geometry.x2 + block._geometry.x2;
+				var y = Block.prototype.HEIGHT * row - this._geometry.y2 + block._geometry.y2;
+
+				block.translateTo(x, y, 0)
+					.mount(this._renderContainer);
+			}
+		}
+	},
+
+	maxRowLengthForGrid: function(grid) {
+		var maxRowLength = 0;
+		for (var row = 0; row < grid.length; row++) {
+			if (grid[row].length > maxRowLength) {
+				maxRowLength = grid[row].length;
+			}
+		}
+
+		return maxRowLength;
 	}
 });
 

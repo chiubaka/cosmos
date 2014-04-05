@@ -16,9 +16,9 @@ cargo hold
 
 chat (low priority)
 	there are already components for this in IGE
-	push this feature branch (rafael)
 
-Minimap (rafael)
+Minimap
+	seems to be more trouble than it's worth right now
 	make minimap show a stylized version of the world (low priority)
 
 It would be really nice if Master was automatically tested (Derrick?)
@@ -51,3 +51,9 @@ merge the approved pull request (Rafael)
 You should be able to Zoom with the mouse. To a certain extent.
 
 Submit pull request for refactor game init (rafael)
+
+make rotation impulse proportional to the number of ThrusterBlocks on your ship (Rafael)
+
+allow option for camera to track rotation as well?
+
+fix multiplayer (rafael)

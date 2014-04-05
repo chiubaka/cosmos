@@ -3,7 +3,6 @@ var igeClientConfig = {
 		/* Our custom game JS scripts */
 		'./gameClasses/Block.js',
 		'./gameClasses/BlockGrid.js',
-		'./gameClasses/BlockGridRenderContainer.js',
 
 		'./gameClasses/GameInit.js',
 		'./gameClasses/ClientNetworkEvents.js',
@@ -13,7 +12,7 @@ var igeClientConfig = {
 		'./gameClasses/ExampleShips.js',
 
 		/* Parts */
-		'./gameClasses/blocks/part.js',
+		'./gameClasses/blocks/Part.js',
 		//-------------
 		'./gameClasses/blocks/parts/EngineBlock.js',
 		'./gameClasses/blocks/parts/PowerBlock.js',
@@ -24,7 +23,7 @@ var igeClientConfig = {
 		'./gameClasses/blocks/parts/ThrusterBlock.js',
 
 		/* Elements */
-		'./gameClasses/blocks/element.js',
+		'./gameClasses/blocks/Element.js',
 		//--------------
 		'./gameClasses/blocks/elements/IronBlock.js',
 		'./gameClasses/blocks/elements/CarbonBlock.js',
