@@ -14,12 +14,6 @@ var Player = BlockGrid.extend({
 				right: false,
 				up: false,
 				down: false
-			},
-
-			mouse: {
-				button1: false,
-				button2: false,
-				button3: false
 			}
 		};
 
@@ -163,17 +157,6 @@ var Player = BlockGrid.extend({
 			}
 
 		}
-
-		/* Mouse buttons */
-		if (this.controls.mouse.button1) {
-			console.log("Mouse button 1 is down!");
-		}
-		if (this.controls.mouse.button2) {
-			console.log("Mouse button 2 is down");
-		}
-		if (this.controls.mouse.button3) {
-			console.log("Mouse button 3 is down");
-		}
 		/* CEXCLUDE */
 
 		/* For the client: */
@@ -186,11 +169,6 @@ var Player = BlockGrid.extend({
 			this.controls.key.down = ige.input.actionState('key.down');
 			this.controls.key.left = ige.input.actionState('key.left');
 			this.controls.key.right = ige.input.actionState('key.right');
-
-			/* Modify the MOUSE controls to reflect what buttons the client currently has down */
-			this.controls.mouse.button1 = ige.input.actionState('mouse.button1');
-			this.controls.mouse.button2 = ige.input.actionState('mouse.button2');
-			this.controls.mouse.button3 = ige.input.actionState('mouse.button3');
 
 			if (JSON.stringify(this.controls) !== oldControls) { //this.controls !== oldControls) {
 				// Tell the server about our control change
