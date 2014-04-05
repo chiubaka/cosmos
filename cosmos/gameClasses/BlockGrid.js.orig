@@ -163,6 +163,35 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		return this;
 	},
+<<<<<<< HEAD
+=======
+
+	tick: function(ctx) {
+		var self = this;
+
+		if(ige.isServer) {
+			if (this.getGrid().length == 1 && this.getGrid()[0].length == 1) {
+				var players = ige.server.getPlayers();
+
+				for (var playerId in players) {
+					var player = players[playerId];
+
+					var linearImpulse = .001;
+
+					var x_comp = (player.translate().x() - self.translate().x()) * linearImpulse;
+					var y_comp = (player.translate().y() - self.translate().y()) * linearImpulse;
+					if (!x_comp) continue;
+					if (!y_comp) continue;
+					var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
+					var location = this._box2dBody.GetWorldCenter(); //center of gravity
+
+					self._box2dBody.ApplyImpulse(impulse, location);
+				}
+			}
+		}
+
+		return IgeEntityBox2d.prototype.tick.call(this, ctx);
+	},
 
 	mountGrid: function() {
 		var maxRowLength = this.maxRowLengthForGrid(this._grid);
@@ -199,6 +228,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		return maxRowLength;
 	}
+>>>>>>> e56b2f3809c45925f83f0483c72f78521e338937
 });
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = BlockGrid; }

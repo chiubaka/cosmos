@@ -1,9 +1,15 @@
 var Player = BlockGrid.extend({
 	classId: 'Player',
 
+<<<<<<< HEAD
+	init: function () {
+		BlockGrid.prototype.init.call(this);
+		
+=======
 	init: function (data) {
 		BlockGrid.prototype.init.call(this, data);
 
+>>>>>>> e56b2f3809c45925f83f0483c72f78521e338937
 		var self = this;
 
 		this.drawBounds(false);
@@ -197,6 +203,8 @@ var Player = BlockGrid.extend({
 				ige.network.send('playerControlUpdate', this.controls);
 			}
 		}
+
+
 
 		// Call the BlockGrid (super-class) tick() method
 		BlockGrid.prototype.tick.call(this, ctx);

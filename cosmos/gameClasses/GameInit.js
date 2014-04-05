@@ -26,18 +26,33 @@ var GameInit = {
 		this.initScenes(game);
 
 		if (ige.isServer) {
-            // The server streams these entities to the client. Creating them on both the client AND the server may speed
-            // up initialization time.
-            var asteroidSpacing = 600;
-            for(var x = 0; x < 3; x++) {
-                for(var y = 0; y < 3; y++) {
+			// The server streams these entities to the client. Creating them on both the client AND the server may speed
+			// up initialization time.
+			var asteroidSpacing = 1500;
+			var asteroidOffset = 500;
+			for (var x = 0; x < 1; x++) {
+				for (var y = 0; y < 1; y++) {
+					new BlockGrid()
+						.id('genRandomAsteroid' + x + "," + y)
+						.streamMode(1)
+						.mount(game.spaceGameScene)
+						.depth(100)
+						.setGrid(AsteroidGenerator.genProceduralAsteroid())
+						.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
+				}
+			}
+
+            var asteroidSpacing = 30;
+            var asteroidOffset = -300;
+            for (var x = -1; x < 0; x++) {
+                for (var y = -1; y < 0; y++) {
                     new BlockGrid()
-                      .id('randomAsteroid' + x + "," + y)
-                      .streamMode(1)
-                      .mount(game.spaceGameScene)
-                      .depth(100)
-                      .setGrid(AsteroidGenerator.randomAsteroid())
-                      .translateTo(x * asteroidSpacing, y * asteroidSpacing, 0)
+                        .id('littleAsteroid' + x + "," + y)
+                        .streamMode(1)
+                        .mount(game.spaceGameScene)
+                        .depth(100)
+                        .setGrid(AsteroidGenerator.prefabs.SINGLE_BLOCK())
+                        .translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
                 }
             }
 		}
