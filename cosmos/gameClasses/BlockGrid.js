@@ -20,7 +20,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		if (!ige.isServer) {
 			this._renderContainer = new IgeEntity()
-				.compositeCache(true)
+				//.compositeCache(true)
 				.mount(this);
 
 			this.mountGrid();
@@ -154,7 +154,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 					new FixtureDebuggingEntity()
 						.streamMode(1)
 						.mount(self)
-						.depth(110)
+						.depth(self.depth() + 1)
 						.translateTo(fixture.shape.data.x, fixture.shape.data.y, 0)
 						.width(fixture.shape.data.width)
 						.height(fixture.shape.data.height);
