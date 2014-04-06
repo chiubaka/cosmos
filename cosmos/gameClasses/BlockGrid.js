@@ -198,6 +198,25 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 
 		return maxRowLength;
+	},
+
+	tick: function(ctx) {
+		var self = this;
+
+		if (ige.isServer) {
+			// Attract the block grid to another body. For example, small asteroids
+			// are attracted to player ships.
+			if (this.attractedTo !== undefined) {
+				var attractedToBody = this.attractedTo._box2dBody;
+				var thisBody = this._box2dBody;
+				var impulse = new ige.box2d.b2Vec2(0, 0);
+				impulse.Add(attractedToBody.GetWorldCenter());
+				impulse.Subtract(thisBody.GetWorldCenter());
+				thisBody.ApplyImpulse(impulse, thisBody.GetWorldCenter());
+			}
+		}
+
+		return IgeEntityBox2d.prototype.tick.call(this, ctx);
 	}
 });
 

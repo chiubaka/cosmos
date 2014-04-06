@@ -31,7 +31,7 @@ var GameInit = {
 			var asteroidSpacing = 1500;
 			var asteroidOffset = 500;
 			for (var x = 0; x < 1; x++) {
-				for (var y = 0; y < 1; y++) {
+				for (var y = 0; y < 2; y++) {
 					new BlockGrid()
 						.id('genRandomAsteroid' + x + "," + y)
 						.streamMode(1)
@@ -42,20 +42,49 @@ var GameInit = {
 				}
 			}
 
-            var asteroidSpacing = 30;
-            var asteroidOffset = -300;
-            for (var x = -1; x < 0; x++) {
-                for (var y = -1; y < 0; y++) {
-                    new BlockGrid()
-                        .id('littleAsteroid' + x + "," + y)
-                        .streamMode(1)
-                        .mount(game.spaceGameScene)
-                        .depth(100)
-                        .setGrid(AsteroidGenerator.prefabs.SINGLE_BLOCK())
-                        .translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
-                }
-            }
-		}
+			var asteroidSpacing = 30;
+			var asteroidOffset = -300;
+			for (var x = -2; x < 0; x++) {
+					for (var y = -2; y < 0; y++) {
+							new BlockGrid()
+									.category("smallAsteroid")
+									.id('littleAsteroid' + x + "," + y)
+									.streamMode(1)
+									.mount(game.spaceGameScene)
+									.depth(100)
+									.setGrid(AsteroidGenerator.prefabs.SINGLE_BLOCK())
+									.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
+					}
+			}
+			// TODO: Move this code inside Player.js
+			// Set the contact listener methods to detect when
+			// contacts (collisions) begin and end
+			ige.box2d.contactListener(
+				// Listen for when contact's begin
+				function (contact) {
+					// If player ship is near small asteroids, attract them
+					if (contact.igeEitherCategory('ship') &&
+							contact.igeEitherCategory('smallAsteroid')) {
+						var asteroid = contact.igeEntityByCategory('smallAsteroid');
+						var ship = contact.igeEntityByCategory('ship');
+						var impulse = new ige.box2d.b2Vec2(0, 0);
+						impulse.Add(ship._box2dBody.GetWorldCenter());
+						impulse.Subtract(asteroid._box2dBody.GetWorldCenter());
+						asteroid._box2dBody.ApplyImpulse(impulse, asteroid._box2dBody.GetWorldCenter());
+						// TODO: Make it so blocks are attracted to multiple players
+						if (asteroid.attractedTo === undefined) {
+							asteroid.attractedTo = ship;
+						}
+					}
+				},
+				// Listen for when contact's end
+				function (contact) {
+					if (contact.igeEitherCategory('smallAsteroid')) {
+						var asteroid = contact.igeEntityByCategory('smallAsteroid')._box2dBody;
+						asteroid.attractedTo = undefined;
+					}
+				});
+			}
 		else {
 			this.initPlayerControls(game);
 

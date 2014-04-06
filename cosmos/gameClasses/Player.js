@@ -6,6 +6,7 @@ var Player = BlockGrid.extend({
 
 		var self = this;
 
+		this.category("ship");
 		this.drawBounds(false);
 
 		this.controls = {
@@ -24,12 +25,6 @@ var Player = BlockGrid.extend({
 		if (!ige.isServer) {
 			this.depth(1);
 		}
-		/*
-		//construct a large grid ship
-		grid = BlockGrid.prototype.newGridFromDimensions(10, 10);
-		grid[grid.length / 2][grid[0].length / 2] = new PlayerControlBlock();
-		this.setGrid(grid);
-		*/
 
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);
@@ -66,6 +61,54 @@ var Player = BlockGrid.extend({
 	},
 
 	/**
+	 * Add the sensor fixture. Called in ServerNetworkEvents after the box2Dbody
+	 * is created.
+	 */
+	addSensor: function () {
+		// Create the fixture
+		fixtureDef =
+		{
+			density: 0.0,
+			friction: 0.0,
+			restitution: 0.0,
+			isSensor: true,
+			shape: {
+				type: 'circle',
+				data: {
+					radius: 300
+				}
+			}
+		}
+		tempFixture = ige.box2d.createFixture(fixtureDef);
+		tempShape = new ige.box2d.b2CircleShape();
+		if (fixtureDef.shape.data && typeof(fixtureDef.shape.data.radius) !== 'undefined') {
+			tempShape.SetRadius(fixtureDef.shape.data.radius / ige.box2d._scaleRatio);
+		} else {
+			tempShape.SetRadius((entity._geometry.x / ige.box2d._scaleRatio) / 2);
+		}
+		
+		if (fixtureDef.shape.data) {
+			finalX = fixtureDef.shape.data.x !== undefined ? fixtureDef.shape.data.x : 0;
+			finalY = fixtureDef.shape.data.y !== undefined ? fixtureDef.shape.data.y : 0;
+			
+			tempShape.SetLocalPosition(new ige.box2d.b2Vec2(finalX /
+			ige.box2d._scaleRatio, finalY / ige.box2d._scaleRatio));
+		}
+
+		tempFixture.shape = tempShape;
+/*
+		if (tempShape) {
+			tempFixture.shape = tempShape;
+			finalFixture = tempBod.CreateFixture(tempFixture);
+			finalFixture.igeId = tempFixture.igeId;
+		}
+*/
+		
+		this._box2dBody.CreateFixture(tempFixture);
+		return this;
+	},
+
+	/**
 	 * Called every frame by the engine when this entity is mounted to the
 	 * scenegraph.
 	 * @param ctx The canvas context to render to.
@@ -75,7 +118,7 @@ var Player = BlockGrid.extend({
 		/* For the server: */
 		if (ige.isServer) {
 			// This determines how fast you can rotate your spaceship
-			var angularImpulse = -5000;
+			var angularImpulse = -10000;
 
 			if (this.controls.key.left) {
 				this._box2dBody.ApplyTorque(angularImpulse);
@@ -114,48 +157,6 @@ var Player = BlockGrid.extend({
 					}
 				}
 			}
-
-			var center = this._box2dBody.GetWorldCenter();
-			var aabb = new ige.box2d.b2AABB();
-			BOX_SIZE_HALF = 1000000;
-			aabb.lowerBound.x = -BOX_SIZE_HALF;
-			aabb.lowerBound.y = -BOX_SIZE_HALF;
-			aabb.upperBound.x =  BOX_SIZE_HALF;
-			aabb.upperBound.y =  BOX_SIZE_HALF;
-			
-			// Use the ECMAScript 6 set for sets of objects
-			// TODO: When V8 gets iteration support, remove the array
-			var bodies_seen = new Set();
-			var bodies = [];
-
-			// Add player body to seen to prevent it to be added to bodies
-			bodies_seen.add(this._box2dBody);
-
-			// Callback function for QueryAABB()
-			// This is called for every fixture in the AABB
-			// We want a list of unique bodies in the AABB
-			var getBodies = function (fixture) {
-				var body = fixture.GetBody();
-				if (!bodies_seen.has(body)) {
-					bodies_seen.add(body);
-					bodies.push(body);
-				}
-				return true;
-			}
-
-			ige.box2d.world().QueryAABB(getBodies, aabb)
-
-			
-			// Attract all bodies
-			// TODO: Only attract asteroids
-			for (var i = 0; i < bodies.length; i++) {
-				var body = bodies[i];
-				var impulse = new ige.box2d.b2Vec2(0, 0);
-				impulse.Subtract(body.GetWorldCenter());
-				impulse.Add(this._box2dBody.GetWorldCenter());
-				body.ApplyImpulse(impulse, body.GetWorldCenter());
-			}
-
 		}
 		/* CEXCLUDE */
 
