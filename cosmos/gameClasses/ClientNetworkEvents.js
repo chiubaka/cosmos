@@ -45,7 +45,7 @@ var ClientNetworkEvents = {
 	initCameras: function(entityToTrack) {
 		var cameraSmoothingAmount = 10;
 
-		ige.$('vp1').camera.trackTranslate(entityToTrack, cameraSmoothingAmount);
+		ige.$('mainViewport').camera.trackTranslate(entityToTrack, cameraSmoothingAmount);
 	}
 };
 
