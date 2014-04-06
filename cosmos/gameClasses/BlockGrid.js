@@ -144,7 +144,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 				fixtures.push(fixture);
 
 				self = this;
-				block.onDeath = function () {
+				block.onDeath = function() {
 					self.remove(block, fixture)
 				};
 			}
