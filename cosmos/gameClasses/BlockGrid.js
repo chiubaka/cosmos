@@ -94,58 +94,61 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @return this if we set the grid or the current grid otherwise
 	 */
 	grid: function(grid) {
-		if (grid !== undefined) {
-			this._grid = grid;
+		if (grid === undefined) {
+			return this._grid;
+		}
 
-			fixtures = [];
+		this._grid = grid;
 
-			var maxRowLength = this.maxRowLengthForGrid(this._grid);
+		fixtures = [];
 
-			this.height(Block.prototype.HEIGHT * this._grid.length)
-				.width(Block.prototype.WIDTH * maxRowLength);
+		var maxRowLength = this.maxRowLengthForGrid(this._grid);
 
-			for(var row = 0; row < this._grid.length; row++)
+		this.height(Block.prototype.HEIGHT * this._grid.length)
+			.width(Block.prototype.WIDTH * maxRowLength);
+
+		for(var row = 0; row < this._grid.length; row++)
+		{
+			var blockList = this._grid[row];
+			for(var col = 0; col < blockList.length; col++)
 			{
-				var blockList = this._grid[row];
-				for(var col = 0; col < blockList.length; col++)
-				{
-					var block = blockList[col];
+				var block = blockList[col];
 
-					if (block === undefined) {
-						continue;
-					}
-
-
-					var width = Block.prototype.WIDTH;
-					var height = Block.prototype.HEIGHT;
-
-					var x = width * col - this._geometry.x2 + block._geometry.x2;
-					var y = height * row - this._geometry.y2 + block._geometry.y2;
-
-					fixture = {
-						density: 1.0,
-						friction: 0.5,
-						restitution: 0.5,
-						shape: {
-							type: 'rectangle',
-							data: {
-								// The position of the fixture relative to the body
-								x: x,
-								y: y,
-								width: width / 2, //I don't know why we have to devide by two here to make this come out right : (
-								height: height / 2
-							}
-						}
-					};
-
-					fixtures.push(fixture);
-
-					self = this;
-					block.onDeath = function () {
-						self.remove(block, fixture)
-					};
+				if (block === undefined) {
+					continue;
 				}
+
+
+				var width = Block.prototype.WIDTH;
+				var height = Block.prototype.HEIGHT;
+
+				var x = width * col - this._geometry.x2 + block._geometry.x2;
+				var y = height * row - this._geometry.y2 + block._geometry.y2;
+
+				fixture = {
+					density: 1.0,
+					friction: 0.5,
+					restitution: 0.5,
+					shape: {
+						type: 'rectangle',
+						data: {
+							// The position of the fixture relative to the body
+							x: x,
+							y: y,
+							width: width / 2, //I don't know why we have to devide by two here to make this come out right : (
+							height: height / 2
+						}
+					}
+				};
+
+				fixtures.push(fixture);
+
+				self = this;
+				block.onDeath = function() {
+					self.remove(block, fixture)
+				};
 			}
+		}
 
 		this.box2dBody({
 			type: 'dynamic',
@@ -158,10 +161,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			fixtures: fixtures
 		});
 
-			return this;
-		}
-
-		return this._grid;
+		return this;
 	},
 
 	mountGrid: function() {
@@ -198,6 +198,18 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 
 		return maxRowLength;
+	},
+
+	update: function(ctx) {
+		if (!ige.isServer) {
+			// TODO: This is a fix for having the entity aabb's draw in the center initially rather than where
+			// the entity has been initially translated to. Ideally, I should be able to call aabb(true) once
+			// before the update loop even happens, but I had trouble finding the right place to do this and even
+			// trying to trigger this code on just the first update didn't seem to work.
+			this._renderContainer.aabb(true);
+		}
+
+		IgeEntityBox2d.prototype.update.call(this, ctx);
 	}
 });
 
