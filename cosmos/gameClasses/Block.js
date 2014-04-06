@@ -2,6 +2,8 @@ var Block = IgeEntity.extend({
 	classId: 'Block',
 	WIDTH: 26,
 	HEIGHT: 26,
+	_row: undefined,
+	_col: undefined,
 
 	/**
 	 * Construct a new block
@@ -23,9 +25,35 @@ var Block = IgeEntity.extend({
 			this.cacheSmoothing(true);
 
 			this.mouseDown(function(event, control) {
-				this.unMount();
+				var data = {
+					blockGridId: this.blockGrid().id(),
+					row: this._row,
+					col: this._col
+				};
+
+				this.blockGrid().remove(this._row, this._col);
 			});
 		}
+	},
+
+	blockGrid: function() {
+		return this._parent._parent;
+	},
+
+	row: function(val) {
+		if (val !== undefined) {
+			this._row = val;
+			return this;
+		}
+		return this._row;
+	},
+
+	col: function(val) {
+		if (val !== undefined) {
+			this._col = val;
+			return this;
+		}
+		return this._col;
 	},
 
 	/**

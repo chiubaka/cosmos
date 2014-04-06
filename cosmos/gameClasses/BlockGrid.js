@@ -52,11 +52,19 @@ var BlockGrid = IgeEntityBox2d.extend({
 			var row = [];
 			for (var j = 0; j < data[i].length; j++) {
 				var classId = data[i][j];
-				row.push(Block.prototype.blockFromClassId(classId));
+
+				var block = Block.prototype.blockFromClassId(classId)
+
+				if (block !== undefined) {
+					block.row(i).col(j);
+				}
+
+				row.push(block);
 			}
 			this._grid.push(row);
 		}
 	},
+
 
 	/**
 	Static function
@@ -82,9 +90,13 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * Remove is intended to remove the block from the grid,
 	 * and also remove the fixture from the list of fixtures in the box2D object.
 	 */
-	remove: function(block, fixture) {
-		this._grid.splice(this._grid.indexOf(block), 1);
-		//this.box2DBody().fixtures.splice(this.box2Dbody().fixtures.indexOf(fixture), 1);
+	remove: function(row, col) {
+		var block = this._grid[row][col];
+
+		if (!ige.isServer && block !== undefined) {
+			block.unMount();
+		}
+		this._grid[row][col] = undefined;
 	},
 
 	/**
@@ -100,7 +112,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		this._grid = grid;
 
-		fixtures = [];
+		this._fixtures = [];
 
 		var maxRowLength = this.maxRowLengthForGrid(this._grid);
 
@@ -125,7 +137,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 				var x = width * col - this._geometry.x2 + block._geometry.x2;
 				var y = height * row - this._geometry.y2 + block._geometry.y2;
 
-				fixture = {
+				var fixture = {
 					density: 1.0,
 					friction: 0.5,
 					restitution: 0.5,
@@ -140,8 +152,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 						}
 					}
 				};
-
-				fixtures.push(fixture);
+				this._fixtures.push(fixture);
 
 				self = this;
 				block.onDeath = function() {
@@ -158,7 +169,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			bullet: false,
 			gravitic: false,
 			fixedRotation: false,
-			fixtures: fixtures
+			fixtures: this._fixtures
 		});
 
 		return this;
