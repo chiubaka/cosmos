@@ -70,6 +70,18 @@ var Block = IgeEntity.extend({
 			default:
 				return undefined;
 		}
+	},
+
+	update: function(ctx) {
+		if (!ige.isServer) {
+			// TODO: This is a fix for having the entity aabb's draw in the center initially rather than where
+			// the entity has been initially translated to. Ideally, I should be able to call aabb(true) once
+			// before the update loop even happens, but I had trouble finding the right place to do this and even
+			// trying to trigger this code on just the first update didn't seem to work.
+			this.aabb(true);
+		}
+
+		IgeEntity.prototype.update.call(this, ctx);
 	}
 });
 
