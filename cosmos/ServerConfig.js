@@ -32,6 +32,9 @@ var config = {
 		{name: 'ExampleShips', path: './gameClasses/ExampleShips'},
 		{name: 'AsteroidGenerator', path: './gameClasses/AsteroidGenerator'},
 
+		/* Debugging */
+		{name: 'FixtureDebuggingEntity', path: './gameClasses/debug/FixtureDebuggingEntity'},
+
 		/* Utility classes */
 		{name: 'WeightedSelection', path: './gameClasses/utils/weighted'}
 	]

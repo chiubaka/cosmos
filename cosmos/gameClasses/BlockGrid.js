@@ -9,6 +9,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * texture. */
 	_renderContainer: undefined,
 
+	_debugFixtures: false,
+
 	init: function(data) {
 		IgeEntityBox2d.prototype.init.call(this);
 
@@ -147,6 +149,16 @@ var BlockGrid = IgeEntityBox2d.extend({
 				block.onDeath = function() {
 					self.remove(block, fixture)
 				};
+
+				if (this.debugFixtures()) {
+					new FixtureDebuggingEntity()
+						.streamMode(1)
+						.mount(self)
+						.depth(110)
+						.translateTo(fixture.shape.data.x, fixture.shape.data.y, 0)
+						.width(fixture.shape.data.width)
+						.height(fixture.shape.data.height);
+				}
 			}
 		}
 
@@ -198,6 +210,19 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 
 		return maxRowLength;
+	},
+
+	/**
+	 * Call this before calling setGrid to create a bunch of entities which will help to visualize the box2D fixtures
+	 * @param flag true iff you want to debug the fixtures
+	 */
+	debugFixtures: function(flag) {
+		if (flag === undefined)
+			return this._debugFixtures;
+
+		this._debugFixtures = flag;
+
+		return this;
 	}
 });
 
