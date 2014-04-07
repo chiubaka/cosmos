@@ -64,7 +64,7 @@ var Player = BlockGrid.extend({
 	 * Add the sensor fixture. Called in ServerNetworkEvents after the box2Dbody
 	 * is created.
 	 */
-	addSensor: function () {
+	addSensor: function (params) {
 		// Create the fixture
 		fixtureDef =
 		{
@@ -75,7 +75,7 @@ var Player = BlockGrid.extend({
 			shape: {
 				type: 'circle',
 				data: {
-					radius: 300
+					radius: params.radius
 				}
 			}
 		}

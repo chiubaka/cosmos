@@ -44,8 +44,8 @@ var GameInit = {
 
 			var asteroidSpacing = 30;
 			var asteroidOffset = -300;
-			for (var x = -2; x < 0; x++) {
-					for (var y = -2; y < 0; y++) {
+			for (var x = -10; x < 0; x++) {
+					for (var y = -10; y < 0; y++) {
 							new BlockGrid()
 									.category("smallAsteroid")
 									.id('littleAsteroid' + x + "," + y)
@@ -67,6 +67,7 @@ var GameInit = {
 							contact.igeEitherCategory('smallAsteroid')) {
 						var asteroid = contact.igeEntityByCategory('smallAsteroid');
 						var ship = contact.igeEntityByCategory('ship');
+
 						var impulse = new ige.box2d.b2Vec2(0, 0);
 						impulse.Add(ship._box2dBody.GetWorldCenter());
 						impulse.Subtract(asteroid._box2dBody.GetWorldCenter());
@@ -82,6 +83,23 @@ var GameInit = {
 					if (contact.igeEitherCategory('smallAsteroid')) {
 						var asteroid = contact.igeEntityByCategory('smallAsteroid')._box2dBody;
 						asteroid.attractedTo = undefined;
+					}
+				},
+				// Presolve events. This is called after collision is detected, but
+				// before collision repsonse is calculated.
+				function (contact) {
+					if (contact.igeEitherCategory('ship') &&
+							contact.igeEitherCategory('smallAsteroid')) {
+						var asteroid = contact.igeEntityByCategory('smallAsteroid');
+						var ship = contact.igeEntityByCategory('ship');
+						var shipFixture = contact.fixtureByCategory('ship');
+
+						// Asteroid has hit ship blocks, destroy the asteroid
+						if (!shipFixture.m_isSensor) {
+							// Disable contact so ship doesn't move due to collision
+							contact.SetEnabled(false);
+							asteroid.destroy();
+						}
 					}
 				});
 			}
