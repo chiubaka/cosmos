@@ -10,6 +10,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	_renderContainer: undefined,
 
 	init: function(data) {
+		var self = this;
+
 		IgeEntityBox2d.prototype.init.call(this);
 
 		if (data !== undefined) {
@@ -18,8 +20,83 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		if (!ige.isServer) {
 			this._renderContainer = new IgeEntity()
-				//.compositeCache(true)
+				.compositeCache(true)
 				.mount(this);
+
+			/*
+			 * The general strategy for handling clicks is to:
+			 * 1. Unrotate the click coordinate
+			 * 2. Compare the unrotated click coordinate to where the blocks would be if the BlockGrid were not rotated
+			 * 3. Fire the mouseDown() event on the appropriate block
+			 */
+			this._renderContainer.mouseDown(function(event, control) {
+				// event.igeBaseX and event.igeBaseY give coordinates relative to the clicked entity's origin (center)
+				var clickX = event.igeBaseX;
+				var clickY = event.igeBaseY;
+
+				console.log(clickX);
+				console.log(clickY);
+
+				// This is the BlockGrid's rotation, not the render container's, since the render container does
+				// not rotate with respect to its parent.
+				// Negative because we want to reverse the rotation.
+				var theta = -self._rotate.z;
+
+				// The unrotated coordinates for comparison against an unrotated grid with respect to the center of the
+				// entity
+				// This uses basic trigonometry. See http://en.wikipedia.org/wiki/Rotation_matrix.
+				var centerGridX = clickX * Math.cos(theta) - clickY * Math.sin(theta);
+				var centerGridY = clickX * Math.sin(theta) + clickY * Math.cos(theta);
+
+				console.log(centerGridX);
+				console.log(centerGridY);
+
+				// Height and width of the grid area
+				var width = self._renderContainer.width();
+				var height = self._renderContainer.height();
+
+				// Check if the click was out of the grid area (happens because axis-aligned bounding boxes are larger
+				// than the non-axis-aligned grid area)
+				if (Math.abs(centerGridX) > width / 2
+					|| Math.abs(centerGridY) > height / 2)
+				{
+					console.log("Click out of bounds!");
+					return;
+				}
+
+				console.log(centerGridX);
+				console.log(centerGridY);
+
+				// Coordinates for the top left corner of the grid area
+				var topLeftCornerX = -width / 2;
+				var topLeftCornerY = -height / 2;
+
+				// Coordinates of the unrotated clicked point with respect to the top left of the grid area
+				// This is just so calculations are a little bit easier
+				var gridX = centerGridX - topLeftCornerX;
+				var gridY = centerGridY - topLeftCornerY;
+
+				console.log(gridX);
+				console.log(gridY);
+
+				var row = Math.floor(gridY / Block.prototype.HEIGHT);
+				var col = Math.floor(gridX / Block.prototype.WIDTH);
+
+				console.log(row);
+				console.log(col);
+
+				var block = self._grid[row][col];
+
+				if (block === undefined) {
+					return;
+				}
+
+				// TODO: This might be dangerous, since some of the event properties should be changed so that they are
+				// relative to the child's bounding box, but since we don't use any of those properties for the moment,
+				// ignore that.
+				block._mouseDown(event, control);
+				self._renderContainer.cacheDirty(true);
+			});
 
 			this.mountGrid();
 		}
