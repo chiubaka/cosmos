@@ -178,6 +178,12 @@ var AsteroidGenerator = {
 	},
 
 	prefabs: {
+		SINGLE_BLOCK: function() {
+			return [
+				[new CarbonBlock()]
+			]
+		},
+
 		/**
 		 * A little tiny asteroid : )
 		 */

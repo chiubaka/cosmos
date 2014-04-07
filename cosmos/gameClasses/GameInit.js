@@ -16,8 +16,8 @@ var GameInit = {
 
 		// Create the main viewport and set the scene it will "look" at as the new scene1 we just created above.
 		// Surprisingly, this must exist on both the client and the server, or a blank screen will be displayed.
-		game.vp1 = new IgeViewport()
-			.id('vp1')
+		game.mainViewport = new IgeViewport()
+			.id('mainViewport')
 			.autoSize(true)
 			.scene(game.mainScene)
 			.drawBounds(false) //draws the axis aligned bounding boxes. Set to true for debugging.
@@ -37,10 +37,24 @@ var GameInit = {
 						.streamMode(1)
 						.mount(game.spaceGameScene)
 						.depth(100)
-						.setGrid(AsteroidGenerator.genProceduralAsteroid(20))
+						.grid(AsteroidGenerator.genProceduralAsteroid(20))
 						.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
 				}
 			}
+
+            var asteroidSpacing = 30;
+            var asteroidOffset = -300;
+            for (var x = -10; x < 0; x++) {
+                for (var y = -10; y < 0; y++) {
+                    new BlockGrid()
+                        .id('littleAsteroid' + x + "," + y)
+                        .streamMode(1)
+                        .mount(game.spaceGameScene)
+                        .depth(100)
+                        .grid(AsteroidGenerator.prefabs.SINGLE_BLOCK())
+                        .translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
+                }
+            }
 		}
 		else {
 			this.initPlayerControls(game);

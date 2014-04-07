@@ -90,18 +90,17 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	/**
-	 * getGrid returns the array of arrays which represents the grid of blocks that this BlockGrid is composed of.
+	 * Getter/setter for the grid property of the BlockGrid. If a parameter is passed, sets
+	 * the property and returns this. If not, returns the property.
+	 * @parameter grid the grid to set (optional)
+	 * @return this if we set the grid or the current grid otherwise
 	 */
-	getGrid: function() {
-		return this._grid;
-	},
+	grid: function(grid) {
+		if (grid === undefined) {
+			return this._grid;
+		}
 
-	/**
-	 * setGrid sets the grid of this BlockGrid. This both updates the grid property (accessible with getGrid()),
-	 * and also updates this BlockGrid's box2d object to have the appropriate fixtures.
-	 */
-	setGrid: function(newGrid) {
-		this._grid = newGrid;
+		this._grid = grid;
 
 		fixtures = [];
 
@@ -120,6 +119,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 				if (block === undefined) {
 					continue;
 				}
+
 
 				var width = Block.prototype.WIDTH;
 				var height = Block.prototype.HEIGHT;
@@ -141,7 +141,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 							height: height / 2
 						}
 					}
-				}
+				};
 
 				fixtures.push(fixture);
 

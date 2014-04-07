@@ -34,7 +34,7 @@ var ServerNetworkEvents = {
 		if (!ige.server.players[clientId]) {
 			ige.server.players[clientId] = new Player(clientId)
 				.debugFixtures(false)//call this before calling setGrid()
-				.setGrid(ExampleShips.starterShipSingleMisplacedEngine())
+				.grid(ExampleShips.starterShipSingleMisplacedEngine())
 				.streamMode(1)
 				.mount(ige.server.spaceGameScene);
 
