@@ -20,7 +20,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		if (!ige.isServer) {
 			this._renderContainer = new IgeEntity()
-				//.compositeCache(true)
+				.compositeCache(true)
 				.mount(this);
 
 			this.mountGrid();
