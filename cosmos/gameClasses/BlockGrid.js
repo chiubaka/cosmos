@@ -31,11 +31,22 @@ var BlockGrid = IgeEntityBox2d.extend({
 			 */
 			this._renderContainer.mouseDown(function(event, control) {
 				// event.igeBaseX and event.igeBaseY give coordinates relative to the clicked entity's origin (center)
-				var clickX = event.igeBaseX;
-				var clickY = event.igeBaseY;
 
-				console.log(clickX);
-				console.log(clickY);
+				// The position of the click in world coordinates
+				var mousePosWorld = self.mousePosWorld();
+				var worldX = mousePosWorld.x;
+				var worldY = mousePosWorld.y;
+
+				// The coordinates of the center of the axis-aligned bounding box of the render container in
+				// world coordinates
+				var aabb = self._renderContainer.aabb();
+				var aabbX = aabb.x + aabb.width / 2;
+				var aabbY = aabb.y + aabb.height / 2;
+
+				// Translate the mouse position to a reference system where the center of the axis-aligned
+				// bounding box is the center
+				var aabbRelativeX = worldX - aabbX;
+				var aabbRelativeY = worldY - aabbY;
 
 				// This is the BlockGrid's rotation, not the render container's, since the render container does
 				// not rotate with respect to its parent.
@@ -45,11 +56,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 				// The unrotated coordinates for comparison against an unrotated grid with respect to the center of the
 				// entity
 				// This uses basic trigonometry. See http://en.wikipedia.org/wiki/Rotation_matrix.
-				var centerGridX = clickX * Math.cos(theta) - clickY * Math.sin(theta);
-				var centerGridY = clickX * Math.sin(theta) + clickY * Math.cos(theta);
-
-				console.log(centerGridX);
-				console.log(centerGridY);
+				var unrotatedX = aabbRelativeX * Math.cos(theta) - aabbRelativeY * Math.sin(theta);
+				var unrotatedY = aabbRelativeX * Math.sin(theta) + aabbRelativeY * Math.cos(theta);
 
 				// Height and width of the grid area
 				var width = self._renderContainer.width();
@@ -57,15 +65,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 				// Check if the click was out of the grid area (happens because axis-aligned bounding boxes are larger
 				// than the non-axis-aligned grid area)
-				if (Math.abs(centerGridX) > width / 2
-					|| Math.abs(centerGridY) > height / 2)
+				if (Math.abs(unrotatedX) > width / 2
+					|| Math.abs(unrotatedY) > height / 2)
 				{
-					console.log("Click out of bounds!");
 					return;
 				}
-
-				console.log(centerGridX);
-				console.log(centerGridY);
 
 				// Coordinates for the top left corner of the grid area
 				var topLeftCornerX = -width / 2;
@@ -73,17 +77,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 				// Coordinates of the unrotated clicked point with respect to the top left of the grid area
 				// This is just so calculations are a little bit easier
-				var gridX = centerGridX - topLeftCornerX;
-				var gridY = centerGridY - topLeftCornerY;
-
-				console.log(gridX);
-				console.log(gridY);
+				var gridX = unrotatedX - topLeftCornerX;
+				var gridY = unrotatedY - topLeftCornerY;
 
 				var row = Math.floor(gridY / Block.prototype.HEIGHT);
 				var col = Math.floor(gridX / Block.prototype.WIDTH);
-
-				console.log(row);
-				console.log(col);
 
 				var block = self._grid[row][col];
 
