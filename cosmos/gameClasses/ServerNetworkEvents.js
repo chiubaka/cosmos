@@ -7,7 +7,7 @@ var ServerNetworkEvents = {
 	 * @param clientId The client id of the client that sent the message.
 	 * @private
 	 */
-	_onPlayerConnect: function (socket) {
+	_onPlayerConnect: function(socket) {
 		// Don't reject the client connection
 		return false;
 	},
@@ -16,7 +16,7 @@ var ServerNetworkEvents = {
 	A player has disconnected from the server
 	This function removes all trace of the player from the 'players' list
 	*/
-	_onPlayerDisconnect: function (clientId) {
+	_onPlayerDisconnect: function(clientId) {
 		if (ige.server.players[clientId]) {
 			// Remove the player from the game
 			ige.server.players[clientId].destroy();
@@ -30,7 +30,7 @@ var ServerNetworkEvents = {
 	/**
 	A player has connected to the server and asked for a player Entity to be created for him or her!
 	*/
-	_onPlayerEntity: function (data, clientId) {
+	_onPlayerEntity: function(data, clientId) {
 		if (!ige.server.players[clientId]) {
 			ige.server.players[clientId] = new Player(clientId)
 				.grid(ExampleShips.starterShipSingleMisplacedEngine())
@@ -46,8 +46,17 @@ var ServerNetworkEvents = {
 	Called when the player updates the state of his control object
 	data in this case represents the *new* state of the player's controls
 	*/
-	_onPlayerControlUpdate: function (data, clientId) {
+	_onPlayerControlUpdate: function(data, clientId) {
 		ige.server.players[clientId].controls = data;
+	},
+
+	_onBlockClicked: function(data, clientId) {
+		// TODO: Decide what to do with the click. For now, we just assume a click means a block should be removed.
+
+		var blockGrid = ige.$(data.blockGridId);
+		blockGrid.remove(data.row, data.col);
+		// TODO: Remove the appropriate fixtures from the server's BlockGrid so physics operates properly
+		// TODO: Send update to other clients so they can update their state to reflect the click
 	}
 };
 
