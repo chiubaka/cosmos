@@ -238,12 +238,12 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 				if (this.debugFixtures()) {
 					new FixtureDebuggingEntity()
-						.streamMode(1)
 						.mount(self)
 						.depth(self.depth() + 1)
 						.translateTo(fixture.shape.data.x, fixture.shape.data.y, 0)
-						.width(fixture.shape.data.width / 2)
-						.height(fixture.shape.data.height / 2);
+						.width(fixture.shape.data.width * 2)
+						.height(fixture.shape.data.height * 2)
+						.streamMode(1);
 				}
 			}
 		}
