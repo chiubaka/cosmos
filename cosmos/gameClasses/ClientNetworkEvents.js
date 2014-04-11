@@ -7,7 +7,7 @@ var ClientNetworkEvents = {
 	 * @param data The data object that contains any data sent from the server.
 	 * @private
 	 */
-	_onPlayerEntity: function (data) {
+	_onPlayerEntity: function(data) {
 		var self = this;
 
 		if (ige.$(data)) {
@@ -40,6 +40,12 @@ var ClientNetworkEvents = {
 				}
 			});
 		}
+	},
+
+	_onBlockAction: function(data) {
+		console.log('Block action!');
+		var blockGrid = ige.$(data.blockGridId);
+		blockGrid.processBlockAction(data);
 	},
 
 	initCameras: function(entityToTrack) {

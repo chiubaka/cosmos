@@ -160,6 +160,16 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return grid;
 	},
 
+	processBlockAction: function(data) {
+		switch (data.action) {
+			case 'remove':
+				this.remove(data.row, data.col);
+				break;
+			default:
+				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
+		}
+	},
+
 	/**
 	 * Remove is intended to remove the block from the grid,
 	 * and also remove the fixture from the list of fixtures in the box2D object.
@@ -169,6 +179,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		if (!ige.isServer && block !== undefined) {
 			block.unMount();
+			this._renderContainer.cacheDirty(true);
 		}
 		this._grid[row][col] = undefined;
 	},
