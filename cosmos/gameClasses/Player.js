@@ -1,7 +1,7 @@
 var Player = BlockGrid.extend({
 	classId: 'Player',
 
-	init: function (data) {
+	init: function(data) {
 		BlockGrid.prototype.init.call(this, data);
 
 		var self = this;
@@ -42,7 +42,7 @@ var Player = BlockGrid.extend({
 	 * from the server to the client for this entity.
 	 * @return {*}
 	 */
-	streamSectionData: function (sectionId, data) {
+	streamSectionData: function(sectionId, data) {
 		// Check if the section is one that we are handling
 		if (sectionId === 'score') {
 			// Check if the server sent us data, if not we are supposed
@@ -68,7 +68,7 @@ var Player = BlockGrid.extend({
 	 * @param {number} radius sets the radius of the attraction field
 	 * @return {Player}
 	 */
-	addSensor: function (radius) {
+	addSensor: function(radius) {
 		// Create the fixture
 		var fixtureDef = {
 			density: 0.0,
@@ -103,7 +103,7 @@ var Player = BlockGrid.extend({
 	 * @param {?number} Strength is a multiplier for attraction force
 	 * @return {(number|Player)}
 	 */
-	attractionStrength: function (strength) {
+	attractionStrength: function(strength) {
 		if (strength === undefined) {
 			return this._attractionStrength;
 		}
@@ -118,7 +118,7 @@ var Player = BlockGrid.extend({
 	 * Called every time a ship collects a block
 	 * @param {BlockGrid}
 	 */
-	onBlockCollect: function (block) {
+	onBlockCollect: function(block) {
 		//console.log("Block collected!");
 	},
 
@@ -127,7 +127,7 @@ var Player = BlockGrid.extend({
 	 * scenegraph.
 	 * @param ctx The canvas context to render to.
 	 */
-	tick: function (ctx) {
+	tick: function(ctx) {
 		/* CEXCLUDE */
 		/* For the server: */
 		if (ige.isServer) {
