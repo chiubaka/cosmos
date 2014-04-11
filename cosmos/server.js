@@ -30,7 +30,6 @@ var Server = IgeClass.extend({
 		// Define an object to hold references to our player entities
 		this.players = {};
 
-
 		// Add the networking component
 		ige.addComponent(IgeNetIoComponent)
 			// Start the network server on a particular port
