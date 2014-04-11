@@ -45,16 +45,16 @@ var GameInit = {
 			var asteroidSpacing = 30;
 			var asteroidOffset = -300;
 			for (var x = -10; x < 0; x++) {
-					for (var y = -10; y < 0; y++) {
-							new BlockGrid()
-									.category("smallAsteroid")
-									.id('littleAsteroid' + x + "," + y)
-									.streamMode(1)
-									.mount(game.spaceGameScene)
-									.depth(100)
-									.grid(AsteroidGenerator.prefabs.SINGLE_BLOCK())
-									.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
-					}
+				for (var y = -10; y < 0; y++) {
+					new BlockGrid()
+						.category('smallAsteroid')
+						.id('littleAsteroid' + x + ',' + y)
+						.streamMode(1)
+						.mount(game.spaceGameScene)
+						.depth(100)
+						.grid(AsteroidGenerator.prefabs.SINGLE_BLOCK())
+						.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
+				}
 			}
 
 			// Set the contact listener methods to detect when
@@ -95,7 +95,7 @@ var GameInit = {
 						if (!shipFixture.m_isSensor) {
 							// Disable contact so player doesn't move due to collision
 							contact.SetEnabled(false);
-							player.onAsteroidCollect();
+							player.onBlockCollect(asteroid);
 							asteroid.destroy();
 						}
 					}

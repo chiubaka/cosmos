@@ -299,7 +299,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 
 	tick: function(ctx) {
-		var self = this;
 
 		if (ige.isServer) {
 			// Attract the block grid to another body. For example, small asteroids

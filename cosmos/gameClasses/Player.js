@@ -98,11 +98,11 @@ var Player = BlockGrid.extend({
 		return this;
 	},
 
-	/**
-	* Get/set the strength of attraction
-	* @param {?number} Strength is a multiplier for attraction force
-	* @return {(number|Player)}
-	*/
+	 /**
+	 * Get/set the strength of attraction
+	 * @param {?number} Strength is a multiplier for attraction force
+	 * @return {(number|Player)}
+	 */
 	attractionStrength: function (strength) {
 		if (strength === undefined) {
 			return this._attractionStrength;
@@ -114,11 +114,12 @@ var Player = BlockGrid.extend({
 		
 	},
 
-	/**
-	* Called every time a ship collects an asteroid
-	*/
-	onAsteroidCollect: function () {
-		//console.log("Asteroid collected!");
+	 /**
+	 * Called every time a ship collects a block
+	 * @param {BlockGrid}
+	 */
+	onBlockCollect: function (block) {
+		//console.log("Block collected!");
 	},
 
 	/**
