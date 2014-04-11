@@ -98,7 +98,7 @@ var Player = BlockGrid.extend({
 		return this;
 	},
 
-	 /**
+	/**
 	 * Get/set the strength of attraction
 	 * @param {?number} Strength is a multiplier for attraction force
 	 * @return {(number|Player)}
@@ -114,7 +114,7 @@ var Player = BlockGrid.extend({
 		
 	},
 
-	 /**
+	/**
 	 * Called every time a ship collects a block
 	 * @param {BlockGrid}
 	 */
