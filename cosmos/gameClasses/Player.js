@@ -6,7 +6,9 @@ var Player = BlockGrid.extend({
 
 		var self = this;
 
-		this.category("ship");
+		this.category('player');
+		this._attractionStrength = 1;
+
 		this.drawBounds(false);
 
 		this.controls = {
@@ -34,7 +36,6 @@ var Player = BlockGrid.extend({
 	 * Override the default IgeEntity class streamSectionData() method
 	 * so that we can check for the custom1 section and handle how we deal
 	 * with it.
-	 * @param {String} sectionId A string identifying the section to
 	 * handle data get / set for.
 	 * @param {*=} data If present, this is the data that has been sent
 	 * from the server to the client for this entity.
@@ -63,11 +64,12 @@ var Player = BlockGrid.extend({
 	/**
 	 * Add the sensor fixture. Called in ServerNetworkEvents after the box2Dbody
 	 * is created.
+	 * @param {number} radius sets the radius of the attraction field
+	 * @return {Player}
 	 */
-	addSensor: function (params) {
+	addSensor: function (radius) {
 		// Create the fixture
-		fixtureDef =
-		{
+		var fixtureDef = {
 			density: 0.0,
 			friction: 0.0,
 			restitution: 0.0,
@@ -75,37 +77,47 @@ var Player = BlockGrid.extend({
 			shape: {
 				type: 'circle',
 				data: {
-					radius: params.radius
+					radius: radius,
+					x: 0,
+					y: 0
 				}
 			}
 		}
-		tempFixture = ige.box2d.createFixture(fixtureDef);
-		tempShape = new ige.box2d.b2CircleShape();
-		if (fixtureDef.shape.data && typeof(fixtureDef.shape.data.radius) !== 'undefined') {
-			tempShape.SetRadius(fixtureDef.shape.data.radius / ige.box2d._scaleRatio);
-		} else {
-			tempShape.SetRadius((entity._geometry.x / ige.box2d._scaleRatio) / 2);
-		}
-		
-		if (fixtureDef.shape.data) {
-			finalX = fixtureDef.shape.data.x !== undefined ? fixtureDef.shape.data.x : 0;
-			finalY = fixtureDef.shape.data.y !== undefined ? fixtureDef.shape.data.y : 0;
-			
-			tempShape.SetLocalPosition(new ige.box2d.b2Vec2(finalX /
-			ige.box2d._scaleRatio, finalY / ige.box2d._scaleRatio));
-		}
+		var tempFixture = ige.box2d.createFixture(fixtureDef);
+		var tempShape = new ige.box2d.b2CircleShape();
+
+		tempShape.SetRadius(fixtureDef.shape.data.radius / ige.box2d._scaleRatio);
+		tempShape.SetLocalPosition(new ige.box2d.b2Vec2(fixtureDef.shape.data.x /
+			ige.box2d._scaleRatio, fixtureDef.shape.data.y / ige.box2d._scaleRatio));
 
 		tempFixture.shape = tempShape;
-/*
-		if (tempShape) {
-			tempFixture.shape = tempShape;
-			finalFixture = tempBod.CreateFixture(tempFixture);
-			finalFixture.igeId = tempFixture.igeId;
-		}
-*/
 		
 		this._box2dBody.CreateFixture(tempFixture);
+
 		return this;
+	},
+
+	/**
+	* Get/set the strength of attraction
+	* @param {?number} Strength is a multiplier for attraction force
+	* @return {(number|Player)}
+	*/
+	attractionStrength: function (strength) {
+		if (strength === undefined) {
+			return this._attractionStrength;
+		}
+		else {
+			this._attractionStrength = strength;
+			return this;
+		}
+		
+	},
+
+	/**
+	* Called every time a ship collects an asteroid
+	*/
+	onAsteroidCollect: function () {
+		//console.log("Asteroid collected!");
 	},
 
 	/**

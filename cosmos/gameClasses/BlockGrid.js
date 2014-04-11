@@ -212,6 +212,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 				var impulse = new ige.box2d.b2Vec2(0, 0);
 				impulse.Add(attractedToBody.GetWorldCenter());
 				impulse.Subtract(thisBody.GetWorldCenter());
+				impulse.Multiply(this.attractedTo.attractionStrength());
 				thisBody.ApplyImpulse(impulse, thisBody.GetWorldCenter());
 			}
 		}

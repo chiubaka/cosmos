@@ -56,48 +56,46 @@ var GameInit = {
 									.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
 					}
 			}
-			// TODO: Move this code inside Player.js
+
 			// Set the contact listener methods to detect when
 			// contacts (collisions) begin and end
 			ige.box2d.contactListener(
 				// Listen for when contact's begin
 				function (contact) {
 					// If player ship is near small asteroids, attract them
-					if (contact.igeEitherCategory('ship') &&
+					if (contact.igeEitherCategory('player') &&
 							contact.igeEitherCategory('smallAsteroid')) {
 						var asteroid = contact.igeEntityByCategory('smallAsteroid');
-						var ship = contact.igeEntityByCategory('ship');
+						var player = contact.igeEntityByCategory('player');
 
-						var impulse = new ige.box2d.b2Vec2(0, 0);
-						impulse.Add(ship._box2dBody.GetWorldCenter());
-						impulse.Subtract(asteroid._box2dBody.GetWorldCenter());
-						asteroid._box2dBody.ApplyImpulse(impulse, asteroid._box2dBody.GetWorldCenter());
 						// TODO: Make it so blocks are attracted to multiple players
 						if (asteroid.attractedTo === undefined) {
-							asteroid.attractedTo = ship;
+							asteroid.attractedTo = player;
 						}
 					}
 				},
-				// Listen for when contact's end
+				// Listen for when contacts end
 				function (contact) {
-					if (contact.igeEitherCategory('smallAsteroid')) {
-						var asteroid = contact.igeEntityByCategory('smallAsteroid')._box2dBody;
+					if (contact.igeEitherCategory('player') &&
+							contact.igeEitherCategory('smallAsteroid')) {
+						var asteroid = contact.igeEntityByCategory('smallAsteroid');
 						asteroid.attractedTo = undefined;
 					}
 				},
 				// Presolve events. This is called after collision is detected, but
 				// before collision repsonse is calculated.
 				function (contact) {
-					if (contact.igeEitherCategory('ship') &&
+					if (contact.igeEitherCategory('player') &&
 							contact.igeEitherCategory('smallAsteroid')) {
 						var asteroid = contact.igeEntityByCategory('smallAsteroid');
-						var ship = contact.igeEntityByCategory('ship');
-						var shipFixture = contact.fixtureByCategory('ship');
+						var player = contact.igeEntityByCategory('player');
+						var shipFixture = contact.fixtureByCategory('player');
 
 						// Asteroid has hit ship blocks, destroy the asteroid
 						if (!shipFixture.m_isSensor) {
-							// Disable contact so ship doesn't move due to collision
+							// Disable contact so player doesn't move due to collision
 							contact.SetEnabled(false);
+							player.onAsteroidCollect();
 							asteroid.destroy();
 						}
 					}

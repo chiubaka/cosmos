@@ -34,7 +34,8 @@ var ServerNetworkEvents = {
 		if (!ige.server.players[clientId]) {
 			ige.server.players[clientId] = new Player(clientId)
 				.grid(ExampleShips.starterShipSingleMisplacedEngine())
-				.addSensor({radius:300})
+				.addSensor(300)
+				.attractionStrength(0.1)
 				.streamMode(1)
 				.mount(ige.server.spaceGameScene);
 
