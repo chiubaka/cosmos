@@ -55,7 +55,6 @@ var ServerNetworkEvents = {
 
 		var blockGrid = ige.$(data.blockGridId);
 		blockGrid.remove(data.row, data.col);
-		// TODO: Remove the appropriate fixtures from the server's BlockGrid so physics operates properly
 		// TODO: Send update to other clients so they can update their state to reflect the click
 	}
 };

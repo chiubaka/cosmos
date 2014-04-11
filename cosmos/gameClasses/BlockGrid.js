@@ -172,6 +172,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 			block.unMount();
 		}
 		this._grid[row][col] = undefined;
+
+		if (ige.isServer) {
+			// TODO: Remove the fixtures for the block at row and col
+		}
 	},
 
 	/**
