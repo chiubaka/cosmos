@@ -36,6 +36,7 @@ var Player = BlockGrid.extend({
 	 * Override the default IgeEntity class streamSectionData() method
 	 * so that we can check for the custom1 section and handle how we deal
 	 * with it.
+	 * @param {String} sectionId A string identifying the section to
 	 * handle data get / set for.
 	 * @param {*=} data If present, this is the data that has been sent
 	 * from the server to the client for this entity.

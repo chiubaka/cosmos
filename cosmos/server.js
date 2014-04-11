@@ -2,9 +2,6 @@ var Server = IgeClass.extend({
 	classId: 'Server',
 	Server: true,
 
-	/** Define an object to hold references to our player entities */
-	players: {},
-
 	init: function (options) {
 		var self = this;
 
@@ -29,6 +26,9 @@ var Server = IgeClass.extend({
 
     // Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);
+
+		// Define an object to hold references to our player entities
+		this.players = {};
 
 		// Add the networking component
 		ige.addComponent(IgeNetIoComponent)
@@ -60,10 +60,6 @@ var Server = IgeClass.extend({
 					}
 				});
 			});
-	},
-
-	getPlayers: function() {
-		return this.players;
 	}
 });
 
