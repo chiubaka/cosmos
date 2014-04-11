@@ -43,7 +43,6 @@ var ClientNetworkEvents = {
 	},
 
 	_onBlockAction: function(data) {
-		console.log('Block action!');
 		var blockGrid = ige.$(data.blockGridId);
 		blockGrid.processBlockAction(data);
 	},
