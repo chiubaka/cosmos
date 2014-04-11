@@ -1,10 +1,13 @@
 var Player = BlockGrid.extend({
 	classId: 'Player',
 
-	init: function (data) {
+	init: function(data) {
 		BlockGrid.prototype.init.call(this, data);
 
 		var self = this;
+
+		this.category('player');
+		this._attractionStrength = 1;
 
 		this.drawBounds(false);
 
@@ -24,12 +27,6 @@ var Player = BlockGrid.extend({
 		if (!ige.isServer) {
 			this.depth(1);
 		}
-		/*
-		//construct a large grid ship
-		grid = BlockGrid.prototype.newGridFromDimensions(10, 10);
-		grid[grid.length / 2][grid[0].length / 2] = new PlayerControlBlock();
-		this.setGrid(grid);
-		*/
 
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);
@@ -45,7 +42,7 @@ var Player = BlockGrid.extend({
 	 * from the server to the client for this entity.
 	 * @return {*}
 	 */
-	streamSectionData: function (sectionId, data) {
+	streamSectionData: function(sectionId, data) {
 		// Check if the section is one that we are handling
 		if (sectionId === 'score') {
 			// Check if the server sent us data, if not we are supposed
@@ -66,16 +63,76 @@ var Player = BlockGrid.extend({
 	},
 
 	/**
+	 * Add the sensor fixture. Called in ServerNetworkEvents after the box2Dbody
+	 * is created.
+	 * @param {number} radius sets the radius of the attraction field
+	 * @return {Player}
+	 */
+	addSensor: function(radius) {
+		// Create the fixture
+		var fixtureDef = {
+			density: 0.0,
+			friction: 0.0,
+			restitution: 0.0,
+			isSensor: true,
+			shape: {
+				type: 'circle',
+				data: {
+					radius: radius,
+					x: 0,
+					y: 0
+				}
+			}
+		}
+		var tempFixture = ige.box2d.createFixture(fixtureDef);
+		var tempShape = new ige.box2d.b2CircleShape();
+
+		tempShape.SetRadius(fixtureDef.shape.data.radius / ige.box2d._scaleRatio);
+		tempShape.SetLocalPosition(new ige.box2d.b2Vec2(fixtureDef.shape.data.x /
+			ige.box2d._scaleRatio, fixtureDef.shape.data.y / ige.box2d._scaleRatio));
+
+		tempFixture.shape = tempShape;
+		
+		this._box2dBody.CreateFixture(tempFixture);
+
+		return this;
+	},
+
+	/**
+	 * Get/set the strength of attraction
+	 * @param {?number} Strength is a multiplier for attraction force
+	 * @return {(number|Player)}
+	 */
+	attractionStrength: function(strength) {
+		if (strength === undefined) {
+			return this._attractionStrength;
+		}
+		else {
+			this._attractionStrength = strength;
+			return this;
+		}
+		
+	},
+
+	/**
+	 * Called every time a ship collects a block
+	 * @param {BlockGrid}
+	 */
+	onBlockCollect: function(block) {
+		//console.log("Block collected!");
+	},
+
+	/**
 	 * Called every frame by the engine when this entity is mounted to the
 	 * scenegraph.
 	 * @param ctx The canvas context to render to.
 	 */
-	tick: function (ctx) {
+	tick: function(ctx) {
 		/* CEXCLUDE */
 		/* For the server: */
 		if (ige.isServer) {
 			// This determines how fast you can rotate your spaceship
-			var angularImpulse = -5000;
+			var angularImpulse = -10000;
 
 			if (this.controls.key.left) {
 				this._box2dBody.ApplyTorque(angularImpulse);
