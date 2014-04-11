@@ -2,6 +2,8 @@ var Block = IgeEntity.extend({
 	classId: 'Block',
 	WIDTH: 26,
 	HEIGHT: 26,
+	_row: undefined,
+	_col: undefined,
 
 	/**
 	 * Construct a new block
@@ -21,7 +23,37 @@ var Block = IgeEntity.extend({
 			// Enable caching so that the smart textures aren't reevaluated every time.
 			this.compositeCache(true);
 			this.cacheSmoothing(true);
+
+			this.mouseDown(function(event, control) {
+				var data = {
+					blockGridId: this.blockGrid().id(),
+					row: this._row,
+					col: this._col
+				};
+
+				this.blockGrid().remove(this._row, this._col);
+			});
 		}
+	},
+
+	blockGrid: function() {
+		return this._parent._parent;
+	},
+
+	row: function(val) {
+		if (val !== undefined) {
+			this._row = val;
+			return this;
+		}
+		return this._row;
+	},
+
+	col: function(val) {
+		if (val !== undefined) {
+			this._col = val;
+			return this;
+		}
+		return this._col;
 	},
 
 	/**
@@ -70,6 +102,18 @@ var Block = IgeEntity.extend({
 			default:
 				return undefined;
 		}
+	},
+
+	update: function(ctx) {
+		if (!ige.isServer) {
+			// TODO: This is a fix for having the entity aabb's draw in the center initially rather than where
+			// the entity has been initially translated to. Ideally, I should be able to call aabb(true) once
+			// before the update loop even happens, but I had trouble finding the right place to do this and even
+			// trying to trigger this code on just the first update didn't seem to work.
+			this.aabb(true);
+		}
+
+		IgeEntity.prototype.update.call(this, ctx);
 	}
 });
 
