@@ -5,17 +5,17 @@
 	 * @returns {String} the server URL that the client should connect to
 	 */
 	getServerUrl: function() {
-		var selectedServer = this.SERVERURL_LOCAL;
+		var selectedServer = DeploymentConfig.SERVERURL_LOCAL;
 
 		// Switch on the location host (must be a string)
 		switch (location.hostname) {
-			case this.DS_DEV:
+			case DeploymentConfig.CLIENTURL_DEV:
 				selectedServer = DeploymentConfig.SERVERURL_DEV;
 				break;
-			case this.DS_STAGING:
+			case DeploymentConfig.CLIENTURL_STAGING:
 				selectedServer = DeploymentConfig.SERVERURL_STAGING;
 				break;
-			case this.DS_RELEASE:
+			case DeploymentConfig.CLIENTURL_RELEASE:
 				selectedServer = DeploymentConfig.SERVERURL_RELEASE;
 				break;
 			case undefined:
