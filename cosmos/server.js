@@ -40,9 +40,12 @@ var Server = IgeClass.extend({
 					if (success) {
 						/* This is called when a player connects to the server and asks for a player object to be made for them */
 						ige.network.define('playerEntity', self._onPlayerEntity);
-
 						/* This is called when a player pushes down or releases a key */
 						ige.network.define('playerControlUpdate', self._onPlayerControlUpdate);
+						/* This is called when a player clicks on a block */
+						ige.network.define('blockClicked', self._onBlockClicked);
+						/* Define this command so that we can use it on the client */
+						ige.network.define('blockAction');
 
 						/* When a client connects or disconnects */
 						ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js

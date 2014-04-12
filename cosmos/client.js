@@ -84,7 +84,8 @@ var Client = IgeClass.extend({
 					ige.network.start(DeploymentUtils.getServerUrl(), function () {
 						// Setup the network command listeners
 						ige.network.define('playerEntity', self._onPlayerEntity);
-
+						// Called when the server needs to broadcast updates about a block
+						ige.network.define('blockAction', self._onBlockAction);
 						// Setup the network stream handler
 						ige.network.addComponent(IgeStreamComponent)
 							.stream.renderLatency(80); // Render the simulation 160 milliseconds in the past
