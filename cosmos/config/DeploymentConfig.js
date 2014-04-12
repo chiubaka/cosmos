@@ -10,7 +10,7 @@
 	/**
 	 * Deployed server URLs
 	 */
-	SERVERURL_LOCAL: "http://" + location.hostname,
+	SERVERURL_LOCAL: "http://" + location.hostname + ":2000",
 	SERVERURL_DEV: "http://dev.srv.cosmos.teamleonine.com",
 	SERVERURL_STAGING: "http://stg.srv.cosmos.teamleonine.com",
 	SERVERURL_RELEASE: "http://srv.cosmos.teamleonine.com",
