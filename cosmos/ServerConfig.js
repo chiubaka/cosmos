@@ -32,8 +32,8 @@ var config = {
 		{name: 'ExampleShips', path: './gameClasses/ExampleShips'},
 		{name: 'AsteroidGenerator', path: './gameClasses/AsteroidGenerator'},
 
-		/* Utility classes */
-		{name: 'WeightedSelection', path: './gameClasses/utils/weighted'}
+		/* Libraries used */
+		{name: 'WeightedSelection', path: './lib/weighted'}
 	]
 };
 
