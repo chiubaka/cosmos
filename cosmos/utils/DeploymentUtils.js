@@ -24,6 +24,9 @@
 				break;
 		}
 
+		// Append IGE server port number
+		selectedServer += ":2000";
+
 		console.log("Deployment: Selected server " + selectedServer + " for hostname " + location.host);
 		return selectedServer;
 	}
