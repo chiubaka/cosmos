@@ -111,6 +111,12 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
   popd
 )
 
+:: 4. Install NPM packages in server json
+pushd "%DEPLOYMENT_TARGET%\cosmos\ige\server"
+call :ExecuteCmd !NPM_CMD! install --production
+IF !ERRORLEVEL! NEQ 0 goto error
+popd
+
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :: Post deployment stub
