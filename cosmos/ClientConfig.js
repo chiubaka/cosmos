@@ -1,5 +1,9 @@
 var igeClientConfig = {
 	include: [
+		/* Configuration */
+		'./config/DeploymentConfig.js',
+
+
 		/* Our custom game JS scripts */
 		'./gameClasses/Block.js',
 		'./gameClasses/BlockGrid.js',
@@ -34,7 +38,10 @@ var igeClientConfig = {
 
 		/* Standard game scripts */
 		'./client.js',
-		'./index.js'
+		'./index.js',
+
+		/* Utility scripts*/
+		'./utils/DeploymentUtils.js'
 	]
 };
 

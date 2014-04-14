@@ -35,8 +35,8 @@ var config = {
 		/* Debugging */
 		{name: 'FixtureDebuggingEntity', path: './gameClasses/debug/FixtureDebuggingEntity'},
 
-		/* Utility classes */
-		{name: 'WeightedSelection', path: './gameClasses/utils/weighted'}
+		/* Libraries used */
+		{name: 'WeightedSelection', path: './lib/weighted'}
 	]
 };
 

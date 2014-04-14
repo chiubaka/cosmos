@@ -142,7 +142,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 	},
 
-
 	/**
 	Static function
 	Returns a new block grid with the given dimensions.
@@ -163,6 +162,16 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return grid;
 	},
 
+	processBlockAction: function(data) {
+		switch (data.action) {
+			case 'remove':
+				this.remove(data.row, data.col);
+				break;
+			default:
+				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
+		}
+	},
+
 	/**
 	 * Remove is intended to remove the block from the grid,
 	 * and also remove the fixture from the list of fixtures in the box2D object.
@@ -172,6 +181,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		if (!ige.isServer && block !== undefined) {
 			block.unMount();
+			this._renderContainer.cacheDirty(true);
 		}
 		this._grid[row][col] = undefined;
 	},
@@ -321,6 +331,26 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 
 		IgeEntityBox2d.prototype.update.call(this, ctx);
+	},
+
+
+	tick: function(ctx) {
+
+		if (ige.isServer) {
+			// Attract the block grid to another body. For example, small asteroids
+			// are attracted to player ships.
+			if (this.attractedTo !== undefined) {
+				var attractedToBody = this.attractedTo._box2dBody;
+				var thisBody = this._box2dBody;
+				var impulse = new ige.box2d.b2Vec2(0, 0);
+				impulse.Add(attractedToBody.GetWorldCenter());
+				impulse.Subtract(thisBody.GetWorldCenter());
+				impulse.Multiply(this.attractedTo.attractionStrength());
+				thisBody.ApplyImpulse(impulse, thisBody.GetWorldCenter());
+			}
+		}
+
+		return IgeEntityBox2d.prototype.tick.call(this, ctx);
 	}
 });
 
