@@ -159,14 +159,14 @@ var Player = BlockGrid.extend({
 				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
 				var location = this._box2dBody.GetWorldCenter(); //center of gravity
 
-				var grid = self.grid();
+				var grid = this.grid();
 				for (row = 0; row < grid.length; row++) {
 					var blockRow = grid[row];
 					for (col = 0; col < blockRow.length; col++) {
 						var block = blockRow[col];
 
 						if(block && block.classId() === "EngineBlock") {
-							self._box2dBody.ApplyImpulse(impulse, location);
+							this._box2dBody.ApplyImpulse(impulse, location);
 						}
 					}
 				}
