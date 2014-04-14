@@ -79,11 +79,13 @@ var Client = IgeClass.extend({
 					// than before the scene etc are created... maybe you want
 					// a splash screen or a menu first? Then connect after you've
 					// got a username or something?
-					ige.network.start('http://localhost:2000', function () {
 
+					// Use DeploymentUtils to get the appropriate game server to connect to.
+					ige.network.start(DeploymentUtils.getServerUrl(), function () {
 						// Setup the network command listeners
 						ige.network.define('playerEntity', self._onPlayerEntity);
-
+						// Called when the server needs to broadcast updates about a block
+						ige.network.define('blockAction', self._onBlockAction);
 						// Setup the network stream handler
 						ige.network.addComponent(IgeStreamComponent)
 							.stream.renderLatency(80); // Render the simulation 160 milliseconds in the past
