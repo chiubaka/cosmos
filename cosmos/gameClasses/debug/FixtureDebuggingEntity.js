@@ -7,6 +7,7 @@ var FixtureDebuggingBlock = IgeEntity.extend({
 		if (data !== undefined) {
 			this.width(data.width);
 			this.height(data.height);
+			this.depth(data.depth);
 		}
 
 		if (!ige.isServer) {
@@ -17,7 +18,8 @@ var FixtureDebuggingBlock = IgeEntity.extend({
 	streamCreateData: function() {
 		return {
 			width: this.width(),
-			height: this.height()
+			height: this.height(),
+			depth: this.depth()
 		}
 	}
 });
