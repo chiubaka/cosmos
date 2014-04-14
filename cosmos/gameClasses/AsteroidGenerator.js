@@ -2,7 +2,7 @@ var AsteroidGenerator = {
 	/**
 	 * Asteroid constants
 	 */
-	MAX_SIZE: 40,
+	DEFAULT_MAX_SIZE: 40,
 
 	/**
 	 * A random asteroid which may have holes in it
@@ -10,7 +10,7 @@ var AsteroidGenerator = {
 	genRandomAsteroid: function(maxSize, probabilityOfHole) {
 		asteroid = []
 
-		var maxSize = maxSize || 40;
+		var maxSize = maxSize || DEFAULT_MAX_SIZE;
 		var probabilityOfHole = probabilityOfHole || .2;
 
 		for (var x = 0; x < Math.random() * maxSize; x++) {
@@ -39,7 +39,7 @@ var AsteroidGenerator = {
 	 * Procedurally generates an asteroid recursively
 	 */
 	genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution) {
-		var maxSize = (maxSize || this.MAX_SIZE);
+		var maxSize = maxSize || this.DEFAULT_MAX_SIZE;
 		var blockDistribution = blockDistribution || this.blockDistributions.STANDARD;
 
 		// Dimensions of this generated asteroid. Guaranteed to be at least 0.25 of the upper bound.
