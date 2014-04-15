@@ -2,7 +2,7 @@ var AsteroidGenerator = {
 	/**
 	 * Asteroid constants
 	 */
-	MAX_SIZE: 40,
+	DEFAULT_MAX_SIZE: 40,
 
 	/**
 	 * A random asteroid which may have holes in it
@@ -10,7 +10,7 @@ var AsteroidGenerator = {
 	genRandomAsteroid: function(maxSize, probabilityOfHole) {
 		asteroid = []
 
-		var maxSize = maxSize || 40;
+		var maxSize = maxSize || DEFAULT_MAX_SIZE;
 		var probabilityOfHole = probabilityOfHole || .2;
 
 		for (var x = 0; x < Math.random() * maxSize; x++) {
@@ -39,7 +39,7 @@ var AsteroidGenerator = {
 	 * Procedurally generates an asteroid recursively
 	 */
 	genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution) {
-		var maxSize = (maxSize || this.MAX_SIZE);
+		var maxSize = maxSize || this.DEFAULT_MAX_SIZE;
 		var blockDistribution = blockDistribution || this.blockDistributions.STANDARD;
 
 		// Dimensions of this generated asteroid. Guaranteed to be at least 0.25 of the upper bound.
@@ -177,33 +177,33 @@ var AsteroidGenerator = {
 		return (Math.random() * (value)) * weight + (upperBound * (1 - weight));
 	},
 
-	prefabs: {
-		SINGLE_BLOCK: function() {
-			return [
-				[new CarbonBlock()]
-			]
-		},
+	singleBlock: function(distribution) {
+		distribution = distribution || this.blockDistributions.STANDARD;
+		return [
+			[this.drawFromDistribution(distribution)]
+		];
+	},
 
-		/**
-		 * A little tiny asteroid : )
-		 */
-		LITTLE_ASTEROID: function() {
-			return [
-				[new CarbonBlock(), new IronBlock()],
-				[new IronBlock(), new CarbonBlock()]
-			];
-		},
+	littleAsteroid: function(distribution) {
+		distribution = distribution || this.blockDistributions.STANDARD;
+		return [
+			[this.drawFromDistribution(distribution), this.drawFromDistribution(distribution)],
+			[this.drawFromDistribution(distribution), this.drawFromDistribution(distribution)]
+		];
+	},
 
-		/**
-		 * A hollow asteroid
-		 */
-		HOLLOW_ASTEROID: function() {
-			return [
-				[new CarbonBlock(), new CarbonBlock(), new IronBlock()],
-				[new IronBlock(), undefined, new CarbonBlock()],
-				[new IronBlock(), new IronBlock(), new IronBlock()]
-			];
-		},
+	hollowAsteroid: function(distribution) {
+		distribution = distribution || this.blockDistributions.STANDARD;
+		return [
+			[this.drawFromDistribution(distribution), this.drawFromDistribution(distribution), this.drawFromDistribution(distribution)],
+			[this.drawFromDistribution(distribution), undefined, this.drawFromDistribution(distribution)],
+			[this.drawFromDistribution(distribution), this.drawFromDistribution(distribution), this.drawFromDistribution(distribution)],
+		];
+	},
+
+	drawFromDistribution: function(distribution) {
+		var selection = WeightedSelection.select(distribution);
+		return Block.prototype.blockFromClassId(selection);
 	},
 
 	blockDistributions: {
@@ -211,11 +211,26 @@ var AsteroidGenerator = {
 			"IceBlock": 0.5,
 			"IronBlock": 0.3,
 			"CarbonBlock": 0.2
+		},
+
+		ICY: {
+			"IceBlock": 0.8,
+			"IronBlock": 0.1,
+			"CarbonBlock": 0.1
+		},
+
+		ROCKY: {
+			"IceBlock": 0.0,
+			"IronBlock": 0.5,
+			"CarbonBlock": 0.5
 		}
 	}
 };
 
-// Referenced from http://ejohn.org/blog/javascript-array-remove/
+/**
+ * Referenced from http://ejohn.org/blog/javascript-array-remove/
+ * Should this be moved to the library folder or something?
+ */
 Array.prototype.remove = function(from, to) {
 	var rest = this.slice((to || from) + 1 || this.length);
 	this.length = from < 0 ? this.length + from : from;
