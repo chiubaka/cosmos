@@ -33,6 +33,7 @@ var ServerNetworkEvents = {
 	_onPlayerEntity: function(data, clientId) {
 		if (!ige.server.players[clientId]) {
 			ige.server.players[clientId] = new Player(clientId)
+				.debugFixtures(false)//call this before calling setGrid()
 				.grid(ExampleShips.starterShipSingleMisplacedEngine())
 				.addSensor(300)
 				.attractionStrength(1)
