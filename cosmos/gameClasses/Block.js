@@ -4,6 +4,7 @@ var Block = IgeEntity.extend({
 	HEIGHT: 26,
 	_row: undefined,
 	_col: undefined,
+	_fixture: undefined,
 
 	/**
 	 * Construct a new block
@@ -56,6 +57,14 @@ var Block = IgeEntity.extend({
 			return this;
 		}
 		return this._col;
+	},
+
+	fixture: function(my_fixture) {
+		if (my_fixture !== undefined) {
+			this._fixture = my_fixture;
+			return this;
+		}
+		return this._fixture;
 	},
 
 	/**
