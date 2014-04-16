@@ -184,6 +184,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 			this._renderContainer.cacheDirty(true);
 		}
 		this._grid[row][col] = undefined;
+
+		if (ige.isServer) {
+			this._box2dBody.DestroyFixture(block.fixture());
+		}
 	},
 
 	/**
@@ -206,6 +210,19 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this.height(Block.prototype.HEIGHT * this._grid.length)
 			.width(Block.prototype.WIDTH * maxRowLength);
 
+		this.box2dBody({
+			type: 'dynamic',
+			linearDamping: 0.4,
+			angularDamping: 0.8,
+			allowSleep: true,
+			bullet: false,
+			gravitic: false,
+			fixedRotation: false,
+		});
+
+
+		
+
 		for(var row = 0; row < this._grid.length; row++)
 		{
 			var blockList = this._grid[row];
@@ -224,7 +241,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 				var x = width * col - this._geometry.x2 + block._geometry.x2;
 				var y = height * row - this._geometry.y2 + block._geometry.y2;
 
-				var fixture = {
+				var fixtureDef = {
 					density: 1.0,
 					friction: 0.5,
 					restitution: 0.5,
@@ -234,40 +251,27 @@ var BlockGrid = IgeEntityBox2d.extend({
 							// The position of the fixture relative to the body
 							x: x,
 							y: y,
-							width: width / 2, //I don't know why we have to devide by two here to make this come out right : (
+							width: width / 2,
 							height: height / 2
 						}
 					}
 				};
-				this._fixtures.push(fixture);
-
-				self = this;
-				block.onDeath = function() {
-					self.remove(block, fixture)
-				};
+				var fixture = ige.box2d.addFixture(this._box2dBody, fixtureDef);
+				// Add fixture reference to Block so we can destroy fixture later.
+				block.fixture(fixture);
 
 				if (this.debugFixtures()) {
 					new FixtureDebuggingEntity()
-						.mount(self)
-						.depth(self.depth() + 1)
-						.translateTo(fixture.shape.data.x, fixture.shape.data.y, 0)
-						.width(fixture.shape.data.width * 2)
-						.height(fixture.shape.data.height * 2)
+						.mount(this)
+						.depth(this.depth() + 1)
+						.translateTo(fixtureDef.shape.data.x, fixtureDef.shape.data.y, 0)
+						.width(fixtureDef.shape.data.width * 2)
+						.height(fixtureDef.shape.data.height * 2)
 						.streamMode(1);
 				}
 			}
 		}
 
-		this.box2dBody({
-			type: 'dynamic',
-			linearDamping: 0.4,
-			angularDamping: 0.8,
-			allowSleep: true,
-			bullet: false,
-			gravitic: false,
-			fixedRotation: false,
-			fixtures: this._fixtures
-		});
 
 		return this;
 	},
