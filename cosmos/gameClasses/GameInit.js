@@ -52,7 +52,7 @@ var GameInit = {
 						.streamMode(1)
 						.mount(game.spaceGameScene)
 						.depth(100)
-						.grid(AsteroidGenerator.prefabs.SINGLE_BLOCK())
+						.grid(AsteroidGenerator.singleBlock())
 						.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
 				}
 			}
@@ -101,6 +101,7 @@ var GameInit = {
 					}
 				});
 			}
+
 		else {
 			this.initPlayerControls(game);
 
