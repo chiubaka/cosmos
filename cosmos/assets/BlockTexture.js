@@ -1,3 +1,4 @@
+
 var image = {
 	render: function(ctx, entity) {
 		ctx.globalCompositeOperation = "source-over";
@@ -46,5 +47,5 @@ var image = {
 				ctx.drawImage(entity.textureImage, -entity._geometry.x2 * iconScaleFactor, -entity._geometry.y2 * iconScaleFactor, entity.width() * iconScaleFactor, entity.height() * iconScaleFactor);
 			}
 		}
-  }
+	}
 };

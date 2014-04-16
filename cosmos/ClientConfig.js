@@ -33,6 +33,9 @@ var igeClientConfig = {
 		'./gameClasses/blocks/elements/CarbonBlock.js',
 		'./gameClasses/blocks/elements/IceBlock.js',
 
+		/* Debugging */
+		'./gameClasses/debug/FixtureDebuggingEntity.js',
+
 		/* Standard game scripts */
 		'./client.js',
 		'./index.js',
