@@ -195,14 +195,16 @@ var BlockGrid = IgeEntityBox2d.extend({
 										Math.cos(theta) * fixtureY + gridY;
 
 			// Create new IgeEntityBox2d separate from parent
-			var bg = new BlockGrid()
+			var newGrid = new BlockGrid()
 				.category('smallAsteroid')
 				.mount(ige.server.spaceGameScene)
 				.depth(100)
-				.grid(AsteroidGenerator.prefabs.SINGLE_BLOCK())
+				.grid([[Block.prototype.blockFromClassId(block.classId())]])
 				.translateTo(finalX, finalY, 0)
 				.rotate().z(theta)
 				.streamMode(1);
+
+			// TODO: Compute correct velocities for new bodies, if needed
 		}
 
 		block.destroy();
@@ -240,9 +242,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 			gravitic: false,
 			fixedRotation: false,
 		});
-
-
-		
 
 		for(var row = 0; row < this._grid.length; row++)
 		{
