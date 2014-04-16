@@ -5,6 +5,7 @@ var Block = IgeEntity.extend({
 	_row: undefined,
 	_col: undefined,
 	_fixture: undefined,
+	_fixtureDef:undefined,
 
 	/**
 	 * Construct a new block
@@ -66,6 +67,15 @@ var Block = IgeEntity.extend({
 		}
 		return this._fixture;
 	},
+
+	fixtureDef: function(my_fixtureDef) {
+		if (my_fixtureDef !== undefined) {
+			this._fixtureDef = my_fixtureDef;
+			return this;
+		}
+		return this._fixtureDef;
+	},
+
 
 	/**
 	 * Decreases the block's health by the amount passed.
