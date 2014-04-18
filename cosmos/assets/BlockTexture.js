@@ -9,21 +9,21 @@ var image = {
 		// Draw block background
 		ctx.fillStyle = entity.textureBackground || "rgb(217, 217, 217)";
 		ctx.beginPath();
-		ctx.moveTo(-entity._geometry.x2, -entity._geometry.y2);
-		ctx.lineTo(entity._geometry.x2, -entity._geometry.y2);
-		ctx.lineTo(entity._geometry.x2, entity._geometry.y2);
-		ctx.lineTo(-entity._geometry.x2, entity._geometry.y2);
-		ctx.lineTo(-entity._geometry.x2, -entity._geometry.y2);
+		ctx.moveTo(-entity._bounds2d.x2, -entity._bounds2d.y2);
+		ctx.lineTo(entity._bounds2d.x2, -entity._bounds2d.y2);
+		ctx.lineTo(entity._bounds2d.x2, entity._bounds2d.y2);
+		ctx.lineTo(-entity._bounds2d.x2, entity._bounds2d.y2);
+		ctx.lineTo(-entity._bounds2d.x2, -entity._bounds2d.y2);
 		ctx.fill();
 
 		// Draw block outline
 		ctx.strokeStyle = entity.textureOutline || 'rgba(201, 201, 201, 1)';
 		ctx.beginPath();
-		ctx.moveTo(-entity._geometry.x2, -entity._geometry.y2);
-		ctx.lineTo(entity._geometry.x2, -entity._geometry.y2);
-		ctx.lineTo(entity._geometry.x2, entity._geometry.y2);
-		ctx.lineTo(-entity._geometry.x2, entity._geometry.y2);
-		ctx.lineTo(-entity._geometry.x2, -entity._geometry.y2);
+		ctx.moveTo(-entity._bounds2d.x2, -entity._bounds2d.y2);
+		ctx.lineTo(entity._bounds2d.x2, -entity._bounds2d.y2);
+		ctx.lineTo(entity._bounds2d.x2, entity._bounds2d.y2);
+		ctx.lineTo(-entity._bounds2d.x2, entity._bounds2d.y2);
+		ctx.lineTo(-entity._bounds2d.x2, -entity._bounds2d.y2);
 		ctx.stroke();
 
 		// Draw block icon
@@ -44,7 +44,7 @@ var image = {
 			}
 			else {
 				var iconScaleFactor = 0.8;
-				ctx.drawImage(entity.textureImage, -entity._geometry.x2 * iconScaleFactor, -entity._geometry.y2 * iconScaleFactor, entity.width() * iconScaleFactor, entity.height() * iconScaleFactor);
+				ctx.drawImage(entity.textureImage, -entity._bounds2d.x2 * iconScaleFactor, -entity._bounds2d.y2 * iconScaleFactor, entity.width() * iconScaleFactor, entity.height() * iconScaleFactor);
 			}
 		}
 	}

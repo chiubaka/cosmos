@@ -238,8 +238,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 				var width = Block.prototype.WIDTH;
 				var height = Block.prototype.HEIGHT;
 
-				var x = width * col - this._geometry.x2 + block._geometry.x2;
-				var y = height * row - this._geometry.y2 + block._geometry.y2;
+				var x = width * col - this._bounds2d.x2 + block._bounds2d.x2;
+				var y = height * row - this._bounds2d.y2 + block._bounds2d.y2;
 
 				var fixtureDef = {
 					density: 1.0,
@@ -292,8 +292,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 					continue;
 				}
 
-				var x = Block.prototype.WIDTH * col - this._geometry.x2 + block._geometry.x2;
-				var y = Block.prototype.HEIGHT * row - this._geometry.y2 + block._geometry.y2;
+				var x = Block.prototype.WIDTH * col - this._bounds2d.x2 + block._bounds2d.x2;
+				var y = Block.prototype.HEIGHT * row - this._bounds2d.y2 + block._bounds2d.y2;
 
 				block.translateTo(x, y, 0)
 					.mount(this._renderContainer);

@@ -13,6 +13,9 @@ var Client = IgeClass.extend({
 		self.LAYER_MIDDLE = 50;
 		self.LAYER_FOREGROUND = 90;
 
+		// Enable IGE on screen editor
+		ige.addComponent(IgeEditorComponent);
+
 		// Enable networking
 		ige.addComponent(IgeNetIoComponent);
 
@@ -96,6 +99,8 @@ var Client = IgeClass.extend({
 						ige.network.send('playerEntity');
 
 						GameInit.init(self);
+						ige.editor.showStats();
+
 					});
 				}
 			});
