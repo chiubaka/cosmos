@@ -3,8 +3,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	/** Contains the grid of Block objects that make up this BlockGrid */
 	_grid: [],
-	/** Contains the Box2D physics fixtures for this block grid */
-	_fixtures: [],
 	/** The rendering container for this BlockGrid, which essentially provides a cacheable location for the BlockGrid's
 	 * texture. */
 	_renderContainer: undefined,
@@ -178,15 +176,42 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 */
 	remove: function(row, col) {
 		var block = this._grid[row][col];
-
-		if (!ige.isServer && block !== undefined) {
-			block.unMount();
-			this._renderContainer.cacheDirty(true);
-		}
-		this._grid[row][col] = undefined;
+		if (block === undefined)
+			return;
 
 		if (ige.isServer) {
 			this._box2dBody.DestroyFixture(block.fixture());
+			
+			// Calculate position of new BlockGrid, taking into account rotation
+			var gridX = this.translate().x();
+			var gridY = this.translate().y();
+			var fixtureX = block.fixtureDef().shape.data.x;
+			var fixtureY = block.fixtureDef().shape.data.y;
+			var theta = this.rotate().z();
+
+			var finalX = 	Math.cos(theta) * fixtureX -
+										Math.sin(theta) * fixtureY + gridX;
+			var finalY =	Math.sin(theta) * fixtureX + 
+										Math.cos(theta) * fixtureY + gridY;
+
+			// Create new IgeEntityBox2d separate from parent
+			var newGrid = new BlockGrid()
+				.category('smallAsteroid')
+				.mount(ige.server.spaceGameScene)
+				.depth(100)
+				.grid([[Block.prototype.blockFromClassId(block.classId())]])
+				.translateTo(finalX, finalY, 0)
+				.rotate().z(theta)
+				.streamMode(1);
+
+			// TODO: Compute correct velocities for new bodies, if needed
+		}
+
+		block.destroy();
+		this._grid[row][col] = undefined;
+
+		if (!ige.isServer ) {
+			this._renderContainer.cacheDirty(true);
 		}
 	},
 
@@ -203,8 +228,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		this._grid = grid;
 
-		this._fixtures = [];
-
 		var maxRowLength = this.maxRowLengthForGrid(this._grid);
 
 		this.height(Block.prototype.HEIGHT * this._grid.length)
@@ -219,9 +242,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 			gravitic: false,
 			fixedRotation: false,
 		});
-
-
-		
 
 		for(var row = 0; row < this._grid.length; row++)
 		{
@@ -259,6 +279,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 				var fixture = ige.box2d.addFixture(this._box2dBody, fixtureDef);
 				// Add fixture reference to Block so we can destroy fixture later.
 				block.fixture(fixture);
+				// Add fixtureDef reference so we can create a new BlockGrid later.
+				block.fixtureDef(fixtureDef);
 
 				if (this.debugFixtures()) {
 					new FixtureDebuggingEntity()
