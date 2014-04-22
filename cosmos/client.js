@@ -3,7 +3,6 @@ var Client = IgeClass.extend({
 
 	init: function () {
 		//ige.timeScale(0.1);
-		ige.showStats(1);
 		ige.setFps(60);
 
 		// Load our textures
@@ -22,21 +21,20 @@ var Client = IgeClass.extend({
 		// Implement our game methods
 		this.implement(ClientNetworkEvents);
 
-		// Add physics and setup physics world
-		ige.addComponent(IgeBox2dComponent)
-			.box2d.sleep(true)
-			.box2d.createWorld()
-			.box2d.start();
-
 		// Create the HTML canvas
 		ige.createFrontBuffer(true);
 
 		// Load the textures we want to use
 		this.textures = {
 			block: new IgeTexture(gameRoot + 'assets/BlockTexture.js'),
-			background_helix_nebula: new IgeTexture(gameRoot + 'assets/backgrounds/helix_nebula.jpg'),
+			background_helix_nebula: new IgeTexture(gameRoot + 
+				'assets/backgrounds/helix_nebula.jpg'),
 
-			fixtureDebuggingTexture: new IgeTexture(gameRoot + 'assets/debug/FixtureDebuggingTexture.js')
+			fixtureDebuggingTexture: new IgeTexture(gameRoot +
+				'assets/debug/FixtureDebuggingTexture.js'),
+
+			laserBeamTexture: new IgeTexture(gameRoot +
+				'assets/laserbeam.png')
 		};
 
 		ige.on('texturesLoaded', function () {

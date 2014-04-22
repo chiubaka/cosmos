@@ -32,6 +32,16 @@ var Player = BlockGrid.extend({
 		this.streamSections(['transform', 'score']);
 	},
 
+	addLaser: function() {
+		new LaserBeam()
+			.id('laser')
+			.width(500)
+			.height(500)
+			.mount(self);
+
+		return this;		
+	},
+
 	/**
 	 * Override the default IgeEntity class streamSectionData() method
 	 * so that we can check for the custom1 section and handle how we deal

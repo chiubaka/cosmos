@@ -11,6 +11,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	init: function(data) {
 		var self = this;
+		this.updateCount = 0;
 
 		IgeEntityBox2d.prototype.init.call(this);
 
@@ -353,7 +354,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 			// the entity has been initially translated to. Ideally, I should be able to call aabb(true) once
 			// before the update loop even happens, but I had trouble finding the right place to do this and even
 			// trying to trigger this code on just the first update didn't seem to work.
-			this._renderContainer.aabb(true);
+			this.updateCount++;
+			//if (this.updateCount == 10)
+				this._renderContainer.aabb(true);
+
 		}
 
 		IgeEntityBox2d.prototype.update.call(this, ctx);
@@ -361,7 +365,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 
 	tick: function(ctx) {
-
+		// TODO: Move this to update function
 		if (ige.isServer) {
 			// Attract the block grid to another body. For example, small asteroids
 			// are attracted to player ships.
