@@ -36,7 +36,6 @@ var ServerNetworkEvents = {
 				.debugFixtures(false)//call this before calling setGrid()
 				.grid(ExampleShips.starterShipSingleMisplacedEngine())
 				.addSensor(300)
-				//.addLaser()
 				.attractionStrength(1)
 				.streamMode(1)
 				.mount(ige.server.spaceGameScene);

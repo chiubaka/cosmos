@@ -32,9 +32,6 @@ var Client = IgeClass.extend({
 
 			fixtureDebuggingTexture: new IgeTexture(gameRoot +
 				'assets/debug/FixtureDebuggingTexture.js'),
-
-			laserBeamTexture: new IgeTexture(gameRoot +
-				'assets/laserbeam.png')
 		};
 
 		ige.on('texturesLoaded', function () {
