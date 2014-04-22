@@ -10,6 +10,11 @@ var GameInit = {
 	 * @param game either ige.client or ige.server
 	 */
 	init: function(game) {
+
+		// Disable debug features for more performance
+		ige.debugEnabled(false);
+		ige.debugTiming(false);
+
 		// Load the base scene data
 		game.mainScene = new IgeScene2d()
 			.id('mainScene');
@@ -20,7 +25,7 @@ var GameInit = {
 			.id('mainViewport')
 			.autoSize(true)
 			.scene(game.mainScene)
-			.drawBounds(true) //draws the axis aligned bounding boxes. Set to true for debugging.
+			.drawBounds(false) //draws the axis aligned bounding boxes. Set to true for debugging.
 			.mount(ige);
 
 		this.initScenes(game);
