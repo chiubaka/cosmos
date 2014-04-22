@@ -349,23 +349,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	update: function(ctx) {
-		if (!ige.isServer) {
-			// TODO: This is a fix for having the entity aabb's draw in the center initially rather than where
-			// the entity has been initially translated to. Ideally, I should be able to call aabb(true) once
-			// before the update loop even happens, but I had trouble finding the right place to do this and even
-			// trying to trigger this code on just the first update didn't seem to work.
-			this.updateCount++;
-			if (this.updateCount == 10)
-				this._renderContainer.aabb(true);
-
-		}
-
-		IgeEntityBox2d.prototype.update.call(this, ctx);
-	},
-
-
-	tick: function(ctx) {
-		// TODO: Move this to update function
 		if (ige.isServer) {
 			// Attract the block grid to another body. For example, small asteroids
 			// are attracted to player ships.
@@ -379,9 +362,19 @@ var BlockGrid = IgeEntityBox2d.extend({
 				thisBody.ApplyImpulse(impulse, thisBody.GetWorldCenter());
 			}
 		}
+		else {
+			// TODO: This is a fix for having the entity aabb's draw in the center initially rather than where
+			// the entity has been initially translated to. Ideally, I should be able to call aabb(true) once
+			// before the update loop even happens, but I had trouble finding the right place to do this and even
+			// trying to trigger this code on just the first update didn't seem to work.
+			this.updateCount++;
+			if (this.updateCount == 10)
+				this._renderContainer.aabb(true);
 
-		return IgeEntityBox2d.prototype.tick.call(this, ctx);
-	}
+		}
+		IgeEntityBox2d.prototype.update.call(this, ctx);
+	},
+
 });
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = BlockGrid; }
