@@ -26,6 +26,7 @@ var Player = BlockGrid.extend({
 
 		if (!ige.isServer) {
 			this.depth(1);
+			this.addLaser();
 		}
 
 		// Define the data sections that will be included in the stream
@@ -33,12 +34,20 @@ var Player = BlockGrid.extend({
 	},
 
 	addLaser: function() {
-		new LaserBeam()
-			.id('laser')
-			.width(500)
-			.height(500)
-			.mount(self);
-
+		
+		this.laserBeam = new LaserBeam()
+			//.id('laser')
+			.width(300)
+			//.height(500)
+			.translateTo(0, -115, 0)
+			.rotateTo(0, 0, Math.radians(90))
+			.newTween()
+			.mount(this);
+/*
+		new IceBlock()
+			.streamMode(0)
+			.mount(ige.client.spaceGameScene)
+*/
 		return this;		
 	},
 
