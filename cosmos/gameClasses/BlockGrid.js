@@ -181,7 +181,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		if (ige.isServer) {
 			this._box2dBody.DestroyFixture(block.fixture());
-			
+
 			// Calculate position of new BlockGrid, taking into account rotation
 			var gridX = this.translate().x();
 			var gridY = this.translate().y();
@@ -191,7 +191,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 			var finalX = 	Math.cos(theta) * fixtureX -
 										Math.sin(theta) * fixtureY + gridX;
-			var finalY =	Math.sin(theta) * fixtureX + 
+			var finalY =	Math.sin(theta) * fixtureX +
 										Math.cos(theta) * fixtureY + gridY;
 
 			// Create new IgeEntityBox2d separate from parent
@@ -241,7 +241,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			bullet: false,
 			gravitic: false,
 			fixedRotation: false,
-		});
+	});
 
 		for(var row = 0; row < this._grid.length; row++)
 		{

@@ -6,7 +6,7 @@ var Block = IgeEntity.extend({
 
 	_row: undefined,
 	_col: undefined,
-	
+
 	_fixture: undefined,
 	_fixtureDef:undefined,
 

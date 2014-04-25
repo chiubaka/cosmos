@@ -12,8 +12,10 @@ var igeClientConfig = {
 		'./gameClasses/ClientNetworkEvents.js',
 
 		'./gameClasses/Player.js',
-		'./gameClasses/Background.js',
 		'./gameClasses/ExampleShips.js',
+
+		'./gameClasses/Background.js',
+		'./gameClasses/ClickInterceptLayer.js',
 
 		/* Parts */
 		'./gameClasses/blocks/Part.js',

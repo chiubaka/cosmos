@@ -64,6 +64,17 @@ var ServerNetworkEvents = {
 
 
 		ige.network.send('blockAction', data);
+	},
+
+	_onBackgroundClicked: function(data, clientId) {
+		new BlockGrid()
+			.category('smallAsteroid')
+			.id('littleAsteroid' + Math.random())
+			.streamMode(1)
+			.mount(game.spaceGameScene)
+			.depth(100)
+			.grid(AsteroidGenerator.singleBlock())
+			.translateTo(data.x, data.y, 0);
 	}
 };
 
