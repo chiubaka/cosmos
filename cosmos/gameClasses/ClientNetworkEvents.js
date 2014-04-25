@@ -44,7 +44,7 @@ var ClientNetworkEvents = {
 
 	_onBlockAction: function(data) {
 		var blockGrid = ige.$(data.blockGridId);
-		blockGrid.processBlockAction(data);
+		blockGrid.processBlockActionClient(data);
 	},
 
 	initCameras: function(entityToTrack) {

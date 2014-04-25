@@ -12,7 +12,6 @@ var Block = IgeEntity.extend({
 	 * Note that block doesn't have any texture. This is because subclasses of Block are expected to have their own textures.
 	 */
 	init: function () {
-		this.updateCount = 0;
 		IgeEntity.prototype.init.call(this);
 
 		// Use an even number so values don't have to become approximate when we divide by two
@@ -21,6 +20,10 @@ var Block = IgeEntity.extend({
 		this.hp = 10; //this is the default hp of all blocks. Subclasses of block can have a different hp.
 
 		if (!ige.isServer) {
+			this.updateCount = 0;
+			// Add some randomness so we don't calculate aabb all at once
+			this.updateTrigger = TL_Random.randomIntFromInterval(700, 1200);			
+			
 			this.texture(ige.client.textures.block);
 
 			// Enable caching so that the smart textures aren't reevaluated every time.
@@ -35,8 +38,6 @@ var Block = IgeEntity.extend({
 				};
 
 				ige.network.send('blockClicked', data);
-
-				this.blockGrid().remove(this._row, this._col);
 			});
 		}
 	},
@@ -133,7 +134,8 @@ var Block = IgeEntity.extend({
 			// before the update loop even happens, but I had trouble finding the right place to do this and even
 			// trying to trigger this code on just the first update didn't seem to work.
 			this.updateCount++;
-			if ((this.updateCount == 10) || (this.updateCount % 1000 == 0))
+			if ((this.updateCount == 10) ||
+					(this.updateCount % this.updateTrigger == 0))
 				this.aabb(true);
 		}
 

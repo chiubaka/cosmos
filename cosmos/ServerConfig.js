@@ -38,7 +38,8 @@ var config = {
 		{name: 'FixtureDebuggingEntity', path: './gameClasses/debug/FixtureDebuggingEntity'},
 
 		/* Libraries used */
-		{name: 'WeightedSelection', path: './lib/weighted'}
+		{name: 'WeightedSelection', path: './lib/weighted'},
+		{name: 'TL_Random', path: './lib/TL_Random'}
 	]
 };
 
