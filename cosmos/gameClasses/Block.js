@@ -22,7 +22,7 @@ var Block = IgeEntity.extend({
 		if (!ige.isServer) {
 			this.updateCount = 0;
 			// Add some randomness so we don't calculate aabb all at once
-			this.updateTrigger = TL_Random.randomIntFromInterval(700, 1200);			
+			this.updateTrigger = TL_Random.randomIntFromInterval(70, 120);			
 			
 			this.texture(ige.client.textures.block);
 
