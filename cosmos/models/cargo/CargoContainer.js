@@ -18,6 +18,10 @@
 		this._itemStore[uuid] = item;
 		return item.uuid();
 	},
+
+	hasItem: function(itemId) {
+		return this._itemStore.hasOwnProperty(itemId);
+	},
 	
 	getItems: function(itemId) {
 		return this._itemStore[itemId];
