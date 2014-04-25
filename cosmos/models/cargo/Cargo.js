@@ -17,15 +17,21 @@
 	/**
 	 * The cargo containers that make up the player's cargo inventory.
 	 * CargoContainers contain a reference to a block in the world and a list
-	 * of references to CargoItems that are contained within them (for fast lookup).
+	 * of references to CargoItems that are contained within them.
 	 */
-	_containers: [],
+	_containers: undefined,
+
+	/**
+	 * The list of items. Each item contains a reference to its container and vice versa.
+	 */
+	_items: undefined,
 
 	/**
 	 * Initialize the cargo model for a player.
 	 */
 	init: function() {
-		throw "Not implemented!";
+		this._containers = [];
+		this._items = [];
 	},
 	
 	unlimitedSpace: function(flag) {
