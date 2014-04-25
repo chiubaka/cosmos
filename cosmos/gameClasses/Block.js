@@ -1,9 +1,12 @@
 var Block = IgeEntity.extend({
 	classId: 'Block',
+
 	WIDTH: 26,
 	HEIGHT: 26,
+
 	_row: undefined,
 	_col: undefined,
+	
 	_fixture: undefined,
 	_fixtureDef:undefined,
 
