@@ -71,13 +71,13 @@ var AsteroidGenerator = {
 			var block = blocksToPlace[blockIndex];
 
 			if (asteroidConstr[block.x] !== undefined && asteroidConstr[block.x][block.y] !== undefined) {
-				blocksToPlace.remove(blockIndex);
+				ArrayUtils.remove(blocksToPlace, blockIndex);
 				continue;
 			}
 
 			if (block.x > asteroidDim || block.x < 0 ||
 				block.y > asteroidDim || block.y < 0) {
-				blocksToPlace.remove(blockIndex);
+				ArrayUtils.remove(blocksToPlace, blockIndex);
 				continue;
 			}
 
@@ -102,7 +102,7 @@ var AsteroidGenerator = {
 			blocksToPlace.push({ x: block.x, y: block.y + 1 });
 
 			// Remove the block
-			blocksToPlace.remove(blockIndex);
+			ArrayUtils.remove(blocksToPlace, blockIndex);
 		}
 
 		// Now, prune all unused columns in the asteroid to result in the final asteroid
@@ -225,16 +225,6 @@ var AsteroidGenerator = {
 			"CarbonBlock": 0.5
 		}
 	}
-};
-
-/**
- * Referenced from http://ejohn.org/blog/javascript-array-remove/
- * Should this be moved to the library folder or something?
- */
-Array.prototype.remove = function(from, to) {
-	var rest = this.slice((to || from) + 1 || this.length);
-	this.length = from < 0 ? this.length + from : from;
-	return this.push.apply(this, rest);
 };
 
 if (typeof (module) !== 'undefined' && typeof (module.exports) !== 'undefined') {
