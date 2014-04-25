@@ -6,15 +6,35 @@
 	 * 
 	 * May require refactoring of the Block model or adding a new model to represent a block so it doesn't contain world-specific info.
 	 */
-    _entity: undefined,
-	_type: undefined,
 	_id: undefined,
+	_entity: undefined,
+	_type: undefined,
+	_container: undefined,
 
-    init: function(item) {
+	_lastModified: undefined,
+
+    init: function(block) {
     	this._id = UuidGenerator.gen();
-    	this._entity = JSON.parse(JSON.stringify(item));
-	    this._type = this._entity.classId;
+    	this._entity = JSON.parse(JSON.stringify(block));
+    	this._type = this._entity.classId;
+    	this._container = container;
+
+	    this.updateLastModified();
     },
+
+	updateLastModified: function() {
+		this._lastModified = Date.now();
+	},
+
+	container: function(container) {
+		if (container !== undefined) {
+			this._container = container;
+			this.updateLastModified();
+			return this;
+		}
+
+		return this._container;
+	},
 
 	/**
 	 * Generates a UUID to distinguish this cargo item from all other cargo items.
