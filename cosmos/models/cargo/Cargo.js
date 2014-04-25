@@ -81,11 +81,27 @@
 	},
 
 	removeItem: function(itemId) {
-		throw "Not implemented!";
+		for (var i = 0; i < this.getNumContainers(); i++) {
+			var container = this.getContainer(i);
+			if (container.hasItem(itemId)) {
+				container.removeItem(itemId);
+				return this;
+			}
+		}
+
+		return this;
 	},
 
-	removeAllItems: function(itemType) {
-		throw "Not implemented!";
+	removeItems: function(itemType) {
+		for (var i = 0; i < this.getNumContainers(); i++) {
+			var container = this.getContainer(i);
+			if (container.hasItemType(itemType)) {
+				container.removeItems(itemType);
+				return this;
+			}
+		}
+
+		return this;
 	},
 	
 	getItems: function(itemType) {
