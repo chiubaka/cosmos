@@ -37,6 +37,7 @@ var config = {
 
 		/* Libraries used */
 		{name: 'WeightedSelection', path: './lib/weighted'},
+		{name: 'UuidGenerator', path: './lib/UuidGenerator'},
 
 		/* Utilities */
 		{name: 'ArrayUtils', path: './utils/ArrayUtils'}
