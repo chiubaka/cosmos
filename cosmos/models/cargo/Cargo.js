@@ -168,8 +168,6 @@ var Cargo = IgeClass.extend({
 			var item = this._items[index];
 			this.removeItem(item.uuid());
 		}
-
-		return this;
 	},
 
 	/**
