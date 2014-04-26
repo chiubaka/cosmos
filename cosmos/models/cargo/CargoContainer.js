@@ -90,3 +90,7 @@ var CargoContainer = IgeClass.extend({
 		return ((this.capacity() - this.numItems()) > 0);
 	}
 });
+
+if (typeof (module) !== 'undefined' && typeof (module.exports) !== 'undefined') {
+	module.exports = CargoContainer;
+}

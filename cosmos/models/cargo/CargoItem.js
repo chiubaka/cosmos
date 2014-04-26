@@ -52,3 +52,7 @@ var CargoItem = IgeClass.extend({
 		return this._id;
 	},
 });
+
+if (typeof (module) !== 'undefined' && typeof (module.exports) !== 'undefined') {
+	module.exports = CargoItem;
+}

@@ -32,3 +32,7 @@ var ChunkedCargoItem = CargoItem.extend({
 		CargoItem.prototype.init.call(this, item);
 	}
 });
+
+if (typeof (module) !== 'undefined' && typeof (module.exports) !== 'undefined') {
+	module.exports = ChunkedCargoItem;
+}

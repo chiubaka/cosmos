@@ -258,3 +258,7 @@ var Cargo = IgeClass.extend({
 		return this._containers.length;
 	} 
 });
+
+if (typeof (module) !== 'undefined' && typeof (module.exports) !== 'undefined') {
+	 module.exports = Cargo;
+}

@@ -52,3 +52,7 @@ var CargoContainer2D = CargoContainer.extend({
 		return CargoContainer.prototype.hasSpace.call(this);
 	}
 });
+
+if (typeof (module) !== 'undefined' && typeof (module.exports) !== 'undefined') {
+	module.exports = CargoContainer2D;
+}
