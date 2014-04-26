@@ -42,7 +42,17 @@ var CargoContainer = IgeClass.extend({
 	 * container (i.e. the item is "removed" from this cargo container)
 	 */
 	unlinkItem: function(itemId) {
-		throw "Not implemented";
+		var indexToRemove = -1;
+		for (var i = 0; i < this._itemStore.length; i++) {
+			if (this._itemStore[i].uuid() === itemId) {
+				indexToRemove = i;
+				break;
+			}
+		}
+
+		if (indexToRemove >= 0) {
+			ArrayUtils.remove(this._itemStore, indexToRemove);
+		}
 	},
 
 	/**
