@@ -1,4 +1,4 @@
-﻿var CargoItem = IgeClass.extend({
+var CargoItem = IgeClass.extend({
     classId: 'CargoItem',
 
 	/**
@@ -8,7 +8,6 @@
 	 */
 	_id: undefined,
 	_entity: undefined,
-	_type: undefined,
 	_container: undefined,
 
 	_lastModified: undefined,
@@ -16,7 +15,6 @@
     init: function(block) {
     	this._id = UuidGenerator.gen();
     	this._entity = JSON.parse(JSON.stringify(block));
-    	this._type = this._entity.classId;
     	this._container = container;
 
 	    this.updateLastModified();
@@ -36,8 +34,12 @@
 		return this._container;
 	},
 
+	type: function() {
+		return this._entity.classId;
+	},
+
 	/**
-	 * Generates a UUID to distinguish this cargo item from all other cargo items.
+	 * A UUID to distinguish this cargo item from all other cargo items.
 	 */
 	uuid: function() {
 		return this._id;
