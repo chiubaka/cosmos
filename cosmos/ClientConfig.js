@@ -1,23 +1,26 @@
 var igeClientConfig = {
 	include: [
-		/* Configuration */
-		'./config/DeploymentConfig.js',
-
-
-		/* Our custom game JS scripts */
-		'./gameClasses/Block.js',
-		'./gameClasses/BlockGrid.js',
+		/* === GAME SETUP === */
+		/* Initialization */
+		'./client.js',
+		'./index.js',
 
 		'./gameClasses/GameInit.js',
 		'./gameClasses/ClientNetworkEvents.js',
 
-		'./gameClasses/Player.js',
-		'./gameClasses/Background.js',
-		'./gameClasses/ExampleShips.js',
+		/* Configuration */
+		'./config/DeploymentConfig.js',
 
-		/* Parts */
+		/* === PLAYER STATE === */
+		'./gameClasses/Player.js',
+
+		/* === ENVIRONMENT STATE === */
+		/* Blocks */
+		'./gameClasses/Block.js',
+		'./gameClasses/BlockGrid.js',
+
+		/* Ship part blocks */
 		'./gameClasses/blocks/Part.js',
-		//-------------
 		'./gameClasses/blocks/parts/EngineBlock.js',
 		'./gameClasses/blocks/parts/PowerBlock.js',
 		'./gameClasses/blocks/parts/FuelBlock.js',
@@ -26,21 +29,23 @@ var igeClientConfig = {
 		'./gameClasses/blocks/parts/MiningLaserBlock.js',
 		'./gameClasses/blocks/parts/ThrusterBlock.js',
 
-		/* Elements */
+		/* Element blocks */
 		'./gameClasses/blocks/Element.js',
-		//--------------
 		'./gameClasses/blocks/elements/IronBlock.js',
 		'./gameClasses/blocks/elements/CarbonBlock.js',
 		'./gameClasses/blocks/elements/IceBlock.js',
 
+		/* Structures */
+		'./gameClasses/ExampleShips.js',
+
+		/* Environment scenery */
+		'./gameClasses/Background.js',
+
+		/* === SUPPLEMENTAL FUNCTIONALITY === */
 		/* Debugging */
 		'./gameClasses/debug/FixtureDebuggingEntity.js',
 
-		/* Standard game scripts */
-		'./client.js',
-		'./index.js',
-
-		/* Utility scripts*/
+		/* Helper utilities */
 		'./utils/DeploymentUtils.js'
 	]
 };
