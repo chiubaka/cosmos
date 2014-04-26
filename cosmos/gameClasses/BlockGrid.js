@@ -92,7 +92,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 				// TODO: This might be dangerous, since some of the event properties should be changed so that they are
 				// relative to the child's bounding box, but since we don't use any of those properties for the moment,
 				// ignore that.
-				block._mouseDown(event, control);
+				block.mouseDown(event, control);
 				self._renderContainer.cacheDirty(true);
 			});
 
@@ -181,7 +181,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		if (ige.isServer) {
 			this._box2dBody.DestroyFixture(block.fixture());
-			
+
 			// Calculate position of new BlockGrid, taking into account rotation
 			var gridX = this.translate().x();
 			var gridY = this.translate().y();
@@ -191,7 +191,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 			var finalX = 	Math.cos(theta) * fixtureX -
 										Math.sin(theta) * fixtureY + gridX;
-			var finalY =	Math.sin(theta) * fixtureX + 
+			var finalY =	Math.sin(theta) * fixtureX +
 										Math.cos(theta) * fixtureY + gridY;
 
 			// Create new IgeEntityBox2d separate from parent
