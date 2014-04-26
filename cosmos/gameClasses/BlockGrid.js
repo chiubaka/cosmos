@@ -19,82 +19,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 
 		if (!ige.isServer) {
-			this._renderContainer = new IgeEntity()
+			this._renderContainer = new RenderContainer()
 				.compositeCache(true)
-				.mount(this);
-
-			/*
-			 * The general strategy for handling clicks is to:
-			 * 1. Unrotate the click coordinate
-			 * 2. Compare the unrotated click coordinate to where the blocks would be if the BlockGrid were not rotated
-			 * 3. Fire the mouseDown() event on the appropriate block
-			 */
-			this._renderContainer.mouseDown(function(event, control) {
-				// event.igeBaseX and event.igeBaseY give coordinates relative to the clicked entity's origin (center)
-
-				// The position of the click in world coordinates
-				var mousePosWorld = self.mousePosWorld();
-				var worldX = mousePosWorld.x;
-				var worldY = mousePosWorld.y;
-
-				// The coordinates of the center of the axis-aligned bounding box of the render container in
-				// world coordinates
-				var aabb = self._renderContainer.aabb();
-				var aabbX = aabb.x + aabb.width / 2;
-				var aabbY = aabb.y + aabb.height / 2;
-
-				// Translate the mouse position to a reference system where the center of the axis-aligned
-				// bounding box is the center
-				var aabbRelativeX = worldX - aabbX;
-				var aabbRelativeY = worldY - aabbY;
-
-				// This is the BlockGrid's rotation, not the render container's, since the render container does
-				// not rotate with respect to its parent.
-				// Negative because we want to reverse the rotation.
-				var theta = -self._rotate.z;
-
-				// The unrotated coordinates for comparison against an unrotated grid with respect to the center of the
-				// entity
-				// This uses basic trigonometry. See http://en.wikipedia.org/wiki/Rotation_matrix.
-				var unrotatedX = aabbRelativeX * Math.cos(theta) - aabbRelativeY * Math.sin(theta);
-				var unrotatedY = aabbRelativeX * Math.sin(theta) + aabbRelativeY * Math.cos(theta);
-
-				// Height and width of the grid area
-				var width = self._renderContainer.width();
-				var height = self._renderContainer.height();
-
-				// Check if the click was out of the grid area (happens because axis-aligned bounding boxes are larger
-				// than the non-axis-aligned grid area)
-				if (Math.abs(unrotatedX) > width / 2
-					|| Math.abs(unrotatedY) > height / 2)
-				{
-					return;
-				}
-
-				// Coordinates for the top left corner of the grid area
-				var topLeftCornerX = -width / 2;
-				var topLeftCornerY = -height / 2;
-
-				// Coordinates of the unrotated clicked point with respect to the top left of the grid area
-				// This is just so calculations are a little bit easier
-				var gridX = unrotatedX - topLeftCornerX;
-				var gridY = unrotatedY - topLeftCornerY;
-
-				var row = Math.floor(gridY / Block.prototype.HEIGHT);
-				var col = Math.floor(gridX / Block.prototype.WIDTH);
-
-				var block = self._grid[row][col];
-
-				if (block === undefined) {
-					return;
-				}
-
-				// TODO: This might be dangerous, since some of the event properties should be changed so that they are
-				// relative to the child's bounding box, but since we don't use any of those properties for the moment,
-				// ignore that.
-				block._mouseDown(event, control);
-				self._renderContainer.cacheDirty(true);
-			});
+				.mount(this)
+				.blockGrid(this);
 
 			this.mountGrid();
 		}
@@ -181,7 +109,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		if (ige.isServer) {
 			this._box2dBody.DestroyFixture(block.fixture());
-			
+
 			// Calculate position of new BlockGrid, taking into account rotation
 			var gridX = this.translate().x();
 			var gridY = this.translate().y();
@@ -191,7 +119,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 			var finalX = 	Math.cos(theta) * fixtureX -
 										Math.sin(theta) * fixtureY + gridX;
-			var finalY =	Math.sin(theta) * fixtureX + 
+			var finalY =	Math.sin(theta) * fixtureX +
 										Math.cos(theta) * fixtureY + gridY;
 
 			// Create new IgeEntityBox2d separate from parent
