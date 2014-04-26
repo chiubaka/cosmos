@@ -1,3 +1,13 @@
+﻿/**
+ * Cargo.js
+ * @author Derrick Liu
+ * 
+ * The Cargo class represents a player's entire cargo inventory. 
+ * This class provides a high-level interface for managing cargo items.
+ * 
+ * In the future, other classes can extend the base CargoContainer and CargoItem classes
+ * to provide additional functionality reasonably easily.
+ */
 var Cargo = IgeClass.extend({
 	classId: 'Cargo',
 	
@@ -43,6 +53,10 @@ var Cargo = IgeClass.extend({
 		return this._isUnlimited;
 	},
 
+	/**
+	 * Adds a single Block to the player's cargo inventory.
+	 * Automatically encapsulates the block in a CargoItem.
+	 */
 	addBlock: function(block) {
 		if (block === undefined) {
 			return this;
@@ -53,6 +67,10 @@ var Cargo = IgeClass.extend({
 		return this.addCargoItem(cargoItem);
 	},
 
+	/**
+	 * Adds a list of Blocks to the player's cargo inventory using addBlock().
+	 * @param blocks an array of all of the Blocks to add
+	 */
 	addBlocks: function(blocks) {
 		for (var block in blocks) {
 			this.addBlock(block);
@@ -61,6 +79,11 @@ var Cargo = IgeClass.extend({
 		return this;
 	},
 
+	/**
+	 * Adds a single existing CargoItem to the player's cargo inventory.
+	 * Does NOT automatically encapsulate objects into CargoItems.
+	 * @param item the CargoItem to add
+	 */
 	addCargoItem: function(item) {
 		if (item === undefined || !this.hasSpace()) {
 			// Do nothing, abort.
@@ -98,6 +121,10 @@ var Cargo = IgeClass.extend({
 		return false;
 	},
 	
+	/**
+	 * Adds a list of CargoItems to the player's cargo inventory.
+	 * @param items an array of CargoItems to add
+	 */
 	addCargoItems: function(items) {
 		for (var item in items) {
 			this.addCargoItem(item);
@@ -106,6 +133,10 @@ var Cargo = IgeClass.extend({
 		return this;
 	},
 
+	/**
+	 * Removes a specific item from the player's cargo inventory by its UUID.
+	 * @param itemId the item UUID to remove (as returned by addItem)
+	 */
 	removeItem: function(itemId) {
 		var itemToRemove = this.getItem(itemId);
 
@@ -118,6 +149,10 @@ var Cargo = IgeClass.extend({
 		itemContainer.unlinkItem(itemId);
 	},
 
+	/**
+	 * Removes all items of a specific type from the player's cargo inventory.
+	 * @param itemType the type of items to remove (given by classId)
+	 */
 	removeItems: function(itemType) {
 		// Find all of the items in the list to remove
 		var indicesForRemoval = [];
@@ -137,6 +172,10 @@ var Cargo = IgeClass.extend({
 		return this;
 	},
 
+	/**
+	 * Gets a specific item by its UUID.
+	 * @param itemId the item's UUID (as returned by addItem)
+	 */
 	getItem: function(itemId) {
 		for (var item in this._items) {
 			if (item.uuid() === itemId) {
@@ -147,6 +186,10 @@ var Cargo = IgeClass.extend({
 		return undefined;
 	},
 	
+	/**
+	 * Gets a list of items of a specific type.
+	 * @param itemType the type of items to list out (given by classId)
+	 */
 	getItems: function(itemType) {
 		var results = [];
 		for (var item in this._items) {
@@ -156,6 +199,10 @@ var Cargo = IgeClass.extend({
 		}
 	},
 	
+	/**
+	 * Gets a list of all of the items contained in the player's cargo inventory.
+	 * @param clone Whether to return a clone of the items or not.
+	 */
 	listItems: function(clone) {
 		if (clone !== undefined && clone) {
 			return JSON.parse(JSON.stringify(clone));
@@ -163,6 +210,9 @@ var Cargo = IgeClass.extend({
 		return this._items;
 	},
 	
+	/**
+	 * Whether or not the cargo hold still has space to add more items.
+	 */
 	hasSpace: function() {
 		if (this.unlimitedSpace()) {
 			return true;
