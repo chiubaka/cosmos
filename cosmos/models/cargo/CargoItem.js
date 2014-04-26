@@ -22,7 +22,6 @@ var CargoItem = IgeClass.extend({
     init: function(block) {
     	this._id = UuidGenerator.gen();
     	this._entity = JSON.parse(JSON.stringify(block));
-    	this._container = container;
 
 	    this.updateLastModified();
     },
