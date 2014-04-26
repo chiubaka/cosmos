@@ -28,19 +28,19 @@ var Block = IgeEntity.extend({
 			// Enable caching so that the smart textures aren't reevaluated every time.
 			this.compositeCache(true);
 			this.cacheSmoothing(true);
-
-			this.mouseDown(function(event, control) {
-				var data = {
-					blockGridId: this.blockGrid().id(),
-					row: this._row,
-					col: this._col
-				};
-
-				ige.network.send('blockClicked', data);
-
-				this.blockGrid().remove(this._row, this._col);
-			});
 		}
+	},
+
+	mouseDown: function(event, control) {
+		var data = {
+			blockGridId: this.blockGrid().id(),
+			row: this._row,
+			col: this._col
+		};
+
+		ige.network.send('blockClicked', data);
+
+		this.blockGrid().remove(this._row, this._col);
 	},
 
 	blockGrid: function() {

@@ -37,7 +37,8 @@ var config = {
 		{name: 'FixtureDebuggingEntity', path: './gameClasses/debug/FixtureDebuggingEntity'},
 
 		/* Libraries used */
-		{name: 'WeightedSelection', path: './lib/weighted'}
+		{name: 'WeightedSelection', path: './lib/weighted'},
+		{name: 'UuidGenerator', path: './lib/UuidGenerator'}
 	]
 };
 
