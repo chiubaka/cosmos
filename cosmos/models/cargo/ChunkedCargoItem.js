@@ -1,4 +1,15 @@
-﻿var ChunkedCargoItem = IgeClass.extend({
+﻿/**
+ * ChunkedCargoItem.js
+ * @author Derrick Liu
+ * 
+ * WIP: An example of extending CargoItems to serve as chunk containers.
+ * 
+ * Chunks are the drops that result from mining asteroids and ore. Chunks
+ * represent the viable material that is collected from the mining process.
+ * After a certain number of mined chunks are collected, these chunk containers
+ * could be coalesced into whole blocks of a particular element.
+ */
+var ChunkedCargoItem = CargoItem.extend({
 	classId: 'ChunkedCargoItem',
 
 	/**
@@ -17,6 +28,7 @@
 	_chunks: [],
 
 	init: function(item) {
-		throw "Not implemented!";
+		this._chunks = [];
+		CargoItem.prototype.init.call(this, item);
 	}
 });

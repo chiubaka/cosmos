@@ -1,8 +1,18 @@
-﻿var CargoContainer2D = CargoContainer.extend({
+﻿/**
+ * CargoContainer2D.js
+ * @author Derrick Liu
+ * 
+ * WIP: A 2D extension of a CargoContainer that represents a physical cargo block and its dimensions
+ * on a player's ship.
+ * 
+ * This is an example of how CargoContainers can be extended. Many methods have not been implemented yet.
+ */
+var CargoContainer2D = CargoContainer.extend({
 	classId: 'CargoContainer2D',
 
 	_width: 1,
 	_height: 1,
+	_block: undefined,
 
 	init: function(width, height) {
 		if (width <= 0 || height <= 0) {
@@ -22,23 +32,23 @@
 		}
 	},
 
-	addItem: function(item) {
-		
+	linkItem: function(item) {
+		return CargoContainer.prototype.linkItem.call(this, item);
 	},
 
-	getItems: function(itemId) {
-		throw "Not implemented";
+	unlinkItem: function(itemId) {
+		return CargoContainer.prototype.unlinkItem.call(this, itemId);
 	},
 
-	capacity: function() {
-		return this._capacity;
+	hasItem: function(itemId) {
+		return CargoContainer.prototype.hasItem.call(this, itemId);
 	},
 
-	numItems: function() {
-		return this._numItems;
+	getItem: function(itemId) {
+		return CargoContainer.prototype.getItem.call(this, itemId);
 	},
 
 	hasSpace: function() {
-		return (this._capacity - this._numItems > 0);
+		return CargoContainer.prototype.hasSpace.call(this);
 	}
 });
