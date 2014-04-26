@@ -92,7 +92,7 @@ var Player = BlockGrid.extend({
 			ige.box2d._scaleRatio, fixtureDef.shape.data.y / ige.box2d._scaleRatio));
 
 		tempFixture.shape = tempShape;
-		
+
 		this._box2dBody.CreateFixture(tempFixture);
 
 		return this;
@@ -111,7 +111,6 @@ var Player = BlockGrid.extend({
 			this._attractionStrength = strength;
 			return this;
 		}
-		
 	},
 
 	/**
@@ -120,6 +119,7 @@ var Player = BlockGrid.extend({
 	 */
 	onBlockCollect: function(block) {
 		//console.log("Block collected!");
+		//TODO: add a cool animation or sound here.
 	},
 
 	/**
@@ -166,6 +166,7 @@ var Player = BlockGrid.extend({
 						var block = blockRow[col];
 
 						if(block && block.classId() === "EngineBlock") {
+							//TODO: make this actually apply the impulse at the location of the engine block
 							this._box2dBody.ApplyImpulse(impulse, location);
 						}
 					}

@@ -51,8 +51,9 @@ var config = {
 		{ name: 'ArrayUtils', path: './utils/ArrayUtils' },
 
 		/* === EXTERNAL LIBRARIES === */
-		{ name: 'WeightedSelection', path: './lib/weighted' }
-
+		{ name: 'WeightedSelection', path: './lib/weighted' },
+		{ name: 'UuidGenerator', path: './lib/UuidGenerator' }
+>>>>>>> master
 	]
 };
 
