@@ -1,3 +1,10 @@
+﻿/**
+ * CargoItem.js
+ * @author Derrick Liu
+ * 
+ * The CargoItem class represents a single item in a player's cargo inventory.
+ * This item contains a reference to the CargoContainer that contains it.
+ */
 var CargoItem = IgeClass.extend({
     classId: 'CargoItem',
 
