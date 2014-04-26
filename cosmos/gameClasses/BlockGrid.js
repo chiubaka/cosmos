@@ -23,7 +23,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 				.compositeCache(true)
 				.mount(this)
 				.blockGrid(this);
-				
+
 			this.mountGrid();
 		}
 	},

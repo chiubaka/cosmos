@@ -3,22 +3,17 @@ var RenderContainer = IgeEntity.extend({
 
 	_blockGrid: undefined,
 
-	init: function () {
-		IgeEntity.prototype.init.call(this);
-	},
-
 	/*
 	* The general strategy for handling clicks is to:
 	* 1. Unrotate the click coordinate
 	* 2. Compare the unrotated click coordinate to where the blocks would be if the BlockGrid were not rotated
 	* 3. Fire the mouseDown() event on the appropriate block
 	*/
-	mouseDown: function(event, control) {
-		console.log("TEST");
+	mouseDownHandler: function(event, control) {
 		// event.igeBaseX and event.igeBaseY give coordinates relative to the clicked entity's origin (center)
 
 		// The position of the click in world coordinates
-		var mousePosWorld = _blockGrid.mousePosWorld();
+		var mousePosWorld = this._blockGrid.mousePosWorld();
 		var worldX = mousePosWorld.x;
 		var worldY = mousePosWorld.y;
 
@@ -36,7 +31,7 @@ var RenderContainer = IgeEntity.extend({
 		// This is the BlockGrid's rotation, not the render container's, since the render container does
 		// not rotate with respect to its parent.
 		// Negative because we want to reverse the rotation.
-		var theta = -_blockGrid._rotate.z;
+		var theta = -this._blockGrid._rotate.z;
 
 		// The unrotated coordinates for comparison against an unrotated grid with respect to the center of the
 		// entity
@@ -45,8 +40,8 @@ var RenderContainer = IgeEntity.extend({
 		var unrotatedY = aabbRelativeX * Math.sin(theta) + aabbRelativeY * Math.cos(theta);
 
 		// Height and width of the grid area
-		var width = _blockGrid.width();
-		var height = _blockGrid.height();
+		var width = this._blockGrid.width();
+		var height = this._blockGrid.height();
 
 		// Check if the click was out of the grid area (happens because axis-aligned bounding boxes are larger
 		// than the non-axis-aligned grid area)
@@ -67,7 +62,7 @@ var RenderContainer = IgeEntity.extend({
 		var row = Math.floor(gridY / Block.prototype.HEIGHT);
 		var col = Math.floor(gridX / Block.prototype.WIDTH);
 
-		var block = self._grid[row][col];
+		var block = this._blockGrid._grid[row][col];
 
 		if (block === undefined) {
 			return;
@@ -87,6 +82,12 @@ var RenderContainer = IgeEntity.extend({
 
 		this._blockGrid = newBlockGrid;
 		return this;
+	},
+
+	init: function () {
+		IgeEntity.prototype.init.call(this);
+
+		this.mouseDown(this.mouseDownHandler);
 	}
 });
 
