@@ -246,7 +246,7 @@ var Cargo = IgeClass.extend({
 	 * Retrieve a specific cargo container from a player's cargo inventory.
 	 */
 	getContainer: function(index) {
-		throw "Not implemented!";
+		return this._containers[index];
 	},
 	
 	/**
