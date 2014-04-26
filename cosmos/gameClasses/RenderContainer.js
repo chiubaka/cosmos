@@ -14,6 +14,7 @@ var RenderContainer = IgeEntity.extend({
 	* 3. Fire the mouseDown() event on the appropriate block
 	*/
 	mouseDown: function(event, control) {
+		console.log("TEST");
 		// event.igeBaseX and event.igeBaseY give coordinates relative to the clicked entity's origin (center)
 
 		// The position of the click in world coordinates
