@@ -95,7 +95,6 @@ var Client = IgeClass.extend({
 
 						GameInit.init(self);
 						ige.editor.showStats();
-
 					});
 				}
 			});

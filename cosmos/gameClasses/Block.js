@@ -1,9 +1,12 @@
 var Block = IgeEntity.extend({
 	classId: 'Block',
+
 	WIDTH: 26,
 	HEIGHT: 26,
+
 	_row: undefined,
 	_col: undefined,
+	
 	_fixture: undefined,
 	_fixtureDef:undefined,
 
@@ -15,7 +18,7 @@ var Block = IgeEntity.extend({
 		IgeEntity.prototype.init.call(this);
 
 		// Use an even number so values don't have to become approximate when we divide by two
-		this.width(26).height(26);
+		this.width(this.WIDTH).height(this.HEIGHT);
 
 		this.hp = 10; //this is the default hp of all blocks. Subclasses of block can have a different hp.
 
@@ -29,19 +32,19 @@ var Block = IgeEntity.extend({
 			// Enable caching so that the smart textures aren't reevaluated every time.
 			this.compositeCache(true);
 			this.cacheSmoothing(true);
-
-			this.mouseDown(function(event, control) {
-				var data = {
-					blockGridId: this.blockGrid().id(),
-					row: this._row,
-					col: this._col
-				};
-
-				ige.network.send('blockClicked', data);
-
-				this.blockGrid().remove(this._row, this._col);
-			});
 		}
+	},
+
+	mouseDown: function(event, control) {
+		var data = {
+			blockGridId: this.blockGrid().id(),
+			row: this._row,
+			col: this._col
+		};
+
+		ige.network.send('blockClicked', data);
+
+		this.blockGrid().remove(this._row, this._col);
 	},
 
 	blockGrid: function() {
