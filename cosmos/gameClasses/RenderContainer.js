@@ -71,8 +71,13 @@ var RenderContainer = IgeEntity.extend({
 		// TODO: This might be dangerous, since some of the event properties should be changed so that they are
 		// relative to the child's bounding box, but since we don't use any of those properties for the moment,
 		// ignore that.
-		block.mouseDown(event, control);
-		this.cacheDirty(true);
+		if (this._blockGrid._grid[row+1][col] == undefined ||
+			this._blockGrid._grid[row-1][col] == undefined ||
+			this._blockGrid._grid[row][col+1] == undefined ||
+			this._blockGrid._grid[row][col-1] == undefined) {
+			block.mouseDown(event, control);
+			this.cacheDirty(true);
+		}
 	},
 
 	blockGrid: function(newBlockGrid) {
