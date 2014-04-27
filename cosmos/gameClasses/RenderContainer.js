@@ -3,6 +3,20 @@ var RenderContainer = IgeEntity.extend({
 
 	_blockGrid: undefined,
 
+	getBlockFromBlockGrid: function(row, col) {
+		if(row < 0 || col < 0) {
+			return undefined;
+		}
+		if (row >= this._blockGrid.grid().length) {
+			return undefined;
+		}
+		if (col >= this._blockGrid.grid()[0].length) {
+			return undefined;
+		}
+
+		return this._blockGrid.grid()[row][col];
+	},
+
 	/*
 	* The general strategy for handling clicks is to:
 	* 1. Unrotate the click coordinate
@@ -71,10 +85,10 @@ var RenderContainer = IgeEntity.extend({
 		// TODO: This might be dangerous, since some of the event properties should be changed so that they are
 		// relative to the child's bounding box, but since we don't use any of those properties for the moment,
 		// ignore that.
-		if (this._blockGrid._grid[row+1][col] == undefined ||
-			this._blockGrid._grid[row-1][col] == undefined ||
-			this._blockGrid._grid[row][col+1] == undefined ||
-			this._blockGrid._grid[row][col-1] == undefined) {
+		if (this.getBlockFromBlockGrid(row+1, col) == undefined ||
+			this.getBlockFromBlockGrid(row-1, col) == undefined ||
+			this.getBlockFromBlockGrid(row, col+1) == undefined ||
+			this.getBlockFromBlockGrid(row, col-1) == undefined) {
 			block.mouseDown(event, control);
 			this.cacheDirty(true);
 		}
