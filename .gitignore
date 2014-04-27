@@ -17,3 +17,9 @@ obj/
 
 # Mac OS X
 .DS_Store
+
+# Codekit configuration file
+*.codekit
+
+# Codekit minified files
+*-ck.js

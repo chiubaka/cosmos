@@ -18,6 +18,7 @@ var igeClientConfig = {
 		/* Blocks */
 		'./gameClasses/Block.js',
 		'./gameClasses/BlockGrid.js',
+		'./gameClasses/RenderContainer.js',
 
 		/* Ship part blocks */
 		'./gameClasses/blocks/Part.js',

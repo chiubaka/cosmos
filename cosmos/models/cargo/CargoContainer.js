@@ -51,7 +51,7 @@ var CargoContainer = IgeClass.extend({
 		}
 
 		if (indexToRemove >= 0) {
-			ArrayUtils.remove(this._itemStore, indexToRemove);
+			this._itemStore.remove(indexToRemove);
 		}
 	},
 

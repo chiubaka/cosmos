@@ -48,7 +48,7 @@ var config = {
 		{ name: 'FixtureDebuggingEntity', path: './gameClasses/debug/FixtureDebuggingEntity' },
 
 		/* Helper Utilities */
-		{ name: 'ArrayUtils', path: './utils/ArrayUtils' },
+		{ name: 'PrototypeMixins', path: './utils/PrototypeMixins' },
 		{ name: 'RandomInterval', path: './utils/RandomInterval' },
 
 		/* === EXTERNAL LIBRARIES === */
