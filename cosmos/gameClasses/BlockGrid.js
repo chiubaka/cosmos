@@ -11,7 +11,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	init: function(data) {
 		var self = this;
-		this.updateCount = 0;
 
 		IgeEntityBox2d.prototype.init.call(this);
 
@@ -20,6 +19,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 
 		if (!ige.isServer) {
+			this.updateCount = 0;
+			// Add some randomness so we don't calculate aabb all at once
+			this.updateTrigger = RandomInterval.randomIntFromInterval(70, 120);
+
 			this._renderContainer = new IgeEntity()
 				.compositeCache(true)
 				.mount(this);
@@ -368,9 +371,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 			// before the update loop even happens, but I had trouble finding the right place to do this and even
 			// trying to trigger this code on just the first update didn't seem to work.
 			this.updateCount++;
-			if (this.updateCount == 10)
+			if ((this.updateCount == 10) ||
+				  (this.updateCount % this.updateTrigger == 0)) {
 				this._renderContainer.aabb(true);
-
+			}
 		}
 		IgeEntityBox2d.prototype.update.call(this, ctx);
 	},

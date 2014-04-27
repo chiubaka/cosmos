@@ -3,7 +3,7 @@ var Client = IgeClass.extend({
 
 	init: function () {
 		//ige.timeScale(0.1);
-		ige.setFps(60);
+		ige.setFps(30);
 
 		// Load our textures
 		var self = this;
