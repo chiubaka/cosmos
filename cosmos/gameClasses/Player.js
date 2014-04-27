@@ -25,7 +25,7 @@ var Player = BlockGrid.extend({
 		this.translateTo(-200, -200, 0);
 
 		if (ige.isServer) {
-			var blockMinedListener = function () {
+			var blockMinedListener = function (blockClassId) {
 				this.laserBeam.destroy();
 				this.laserBeam = undefined;
 			}

@@ -175,9 +175,13 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 			// TODO: Vary mining speed based on block material
 			case 'mine':
-				setTimeout(function() { 
+				setTimeout(function() {
+					// Emit a message to remove laser, add to cargo, etc
+					var blockClassId = self._grid[data.row][data.col].classId();
+					player.emit('block mined', [blockClassId]);
+
+					// Remove block server side, then send remove msg to client
 					self.remove(data.row, data.col);
-					player.emit('block mined');
 					data.action = 'remove';
 					ige.network.send('blockAction', data);
 				}, 2000);
