@@ -71,13 +71,13 @@ var AsteroidGenerator = {
 			var block = blocksToPlace[blockIndex];
 
 			if (asteroidConstr[block.x] !== undefined && asteroidConstr[block.x][block.y] !== undefined) {
-				ArrayUtils.remove(blocksToPlace, blockIndex);
+				blocksToPlace.remove(blockIndex);
 				continue;
 			}
 
 			if (block.x > asteroidDim || block.x < 0 ||
 				block.y > asteroidDim || block.y < 0) {
-				ArrayUtils.remove(blocksToPlace, blockIndex);
+				blocksToPlace.remove(blockIndex);
 				continue;
 			}
 
@@ -102,7 +102,7 @@ var AsteroidGenerator = {
 			blocksToPlace.push({ x: block.x, y: block.y + 1 });
 
 			// Remove the block
-			ArrayUtils.remove(blocksToPlace, blockIndex);
+			blocksToPlace.remove(blockIndex);
 		}
 
 		// Now, prune all unused columns in the asteroid to result in the final asteroid

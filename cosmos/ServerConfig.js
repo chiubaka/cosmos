@@ -40,7 +40,7 @@ var config = {
 		{name: 'UuidGenerator', path: './lib/UuidGenerator'},
 
 		/* Utilities */
-		{name: 'ArrayUtils', path: './utils/ArrayUtils'}
+		{name: 'PrototypeMixins', path: './utils/PrototypeMixins'}
 	]
 };
 
