@@ -20,3 +20,6 @@ obj/
 
 # Codekit configuration file
 *.codekit
+
+# Codekit minified files
+*-ck.js
