@@ -33,7 +33,7 @@ var igeClientConfig = {
 		'./gameClasses/blocks/elements/CarbonBlock.js',
 		'./gameClasses/blocks/elements/IceBlock.js',
 
-		'./gameClasses/LaserBeam.js',
+		'./gameClasses/mining/LaserBeam.js',
 
 		/* Debugging */
 		'./gameClasses/debug/FixtureDebuggingEntity.js',

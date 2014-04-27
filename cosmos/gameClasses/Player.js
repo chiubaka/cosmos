@@ -128,7 +128,7 @@ var Player = BlockGrid.extend({
 		else {
 			this._attractionStrength = strength;
 			return this;
-		}		
+		}
 	},
 
 	/**

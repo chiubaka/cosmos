@@ -32,7 +32,7 @@ var config = {
 		{name: 'ExampleShips', path: './gameClasses/ExampleShips'},
 		{name: 'AsteroidGenerator', path: './gameClasses/AsteroidGenerator'},
 
-		{name: 'LaserBeam', path: './gameClasses/LaserBeam'},
+		{name: 'LaserBeam', path: './gameClasses/mining/LaserBeam'},
 
 		/* Debugging */
 		{name: 'FixtureDebuggingEntity', path: './gameClasses/debug/FixtureDebuggingEntity'},
