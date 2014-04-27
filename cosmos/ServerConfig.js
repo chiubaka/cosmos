@@ -28,6 +28,9 @@ var config = {
 		{ name: 'IronBlock', path: './gameClasses/blocks/elements/IronBlock' },
 		{ name: 'IceBlock', path: './gameClasses/blocks/elements/IceBlock' },
 
+		/* Effects */
+		{name: 'LaserBeam', path: './gameClasses/mining/LaserBeam'},
+
 		/* Structures */
 		{ name: 'ExampleShips', path: './gameClasses/ExampleShips' },
 

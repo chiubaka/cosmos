@@ -77,7 +77,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	Static function
 	Returns a new block grid with the given dimensions.
 
-	POTENTIAL BUG: are numCols and numRows swithed?
+	POTENTIAL BUG: are numCols and numRows switched?
 	*/
 	newGridFromDimensions: function (numCols, numRows) {
 		var grid = [];
@@ -93,15 +93,46 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return grid;
 	},
 
-	processBlockAction: function(data) {
+	processBlockActionServer: function(data, player) {
+		var self = this;
+
 		switch (data.action) {
 			case 'remove':
 				this.remove(data.row, data.col);
 				break;
+
+			// TODO: Vary mining speed based on block material
+			case 'mine':
+				setTimeout(function() {
+					// Emit a message saying that a block has been mined, but not
+					// necessarily collected. This is used for removing the laser.
+					var blockClassId = self._grid[data.row][data.col].classId();
+					player.emit('block mined', [blockClassId]);
+
+					// Remove block server side, then send remove msg to client
+					self.remove(data.row, data.col);
+					data.action = 'remove';
+					ige.network.send('blockAction', data);
+				}, 2000);
+				
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
 		}
 	},
+
+	processBlockActionClient: function(data) {
+		var self = this;
+
+		switch (data.action) {
+			case 'remove':
+				this.remove(data.row, data.col);
+				break;
+
+			default:
+				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
+		}
+	},
+
 
 	/**
 	 * Remove is intended to remove the block from the grid,

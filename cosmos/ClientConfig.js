@@ -8,6 +8,7 @@ var igeClientConfig = {
 
 		/* Ship part blocks */
 		'./gameClasses/blocks/Part.js',
+		//-------------
 		'./gameClasses/blocks/parts/EngineBlock.js',
 		'./gameClasses/blocks/parts/PowerBlock.js',
 		'./gameClasses/blocks/parts/FuelBlock.js',
@@ -18,9 +19,13 @@ var igeClientConfig = {
 
 		/* Element blocks */
 		'./gameClasses/blocks/Element.js',
+		//--------------
 		'./gameClasses/blocks/elements/IronBlock.js',
 		'./gameClasses/blocks/elements/CarbonBlock.js',
 		'./gameClasses/blocks/elements/IceBlock.js',
+
+		/* Effects */
+		'./gameClasses/mining/LaserBeam.js',
 
 		/* Structures */
 		'./gameClasses/ExampleShips.js',

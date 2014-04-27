@@ -100,6 +100,7 @@ var GameInit = {
 						if (!shipFixture.m_isSensor) {
 							// Disable contact so player doesn't move due to collision
 							contact.SetEnabled(false);
+							// TODO: Add to cargo. Consider emitting an event?
 							player.onBlockCollect(asteroid);
 							asteroid.destroy();
 						}

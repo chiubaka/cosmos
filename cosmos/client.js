@@ -29,9 +29,10 @@ var Client = IgeClass.extend({
 			block: new IgeTexture(gameRoot + 'assets/BlockTexture.js'),
 			background_helix_nebula: new IgeTexture(gameRoot + 
 				'assets/backgrounds/helix_nebula.jpg'),
-
 			fixtureDebuggingTexture: new IgeTexture(gameRoot +
 				'assets/debug/FixtureDebuggingTexture.js'),
+			laserBeamTexture: new IgeTexture(gameRoot +
+				'assets/laser/laserbeam.png')
 		};
 
 		ige.on('texturesLoaded', function () {
