@@ -1,18 +1,14 @@
 var igeClientConfig = {
 	include: [
 		/* === GAME SETUP === */
-		/* Initialization */
-		'./client.js',
-		'./index.js',
-
-		'./gameClasses/GameInit.js',
-		'./gameClasses/ClientNetworkEvents.js',
-
 		/* Configuration */
 		'./config/DeploymentConfig.js',
 
-		/* === PLAYER STATE === */
-		'./gameClasses/Player.js',
+		/* Initialization */
+		'./gameClasses/GameInit.js',
+		'./gameClasses/ClientNetworkEvents.js',
+		'./client.js',
+		'./index.js',
 
 		/* === ENVIRONMENT STATE === */
 		/* Blocks */
@@ -41,6 +37,9 @@ var igeClientConfig = {
 
 		/* Environment scenery */
 		'./gameClasses/Background.js',
+
+		/* === PLAYER STATE === */
+		'./gameClasses/Player.js',
 
 		/* === SUPPLEMENTAL FUNCTIONALITY === */
 		/* Debugging */
