@@ -44,9 +44,7 @@ var igeClientConfig = {
 
 		/* Utility scripts*/
 		'./utils/DeploymentUtils.js',
-
-		/* Library */
-		'./lib/TL_Random.js'
+		'./utils/RandomInterval.js'
 	]
 };
 

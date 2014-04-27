@@ -1,9 +1,12 @@
 var Block = IgeEntity.extend({
 	classId: 'Block',
+
 	WIDTH: 26,
 	HEIGHT: 26,
+
 	_row: undefined,
 	_col: undefined,
+	
 	_fixture: undefined,
 	_fixtureDef:undefined,
 
@@ -15,31 +18,33 @@ var Block = IgeEntity.extend({
 		IgeEntity.prototype.init.call(this);
 
 		// Use an even number so values don't have to become approximate when we divide by two
-		this.width(26).height(26);
+		this.width(this.WIDTH).height(this.HEIGHT);
 
 		this.hp = 10; //this is the default hp of all blocks. Subclasses of block can have a different hp.
 
 		if (!ige.isServer) {
 			this.updateCount = 0;
 			// Add some randomness so we don't calculate aabb all at once
-			this.updateTrigger = TL_Random.randomIntFromInterval(70, 120);			
-			
+			this.updateTrigger = RandomInterval.randomIntFromInterval(70, 120);
+
 			this.texture(ige.client.textures.block);
 
 			// Enable caching so that the smart textures aren't reevaluated every time.
 			this.compositeCache(true);
 			this.cacheSmoothing(true);
-
-			this.mouseDown(function(event, control) {
-				var data = {
-					blockGridId: this.blockGrid().id(),
-					row: this._row,
-					col: this._col
-				};
-
-				ige.network.send('blockClicked', data);
-			});
 		}
+	},
+
+	mouseDown: function(event, control) {
+		var data = {
+			blockGridId: this.blockGrid().id(),
+			row: this._row,
+			col: this._col
+		};
+
+		ige.network.send('blockClicked', data);
+
+		this.blockGrid().remove(this._row, this._col);
 	},
 
 	blockGrid: function() {
@@ -134,9 +139,10 @@ var Block = IgeEntity.extend({
 			// before the update loop even happens, but I had trouble finding the right place to do this and even
 			// trying to trigger this code on just the first update didn't seem to work.
 			this.updateCount++;
-			if ((this.updateCount == 10) ||
-					(this.updateCount % this.updateTrigger == 0))
+			if ((this.updateCount < 10) ||
+				  (this.updateCount % this.updateTrigger == 0)) {
 				this.aabb(true);
+			}
 		}
 
 		IgeEntity.prototype.update.call(this, ctx);

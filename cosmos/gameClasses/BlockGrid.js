@@ -21,7 +21,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		if (!ige.isServer) {
 			this.updateCount = 0;
 			// Add some randomness so we don't calculate aabb all at once
-			this.updateTrigger = TL_Random.randomIntFromInterval(70, 120);
+			this.updateTrigger = RandomInterval.randomIntFromInterval(70, 120);
 
 			this._renderContainer = new IgeEntity()
 				.compositeCache(true)
@@ -96,7 +96,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 				// TODO: This might be dangerous, since some of the event properties should be changed so that they are
 				// relative to the child's bounding box, but since we don't use any of those properties for the moment,
 				// ignore that.
-				block._mouseDown(event, control);
+				block.mouseDown(event, control);
 				self._renderContainer.cacheDirty(true);
 			});
 
@@ -211,7 +211,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		if (ige.isServer) {
 			this._box2dBody.DestroyFixture(block.fixture());
-			
+
 			// Calculate position of new BlockGrid, taking into account rotation
 			var gridX = this.translate().x();
 			var gridY = this.translate().y();
@@ -221,7 +221,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 			var finalX = 	Math.cos(theta) * fixtureX -
 										Math.sin(theta) * fixtureY + gridX;
-			var finalY =	Math.sin(theta) * fixtureX + 
+			var finalY =	Math.sin(theta) * fixtureX +
 										Math.cos(theta) * fixtureY + gridY;
 
 			// Create new IgeEntityBox2d separate from parent
@@ -397,12 +397,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 			// before the update loop even happens, but I had trouble finding the right place to do this and even
 			// trying to trigger this code on just the first update didn't seem to work.
 			this.updateCount++;
-			if ((this.updateCount == 10) ||
-				  (this.updateCount % this.updateTrigger == 0))
+			if ((this.updateCount < 10) ||
+				 ((this.updateCount % this.updateTrigger == 0))) {
 				this._renderContainer.aabb(true);
-
+			}
 		}
-
 		IgeEntityBox2d.prototype.update.call(this, ctx);
 	},
 

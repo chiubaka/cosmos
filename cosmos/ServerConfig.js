@@ -39,7 +39,10 @@ var config = {
 
 		/* Libraries used */
 		{name: 'WeightedSelection', path: './lib/weighted'},
-		{name: 'TL_Random', path: './lib/TL_Random'}
+		{name: 'UuidGenerator', path: './lib/UuidGenerator'},
+
+		/* Utils */
+		{name: 'RandomInterval', path: './utils/RandomInterval'}
 	]
 };
 
