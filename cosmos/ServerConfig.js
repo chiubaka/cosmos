@@ -40,7 +40,8 @@ var config = {
 		{name: 'WeightedSelection', path: './lib/weighted'},
 		{name: 'UuidGenerator', path: './lib/UuidGenerator'},
 
-		/* Utils */
+		/* Utilities */
+		{name: 'PrototypeMixins', path: './utils/PrototypeMixins'},
 		{name: 'RandomInterval', path: './utils/RandomInterval'}
 	]
 };
