@@ -43,8 +43,6 @@ var Block = IgeEntity.extend({
 		};
 
 		ige.network.send('blockClicked', data);
-
-		this.blockGrid().remove(this._row, this._col);
 	},
 
 	blockGrid: function() {
