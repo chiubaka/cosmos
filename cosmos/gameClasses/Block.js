@@ -24,7 +24,8 @@ var Block = IgeEntity.extend({
 
 		if (!ige.isServer) {
 			this.updateCount = 0;
-			// Add some randomness so we don't calculate aabb all at once
+			// Add some randomness to spread out expensive aabb calls over time.
+			// This leads to decreased stuttering.
 			this.updateTrigger = RandomInterval.randomIntFromInterval(70, 120);
 
 			this.texture(ige.client.textures.block);
@@ -43,8 +44,6 @@ var Block = IgeEntity.extend({
 		};
 
 		ige.network.send('blockClicked', data);
-
-		this.blockGrid().remove(this._row, this._col);
 	},
 
 	blockGrid: function() {
