@@ -176,7 +176,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 			// TODO: Vary mining speed based on block material
 			case 'mine':
 				setTimeout(function() {
-					// Emit a message to remove laser, add to cargo, etc
+					// Emit a message saying that a block has been mined, but not
+					// necessarily collected. This is used for removing the laser.
 					var blockClassId = self._grid[data.row][data.col].classId();
 					player.emit('block mined', [blockClassId]);
 
