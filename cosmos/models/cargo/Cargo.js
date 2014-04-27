@@ -142,7 +142,7 @@ var Cargo = IgeClass.extend({
 
 		// Remove the item from the item list
 		var itemIndex = this._items.indexOf(itemToRemove);
-		ArrayUtils.remove(this._items, itemIndex);
+		this._items.remove(itemIndex);
 
 		// Remove the item from a container.
 		var itemContainer = itemToRemove.container();
