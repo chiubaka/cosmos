@@ -70,10 +70,6 @@ var ServerNetworkEvents = {
 
 		// Activate mining laser
 		player.addLaser();
-
-		// Send explicit block command because individual blocks are
-		// not streamed
-		//ige.network.send('blockAction', data);
 	}
 };
 

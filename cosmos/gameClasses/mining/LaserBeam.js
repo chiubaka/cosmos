@@ -9,8 +9,8 @@ var LaserBeam = IgeEntity.extend({
 
 		// No need for server to be concerned with tweening
 		if (!ige.isServer) {
-				.width(300)
-				.newTween();
+			.width(300)
+			.newTween();
 		}
 	},
 

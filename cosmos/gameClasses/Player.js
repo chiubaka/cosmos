@@ -39,7 +39,7 @@ var Player = BlockGrid.extend({
 		this.streamSections(['transform', 'score']);
 	},
 
-	// Server only
+	// Created on server, streamed to all clients
 	addLaser: function() {
 		
 		this.laserBeam = new LaserBeam()
