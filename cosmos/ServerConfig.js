@@ -1,48 +1,62 @@
 var config = {
 	include: [
-		/* Our custom game JS scripts */
-		{name: 'ServerNetworkEvents', path: './gameClasses/ServerNetworkEvents'},
-		{name: 'GameInit', path: './gameClasses/GameInit'},
+		/* === GAME SETUP === */
+		/* Initialization */
+		{ name: 'ServerNetworkEvents', path: './gameClasses/ServerNetworkEvents' },
+		{ name: 'GameInit', path: './gameClasses/GameInit' },
 
-		/* Our custom classes */
-		{name: 'Block', path: './gameClasses/Block'},
-		{name: 'BlockGrid', path: './gameClasses/BlockGrid'},
+		/* Configuration */
 
-		/* Parts */
-		{name: 'Part', path: './gameClasses/blocks/Part'},
-		//-----------
-		{name: 'PowerBlock', path: './gameClasses/blocks/parts/PowerBlock'},
-		{name: 'EngineBlock', path: './gameClasses/blocks/parts/EngineBlock'},
-		{name: 'FuelBlock', path: './gameClasses/blocks/parts/FuelBlock'},
-		{name: 'CargoBlock', path: './gameClasses/blocks/parts/CargoBlock'},
-		{name: 'ControlBlock', path: './gameClasses/blocks/parts/ControlBlock'},
-		{name: 'MiningLaserBlock', path: './gameClasses/blocks/parts/MiningLaserBlock'},
-		{name: 'ThrusterBlock', path: './gameClasses/blocks/parts/ThrusterBlock'},
+		/* === ENVIRONMENT STATE === */
+		/* Blocks */
+		{ name: 'Block', path: './gameClasses/Block' },
+		{ name: 'BlockGrid', path: './gameClasses/BlockGrid' },
 
-		/* Elements */
-		{name: 'Element', path: './gameClasses/blocks/Element'},
-		//-------------
-		{name: 'CarbonBlock', path: './gameClasses/blocks/elements/CarbonBlock'},
-		{name: 'IronBlock', path: './gameClasses/blocks/elements/IronBlock'},
-		{name: 'IceBlock', path:'./gameClasses/blocks/elements/IceBlock'},
+		/* Ship part blocks */
+		{ name: 'Part', path: './gameClasses/blocks/Part' },
+		{ name: 'PowerBlock', path: './gameClasses/blocks/parts/PowerBlock' },
+		{ name: 'EngineBlock', path: './gameClasses/blocks/parts/EngineBlock' },
+		{ name: 'FuelBlock', path: './gameClasses/blocks/parts/FuelBlock' },
+		{ name: 'CargoBlock', path: './gameClasses/blocks/parts/CargoBlock' },
+		{ name: 'ControlBlock', path: './gameClasses/blocks/parts/ControlBlock' },
+		{ name: 'MiningLaserBlock', path: './gameClasses/blocks/parts/MiningLaserBlock' },
+		{ name: 'ThrusterBlock', path: './gameClasses/blocks/parts/ThrusterBlock' },
 
-		/* Other classes */
-		{name: 'Player', path: './gameClasses/Player'},
-		{name: 'Background', path: './gameClasses/Background'},
-		{name: 'ExampleShips', path: './gameClasses/ExampleShips'},
-		{name: 'AsteroidGenerator', path: './gameClasses/AsteroidGenerator'},
+		/* Element blocks */
+		{ name: 'Element', path: './gameClasses/blocks/Element' },
+		{ name: 'CarbonBlock', path: './gameClasses/blocks/elements/CarbonBlock' },
+		{ name: 'IronBlock', path: './gameClasses/blocks/elements/IronBlock' },
+		{ name: 'IceBlock', path: './gameClasses/blocks/elements/IceBlock' },
 
+		/* Effects */
 		{name: 'LaserBeam', path: './gameClasses/mining/LaserBeam'},
 
+		/* Structures */
+		{ name: 'ExampleShips', path: './gameClasses/ExampleShips' },
+
+		/* Environment scenery */
+		{ name: 'Background', path: './gameClasses/Background' },
+		{ name: 'AsteroidGenerator', path: './gameClasses/AsteroidGenerator' },
+
+		/* === PLAYER STATE === */
+		{ name: 'Player', path: './gameClasses/Player' },
+
+		/* Cargo */
+		{ name: 'Cargo', path: './models/cargo/Cargo' },
+		{ name: 'CargoContainer', path: './models/cargo/CargoContainer' },
+		{ name: 'CargoItem', path: './models/cargo/CargoItem' },
+
+		/* === SUPPLEMENTAL FUNCTIONALITY=== */
 		/* Debugging */
-		{name: 'FixtureDebuggingEntity', path: './gameClasses/debug/FixtureDebuggingEntity'},
+		{ name: 'FixtureDebuggingEntity', path: './gameClasses/debug/FixtureDebuggingEntity' },
 
-		/* Libraries used */
-		{name: 'WeightedSelection', path: './lib/weighted'},
-		{name: 'UuidGenerator', path: './lib/UuidGenerator'},
+		/* Helper Utilities */
+		{ name: 'PrototypeMixins', path: './utils/PrototypeMixins' },
+		{ name: 'RandomInterval', path: './utils/RandomInterval' },
 
-		/* Utils */
-		{name: 'RandomInterval', path: './utils/RandomInterval'}
+		/* === EXTERNAL LIBRARIES === */
+		{ name: 'WeightedSelection', path: './lib/weighted' },
+		{ name: 'UuidGenerator', path: './lib/UuidGenerator' }
 	]
 };
 
