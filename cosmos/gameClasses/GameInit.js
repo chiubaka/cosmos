@@ -10,6 +10,11 @@ var GameInit = {
 	 * @param game either ige.client or ige.server
 	 */
 	init: function(game) {
+
+		// Disable debug features for more performance
+		ige.debugEnabled(false);
+		ige.debugTiming(false);
+
 		// Load the base scene data
 		game.mainScene = new IgeScene2d()
 			.id('mainScene');
@@ -109,7 +114,7 @@ var GameInit = {
 				.id('helix_nebula_background')
 				.mount(game.spaceBackgroundScene);
 
-			this.initTimeStream(game);
+			//this.initTimeStream(game);
 		}
 	},
 

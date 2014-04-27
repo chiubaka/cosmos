@@ -46,7 +46,8 @@ var igeClientConfig = {
 		'./gameClasses/debug/FixtureDebuggingEntity.js',
 
 		/* Helper utilities */
-		'./utils/DeploymentUtils.js'
+		'./utils/DeploymentUtils.js',
+		'./utils/RandomInterval.js'
 	]
 };
 

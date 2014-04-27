@@ -49,11 +49,11 @@ var config = {
 
 		/* Helper Utilities */
 		{ name: 'ArrayUtils', path: './utils/ArrayUtils' },
+		{ name: 'RandomInterval', path: './utils/RandomInterval' },
 
 		/* === EXTERNAL LIBRARIES === */
 		{ name: 'WeightedSelection', path: './lib/weighted' },
 		{ name: 'UuidGenerator', path: './lib/UuidGenerator' }
->>>>>>> master
 	]
 };
 
