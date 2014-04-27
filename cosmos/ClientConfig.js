@@ -7,6 +7,7 @@ var igeClientConfig = {
 		/* Our custom game JS scripts */
 		'./gameClasses/Block.js',
 		'./gameClasses/BlockGrid.js',
+		'./gameClasses/RenderContainer.js',
 
 		'./gameClasses/GameInit.js',
 		'./gameClasses/ClientNetworkEvents.js',
@@ -41,7 +42,8 @@ var igeClientConfig = {
 		'./index.js',
 
 		/* Utility scripts*/
-		'./utils/DeploymentUtils.js'
+		'./utils/DeploymentUtils.js',
+		'./utils/RandomInterval.js'
 	]
 };
 
