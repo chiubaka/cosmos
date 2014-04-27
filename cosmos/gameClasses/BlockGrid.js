@@ -371,8 +371,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 			// before the update loop even happens, but I had trouble finding the right place to do this and even
 			// trying to trigger this code on just the first update didn't seem to work.
 			this.updateCount++;
-			if ((this.updateCount == 10) ||
-				  (this.updateCount % this.updateTrigger == 0)) {
+			if ((this.updateCount < 10) ||
+				 ((this.updateCount % this.updateTrigger == 0))) {
 				this._renderContainer.aabb(true);
 			}
 		}
