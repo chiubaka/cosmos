@@ -120,7 +120,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 	},
 
-		processBlockActionClient: function(data) {
+	processBlockActionClient: function(data) {
 		var self = this;
 
 		switch (data.action) {
