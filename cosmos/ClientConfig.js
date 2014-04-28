@@ -45,6 +45,9 @@ var igeClientConfig = {
 		'./utils/DeploymentUtils.js',
 		'./utils/RandomInterval.js',
 
+		/* UI */
+		'./gameClasses/ClickInterceptLayer.js',
+
 		/* === GAME SETUP === */
 		/* Configuration */
 		'./config/DeploymentConfig.js',

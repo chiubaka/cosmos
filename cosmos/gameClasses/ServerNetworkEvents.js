@@ -79,7 +79,7 @@ var ServerNetworkEvents = {
 			.category('smallAsteroid')
 			.id('littleAsteroid' + Math.random())
 			.streamMode(1)
-			.mount(game.spaceGameScene)
+			.mount(ige.$("spaceGameScene"))
 			.depth(100)
 			.grid(AsteroidGenerator.singleBlock())
 			.translateTo(data.x, data.y, 0);
