@@ -158,12 +158,10 @@ var Player = BlockGrid.extend({
 
 	/**
 	 * Called every time a ship collects a block
-	 * @param {BlockGrid}
 	 */
 	blockCollectListener: function (player, blockClassId) {
 		//TODO: Add a cool animation or sound here, or on another listener
 		//console.log("Block collected!");
-		//TODO: add a cool animation or sound here.
 	},
 
 	/**
