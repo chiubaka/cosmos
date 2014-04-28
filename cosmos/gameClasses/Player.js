@@ -166,6 +166,7 @@ var Player = BlockGrid.extend({
 	blockCollectListener: function (player, blockClassId) {
 		//TODO: Add a cool animation or sound here, or on another listener
 		//console.log("Block collected!");
+		player.cargo.addBlock(blockClassId);
 	},
 
 	/**
