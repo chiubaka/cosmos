@@ -25,11 +25,8 @@ var Player = BlockGrid.extend({
 		this.translateTo(-200, -200, 0);
 
 		if (ige.isServer) {
-			var blockMinedListener = function (blockClassId) {
-				this.laserBeam.destroy();
-				this.laserBeam = undefined;
-			}
-			this.on('block mined', blockMinedListener);
+			ige.on('block mined', this.blockMinedListener);
+			ige.on('block collected', this.blockCollectListener);
 		}
 		else {
 			this.depth(1);
@@ -132,12 +129,19 @@ var Player = BlockGrid.extend({
 	},
 
 	/**
-	 * Called every time a ship collects a block
-	 * @param {BlockGrid}
+	 * Called every time a ship mines a block
 	 */
-	onBlockCollect: function(block) {
+	blockMinedListener: function (player, blockClassId) {
+		player.laserBeam.destroy();
+		player.laserBeam = undefined;
+	},
+
+	/**
+	 * Called every time a ship collects a block
+	 */
+	blockCollectListener: function (player, blockClassId) {
+		//TODO: Add a cool animation or sound here, or on another listener
 		//console.log("Block collected!");
-		//TODO: add a cool animation or sound here.
 	},
 
 	/**

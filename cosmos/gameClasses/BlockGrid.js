@@ -107,7 +107,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 					// Emit a message saying that a block has been mined, but not
 					// necessarily collected. This is used for removing the laser.
 					var blockClassId = self._grid[data.row][data.col].classId();
-					player.emit('block mined', [blockClassId]);
+					ige.emit('block mined', [player, blockClassId]);
 
 					// Remove block server side, then send remove msg to client
 					self.remove(data.row, data.col);
