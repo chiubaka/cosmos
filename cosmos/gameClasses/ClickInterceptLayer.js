@@ -16,11 +16,10 @@ var ClickInterceptLayer = IgeEntity.extend({
 	 * Intercept clicks and create a new block grid wherever the user clicked
 	 */
 	mouseDownHandler: function(event, control) {
-		console.log("TEST");
-
+		console.log(event);
 		var data = {
-			x: 0,
-			y: 0
+			x: this.mousePosWorld().x,
+			y: this.mousePosWorld().y
 		};//TODO make these not 0
 
 		ige.network.send('backgroundClicked', data);

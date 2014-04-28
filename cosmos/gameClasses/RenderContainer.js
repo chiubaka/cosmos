@@ -86,9 +86,9 @@ var RenderContainer = IgeEntity.extend({
 		// relative to the child's bounding box, but since we don't use any of those properties for the moment,
 		// ignore that.
 		if (this.getBlockFromBlockGrid(row+1, col) == undefined ||
-			this.getBlockFromBlockGrid(row-1, col) == undefined ||
-			this.getBlockFromBlockGrid(row, col+1) == undefined ||
-			this.getBlockFromBlockGrid(row, col-1) == undefined) {
+				this.getBlockFromBlockGrid(row-1, col) == undefined ||
+				this.getBlockFromBlockGrid(row, col+1) == undefined ||
+				this.getBlockFromBlockGrid(row, col-1) == undefined) {
 			block.mouseDown(event, control);
 			this.cacheDirty(true);
 		}
