@@ -30,6 +30,26 @@ var Player = BlockGrid.extend({
 		}
 		else {
 			this.depth(1);
+
+			// TODO: Move this
+			self.laserParticleEmitter = new IgeParticleEmitter()
+				// Set the particle entity to generate for each particle
+				.particle(LaserParticle)
+				// Set particle life to 300ms
+				.lifeBase(300)
+				// Set output to 60 particles a second (1000ms)
+				.quantityBase(60)
+				.quantityTimespan(1000)
+				// Set the particle's death opacity to zero so it fades out as it's lifespan runs out
+				.deathOpacityBase(0)
+				// Set velocity vector to y = 0.05, with variance values
+				.velocityVector(new IgePoint3d(0, 0.05, 0), new IgePoint3d(-0.04, 0.05, 0), new IgePoint3d(0.04, 0.15, 0))
+				// Mount new particles to the object scene
+				.particleMountTarget(this)
+				// Move the particle emitter to the bottom of the ship
+				.translateTo(0, 5, 0)
+				// Mount the emitter to the ship
+				.mount(this);
 		}
 
 		// Define the data sections that will be included in the stream
@@ -138,10 +158,12 @@ var Player = BlockGrid.extend({
 
 	/**
 	 * Called every time a ship collects a block
+	 * @param {BlockGrid}
 	 */
 	blockCollectListener: function (player, blockClassId) {
 		//TODO: Add a cool animation or sound here, or on another listener
 		//console.log("Block collected!");
+		//TODO: add a cool animation or sound here.
 	},
 
 	/**

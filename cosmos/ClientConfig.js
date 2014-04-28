@@ -26,6 +26,7 @@ var igeClientConfig = {
 
 		/* Effects */
 		'./gameClasses/mining/LaserBeam.js',
+		'./gameClasses/mining/LaserParticle.js',
 
 		/* Structures */
 		'./gameClasses/ExampleShips.js',
