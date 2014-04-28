@@ -126,6 +126,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		switch (data.action) {
 			case 'remove':
 				this.remove(data.row, data.col);
+				this._renderContainer.cacheDirty(true);
 				break;
 
 			default:
@@ -173,10 +174,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		block.destroy();
 		this._grid[row][col] = undefined;
-
-		if (!ige.isServer ) {
-			this._renderContainer.cacheDirty(true);
-		}
 	},
 
 	/**
