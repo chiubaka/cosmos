@@ -96,12 +96,16 @@ var GameInit = {
 						var player = contact.igeEntityByCategory('player');
 						var shipFixture = contact.fixtureByCategory('player');
 
+						if (asteroid === undefined || !asteroid.alive()) {
+							return;
+						}
+
 						// Asteroid has hit ship blocks, destroy the asteroid
 						if (!shipFixture.m_isSensor) {
 							// Disable contact so player doesn't move due to collision
 							contact.SetEnabled(false);
-							// TODO: Add to cargo.
-							ige.emit('block collected', [player, asteroid.blockClassId]);
+
+							ige.emit('block collected', [player, asteroid.grid()[0][0].classId()]);
 							asteroid.destroy();
 						}
 					}
