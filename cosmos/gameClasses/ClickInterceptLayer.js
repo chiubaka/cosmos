@@ -20,7 +20,7 @@ var ClickInterceptLayer = IgeEntity.extend({
 		var data = {
 			x: this.mousePosWorld().x,
 			y: this.mousePosWorld().y
-		};//TODO make these not 0
+		};
 
 		ige.network.send('backgroundClicked', data);
 	}
