@@ -53,17 +53,25 @@ var ServerNetworkEvents = {
 		ige.server.players[clientId].controls = data;
 	},
 
+	// TODO: User access control. Restrict what players can do based on clientId
+	// TODO: Guard against undefined blocks (do not trust client) so server doesn't crash
 	_onBlockClicked: function(data, clientId) {
-		// TODO: Decide what to do with the click. For now, we just assume a click means a block should be removed.
+
+		var player = ige.server.players[clientId];
+
+		// Do not start mining if we are already mining
+		if (player.laserBeam !== undefined) {
+			return;
+		}
 
 		var blockGrid = ige.$(data.blockGridId);
-		data.action = 'remove';
-		blockGrid.processBlockAction(data);
-		// TODO: Remove the appropriate fixtures from the server's BlockGrid so physics operates properly
-		// TODO: Send update to other clients so they can update their state to reflect the click
-
+		data.action = 'mine';
+		blockGrid.processBlockActionServer(data, player);
 
 		ige.network.send('blockAction', data);
+
+		// Activate mining laser
+		player.addLaser();
 	},
 
 	_onBackgroundClicked: function(data, clientId) {

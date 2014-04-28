@@ -227,16 +227,6 @@ var AsteroidGenerator = {
 	}
 };
 
-/**
- * Referenced from http://ejohn.org/blog/javascript-array-remove/
- * Should this be moved to the library folder or something?
- */
-Array.prototype.remove = function(from, to) {
-	var rest = this.slice((to || from) + 1 || this.length);
-	this.length = from < 0 ? this.length + from : from;
-	return this.push.apply(this, rest);
-};
-
 if (typeof (module) !== 'undefined' && typeof (module.exports) !== 'undefined') {
 	module.exports = AsteroidGenerator;
 }

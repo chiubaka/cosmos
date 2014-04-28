@@ -24,12 +24,30 @@ var Player = BlockGrid.extend({
 		this.height(20);
 		this.translateTo(-200, -200, 0);
 
-		if (!ige.isServer) {
+		if (ige.isServer) {
+			var blockMinedListener = function (blockClassId) {
+				this.laserBeam.destroy();
+				this.laserBeam = undefined;
+			}
+			this.on('block mined', blockMinedListener);
+		}
+		else {
 			this.depth(1);
 		}
 
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);
+	},
+
+	// Created on server, streamed to all clients
+	addLaser: function() {
+		
+		this.laserBeam = new LaserBeam()
+			.translateTo(0, -115, 0)
+			.streamMode(1)
+			.mount(this);
+
+		return this;		
 	},
 
 	/**

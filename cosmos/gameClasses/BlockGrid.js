@@ -20,9 +20,14 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		if (!ige.isServer) {
 			this._renderContainer = new RenderContainer()
-				.compositeCache(true)
-				.mount(this)
-				.blockGrid(this);
+							.compositeCache(true)
+							.mount(this)
+							.blockGrid(this);
+
+			this.updateCount = 0;
+			// Add some randomness to spread out expensive aabb calls over time.
+			// This leads to decreased stuttering.
+			this.updateTrigger = RandomInterval.randomIntFromInterval(70, 120);
 
 			this.mountGrid();
 		}
@@ -72,7 +77,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	Static function
 	Returns a new block grid with the given dimensions.
 
-	POTENTIAL BUG: are numCols and numRows swithed?
+	POTENTIAL BUG: are numCols and numRows switched?
 	*/
 	newGridFromDimensions: function (numCols, numRows) {
 		var grid = [];
@@ -88,15 +93,46 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return grid;
 	},
 
-	processBlockAction: function(data) {
+	processBlockActionServer: function(data, player) {
+		var self = this;
+
 		switch (data.action) {
 			case 'remove':
 				this.remove(data.row, data.col);
 				break;
+
+			// TODO: Vary mining speed based on block material
+			case 'mine':
+				setTimeout(function() {
+					// Emit a message saying that a block has been mined, but not
+					// necessarily collected. This is used for removing the laser.
+					var blockClassId = self._grid[data.row][data.col].classId();
+					player.emit('block mined', [blockClassId]);
+
+					// Remove block server side, then send remove msg to client
+					self.remove(data.row, data.col);
+					data.action = 'remove';
+					ige.network.send('blockAction', data);
+				}, 2000);
+				
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
 		}
 	},
+
+	processBlockActionClient: function(data) {
+		var self = this;
+
+		switch (data.action) {
+			case 'remove':
+				this.remove(data.row, data.col);
+				break;
+
+			default:
+				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
+		}
+	},
+
 
 	/**
 	 * Remove is intended to remove the block from the grid,
@@ -276,20 +312,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	update: function(ctx) {
-		if (!ige.isServer) {
-			// TODO: This is a fix for having the entity aabb's draw in the center initially rather than where
-			// the entity has been initially translated to. Ideally, I should be able to call aabb(true) once
-			// before the update loop even happens, but I had trouble finding the right place to do this and even
-			// trying to trigger this code on just the first update didn't seem to work.
-			this._renderContainer.aabb(true);
-		}
-
-		IgeEntityBox2d.prototype.update.call(this, ctx);
-	},
-
-
-	tick: function(ctx) {
-
 		if (ige.isServer) {
 			// Attract the block grid to another body. For example, small asteroids
 			// are attracted to player ships.
@@ -303,9 +325,20 @@ var BlockGrid = IgeEntityBox2d.extend({
 				thisBody.ApplyImpulse(impulse, thisBody.GetWorldCenter());
 			}
 		}
+		else {
+			// TODO: This is a fix for having the entity aabb's draw in the center initially rather than where
+			// the entity has been initially translated to. Ideally, I should be able to call aabb(true) once
+			// before the update loop even happens, but I had trouble finding the right place to do this and even
+			// trying to trigger this code on just the first update didn't seem to work.
+			this.updateCount++;
+			if ((this.updateCount < 10) ||
+				 ((this.updateCount % this.updateTrigger == 0))) {
+				this._renderContainer.aabb(true);
+			}
+		}
+		IgeEntityBox2d.prototype.update.call(this, ctx);
+	},
 
-		return IgeEntityBox2d.prototype.tick.call(this, ctx);
-	}
 });
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = BlockGrid; }

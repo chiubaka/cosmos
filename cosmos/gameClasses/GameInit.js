@@ -10,6 +10,11 @@ var GameInit = {
 	 * @param game either ige.client or ige.server
 	 */
 	init: function(game) {
+
+		// Disable debug features for more performance
+		ige.debugEnabled(false);
+		ige.debugTiming(false);
+
 		// Load the base scene data
 		game.mainScene = new IgeScene2d()
 			.id('mainScene');
@@ -95,6 +100,7 @@ var GameInit = {
 						if (!shipFixture.m_isSensor) {
 							// Disable contact so player doesn't move due to collision
 							contact.SetEnabled(false);
+							// TODO: Add to cargo. Consider emitting an event?
 							player.onBlockCollect(asteroid);
 							asteroid.destroy();
 						}
@@ -114,7 +120,7 @@ var GameInit = {
 				.mount(game.spaceBackgroundScene)
 				.depth(1000);//TODO this might not be the best place to mount it
 
-			this.initTimeStream(game);
+			//this.initTimeStream(game);
 		}
 	},
 

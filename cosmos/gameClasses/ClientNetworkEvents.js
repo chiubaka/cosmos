@@ -28,7 +28,7 @@ var ClientNetworkEvents = {
 
 					// Set the time stream UI entity to monitor our player entity
 					// time stream data
-					ige.client.tsVis.monitor(ige.$(data));
+					//ige.client.tsVis.monitor(ige.$(data));
 
 					// Turn off the listener for this event now that we
 					// have found and started tracking our player entity
@@ -44,7 +44,7 @@ var ClientNetworkEvents = {
 
 	_onBlockAction: function(data) {
 		var blockGrid = ige.$(data.blockGridId);
-		blockGrid.processBlockAction(data);
+		blockGrid.processBlockActionClient(data);
 	},
 
 	initCameras: function(entityToTrack) {
