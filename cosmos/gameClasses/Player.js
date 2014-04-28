@@ -24,11 +24,7 @@ var Player = BlockGrid.extend({
 		this.height(20);
 		this.translateTo(-200, -200, 0);
 
-		if (ige.isServer) {
-			ige.on('block mined', this.blockMinedListener);
-			ige.on('block collected', this.blockCollectListener);
-		}
-		else {
+		if (!ige.isServer) {
 			this.depth(1);
 		}
 

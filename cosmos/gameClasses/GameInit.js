@@ -110,6 +110,10 @@ var GameInit = {
 						}
 					}
 				});
+
+			// Register game event listeners
+			ige.on('block mined', Player.prototype.blockMinedListener);
+			ige.on('block collected', Player.prototype.blockCollectListener);
 			}
 
 		else {
