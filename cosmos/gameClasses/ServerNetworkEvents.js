@@ -75,14 +75,21 @@ var ServerNetworkEvents = {
 	},
 
 	_onBackgroundClicked: function(data, clientId) {
-		new BlockGrid()
-			.category('smallAsteroid')
-			.id('littleAsteroid' + Math.random())
-			.streamMode(1)
-			.mount(ige.$("spaceGameScene"))
-			.depth(100)
-			.grid(AsteroidGenerator.singleBlock())
-			.translateTo(data.x, data.y, 0);
+		// TODO: Extract this into a new method and call it with an event emission!
+		var player = ige.server.players[clientId];
+		var blockToPlace = player.cargo.rrExtractItems()[0];
+
+		if (blockToPlace !== undefined) {
+			console.log("Placing item: " + blockToPlace.classId());
+			new BlockGrid()
+				.category('smallAsteroid')
+				.id('littleAsteroid' + Math.random())
+				.streamMode(1)
+				.mount(ige.$("spaceGameScene"))
+				.depth(100)
+				.grid([[blockToPlace]])
+				.translateTo(data.x, data.y, 0);
+		}
 	}
 };
 
