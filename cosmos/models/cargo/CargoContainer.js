@@ -14,13 +14,13 @@ var CargoContainer = IgeClass.extend({
 	 * The number of "slots" that a single cargo container contains. A slot is a space
 	 * in the cargo container that can hold a stack of items of a single type.
 	 */
-	DEFAULT_CONTAINER_SLOTS: 20,
+	DEFAULT_CONTAINER_SLOTS: 64,
 
 	/**
 	 * The maximum size of a stack of items of the same type that will fit in a slot. 
 	 * Adding more items of the same type will require a new stack or a new container.
 	 */
-	STACK_SIZE: 20,
+	STACK_SIZE: 60,
 
 	/**
 	 * The store used for this item container.
@@ -30,7 +30,7 @@ var CargoContainer = IgeClass.extend({
 	/**
 	 * The number of available slots in this container.
 	 */
-	_numSlots: this.DEFAULT_CONTAINER_SLOTS,
+	_numSlots: 0,
 
 	/**
 	 * Initialize a cargo container.
@@ -40,6 +40,7 @@ var CargoContainer = IgeClass.extend({
 	init: function(numSlots) {
 		this._itemStore = {};
 
+		this._numSlots = this.DEFAULT_CONTAINER_SLOTS;
 		if (numSlots !== undefined) {
 			this._numSlots = numSlots;
 		}
