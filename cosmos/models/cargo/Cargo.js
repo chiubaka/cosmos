@@ -227,6 +227,46 @@ var Cargo = IgeClass.extend({
 
 		return extracted;
 	},
+
+	/**
+	 * Extracts a specific number of items from the player's cargo inventory, 
+	 * with types chosen by round-robin selection.
+	 * 
+	 * @param quantity the number of items to extract
+	 * @returns a list of items that were extracted 
+	 */
+	rrExtractItems: function(quantity) {
+		var extracted = [];
+
+		if (quantity === undefined) {
+			quantity = 1;
+		}
+		var remaining = Math.min(quantity, this.numItems());
+		if (remaining == 0) {
+			console.log("No items to extract!");
+			return extracted;
+		}
+
+		console.log("rrExtractItems: start: " + this.numItems() + " in cargo inventory");
+		for (var i = 0; i < this.getNumContainers() ; i++) {
+			var container = this.getContainer(i);
+			var extractedFromContainer = container.rrExtractItems(remaining);
+
+			extracted = extracted.concat(extractedFromContainer);
+			remaining -= extractedFromContainer.length;
+			if (remaining == 0) {
+				break;
+			} else if (remaining < 0) {
+				console.error("Removed more items from container #" + i + " than existed! Surely something must be wrong.");
+				console.log("Extracted: " + extracted);
+				return extracted;
+			}
+		}
+		console.log("rrExtractItems: extracted " + extracted.length + " items.");
+		console.log("Extracted: " + extracted);
+
+		return extracted;
+	},
 	
 	/**
 	 * Check if the player's cargo inventory contains a particular type of item.
