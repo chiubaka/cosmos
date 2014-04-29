@@ -95,7 +95,7 @@ var Cargo = IgeClass.extend({
 			
 			if (this.unlimitedSpace()) {
 				// Create a new cargo container to contain the item.
-				this._containers.push(new CargoContainer(this.DEFAULT_CONTAINER_SLOTS));
+				this._containers.push(new CargoContainer());
 			} else {
 				// Abort, we can't add anything.
 				return false;
