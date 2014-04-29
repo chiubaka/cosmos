@@ -24,8 +24,6 @@ var Player = BlockGrid.extend({
 		this.height(20);
 		this.translateTo(-200, -200, 0);
 
-		this.registerEventListeners();
-
 		if (ige.isClient) {
 			this.initClient();
 		} else {
@@ -48,16 +46,6 @@ var Player = BlockGrid.extend({
 	 */
 	initServer: function() {
 		this.cargo = new Cargo();
-	},
-
-	/**
-	 * Registers event listeners that the Player class should pay attention to.
-	 */
-	registerEventListeners: function() {
-		if (ige.isServer) {
-			ige.on('block mined', this.blockMinedListener);
-			ige.on('block collected', this.blockCollectListener);
-		}
 	},
 
 	// Created on server, streamed to all clients
