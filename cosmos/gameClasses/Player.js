@@ -36,7 +36,7 @@ var Player = BlockGrid.extend({
 	addLaser: function(blockGridId, row, col) {
 		
 		this.laserBeam = new LaserBeam()
-			.setTarget(blockGridId, row, col, this.id())
+			.setTarget(blockGridId, row, col)
 			.translateTo(0, -115, 0)
 			.streamMode(1)
 			.mount(this);

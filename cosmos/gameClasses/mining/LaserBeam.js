@@ -11,7 +11,6 @@ var LaserBeam = IgeEntity.extend({
 			this._targetId = createData[0];
 			this._targetCol = createData[1];
 			this._targetRow = createData[2];
-			this._playerId = createData[3];
 
 			console.log('id: ' + this._targetId + 'row: ' + this._targetRow + 'col: '
 			+ this._targetCol);
@@ -34,33 +33,35 @@ var LaserBeam = IgeEntity.extend({
 		return this;
 	},
 
-	setTarget: function(blockGridId, row, col, playerId) {
+	setTarget: function(blockGridId, row, col) {
 		this._targetId = blockGridId;
 		this._targetCol = row;
 		this._targetCol = col;
-		this._playerId = playerId;
 		return this;
 	},
 
 
 	// Send custom data to client upon creation through network stream
 	streamCreateData: function () {
-		return [this._targetId, this._targetCol, this._targetCol, this._playerId];
+		return [this._targetId, this._targetCol, this._targetCol];
 	},
 
 	update: function(ctx) {
 		if (!ige.isServer) {
-			var player = ige.$(this._playerId);
+			var player = this.parent();
 			var block = ige.$(this._targetId);
+
 			var deltaX = block.worldPosition().x - player.worldPosition().x;
 			var deltaY = block.worldPosition().y - player.worldPosition().y;
 			var distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
 			var angle = Math.atan2(deltaY,deltaX);
 
 			this.texture(ige.client.textures.laserBeamTexture)
-				.rotate().z(angle + Math.radians(90))
+				//.rotateToPoint(block.worldPosition())
+				//TODO: Take into account player's angle
+				.rotate().z(angle)
 				//.newTween()
-				.width(distance)
+				.height(distance)
 		}
 
 		IgeEntity.prototype.update.call(this, ctx);
