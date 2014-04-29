@@ -144,24 +144,29 @@ var Cargo = IgeClass.extend({
 	 * @returns the number of items actually removed (up to quantity items)
 	 */
 	removeType: function(itemType, quantity) {
-		var remaining = 1;
-		if (quantity !== undefined) {
-			remaining = quantity;
+		if (quantity === undefined) {
+			quantity = 1;
+		}
+		var remaining = Math.min(quantity, this.numItems());
+		var numRemoved = 0;
+		if (remaining == 0) {
+			console.log("No items to remove!");
+			return numRemoved;
 		}
 
 		for (var i = 0; i < this.getNumContainers(); i++) {
 			var container = this.getContainer(i);
-			var numRemoved = container.removeType(itemType, remaining);
+			var containerRemoved = container.removeType(itemType, remaining);
 
-			remaining -= numRemoved;
+			remaining -= containerRemoved;
+			numRemoved += containerRemoved;
+
 			if (remaining == 0) {
 				break;
-			} else if (remaining < 0) {
-				return remaining;
 			}
 		}
 
-		return remaining;
+		return numRemoved;
 	},
 
 	/**
@@ -194,11 +199,16 @@ var Cargo = IgeClass.extend({
 	 * @param quantity the number of items to extract
 	 * @returns the items that were extracted
 	 */
-	extractItem: function(itemType, quantity) {
+	extractType: function(itemType, quantity) {
 		var extracted = [];
-		var remaining = 1;
-		if (quantity !== undefined) {
-			remaining = quantity;
+
+		if (quantity === undefined) {
+			quantity = 1;
+		}
+		var remaining = Math.min(quantity, this.numItems());
+		if (remaining == 0) {
+			console.log("No items to extract!");
+			return extracted;
 		}
 
 		for (var i = 0; i < this.getNumContainers() ; i++) {
