@@ -12,10 +12,9 @@ var Cargo = IgeClass.extend({
 	classId: 'Cargo',
 	
 	/**
-	 * Define the capacities of cargo blocks, in terms of size in tiles.
+	 * The number of cargo containers that a single physical Cargo block represents.
 	 */
-	CHUNKS_PER_TILE: 9,
-	BLOCKS_PER_TILE: 1,
+	CONTAINERS_PER_BLOCK: 1,
 	
 	/**
 	 * Whether or not we want to respect cargo capacities right now.
@@ -32,11 +31,6 @@ var Cargo = IgeClass.extend({
 	_containers: undefined,
 
 	/**
-	 * The list of items. Each item contains a reference to its container and vice versa.
-	 */
-	_items: undefined,
-
-	/**
 	 * Initialize the cargo model for a player.
 	 */
 	init: function() {
@@ -44,6 +38,11 @@ var Cargo = IgeClass.extend({
 		this._items = [];
 	},
 	
+	/**
+	 * Gets or sets whether or not the cargo inventory has an unlimited capacity.
+	 * 
+	 * @param the value to set the flag to
+	 */
 	unlimitedSpace: function(flag) {
 		if (flag !== undefined) {
 			this._isUnlimited = flag;
@@ -54,38 +53,49 @@ var Cargo = IgeClass.extend({
 	},
 
 	/**
-	 * Adds a single Block to the player's cargo inventory.
-	 * Automatically encapsulates the block in a CargoItem.
+	 * Adds a block of a specific block type to the player's cargo inventory.
+	 * Automatically encapsulates blockTypes into CargoItems
+	 * 
+	 * @param blockType the type of block to add to the inventory
+	 * @returns whether or not the add was successful
 	 */
-	addBlock: function(block) {
-		if (block === undefined) {
-			return this;
+	addBlock: function(blockType) {
+		if (blockType === undefined || blockType === "") {
+			return false;
 		}
 
 		// Construct a new item from the block
-		var cargoItem = new CargoItem(block);
+		var cargoItem = new CargoItem(blockType);
+
 		return this.addCargoItem(cargoItem);
 	},
 
 	/**
-	 * Adds a list of Blocks to the player's cargo inventory using addBlock().
-	 * @param blocks an array of all of the Blocks to add
+	 * Adds a list of block types to the player's cargo inventory using addBlockFromType().
+	 * 
+	 * @param blockTypes an array of all of the blockTypes to add
+	 * @returns a list of booleans representing the success of adding the list of blocks
 	 */
-	addBlocks: function(blocks) {
-		for (var block in blocks) {
-			this.addBlock(block);
+	addBlocks: function(blockTypes) {
+		var addedList = [];
+
+		for (var block in blockTypes) {
+			var success = this.addBlock(block);
+			addedList.push(success);
 		}
 
-		return this;
+		return addedList;
 	},
 
 	/**
 	 * Adds a single existing CargoItem to the player's cargo inventory.
 	 * Does NOT automatically encapsulate objects into CargoItems.
+	 * 
 	 * @param item the CargoItem to add
+	 * @returns whether or not the add was successful
 	 */
 	addCargoItem: function(item) {
-		if (item === undefined || !this.hasSpace()) {
+		if (item === undefined) {
 			// Do nothing, abort.
 			return false;
 		}
@@ -102,134 +112,176 @@ var Cargo = IgeClass.extend({
 				return false;
 			}
 		}
-		
-		// Add items to the item list and to an available cargo container.
-		this._items.push(item);
 
-		// Right now, linearly fill up the containers.
-		for (var i = 0; i < this.getNumContainers(); i++) {
-			// Check if the container has space.
-			var container = this.getContainer(i);
-			if (container.hasSpace()) {
-				return container.linkItem(item);
-			} else {
-				continue;
+		while (this.unlimitedSpace()) {
+			// Right now, linearly fill up the containers.
+			for (var i = 0; i < this.getNumContainers(); i++) {
+				// Check if the container has space.
+				var container = this.getContainer(i);
+				if (container.hasSpace(item)) {
+					var success = container.addItem(item);
+					return success;
+				} else {
+					continue;
+				}
+			}
+
+			if (this.unlimitedSpace()) {
+				this._containers.push(new CargoContainer());
 			}
 		}
 
-		// Should never get here
 		return false;
 	},
 	
 	/**
 	 * Adds a list of CargoItems to the player's cargo inventory.
+	 * 
 	 * @param items an array of CargoItems to add
+	 * @returns a list of booleans representing the success of adding the list of blocks
 	 */
 	addCargoItems: function(items) {
+		var addedList = [];
+
 		for (var item in items) {
-			this.addCargoItem(item);
+			addedList.push(this.addCargoItem(item));
 		}
 
-		return this;
+		return addedList;
 	},
 
 	/**
-	 * Removes a specific item from the player's cargo inventory by its UUID.
-	 * @param itemId the item UUID to remove (as returned by addItem)
+	 * Removes (destroys) up to quantity items of a specific type from the cargo inventory
+	 * 
+	 * @param itemType the item type to remove (as returned by addItem)
+	 * @param quantity the number of items to try to remove (upper bound). Defaults to 1
+	 * @returns the number of items actually removed (up to quantity items)
 	 */
-	removeItem: function(itemId) {
-		var itemToRemove = this.getItem(itemId);
+	removeType: function(itemType, quantity) {
+		if (quantity === undefined) {
+			quantity = 1;
+		}
+		var remaining = Math.min(quantity, this.numItems());
+		var numRemoved = 0;
+		if (remaining == 0) {
+			return numRemoved;
+		}
 
-		// Remove the item from the item list
-		var itemIndex = this._items.indexOf(itemToRemove);
-		this._items.remove(itemIndex);
+		for (var i = 0; i < this.getNumContainers(); i++) {
+			var container = this.getContainer(i);
+			var containerRemoved = container.removeType(itemType, remaining);
 
-		// Remove the item from a container.
-		var itemContainer = itemToRemove.container();
-		itemContainer.unlinkItem(itemId);
+			remaining -= containerRemoved;
+			numRemoved += containerRemoved;
+
+			if (remaining == 0) {
+				break;
+			}
+		}
+
+		return numRemoved;
 	},
 
 	/**
 	 * Removes all items of a specific type from the player's cargo inventory.
+	 * 
 	 * @param itemType the type of items to remove (given by classId)
+	 * @returns the total number of items removed
 	 */
-	removeItems: function(itemType) {
-		// Find all of the items in the list to remove
-		var indicesForRemoval = [];
-		for (var i = 0; i < this._items.length; i++) {
-			var item = this._items[i];
-			if (item.type() === itemType) {
-				indicesForRemoval.push(i);
-			}
+	removeAllOfType: function(itemType) {
+		var totalItemsRemoved = 0;
+		for (var i = 0; i < this.getNumContainers(); i++) {
+			var container = this.getContainer(i);
+			totalItemsRemoved += container.removeType(itemType, container.numItems());
 		}
 
-		// Now, remove all selected elements and unlink them via removeItem().
-		for (var index in indicesForRemoval) {
-			var item = this._items[index];
-			this.removeItem(item.uuid());
-		}
+		return totalItemsRemoved;
 	},
 
 	/**
-	 * Gets a specific item by its UUID.
-	 * @param itemId the item's UUID (as returned by addItem)
+	 * Remove ALL items from the player's cargo inventory.
 	 */
-	getItem: function(itemId) {
-		for (var item in this._items) {
-			if (item.uuid() === itemId) {
-				return item;
-			}
-		}
+	removeAll: function() {
+		console.error('abort - not implemented');
+	},
 
-		return undefined;
-	},
-	
 	/**
-	 * Gets a list of items of a specific type.
-	 * @param itemType the type of items to list out (given by classId)
+	 * Extracts a specific number of items from the player's cargo inventory.
+	 * This is similar to a withdrawal: the items will be removed from the inventory
+	 * and returned to the caller.
+	 * 
+	 * @param itemType the item's type
+	 * @param quantity the number of items to extract
+	 * @returns a list of items that were extracted
 	 */
-	getItems: function(itemType) {
-		var results = [];
-		for (var item in this._items) {
-			if (item.type() === itemType) {
-				results.push(item);
-			}
+	extractType: function(itemType, quantity) {
+		var extracted = [];
+
+		if (quantity === undefined) {
+			quantity = 1;
 		}
-	},
-	
-	/**
-	 * Gets a list of all of the items contained in the player's cargo inventory.
-	 * @param clone Whether to return a clone of the items or not.
-	 */
-	listItems: function(clone) {
-		if (clone !== undefined && clone) {
-			return JSON.parse(JSON.stringify(clone));
-		}
-		return this._items;
-	},
-	
-	/**
-	 * Whether or not the cargo hold still has space to add more items.
-	 */
-	hasSpace: function() {
-		if (this.unlimitedSpace()) {
-			return true;
+		var remaining = Math.min(quantity, this.numItems());
+		if (remaining == 0) {
+			return extracted;
 		}
 
 		for (var i = 0; i < this.getNumContainers(); i++) {
-			// Check if the container has space.
 			var container = this.getContainer(i);
-			if (container.hasSpace()) {
-				return true;
+			var extractedFromContainer = container.extractType(itemType, remaining);
+
+			extracted = extracted.concat(extractedFromContainer);
+			remaining -= extractedFromContainer.length;
+			if (remaining == 0) {
+				break;
+			} else if (remaining < 0) {
+				console.error("Removed more items from container #" + i + " than existed! Surely something must be wrong.");
+				return extracted;
 			}
 		}
 
-		return false;
+		return extracted;
 	},
 
+	/**
+	 * Extracts a specific number of items from the player's cargo inventory, 
+	 * with types chosen by round-robin selection.
+	 * 
+	 * @param quantity the number of items to extract
+	 * @returns a list of items that were extracted 
+	 */
+	rrExtractItems: function(quantity) {
+		var extracted = [];
+
+		if (quantity === undefined) {
+			quantity = 1;
+		}
+		var remaining = Math.min(quantity, this.numItems());
+		if (remaining == 0) {
+			return extracted;
+		}
+
+		for (var i = 0; i < this.getNumContainers() ; i++) {
+			var container = this.getContainer(i);
+			var extractedFromContainer = container.rrExtractItems(remaining);
+
+			extracted = extracted.concat(extractedFromContainer);
+			remaining -= extractedFromContainer.length;
+			if (remaining == 0) {
+				break;
+			} else if (remaining < 0) {
+				console.error("Removed more items from container #" + i + " than existed! Surely something must be wrong.");
+				return extracted;
+			}
+		}
+
+		return extracted;
+	},
 	
 	/**
 	 * Check if the player's cargo inventory contains a particular type of item.
+	 * 
+	 * @param the item type to look for
+	 * @returns whether or not the cargo inventory the type of item
 	 */
 	hasItemType: function(itemType) {
 		for (var i = 0; i < this.getNumContainers() ; i++) {
@@ -241,20 +293,50 @@ var Cargo = IgeClass.extend({
 
 		return false;
 	},
+
+	/**
+	 * Gets the total number of items in the cargo inventory
+	 * 
+	 * @returns the total number of items in the cargo inventory
+	 */
+	numItems: function() {
+		var total = 0;
+		for (var i = 0; i < this.getNumContainers() ; i++) {
+			var container = this.getContainer(i);
+			total += container.numItems();
+		}
+
+		return total;
+	},
 	
 	/** 
 	 * Retrieve a specific cargo container from a player's cargo inventory.
+	 * 
+	 * @param index the index of the specific cargo container
+	 * @returns the cargo container (or undefined)
 	 */
 	getContainer: function(index) {
 		return this._containers[index];
 	},
 	
 	/**
-	 * Retrieves the number of CargoContainers that this player has.
+	 * Retrieves the number of cargo containers that this player has.
+	 * 
+	 * @returns the number of cargo containers
 	 */
 	getNumContainers: function() {
 		return this._containers.length;
-	} 
+	},
+
+	/**
+	 * Prints a debug log of a container to the console.
+	 * 
+	 * @params the container number
+	 */
+	debugDump: function(i) {
+		console.log(":: cargo container #" + i);
+		this.getContainer(i).debugDump();
+	}
 });
 
 if (typeof (module) !== 'undefined' && typeof (module.exports) !== 'undefined') {
