@@ -56,7 +56,7 @@ var ServerNetworkEvents = {
 	// TODO: User access control. Restrict what players can do based on clientId
 	// TODO: Guard against undefined blocks (do not trust client) so server doesn't crash
 	_onBlockClicked: function(data, clientId) {
-		
+
 		var player = ige.server.players[clientId];
 
 		// Do not start mining if we are already mining
@@ -68,8 +68,21 @@ var ServerNetworkEvents = {
 		data.action = 'mine';
 		blockGrid.processBlockActionServer(data, player);
 
+		ige.network.send('blockAction', data);
+
 		// Activate mining laser
 		player.addLaser();
+	},
+
+	_onBackgroundClicked: function(data, clientId) {
+		new BlockGrid()
+			.category('smallAsteroid')
+			.id('littleAsteroid' + Math.random())
+			.streamMode(1)
+			.mount(ige.$("spaceGameScene"))
+			.depth(100)
+			.grid(AsteroidGenerator.singleBlock())
+			.translateTo(data.x, data.y, 0);
 	}
 };
 

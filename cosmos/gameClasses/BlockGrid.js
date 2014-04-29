@@ -205,7 +205,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			bullet: false,
 			gravitic: false,
 			fixedRotation: false,
-		});
+	});
 
 		for(var row = 0; row < this._grid.length; row++)
 		{
