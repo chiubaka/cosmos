@@ -64,14 +64,14 @@ var ServerNetworkEvents = {
 			return;
 		}
 
+		// Activate mining laser
+		player.addLaser();
+
 		var blockGrid = ige.$(data.blockGridId);
 		data.action = 'mine';
 		blockGrid.processBlockActionServer(data, player);
 
 		ige.network.send('blockAction', data);
-
-		// Activate mining laser
-		player.addLaser();
 	},
 
 	_onBackgroundClicked: function(data, clientId) {
