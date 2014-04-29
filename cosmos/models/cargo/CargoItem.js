@@ -19,7 +19,6 @@ var CargoItem = IgeClass.extend({
 
 	/**
 	 * Initializes this CargoItem with a provided block. 
-	 * 
 	 * Generates a UUID for this CargoItem object and initializes the last modified timestamp.
 	 * 
 	 * @param block the block this item should represent
@@ -30,6 +29,8 @@ var CargoItem = IgeClass.extend({
 
 	/**
 	 * Gets the type of the entity represented by this CargoItem
+	 * 
+	 * @returns the type of the entity
 	 */
 	type: function() {
 		return this._type;
