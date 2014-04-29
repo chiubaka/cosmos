@@ -24,8 +24,6 @@ var Player = BlockGrid.extend({
 		this.height(20);
 		this.translateTo(-200, -200, 0);
 
-		this.registerEventListeners();
-
 		if (ige.isClient) {
 			this.initClient();
 		} else {
