@@ -220,7 +220,8 @@ var Cargo = IgeClass.extend({
 			if (remaining == 0) {
 				break;
 			} else if (remaining < 0) {
-				return remaining;
+				console.error("Removed more items from container #" + i + " than existed! Surely something must be wrong.");
+				return extracted;
 			}
 		}
 
