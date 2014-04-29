@@ -124,7 +124,6 @@ var CargoContainer = IgeClass.extend({
 		var remaining = Math.min(quantity, this.numItems());
 		while (remaining > 0) {
 			for (var itemType in this._itemStore) {
-				console.log("rrExtractItems: removing " + itemType + ".");
 				var extractedFromType = this.extractType(itemType, 1);
 				extracted = extracted.concat(extractedFromType);
 				remaining -= extractedFromType.length;

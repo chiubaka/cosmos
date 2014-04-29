@@ -164,7 +164,6 @@ var Cargo = IgeClass.extend({
 		var remaining = Math.min(quantity, this.numItems());
 		var numRemoved = 0;
 		if (remaining == 0) {
-			console.log("No items to remove!");
 			return numRemoved;
 		}
 
@@ -203,7 +202,7 @@ var Cargo = IgeClass.extend({
 	 * Remove ALL items from the player's cargo inventory.
 	 */
 	removeAll: function() {
-		console.log('abort - not implemented');
+		console.error('abort - not implemented');
 	},
 
 	/**
@@ -223,7 +222,6 @@ var Cargo = IgeClass.extend({
 		}
 		var remaining = Math.min(quantity, this.numItems());
 		if (remaining == 0) {
-			console.log("No items to extract!");
 			return extracted;
 		}
 
@@ -259,11 +257,9 @@ var Cargo = IgeClass.extend({
 		}
 		var remaining = Math.min(quantity, this.numItems());
 		if (remaining == 0) {
-			console.log("No items to extract!");
 			return extracted;
 		}
 
-		console.log("rrExtractItems: start: " + this.numItems() + " in cargo inventory");
 		for (var i = 0; i < this.getNumContainers() ; i++) {
 			var container = this.getContainer(i);
 			var extractedFromContainer = container.rrExtractItems(remaining);
@@ -274,12 +270,9 @@ var Cargo = IgeClass.extend({
 				break;
 			} else if (remaining < 0) {
 				console.error("Removed more items from container #" + i + " than existed! Surely something must be wrong.");
-				console.log("Extracted: " + extracted);
 				return extracted;
 			}
 		}
-		console.log("rrExtractItems: extracted " + extracted.length + " items.");
-		console.log("Extracted: " + extracted);
 
 		return extracted;
 	},
