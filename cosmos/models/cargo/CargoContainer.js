@@ -10,6 +10,11 @@
 var CargoContainer = IgeClass.extend({
 	classId: 'CargoContainer',
 
+	/**
+	 * The number of "slots" that a single cargo container contains. A slot is a space
+	 * in the cargo container that can hold a stack of items of a single type.
+	 */
+	DEFAULT_CONTAINER_SLOTS: 20,
 	STACK_SIZE: 20,
 
 	_itemStore: undefined,

@@ -15,7 +15,6 @@ var Cargo = IgeClass.extend({
 	 * Define the capacities of cargo blocks, in terms of size in tiles.
 	 */
 	CONTAINERS_PER_BLOCK: 1,
-	DEFAULT_CONTAINER_SLOTS: 20,
 	
 	/**
 	 * Whether or not we want to respect cargo capacities right now.
