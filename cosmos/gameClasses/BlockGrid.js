@@ -114,7 +114,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 					data.action = 'remove';
 					ige.network.send('blockAction', data);
 				}, 2000);
-				
+
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
 		}
@@ -205,7 +205,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			bullet: false,
 			gravitic: false,
 			fixedRotation: false,
-	});
+		});
 
 		for(var row = 0; row < this._grid.length; row++)
 		{
