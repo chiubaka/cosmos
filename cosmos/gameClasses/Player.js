@@ -33,14 +33,15 @@ var Player = BlockGrid.extend({
 	},
 
 	// Created on server, streamed to all clients
-	addLaser: function() {
+	addLaser: function(blockGridId, row, col) {
 		
 		this.laserBeam = new LaserBeam()
+			.setTarget(blockGridId, row, col, this.id())
 			.translateTo(0, -115, 0)
 			.streamMode(1)
 			.mount(this);
 
-		return this;		
+		return this;
 	},
 
 	/**
@@ -145,6 +146,7 @@ var Player = BlockGrid.extend({
 	 * scenegraph.
 	 * @param ctx The canvas context to render to.
 	 */
+	// TODO: Move control code to update()
 	tick: function(ctx) {
 		/* CEXCLUDE */
 		/* For the server: */

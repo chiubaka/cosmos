@@ -64,8 +64,8 @@ var ServerNetworkEvents = {
 			return;
 		}
 
-		// Activate mining laser
-		player.addLaser();
+		// Activate mining laser on the selected block
+		player.addLaser(data.blockGridId, data.row, data.col);
 
 		var blockGrid = ige.$(data.blockGridId);
 		data.action = 'mine';

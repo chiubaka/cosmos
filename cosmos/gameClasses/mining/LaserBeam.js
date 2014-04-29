@@ -1,23 +1,27 @@
 var LaserBeam = IgeEntity.extend({
 	classId: 'LaserBeam',
 
-	init: function () {
+	init: function (createData) {
 		IgeEntity.prototype.init.call(this);
 
 		// Correct for texture rotation
-		this.rotateTo(0, 0, Math.radians(90))
+		this.rotateTo(0, 0, Math.radians(90));
 
-		// No need for server to be concerned with tweening
 		if (!ige.isServer) {
-			this.texture(ige.client.textures.laserBeamTexture)
-				.width(300)
-				.newTween();
+			this._targetId = createData[0];
+			this._targetCol = createData[1];
+			this._targetRow = createData[2];
+			this._playerId = createData[3];
+
+			console.log('id: ' + this._targetId + 'row: ' + this._targetRow + 'col: '
+			+ this._targetCol);
 		}
 	},
 
 	newTween: function () {
 		var self = this;
-		var restAngle = Math.radians(90);
+		//var restAngle = Math.radians(90);
+		var restAngle = this.rotate().z();
 		var sweepAngle = Math.radians(75);
 		
 		this._rotate.tween()
@@ -28,7 +32,38 @@ var LaserBeam = IgeEntity.extend({
 			.start();
 
 		return this;
+	},
 
+	setTarget: function(blockGridId, row, col, playerId) {
+		this._targetId = blockGridId;
+		this._targetCol = row;
+		this._targetCol = col;
+		this._playerId = playerId;
+		return this;
+	},
+
+
+	// Send custom data to client upon creation through network stream
+	streamCreateData: function () {
+		return [this._targetId, this._targetCol, this._targetCol, this._playerId];
+	},
+
+	update: function(ctx) {
+		if (!ige.isServer) {
+			var player = ige.$(this._playerId);
+			var block = ige.$(this._targetId);
+			var deltaX = block.worldPosition().x - player.worldPosition().x;
+			var deltaY = block.worldPosition().y - player.worldPosition().y;
+			var distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+			var angle = Math.atan2(deltaY,deltaX);
+
+			this.texture(ige.client.textures.laserBeamTexture)
+				.rotate().z(angle + Math.radians(90))
+				//.newTween()
+				.width(distance)
+		}
+
+		IgeEntity.prototype.update.call(this, ctx);
 	}
 });
 
