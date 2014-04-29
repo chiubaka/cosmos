@@ -76,7 +76,7 @@ var CargoContainer = IgeClass.extend({
 	 * @param itemType the item's type
 	 * @param quantity the number of items to extract
 	 */
-	extractItem: function(itemType, quantity) {
+	extractType: function(itemType, quantity) {
 		var extracted = [];
 
 		if (!this._itemStore.hasOwnProperty(itemType)) {
