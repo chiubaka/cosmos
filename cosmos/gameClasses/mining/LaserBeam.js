@@ -9,8 +9,8 @@ var LaserBeam = IgeEntity.extend({
 
 		if (!ige.isServer) {
 			this._targetId = createData[0];
-			this._targetCol = createData[1];
-			this._targetRow = createData[2];
+			this._targetRow = createData[1];
+			this._targetCol = createData[2];
 
 			console.log('id: ' + this._targetId + 'row: ' + this._targetRow + 'col: '
 			+ this._targetCol);
@@ -35,7 +35,7 @@ var LaserBeam = IgeEntity.extend({
 
 	setTarget: function(blockGridId, row, col) {
 		this._targetId = blockGridId;
-		this._targetCol = row;
+		this._targetRow = row;
 		this._targetCol = col;
 		return this;
 	},
@@ -43,13 +43,22 @@ var LaserBeam = IgeEntity.extend({
 
 	// Send custom data to client upon creation through network stream
 	streamCreateData: function () {
-		return [this._targetId, this._targetCol, this._targetCol];
+		return [this._targetId, this._targetRow, this._targetCol];
 	},
 
 	update: function(ctx) {
 		if (!ige.isServer) {
+			if(ige.$(this._targetId) === undefined) {
+				IgeEntity.prototype.update.call(this, ctx);
+				return;
+			}
+
 			var player = this.parent();
-			var block = ige.$(this._targetId);
+			var block = ige.$(this._targetId).grid()[this._targetRow][this._targetCol];
+
+			if ((block === undefined) || (player === undefined)) {
+				var x = 1;
+			}
 
 			var deltaX = block.worldPosition().x - player.worldPosition().x;
 			var deltaY = block.worldPosition().y - player.worldPosition().y;
