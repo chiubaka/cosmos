@@ -92,7 +92,7 @@ var RenderContainer = IgeEntity.extend({
 			block.mouseDown(event, control);
 			this.cacheDirty(true);
 
-			//TODO this doesn't quite work yet.
+			//TODO this doesn't quite work yet. It was supposed to stop the propagation. It doesn’t stop the propagation. I know that because I can click and still create a block even if I am clicking on an existing block.
 			control.stopPropagation();
 			ige.input.stopPropagation();
 		}
