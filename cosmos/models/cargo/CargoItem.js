@@ -24,9 +24,9 @@ var CargoItem = IgeClass.extend({
 	 * 
 	 * @param block the block this item should represent
 	 */
-    init: function(blockType) {
-	    this._type = blockType;
-    },
+	init: function(blockType) {
+		this._type = blockType;
+	},
 
 	/**
 	 * Gets the type of the entity represented by this CargoItem
