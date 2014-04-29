@@ -71,8 +71,8 @@ var Cargo = IgeClass.extend({
 		var addedList = [];
 
 		for (var block in blockTypes) {
-			var uuid = this.addBlock(block);
-			addedList.push(uuid);
+			var success = this.addBlock(block);
+			addedList.push(success);
 		}
 
 		return addedList;
