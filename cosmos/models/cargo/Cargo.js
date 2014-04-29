@@ -281,6 +281,21 @@ var Cargo = IgeClass.extend({
 
 		return false;
 	},
+
+	/**
+	 * Gets the total number of items in the cargo inventory
+	 * 
+	 * @returns the total number of items in the cargo inventory
+	 */
+	numItems: function() {
+		var total = 0;
+		for (var i = 0; i < this.getNumContainers() ; i++) {
+			var container = this.getContainer(i);
+			total += container.numItems();
+		}
+
+		return total;
+	},
 	
 	/** 
 	 * Retrieve a specific cargo container from a player's cargo inventory.
