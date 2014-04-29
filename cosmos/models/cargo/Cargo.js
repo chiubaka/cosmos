@@ -103,7 +103,7 @@ var Cargo = IgeClass.extend({
 			}
 		}
 
-		while (true) {
+		while (this.unlimitedSpace()) {
 			// Right now, linearly fill up the containers.
 			for (var i = 0; i < this.getNumContainers(); i++) {
 				// Check if the container has space.
@@ -116,8 +116,9 @@ var Cargo = IgeClass.extend({
 				}
 			}
 
-			// TODO: Remove this so we actually have limited containers.
-			this._containers.push(new CargoContainer(DEFAULT_CONTAINER_SLOTS));
+			if (this.unlimitedSpace()) {
+				this._containers.push(new CargoContainer());
+			}
 		}
 
 		return false;
