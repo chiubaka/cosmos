@@ -57,9 +57,7 @@ var LaserBeam = IgeEntity.extend({
 			var angle = Math.atan2(deltaY,deltaX);
 
 			this.texture(ige.client.textures.laserBeamTexture)
-				//.rotateToPoint(block.worldPosition())
-				//TODO: Take into account player's angle
-				.rotate().z(angle)
+				.rotate().z(angle - player.rotate().z() - Math.radians(270))
 				//.newTween()
 				.height(distance)
 		}
