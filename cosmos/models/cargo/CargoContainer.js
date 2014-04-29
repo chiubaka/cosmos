@@ -98,6 +98,23 @@ var CargoContainer = IgeClass.extend({
 
 	/**
 	 * Whether or not more elements can be added to the cargo container
+	rrExtractItems: function(quantity) {
+		var extracted = [];
+		var remaining = Math.min(quantity, this.numItems());
+		while (remaining > 0) {
+			for (var itemType in this._itemStore) {
+				console.log("rrExtractItems: removing " + itemType + ".");
+				var extractedFromType = this.extractType(itemType, 1);
+				extracted = extracted.concat(extractedFromType);
+				remaining -= extractedFromType.length;
+				if (remaining == 0) {
+					break;
+				}
+			}
+		}
+
+		return extracted;
+	},
 	 */
 	hasSpace: function(item) {
 		var itemType = item.type();
