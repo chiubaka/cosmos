@@ -18,9 +18,11 @@ var CargoContainer = IgeClass.extend({
 	STACK_SIZE: 20,
 
 	_itemStore: undefined,
-	_numSlots: 1,
 
 	/**
+	 * The number of available slots in this container.
+	 */
+	_numSlots: this.DEFAULT_CONTAINER_SLOTS,
 	 * Initialize a cargo container.
 	 */
 	init: function(numSlots) {
