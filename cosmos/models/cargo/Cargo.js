@@ -128,11 +128,13 @@ var Cargo = IgeClass.extend({
 	 * @param items an array of CargoItems to add
 	 */
 	addCargoItems: function(items) {
+		var addedList = [];
+
 		for (var item in items) {
-			this.addCargoItem(item);
+			addedList.push(this.addCargoItem(item));
 		}
 
-		return this;
+		return addedList;
 	},
 
 	/**
