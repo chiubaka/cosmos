@@ -52,7 +52,6 @@ var Block = IgeEntity.extend({
 			if (self.hp > 0) {
 				self.hp--;
 				self.cacheDirty(true);
-				console.log(self.hp);
 			}
 			if (self.hp == 0) {
 				clearInterval(self.decrementHealthIntervalId)
