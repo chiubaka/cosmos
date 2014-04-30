@@ -113,7 +113,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 					self.remove(data.row, data.col);
 					data.action = 'remove';
 					ige.network.send('blockAction', data);
-				}, 2000);
+				}, Block.prototype.MINING_TIME);
 				
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
