@@ -28,18 +28,24 @@ var image = {
 
 		// Draw block health
 		if (entity._displayHealth) {
-			var healthBarXOffset = 3;
-			var healthBarYOffset = 3;
-			var healthBarHeight = 4;
-			var healthBarWidth = (entity.width() - 2 * healthBarXOffset) * (entity.hp / 10);
-			var healthBarStartX = -entity._bounds2d.x2 + healthBarXOffset;
+			// The current width of the health bar computed based on the percentage of health remaining
+			var healthBarWidth = (entity.width() - 2 * Block.prototype.HEALTH_BAR_MARGIN)
+				* (entity._hp / entity._maxHp);
+
+			// The x-coordinate to start drawing the health bar based on the margin constant from the Block class
+ 			var healthBarStartX = -entity._bounds2d.x2 + Block.prototype.HEALTH_BAR_MARGIN;
+
+			// Fill color is red
 			ctx.fillStyle = "rgb(255, 0, 0)";
 			ctx.beginPath();
-			ctx.moveTo(healthBarStartX, entity._bounds2d.y2 - healthBarYOffset - healthBarHeight);
-			ctx.lineTo(healthBarStartX, entity._bounds2d.y2 - healthBarYOffset);
-			ctx.lineTo(healthBarStartX + healthBarWidth, entity._bounds2d.y2 - healthBarYOffset);
-			ctx.lineTo(healthBarStartX + healthBarWidth, entity._bounds2d.y2 - healthBarYOffset - healthBarHeight);
-			ctx.lineTo(healthBarStartX, entity._bounds2d.y2 - healthBarYOffset - healthBarHeight);
+			ctx.moveTo(healthBarStartX, entity._bounds2d.y2 - Block.prototype.HEALTH_BAR_MARGIN
+				- Block.prototype.HEALTH_BAR_HEIGHT);
+			ctx.lineTo(healthBarStartX, entity._bounds2d.y2 - Block.prototype.HEALTH_BAR_MARGIN);
+			ctx.lineTo(healthBarStartX + healthBarWidth, entity._bounds2d.y2 - Block.prototype.HEALTH_BAR_MARGIN);
+			ctx.lineTo(healthBarStartX + healthBarWidth, entity._bounds2d.y2 - Block.prototype.HEALTH_BAR_MARGIN
+				- Block.prototype.HEALTH_BAR_HEIGHT);
+			ctx.lineTo(healthBarStartX, entity._bounds2d.y2 - Block.prototype.HEALTH_BAR_MARGIN
+				- Block.prototype.HEALTH_BAR_HEIGHT);
 			ctx.fill();
 		}
 
