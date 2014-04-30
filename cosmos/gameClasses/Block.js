@@ -10,6 +10,8 @@ var Block = IgeEntity.extend({
 	_fixture: undefined,
 	_fixtureDef:undefined,
 
+	_displayHealth: false,
+
 	/**
 	 * Construct a new block
 	 * Note that block doesn't have any texture. This is because subclasses of Block are expected to have their own textures.
@@ -43,6 +45,8 @@ var Block = IgeEntity.extend({
 			row: this._row,
 			col: this._col
 		};
+
+		this._displayHealth = true;
 
 		self.decrementHealthIntervalId = setInterval(function() {
 			if (self.hp > 0) {
