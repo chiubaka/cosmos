@@ -24,19 +24,28 @@ var Player = BlockGrid.extend({
 		this.height(20);
 		this.translateTo(-200, -200, 0);
 
-		if (ige.isServer) {
-			var blockMinedListener = function (blockClassId) {
-				this.laserBeam.destroy();
-				this.laserBeam = undefined;
-			}
-			this.on('block mined', blockMinedListener);
+		if (ige.isClient) {
+			this.initClient();
+		} else {
+			this.initServer();
 		}
-		else {
-			this.depth(1);
-		}
-
+		
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);
+	},
+
+	/**
+	 * Perform client-specific initialization here. Called by init()
+	 */
+	initClient: function() {
+		this.depth(1);
+	},
+
+	/**
+	 * Perform server-specific initialization here. Called by init()
+	 */
+	initServer: function() {
+		this.cargo = new Cargo();
 	},
 
 	// Created on server, streamed to all clients
@@ -132,12 +141,20 @@ var Player = BlockGrid.extend({
 	},
 
 	/**
-	 * Called every time a ship collects a block
-	 * @param {BlockGrid}
+	 * Called every time a ship mines a block
 	 */
-	onBlockCollect: function(block) {
+	blockMinedListener: function (player, blockClassId) {
+		player.laserBeam.destroy();
+		player.laserBeam = undefined;
+	},
+
+	/**
+	 * Called every time a ship collects a block
+	 */
+	blockCollectListener: function (player, blockClassId) {
+		//TODO: Add a cool animation or sound here, or on another listener
 		//console.log("Block collected!");
-		//TODO: add a cool animation or sound here.
+		player.cargo.addBlock(blockClassId);
 	},
 
 	/**
