@@ -2,43 +2,42 @@ var igeClientConfig = {
 	include: [
 		/* === ENVIRONMENT STATE === */
 		/* Blocks */
-		'./gameClasses/Block.js',
-		'./gameClasses/BlockGrid.js',
-		'./gameClasses/RenderContainer.js',
+		'./entities/Block.js',
+		'./entities/BlockGrid.js',
+		'./entities/RenderContainer.js',
 
 		/* Ship part blocks */
-		'./gameClasses/blocks/Part.js',
-		//-------------
-		'./gameClasses/blocks/parts/EngineBlock.js',
-		'./gameClasses/blocks/parts/PowerBlock.js',
-		'./gameClasses/blocks/parts/FuelBlock.js',
-		'./gameClasses/blocks/parts/CargoBlock.js',
-		'./gameClasses/blocks/parts/ControlBlock.js',
-		'./gameClasses/blocks/parts/MiningLaserBlock.js',
-		'./gameClasses/blocks/parts/ThrusterBlock.js',
+		'./entities/blocks/Part.js',
+		'./entities/blocks/parts/EngineBlock.js',
+		'./entities/blocks/parts/PowerBlock.js',
+		'./entities/blocks/parts/FuelBlock.js',
+		'./entities/blocks/parts/CargoBlock.js',
+		'./entities/blocks/parts/ControlBlock.js',
+		'./entities/blocks/parts/MiningLaserBlock.js',
+		'./entities/blocks/parts/ThrusterBlock.js',
 
 		/* Element blocks */
-		'./gameClasses/blocks/Element.js',
+		'./entities/blocks/Element.js',
 		//--------------
-		'./gameClasses/blocks/elements/IronBlock.js',
-		'./gameClasses/blocks/elements/CarbonBlock.js',
-		'./gameClasses/blocks/elements/IceBlock.js',
+		'./entities/blocks/elements/IronBlock.js',
+		'./entities/blocks/elements/CarbonBlock.js',
+		'./entities/blocks/elements/IceBlock.js',
 
 		/* Effects */
-		'./gameClasses/mining/LaserBeam.js',
+		'./entities/effects/mining/LaserBeam.js',
 
-		/* Structures */
-		'./gameClasses/ExampleShips.js',
+		/* Structures (prefabs) */
+		'./entities/prefabs/ExampleShips.js',
 
-		/* Environment scenery */
-		'./gameClasses/Background.js',
+		/* Scenery */
+		'./entities/scenery/Background.js',
 
 		/* === PLAYER STATE === */
-		'./gameClasses/Player.js',
+		'./entities/player/Player.js',
 
 		/* === SUPPLEMENTAL FUNCTIONALITY === */
 		/* Debugging */
-		'./gameClasses/debug/FixtureDebuggingEntity.js',
+		'./debug/FixtureDebuggingEntity.js',
 
 		/* Helper utilities */
 		'./utils/DeploymentUtils.js',
@@ -49,10 +48,10 @@ var igeClientConfig = {
 		'./config/DeploymentConfig.js',
 
 		/* Initialization */
-		'./gameClasses/GameInit.js',
-		'./gameClasses/ClientNetworkEvents.js',
+		'./init/GameInit.js',
+		'./init/ClientNetworkEvents.js',
 		'./client.js',
-		'./index.js',
+		'./index.js'
 	]
 };
 
