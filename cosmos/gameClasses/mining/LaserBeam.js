@@ -48,18 +48,22 @@ var LaserBeam = IgeEntity.extend({
 
 	update: function(ctx) {
 		if (!ige.isServer) {
-			if(ige.$(this._targetId) === undefined) {
+			var player = this.parent();
+			var blockGrid = ige.$(this._targetId);
+			var block = undefined;
+			if (blockGrid !== undefined) {
+				block = blockGrid.grid()[this._targetRow][this._targetCol];
+			}
+
+			// Check if the block is undefined. This happens in the update() ticks
+			// where the block has been broken off the BlockGrid, but the laser
+			// hasn't been destroyed yet.
+			if(block === undefined) {
 				IgeEntity.prototype.update.call(this, ctx);
 				return;
 			}
 
-			var player = this.parent();
-			var block = ige.$(this._targetId).grid()[this._targetRow][this._targetCol];
-
-			if ((block === undefined) || (player === undefined)) {
-				var x = 1;
-			}
-
+			// Calculate length and angle of laser
 			var deltaX = block.worldPosition().x - player.worldPosition().x;
 			var deltaY = block.worldPosition().y - player.worldPosition().y;
 			var distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
