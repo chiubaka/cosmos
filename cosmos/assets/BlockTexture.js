@@ -26,6 +26,21 @@ var image = {
 		ctx.lineTo(-entity._bounds2d.x2, -entity._bounds2d.y2);
 		ctx.stroke();
 
+		// Draw block health
+		var healthBarXOffset = 3;
+		var healthBarYOffset = 3;
+		var healthBarHeight = 4;
+		var healthBarWidth = (entity.width() - 2 * healthBarXOffset) * (entity.hp / 10);
+		var healthBarStartX = -entity._bounds2d.x2 + healthBarXOffset;
+		ctx.fillStyle = "rgb(255, 0, 0)";
+		ctx.beginPath();
+		ctx.moveTo(healthBarStartX, entity._bounds2d.y2 - healthBarYOffset - healthBarHeight);
+		ctx.lineTo(healthBarStartX, entity._bounds2d.y2 - healthBarYOffset);
+		ctx.lineTo(healthBarStartX + healthBarWidth, entity._bounds2d.y2 - healthBarYOffset);
+		ctx.lineTo(healthBarStartX + healthBarWidth, entity._bounds2d.y2 - healthBarYOffset - healthBarHeight);
+		ctx.lineTo(healthBarStartX, entity._bounds2d.y2 - healthBarYOffset - healthBarHeight);
+		ctx.fill();
+
 		// Draw block icon
 		if (entity.textureSvg)
 		{

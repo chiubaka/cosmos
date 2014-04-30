@@ -37,11 +37,23 @@ var Block = IgeEntity.extend({
 	},
 
 	mouseDown: function(event, control) {
+		var self = this;
 		var data = {
 			blockGridId: this.blockGrid().id(),
 			row: this._row,
 			col: this._col
 		};
+
+		self.decrementHealthIntervalId = setInterval(function() {
+			if (self.hp > 0) {
+				self.hp--;
+				self.cacheDirty(true);
+				console.log(self.hp);
+			}
+			if (self.hp == 0) {
+				clearInterval(self.decrementHealthIntervalId)
+			}
+		}, 200);
 
 		ige.network.send('blockClicked', data);
 	},
