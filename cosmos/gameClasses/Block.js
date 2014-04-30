@@ -9,6 +9,10 @@ var Block = IgeEntity.extend({
 	// The pixel height of the health bar
 	HEALTH_BAR_HEIGHT: 4,
 
+	// The time it takes to mine a block in milliseconds
+	// TODO: Make this an instance variable and let the value vary for different block types
+	MINING_TIME: 2000,
+
 	_row: undefined,
 	_col: undefined,
 
@@ -63,7 +67,7 @@ var Block = IgeEntity.extend({
 			if (self._hp == 0) {
 				clearInterval(self.decrementHealthIntervalId)
 			}
-		}, 200);
+		}, self.MINING_TIME / self._maxHp);
 
 		ige.network.send('blockClicked', data);
 	},
