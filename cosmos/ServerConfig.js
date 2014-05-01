@@ -30,6 +30,7 @@ var config = {
 
 		/* Effects */
 		{name: 'LaserBeam', path: './gameClasses/mining/LaserBeam'},
+		{name: 'EffectsMount', path: './gameClasses/mining/EffectsMount'},
 
 		/* Structures */
 		{ name: 'ExampleShips', path: './gameClasses/ExampleShips' },

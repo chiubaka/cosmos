@@ -36,7 +36,7 @@ var Player = BlockGrid.extend({
 	addLaser: function(blockGridId, row, col) {
 		// Hack because we can't mount on mining laser block
 		// (Server has no blocks mounted)
-		this.laserMount = new IgeEntity()
+		this.laserMount = new EffectsMount()
 			.mount(this)
 			.streamMode(1)
 			// TODO: Vary the position depending on where mining laser is,
