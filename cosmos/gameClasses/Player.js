@@ -34,12 +34,19 @@ var Player = BlockGrid.extend({
 
 	// Created on server, streamed to all clients
 	addLaser: function(blockGridId, row, col) {
-		
+		// Hack because we can't mount on mining laser block
+		// (Server has no blocks mounted)
+		this.laserMount = new IgeEntity()
+			.mount(this)
+			.streamMode(1)
+			// TODO: Vary the position depending on where mining laser is,
+			// or implement server streaming of blocks.
+			.translateBy(0, -115, 0)
+
 		this.laserBeam = new LaserBeam()
 			.setTarget(blockGridId, row, col)
-			.translateTo(0, -115, 0)
 			.streamMode(1)
-			.mount(this);
+			.mount(this.laserMount);
 
 		return this;
 	},

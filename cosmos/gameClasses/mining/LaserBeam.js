@@ -4,20 +4,23 @@ var LaserBeam = IgeEntity.extend({
 	init: function (createData) {
 		IgeEntity.prototype.init.call(this);
 
-		// Correct for texture rotation
-		this.rotateTo(0, 0, Math.radians(90));
-
 		if (!ige.isServer) {
 			this._targetId = createData[0];
 			this._targetRow = createData[1];
 			this._targetCol = createData[2];
 
-			console.log('id: ' + this._targetId + 'row: ' + this._targetRow + 'col: '
-			+ this._targetCol);
+			this.texture(ige.client.textures.laserBeamTexture)
+
+			// Fade in the laser beam
+			this.opacity(0);
+			this.newTween();
 		}
 	},
 
 	newTween: function () {
+		/*
+		// Old tween example. This creates a sweeping laser
+
 		var self = this;
 		//var restAngle = Math.radians(90);
 		var restAngle = this.rotate().z();
@@ -29,10 +32,17 @@ var LaserBeam = IgeEntity.extend({
 			// From the 1st step, repeat forever
 			.repeatMode (1, -1)
 			.start();
+		*/
+
+		this.tween()
+			.stepTo({_opacity: 1}, 1000, 'inOutCubic')
+			.start();
 
 		return this;
 	},
 
+	// Server sets the location of the targeted block. This gets streamed
+	// with our custom streamCreateData() function.
 	setTarget: function(blockGridId, row, col) {
 		this._targetId = blockGridId;
 		this._targetRow = row;
@@ -48,7 +58,7 @@ var LaserBeam = IgeEntity.extend({
 
 	update: function(ctx) {
 		if (!ige.isServer) {
-			var player = this.parent();
+			var laserMount = this.parent();
 			var blockGrid = ige.$(this._targetId);
 			var block = undefined;
 			if (blockGrid !== undefined) {
@@ -64,17 +74,15 @@ var LaserBeam = IgeEntity.extend({
 			}
 
 			// Calculate length and angle of laser
-			var deltaX = block.worldPosition().x - player.worldPosition().x;
-			var deltaY = block.worldPosition().y - player.worldPosition().y;
+			var deltaX = block.worldPosition().x - laserMount.worldPosition().x;
+			var deltaY = block.worldPosition().y - laserMount.worldPosition().y;
 			var distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
 			var angle = Math.atan2(deltaY,deltaX);
 
-			this.texture(ige.client.textures.laserBeamTexture)
-				.rotate().z(angle - player.rotate().z() - Math.radians(270))
-				//.newTween()
-				.height(distance)
+			this.rotate().z(angle - laserMount.parent().rotate().z() - Math.radians(270))
+			// Distance * 2 because image is half blank
+			this.height(distance * 2);
 		}
-
 		IgeEntity.prototype.update.call(this, ctx);
 	}
 });

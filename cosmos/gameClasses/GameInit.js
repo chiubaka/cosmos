@@ -25,7 +25,8 @@ var GameInit = {
 			.id('mainViewport')
 			.autoSize(true)
 			.scene(game.mainScene)
-			.drawBounds(true) //draws the axis aligned bounding boxes. Set to true for debugging.
+			//Note: drawBounds runs on the server for and will slow performance
+			.drawBounds(false) //draws the axis aligned bounding boxes. Set to true for debugging.
 			.mount(ige);
 
 		this.initScenes(game);
