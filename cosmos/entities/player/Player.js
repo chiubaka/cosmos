@@ -24,47 +24,67 @@ var Player = BlockGrid.extend({
 		this.height(20);
 		this.translateTo(-200, -200, 0);
 
-		if (ige.isServer) {
-			ige.on('block mined', this.blockMinedListener);
-			ige.on('block collected', this.blockCollectListener);
+		if (ige.isClient) {
+			this.initClient();
+		} else {
+			this.initServer();
 		}
-		else {
-			this.depth(1);
-
-			// TODO: Move this
-			self.laserParticleEmitter = new IgeParticleEmitter()
-				// Set the particle entity to generate for each particle
-				.particle(LaserParticle)
-				// Set particle life to 300ms
-				.lifeBase(300)
-				// Set output to 60 particles a second (1000ms)
-				.quantityBase(60)
-				.quantityTimespan(1000)
-				// Set the particle's death opacity to zero so it fades out as it's lifespan runs out
-				.deathOpacityBase(0)
-				// Set velocity vector to y = 0.05, with variance values
-				.velocityVector(new IgePoint3d(0, 0.05, 0), new IgePoint3d(-0.04, 0.05, 0), new IgePoint3d(0.04, 0.15, 0))
-				// Mount new particles to the object scene
-				.particleMountTarget(this)
-				// Move the particle emitter to the bottom of the ship
-				.translateTo(0, 5, 0)
-				// Mount the emitter to the ship
-				.mount(this);
-		}
-
+		
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);
 	},
 
-	// Created on server, streamed to all clients
-	addLaser: function() {
-		
-		this.laserBeam = new LaserBeam()
-			.translateTo(0, -115, 0)
-			.streamMode(1)
-			.mount(this);
+	/**
+	 * Perform client-specific initialization here. Called by init()
+	 */
+	initClient: function() {
+		this.depth(1);
 
-		return this;		
+		// TODO: Move this
+		self.laserParticleEmitter = new IgeParticleEmitter()
+			// Set the particle entity to generate for each particle
+			.particle(LaserParticle)
+			// Set particle life to 300ms
+			.lifeBase(300)
+			// Set output to 60 particles a second (1000ms)
+			.quantityBase(60)
+			.quantityTimespan(1000)
+			// Set the particle's death opacity to zero so it fades out as it's lifespan runs out
+			.deathOpacityBase(0)
+			// Set velocity vector to y = 0.05, with variance values
+			.velocityVector(new IgePoint3d(0, 0.05, 0), new IgePoint3d(-0.04, 0.05, 0), new IgePoint3d(0.04, 0.15, 0))
+			// Mount new particles to the object scene
+			.particleMountTarget(this)
+			// Move the particle emitter to the bottom of the ship
+			.translateTo(0, 5, 0)
+			// Mount the emitter to the ship
+			.mount(this);
+},
+
+	/**
+	 * Perform server-specific initialization here. Called by init()
+	 */
+	initServer: function() {
+		this.cargo = new Cargo();
+	},
+
+	// Created on server, streamed to all clients
+	addLaser: function(blockGridId, row, col) {
+		// Hack because we can't mount on mining laser block
+		// (Server has no blocks mounted)
+		this.laserMount = new EffectsMount()
+			.mount(this)
+			.streamMode(1)
+			// TODO: Vary the position depending on where mining laser is,
+			// or implement server streaming of blocks.
+			.translateBy(0, -115, 0)
+
+		this.laserBeam = new LaserBeam()
+			.setTarget(blockGridId, row, col)
+			.streamMode(1)
+			.mount(this.laserMount);
+
+		return this;
 	},
 
 	/**
@@ -162,6 +182,7 @@ var Player = BlockGrid.extend({
 	blockCollectListener: function (player, blockClassId) {
 		//TODO: Add a cool animation or sound here, or on another listener
 		//console.log("Block collected!");
+		player.cargo.addBlock(blockClassId);
 	},
 
 	/**
@@ -169,6 +190,7 @@ var Player = BlockGrid.extend({
 	 * scenegraph.
 	 * @param ctx The canvas context to render to.
 	 */
+	// TODO: Move control code to update()
 	tick: function(ctx) {
 		/* CEXCLUDE */
 		/* For the server: */
