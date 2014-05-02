@@ -25,7 +25,7 @@ var igeClientConfig = {
 
 		/* Effects */
 		'./entities/effects/mining/LaserBeam.js',
-		'./gameClasses/mining/EffectsMount.js',
+		'./entities/effects/mining/EffectsMount.js',
 
 		/* Structures (prefabs) */
 		'./entities/prefabs/ExampleShips.js',
