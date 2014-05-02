@@ -24,12 +24,28 @@ var Player = BlockGrid.extend({
 		this.height(20);
 		this.translateTo(-200, -200, 0);
 
-		if (!ige.isServer) {
-			this.depth(1);
+		if (ige.isClient) {
+			this.initClient();
+		} else {
+			this.initServer();
 		}
-
+		
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);
+	},
+
+	/**
+	 * Perform client-specific initialization here. Called by init()
+	 */
+	initClient: function() {
+		this.depth(1);
+	},
+
+	/**
+	 * Perform server-specific initialization here. Called by init()
+	 */
+	initServer: function() {
+		this.cargo = new Cargo();
 	},
 
 	// Created on server, streamed to all clients
@@ -146,6 +162,7 @@ var Player = BlockGrid.extend({
 	blockCollectListener: function (player, blockClassId) {
 		//TODO: Add a cool animation or sound here, or on another listener
 		//console.log("Block collected!");
+		player.cargo.addBlock(blockClassId);
 	},
 
 	/**

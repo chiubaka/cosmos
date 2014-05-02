@@ -2,45 +2,45 @@ var config = {
 	include: [
 		/* === GAME SETUP === */
 		/* Initialization */
-		{ name: 'ServerNetworkEvents', path: './gameClasses/ServerNetworkEvents' },
-		{ name: 'GameInit', path: './gameClasses/GameInit' },
+		{ name: 'ServerNetworkEvents', path: './init/ServerNetworkEvents' },
+		{ name: 'GameInit', path: './init/GameInit' },
 
 		/* Configuration */
 
 		/* === ENVIRONMENT STATE === */
 		/* Blocks */
-		{ name: 'Block', path: './gameClasses/Block' },
-		{ name: 'BlockGrid', path: './gameClasses/BlockGrid' },
+		{ name: 'Block', path: './entities/Block' },
+		{ name: 'BlockGrid', path: './entities/BlockGrid' },
 
 		/* Ship part blocks */
-		{ name: 'Part', path: './gameClasses/blocks/Part' },
-		{ name: 'PowerBlock', path: './gameClasses/blocks/parts/PowerBlock' },
-		{ name: 'EngineBlock', path: './gameClasses/blocks/parts/EngineBlock' },
-		{ name: 'FuelBlock', path: './gameClasses/blocks/parts/FuelBlock' },
-		{ name: 'CargoBlock', path: './gameClasses/blocks/parts/CargoBlock' },
-		{ name: 'ControlBlock', path: './gameClasses/blocks/parts/ControlBlock' },
-		{ name: 'MiningLaserBlock', path: './gameClasses/blocks/parts/MiningLaserBlock' },
-		{ name: 'ThrusterBlock', path: './gameClasses/blocks/parts/ThrusterBlock' },
+		{ name: 'Part', path: './entities/blocks/Part' },
+		{ name: 'PowerBlock', path: './entities/blocks/parts/PowerBlock' },
+		{ name: 'EngineBlock', path: './entities/blocks/parts/EngineBlock' },
+		{ name: 'FuelBlock', path: './entities/blocks/parts/FuelBlock' },
+		{ name: 'CargoBlock', path: './entities/blocks/parts/CargoBlock' },
+		{ name: 'ControlBlock', path: './entities/blocks/parts/ControlBlock' },
+		{ name: 'MiningLaserBlock', path: './entities/blocks/parts/MiningLaserBlock' },
+		{ name: 'ThrusterBlock', path: './entities/blocks/parts/ThrusterBlock' },
 
 		/* Element blocks */
-		{ name: 'Element', path: './gameClasses/blocks/Element' },
-		{ name: 'CarbonBlock', path: './gameClasses/blocks/elements/CarbonBlock' },
-		{ name: 'IronBlock', path: './gameClasses/blocks/elements/IronBlock' },
-		{ name: 'IceBlock', path: './gameClasses/blocks/elements/IceBlock' },
+		{ name: 'Element', path: './entities/blocks/Element' },
+		{ name: 'CarbonBlock', path: './entities/blocks/elements/CarbonBlock' },
+		{ name: 'IronBlock', path: './entities/blocks/elements/IronBlock' },
+		{ name: 'IceBlock', path: './entities/blocks/elements/IceBlock' },
 
 		/* Effects */
-		{name: 'LaserBeam', path: './gameClasses/mining/LaserBeam'},
+		{ name: 'LaserBeam', path: './entities/effects/mining/LaserBeam' },
 		{name: 'EffectsMount', path: './gameClasses/mining/EffectsMount'},
 
-		/* Structures */
-		{ name: 'ExampleShips', path: './gameClasses/ExampleShips' },
+		/* Structures (Prefabs) */
+		{ name: 'ExampleShips', path: './entities/prefabs/ExampleShips' },
 
-		/* Environment scenery */
-		{ name: 'Background', path: './gameClasses/Background' },
-		{ name: 'AsteroidGenerator', path: './gameClasses/AsteroidGenerator' },
+		/* Scenery */
+		{ name: 'Background', path: './entities/scenery/Background' },
+		{ name: 'AsteroidGenerator', path: './entities/scenery/AsteroidGenerator' },
 
 		/* === PLAYER STATE === */
-		{ name: 'Player', path: './gameClasses/Player' },
+		{ name: 'Player', path: './entities/player/Player' },
 
 		/* Cargo */
 		{ name: 'Cargo', path: './models/cargo/Cargo' },
@@ -49,7 +49,7 @@ var config = {
 
 		/* === SUPPLEMENTAL FUNCTIONALITY=== */
 		/* Debugging */
-		{ name: 'FixtureDebuggingEntity', path: './gameClasses/debug/FixtureDebuggingEntity' },
+		{ name: 'FixtureDebuggingEntity', path: './debug/FixtureDebuggingEntity' },
 
 		/* Helper Utilities */
 		{ name: 'PrototypeMixins', path: './utils/PrototypeMixins' },
