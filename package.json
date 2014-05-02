@@ -27,7 +27,7 @@
 	],
 	"private": true,
 	"scripts": {
-		"start": "node ige/server/ige.js -g cosmos"
+		"start": "node ige/server/IgeSlim.js"
 	},
 	"engines": {
 		"node": ">=0.8.3"
