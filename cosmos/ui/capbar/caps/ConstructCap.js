@@ -2,17 +2,11 @@
 	classId: "ConstructCap",
 
 	CAP_NAME: "Construct",
-	STUB_COLOR: "rgb(0, 240, 20)",
-	BG_COLOR: "rgb(0, 200, 16)",
-	FG_COLOR: "rgb(255, 255, 255)",
+	STUB_COLOR: "rgb(2,108,210)",
+	BG_COLOR: "rgb(3,131,255)",
+	FG_COLOR: "rgb(51,77,0)",
 
 	init: function() {
 		Cap.prototype.init.call(this);
-
-		this.applyStyle({
-			'borderBottomColor': this.STUB_COLOR,
-			'borderBottomWidth': this.STUB_HEIGHT,
-			'backgroundColor': this.BG_COLOR
-		});
 	},
 });
