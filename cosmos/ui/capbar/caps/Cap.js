@@ -64,8 +64,17 @@
 	},
 
 	initLabel: function() {
-		this._label = new CapLabel(this.CAP_NAME, this.LABEL_COLOR)
+		this._label = new CapLabel(this.classId(), this.CAP_NAME, this.LABEL_COLOR)
 			.mount(this);
+	},
+
+	_updateStyle: function() {
+		IgeUiElement.prototype._updateStyle.call(this);
+
+		if (this._label !== undefined) {
+			this._label._mouseStateOver = this._mouseStateOver;
+			this._label._updateStyle();
+		}
 	},
 
 	name: function() {

@@ -3,13 +3,22 @@
 
 	LABEL_MARGIN: 10,
 
-	init: function(value, color) {
+	init: function(id, value, color) {
 		IgeUiLabel.prototype.init.call(this);
+
+		var styleId = id + '-label';
+		ige.ui.style('#' + styleId, {
+			'color': 'rgba(0, 0, 0, 0)',
+		});
+
+		ige.ui.style('#' + styleId + ':hover', {
+			'color': color
+		});
 
 		this.font("12pt Segoe UI Semibold")
 			.padding(0)
 			.value(value)
-			.color(color);
+			.id(styleId);					 
 
 		// Need to manually calculate width because labels don't do it automatically
 		// Increase by 10px to offset margin compensation
