@@ -8,9 +8,15 @@ var Client = IgeClass.extend({
 		// Load our textures
 		var self = this;
 
-		self.LAYER_BACKGROUND = 10;
 		self.LAYER_MIDDLE = 50;
 		self.LAYER_FOREGROUND = 90;
+		self.DEPTH_PLAYER = 90;
+
+		self.LAYER_BACKGROUND = 10;
+		self.LAYER_PARALLAX = 11;
+		self.LAYER_WORLD = 50;
+		self.LAYER_HUD = 90;
+		self.LAYER_MODAL = 100;
 
 		// Enable IGE on screen editor
 		ige.addComponent(IgeEditorComponent);
