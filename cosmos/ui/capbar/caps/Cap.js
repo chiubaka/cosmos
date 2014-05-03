@@ -26,6 +26,8 @@
 	LABEL_COLOR: "rgb(255, 255, 255)",
 	LABEL_WIDTH: 100,
 
+	_selected: false,
+
 	init: function() {
 		IgeUiElement.prototype.init.call(this);
 
@@ -36,27 +38,38 @@
 
 		// Set up labels
 		this.initLabel();
+
+		// Set up events
+		this.initEvents();
 	},
 
-	initStyles: function()
-	{
+	initStyles: function() {
 		this.width(this.WIDTH);
 		this.height(this.HEIGHT);
+
+		this.ID_NORMAL = this.classId();
+		this.ID_HOVER = this.classId() + ':hover';
+		this.ID_SELECTED = this.classId() + ':selected';
 
 		ige.ui.style(this.DEFAULT_CLASS, {
 			'width': this.WIDTH,
 			'height': this.HEIGHT
 		});
 
-		ige.ui.style('#' + this.classId(), {
+		ige.ui.style('#' + this.ID_NORMAL, {
 			'borderBottomColor': this.STUB_COLOR,
 			'borderBottomWidth': this.STUB_HEIGHT,
 			'backgroundColor': this.TRANSPARENT
 		});
 
-		ige.ui.style('#' + this.classId() + ":hover", {
+		ige.ui.style('#' + this.ID_HOVER, {
 			'backgroundColor': this.BG_COLOR,
 			'borderBottomColor': this.BG_COLOR,
+		});
+
+		ige.ui.style('#' + this.ID_SELECTED, {
+			'backgroundColor': this.STUB_COLOR,
+			'borderBottomColor': this.STUB_COLOR,
 		});
 
 		this.styleClass('capbar-cap');
@@ -68,8 +81,46 @@
 			.mount(this);
 	},
 
+	initEvents: function() {
+		var self = this;
+
+		this.on('mouseUp', function() {
+			if (!self._selected) {
+				self.select();
+			}
+		});
+
+		ige.on('capbar cap selected', function(classId)
+		{
+			if (classId !== self.classId()) {
+				self.deselect();
+			}
+		});
+	},
+
+	select: function() {
+		// Show the selected state of the button
+		this.id(this.ID_SELECTED);
+		this.applyStyle(ige.ui.style("#" + this.ID_SELECTED));
+
+		ige.emit('capbar cap selected', [this.classId()]);
+		this._selected = true;
+	},
+
+	deselect: function() {
+		if (this._selected) {
+			this._selected = false;
+
+			// Show the deselected state of the button
+			this.id(this.ID_NORMAL);
+			this.applyStyle(ige.ui.style("#" + this.ID_NORMAL));
+		}
+	},
+
 	_updateStyle: function() {
-		IgeUiElement.prototype._updateStyle.call(this);
+		if (!this._selected) {
+			IgeUiElement.prototype._updateStyle.call(this);
+		}
 
 		if (this._label !== undefined) {
 			this._label._mouseStateOver = this._mouseStateOver;
