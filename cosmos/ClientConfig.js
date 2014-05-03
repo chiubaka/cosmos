@@ -39,6 +39,7 @@ var igeClientConfig = {
 		'./ui/HUDManager.js',
 
 		/* Capbar */
+		'./ui/capbar/CapBar.js',
 
 		/* Capabilities */
 

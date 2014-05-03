@@ -5,6 +5,10 @@
 
 	init: function(game) {
 		console.log("Initializing HUDManager...");
+
+		this._capbar = new CapBar()
+			.id("capbar")
+			.mount(game.hudScene);
 	},
 });
 
