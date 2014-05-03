@@ -134,6 +134,14 @@ var GameInit = {
 	 */
 	initScenes: function(game) {
 		this.initSpaceScene(game);
+		// Initialize client-specific scenes
+		if (!ige.isServer) {
+			// Initialize UI scenes
+			this.initUIScenes(game);
+
+			// Pre-initialize player HUD
+			this.initHUD(game);
+		}
 	},
 
 	/**
@@ -169,6 +177,9 @@ var GameInit = {
 		}
 	},
 
+	initHUD: function(game) {
+		game.hud = new HUDManager(game);
+	},
 	/**
 	 * Sets up the player controls.
 	 * @param client the client (ige.client)

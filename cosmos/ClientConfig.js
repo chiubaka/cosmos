@@ -18,7 +18,6 @@ var igeClientConfig = {
 
 		/* Element blocks */
 		'./entities/blocks/Element.js',
-		//--------------
 		'./entities/blocks/elements/IronBlock.js',
 		'./entities/blocks/elements/CarbonBlock.js',
 		'./entities/blocks/elements/IceBlock.js',
@@ -34,6 +33,16 @@ var igeClientConfig = {
 
 		/* === PLAYER STATE === */
 		'./entities/player/Player.js',
+
+		/* === USER INTERFACE === */
+		/* HUD */
+		'./ui/HUDManager.js',
+
+		/* Capbar */
+
+		/* Capabilities */
+
+		/* Toolbars */
 
 		/* === SUPPLEMENTAL FUNCTIONALITY === */
 		/* Debugging */
