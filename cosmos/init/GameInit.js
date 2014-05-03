@@ -177,6 +177,20 @@ var GameInit = {
 		}
 	},
 
+	initUIScenes: function(game) {
+		game.uiModalScene = new IgeScene2d()
+			.id('uiModalScene')
+			.layer(game.LAYER_MODAL)
+			.ignoreCamera(true)
+			.mount(game.mainScene);
+
+		game.hudScene = new IgeScene2d()
+			.id('hudScene')
+			.layer(game.LAYER_HUD)
+			.ignoreCamera(true)
+			.mount(game.spaceScene);
+	},
+
 	initHUD: function(game) {
 		game.hud = new HUDManager(game);
 	},
