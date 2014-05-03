@@ -40,6 +40,7 @@ var igeClientConfig = {
 
 		/* Capbar */
 		'./ui/capbar/CapBar.js',
+		'./ui/capbar/CapLabel.js',
 
 		/* Capabilities */
 		'./ui/capbar/caps/Cap.js',
