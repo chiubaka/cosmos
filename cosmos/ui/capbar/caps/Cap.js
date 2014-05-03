@@ -30,6 +30,9 @@
 			'width': this.WIDTH,
 			'height': this.HEIGHT
 		});
+
+		this._label = new CapLabel(this.CAP_NAME, this.FG_COLOR)
+			.mount(this);		 
 	},
 
 	name: function() {
