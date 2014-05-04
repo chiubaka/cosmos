@@ -49,14 +49,24 @@ var Player = BlockGrid.extend({
 	},
 
 	// Created on server, streamed to all clients
-	addLaser: function() {
-		
-		this.laserBeam = new LaserBeam()
-			.translateTo(0, -115, 0)
+	addLaser: function(blockGridId, row, col) {
+		// Hack because we can't mount on mining laser block
+		// (Server has no blocks mounted)
+		this.laserMount = new EffectsMount()
+			.mount(this)
 			.streamMode(1)
-			.mount(this);
+			// TODO: Vary the position depending on where mining laser is,
+			// or implement server streaming of blocks.
+			// Right now, we translate the laser mount to the location of the mining
+			// laser block.
+			.translateBy(0, -115, 0)
 
-		return this;		
+		this.laserBeam = new LaserBeam()
+			.setTarget(blockGridId, row, col)
+			.streamMode(1)
+			.mount(this.laserMount);
+
+		return this;
 	},
 
 	/**
@@ -162,6 +172,7 @@ var Player = BlockGrid.extend({
 	 * scenegraph.
 	 * @param ctx The canvas context to render to.
 	 */
+	// TODO: Move control code to update()
 	tick: function(ctx) {
 		/* CEXCLUDE */
 		/* For the server: */
