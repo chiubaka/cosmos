@@ -70,6 +70,8 @@ var ServerNetworkEvents = {
 		var blockGrid = ige.$(data.blockGridId);
 		data.action = 'mine';
 		blockGrid.processBlockActionServer(data, player);
+		blockGrid.addMiningParticles(data.blockGridId, data.row, data.col);
+
 	}
 };
 

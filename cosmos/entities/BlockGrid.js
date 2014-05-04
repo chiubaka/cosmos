@@ -93,6 +93,33 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return grid;
 	},
 
+	// Created on server, streamed to all clients
+	addMiningParticles: function(blockGridId, row, col) {
+		// Hack because we can't mount on mining laser block
+		// (Server has no blocks mounted)
+		// TODO: Store effects mount in block
+		this.effectsMount = new EffectsMount()
+			.mount(this)
+			.streamMode(1)
+			// TODO: Vary the position depending on where block is
+			// or implement server streaming of blocks. Use math to determine
+			// translate with respect to BlockGrid
+			.translateBy(0, 0, 0)
+
+		this.blockParticleEmitter = new BlockParticleEmitter()
+			.streamMode(1)
+			.mount(this.effectsMount)
+
+		return this;
+	},
+
+	/**
+	 * Called every time a ship mines a block
+	 */
+	blockMinedListener: function (player, blockClassId) {
+		//TODO: Removing mining animation
+	},
+
 	processBlockActionServer: function(data, player) {
 		var self = this;
 
@@ -163,7 +190,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 			var newGrid = new BlockGrid()
 				.category('smallAsteroid')
 				.mount(ige.server.spaceGameScene)
-				.depth(100)
 				.grid([[Block.prototype.blockFromClassId(block.classId())]])
 				.translateTo(finalX, finalY, 0)
 				.rotate().z(theta)

@@ -10,6 +10,7 @@ var Client = IgeClass.extend({
 
 		self.LAYER_BACKGROUND = 10;
 		self.LAYER_MIDDLE = 50;
+		self.LAYER_MIDDLE_HIGH = 60;
 		self.LAYER_FOREGROUND = 90;
 
 		// Enable IGE on screen editor

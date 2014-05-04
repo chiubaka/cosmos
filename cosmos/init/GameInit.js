@@ -42,7 +42,6 @@ var GameInit = {
 						.id('genRandomAsteroid' + x + "," + y)
 						.streamMode(1)
 						.mount(game.spaceGameScene)
-						.depth(100)
 						.grid(AsteroidGenerator.genProceduralAsteroid(20))
 						.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
 				}
@@ -57,7 +56,6 @@ var GameInit = {
 						.id('littleAsteroid' + x + ',' + y)
 						.streamMode(1)
 						.mount(game.spaceGameScene)
-						.depth(100)
 						.grid(AsteroidGenerator.singleBlock())
 						.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
 				}
@@ -113,6 +111,7 @@ var GameInit = {
 
 			// Register game event listeners
 			ige.on('block mined', Player.prototype.blockMinedListener);
+			ige.on('block mined', BlockGrid.prototype.blockMinedListener);
 			ige.on('block collected', Player.prototype.blockCollectListener);
 			}
 
@@ -161,6 +160,11 @@ var GameInit = {
 				.id('spaceBackgroundScene')
 				.layer(game.LAYER_BACKGROUND)
 				.mount(game.spaceScene);
+
+			game.effectsScene = new IgeScene2d()
+				.id('effectsScene')
+				.layer(game.LAYER_MIDDLE_HIGH)
+				.mount(game.spaceScene)
 
 			game.spaceUiScene = new IgeScene2d()
 				.id('spaceUiScene')
