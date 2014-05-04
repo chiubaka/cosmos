@@ -194,15 +194,23 @@ var Player = BlockGrid.extend({
 		player.cargo.addBlock(blockClassId);
 	},
 
-	/**
-	 * Called every frame by the engine when this entity is mounted to the
-	 * scenegraph.
-	 * @param ctx The canvas context to render to.
-	 */
-	// TODO: Move control code to update()
-	tick: function(ctx) {
-		/* CEXCLUDE */
-		/* For the server: */
+	update: function(ctx) {
+		if (!ige.isServer) {
+			/* Save the old control state for comparison later */
+			oldControls = JSON.stringify(this.controls);
+
+			/* Modify the KEYBOARD controls to reflect which keys the client currently is pushing */
+			this.controls.key.up = ige.input.actionState('key.up');
+			this.controls.key.down = ige.input.actionState('key.down');
+			this.controls.key.left = ige.input.actionState('key.left');
+			this.controls.key.right = ige.input.actionState('key.right');
+
+			if (JSON.stringify(this.controls) !== oldControls) { //this.controls !== oldControls) {
+				// Tell the server about our control change
+				ige.network.send('playerControlUpdate', this.controls);
+			}
+		}
+
 		if (ige.isServer) {
 			// This determines how fast you can rotate your spaceship
 			var angularImpulse = -10000;
@@ -219,7 +227,8 @@ var Player = BlockGrid.extend({
 				var linearImpulse;
 				if (this.controls.key.up) {
 					linearImpulse = 100;
-				} else if (this.controls.key.down) {
+				}
+				else if (this.controls.key.down) {
 					linearImpulse = -100;
 				}
 
@@ -246,27 +255,8 @@ var Player = BlockGrid.extend({
 				}
 			}
 		}
-		/* CEXCLUDE */
 
-		/* For the client: */
-		if (!ige.isServer) {
-			/* Save the old control state for comparison later */
-			oldControls = JSON.stringify(this.controls);
-
-			/* Modify the KEYBOARD controls to reflect which keys the client currently is pushing */
-			this.controls.key.up = ige.input.actionState('key.up');
-			this.controls.key.down = ige.input.actionState('key.down');
-			this.controls.key.left = ige.input.actionState('key.left');
-			this.controls.key.right = ige.input.actionState('key.right');
-
-			if (JSON.stringify(this.controls) !== oldControls) { //this.controls !== oldControls) {
-				// Tell the server about our control change
-				ige.network.send('playerControlUpdate', this.controls);
-			}
-		}
-
-		// Call the BlockGrid (super-class) tick() method
-		BlockGrid.prototype.tick.call(this, ctx);
+		BlockGrid.prototype.update.call(this, ctx);
 	}
 });
 
