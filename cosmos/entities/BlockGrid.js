@@ -119,8 +119,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 	/**
 	 * Called every time a ship mines a block
 	 */
-	blockMinedListener: function (player, blockClassId) {
-		//TODO: Removing mining animation
+	blockMinedListener: function (player, blockClassId, block) {
+		block.blockParticleEmitter.destroy();
+		block.effectsMount.destroy();
 	},
 
 	processBlockActionServer: function(data, player) {
@@ -147,7 +148,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 					// Emit a message saying that a block has been mined, but not
 					// necessarily collected. This is used for removing the laser.
 					var blockClassId = block.classId();
-					ige.emit('block mined', [player, blockClassId]);
+					ige.emit('block mined', [player, blockClassId, block]);
 
 					// Remove block server side, then send remove msg to client
 					self.remove(data.row, data.col);
