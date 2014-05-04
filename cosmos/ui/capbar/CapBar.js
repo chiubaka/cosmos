@@ -11,7 +11,7 @@
 	_caps: undefined,
 
 	init: function() {
-		console.log("Initializing CapBar...");
+		console.log("Initializing Capbar...");
 		IgeEntity.prototype.init.call(this);
 
 		this.applyStyle({
