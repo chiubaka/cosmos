@@ -59,6 +59,8 @@ var Player = BlockGrid.extend({
 			.streamMode(1)
 			// TODO: Vary the position depending on where mining laser is,
 			// or implement server streaming of blocks.
+			// Right now, we translate the laser mount to the location of the mining
+			// laser block.
 			.translateBy(0, -115, 0)
 
 		this.laserBeam = new LaserBeam()

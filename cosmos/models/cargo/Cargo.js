@@ -308,6 +308,16 @@ var Cargo = IgeClass.extend({
 
 		return total;
 	},
+
+	numOfType: function(itemType) {
+		var total = 0;
+		for (var i = 0; i < this.getNumContainers() ; i++) {
+			var container = this.getContainer(i);
+			total += container.numOfType(itemType);
+		}
+
+		return total;
+	},
 	
 	/** 
 	 * Retrieve a specific cargo container from a player's cargo inventory.
