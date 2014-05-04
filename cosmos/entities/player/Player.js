@@ -40,8 +40,13 @@ var Player = BlockGrid.extend({
 	initClient: function() {
 		this.depth(1);
 
+		//new EngineBlock()
+			//.mount(this);
+
+		var player = this;
 		// TODO: Move this
-		self.laserParticleEmitter = new IgeParticleEmitter()
+		this.laserParticleEmitter = new IgeParticleEmitter()
+			.id('derp')
 			// Set the particle entity to generate for each particle
 			.particle(LaserParticle)
 			// Set particle life to 300ms
@@ -52,13 +57,17 @@ var Player = BlockGrid.extend({
 			// Set the particle's death opacity to zero so it fades out as it's lifespan runs out
 			.deathOpacityBase(0)
 			// Set velocity vector to y = 0.05, with variance values
-			.velocityVector(new IgePoint3d(0, 0.05, 0), new IgePoint3d(-0.04, 0.05, 0), new IgePoint3d(0.04, 0.15, 0))
+			//.velocityVector(new IgePoint3d(0, 0.05, 0), new IgePoint3d(-0.04, 0.05, 0), new IgePoint3d(0.04, 0.15, 0))
+			.translateVarianceY(-10, 10)
+			.translateVarianceX(-10, 10)
 			// Mount new particles to the object scene
-			.particleMountTarget(this)
+			.particleMountTarget(ige.client.spaceGameScene)
 			// Move the particle emitter to the bottom of the ship
-			.translateTo(0, 5, 0)
+			.translateTo(0, 100, 0)
+			.mount(player)
 			// Mount the emitter to the ship
-			.mount(this);
+			.start();
+
 },
 
 	/**

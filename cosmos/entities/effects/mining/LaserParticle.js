@@ -7,9 +7,8 @@ var LaserParticle = IgeParticle.extend({
 
 
 		this.texture(ige.client.textures.rectangleTexture)
-			.width(5)
-			.height(5)
-			//.layer(LAYER_FOREGROUND)
+			.width(7)
+			.height(7)
 	},
 
 });
