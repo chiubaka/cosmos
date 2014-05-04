@@ -27,6 +27,7 @@ var igeClientConfig = {
 		'./entities/effects/mining/LaserBeam.js',
 		'./entities/effects/mining/EffectsMount.js',
 		'./entities/effects/mining/LaserParticle.js',
+		'./entities/effects/mining/EngineParticle.js',
 		'./entities/effects/mining/BlockParticleEmitter.js',
 
 		/* Structures (prefabs) */

@@ -1,8 +1,8 @@
-var LaserParticle = IgeParticle.extend({
-	classId: 'LaserParticle',
+var EngineParticle = IgeParticle.extend({
+	classId: 'EngineParticle',
 
-	// Orange color
-	_color: '#ff5a00',
+	// Light blue color
+	_color: '#ccffff',
 
 	init: function(emitter) {
 		this._emitter = emitter;
@@ -10,10 +10,10 @@ var LaserParticle = IgeParticle.extend({
 
 
 		this.texture(ige.client.textures.rectangleTexture)
-			.width(7)
-			.height(7)
+			.width(10)
+			.height(10)
 	},
 
 });
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
-	module.exports = LaserParticle; }
+	module.exports = EngineParticle; }

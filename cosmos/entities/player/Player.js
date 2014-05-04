@@ -73,7 +73,7 @@ var Player = BlockGrid.extend({
 		var player = this;
 		this.laserParticleEmitter = new IgeParticleEmitter()
 			// Set the particle entity to generate for each particle
-			.particle(LaserParticle)
+			.particle(EngineParticle)
 			// Set particle life to 300ms
 			.lifeBase(300)
 			// Set output to 60 particles a second (1000ms)
