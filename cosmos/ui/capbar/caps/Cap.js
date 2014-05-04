@@ -92,7 +92,9 @@
 
 		ige.on('capbar cap selected', function(classId)
 		{
-			if (classId !== self.classId()) {
+			if (!self._selected && classId === self.classId()) {
+				self.select();
+			} else if(classId !== self.classId()) {
 				self.deselect();
 			}
 		});
