@@ -33,7 +33,7 @@ var config = {
 		{ name: 'EffectsMount', path: './entities/effects/mining/EffectsMount'},
 		{ name: 'LaserParticle', path: './entities/effects/mining/LaserParticle'},
 		{ name: 'EngineParticle', path: './entities/effects/mining/EngineParticle'},
-		{name: 'BlockParticleEmitter', path: './entities/effects/mining/BlockParticleEmitter'},
+		{ name: 'BlockParticleEmitter', path: './entities/effects/mining/BlockParticleEmitter'},
 
 		/* Structures (Prefabs) */
 		{ name: 'ExampleShips', path: './entities/prefabs/ExampleShips' },
