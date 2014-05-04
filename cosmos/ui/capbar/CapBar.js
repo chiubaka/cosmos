@@ -22,7 +22,7 @@
 		});
 
 		this._caps = [];
-		this._caps.push(new MiningCap());
+		this._caps.push(new MineCap());
 		this._caps.push(new ConstructCap());
 
 		this.mountCaps();

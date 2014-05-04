@@ -1,5 +1,5 @@
-﻿var MiningCap = Cap.extend({
-	classId: "MiningCap",
+﻿var MineCap = Cap.extend({
+	classId: "MineCap",
 
 	CAP_NAME: "Mine",
 	STUB_COLOR: "rgb(200,32,32)",

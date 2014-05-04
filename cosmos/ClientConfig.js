@@ -44,7 +44,7 @@ var igeClientConfig = {
 
 		/* Capabilities */
 		'./ui/capbar/caps/Cap.js',
-		'./ui/capbar/caps/MiningCap.js',
+		'./ui/capbar/caps/MineCap.js',
 		'./ui/capbar/caps/ConstructCap.js',
 
 		/* Toolbars */
