@@ -23,6 +23,8 @@ var Block = IgeEntity.extend({
 	_hp: undefined,
 	_displayHealth: false,
 
+	_busy: false,
+
 	/**
 	 * Construct a new block
 	 * Note that block doesn't have any texture. This is because subclasses of Block are expected to have their own textures.
@@ -122,6 +124,21 @@ var Block = IgeEntity.extend({
 		if (this.hp <= 0) {
 			this.onDeath();
 		}
+	},
+
+	/**
+	 * Block is set to busy on the server when mining begins.
+	 * This is so blocks can't be mined by two players and get
+	 * doubly removed from the BlockGrid.
+	 * @param {boolean=}
+	 * @return {*}
+	 */
+	busy: function(bool) {
+		if (bool !== undefined) {
+			this._busy = bool;
+			return this;
+		}
+		return this._busy;
 	},
 
 	/**
