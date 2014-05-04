@@ -57,19 +57,22 @@ var Block = IgeEntity.extend({
 			col: this._col
 		};
 
-		this._displayHealth = true;
+		// TODO: Check capabilities and confirm with server
+		if (ige.client.state.state() === 'mine') {
+			this._displayHealth = true;
 
-		self.decrementHealthIntervalId = setInterval(function() {
-			if (self._hp > 0) {
-				self._hp--;
-				self.cacheDirty(true);
-			}
-			if (self._hp == 0) {
-				clearInterval(self.decrementHealthIntervalId)
-			}
-		}, self.MINING_TIME / self._maxHp);
+			self.decrementHealthIntervalId = setInterval(function() {
+				if (self._hp > 0) {
+					self._hp--;
+					self.cacheDirty(true);
+				}
+				if (self._hp == 0) {
+					clearInterval(self.decrementHealthIntervalId);
+				}
+			}, self.MINING_TIME / self._maxHp);
 
-		ige.network.send('blockClicked', data);
+			ige.network.send('blockClicked', data);
+		}
 	},
 
 	blockGrid: function() {

@@ -121,6 +121,7 @@ var GameInit = {
 			new Background()
 				.id('helix_nebula_background')
 				.mount(game.spaceBackgroundScene);
+			this.initPlayerState(game);
 
 			//this.initTimeStream(game);
 		}
@@ -208,6 +209,10 @@ var GameInit = {
 		ige.input.mapAction('mouse.button1', ige.input.mouse.button1);
 		ige.input.mapAction('mouse.button2', ige.input.mouse.button2);
 		ige.input.mapAction('mouse.button3', ige.input.mouse.button3);
+	},
+
+	initPlayerState: function(client) {
+		client.state = new ClientState();
 	},
 
 	/**
