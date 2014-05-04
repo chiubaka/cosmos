@@ -39,34 +39,8 @@ var Player = BlockGrid.extend({
 	 */
 	initClient: function() {
 		this.depth(1);
-
-		//new EngineBlock()
-			//.mount(this);
-
-		var player = this;
-		// TODO: Move this
-		this.laserParticleEmitter = new IgeParticleEmitter()
-			// Set the particle entity to generate for each particle
-			.particle(LaserParticle)
-			// Set particle life to 300ms
-			.lifeBase(300)
-			// Set output to 60 particles a second (1000ms)
-			.quantityBase(60)
-			.quantityTimespan(1000)
-			// Set the particle's death opacity to zero so it fades out as it's lifespan runs out
-			.deathOpacityBase(0)
-			// Set velocity vector to y = 0.05, with variance values
-			//.velocityVector(new IgePoint3d(0, 0.05, 0), new IgePoint3d(-0.04, 0.05, 0), new IgePoint3d(0.04, 0.15, 0))
-			.translateVarianceY(-10, 10)
-			.translateVarianceX(-10, 10)
-			// Mount new particles to the object scene
-			.particleMountTarget(ige.client.spaceGameScene)
-			// Move the particle emitter to the bottom of the ship
-			.translateTo(0, 100, 0)
-			.mount(player)
-			// Mount the emitter to the ship
-			.start();
-
+		// TODO: Add engine particles dynamically as engine blocks are added
+		this.addEngineParticles();
 },
 
 	/**
@@ -93,6 +67,31 @@ var Player = BlockGrid.extend({
 			.mount(this.laserMount);
 
 		return this;
+	},
+
+	addEngineParticles: function() {
+		var player = this;
+		this.laserParticleEmitter = new IgeParticleEmitter()
+			// Set the particle entity to generate for each particle
+			.particle(LaserParticle)
+			// Set particle life to 300ms
+			.lifeBase(300)
+			// Set output to 60 particles a second (1000ms)
+			.quantityBase(60)
+			.quantityTimespan(1000)
+			// Set the particle's death opacity to zero so it fades out as it's lifespan runs out
+			.deathOpacityBase(0)
+			// Set velocity vector to y = 0.05, with variance values
+			//.velocityVector(new IgePoint3d(0, 0.05, 0), new IgePoint3d(-0.04, 0.05, 0), new IgePoint3d(0.04, 0.15, 0))
+			.translateVarianceY(-10, 10)
+			.translateVarianceX(-10, 10)
+			// Mount new particles to the object scene
+			.particleMountTarget(ige.client.spaceGameScene)
+			// Move the particle emitter to the bottom of the ship
+			.translateTo(0, 100, 0)
+			.mount(player)
+			// Mount the emitter to the ship
+			.start();
 	},
 
 	/**
