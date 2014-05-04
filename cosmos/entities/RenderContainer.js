@@ -4,6 +4,7 @@ var RenderContainer = IgeEntity.extend({
 	_blockGrid: undefined,
 
 	getBlockFromBlockGrid: function(row, col) {
+		// Check if row, col refers to a block that is off the edge of the block grid.
 		if(row < 0 || col < 0) {
 			return undefined;
 		}
