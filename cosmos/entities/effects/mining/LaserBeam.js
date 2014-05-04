@@ -13,27 +13,13 @@ var LaserBeam = IgeEntity.extend({
 
 			// Fade in the laser beam
 			this.opacity(0);
-			this.newTween();
+			this.fadeInTween();
 		}
 	},
 
-	newTween: function () {
-		/*
-		// Old tween example. This creates a sweeping laser
-
-		var self = this;
-		//var restAngle = Math.radians(90);
-		var restAngle = this.rotate().z();
-		var sweepAngle = Math.radians(75);
-		
-		this._rotate.tween()
-			.stepTo({z: restAngle + sweepAngle/2}, 1000, 'inOutCubic')
-			.stepTo({z: restAngle - sweepAngle/2}, 1000, 'inOutCubic')
-			// From the 1st step, repeat forever
-			.repeatMode (1, -1)
-			.start();
-		*/
-
+	// Note: Old sweeping laser tween is in commit
+	// c4192b5d5a7ee840a688744c8e6ad92fb2a97e51
+	fadeInTween: function () {
 		this.tween()
 			.stepTo({_opacity: 1}, 1000, 'inOutCubic')
 			.start();
