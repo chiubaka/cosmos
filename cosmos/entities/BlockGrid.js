@@ -95,20 +95,23 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	// Created on server, streamed to all clients
 	addMiningParticles: function(blockGridId, row, col) {
-		// Hack because we can't mount on mining laser block
-		// (Server has no blocks mounted)
-		// TODO: Store effects mount in block
-		this.effectsMount = new EffectsMount()
+		var block = ige.$(blockGridId).grid()[row][col];
+		// Calculate where to put our effect mount
+		// with respect to the BlockGrid
+		var x = Block.prototype.WIDTH * col -
+						this._bounds2d.x2 + block._bounds2d.x2;
+		var y = Block.prototype.HEIGHT * row -
+						this._bounds2d.y2 + block._bounds2d.y2;
+
+		// Store the effectsMount in the block so we can remove it later
+		block.effectsMount = new EffectsMount()
 			.mount(this)
 			.streamMode(1)
-			// TODO: Vary the position depending on where block is
-			// or implement server streaming of blocks. Use math to determine
-			// translate with respect to BlockGrid
-			.translateBy(0, 0, 0)
+			.translateBy(x, y, 0)
 
-		this.blockParticleEmitter = new BlockParticleEmitter()
+		block.blockParticleEmitter = new BlockParticleEmitter()
 			.streamMode(1)
-			.mount(this.effectsMount)
+			.mount(block.effectsMount)
 
 		return this;
 	},
