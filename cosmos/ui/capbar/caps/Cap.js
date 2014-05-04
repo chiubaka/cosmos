@@ -84,7 +84,7 @@
 	initEvents: function() {
 		var self = this;
 
-		this.on('mouseUp', function() {
+		this.on('mouseDown', function() {
 			if (!self._selected) {
 				self.select();
 			}
