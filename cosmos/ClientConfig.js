@@ -33,6 +33,7 @@ var igeClientConfig = {
 
 		/* === PLAYER STATE === */
 		'./entities/player/Player.js',
+		'./models/state/ClientState.js',
 
 		/* === USER INTERFACE === */
 		/* HUD */
