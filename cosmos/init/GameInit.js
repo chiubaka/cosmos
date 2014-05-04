@@ -31,96 +31,12 @@ var GameInit = {
 		this.initScenes(game);
 
 		if (ige.isServer) {
-			// The server streams these entities to the client. Creating them on both the client AND the server may speed
-			// up initialization time.
-			var asteroidSpacing = 1500;
-			var asteroidOffset = 500;
-			for (var x = 0; x < 3; x++) {
-				for (var y = 0; y < 3; y++) {
-					new BlockGrid()
-						.id('genRandomAsteroid' + x + "," + y)
-						.streamMode(1)
-						.mount(game.spaceGameScene)
-						.depth(100)
-						.grid(AsteroidGenerator.genProceduralAsteroid(20))
-						.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
-				}
-			}
-
-			var asteroidSpacing = 30;
-			var asteroidOffset = -300;
-			for (var x = -10; x < 0; x++) {
-				for (var y = -10; y < 0; y++) {
-					new BlockGrid()
-						.category('smallAsteroid')
-						.id('littleAsteroid' + x + ',' + y)
-						.streamMode(1)
-						.mount(game.spaceGameScene)
-						.depth(100)
-						.grid(AsteroidGenerator.singleBlock())
-						.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
-				}
-			}
-
-			// Set the contact listener methods to detect when
-			// contacts (collisions) begin and end
-			ige.box2d.contactListener(
-				// Listen for when contact's begin
-				function (contact) {
-					// If player ship is near small asteroids, attract them
-					if (contact.igeEitherCategory('player') &&
-							contact.igeEitherCategory('smallAsteroid')) {
-						var asteroid = contact.igeEntityByCategory('smallAsteroid');
-						var player = contact.igeEntityByCategory('player');
-
-						// TODO: Make it so blocks are attracted to multiple players
-						if (asteroid.attractedTo === undefined) {
-							asteroid.attractedTo = player;
-						}
-					}
-				},
-				// Listen for when contacts end
-				function (contact) {
-					if (contact.igeEitherCategory('player') &&
-							contact.igeEitherCategory('smallAsteroid')) {
-						var asteroid = contact.igeEntityByCategory('smallAsteroid');
-						asteroid.attractedTo = undefined;
-					}
-				},
-				// Presolve events. This is called after collision is detected, but
-				// before collision repsonse is calculated.
-				function (contact) {
-					if (contact.igeEitherCategory('player') &&
-							contact.igeEitherCategory('smallAsteroid')) {
-						var asteroid = contact.igeEntityByCategory('smallAsteroid');
-						var player = contact.igeEntityByCategory('player');
-						var shipFixture = contact.fixtureByCategory('player');
-
-						// Asteroid has hit ship blocks, destroy the asteroid
-						if (!shipFixture.m_isSensor) {
-							// Disable contact so player doesn't move due to collision
-							contact.SetEnabled(false);
-							// Ignore multiple collision points
-							if (asteroid === undefined || !asteroid.alive()) {
-								return;
-							}
-							ige.emit('block collected', [player, asteroid.grid()[0][0].classId()]);
-							asteroid.destroy();
-						}
-					}
-				});
-
-			// Register game event listeners
-			ige.on('block mined', Player.prototype.blockMinedListener);
-			ige.on('block collected', Player.prototype.blockCollectListener);
-			}
-
-		else {
+			this.initEnvironment(game);
+			this.initPhysics(game);
+			this.initServerEvents(game);
+		} else {
 			this.initPlayerControls(game);
-
-			new Background()
-				.id('helix_nebula_background')
-				.mount(game.spaceBackgroundScene);
+			this.initPlayerState(game);
 
 			//this.initTimeStream(game);
 		}
@@ -133,7 +49,17 @@ var GameInit = {
 	 * @param game either ige.client or ige.server
 	 */
 	initScenes: function(game) {
-		this.initSpaceScene(game);
+		// Initialize client-specific overlay scenes
+		if (!ige.isServer) {
+			// Initialize UI scenes
+			this.initUIScenes(game);
+
+			// Initialize debugging info
+			this.initDebugDisplay(game);
+		}
+
+		// Initialize in-game scenes
+		this.initInGameScenes(game);
 	},
 
 	/**
@@ -143,7 +69,7 @@ var GameInit = {
 	 * to the clients. Scenes that are not associated with streamed entities can usually be loaded on just the client.
 	 * @param game either ige.client or ige.server
 	 */
-	initSpaceScene: function(game) {
+	initInGameScenes: function(game) {
 		game.spaceScene = new IgeScene2d()
 			.id('spaceScene')
 			.mount(game.mainScene);
@@ -156,17 +82,211 @@ var GameInit = {
 		// For now, the server does not need to know about the background scene.
 		// The server does not need to load the UI.
 		if (!ige.isServer) {
-			game.spaceBackgroundScene = new IgeScene2d()
+			this.initBackgroundScene(game);
+
+			// Pre-initialize player HUD
+			this.initHUD(game);
+		}
+	},
+
+	initUIScenes: function(game) {
+		game.uiModalScene = new IgeScene2d()
+			.id('uiModalScene')
+			.layer(game.LAYER_MODAL)
+			.ignoreCamera(true)
+			.mount(game.mainScene);
+	},
+
+	initHUD: function(game) {
+		game.hudScene = new IgeScene2d()
+			.id('hudScene')
+			.layer(game.LAYER_HUD)
+			.ignoreCamera(true)
+			.mount(game.spaceScene);
+
+		game.hud = new HUDManager(game);
+	},
+
+	initBackgroundScene: function(game) {
+		game.spaceBackgroundScene = new IgeScene2d()
 				.id('spaceBackgroundScene')
 				.layer(game.LAYER_BACKGROUND)
 				.mount(game.spaceScene);
 
-			game.spaceUiScene = new IgeScene2d()
-				.id('spaceUiScene')
-				.layer(game.LAYER_FOREGROUND)
-				.ignoreCamera(true)
-				.mount(game.spaceScene);
+		new Background()
+			.id('helix_nebula_background')
+			.mount(game.spaceBackgroundScene);
+	},
+
+	initDebugDisplay: function(client) {
+	},
+
+	initEnvironment: function(game) {
+		// The server streams these entities to the client. Creating them on both the client AND the server may speed
+		// up initialization time.
+		var asteroidSpacing = 1500;
+		var asteroidOffset = 500;
+		for (var x = 0; x < 3; x++) {
+			for (var y = 0; y < 3; y++) {
+				new BlockGrid()
+					.id('genRandomAsteroid' + x + "," + y)
+					.streamMode(1)
+					.mount(game.spaceGameScene)
+					.depth(100)
+					.grid(AsteroidGenerator.genProceduralAsteroid(20))
+					.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
+			}
 		}
+
+		var asteroidSpacing = 30;
+		var asteroidOffset = -300;
+		for (var x = -10; x < 0; x++) {
+			for (var y = -10; y < 0; y++) {
+				new BlockGrid()
+					.category('smallAsteroid')
+					.id('littleAsteroid' + x + ',' + y)
+					.streamMode(1)
+					.mount(game.spaceGameScene)
+					.depth(100)
+					.grid(AsteroidGenerator.singleBlock())
+					.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
+			}
+		}
+
+		var asteroidSpacing = 30;
+		var asteroidOffset = -300;
+		for (var x = -10; x < 0; x++) {
+			for (var y = -10; y < 0; y++) {
+				new BlockGrid()
+					.category('smallAsteroid')
+					.id('littleAsteroid' + x + ',' + y)
+					.streamMode(1)
+					.mount(game.spaceGameScene)
+					.depth(100)
+					.grid(AsteroidGenerator.singleBlock())
+					.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
+			}
+		}
+	},
+
+	initPhysics: function(game) {
+		// Set the contact listener methods to detect when
+		// contacts (collisions) begin and end
+		ige.box2d.contactListener(
+			// Listen for when contact's begin
+			function(contact) {
+				// If player ship is near small asteroids, attract them
+				if (contact.igeEitherCategory('player') &&
+					contact.igeEitherCategory('smallAsteroid')) {
+					var asteroid = contact.igeEntityByCategory('smallAsteroid');
+					var player = contact.igeEntityByCategory('player');
+
+					// TODO: Make it so blocks are attracted to multiple players
+					if (asteroid.attractedTo === undefined) {
+						asteroid.attractedTo = player;
+					}
+				}
+			},
+			// Listen for when contacts end
+			function(contact) {
+				if (contact.igeEitherCategory('player') &&
+					contact.igeEitherCategory('smallAsteroid')) {
+					var asteroid = contact.igeEntityByCategory('smallAsteroid');
+					asteroid.attractedTo = undefined;
+				}
+			},
+			// Presolve events. This is called after collision is detected, but
+			// before collision repsonse is calculated.
+			function(contact) {
+				if (contact.igeEitherCategory('player') &&
+					contact.igeEitherCategory('smallAsteroid')) {
+					var asteroid = contact.igeEntityByCategory('smallAsteroid');
+					var player = contact.igeEntityByCategory('player');
+					var shipFixture = contact.fixtureByCategory('player');
+
+					// Asteroid has hit ship blocks, destroy the asteroid
+					if (!shipFixture.m_isSensor) {
+						// Disable contact so player doesn't move due to collision
+						contact.SetEnabled(false);
+						// Ignore multiple collision points
+						if (asteroid === undefined || !asteroid.alive()) {
+							return;
+						}
+						ige.emit('block collected', [player, asteroid.grid()[0][0].classId()]);
+						asteroid.destroy();
+					}
+				}
+			});
+	},
+
+	initServerEvents: function(game) {
+		// Register game event listeners
+		ige.on('block mined', Player.prototype.blockMinedListener);
+		ige.on('block collected', Player.prototype.blockCollectListener);
+	},
+
+	initClientEvents: function(game) {
+		
+	},
+
+	initPhysics: function(game) {
+		// Set the contact listener methods to detect when
+		// contacts (collisions) begin and end
+		ige.box2d.contactListener(
+			// Listen for when contact's begin
+			function(contact) {
+				// If player ship is near small asteroids, attract them
+				if (contact.igeEitherCategory('player') &&
+					contact.igeEitherCategory('smallAsteroid')) {
+					var asteroid = contact.igeEntityByCategory('smallAsteroid');
+					var player = contact.igeEntityByCategory('player');
+
+					// TODO: Make it so blocks are attracted to multiple players
+					if (asteroid.attractedTo === undefined) {
+						asteroid.attractedTo = player;
+					}
+				}
+			},
+			// Listen for when contacts end
+			function(contact) {
+				if (contact.igeEitherCategory('player') &&
+					contact.igeEitherCategory('smallAsteroid')) {
+					var asteroid = contact.igeEntityByCategory('smallAsteroid');
+					asteroid.attractedTo = undefined;
+				}
+			},
+			// Presolve events. This is called after collision is detected, but
+			// before collision repsonse is calculated.
+			function(contact) {
+				if (contact.igeEitherCategory('player') &&
+					contact.igeEitherCategory('smallAsteroid')) {
+					var asteroid = contact.igeEntityByCategory('smallAsteroid');
+					var player = contact.igeEntityByCategory('player');
+					var shipFixture = contact.fixtureByCategory('player');
+
+					// Asteroid has hit ship blocks, destroy the asteroid
+					if (!shipFixture.m_isSensor) {
+						// Disable contact so player doesn't move due to collision
+						contact.SetEnabled(false);
+						// Ignore multiple collision points
+						if (asteroid === undefined || !asteroid.alive()) {
+							return;
+						}
+						ige.emit('block collected', [player, asteroid.grid()[0][0].classId()]);
+						asteroid.destroy();
+					}
+				}
+			});
+	},
+
+	initServerEvents: function(game) {
+		// Register game event listeners
+		ige.on('block mined', Player.prototype.blockMinedListener);
+		ige.on('block collected', Player.prototype.blockCollectListener);
+	},
+
+	initClientEvents: function(game) {
+		
 	},
 
 	/**
@@ -197,7 +317,7 @@ var GameInit = {
 			.width(400)
 			.top(0)
 			.center(0)
-			.mount(client.spaceUiScene);
+			.mount(client.uiModalScene);
 
 		client.custom1 = {
 			name: 'Delta',
