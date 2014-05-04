@@ -125,18 +125,28 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	processBlockActionServer: function(data, player) {
 		var self = this;
+		var block = self._grid[data.row][data.col];
+		if (block === undefined) {
+			return false;
+		}
 
 		switch (data.action) {
 			case 'remove':
 				this.remove(data.row, data.col);
-				break;
+				return true;
 
 			// TODO: Vary mining speed based on block material
 			case 'mine':
+				// Blocks should only be mined by one player, for now.
+				if(block.busy()) {
+					return false;
+				}
+				block.busy(true);
+
 				setTimeout(function() {
 					// Emit a message saying that a block has been mined, but not
 					// necessarily collected. This is used for removing the laser.
-					var blockClassId = self._grid[data.row][data.col].classId();
+					var blockClassId = block.classId();
 					ige.emit('block mined', [player, blockClassId]);
 
 					// Remove block server side, then send remove msg to client
@@ -144,9 +154,12 @@ var BlockGrid = IgeEntityBox2d.extend({
 					data.action = 'remove';
 					ige.network.send('blockAction', data);
 				}, Block.prototype.MINING_TIME);
+
+				return true;
 				
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
+				return false;
 		}
 	},
 
