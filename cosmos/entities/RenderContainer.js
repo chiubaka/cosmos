@@ -90,7 +90,6 @@ var RenderContainer = IgeEntity.extend({
 			this.getBlockFromBlockGrid(row, col+1) == undefined ||
 			this.getBlockFromBlockGrid(row, col-1) == undefined) {
 			block.mouseDown(event, control);
-			this.cacheDirty(true);
 		}
 	},
 
