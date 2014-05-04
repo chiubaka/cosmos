@@ -50,6 +50,7 @@
 		this.ID_NORMAL = this.classId();
 		this.ID_HOVER = this.classId() + ':hover';
 		this.ID_SELECTED = this.classId() + ':selected';
+		this.ID_SELECTED_HOVER = this.classId() + ':selected:hover';
 
 		ige.ui.style(this.DEFAULT_CLASS, {
 			'width': this.WIDTH,
@@ -63,6 +64,11 @@
 		});
 
 		ige.ui.style('#' + this.ID_HOVER, {
+			'backgroundColor': this.BG_COLOR,
+			'borderBottomColor': this.BG_COLOR,
+		});
+
+		ige.ui.style('#' + this.ID_SELECTED_HOVER, {
 			'backgroundColor': this.BG_COLOR,
 			'borderBottomColor': this.BG_COLOR,
 		});
@@ -87,6 +93,9 @@
 		this.on('mouseDown', function() {
 			if (!self._selected) {
 				self.select();
+			} else {
+				self.deselect();
+				ige.emit('capbar cap cleared', [self.classId()]);
 			}
 		});
 
@@ -105,8 +114,8 @@
 		this.id(this.ID_SELECTED);
 		this.applyStyle(ige.ui.style("#" + this.ID_SELECTED));
 
-		ige.emit('capbar cap selected', [this.classId()]);
 		this._selected = true;
+		ige.emit('capbar cap selected', [this.classId()]);
 	},
 
 	deselect: function() {
@@ -120,9 +129,7 @@
 	},
 
 	_updateStyle: function() {
-		if (!this._selected) {
-			IgeUiElement.prototype._updateStyle.call(this);
-		}
+		IgeUiElement.prototype._updateStyle.call(this);
 
 		if (this._label !== undefined) {
 			this._label._mouseStateOver = this._mouseStateOver;
