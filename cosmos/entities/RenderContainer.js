@@ -10,7 +10,7 @@ var RenderContainer = IgeEntity.extend({
 		if (row >= this._blockGrid.grid().length) {
 			return undefined;
 		}
-		if (col >= this._blockGrid.grid()[0].length) {
+		if (col >= this._blockGrid.grid()[row].length) {
 			return undefined;
 		}
 
