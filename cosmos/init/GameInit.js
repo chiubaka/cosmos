@@ -123,6 +123,11 @@ var GameInit = {
 				.mount(game.spaceBackgroundScene);
 			this.initPlayerState(game);
 
+			new ClickInterceptLayer()
+				.id('ClickInterceptLayer')
+				.mount(game.spaceBackgroundScene)
+				.depth(1000);//TODO this might not be the best place to mount it
+
 			//this.initTimeStream(game);
 		}
 	},

@@ -6,6 +6,7 @@ var igeClientConfig = {
 		'./entities/BlockGrid.js',
 		'./entities/RenderContainer.js',
 
+		/* Parts */
 		/* Ship part blocks */
 		'./entities/blocks/Part.js',
 		'./entities/blocks/parts/EngineBlock.js',
@@ -57,6 +58,9 @@ var igeClientConfig = {
 		/* Helper utilities */
 		'./utils/DeploymentUtils.js',
 		'./utils/RandomInterval.js',
+
+		/* UI */
+		'./gameClasses/ClickInterceptLayer.js',
 
 		/* === GAME SETUP === */
 		/* Configuration */
