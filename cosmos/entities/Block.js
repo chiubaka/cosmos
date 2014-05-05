@@ -4,11 +4,26 @@ var Block = IgeEntity.extend({
 	WIDTH: 26,
 	HEIGHT: 26,
 
+	// The pixel margin between the drawn health bar and the border of the block
+	HEALTH_BAR_MARGIN: 3,
+	// The pixel height of the health bar
+	HEALTH_BAR_HEIGHT: 4,
+
+	// The time it takes to mine a block in milliseconds
+	// TODO: Make this an instance variable and let the value vary for different block types
+	MINING_TIME: 2000,
+
 	_row: undefined,
 	_col: undefined,
 
 	_fixture: undefined,
-	_fixtureDef:undefined,
+	_fixtureDef: undefined,
+
+	_maxHp: 10,
+	_hp: undefined,
+	_displayHealth: false,
+
+	_busy: false,
 
 	/**
 	 * Construct a new block
@@ -20,7 +35,7 @@ var Block = IgeEntity.extend({
 		// Use an even number so values don't have to become approximate when we divide by two
 		this.width(this.WIDTH).height(this.HEIGHT);
 
-		this.hp = 10; //this is the default hp of all blocks. Subclasses of block can have a different hp.
+		this._hp = this._maxHp;
 
 		if (!ige.isServer) {
 			this.updateCount = 0;
@@ -37,11 +52,24 @@ var Block = IgeEntity.extend({
 	},
 
 	mouseDown: function(event, control) {
+		var self = this;
 		var data = {
 			blockGridId: this.blockGrid().id(),
 			row: this._row,
 			col: this._col
 		};
+
+		this._displayHealth = true;
+
+		self.decrementHealthIntervalId = setInterval(function() {
+			if (self._hp > 0) {
+				self._hp--;
+				self.cacheDirty(true);
+			}
+			if (self._hp == 0) {
+				clearInterval(self.decrementHealthIntervalId)
+			}
+		}, self.MINING_TIME / self._maxHp);
 
 		ige.network.send('blockClicked', data);
 	},
@@ -93,6 +121,21 @@ var Block = IgeEntity.extend({
 		if (this.hp <= 0) {
 			this.onDeath();
 		}
+	},
+
+	/**
+	 * Block is set to busy on the server when mining begins.
+	 * This is so blocks can't be mined by two players and get
+	 * doubly removed from the BlockGrid.
+	 * @param {boolean=}
+	 * @return {*}
+	 */
+	busy: function(bool) {
+		if (bool !== undefined) {
+			this._busy = bool;
+			return this;
+		}
+		return this._busy;
 	},
 
 	/**

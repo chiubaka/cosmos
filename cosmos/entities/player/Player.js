@@ -24,30 +24,76 @@ var Player = BlockGrid.extend({
 		this.height(20);
 		this.translateTo(-200, -200, 0);
 
-		if (ige.isServer) {
-			var blockMinedListener = function (blockClassId) {
-				this.laserBeam.destroy();
-				this.laserBeam = undefined;
-			}
-			this.on('block mined', blockMinedListener);
+		if (ige.isClient) {
+			this.initClient();
+		} else {
+			this.initServer();
 		}
-		else {
-			this.depth(1);
-		}
-
+		
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);
 	},
 
-	// Created on server, streamed to all clients
-	addLaser: function() {
-		
-		this.laserBeam = new LaserBeam()
-			.translateTo(0, -115, 0)
-			.streamMode(1)
-			.mount(this);
+	/**
+	 * Perform client-specific initialization here. Called by init()
+	 */
+	initClient: function() {
+		this.depth(1);
+		// TODO: Add engine particles dynamically as engine blocks are added
+		this.addEngineParticles();
+},
 
-		return this;		
+	/**
+	 * Perform server-specific initialization here. Called by init()
+	 */
+	initServer: function() {
+		this.cargo = new Cargo();
+	},
+
+	// Created on server, streamed to all clients
+	addLaser: function(blockGridId, row, col) {
+		// Hack because we can't mount on mining laser block
+		// (Server has no blocks mounted)
+		this.laserMount = new EffectsMount()
+			.mount(this)
+			.streamMode(1)
+			// TODO: Vary the position depending on where mining laser is,
+			// or implement server streaming of blocks.
+			// Right now, we translate the laser mount to the location of the mining
+			// laser block.
+			.translateBy(0, -115, 0)
+
+		this.laserBeam = new LaserBeam()
+			.setTarget(blockGridId, row, col)
+			.streamMode(1)
+			.mount(this.laserMount);
+
+		return this;
+	},
+
+	addEngineParticles: function() {
+		var player = this;
+		this.laserParticleEmitter = new IgeParticleEmitter()
+			// Set the particle entity to generate for each particle
+			.particle(EngineParticle)
+			// Set particle life to 300ms
+			.lifeBase(300)
+			// Set output to 60 particles a second (1000ms)
+			.quantityBase(60)
+			.quantityTimespan(1000)
+			// Set the particle's death opacity to zero so it fades out as it's lifespan runs out
+			.deathOpacityBase(0)
+			// Set velocity vector to y = 0.05, with variance values
+			//.velocityVector(new IgePoint3d(0, 0.05, 0), new IgePoint3d(-0.04, 0.05, 0), new IgePoint3d(0.04, 0.15, 0))
+			.translateVarianceY(-10, 10)
+			.translateVarianceX(-10, 10)
+			// Mount new particles to the object scene
+			.particleMountTarget(ige.client.spaceGameScene)
+			// Move the particle emitter to the bottom of the ship
+			.translateTo(0, 100, 0)
+			.mount(player)
+			// Mount the emitter to the ship
+			.start();
 	},
 
 	/**
@@ -132,22 +178,39 @@ var Player = BlockGrid.extend({
 	},
 
 	/**
-	 * Called every time a ship collects a block
-	 * @param {BlockGrid}
+	 * Called every time a ship mines a block
 	 */
-	onBlockCollect: function(block) {
-		//console.log("Block collected!");
-		//TODO: add a cool animation or sound here.
+	blockMinedListener: function (player, blockClassId) {
+		player.laserBeam.destroy();
+		player.laserBeam = undefined;
 	},
 
 	/**
-	 * Called every frame by the engine when this entity is mounted to the
-	 * scenegraph.
-	 * @param ctx The canvas context to render to.
+	 * Called every time a ship collects a block
 	 */
-	tick: function(ctx) {
-		/* CEXCLUDE */
-		/* For the server: */
+	blockCollectListener: function (player, blockClassId) {
+		//TODO: Add a cool animation or sound here, or on another listener
+		//console.log("Block collected!");
+		player.cargo.addBlock(blockClassId);
+	},
+
+	update: function(ctx) {
+		if (!ige.isServer) {
+			/* Save the old control state for comparison later */
+			oldControls = JSON.stringify(this.controls);
+
+			/* Modify the KEYBOARD controls to reflect which keys the client currently is pushing */
+			this.controls.key.up = ige.input.actionState('key.up');
+			this.controls.key.down = ige.input.actionState('key.down');
+			this.controls.key.left = ige.input.actionState('key.left');
+			this.controls.key.right = ige.input.actionState('key.right');
+
+			if (JSON.stringify(this.controls) !== oldControls) { //this.controls !== oldControls) {
+				// Tell the server about our control change
+				ige.network.send('playerControlUpdate', this.controls);
+			}
+		}
+
 		if (ige.isServer) {
 			// This determines how fast you can rotate your spaceship
 			var angularImpulse = -10000;
@@ -164,7 +227,8 @@ var Player = BlockGrid.extend({
 				var linearImpulse;
 				if (this.controls.key.up) {
 					linearImpulse = 100;
-				} else if (this.controls.key.down) {
+				}
+				else if (this.controls.key.down) {
 					linearImpulse = -100;
 				}
 
@@ -191,27 +255,8 @@ var Player = BlockGrid.extend({
 				}
 			}
 		}
-		/* CEXCLUDE */
 
-		/* For the client: */
-		if (!ige.isServer) {
-			/* Save the old control state for comparison later */
-			oldControls = JSON.stringify(this.controls);
-
-			/* Modify the KEYBOARD controls to reflect which keys the client currently is pushing */
-			this.controls.key.up = ige.input.actionState('key.up');
-			this.controls.key.down = ige.input.actionState('key.down');
-			this.controls.key.left = ige.input.actionState('key.left');
-			this.controls.key.right = ige.input.actionState('key.right');
-
-			if (JSON.stringify(this.controls) !== oldControls) { //this.controls !== oldControls) {
-				// Tell the server about our control change
-				ige.network.send('playerControlUpdate', this.controls);
-			}
-		}
-
-		// Call the BlockGrid (super-class) tick() method
-		BlockGrid.prototype.tick.call(this, ctx);
+		BlockGrid.prototype.update.call(this, ctx);
 	}
 });
 

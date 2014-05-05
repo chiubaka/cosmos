@@ -10,6 +10,7 @@ var Client = IgeClass.extend({
 
 		self.LAYER_BACKGROUND = 10;
 		self.LAYER_MIDDLE = 50;
+		self.LAYER_MIDDLE_HIGH = 60;
 		self.LAYER_FOREGROUND = 90;
 
 		// Enable IGE on screen editor
@@ -32,7 +33,9 @@ var Client = IgeClass.extend({
 			fixtureDebuggingTexture: new IgeTexture(gameRoot +
 				'assets/debug/FixtureDebuggingTexture.js'),
 			laserBeamTexture: new IgeTexture(gameRoot +
-				'assets/laser/laserbeam.png')
+				'assets/laser/laserbeam.png'),
+			rectangleTexture: new IgeTexture(gameRoot +
+				'assets/particle/Rectangle.js')
 		};
 
 		ige.on('texturesLoaded', function () {

@@ -25,6 +25,7 @@ var GameInit = {
 			.id('mainViewport')
 			.autoSize(true)
 			.scene(game.mainScene)
+			//Note: drawBounds runs on the server for and will slow performance
 			.drawBounds(false) //draws the axis aligned bounding boxes. Set to true for debugging.
 			.mount(ige);
 
@@ -41,7 +42,6 @@ var GameInit = {
 						.id('genRandomAsteroid' + x + "," + y)
 						.streamMode(1)
 						.mount(game.spaceGameScene)
-						.depth(100)
 						.grid(AsteroidGenerator.genProceduralAsteroid(20))
 						.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
 				}
@@ -56,7 +56,6 @@ var GameInit = {
 						.id('littleAsteroid' + x + ',' + y)
 						.streamMode(1)
 						.mount(game.spaceGameScene)
-						.depth(100)
 						.grid(AsteroidGenerator.singleBlock())
 						.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
 				}
@@ -100,12 +99,20 @@ var GameInit = {
 						if (!shipFixture.m_isSensor) {
 							// Disable contact so player doesn't move due to collision
 							contact.SetEnabled(false);
-							// TODO: Add to cargo. Consider emitting an event?
-							player.onBlockCollect(asteroid);
+							// Ignore multiple collision points
+							if (asteroid === undefined || !asteroid.alive()) {
+								return;
+							}
+							ige.emit('block collected', [player, asteroid.grid()[0][0].classId()]);
 							asteroid.destroy();
 						}
 					}
 				});
+
+			// Register game event listeners
+			ige.on('block mined', Player.prototype.blockMinedListener);
+			ige.on('block mined', BlockGrid.prototype.blockMinedListener);
+			ige.on('block collected', Player.prototype.blockCollectListener);
 			}
 
 		else {
@@ -158,6 +165,11 @@ var GameInit = {
 				.id('spaceBackgroundScene')
 				.layer(game.LAYER_BACKGROUND)
 				.mount(game.spaceScene);
+
+			game.effectsScene = new IgeScene2d()
+				.id('effectsScene')
+				.layer(game.LAYER_MIDDLE_HIGH)
+				.mount(game.spaceScene)
 
 			game.spaceUiScene = new IgeScene2d()
 				.id('spaceUiScene')

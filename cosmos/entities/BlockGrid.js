@@ -93,30 +93,74 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return grid;
 	},
 
+	// Created on server, streamed to all clients
+	addMiningParticles: function(blockGridId, row, col) {
+		var block = ige.$(blockGridId).grid()[row][col];
+		// Calculate where to put our effect mount
+		// with respect to the BlockGrid
+		var x = Block.prototype.WIDTH * col -
+						this._bounds2d.x2 + block._bounds2d.x2;
+		var y = Block.prototype.HEIGHT * row -
+						this._bounds2d.y2 + block._bounds2d.y2;
+
+		// Store the effectsMount in the block so we can remove it later
+		block.effectsMount = new EffectsMount()
+			.mount(this)
+			.streamMode(1)
+			.translateBy(x, y, 0)
+
+		block.blockParticleEmitter = new BlockParticleEmitter()
+			.streamMode(1)
+			.mount(block.effectsMount)
+
+		return this;
+	},
+
+	/**
+	 * Called every time a ship mines a block
+	 */
+	blockMinedListener: function (player, blockClassId, block) {
+		block.blockParticleEmitter.destroy();
+		block.effectsMount.destroy();
+	},
+
 	processBlockActionServer: function(data, player) {
 		var self = this;
+		var block = self._grid[data.row][data.col];
+		if (block === undefined) {
+			return false;
+		}
 
 		switch (data.action) {
 			case 'remove':
 				this.remove(data.row, data.col);
-				break;
+				return true;
 
 			// TODO: Vary mining speed based on block material
 			case 'mine':
+				// Blocks should only be mined by one player, for now.
+				if(block.busy()) {
+					return false;
+				}
+				block.busy(true);
+
 				setTimeout(function() {
 					// Emit a message saying that a block has been mined, but not
 					// necessarily collected. This is used for removing the laser.
-					var blockClassId = self._grid[data.row][data.col].classId();
-					player.emit('block mined', [blockClassId]);
+					var blockClassId = block.classId();
+					ige.emit('block mined', [player, blockClassId, block]);
 
 					// Remove block server side, then send remove msg to client
 					self.remove(data.row, data.col);
 					data.action = 'remove';
 					ige.network.send('blockAction', data);
-				}, 2000);
+				}, Block.prototype.MINING_TIME);
 
+				return true;
+				
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
+				return false;
 		}
 	},
 
@@ -126,6 +170,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		switch (data.action) {
 			case 'remove':
 				this.remove(data.row, data.col);
+				this._renderContainer.cacheDirty(true);
 				break;
 
 			default:
@@ -162,7 +207,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 			var newGrid = new BlockGrid()
 				.category('smallAsteroid')
 				.mount(ige.server.spaceGameScene)
-				.depth(100)
 				.grid([[Block.prototype.blockFromClassId(block.classId())]])
 				.translateTo(finalX, finalY, 0)
 				.rotate().z(theta)
@@ -173,10 +217,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		block.destroy();
 		this._grid[row][col] = undefined;
-
-		if (!ige.isServer ) {
-			this._renderContainer.cacheDirty(true);
-		}
 	},
 
 	/**

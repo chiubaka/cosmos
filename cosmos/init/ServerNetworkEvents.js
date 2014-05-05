@@ -64,25 +64,16 @@ var ServerNetworkEvents = {
 			return;
 		}
 
+		// TODO: Guard against bogus blockGridId from client
 		var blockGrid = ige.$(data.blockGridId);
 		data.action = 'mine';
-		blockGrid.processBlockActionServer(data, player);
+		if(blockGrid.processBlockActionServer(data, player)) {
+			// Activate mining laser
+			player.addLaser(data.blockGridId, data.row, data.col);
+			blockGrid.addMiningParticles(data.blockGridId, data.row, data.col);
+		}
 
-		ige.network.send('blockAction', data);
 
-		// Activate mining laser
-		player.addLaser();
-	},
-
-	_onBackgroundClicked: function(data, clientId) {
-		new BlockGrid()
-			.category('smallAsteroid')
-			.id('littleAsteroid' + Math.random())
-			.streamMode(1)
-			.mount(ige.$("spaceGameScene"))
-			.depth(100)
-			.grid(AsteroidGenerator.singleBlock())
-			.translateTo(data.x, data.y, 0);
 	}
 };
 

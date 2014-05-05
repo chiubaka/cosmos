@@ -86,11 +86,10 @@ var RenderContainer = IgeEntity.extend({
 		// relative to the child's bounding box, but since we don't use any of those properties for the moment,
 		// ignore that.
 		if (this.getBlockFromBlockGrid(row+1, col) == undefined ||
-				this.getBlockFromBlockGrid(row-1, col) == undefined ||
-				this.getBlockFromBlockGrid(row, col+1) == undefined ||
-				this.getBlockFromBlockGrid(row, col-1) == undefined) {
+			this.getBlockFromBlockGrid(row-1, col) == undefined ||
+			this.getBlockFromBlockGrid(row, col+1) == undefined ||
+			this.getBlockFromBlockGrid(row, col-1) == undefined) {
 			block.mouseDown(event, control);
-			this.cacheDirty(true);
 
 			//TODO this doesn't quite work yet. It was supposed to stop the propagation. It doesn’t stop the propagation. I know that because I can click and still create a block even if I am clicking on an existing block.
 			control.stopPropagation();
