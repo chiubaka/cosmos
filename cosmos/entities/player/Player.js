@@ -200,10 +200,14 @@ var Player = BlockGrid.extend({
 			oldControls = JSON.stringify(this.controls);
 
 			/* Modify the KEYBOARD controls to reflect which keys the client currently is pushing */
-			this.controls.key.up = ige.input.actionState('key.up');
-			this.controls.key.down = ige.input.actionState('key.down');
-			this.controls.key.left = ige.input.actionState('key.left');
-			this.controls.key.right = ige.input.actionState('key.right');
+			this.controls.key.up =
+				ige.input.actionState('key.up') | ige.input.actionState('key.up_W');
+			this.controls.key.down =
+				ige.input.actionState('key.down') | ige.input.actionState('key.down_S');
+			this.controls.key.left =
+				ige.input.actionState('key.left') | ige.input.actionState('key.left_A');
+			this.controls.key.right =
+				ige.input.actionState('key.right') | ige.input.actionState('key.right_D');
 
 			if (JSON.stringify(this.controls) !== oldControls) { //this.controls !== oldControls) {
 				// Tell the server about our control change

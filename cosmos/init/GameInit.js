@@ -76,13 +76,19 @@ var GameInit = {
 
 		game.spaceGameScene = new IgeScene2d()
 			.id('spaceGameScene')
-			.layer(game.LAYER_MIDDLE)
+			.layer(game.LAYER_WORLD)
 			.mount(game.spaceScene);
 
 		if (!ige.isServer) {
 			game.effectsScene = new IgeScene2d()
 				.id('effectsScene')
-				.layer(game.LAYER_MIDDLE_HIGH)
+				.layer(game.LAYER_WORLD_OVERLAY)
+				.mount(game.spaceScene)
+
+			game.spaceUiScene = new IgeScene2d()
+				.id('spaceUiScene')
+				.layer(game.LAYER_HUD)
+				.ignoreCamera(true)
 				.mount(game.spaceScene);
 
 			// For now, the server does not need to know about the background scene.
@@ -248,6 +254,12 @@ var GameInit = {
 		ige.input.mapAction('key.right', ige.input.key.right);
 		ige.input.mapAction('key.up', ige.input.key.up);
 		ige.input.mapAction('key.down', ige.input.key.down);
+
+		// Alternate WASD controls
+		ige.input.mapAction('key.left_A', ige.input.key.a);
+		ige.input.mapAction('key.right_D', ige.input.key.d);
+		ige.input.mapAction('key.up_W', ige.input.key.w);
+		ige.input.mapAction('key.down_S', ige.input.key.s);
 
 		ige.input.mapAction('mouse.button1', ige.input.mouse.button1);
 		ige.input.mapAction('mouse.button2', ige.input.mouse.button2);
