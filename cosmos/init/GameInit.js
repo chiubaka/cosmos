@@ -150,7 +150,7 @@ var GameInit = {
 
 		game.spaceGameScene = new IgeScene2d()
 			.id('spaceGameScene')
-			.layer(game.LAYER_MIDDLE)
+			.layer(game.LAYER_WORLD)
 			.mount(game.spaceScene);
 
 		// For now, the server does not need to know about the background scene.
@@ -163,12 +163,12 @@ var GameInit = {
 
 			game.effectsScene = new IgeScene2d()
 				.id('effectsScene')
-				.layer(game.LAYER_MIDDLE_HIGH)
+				.layer(game.LAYER_WORLD_OVERLAY)
 				.mount(game.spaceScene)
 
 			game.spaceUiScene = new IgeScene2d()
 				.id('spaceUiScene')
-				.layer(game.LAYER_FOREGROUND)
+				.layer(game.LAYER_HUD)
 				.ignoreCamera(true)
 				.mount(game.spaceScene);
 		}
