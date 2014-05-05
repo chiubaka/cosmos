@@ -45,6 +45,7 @@ var GameInit = {
 			.id('mainViewport')
 			.autoSize(true)
 			.scene(game.mainScene)
+			//Note: drawBounds runs on the server for and will slow performance
 			.drawBounds(false) //draws the axis aligned bounding boxes. Set to true for debugging.
 			.mount(ige);
 
@@ -78,9 +79,14 @@ var GameInit = {
 			.layer(game.LAYER_MIDDLE)
 			.mount(game.spaceScene);
 
-		// For now, the server does not need to know about the background scene.
-		// The server does not need to load the UI.
 		if (!ige.isServer) {
+			game.effectsScene = new IgeScene2d()
+				.id('effectsScene')
+				.layer(game.LAYER_MIDDLE_HIGH)
+				.mount(game.spaceScene);
+
+			// For now, the server does not need to know about the background scene.
+			// The server does not need to load the UI.
 			this.initBackgroundScene();
 
 			// Pre-initialize player HUD
@@ -147,7 +153,6 @@ var GameInit = {
 					.id('genRandomAsteroid' + x + "," + y)
 					.streamMode(1)
 					.mount(server.spaceGameScene)
-					.depth(100)
 					.grid(AsteroidGenerator.genProceduralAsteroid(20))
 					.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
 			}
@@ -162,7 +167,6 @@ var GameInit = {
 					.id('littleAsteroid' + x + ',' + y)
 					.streamMode(1)
 					.mount(server.spaceGameScene)
-					.depth(100)
 					.grid(AsteroidGenerator.singleBlock())
 					.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
 			}
@@ -226,6 +230,7 @@ var GameInit = {
 	initServerEvents: function() {
 		// Register game event listeners
 		ige.on('block mined', Player.prototype.blockMinedListener);
+		ige.on('block mined', BlockGrid.prototype.blockMinedListener);
 		ige.on('block collected', Player.prototype.blockCollectListener);
 	},
 

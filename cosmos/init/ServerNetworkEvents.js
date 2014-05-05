@@ -64,12 +64,16 @@ var ServerNetworkEvents = {
 			return;
 		}
 
-		// Activate mining laser
-		player.addLaser();
-
+		// TODO: Guard against bogus blockGridId from client
 		var blockGrid = ige.$(data.blockGridId);
 		data.action = 'mine';
-		blockGrid.processBlockActionServer(data, player);
+		if(blockGrid.processBlockActionServer(data, player)) {
+			// Activate mining laser
+			player.addLaser(data.blockGridId, data.row, data.col);
+			blockGrid.addMiningParticles(data.blockGridId, data.row, data.col);
+		}
+
+
 	}
 };
 
