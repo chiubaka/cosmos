@@ -185,6 +185,12 @@ var GameInit = {
 		ige.input.mapAction('key.up', ige.input.key.up);
 		ige.input.mapAction('key.down', ige.input.key.down);
 
+		// Alternate WASD controls
+		ige.input.mapAction('key.left_A', ige.input.key.a);
+		ige.input.mapAction('key.right_D', ige.input.key.d);
+		ige.input.mapAction('key.up_W', ige.input.key.w);
+		ige.input.mapAction('key.down_S', ige.input.key.s);
+
 		ige.input.mapAction('mouse.button1', ige.input.mouse.button1);
 		ige.input.mapAction('mouse.button2', ige.input.mouse.button2);
 		ige.input.mapAction('mouse.button3', ige.input.mouse.button3);
