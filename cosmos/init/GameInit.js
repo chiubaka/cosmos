@@ -15,6 +15,26 @@ var GameInit = {
 		ige.debugEnabled(false);
 		ige.debugTiming(false);
 
+		this.initScenes(game);
+
+		if (ige.isServer) {
+			this.initEnvironment();
+			this.initPhysics();
+			this.initServerEvents();
+		} else {
+			this.initPlayerControls();
+
+			//this.initTimeStream(game);
+		}
+	},
+
+	/**
+	 * Initializes the scene graph for the game. All scenes should be initialized here and both the server and the
+	 * client will run this code to construct the same or similar scene graphs. If either the client or the server alone
+	 * need to add some element to the scene graph, use ige.isServer.
+	 * @param game either ige.client or ige.server
+	 */
+	initScenes: function(game) {
 		// Load the base scene data
 		game.mainScene = new IgeScene2d()
 			.id('mainScene');
@@ -28,34 +48,13 @@ var GameInit = {
 			.drawBounds(false) //draws the axis aligned bounding boxes. Set to true for debugging.
 			.mount(ige);
 
-		this.initScenes(game);
-
-		if (ige.isServer) {
-			this.initEnvironment(game);
-			this.initPhysics(game);
-			this.initServerEvents(game);
-		} else {
-			this.initPlayerControls(game);
-			this.initPlayerState(game);
-
-			//this.initTimeStream(game);
-		}
-	},
-
-	/**
-	 * Initializes the scene graph for the game. All scenes should be initialized here and both the server and the
-	 * client will run this code to construct the same or similar scene graphs. If either the client or the server alone
-	 * need to add some element to the scene graph, use ige.isServer.
-	 * @param game either ige.client or ige.server
-	 */
-	initScenes: function(game) {
 		// Initialize client-specific overlay scenes
 		if (!ige.isServer) {
 			// Initialize UI scenes
-			this.initUIScenes(game);
+			this.initUIScenes();
 
 			// Initialize debugging info
-			this.initDebugDisplay(game);
+			this.initDebugDisplay();
 		}
 
 		// Initialize in-game scenes
@@ -82,48 +81,64 @@ var GameInit = {
 		// For now, the server does not need to know about the background scene.
 		// The server does not need to load the UI.
 		if (!ige.isServer) {
-			this.initBackgroundScene(game);
+			this.initBackgroundScene();
 
 			// Pre-initialize player HUD
-			this.initHUD(game);
+			this.initPlayerHUD();
 		}
 	},
 
-	initUIScenes: function(game) {
-		game.uiModalScene = new IgeScene2d()
+	/**
+	 * Initializes the UI scene layer on the client.
+	 */
+	initUIScenes: function() {
+		var client = ige.client;
+
+		client.uiModalScene = new IgeScene2d()
 			.id('uiModalScene')
-			.layer(game.LAYER_MODAL)
+			.layer(client.LAYER_MODAL)
 			.ignoreCamera(true)
-			.mount(game.mainScene);
+			.mount(client.mainScene);
 	},
 
-	initHUD: function(game) {
-		game.hudScene = new IgeScene2d()
+	/**
+	 * Initializes the HUD scene layer on the client.
+	 */
+	initPlayerHUD: function() {
+		var client = ige.client;
+		client.hudScene = new IgeScene2d()
 			.id('hudScene')
-			.layer(game.LAYER_HUD)
+			.layer(client.LAYER_HUD)
 			.ignoreCamera(true)
-			.mount(game.spaceScene);
+			.mount(client.spaceScene);
 
-		game.hud = new HUDManager(game);
+		//client.hud = new HUDManager();
 	},
 
-	initBackgroundScene: function(game) {
-		game.spaceBackgroundScene = new IgeScene2d()
+	/**
+	 * Initializes the environmental background layers on the client.
+	 */
+	initBackgroundScene: function() {
+		var client = ige.client;
+		client.spaceBackgroundScene = new IgeScene2d()
 				.id('spaceBackgroundScene')
-				.layer(game.LAYER_BACKGROUND)
-				.mount(game.spaceScene);
+				.layer(client.LAYER_BACKGROUND)
+				.mount(client.spaceScene);
 
 		new Background()
 			.id('helix_nebula_background')
-			.mount(game.spaceBackgroundScene);
+			.mount(client.spaceBackgroundScene);
 	},
 
-	initDebugDisplay: function(client) {
+	initDebugDisplay: function() {
 	},
 
-	initEnvironment: function(game) {
-		// The server streams these entities to the client. Creating them on both the client AND the server may speed
-		// up initialization time.
+	/**
+	 * Initializes the in-game environment on the server.
+	 * TODO: Creating the environment on the client may speed up init time
+	 */
+	initEnvironment: function() {
+		var server = ige.server;
 		var asteroidSpacing = 1500;
 		var asteroidOffset = 500;
 		for (var x = 0; x < 3; x++) {
@@ -131,7 +146,7 @@ var GameInit = {
 				new BlockGrid()
 					.id('genRandomAsteroid' + x + "," + y)
 					.streamMode(1)
-					.mount(game.spaceGameScene)
+					.mount(server.spaceGameScene)
 					.depth(100)
 					.grid(AsteroidGenerator.genProceduralAsteroid(20))
 					.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
@@ -146,22 +161,7 @@ var GameInit = {
 					.category('smallAsteroid')
 					.id('littleAsteroid' + x + ',' + y)
 					.streamMode(1)
-					.mount(game.spaceGameScene)
-					.depth(100)
-					.grid(AsteroidGenerator.singleBlock())
-					.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
-			}
-		}
-
-		var asteroidSpacing = 30;
-		var asteroidOffset = -300;
-		for (var x = -10; x < 0; x++) {
-			for (var y = -10; y < 0; y++) {
-				new BlockGrid()
-					.category('smallAsteroid')
-					.id('littleAsteroid' + x + ',' + y)
-					.streamMode(1)
-					.mount(game.spaceGameScene)
+					.mount(server.spaceGameScene)
 					.depth(100)
 					.grid(AsteroidGenerator.singleBlock())
 					.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
@@ -169,7 +169,11 @@ var GameInit = {
 		}
 	},
 
-	initPhysics: function(game) {
+	/**
+	 * Initializes the physics on the server.
+	 * TODO: Running physics on the client may improve performance.
+	 */
+	initPhysics: function() {
 		// Set the contact listener methods to detect when
 		// contacts (collisions) begin and end
 		ige.box2d.contactListener(
@@ -219,73 +223,13 @@ var GameInit = {
 			});
 	},
 
-	initServerEvents: function(game) {
+	initServerEvents: function() {
 		// Register game event listeners
 		ige.on('block mined', Player.prototype.blockMinedListener);
 		ige.on('block collected', Player.prototype.blockCollectListener);
 	},
 
-	initClientEvents: function(game) {
-		
-	},
-
-	initPhysics: function(game) {
-		// Set the contact listener methods to detect when
-		// contacts (collisions) begin and end
-		ige.box2d.contactListener(
-			// Listen for when contact's begin
-			function(contact) {
-				// If player ship is near small asteroids, attract them
-				if (contact.igeEitherCategory('player') &&
-					contact.igeEitherCategory('smallAsteroid')) {
-					var asteroid = contact.igeEntityByCategory('smallAsteroid');
-					var player = contact.igeEntityByCategory('player');
-
-					// TODO: Make it so blocks are attracted to multiple players
-					if (asteroid.attractedTo === undefined) {
-						asteroid.attractedTo = player;
-					}
-				}
-			},
-			// Listen for when contacts end
-			function(contact) {
-				if (contact.igeEitherCategory('player') &&
-					contact.igeEitherCategory('smallAsteroid')) {
-					var asteroid = contact.igeEntityByCategory('smallAsteroid');
-					asteroid.attractedTo = undefined;
-				}
-			},
-			// Presolve events. This is called after collision is detected, but
-			// before collision repsonse is calculated.
-			function(contact) {
-				if (contact.igeEitherCategory('player') &&
-					contact.igeEitherCategory('smallAsteroid')) {
-					var asteroid = contact.igeEntityByCategory('smallAsteroid');
-					var player = contact.igeEntityByCategory('player');
-					var shipFixture = contact.fixtureByCategory('player');
-
-					// Asteroid has hit ship blocks, destroy the asteroid
-					if (!shipFixture.m_isSensor) {
-						// Disable contact so player doesn't move due to collision
-						contact.SetEnabled(false);
-						// Ignore multiple collision points
-						if (asteroid === undefined || !asteroid.alive()) {
-							return;
-						}
-						ige.emit('block collected', [player, asteroid.grid()[0][0].classId()]);
-						asteroid.destroy();
-					}
-				}
-			});
-	},
-
-	initServerEvents: function(game) {
-		// Register game event listeners
-		ige.on('block mined', Player.prototype.blockMinedListener);
-		ige.on('block collected', Player.prototype.blockCollectListener);
-	},
-
-	initClientEvents: function(game) {
+	initClientEvents: function() {
 		
 	},
 
@@ -293,7 +237,7 @@ var GameInit = {
 	 * Sets up the player controls.
 	 * @param client the client (ige.client)
 	 */
-	initPlayerControls: function(client) {
+	initPlayerControls: function() {
 		// Define our player controls
 		ige.input.mapAction('key.left', ige.input.key.left);
 		ige.input.mapAction('key.right', ige.input.key.right);
