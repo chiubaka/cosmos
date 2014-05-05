@@ -11,7 +11,7 @@ var Client = IgeClass.extend({
 		self.LAYER_BACKGROUND = 10;
 		self.LAYER_PARALLAX = 11;
 		self.LAYER_WORLD = 50;
-		self.LAYER_WORLD_OVERLAY = 60;
+		self.LAYER_WORLD_OVERLAY = 51;
 		self.LAYER_HUD = 90;
 		self.LAYER_MODAL = 100;
 
