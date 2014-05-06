@@ -6,8 +6,8 @@ var Server = IgeClass.extend({
 		var self = this;
 
 		self.LAYER_BACKGROUND = 10;
-		self.LAYER_MIDDLE = 50;
-		self.LAYER_FOREGROUND = 90;
+		self.LAYER_WORLD = 50;
+		self.LAYER_HUD = 90;
 		self.DEPTH_PLAYER = 90;
 
 		// Load our blocks
