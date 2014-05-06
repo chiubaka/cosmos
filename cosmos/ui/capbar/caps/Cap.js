@@ -67,7 +67,7 @@
 		ige.ui.style('#' + this.ID_NORMAL, {
 			'borderBottomColor': this.STUB_COLOR,
 			'borderBottomWidth': this.STUB_HEIGHT,
-			'backgroundImage': this.ACTIVE_ICON,
+			'backgroundImage': this.STUB_ICON,
 			'backgroundSize': [this.WIDTH, this.HEIGHT],
 
 			'backgroundColor': this.TRANSPARENT
