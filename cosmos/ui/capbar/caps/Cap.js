@@ -17,6 +17,8 @@
 	BG_COLOR: "rgb(50, 50, 50)",
 	FG_COLOR: "rgb(255, 255, 255)",
 	TRANSPARENT: "rgba(0, 0, 0, 0)",
+	STUB_ICON: undefined,
+	ACTIVE_ICON: undefined,
 
 	/**
 	 * Define the name of the capability and the title used by the Label
@@ -47,6 +49,11 @@
 		this.width(this.WIDTH);
 		this.height(this.HEIGHT);
 
+		if (this.STUB_ICON === undefined) {
+			this.STUB_ICON = ige.client.textures.baseCap_color;
+			this.ACTIVE_ICON = ige.client.textures.baseCap_white;
+		}
+
 		this.ID_NORMAL = this.classId();
 		this.ID_HOVER = this.classId() + ':hover';
 		this.ID_SELECTED = this.classId() + ':selected';
@@ -60,22 +67,28 @@
 		ige.ui.style('#' + this.ID_NORMAL, {
 			'borderBottomColor': this.STUB_COLOR,
 			'borderBottomWidth': this.STUB_HEIGHT,
+			'backgroundImage': this.ACTIVE_ICON,
+			'backgroundSize': [this.WIDTH, this.HEIGHT],
+
 			'backgroundColor': this.TRANSPARENT
 		});
 
 		ige.ui.style('#' + this.ID_HOVER, {
 			'backgroundColor': this.BG_COLOR,
 			'borderBottomColor': this.BG_COLOR,
+			'backgroundImage': this.ACTIVE_ICON
 		});
 
 		ige.ui.style('#' + this.ID_SELECTED_HOVER, {
 			'backgroundColor': this.BG_COLOR,
 			'borderBottomColor': this.BG_COLOR,
+			'backgroundImage': this.ACTIVE_ICON
 		});
 
 		ige.ui.style('#' + this.ID_SELECTED, {
 			'backgroundColor': this.STUB_COLOR,
 			'borderBottomColor': this.STUB_COLOR,
+			'backgroundImage': this.ACTIVE_ICON
 		});
 
 		this.styleClass('capbar-cap');
