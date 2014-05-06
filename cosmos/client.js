@@ -38,6 +38,14 @@ var Client = IgeClass.extend({
 				'assets/effects/laser/laserbeam.png'),
 			rectangleTexture: new IgeTexture(gameRoot +
 				'assets/effects/particles/Rectangle.js')
+
+			// Cap textures
+			mineCap_color: new IgeTexture(gameRoot + 'assets/ui/mine/mine-color.png'),
+			mineCap_white: new IgeTexture(gameRoot + 'assets/ui/mine/mine-white.png'),
+			constructCap_color: new IgeTexture(gameRoot + 'assets/ui/construct/construct-color.png'),
+			constructCap_white: new IgeTexture(gameRoot + 'assets/ui/construct/construct-white.png'),
+			baseCap_color: new IgeTexture(gameRoot + 'assets/ui/base/base-color.png'),
+			baseCap_white: new IgeTexture(gameRoot + 'assets/ui/base/base-white.png')
 		};
 
 		ige.on('texturesLoaded', function () {
