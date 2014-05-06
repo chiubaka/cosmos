@@ -37,7 +37,7 @@ var Client = IgeClass.extend({
 			laserBeamTexture: new IgeTexture(gameRoot +
 				'assets/effects/laser/laserbeam.png'),
 			rectangleTexture: new IgeTexture(gameRoot +
-				'assets/effects/particles/Rectangle.js')
+				'assets/effects/particles/Rectangle.js'),
 
 			// Cap textures
 			mineCap_color: new IgeTexture(gameRoot + 'assets/ui/mine/mine-color.png'),
