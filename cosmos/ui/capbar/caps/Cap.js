@@ -4,8 +4,8 @@
 	/**
 	 * Defines the dimensions of a capability on the Capbar
 	 */
-	WIDTH: 40,
-	HEIGHT: 40,
+	WIDTH: 64,
+	HEIGHT: 64,
 	STUB_HEIGHT: 10,
 
 	/**

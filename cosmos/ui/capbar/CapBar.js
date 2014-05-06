@@ -4,7 +4,7 @@
 	/**
 	 * The height of the capbar.
 	 */
-	HEIGHT: 40,
+	HEIGHT: 64,
 
 	CAP_SPACING: 10,
 
