@@ -26,6 +26,6 @@
 		this.width(calcWidth);
 
 		// Move labels above icons, translate to the right to make 
-		this.translateTo(5, -this.height(), 0);
+		this.translateTo(5, -this.height() - this.LABEL_MARGIN, 0);
 	},
 });
