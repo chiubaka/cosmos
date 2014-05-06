@@ -33,6 +33,14 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 	},
 
+	addConstructionZonesAroundBlocks: function() {
+		//First create an array that's two larger in each dimensions than the current grid
+
+		//Copy the grid over to the new array with an offset of (1, 1)
+
+		//Traverse the two dimensional array looking for spaces where the following two conditions hold: (1) the space is an undefined and (2) the space has at least one neighbor that's undefined
+	},
+
 	streamCreateData: function() {
 		return this.streamCreateDataFromGrid(this._grid);
 	},
@@ -126,7 +134,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 				}, Block.prototype.MINING_TIME);
 
 				return true;
-				
+
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
 				return false;
