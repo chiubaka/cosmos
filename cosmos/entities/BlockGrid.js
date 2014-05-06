@@ -298,7 +298,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 			}
 		}
 
-
 		return this;
 	},
 
