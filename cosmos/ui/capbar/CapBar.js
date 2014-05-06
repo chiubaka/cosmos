@@ -29,18 +29,20 @@
 	},
 
 	mountCaps: function() {
-		var capbarWidth = this.width();
-		var capbarCenter = capbarWidth / 2;
 		var numCaps = this._caps.length;
+		var capbarWidth = (numCaps * this.HEIGHT) + ((numCaps - 1) * this.CAP_SPACING);
+		var capbarCenter = capbarWidth / 2;
+		this.width(capbarWidth);
 
 		for (var i = 0; i < this._caps.length; i++) {
 			var cap = this._caps[i];
 
-			var capOriginOffset = (cap.width() / 2);
-			var capFromCenterOffset = ((cap.width() + this.CAP_SPACING) * ((numCaps - 1) / 2 - i));
-			var xPos = capbarCenter - capOriginOffset - capFromCenterOffset;
+			var capCenterOffset = (cap.width() / 2);
+			var capListPosOffset = (i - (numCaps / 2)) * (cap.width() + this.CAP_SPACING);
+			var spacingTweak = (this.CAP_SPACING / 2);
+			var xPos = (capListPosOffset + capCenterOffset + spacingTweak);
 
-			cap.translateTo(xPos, cap.translate().y(), 0);
+			cap.translateBy(xPos, cap.translate().y(), 0);
 			cap.mount(this);
 		}
 	}
