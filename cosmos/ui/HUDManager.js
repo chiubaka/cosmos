@@ -3,12 +3,12 @@
 
 	_capbar: undefined,
 
-	init: function(game) {
+	init: function() {
 		console.log("Initializing HUDManager...");
 
 		this._capbar = new CapBar()
 			.id("capbar")
-			.mount(game.hudScene);
+			.mount(ige.client.hudScene);
 	},
 });
 

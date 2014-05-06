@@ -23,6 +23,7 @@ var GameInit = {
 			this.initServerEvents();
 		} else {
 			this.initPlayerControls();
+			this.initPlayerState();
 
 			//this.initTimeStream(game);
 		}
@@ -100,29 +101,26 @@ var GameInit = {
 		}
 	},
 
-	initUIScenes: function(game) {
-		game.uiModalScene = new IgeScene2d()
+	initUIScenes: function() {
+		var client = ige.client;
+		client.uiModalScene = new IgeScene2d()
 			.id('uiModalScene')
-			.layer(game.LAYER_MODAL)
+			.layer(client.LAYER_MODAL)
 			.ignoreCamera(true)
-			.mount(game.mainScene);
+			.mount(client.mainScene);
 
-		game.hudScene = new IgeScene2d()
+		client.hudScene = new IgeScene2d()
 			.id('hudScene')
 			.layer(game.LAYER_HUD)
 			.ignoreCamera(true)
-			.mount(game.spaceScene);
+			.mount(client.spaceScene);
 	},
 
-	initHUD: function(game) {
-		game.hud = new HUDManager(game);
-	},
 	/**
 	 * Initializes the UI scene layer on the client.
 	 */
 	initUIScenes: function() {
 		var client = ige.client;
-
 		client.uiModalScene = new IgeScene2d()
 			.id('uiModalScene')
 			.layer(client.LAYER_MODAL)
@@ -141,7 +139,7 @@ var GameInit = {
 			.ignoreCamera(true)
 			.mount(client.spaceScene);
 
-		//client.hud = new HUDManager();
+		client.hud = new HUDManager();
 	},
 
 	/**
@@ -283,8 +281,8 @@ var GameInit = {
 		ige.input.mapAction('mouse.button3', ige.input.mouse.button3);
 	},
 
-	initPlayerState: function(client) {
-		client.state = new ClientState();
+	initPlayerState: function() {
+		ige.client.state = new ClientState();
 	},
 
 	/**
