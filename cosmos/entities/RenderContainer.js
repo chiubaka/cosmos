@@ -4,13 +4,14 @@ var RenderContainer = IgeEntity.extend({
 	_blockGrid: undefined,
 
 	getBlockFromBlockGrid: function(row, col) {
+		// Check if row, col refers to a block that is off the edge of the block grid.
 		if(row < 0 || col < 0) {
 			return undefined;
 		}
 		if (row >= this._blockGrid.grid().length) {
 			return undefined;
 		}
-		if (col >= this._blockGrid.grid()[0].length) {
+		if (col >= this._blockGrid.grid()[row].length) {
 			return undefined;
 		}
 
