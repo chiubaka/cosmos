@@ -157,7 +157,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 				}, Block.prototype.MINING_TIME);
 
 				return true;
-				
+
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
 				return false;
@@ -325,6 +325,25 @@ var BlockGrid = IgeEntityBox2d.extend({
 					.mount(this._renderContainer);
 			}
 		}
+	},
+
+	/**
+	 * getBlockFromGrid returns the block in this block grid at row, col, but will return undefined if row, col is not a valid index into the grid.
+	 * Basically it's a safe (but slightly slower) way of indexing into the grid.
+	 */
+	getBlockFromGrid: function(row, col) {
+		// Check if row, col refers to a block that is off the edge of the block grid.
+		if(row < 0 || col < 0) {
+			return undefined;
+		}
+		if (row >= this.grid().length) {
+			return undefined;
+		}
+		if (col >= this.grid()[row].length) {
+			return undefined;
+		}
+
+		return this.grid()[row][col];
 	},
 
 	maxRowLengthForGrid: function(grid) {
