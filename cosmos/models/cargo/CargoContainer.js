@@ -160,8 +160,8 @@ var CargoContainer = IgeClass.extend({
 			return (this._itemStore[itemType] < this.STACK_SIZE);
 		} else {
 			// We'll need to allocate a new slot for this.
-			var numItems = Object.keys(this._itemStore).length;
-			return (numItems < this.numSlots());
+			var numUsedSlots = Object.keys(this._itemStore).length;
+			return (numUsedSlots < this.numSlots());
 		}
 	},
 
