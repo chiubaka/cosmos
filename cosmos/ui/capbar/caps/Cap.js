@@ -29,6 +29,7 @@
 	LABEL_WIDTH: 100,
 
 	_selected: false,
+	_toolbar: undefined,
 
 	init: function() {
 		IgeUiElement.prototype.init.call(this);
@@ -129,6 +130,11 @@
 
 		this._selected = true;
 		ige.emit('capbar cap selected', [this.classId()]);
+
+		if (this._toolbar !== undefined) {
+			this._toolbar.mount(this.parent());
+			this._toolbar._capParent = this;
+		}
 	},
 
 	deselect: function() {
@@ -138,6 +144,10 @@
 			// Show the deselected state of the button
 			this.id(this.ID_NORMAL);
 			this.applyStyle(ige.ui.style("#" + this.ID_NORMAL));
+
+			if (this._toolbar !== undefined) {
+				this._toolbar.unMount();
+			}
 		}
 	},
 
