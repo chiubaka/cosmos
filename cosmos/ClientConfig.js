@@ -6,7 +6,6 @@ var igeClientConfig = {
 		'./entities/BlockGrid.js',
 		'./entities/RenderContainer.js',
 
-		/* Parts */
 		/* Ship part blocks */
 		'./entities/blocks/Part.js',
 		'./entities/blocks/parts/EngineBlock.js',
@@ -35,6 +34,9 @@ var igeClientConfig = {
 
 		/* Scenery */
 		'./entities/scenery/Background.js',
+
+		/* Click scene (captures background client's background clicks) */
+		'./entities/ClickScene.js',
 
 		/* === PLAYER STATE === */
 		'./entities/player/Player.js',
@@ -66,9 +68,6 @@ var igeClientConfig = {
 		/* Helper utilities */
 		'./utils/DeploymentUtils.js',
 		'./utils/RandomInterval.js',
-
-		/* UI */
-		'./entities/ClickInterceptLayer.js',
 
 		/* === GAME SETUP === */
 		/* Configuration */
