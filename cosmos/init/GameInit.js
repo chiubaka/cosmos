@@ -89,7 +89,7 @@ var GameInit = {
 			game.effectsScene = new IgeScene2d()
 				.id('effectsScene')
 				.layer(game.LAYER_WORLD_OVERLAY)
-				.mount(game.spaceScene)
+				.mount(game.spaceScene);
 
 			game.spaceUiScene = new IgeScene2d()
 				.id('spaceUiScene')
@@ -104,21 +104,6 @@ var GameInit = {
 			// Pre-initialize player HUD
 			this.initPlayerHUD();
 		}
-	},
-
-	initUIScenes: function() {
-		var client = ige.client;
-		client.uiModalScene = new IgeScene2d()
-			.id('uiModalScene')
-			.layer(client.LAYER_MODAL)
-			.ignoreCamera(true)
-			.mount(client.mainScene);
-
-		client.hudScene = new IgeScene2d()
-			.id('hudScene')
-			.layer(game.LAYER_HUD)
-			.ignoreCamera(true)
-			.mount(client.spaceScene);
 	},
 
 	/**
