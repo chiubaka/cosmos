@@ -97,7 +97,7 @@ var GameInit = {
 
 			// This scene's purpose is to catch all clicks on the background
 			game.clickScene = new ClickScene()
-				.layer(game.LAYER_BACKGROUND)
+				.layer(game.LAYER_CLICK_SCENE)
 				.mount(game.spaceScene)
 
 			// Pre-initialize player HUD
