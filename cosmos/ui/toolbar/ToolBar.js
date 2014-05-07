@@ -49,7 +49,7 @@
 		if (this._tools.length == 0) {
 			this._placeholderMsg
 				.value(this.PLACEHOLDER_EMPTY)
-				.width(this._placeholderMsg._fontEntity.measureTextWidth(this.PLACEHOLDER_EMPTY) + 10)
+				.width(this._placeholderMsg._fontEntity.measureTextWidth() + 10)
 				.mount(this);
 			return;
 		} else {
