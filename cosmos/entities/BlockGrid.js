@@ -53,6 +53,16 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 
 		//Traverse the two dimensional array looking for spaces where the following two conditions hold: (1) the space is an undefined and (2) the space has at least one neighbor that's undefined
+		_grid = newGrid;
+		for (var row = 0; row < oldNumRows; row++) {
+			for (var col = 0; col < oldNumCols; col++) {
+				if(newGrid[row][col] === undefined) {
+					if (getBlockFromGrid(row + 1, col) !== undefined || getBlockFromGrid(row - 1, col) !== undefined || getBlockFromGrid(row, col + 1) !== undefined || getBlockFromGrid(row, col - 1) !== undefined) {
+						newGrid[row][col] = new ConstructionZoneBlock();
+					}
+				}
+			}
+		}
 	},
 
 	streamCreateData: function() {
