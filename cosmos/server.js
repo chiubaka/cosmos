@@ -42,8 +42,12 @@ var Server = IgeClass.extend({
 						ige.network.define('playerEntity', self._onPlayerEntity);
 						/* This is called when a player pushes down or releases a key */
 						ige.network.define('playerControlUpdate', self._onPlayerControlUpdate);
+
 						/* This is called when a player clicks on a block */
 						ige.network.define('blockClicked', self._onBlockClicked);
+						/* This is called when a player clicks on the background. */
+						ige.network.define('backgroundClicked', self._onBackgroundClicked);
+
 						/* Define this command so that we can use it on the client */
 						ige.network.define('blockAction');
 

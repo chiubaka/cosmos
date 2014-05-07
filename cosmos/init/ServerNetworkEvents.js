@@ -56,7 +56,6 @@ var ServerNetworkEvents = {
 	// TODO: User access control. Restrict what players can do based on clientId
 	// TODO: Guard against undefined blocks (do not trust client) so server doesn't crash
 	_onBlockClicked: function(data, clientId) {
-		
 		var player = ige.server.players[clientId];
 
 		// Do not start mining if we are already mining
@@ -74,7 +73,15 @@ var ServerNetworkEvents = {
 		}
 
 
+	},
+
+	// Server receives client coordinates for construction
+	// TODO: Verify client's coordinates. Make sure it's within the client's
+	// view. Make sure it's actually empty space
+	_onBackgroundClicked: function(data, clientId) {
+		//console.log("X: " + data.x + " Y: " + data.y);
 	}
+
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = ServerNetworkEvents; }
