@@ -12,12 +12,14 @@
 
 	init: function() {
 		console.log("Initializing Capbar...");
-		IgeEntity.prototype.init.call(this);
+		IgeUiElement.prototype.init.call(this);
 
 		this.applyStyle({
-			'backgroundColor': '#dddddd',
+			'backgroundColor': 'rgba(30,30,30,1)',
 			'borderColor': 'rgba(0,0,0,0)',
 			'bottom': 0,
+			'left': 0,
+			'right': 0,
 			'height': this.HEIGHT
 		});
 
