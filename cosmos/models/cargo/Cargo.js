@@ -339,6 +339,46 @@ var Cargo = IgeClass.extend({
 	},
 
 	/**
+	 * Retrieves a list of all of the items in this cargo inventory.
+	 * 
+	 * @param coalesce Whether or not to coalesce items of the same type 
+	 * in separate containers into a single entry in the list.
+	 * @returns a dictionary of types, and the number of elements of each type
+	 */
+	getItemList: function(coalesce) {
+		var returnDict = {};
+
+		console.log("Getting list of items...");
+
+		for (var i = 0; i < this.getNumContainers(); i++) {
+			var container = this.getContainer(i);
+			console.log("Cargo container #" + i);
+			console.log("Container Item List:");
+
+			var containerItemList = container.getItemList();
+
+			for (var itemType in containerItemList) {
+				var storeType = itemType;
+
+				if (!coalesce) {
+					storeType += ":container" + i;
+				}
+
+				if (!returnDict.hasOwnProperty(storeType)) {
+					returnDict[storeType] = 0;
+				}
+
+				returnDict[storeType] += containerItemList[itemType];
+				console.log("   [" + itemType + "]: " + containerItemList[itemType] + ", total: " + returnDict[storeType]);
+			}
+		}
+
+		console.log("Done!");
+
+		return returnDict;
+	},
+
+	/**
 	 * Prints a debug log of a container to the console.
 	 * 
 	 * @params the container number
