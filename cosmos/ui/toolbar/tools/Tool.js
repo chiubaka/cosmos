@@ -123,7 +123,6 @@
 	},
 
 	setQuantity: function(quantity) {
-		console.log("Setting quantity to " + quantity);
 		this._quantity = new IgeUiLabel()
 			.font("12pt Segoe UI Semibold")
 			.value(quantity)
