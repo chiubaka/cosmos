@@ -8,7 +8,6 @@ var RenderContainer = IgeEntity.extend({
 		this.compositeCache(true);
 	}
 
-
 });
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
