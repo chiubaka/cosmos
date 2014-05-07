@@ -6,7 +6,6 @@ var igeClientConfig = {
 		'./entities/BlockGrid.js',
 		'./entities/RenderContainer.js',
 
-		/* Parts */
 		/* Ship part blocks */
 		'./entities/blocks/Part.js',
 		'./entities/blocks/parts/EngineBlock.js',
@@ -37,7 +36,7 @@ var igeClientConfig = {
 		/* Scenery */
 		'./entities/scenery/Background.js',
 
-		/* Click scene */
+		/* Click scene (captures background client's background clicks) */
 		'./entities/ClickScene.js',
 
 		/* === PLAYER STATE === */
