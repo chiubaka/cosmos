@@ -56,7 +56,6 @@ var ServerNetworkEvents = {
 	// TODO: User access control. Restrict what players can do based on clientId
 	// TODO: Guard against undefined blocks (do not trust client) so server doesn't crash
 	_onBlockClicked: function(data, clientId) {
-
 		var player = ige.server.players[clientId];
 
 		// Do not start mining if we are already mining
