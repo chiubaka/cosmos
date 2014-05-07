@@ -3,6 +3,12 @@ var RenderContainer = IgeEntity.extend({
 
 	_blockGrid: undefined,
 
+	init: function () {
+		IgeEntity.prototype.init.call(this);
+
+		this.mouseDown(this.mouseDownHandler);
+	},
+
 	getBlockFromBlockGrid: function(row, col) {
 		// Check if row, col refers to a block that is off the edge of the block grid.
 		if(row < 0 || col < 0) {
@@ -82,6 +88,9 @@ var RenderContainer = IgeEntity.extend({
 		if (block === undefined) {
 			return;
 		}
+		else {
+			control.stopPropagation();
+		}
 
 		// TODO: This might be dangerous, since some of the event properties should be changed so that they are
 		// relative to the child's bounding box, but since we don't use any of those properties for the moment,
@@ -91,10 +100,6 @@ var RenderContainer = IgeEntity.extend({
 			this.getBlockFromBlockGrid(row, col+1) == undefined ||
 			this.getBlockFromBlockGrid(row, col-1) == undefined) {
 			block.mouseDown(event, control);
-
-			//TODO this doesn't quite work yet. It was supposed to stop the propagation. It doesn’t stop the propagation. I know that because I can click and still create a block even if I am clicking on an existing block.
-			control.stopPropagation();
-			ige.input.stopPropagation();
 		}
 	},
 
@@ -107,11 +112,6 @@ var RenderContainer = IgeEntity.extend({
 		return this;
 	},
 
-	init: function () {
-		IgeEntity.prototype.init.call(this);
-
-		this.mouseDown(this.mouseDownHandler);
-	}
 });
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {

@@ -74,7 +74,15 @@ var ServerNetworkEvents = {
 		}
 
 
+	},
+
+	_onBackgroundClicked: function(data, clientId) {
+		var player = ige.server.players[clientId];
+		var blockToPlace = player.cargo.rrExtractItems()[0];
+
+		console.log("X: " + data.x + "Y: " + data.y);
 	}
+
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = ServerNetworkEvents; }

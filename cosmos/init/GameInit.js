@@ -95,6 +95,9 @@ var GameInit = {
 			// The server does not need to load the UI.
 			this.initBackgroundScene();
 
+			game.clickScene = new ClickScene()
+				.mount(game.spaceScene)
+
 			// Pre-initialize player HUD
 			this.initPlayerHUD();
 		}
