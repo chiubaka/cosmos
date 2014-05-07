@@ -29,3 +29,7 @@
 		this.translateTo(5, Math.floor(-this.height() - this.LABEL_MARGIN), 0);
 	},
 });
+
+if (typeof (module) !== 'undefined' && typeof (module.exports) !== 'undefined') {
+	module.exports = CapLabel;
+}

@@ -15,3 +15,7 @@
 		Cap.prototype.init.call(this);
 	},
 });
+
+if (typeof (module) !== 'undefined' && typeof (module.exports) !== 'undefined') {
+	module.exports = MineCap;
+}

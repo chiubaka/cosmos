@@ -172,3 +172,7 @@
 		return this.CAP_NAME;
 	}
 });
+
+if (typeof (module) !== 'undefined' && typeof (module.exports) !== 'undefined') {
+	module.exports = Tool;
+}
