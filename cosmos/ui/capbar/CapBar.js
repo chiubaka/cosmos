@@ -15,7 +15,7 @@
 		IgeUiElement.prototype.init.call(this);
 
 		this.applyStyle({
-			'backgroundColor': 'rgba(30,30,30,1)',
+			'backgroundColor': 'rgba(30,30,30,0.7)',
 			'borderColor': 'rgba(0,0,0,0)',
 			'bottom': 0,
 			'left': 0,
@@ -33,16 +33,13 @@
 	mountCaps: function() {
 		var numCaps = this._caps.length;
 		var capbarWidth = (numCaps * this.HEIGHT) + ((numCaps - 1) * this.CAP_SPACING);
-		var capbarCenter = capbarWidth / 2;
-		this.width(capbarWidth);
 
 		for (var i = 0; i < this._caps.length; i++) {
 			var cap = this._caps[i];
 
 			var capCenterOffset = (cap.width() / 2);
 			var capListPosOffset = (i - (numCaps / 2)) * (cap.width() + this.CAP_SPACING);
-			var spacingTweak = (this.CAP_SPACING / 2);
-			var xPos = (capListPosOffset + capCenterOffset + spacingTweak);
+			var xPos = (capListPosOffset + capCenterOffset);
 
 			cap.translateBy(xPos, cap.translate().y(), 0);
 			cap.mount(this);
