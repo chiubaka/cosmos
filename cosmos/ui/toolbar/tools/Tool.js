@@ -123,7 +123,15 @@
 	},
 
 	setQuantity: function(quantity) {
-		
+		console.log("Setting quantity to " + quantity);
+		this._quantity = new IgeUiLabel()
+			.font("12pt Segoe UI Semibold")
+			.value(quantity)
+			.color("#ffffff")
+			.mount(this);
+
+		this._quantity.width(this._quantity._fontEntity.measureTextWidth() + 10)
+			.bottom(-10);
 	},
 
 	select: function() {
