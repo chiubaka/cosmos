@@ -20,7 +20,7 @@
 		this._mountedBlock.mount(this);
 
 		if (this._quantity !== undefined) {
-			this._mountedBlock.translateBy(0, -this._quantity.width() / 2, 0);
+			this._mountedBlock.translateBy(0, -10, 0);
 		}
 	}
 });

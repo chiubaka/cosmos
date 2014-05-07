@@ -129,8 +129,7 @@
 			.color("#ffffff")
 			.mount(this);
 
-		this._quantity.width(this._quantity._fontEntity.measureTextWidth() + 10)
-			.bottom(-10);
+		this._quantity.width(this._quantity._fontEntity.measureTextWidth() + 10).bottom(-5);
 	},
 
 	select: function() {
