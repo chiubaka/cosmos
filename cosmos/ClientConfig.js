@@ -68,7 +68,7 @@ var igeClientConfig = {
 		'./utils/RandomInterval.js',
 
 		/* UI */
-		'./gameClasses/ClickInterceptLayer.js',
+		'./entities/ClickInterceptLayer.js',
 
 		/* === GAME SETUP === */
 		/* Configuration */
