@@ -88,6 +88,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		var block = this._grid[row][col];
 
+		// Check if we have clicked on a valid block, if so we want to stop the
+		// click propagation so we don't construct a block at this location
 		if (block === undefined) {
 			return;
 		}
