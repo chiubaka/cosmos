@@ -30,8 +30,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 			this.updateTrigger = RandomInterval.randomIntFromInterval(70, 120);
 
 			this.mountGrid();
-
-			this.addConstructionZonesAroundBlocks();
 		}
 	},
 
@@ -53,12 +51,12 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 
 		//Traverse the two dimensional array looking for spaces where the following two conditions hold: (1) the space is an undefined and (2) the space has at least one neighbor that's undefined
-		_grid = newGrid;
-		for (var row = 0; row < oldNumRows; row++) {
-			for (var col = 0; col < oldNumCols; col++) {
-				if(newGrid[row][col] === undefined) {
-					if (getBlockFromGrid(row + 1, col) !== undefined || getBlockFromGrid(row - 1, col) !== undefined || getBlockFromGrid(row, col + 1) !== undefined || getBlockFromGrid(row, col - 1) !== undefined) {
-						newGrid[row][col] = new ConstructionZoneBlock();
+		this._grid = newGrid;
+		for (var row = 0; row < newNumRows; row++) {
+			for (var col = 0; col < newNumCols; col++) {
+				if(this._grid[row][col] === undefined) {
+					if (this.isRealBlock(row + 1, col) || this.isRealBlock(row - 1, col) || this.isRealBlock(row, col + 1) || this.isRealBlock(row, col - 1)) {
+						this._grid[row][col] = new ConstructionZoneBlock();
 					}
 				}
 			}
@@ -266,9 +264,20 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		var maxRowLength = this.maxRowLengthForGrid(this._grid);
 
-		this.height(Block.prototype.HEIGHT * this._grid.length)
-			.width(Block.prototype.WIDTH * maxRowLength);
+		this.height(Block.prototype.HEIGHT * this._grid.length);
+		this.width(Block.prototype.WIDTH * maxRowLength);
 
+		this.updateFixtures();
+
+		this.addConstructionZonesAroundBlocks();
+
+		return this;
+	},
+
+	/**
+	 * Update fixtures should be called whenever _grid is changed in a way that would affect the physics of the blockgrid.
+	 */
+	updateFixtures: function() {
 		this.box2dBody({
 			type: 'dynamic',
 			linearDamping: 0.4,
@@ -329,8 +338,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 				}
 			}
 		}
-
-		return this;
 	},
 
 	mountGrid: function() {
@@ -386,6 +393,20 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 
 		return maxRowLength;
+	},
+
+	isRealBlock: function(row, col) {
+		var block = this.getBlockFromGrid(row, col);
+
+		if (block === undefined) {
+			return false;
+		}
+
+		if (block.classId() === "ConstructionZoneBlock") {
+			return false;
+		}
+
+		return true;
 	},
 
 	/**

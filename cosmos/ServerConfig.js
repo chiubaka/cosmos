@@ -11,6 +11,7 @@ var config = {
 		/* Blocks */
 		{ name: 'Block', path: './entities/Block' },
 		{ name: 'BlockGrid', path: './entities/BlockGrid' },
+		{ name: 'ConstructionZoneBlock', path: 'entities/blocks/ConstructionZoneBlock' },
 
 		/* Ship part blocks */
 		{ name: 'Part', path: './entities/blocks/Part' },

@@ -5,6 +5,7 @@ var igeClientConfig = {
 		'./entities/Block.js',
 		'./entities/BlockGrid.js',
 		'./entities/RenderContainer.js',
+		'./entities/blocks/ConstructionZoneBlock.js',
 
 		/* Ship part blocks */
 		'./entities/blocks/Part.js',

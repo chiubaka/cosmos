@@ -169,6 +169,8 @@ var Block = IgeEntity.extend({
 				return new IceBlock();
 			case IronBlock.prototype.classId():
 				return new IronBlock();
+			case ConstructionZoneBlock.prototype.classId():
+				return new ConstructionZoneBlock();
 			default:
 				return undefined;
 		}
