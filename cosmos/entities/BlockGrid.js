@@ -30,13 +30,27 @@ var BlockGrid = IgeEntityBox2d.extend({
 			this.updateTrigger = RandomInterval.randomIntFromInterval(70, 120);
 
 			this.mountGrid();
+
+			this.addConstructionZonesAroundBlocks();
 		}
 	},
 
 	addConstructionZonesAroundBlocks: function() {
 		//First create an array that's two larger in each dimensions than the current grid
+		oldNumRows = this.grid().length;
+		oldNumCols = this.maxRowLengthForGrid(this.grid());
+
+		newNumRows = oldNumRows + 2;
+		newNumCols = oldNumCols + 2;
+
+		var newGrid = this.newGridFromDimensions(newNumRows, newNumCols);
 
 		//Copy the grid over to the new array with an offset of (1, 1)
+		for (var row = 0; row < oldNumRows; row++) {
+			for (var col = 0; col < oldNumCols; col++) {
+				newGrid[row + 1][col + 1] = this.getBlockFromGrid(row, col);
+			}
+		}
 
 		//Traverse the two dimensional array looking for spaces where the following two conditions hold: (1) the space is an undefined and (2) the space has at least one neighbor that's undefined
 	},
@@ -93,7 +107,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		for (x = 0; x < numCols; x++) {
 			var gridCol = [];
 			for (y = 0; y < numRows; y++) {
-				gridCol.push(new EngineBlock());
+				gridCol.push(undefined);
 			}
 			grid.push(gridCol);
 		}
