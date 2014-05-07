@@ -51,6 +51,9 @@ var Server = IgeClass.extend({
 						/* Define this command so that we can use it on the client */
 						ige.network.define('blockAction');
 
+						ige.network.define('cargoRequest', self._onCargoRequest);
+						ige.network.define('cargoResponse');
+
 						/* When a client connects or disconnects */
 						ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js
 						ige.network.on('disconnect', self._onPlayerDisconnect); // Defined in ./gameClasses/ServerNetworkEvents.js

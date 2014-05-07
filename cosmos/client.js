@@ -100,6 +100,8 @@ var Client = IgeClass.extend({
 						ige.network.define('playerEntity', self._onPlayerEntity);
 						// Called when the server needs to broadcast updates about a block
 						ige.network.define('blockAction', self._onBlockAction);
+
+						ige.network.define('cargoResponse', self._onCargoResponse);
 						// Setup the network stream handler
 						ige.network.addComponent(IgeStreamComponent)
 							.stream.renderLatency(80); // Render the simulation 160 milliseconds in the past

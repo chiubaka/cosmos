@@ -90,6 +90,13 @@ var ServerNetworkEvents = {
 				.grid([[blockToPlace]])
 				.translateTo(data.x, data.y, 0);
 		}
+	},
+
+	_onCargoRequest: function(data, clientId) {
+		var player = ige.server.players[clientId];
+		var playerCargo = player.cargo;
+
+		ige.network.send('cargoResponse', playerCargo.getItemList(true), clientId);
 	}
 };
 
