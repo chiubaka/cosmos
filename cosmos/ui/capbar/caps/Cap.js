@@ -16,7 +16,7 @@
 	STUB_COLOR: "rgb(70, 70, 70)",
 	BG_COLOR: "rgb(50, 50, 50)",
 	FG_COLOR: "rgb(255, 255, 255)",
-	TRANSPARENT: "rgba(0, 0, 0, 0)",
+	UNACTIVE_COLOR: "rgba(0, 0, 0, 0)",
 	STUB_ICON: undefined,
 	ACTIVE_ICON: undefined,
 
@@ -71,7 +71,7 @@
 			'backgroundImage': this.STUB_ICON,
 			'backgroundSize': [this.WIDTH, this.HEIGHT],
 
-			'backgroundColor': this.TRANSPARENT
+			'backgroundColor': this.UNACTIVE_COLOR
 		});
 
 		ige.ui.style('#' + this.ID_HOVER, {
