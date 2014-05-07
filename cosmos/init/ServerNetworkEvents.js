@@ -76,11 +76,11 @@ var ServerNetworkEvents = {
 
 	},
 
+	// Server receives client coordinates for construction
+	// TODO: Verify client's coordinates. Make sure it's within the client's
+	// view. Make sure it's actually empty space
 	_onBackgroundClicked: function(data, clientId) {
-		var player = ige.server.players[clientId];
-		var blockToPlace = player.cargo.rrExtractItems()[0];
-
-		console.log("X: " + data.x + "Y: " + data.y);
+		//console.log("X: " + data.x + " Y: " + data.y);
 	}
 
 };

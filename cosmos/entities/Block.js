@@ -38,11 +38,6 @@ var Block = IgeEntity.extend({
 		this._hp = this._maxHp;
 
 		if (!ige.isServer) {
-			this.updateCount = 0;
-			// Add some randomness to spread out expensive aabb calls over time.
-			// This leads to decreased stuttering.
-			this.updateTrigger = RandomInterval.randomIntFromInterval(70, 120);
-
 			this.texture(ige.client.textures.block);
 
 			// Enable caching so that the smart textures aren't reevaluated every time.

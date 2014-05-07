@@ -95,7 +95,9 @@ var GameInit = {
 			// The server does not need to load the UI.
 			this.initBackgroundScene();
 
+			// This scene's purpose is to catch all clicks on the background
 			game.clickScene = new ClickScene()
+				.layer(game.LAYER_BACKGROUND)
 				.mount(game.spaceScene)
 
 			// Pre-initialize player HUD
