@@ -115,6 +115,37 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return grid;
 	},
 
+	// Created on server, streamed to all clients
+	addMiningParticles: function(blockGridId, row, col) {
+		var block = ige.$(blockGridId).grid()[row][col];
+		// Calculate where to put our effect mount
+		// with respect to the BlockGrid
+		var x = Block.prototype.WIDTH * col -
+						this._bounds2d.x2 + block._bounds2d.x2;
+		var y = Block.prototype.HEIGHT * row -
+						this._bounds2d.y2 + block._bounds2d.y2;
+
+		// Store the effectsMount in the block so we can remove it later
+		block.effectsMount = new EffectsMount()
+			.mount(this)
+			.streamMode(1)
+			.translateBy(x, y, 0)
+
+		block.blockParticleEmitter = new BlockParticleEmitter()
+			.streamMode(1)
+			.mount(block.effectsMount)
+
+		return this;
+	},
+
+	/**
+	 * Called every time a ship mines a block
+	 */
+	blockMinedListener: function (player, blockClassId, block) {
+		block.blockParticleEmitter.destroy();
+		block.effectsMount.destroy();
+	},
+
 	processBlockActionServer: function(data, player) {
 		var self = this;
 		var block = self._grid[data.row][data.col];
@@ -139,7 +170,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 					// Emit a message saying that a block has been mined, but not
 					// necessarily collected. This is used for removing the laser.
 					var blockClassId = block.classId();
-					ige.emit('block mined', [player, blockClassId]);
+					ige.emit('block mined', [player, blockClassId, block]);
 
 					// Remove block server side, then send remove msg to client
 					self.remove(data.row, data.col);
@@ -198,7 +229,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 			var newGrid = new BlockGrid()
 				.category('smallAsteroid')
 				.mount(ige.server.spaceGameScene)
-				.depth(100)
 				.grid([[Block.prototype.blockFromClassId(block.classId())]])
 				.translateTo(finalX, finalY, 0)
 				.rotate().z(theta)
@@ -290,7 +320,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 			}
 		}
 
-
 		return this;
 	},
 
@@ -317,6 +346,25 @@ var BlockGrid = IgeEntityBox2d.extend({
 					.mount(this._renderContainer);
 			}
 		}
+	},
+
+	/**
+	 * getBlockFromGrid returns the block in this block grid at row, col, but will return undefined if row, col is not a valid index into the grid.
+	 * Basically it's a safe (but slightly slower) way of indexing into the grid.
+	 */
+	getBlockFromGrid: function(row, col) {
+		// Check if row, col refers to a block that is off the edge of the block grid.
+		if(row < 0 || col < 0) {
+			return undefined;
+		}
+		if (row >= this.grid().length) {
+			return undefined;
+		}
+		if (col >= this.grid()[row].length) {
+			return undefined;
+		}
+
+		return this.grid()[row][col];
 	},
 
 	maxRowLengthForGrid: function(grid) {
