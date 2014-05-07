@@ -12,6 +12,8 @@
 		this.STUB_ICON = ige.client.textures.constructCap_color;
 		this.ACTIVE_ICON = ige.client.textures.constructCap_white;
 
+		this._toolbar = new CargoToolbar();
+
 		Cap.prototype.init.call(this);
 	},
 });
