@@ -103,6 +103,7 @@ var Client = IgeClass.extend({
 						ige.network.define('blockAction', self._onBlockAction);
 
 						ige.network.define('cargoResponse', self._onCargoResponse);
+						ige.network.define('cargoUpdate', self._onCargoUpdate);
 						// Setup the network stream handler
 						ige.network.addComponent(IgeStreamComponent)
 							.stream.renderLatency(80); // Render the simulation 160 milliseconds in the past

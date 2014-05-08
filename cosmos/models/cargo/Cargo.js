@@ -36,6 +36,7 @@ var Cargo = IgeClass.extend({
 	init: function() {
 		this._containers = [];
 		this._items = [];
+		this.updateList = [];
 	},
 	
 	/**
@@ -120,6 +121,7 @@ var Cargo = IgeClass.extend({
 				var container = this.getContainer(i);
 				if (container.hasSpace(item)) {
 					var success = container.addItem(item);
+					this.sendUpdates();
 					return success;
 				} else {
 					continue;
@@ -239,6 +241,8 @@ var Cargo = IgeClass.extend({
 			}
 		}
 
+		this.sendUpdates();
+		
 		return extracted;
 	},
 
@@ -379,6 +383,33 @@ var Cargo = IgeClass.extend({
 	debugDump: function(i) {
 		console.log(":: cargo container #" + i);
 		this.getContainer(i).debugDump();
+	},
+
+	subscribeToUpdates: function(clientId) {
+		console.log("Registering clientId " + clientId + " to cargo updates");
+		this.updateList.push(clientId);
+	},
+
+	unsubscribeFromUpdates: function(clientId) {
+		var clientIndex = this.updateList.indexOf(clientId);
+		if (clientIndex >= 0) {
+			console.log("Unregistering clientId " + clientId + " from cargo updates");
+			this.updateList.remove(clientIndex);
+		}
+	},
+
+	sendUpdates: function() {
+		if (this.updateList.length === 0) {
+			return;
+		}
+
+		console.log("Sending updates to " + this.updateList.length + " cargo update listener(s)...");
+
+		for (var i = 0; i < this.updateList.length; i++) {
+			var cargoList = this.getItemList(true);
+			var clientId = this.updateList[i];
+			ige.network.send('cargoUpdate', cargoList, clientId);
+		}
 	}
 });
 

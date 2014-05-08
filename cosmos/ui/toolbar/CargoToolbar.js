@@ -22,8 +22,21 @@
 			self.populateFromInventory(cargoItems);
 		});
 
+		this._cargoUpdateEvent = ige.on('cargo update', function(cargoItems) {
+			console.log("CargoToolbar: Received cargo update");
+			self.populateFromInventory(cargoItems);
+		});
+
 		console.log("Sending cargo request...");
-		ige.network.send('cargoRequest');
+		var data = { requestUpdates: true };
+		ige.network.send('cargoRequest', data);
+	},
+
+	unMount: function() {
+		ige.off('cargo update', this._cargoUpdateEvent);
+		var data = { requestUpdates: false };
+		ige.network.send('cargoRequest', data);
+		Toolbar.prototype.unMount.call(this);
 	},
 
 	populateFromInventory: function(cargoItems) {

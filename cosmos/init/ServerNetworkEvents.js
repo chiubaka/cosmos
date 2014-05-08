@@ -18,6 +18,10 @@ var ServerNetworkEvents = {
 	*/
 	_onPlayerDisconnect: function(clientId) {
 		if (ige.server.players[clientId]) {
+			// Handle destroying player state first
+			// Unsubscribe players from updates
+			ige.server.players[clientId].cargo.unsubscribeFromUpdates(clientId);
+
 			// Remove the player from the game
 			ige.server.players[clientId].destroy();
 
@@ -96,9 +100,16 @@ var ServerNetworkEvents = {
 		var player = ige.server.players[clientId];
 		var playerCargo = player.cargo;
 
-		ige.network.send('cargoResponse', playerCargo.getItemList(true), clientId);
-	}
+		if (data !== undefined && data !== null) {
+			if (data.requestUpdates) {
+				playerCargo.subscribeToUpdates(clientId);
+			} else {
+				playerCargo.unsubscribeFromUpdates(clientId);
+			}
+		}
 
+		ige.network.send('cargoResponse', playerCargo.getItemList(true), clientId);
+	},
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = ServerNetworkEvents; }

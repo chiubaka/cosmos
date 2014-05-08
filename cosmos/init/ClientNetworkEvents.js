@@ -52,6 +52,11 @@ var ClientNetworkEvents = {
 		ige.emit('cargo response', [cargoList]);
 	},
 
+	_onCargoUpdate: function(cargoList) {
+		console.log("ClientNetworkEvents: Received cargo update");
+		ige.emit('cargo update', [cargoList]);
+	},
+
 	initCameras: function(entityToTrack) {
 		var cameraSmoothingAmount = 10;
 
