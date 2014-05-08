@@ -79,12 +79,11 @@ var ServerNetworkEvents = {
 
 	_onConstructNew: function(data, clientId) {
 		// TODO: Extract this into a new method and call it with an event emission!
-		console.log("Placing item with type " + data.selectedType);
 		var player = ige.server.players[clientId];
 		var blockToPlace = player.cargo.extractType(data.selectedType)[0];
 
 		if (blockToPlace !== undefined) {
-			console.log("Placing item: " + blockToPlace.classId());
+			this.log("Placing item: " + blockToPlace.classId(), 'info');
 			new BlockGrid()
 				.category('smallAsteroid')
 				.id('littleAsteroid' + Math.random())

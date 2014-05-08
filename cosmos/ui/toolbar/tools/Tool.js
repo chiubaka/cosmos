@@ -25,11 +25,11 @@
 	init: function(name, quantity) {
 		IgeUiElement.prototype.init.call(this);
 
-		console.log("Initializing Tool for " + this.classId() + "-" + name + "...");
+		this.log("init with name " + name + "...", 'info');
 
 		this.TOOL_NAME = name;
 
-		// Set up the styling for this capability
+		// Set up the styling for this tool
 		this.initStyles();
 
 		// Set up labels
@@ -134,6 +134,8 @@
 	},
 
 	select: function() {
+		this.log('tool ' + this.TOOL_NAME + ' selected...', 'info');
+
 		// Show the selected state of the button
 		this.id(this.ID_SELECTED);
 		this.applyStyle(ige.ui.style("#" + this.ID_SELECTED));

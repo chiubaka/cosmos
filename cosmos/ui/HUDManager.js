@@ -4,7 +4,7 @@
 	_capbar: undefined,
 
 	init: function() {
-		console.log("Initializing HUDManager...");
+		this.log("Initializing Player HUD...", 'info');
 
 		this._capbar = new CapBar()
 			.id("capbar")

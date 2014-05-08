@@ -386,14 +386,14 @@ var Cargo = IgeClass.extend({
 	},
 
 	subscribeToUpdates: function(clientId) {
-		console.log("Registering clientId " + clientId + " to cargo updates");
+		this.log("Registering clientId " + clientId + " to cargo updates", 'info');
 		this.updateList.push(clientId);
 	},
 
 	unsubscribeFromUpdates: function(clientId) {
 		var clientIndex = this.updateList.indexOf(clientId);
 		if (clientIndex >= 0) {
-			console.log("Unregistering clientId " + clientId + " from cargo updates");
+			this.log("Unregistering clientId " + clientId + " from cargo updates", 'info');
 			this.updateList.remove(clientIndex);
 		}
 	},
@@ -402,8 +402,6 @@ var Cargo = IgeClass.extend({
 		if (this.updateList.length === 0) {
 			return;
 		}
-
-		console.log("Sending updates to " + this.updateList.length + " cargo update listener(s)...");
 
 		for (var i = 0; i < this.updateList.length; i++) {
 			var cargoList = this.getItemList(true);

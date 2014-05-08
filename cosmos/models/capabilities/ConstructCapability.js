@@ -21,12 +21,12 @@
 	 * so the capability can store state about the currently selected item on the toolbar.
 	 */
 	activate: function() {
-		console.log("Activating ConstructCapability: registering event listener.");
+		console.log("Activating... registering event listener.", 'info');
 
 		var self = this;
 		this._toolbarListener = ige.on('toolbar tool selected', function(classId, toolName) {
 			if (classId === CargoTool.prototype.classId()) {
-				console.log("ConstructCapability selected type " + toolName);
+				self.log("Selected item type " + toolName, 'info');
 				self.selectedType = toolName;
 				console.log(self.selectedType);
 			}
@@ -39,7 +39,7 @@
 	 * Upon deactivation, unregisters this capability as a toolbar listener.
 	 */
 	deactivate: function() {
-		console.log("Deactivating ConstructCapability: deregistering event listener.");
+		this.log("Deactivating... deregistering event listener.", 'info');
 		ige.off('toolbar tool selected', this._toolbarListener);
 
 		return this;

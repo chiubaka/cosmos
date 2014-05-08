@@ -57,12 +57,12 @@
 				this._selectedCap = this.capStates[cap];
 			} else {
 				this._selectedCap = this.capStates[''];
-				console.log('invalid cap selected, reset to idle...');
+				console.error('invalid cap selected, reset to idle...');
 			}
 
 			this.capabilities[this._selectedCap].activate();
 
-			console.log("Client selected cap changed: " + this._selectedCap);
+			this.log("Player selected " + this._selectedCap + " in capbar", 'info');
 			ige.emit('clientstate selected cap changed', [this._selectedCap]);
 		}
 

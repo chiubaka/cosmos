@@ -34,7 +34,7 @@
 	init: function() {
 		IgeUiElement.prototype.init.call(this);
 
-		console.log("Initializing Capbar entry for " + this.classId() + "...");
+		this.log('init', 'info');
 
 		// Set up the styling for this capability
 		this.initStyles();

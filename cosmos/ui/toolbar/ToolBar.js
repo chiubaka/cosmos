@@ -17,7 +17,7 @@
 	_capParent: undefined,
 
 	init: function() {
-		console.log("Initializing Toolbar for " + this.classId() + "...");
+		this.log("Initializing...", 'info');
 		IgeUiElement.prototype.init.call(this);
 
 		this.applyStyle({

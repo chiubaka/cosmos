@@ -18,16 +18,16 @@
 
 		var self = this;
 		this._cargoResponseEvent = ige.on('cargo response', function(cargoItems) {
-			console.log("CargoToolbar: Received cargo response");
+			self.log("Received cargo response", 'info');
 			self.populateFromInventory(cargoItems);
 		});
 
 		this._cargoUpdateEvent = ige.on('cargo update', function(cargoItems) {
-			console.log("CargoToolbar: Received cargo update");
+			self.log("Received cargo update", 'info');
 			self.populateFromInventory(cargoItems);
 		});
 
-		console.log("Sending cargo request...");
+		this.log("Sending cargo request to server...", info);
 		var data = { requestUpdates: true };
 		ige.network.send('cargoRequest', data);
 	},
@@ -41,7 +41,7 @@
 
 	populateFromInventory: function(cargoItems) {
 		var selectedType = ige.client.state.currentCapability().selectedType;
-		console.log("Populating inventory from callback... " + Object.keys(cargoItems).length + " item(s) in inventory");
+		this.log("Populating toolbar from server response: " + Object.keys(cargoItems).length + " item(s) in inventory", 'info');
 
 		// Clear out the existing tools in the tools palette.
 		for (var i = 0; i < this._tools.length; i++) {

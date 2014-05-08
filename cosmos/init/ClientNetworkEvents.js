@@ -48,12 +48,12 @@ var ClientNetworkEvents = {
 	},
 
 	_onCargoResponse: function(cargoList) {
-		console.log("ClientNetworkEvents: Received cargo response");
+		this.log("Received cargo response", 'info');
 		ige.emit('cargo response', [cargoList]);
 	},
 
 	_onCargoUpdate: function(cargoList) {
-		console.log("ClientNetworkEvents: Received cargo update");
+		this.log("Received cargo update");
 		ige.emit('cargo update', [cargoList]);
 	},
 

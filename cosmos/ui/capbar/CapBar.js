@@ -11,7 +11,7 @@
 	_caps: undefined,
 
 	init: function() {
-		console.log("Initializing Capbar...");
+		this.log("init", 'info');
 		IgeUiElement.prototype.init.call(this);
 
 		this.applyStyle({
