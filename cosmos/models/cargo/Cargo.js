@@ -348,12 +348,8 @@ var Cargo = IgeClass.extend({
 	getItemList: function(coalesce) {
 		var returnDict = {};
 
-		console.log("Getting list of items...");
-
 		for (var i = 0; i < this.getNumContainers(); i++) {
 			var container = this.getContainer(i);
-			console.log("Cargo container #" + i);
-			console.log("Container Item List:");
 
 			var containerItemList = container.getItemList();
 
@@ -369,11 +365,8 @@ var Cargo = IgeClass.extend({
 				}
 
 				returnDict[storeType] += containerItemList[itemType];
-				console.log("   [" + itemType + "]: " + containerItemList[itemType] + ", total: " + returnDict[storeType]);
 			}
 		}
-
-		console.log("Done!");
 
 		return returnDict;
 	},
