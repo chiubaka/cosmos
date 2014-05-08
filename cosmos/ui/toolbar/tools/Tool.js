@@ -11,11 +11,16 @@
 	 * Defines the styling and colors of the capbar
 	 */
 	// TODO: Move these into a centralized styles config
-	STUB_COLOR: "rgb(70, 70, 70)",
-	BG_COLOR: "rgb(50, 50, 50)",
-	FG_COLOR: "rgb(255, 255, 255)",
-	UNACTIVE_COLOR: "rgba(0, 0, 0, 0)",
-	LABEL_COLOR: "rgb(255, 255, 255)",
+	STUB_COLOR: 'rgb(70, 70, 70)',
+	HOVER_STUB_COLOR: 'rgb(255, 255, 255)',
+	ACTIVE_STUB_COLOR: 'rgba(255, 255, 255, 0.5)',
+	ACTIVE_COLOR: 'rgb(100, 100, 100)',
+	HOVER_COLOR: 'rgb(200, 200, 200)',
+	BG_COLOR: 'rgb(50, 50, 50)',
+	FG_COLOR: 'rgb(255, 255, 255)',
+	INACTIVE_COLOR: 'rgba(0, 0, 0, 0)',
+	LABEL_COLOR: 'rgb(255, 255, 255)',
+	STUB_HEIGHT: 2,
 	STUB_ICON: undefined,
 	ACTIVE_ICON: undefined,
 
@@ -72,24 +77,24 @@
 			'backgroundImage': this.ACTIVE_ICON,
 			'backgroundSize': [this.WIDTH, this.HEIGHT],
 
-			'backgroundColor': this.UNACTIVE_COLOR
+			'backgroundColor': this.BG_COLOR
 		});
 
 		ige.ui.style('#' + this.ID_HOVER, {
-			'backgroundColor': this.BG_COLOR,
-			'borderBottomColor': this.BG_COLOR,
+			'backgroundColor': this.HOVER_COLOR,
+			'borderBottomColor': this.HOVER_STUB_COLOR,
 			'backgroundImage': this.ACTIVE_ICON
 		});
 
 		ige.ui.style('#' + this.ID_SELECTED_HOVER, {
-			'backgroundColor': this.BG_COLOR,
-			'borderBottomColor': this.BG_COLOR,
+			'backgroundColor': this.HOVER_COLOR,
+			'borderBottomColor': this.HOVER_STUB_COLOR,
 			'backgroundImage': this.ACTIVE_ICON
 		});
 
 		ige.ui.style('#' + this.ID_SELECTED, {
-			'backgroundColor': this.STUB_COLOR,
-			'borderBottomColor': this.STUB_COLOR,
+			'backgroundColor': this.ACTIVE_COLOR,
+			'borderBottomColor': this.ACTIVE_STUB_COLOR,
 			'backgroundImage': this.ACTIVE_ICON
 		});
 

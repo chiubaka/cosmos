@@ -7,7 +7,11 @@
 	ACTIVE_ICON: '',
 
 	BG_COLOR: 'rgb(3,131,255)',
-	STUB_COLOR: 'rgb(2,108,210)',
+	ACTIVE_COLOR: 'rgb(0, 136, 255)',
+	HOVER_COLOR: 'rgb(0, 170, 255)',
+	STUB_COLOR: 'rgba(0, 0, 0, 0.5)',
+	HOVER_STUB_COLOR: 'rgb(255, 255, 255)',
+	ACTIVE_STUB_COLOR: 'rgba(255, 255, 255, 0.5)',
 
 	mount: function(elem) {
 		Tool.prototype.mount.call(this, elem);
