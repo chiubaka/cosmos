@@ -22,14 +22,8 @@ var GameInit = {
 			this.initPhysics();
 			this.initServerEvents();
 		} else {
-			this.initPlayerControls();
 			this.initPlayerState();
-
-			new ClickInterceptLayer()
-				.id('ClickInterceptLayer')
-				.mount(game.spaceBackgroundScene)
-				.depth(1000);//TODO this might not be the best place to mount it
-
+			this.initPlayerControls();
 			//this.initTimeStream(game);
 		}
 	},
@@ -97,14 +91,14 @@ var GameInit = {
 				.ignoreCamera(true)
 				.mount(game.spaceScene);
 
-			// For now, the server does not need to know about the background scene.
-			// The server does not need to load the UI.
-			this.initBackgroundScene();
-
 			// This scene's purpose is to catch all clicks on the background
 			game.clickScene = new ClickScene()
 				.layer(game.LAYER_CLICK_SCENE)
-				.mount(game.spaceScene)
+				.mount(game.spaceScene);
+
+			// For now, the server does not need to know about the background scene.
+			// The server does not need to load the UI.
+			this.initBackgroundScene();
 
 			// Pre-initialize player HUD
 			this.initPlayerHUD();
