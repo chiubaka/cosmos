@@ -40,6 +40,7 @@
 	},
 
 	populateFromInventory: function(cargoItems) {
+		var selectedType = ige.client.state.currentCapability().selectedType;
 		console.log("Populating inventory from callback... " + Object.keys(cargoItems).length + " item(s) in inventory");
 
 		// Clear out the existing tools in the tools palette.
@@ -48,11 +49,26 @@
 		}
 		this._tools.length = 0;
 
+		// If the selectedType is no longer in the cargo inventory, just select the first one in the list
+		var needToReselect = (!cargoItems.hasOwnProperty(selectedType));
+		var persistedSelection = false;
+
 		// Iterate through the cargo items and create a new 'tool' in the palette for the item.
 		for (var type in cargoItems) {
 			var quantity = cargoItems[type];
+			var tool = new CargoTool(type, quantity);
 
-			this._tools.push(new CargoTool(type, quantity));
+			if (needToReselect) {
+				tool.select();
+				needToReselect = false;
+			}
+
+			if (!persistedSelection && selectedType === type) {
+				tool.select();
+				persistedSelection = true;
+			}
+
+			this._tools.push(tool);
 		}
 
 		ige.off('cargo response', this._cargoResponseEvent);		
