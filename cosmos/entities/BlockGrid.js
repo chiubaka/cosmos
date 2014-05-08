@@ -6,7 +6,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	/** The rendering container for this BlockGrid, which essentially provides a cacheable location for the BlockGrid's
 	 * texture. */
 	_renderContainer: undefined,
-
+	_constructionZoneOverlay: undefined,
 	_debugFixtures: false,
 
 	init: function(data) {
@@ -231,6 +231,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			case 'remove':
 				this.remove(data.row, data.col);
 				this._renderContainer.cacheDirty(true);
+				this._constructionZoneOverlay.refreshNeeded(true);
 				break;
 
 			default:

@@ -4,6 +4,7 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 	_overlayGrid: undefined,
 	_grid: undefined,
 	_renderContainer: undefined,
+	_refreshNeeded: false,
 
 	init: function (grid) {
 		IgeEntity.prototype.init.call(this);
@@ -144,6 +145,14 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 
 	},
 
+	refreshNeeded: function (val) {
+	if (val !== undefined) {
+			this._refreshNeeded = val;
+			return this;
+		}
+		return this._refreshNeeded;
+	},
+
 	update: function(ctx) {
 		if (!ige.isServer) {
 			// TODO: Fade in construction overlay when construction capability is
@@ -151,6 +160,15 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 
 			// TODO: Before fading in, if we need to recalculate the overlay, do so
 			// TODO: CacheDirty(true)
+			if (this._refreshNeeded) {
+				this._renderContainer.destroy();
+				this._renderContainer = new RenderContainer()
+					.mount(this)
+					.opacity(0.5);
+				this.createConstructionZones();
+				this.mountOverlayGrid();
+				this._refreshNeeded = false;
+			}
 		}
 
 		IgeEntity.prototype.update.call(this, ctx);
