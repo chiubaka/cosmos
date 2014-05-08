@@ -93,10 +93,12 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		var aabbRelativeX = worldX - aabbX;
 		var aabbRelativeY = worldY - aabbY;
 
-		// This is the BlockGrid's rotation, not the render container's, since the render container does
-		// not rotate with respect to its parent.
+		// This is the overlay's parent's rotation, since the overlay has no
+		// no rotation with respect to the BlockGrid.
 		// Negative because we want to reverse the rotation.
-		var theta = -this._rotate.z;
+
+		// Negative because we want to reverse the rotation.
+		var theta = -this.parent._rotate.z;
 
 		// The unrotated coordinates for comparison against an unrotated grid with respect to the center of the
 		// entity
