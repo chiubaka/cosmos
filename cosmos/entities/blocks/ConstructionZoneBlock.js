@@ -5,9 +5,9 @@ var ConstructionZoneBlock = Block.extend({
 		Block.prototype.init.call(this);
 
 		if (!ige.isServer) {
-			this.textureBackground = "rgb(242, 242, 242)";
-			this.textureOutline = "rgb(38, 38, 38)";
-			this.textureSvg = ige.client.svgs.cargo;
+			this.textureBackground = "rgb(3,131,255)";
+			this.textureOutline = "rgb(2,108,210)";
+			//this.textureSvg = ige.client.svgs.cargo;
 		}
 	}
 });

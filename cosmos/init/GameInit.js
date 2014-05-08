@@ -231,7 +231,7 @@ var GameInit = {
 						if (asteroid === undefined || !asteroid.alive()) {
 							return;
 						}
-						ige.emit('block collected', [player, asteroid.grid()[1][1].classId()]);
+						ige.emit('block collected', [player, asteroid.grid()[0][0].classId()]);
 						asteroid.destroy();
 					}
 				}

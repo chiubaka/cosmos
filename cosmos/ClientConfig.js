@@ -1,10 +1,16 @@
 var igeClientConfig = {
 	include: [
 		/* === ENVIRONMENT STATE === */
+
+		/* Render container for block grids and overlays */
+		'./entities/RenderContainer.js',
+
+		/* Construction zone overlay */
+		'./entities/ConstructionZoneOverlay.js',
+
 		/* Blocks */
 		'./entities/Block.js',
 		'./entities/BlockGrid.js',
-		'./entities/RenderContainer.js',
 		'./entities/blocks/ConstructionZoneBlock.js',
 
 		/* Ship part blocks */
@@ -50,6 +56,7 @@ var igeClientConfig = {
 		/* Helper utilities */
 		'./utils/DeploymentUtils.js',
 		'./utils/RandomInterval.js',
+		'./utils/PrototypeMixins.js',
 
 		/* === GAME SETUP === */
 		/* Configuration */

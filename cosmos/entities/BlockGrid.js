@@ -20,41 +20,16 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		if (!ige.isServer) {
 			this._renderContainer = new RenderContainer()
-				.mount(this)
+				.mount(this);
+
+			// TODO: Lazily create when needed to speed up load time.
+			this._constructionZoneOverlay = new ConstructionZoneOverlay(this._grid)
+				.mount(this);
 
 			this.mountGrid();
 			this.mouseDown(this.mouseDownHandler);
 		}
-	},
 
-	addConstructionZonesAroundBlocks: function() {
-		//First create an array that's two larger in each dimensions than the current grid
-		oldNumRows = this.grid().length;
-		oldNumCols = this.maxRowLengthForGrid(this.grid());
-
-		newNumRows = oldNumRows + 2;
-		newNumCols = oldNumCols + 2;
-
-		var newGrid = this.newGridFromDimensions(newNumRows, newNumCols);
-
-		//Copy the grid over to the new array with an offset of (1, 1)
-		for (var row = 0; row < oldNumRows; row++) {
-			for (var col = 0; col < oldNumCols; col++) {
-				newGrid[row + 1][col + 1] = this.getBlockFromGrid(row, col);
-			}
-		}
-
-		//Traverse the two dimensional array looking for spaces where the following two conditions hold: (1) the space is an undefined and (2) the space has at least one neighbor that's undefined
-		this._grid = newGrid;
-		for (var row = 0; row < newNumRows; row++) {
-			for (var col = 0; col < newNumCols; col++) {
-				if(this._grid[row][col] === undefined) {
-					if (this.isRealBlock(row + 1, col) || this.isRealBlock(row - 1, col) || this.isRealBlock(row, col + 1) || this.isRealBlock(row, col - 1)) {
-						this._grid[row][col] = new ConstructionZoneBlock();
-					}
-				}
-			}
-		}
 	},
 
 	/*
@@ -130,27 +105,12 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// TODO: This might be dangerous, since some of the event properties should be changed so that they are
 		// relative to the child's bounding box, but since we don't use any of those properties for the moment,
 		// ignore that.
-		if (this.getBlockFromBlockGrid(row+1, col) == undefined ||
-			this.getBlockFromBlockGrid(row-1, col) == undefined ||
-			this.getBlockFromBlockGrid(row, col+1) == undefined ||
-			this.getBlockFromBlockGrid(row, col-1) == undefined) {
+		if (this._grid.get2D(row+1, col) == undefined ||
+			this._grid.get2D(row-1, col) == undefined ||
+			this._grid.get2D(row, col+1) == undefined ||
+			this._grid.get2D(row, col-1) == undefined) {
 			block.mouseDown(event, control);
 		}
-	},
-
-	getBlockFromBlockGrid: function(row, col) {
-		// Check if row, col refers to a block that is off the edge of the block grid.
-		if(row < 0 || col < 0) {
-			return undefined;
-		}
-		if (row >= this.grid().length) {
-			return undefined;
-		}
-		if (col >= this.grid()[row].length) {
-			return undefined;
-		}
-
-		return this.grid()[row][col];
 	},
 
 	streamCreateData: function() {
@@ -191,26 +151,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 			}
 			this._grid.push(row);
 		}
-	},
-
-	/**
-	Static function
-	Returns a new block grid with the given dimensions.
-
-	POTENTIAL BUG: are numCols and numRows switched?
-	*/
-	newGridFromDimensions: function (numCols, numRows) {
-		var grid = [];
-
-		for (x = 0; x < numCols; x++) {
-			var gridCol = [];
-			for (y = 0; y < numRows; y++) {
-				gridCol.push(new EngineBlock());
-			}
-			grid.push(gridCol);
-		}
-
-		return grid;
 	},
 
 	// Created on server, streamed to all clients
@@ -352,22 +292,21 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		this._grid = grid;
 
-		var maxRowLength = this.maxRowLengthForGrid(this._grid);
+		var maxRowLength = this._grid.get2DMaxRowLength();
 
 		this.height(Block.prototype.HEIGHT * this._grid.length);
 		this.width(Block.prototype.WIDTH * maxRowLength);
 
-		this.updateFixtures();
-
-		this.addConstructionZonesAroundBlocks();
+		this.addFixtures();
 
 		return this;
 	},
 
 	/**
-	 * Update fixtures should be called whenever _grid is changed in a way that would affect the physics of the blockgrid.
+	 * Adds fixtures. This should only be called when creating a BlockGrid from
+	 * scratch, otherwise there may be doubled fixtures.
 	 */
-	updateFixtures: function() {
+	addFixtures: function() {
 		this.box2dBody({
 			type: 'dynamic',
 			linearDamping: 0.4,
@@ -433,7 +372,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	mountGrid: function() {
-		var maxRowLength = this.maxRowLengthForGrid(this._grid);
+		var maxRowLength = this._grid.get2DMaxRowLength();
 
 		this.height(Block.prototype.HEIGHT * this._grid.length)
 			.width(Block.prototype.WIDTH * maxRowLength);
@@ -457,49 +396,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 	},
 
-	/**
-	 * getBlockFromGrid returns the block in this block grid at row, col, but will return undefined if row, col is not a valid index into the grid.
-	 * Basically it's a safe (but slightly slower) way of indexing into the grid.
-	 */
-	getBlockFromGrid: function(row, col) {
-		// Check if row, col refers to a block that is off the edge of the block grid.
-		if(row < 0 || col < 0) {
-			return undefined;
-		}
-		if (row >= this.grid().length) {
-			return undefined;
-		}
-		if (col >= this.grid()[row].length) {
-			return undefined;
-		}
-
-		return this.grid()[row][col];
-	},
-
-	maxRowLengthForGrid: function(grid) {
-		var maxRowLength = 0;
-		for (var row = 0; row < grid.length; row++) {
-			if (grid[row].length > maxRowLength) {
-				maxRowLength = grid[row].length;
-			}
-		}
-
-		return maxRowLength;
-	},
-
-	isRealBlock: function(row, col) {
-		var block = this.getBlockFromGrid(row, col);
-
-		if (block === undefined) {
-			return false;
-		}
-
-		if (block.classId() === "ConstructionZoneBlock") {
-			return false;
-		}
-
-		return true;
-	},
 
 	/**
 	 * Call this before calling setGrid to create a bunch of entities which will help to visualize the box2D fixtures
