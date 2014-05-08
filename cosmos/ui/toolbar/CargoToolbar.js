@@ -1,7 +1,7 @@
 ﻿var CargoToolbar = Toolbar.extend({
 	classId: 'CargoToolbar',
 
-	BG_COLOR: 'rgb(2,108,210)',
+	BG_COLOR: 'rgb(2,79,154)',
 	BORDER_COLOR: 'rgb(3,131,255)',
 
 	PLACEHOLDER_LOADING: "Getting your cargo...",

@@ -7,6 +7,7 @@
 	ACTIVE_ICON: '',
 
 	BG_COLOR: 'rgb(3,131,255)',
+	STUB_COLOR: 'rgb(2,108,210)',
 
 	mount: function(elem) {
 		Tool.prototype.mount.call(this, elem);

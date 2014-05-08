@@ -17,7 +17,7 @@
 	_capParent: undefined,
 
 	init: function() {
-		console.log("Initializing Toolbar...");
+		console.log("Initializing Toolbar for " + this.classId() + "...");
 		IgeUiElement.prototype.init.call(this);
 
 		this.applyStyle({
@@ -51,6 +51,8 @@
 				.value(this.PLACEHOLDER_EMPTY)
 				.width(this._placeholderMsg._fontEntity.measureTextWidth() + 10)
 				.mount(this);
+
+			this.width(200);
 			return;
 		} else {
 			this._placeholderMsg.unMount();
