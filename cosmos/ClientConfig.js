@@ -42,6 +42,11 @@ var igeClientConfig = {
 		'./entities/player/Player.js',
 		'./models/state/ClientState.js',
 
+		/* Capabilities */
+		'./models/capabilities/Capability.js',
+		'./models/capabilities/ConstructCapability.js',
+		'./models/capabilities/MineCapability.js',
+
 		/* === USER INTERFACE === */
 		/* HUD */
 		'./ui/HUDManager.js',
@@ -50,7 +55,7 @@ var igeClientConfig = {
 		'./ui/capbar/CapBar.js',
 		'./ui/capbar/CapLabel.js',
 
-		/* Capabilities */
+		/* Caps */
 		'./ui/capbar/caps/Cap.js',
 		'./ui/capbar/caps/MineCap.js',
 		'./ui/capbar/caps/ConstructCap.js',

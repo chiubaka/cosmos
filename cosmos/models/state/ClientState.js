@@ -2,7 +2,7 @@
 	classId: 'ClientState',
 
 	/**
-	 * The possible capabilities and the states that they induce.
+	 * The possible selected caps and the states that they induce.
 	 */
 	capStates: {
 		'': 'idle',
@@ -10,30 +10,68 @@
 		'ConstructCap': 'construct'
 	},
 
-	_currentState: undefined,
+	/**
+	 * Capabilities associated with states above.
+	 */
+	capabilities: {
+		'mine': undefined,
+		'construct': undefined,
+		'idle': undefined
+	},
+
+	_selectedCap: undefined,
 
 	init: function() {
+		this.initEvents();
+		this.initCapabilities();
+
+		// Default selected capability
+		this.selectedCap('');
+	},
+
+	initEvents: function() {
 		var self = this;
 
 		ige.on('capbar cap selected', function(classId) {
-			self.state(self.capStates[classId]);
+			self.selectedCap(classId);
 		});
 
 		ige.on('capbar cap cleared', function(classId) {
-			self.state(self.capStates['']);
+			self.selectedCap('');
 		});
-
-		this.state(this.capStates['']);
 	},
 
-	state: function(newState) {
-		if (newState !== undefined) {
-			this._currentState = newState;
-			console.log("Client state changed: " + this._currentState);
-			ige.emit('client state changed', [this._currentState]);
+	initCapabilities: function() {
+		this.capabilities.mine = new MineCapability();
+		this.capabilities.construct = new ConstructCapability();
+		this.capabilities.idle = new Capability();
+	},
+
+	selectedCap: function(cap) {
+		if (cap !== undefined) {
+			if (this._selectedCap !== undefined) {
+				this.capabilities[this._selectedCap].deactivate();
+			}
+
+			if (this.capStates.hasOwnProperty(cap)) {
+				this._selectedCap = this.capStates[cap];
+			} else {
+				this._selectedCap = this.capStates[''];
+				console.log('invalid cap selected, reset to idle...');
+			}
+
+			this.capabilities[this._selectedCap].activate();
+
+			console.log("Client selected cap changed: " + this._selectedCap);
+			ige.emit('clientstate selected cap changed', [this._selectedCap]);
 		}
 
-		return this._currentState;
+		return this._selectedCap;
+	},
+
+	// TODO: Support multiple current capabilities (active, passive)
+	currentCapability: function() {
+		return this.capabilities[this.selectedCap()];
 	}
 });
 
