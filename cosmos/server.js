@@ -44,9 +44,9 @@ var Server = IgeClass.extend({
 						ige.network.define('playerControlUpdate', self._onPlayerControlUpdate);
 
 						/* This is called when a player clicks on a block */
-						ige.network.define('blockClicked', self._onBlockClicked);
+						ige.network.define('mineBlock', self._onMineBlock);
 						/* This is called when a player clicks on the background. */
-						ige.network.define('backgroundClicked', self._onBackgroundClicked);
+						ige.network.define('constructNew', self._onConstructNew);
 
 						/* Define this command so that we can use it on the client */
 						ige.network.define('blockAction');
