@@ -5,7 +5,7 @@
 	 * The height of the toolbar.
 	 */
 	HEIGHT: 64,
-	TOOL_SPACING: 1,
+	TOOL_SPACING: 0,
 	BG_COLOR: 'rgb(30, 30, 30)',
 	BORDER_COLOR: 'rgb(0, 0, 0)',
 
