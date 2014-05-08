@@ -54,21 +54,9 @@ var Block = IgeEntity.extend({
 			col: this._col
 		};
 
-		// TODO: Check capabilities and confirm with server
-		if (ige.client.state.state() === 'mine') {
-			this._displayHealth = true;
-
-			self.decrementHealthIntervalId = setInterval(function() {
-				if (self._hp > 0) {
-					self._hp--;
-					self.cacheDirty(true);
-				}
-				if (self._hp == 0) {
-					clearInterval(self.decrementHealthIntervalId);
-				}
-			}, self.MINING_TIME / self._maxHp);
-
-			ige.network.send('blockClicked', data);
+		// TODO: Expand when clientState supports multiple current capabilities 
+		if (ige.isClient && ige.client !== undefined && ige.client.state !== undefined) {
+			ige.client.state.currentCapability().tryPerformAction(self, event, data);
 		}
 	},
 
