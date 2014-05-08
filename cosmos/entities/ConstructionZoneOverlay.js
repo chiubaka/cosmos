@@ -98,7 +98,7 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		// Negative because we want to reverse the rotation.
 
 		// Negative because we want to reverse the rotation.
-		var theta = -this.parent._rotate.z;
+		var theta = -this._parent._rotate.z;
 
 		// The unrotated coordinates for comparison against an unrotated grid with respect to the center of the
 		// entity
