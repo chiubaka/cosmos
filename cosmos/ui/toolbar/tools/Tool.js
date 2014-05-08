@@ -46,6 +46,7 @@
 
 	initStyles: function() {
 		var toolId = this.classId() + "-" + this.TOOL_NAME;
+		this.TOOL_ID = toolId;
 
 		this.width(this.WIDTH);
 		this.height(this.HEIGHT);
@@ -109,14 +110,14 @@
 				self.select();
 			} else {
 				self.deselect();
-				ige.emit('toolbar tool cleared', [self.classId()]);
+				ige.emit('toolbar tool cleared', [this.classId(), this.TOOL_NAME]);
 			}
 		});
 
-		ige.on('toolbar tool selected', function(classId) {
-			if (!self._selected && classId === self.classId()) {
+		ige.on('toolbar tool selected', function(classId, toolName) {
+			if (!self._selected && self.classId() === classId && toolName === self.TOOL_NAME) {
 				self.select();
-			} else if (classId !== self.classId()) {
+			} else if (self.classId() !== classId || toolName !== self.TOOL_NAME) {
 				self.deselect();
 			}
 		});
@@ -138,7 +139,7 @@
 		this.applyStyle(ige.ui.style("#" + this.ID_SELECTED));
 
 		this._selected = true;
-		ige.emit('toolbar tool selected', [this.classId()]);
+		ige.emit('toolbar tool selected', [this.classId(), this.TOOL_NAME]);
 
 		if (this._toolbar !== undefined) {
 			this._toolbar.mount(this.parent());
