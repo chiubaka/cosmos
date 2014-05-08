@@ -37,6 +37,9 @@ var igeClientConfig = {
 		/* Scenery */
 		'./entities/scenery/Background.js',
 
+		/* Click scene (captures background client's background clicks) */
+		'./entities/ClickScene.js',
+
 		/* === PLAYER STATE === */
 		'./entities/player/Player.js',
 

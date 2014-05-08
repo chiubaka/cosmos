@@ -20,8 +20,6 @@ var Player = BlockGrid.extend({
 			}
 		};
 
-		this.width(20);
-		this.height(20);
 		this.translateTo(-200, -200, 0);
 
 		if (ige.isClient) {
@@ -54,14 +52,16 @@ var Player = BlockGrid.extend({
 	addLaser: function(blockGridId, row, col) {
 		// Hack because we can't mount on mining laser block
 		// (Server has no blocks mounted)
-		this.laserMount = new EffectsMount()
-			.mount(this)
-			.streamMode(1)
-			// TODO: Vary the position depending on where mining laser is,
-			// or implement server streaming of blocks.
-			// Right now, we translate the laser mount to the location of the mining
-			// laser block.
-			.translateBy(0, -115, 0)
+		if(this.laserMount === undefined) {
+			this.laserMount = new EffectsMount()
+				.mount(this)
+				.streamMode(1)
+				// TODO: Vary the position depending on where mining laser is,
+				// or implement server streaming of blocks.
+				// Right now, we translate the laser mount to the location of the mining
+				// laser block.
+				.translateBy(0, -115, 0)
+		}
 
 		this.laserBeam = new LaserBeam()
 			.setTarget(blockGridId, row, col)
