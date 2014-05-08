@@ -144,6 +144,7 @@ var Block = IgeEntity.extend({
 		switch (classId) {
 			case Block.prototype.classId():
 				return new Block();
+			//ship parts
 			case CargoBlock.prototype.classId():
 				return new CargoBlock();
 			case ControlBlock.prototype.classId():
@@ -158,12 +159,20 @@ var Block = IgeEntity.extend({
 				return new PowerBlock();
 			case ThrusterBlock.prototype.classId():
 				return new ThrusterBlock();
+			//now the elements
 			case CarbonBlock.prototype.classId():
 				return new CarbonBlock();
 			case IceBlock.prototype.classId():
 				return new IceBlock();
 			case IronBlock.prototype.classId():
 				return new IronBlock();
+			case GoldBlock.prototype.classId():
+				return new GoldBlock();
+			case FluorineBlock.prototype.classId():
+				return new FluorineBlock();
+			case CobaltBlock.prototype.classId():
+				return new CobaltBlock();
+
 			default:
 				return undefined;
 		}

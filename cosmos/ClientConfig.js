@@ -21,7 +21,10 @@ var igeClientConfig = {
 		//--------------
 		'./entities/blocks/elements/IronBlock.js',
 		'./entities/blocks/elements/CarbonBlock.js',
-		'./entities/blocks/elements/IceBlock.js',
+		'./entities/blocks/elements/FluorineBlock.js',
+		'./entities/blocks/elements/CobaltBlock.js',
+		'./entities/blocks/elements/GoldBlock.js',
+		'./entities/blocks/elements/IceBlock.js',//not really an element
 
 		/* Effects */
 		'./entities/effects/mining/LaserBeam.js',
