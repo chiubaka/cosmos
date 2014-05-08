@@ -43,6 +43,16 @@
 		IgeUiElement.prototype.mount.call(this, elem);
 
 		this.bottom(elem.HEIGHT);
+		this.mountTools();
+	},
+
+	unMount: function() {
+		for (var i = 0; i < this._tools.length; i++) {
+			var tool = this._tools[i];
+			tool.unMount();
+		}
+
+		IgeUiElement.prototype.unMount.call(this);
 	},
 
 	mountTools: function() {

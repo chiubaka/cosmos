@@ -2,13 +2,13 @@
 	classId: "Tool",
 
 	/**
-	 * Defines the dimensions of a capability on the Capbar
+	 * Defines the dimensions of a capability on the tool
 	 */
 	WIDTH: 64,
 	HEIGHT: 64,
 
 	/**
-	 * Defines the styling and colors of the capbar
+	 * Defines the styling and colors of the tool
 	 */
 	// TODO: Move these into a centralized styles config
 	STUB_COLOR: 'rgb(70, 70, 70)',
@@ -119,13 +119,19 @@
 			}
 		});
 
-		ige.on('toolbar tool selected', function(classId, toolName) {
+		this._selectEvent = ige.on('toolbar tool selected', function(classId, toolName) {
 			if (!self._selected && self.classId() === classId && toolName === self.TOOL_NAME) {
 				self.select();
 			} else if (self.classId() !== classId || toolName !== self.TOOL_NAME) {
 				self.deselect();
 			}
 		});
+	},
+
+	unMount: function() {
+		this.log('Unmounting ' + this.TOOL_NAME, 'info');
+		ige.off('toolbar tool selected', this._selectEvent);
+		IgeUiElement.prototype.unMount.call(this);
 	},
 
 	setQuantity: function(quantity) {
@@ -147,10 +153,6 @@
 
 		this._selected = true;
 		ige.emit('toolbar tool selected', [this.classId(), this.TOOL_NAME]);
-
-		if (this._toolbar !== undefined) {
-			this._toolbar.mount(this.parent());
-		}
 	},
 
 	deselect: function() {
@@ -160,10 +162,6 @@
 			// Show the deselected state of the button
 			this.id(this.ID_NORMAL);
 			this.applyStyle(ige.ui.style("#" + this.ID_NORMAL));
-
-			if (this._toolbar !== undefined) {
-				this._toolbar.unmount();
-			}
 		}
 	},
 
