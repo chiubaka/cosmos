@@ -8,6 +8,9 @@
 			this.registeredEvents = {
 				'Block': {
 					'mousedown': {
+						// Note: Since calling this in either the conditionFunc or actionFunc will 
+						// refer to this object (the one this comment is in), we include 
+						// the capability field to allow easy access to the Capability object itself.
 						capability: this,
 						conditionFunc: this.Block_canMouseDown,
 						actionFunc: this.Block_mouseDown
@@ -40,12 +43,17 @@
 		return this;
 	},
 
-	checkRegistration: function(senderClass, event) {
-		return (this.registeredEvents.hasOwnProperty(senderClass) &&
-				this.registeredEvents[senderClass].hasOwnProperty(event.type));
-	},
-
-	// TODO: Use when class extension is enhanced to have a stack of parent inheritor classes
+	/**
+	 * Selects a registered event from the registeredEvents list that is the most relevant
+	 * to the entity type / event type pair provided.
+	 * 
+	 * If a registered event does not exactly match the entity classId, this method will
+	 * traverse up the entity class hierarchy in case a parent classId is registered.
+	 * 
+	 * @param sender an entity upon which an event was triggered
+	 * @param event the triggering event
+	 * @returns the classId of a registered event, or undefined if none can be found
+	 */
 	selectRegistration: function(sender, event) {
 		var selectedClass, currentPrototype = sender;
 
@@ -74,6 +82,16 @@
 		}
 	},
 
+	/**
+	 * Checks whether or not an event action can be performed in the current game state.
+	 * 
+	 * Calls the conditionFunc associated with the registered event for this entity/event pair.
+	 * 
+	 * @param sender an entity upon which an event was triggered
+	 * @param event the triggering event
+	 * @param data provided data that can be used in conditionFunc and actionFunc
+	 * @returns whether or not the event action can be performed
+	 */
 	canDo: function(sender, event, data) {
 		// Check if we have this event and sender registered for this capability
 		var selectedClass = this.selectRegistration(sender, event);
@@ -86,16 +104,34 @@
 		return this.registeredEvents[selectedClass][event.type].conditionFunc(sender, event, data);
 	},
 
+	/**
+	 * Default stub for demonstrating a conditionFunc
+	 * 
+	 * @param sender an entity upon which an event was triggered
+	 * @param event the triggering event
+	 * @param data provided data that can be used in conditionFunc
+	 */
 	Block_canMouseDown: function(sender, event, data) {
 		return true;
 	},
 
+	/**
+	 * Default stub for demonstrating a conditionFunc
+	 * 
+	 * @param sender an entity upon which an event was triggered
+	 * @param event the triggering event
+	 * @param data provided data that can be used in conditionFunc
+	 */
 	ClickScene_canMouseDown: function(sender, event, data) {
 		return true;
 	},
 
 	/**
-	 * Performs an action (void return)
+	 * Performs a registered event action for the entity/event pair.
+	 * 
+	 * @param sender an entity upon which an event was triggered
+	 * @param event the triggering event
+	 * @param data provided data that can be used in actionFunc
 	 */
 	performAction: function(sender, event, data) {
 		// Check if we have this event and sender registered for this capability
@@ -108,15 +144,34 @@
 		this.registeredEvents[selectedClass][event.type].actionFunc(sender, event, data);
 	},
 
+	/**
+	 * Default stub for demonstrating an actionFunc
+	 * 
+	 * @param sender an entity upon which an event was triggered
+	 * @param event the triggering event
+	 * @param data provided data that can be used in actionFunc
+	 */
 	Block_mouseDown: function(sender, event, data) {
 		console.log("IdleCapability: received mouseDown (button " + event.button + ") on a block (classId: " + sender.classId() + ", id: " + sender.id() + "!");
 	},
 
+	/**
+	 * Default stub for demonstrating an actionFunc
+	 * 
+	 * @param sender an entity upon which an event was triggered
+	 * @param event the triggering event
+	 * @param data provided data that can be used in actionFunc
+	 */
 	ClickScene_mouseDown: function(sender, event, data) {
 		console.log("IdleCapability: received mouseDown (button " + event.button + ") on the background!");
 	},
 
 	/**
+	 * Convenience function to test using canDo and act using performAction in one fell swoop.
+	 * 
+	 * @param sender an entity upon which an event was triggered
+	 * @param event the triggering event
+	 * @param data provided data that can be used in conditionFunc and actionFunc
 	 * @returns a boolean whether or not the action was performed
 	 */
 	tryPerformAction: function(sender, event, data) {
