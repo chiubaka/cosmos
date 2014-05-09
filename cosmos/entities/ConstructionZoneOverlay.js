@@ -168,6 +168,7 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 			// detected
 
 			// TODO: Before fading in, if we need to recalculate the overlay, do so
+			// TODO: Local refresh. Global refresh is slow with large BlockGrids
 			if (this._refreshNeeded) {
 				this._renderContainer.destroy();
 				this._renderContainer = new RenderContainer()
