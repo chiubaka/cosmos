@@ -186,10 +186,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	processBlockActionServer: function(data, player) {
 		var self = this;
-		var block = self._grid[data.row][data.col];
-		if (block === undefined) {
-			return false;
-		}
 
 		switch (data.action) {
 			case 'remove':
@@ -198,8 +194,12 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 			// TODO: Vary mining speed based on block material
 			case 'mine':
+				var block = self._grid.get2D(data.row, data.col);
+				if (block === undefined) {
+					return false;
+				}
 				// Blocks should only be mined by one player, for now.
-				if(block.busy()) {
+				if((block === undefined) || block.busy()) {
 					return false;
 				}
 				block.busy(true);
@@ -237,6 +237,12 @@ var BlockGrid = IgeEntityBox2d.extend({
 		switch (data.action) {
 			case 'remove':
 				this.remove(data.row, data.col);
+				this._renderContainer.cacheDirty(true);
+				this._constructionZoneOverlay.refreshNeeded(true);
+				break;
+
+			case 'add':
+				this.add(data.row, data.col, data.blockClassId);
 				this._renderContainer.cacheDirty(true);
 				this._constructionZoneOverlay.refreshNeeded(true);
 				break;
@@ -288,20 +294,32 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	add: function(row, col, blockClassId) {
-		return;
 		// TODO: Handle expanding the BlockGrid
-		if (!this._grid.is2DinBounds(row, col)) {
-			return;
-		}
+		//if (!this._grid.is2DinBounds(row, col)) {
+			//return;
+		//}
 
-		if (this._grid[row][col] === undefined) {
-			this._grid[row][col] =
-				BlockGrid.prototype.blockFromClassId(blockClassId);
+		var block = Block.prototype.blockFromClassId(blockClassId)
+			.row(row)
+			.col(col);
+
+		this._grid[row][col] = block;
+
+		// Update client's scenegraph
+		if (!ige.isServer) {
+			this._renderContainer.height(this.height());
+			this._renderContainer.width(this.width());
+
+			var x = Block.prototype.WIDTH * col - this._bounds2d.x2 + block._bounds2d.x2;
+			var y = Block.prototype.HEIGHT * row - this._bounds2d.y2 + block._bounds2d.y2;
+
+			block.translateTo(x, y, 0)
+				.mount(this._renderContainer);
 		}
 
 		// Update server's physics model
 		if (ige.isServer) {
-		
+			this.addFixture(this._box2dBody, block, row, col);
 		}
 
 	},

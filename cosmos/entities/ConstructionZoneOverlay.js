@@ -144,8 +144,9 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		// Send constructionZoneClicked message to server
 		var data = {
 			blockGridId: this._parent.id(),
-			row: row,
-			col: col,
+			// Translate overlay coordinates into BlockGrid coordinates
+			row: row - 1,
+			col: col - 1,
 			// TODO: Vary block type
 			blockClassId: 'IronBlock'
 		};
@@ -173,6 +174,7 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 					.mount(this)
 					.opacity(0.5);
 				this.createConstructionZones();
+				this._renderContainer.cacheDirty(true);
 				this.mountOverlayGrid();
 				this._refreshNeeded = false;
 			}
