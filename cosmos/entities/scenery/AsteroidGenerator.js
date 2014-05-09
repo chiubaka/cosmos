@@ -208,9 +208,18 @@ var AsteroidGenerator = {
 
 	blockDistributions: {
 		STANDARD: {
-			"IceBlock": 0.5,
+			"IceBlock": 0.469,
 			"IronBlock": 0.3,
-			"CarbonBlock": 0.2
+			"CarbonBlock": 0.2,
+			//here are some rare things
+			"GoldBlock": 0.01,
+			"CobaltBlock": 0.01,
+			"FluorineBlock": 0.01,
+			//here are some easter-egg type things, which will add up to 0.001
+			"EngineBlock": 0.001 * .25,
+			"FuelBlock": 0.001 * .25,
+			"PowerBlock": 0.001 * .25,
+			"ThrusterBlock": 0.001 * .25
 		},
 
 		ICY: {

@@ -5,8 +5,8 @@ var CarbonBlock = Element.extend({
 		Element.prototype.init.call(this);
 
 		if (!ige.isServer) {
-			this.textureBackground = "rgb(242, 242, 242)";
-			this.textureOutline = "rgb(38, 38, 38)";
+			this.textureBackground = "rgb(40, 40, 40)";
+			this.textureOutline = "rgb(80, 80, 80)";
 		}
 	}
 });

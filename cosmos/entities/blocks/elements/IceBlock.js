@@ -5,8 +5,8 @@ var IceBlock = Element.extend({
 		Element.prototype.init.call(this);
 
 		if (!ige.isServer) {
-			this.textureBackground = "rgb(152, 152, 255)";
-			this.textureOutline = "rgb(38, 38, 38)";
+			this.textureBackground = "rgba(63, 175, 221, 0.3)";
+			this.textureOutline = "rgba(129, 206, 226, 0.3)";
 		}
 	}
 });

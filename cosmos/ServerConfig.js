@@ -26,7 +26,10 @@ var config = {
 		{ name: 'Element', path: './entities/blocks/Element' },
 		{ name: 'CarbonBlock', path: './entities/blocks/elements/CarbonBlock' },
 		{ name: 'IronBlock', path: './entities/blocks/elements/IronBlock' },
-		{ name: 'IceBlock', path: './entities/blocks/elements/IceBlock' },
+		{ name: 'FluorineBlock', path: './entities/blocks/elements/FluorineBlock' },
+		{ name: 'GoldBlock', path: './entities/blocks/elements/GoldBlock' },
+		{ name: 'CobaltBlock', path: './entities/blocks/elements/CobaltBlock' },
+		{ name: 'IceBlock', path: './entities/blocks/elements/IceBlock' },//not really an element
 
 		/* Effects */
 		{ name: 'LaserBeam', path: './entities/effects/mining/LaserBeam' },
