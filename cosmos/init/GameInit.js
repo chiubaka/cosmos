@@ -164,8 +164,8 @@ var GameInit = {
 					.id('genRandomAsteroid' + x + "," + y)
 					.streamMode(1)
 					.mount(server.spaceGameScene)
-					.grid(AsteroidGenerator.genProceduralAsteroid(20))
 					.padding(10)
+					.grid(AsteroidGenerator.genProceduralAsteroid(20))
 					.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
 			}
 		}
@@ -179,8 +179,8 @@ var GameInit = {
 					.id('littleAsteroid' + x + ',' + y)
 					.streamMode(1)
 					.mount(server.spaceGameScene)
-					.grid(AsteroidGenerator.singleBlock())
 					.padding(1)
+					.grid(AsteroidGenerator.singleBlock())
 					.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
 			}
 		}
@@ -234,7 +234,7 @@ var GameInit = {
 							return;
 						}
 						ige.emit('block collected',
-							[player, Padding.extract1x1(asteroid.grid()).classId()]);
+							[player, BlockGridPadding.extract1x1(asteroid.grid()).classId()]);
 						asteroid.destroy();
 					}
 				}
