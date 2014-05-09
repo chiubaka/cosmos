@@ -15,6 +15,7 @@
 	_tools: undefined,
 	_placeholderMsg: undefined,
 	_capParent: undefined,
+	_refreshEvent: undefined,
 
 	init: function() {
 		this.log("Initializing...", 'info');
@@ -43,21 +44,29 @@
 		IgeUiElement.prototype.mount.call(this, elem);
 
 		this.bottom(elem.HEIGHT);
+
+		var self = this;
+		this._refreshEvent = ige.on('toolbar refresh', function() {
+			self.mountTools();
+		});
+
 		this.mountTools();
 	},
 
 	unMount: function() {
 		for (var i = 0; i < this._tools.length; i++) {
 			var tool = this._tools[i];
-			tool.unMount();
+			tool.destroy();
 		}
+
+		ige.off('toolbar refresh', this._refreshEvent);
 
 		IgeUiElement.prototype.unMount.call(this);
 	},
 
 	mountTools: function(needToReselect) {
 		if (needToReselect === undefined) {
-				needToReselect = false;
+			needToReselect = false;
 		}
 
 		// Put a placeholder message in the toolbar if there aren't any tools to put in it.

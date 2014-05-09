@@ -64,7 +64,7 @@
 
 		// If the selectedType is no longer in the cargo inventory, just select the first one in the list
 		var needToReselect = (selectedType !== undefined && !cargoItems.hasOwnProperty(selectedType));
-		this.mountTools(needToReselect);
+		ige.emit('toolbar refresh');
 	}
 });
 
