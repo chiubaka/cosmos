@@ -64,6 +64,16 @@
 
 		// If the selectedType is no longer in the cargo inventory, just select the first one in the list
 		var needToReselect = (selectedType !== undefined && !cargoItems.hasOwnProperty(selectedType));
+
+		/*
+		 * Tools were being destroyed, and some events that are registered to these tools are deregistered in the process. 
+		 * However, if an event deregistration and an event emission for that same event occur in a single call chain, 
+		 * then the event deregistration won't have time to propagate through the event queue, which will cause the 
+		 * event emission to fail.
+		 * 
+		 * By changing the toolbar tool remount call to an event emission, the event deregistration can occur before an event
+		 * emission for that same event occurs, since the toolbar tool remount is guaranteed to occur after the event deregistration.
+		 */
 		ige.emit('toolbar refresh');
 	}
 });
