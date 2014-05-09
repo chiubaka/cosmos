@@ -18,7 +18,6 @@ var igeClientConfig = {
 
 		/* Element blocks */
 		'./entities/blocks/Element.js',
-		//--------------
 		'./entities/blocks/elements/IronBlock.js',
 		'./entities/blocks/elements/CarbonBlock.js',
 		'./entities/blocks/elements/FluorineBlock.js',
@@ -44,6 +43,31 @@ var igeClientConfig = {
 
 		/* === PLAYER STATE === */
 		'./entities/player/Player.js',
+		'./models/state/ClientState.js',
+
+		/* Capabilities */
+		'./models/capabilities/Capability.js',
+		'./models/capabilities/ConstructCapability.js',
+		'./models/capabilities/MineCapability.js',
+
+		/* === USER INTERFACE === */
+		/* HUD */
+		'./ui/HUDManager.js',
+
+		/* Capbar */
+		'./ui/capbar/CapBar.js',
+		'./ui/capbar/CapLabel.js',
+
+		/* Caps */
+		'./ui/capbar/caps/Cap.js',
+		'./ui/capbar/caps/MineCap.js',
+		'./ui/capbar/caps/ConstructCap.js',
+
+		/* Toolbars */
+		'./ui/toolbar/Toolbar.js',
+		'./ui/toolbar/CargoToolbar.js',
+		'./ui/toolbar/tools/Tool.js',
+		'./ui/toolbar/tools/CargoTool.js',
 
 		/* === SUPPLEMENTAL FUNCTIONALITY === */
 		/* Debugging */

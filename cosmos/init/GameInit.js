@@ -22,8 +22,8 @@ var GameInit = {
 			this.initPhysics();
 			this.initServerEvents();
 		} else {
+			this.initPlayerState();
 			this.initPlayerControls();
-
 			//this.initTimeStream(game);
 		}
 	},
@@ -83,7 +83,7 @@ var GameInit = {
 			game.effectsScene = new IgeScene2d()
 				.id('effectsScene')
 				.layer(game.LAYER_WORLD_OVERLAY)
-				.mount(game.spaceScene)
+				.mount(game.spaceScene);
 
 			game.spaceUiScene = new IgeScene2d()
 				.id('spaceUiScene')
@@ -91,14 +91,14 @@ var GameInit = {
 				.ignoreCamera(true)
 				.mount(game.spaceScene);
 
-			// For now, the server does not need to know about the background scene.
-			// The server does not need to load the UI.
-			this.initBackgroundScene();
-
 			// This scene's purpose is to catch all clicks on the background
 			game.clickScene = new ClickScene()
 				.layer(game.LAYER_CLICK_SCENE)
-				.mount(game.spaceScene)
+				.mount(game.spaceScene);
+
+			// For now, the server does not need to know about the background scene.
+			// The server does not need to load the UI.
+			this.initBackgroundScene();
 
 			// Pre-initialize player HUD
 			this.initPlayerHUD();
@@ -110,7 +110,6 @@ var GameInit = {
 	 */
 	initUIScenes: function() {
 		var client = ige.client;
-
 		client.uiModalScene = new IgeScene2d()
 			.id('uiModalScene')
 			.layer(client.LAYER_MODAL)
@@ -129,7 +128,7 @@ var GameInit = {
 			.ignoreCamera(true)
 			.mount(client.spaceScene);
 
-		//client.hud = new HUDManager();
+		client.hud = new HUDManager();
 	},
 
 	/**
@@ -269,6 +268,10 @@ var GameInit = {
 		ige.input.mapAction('mouse.button1', ige.input.mouse.button1);
 		ige.input.mapAction('mouse.button2', ige.input.mouse.button2);
 		ige.input.mapAction('mouse.button3', ige.input.mouse.button3);
+	},
+
+	initPlayerState: function() {
+		ige.client.state = new ClientState();
 	},
 
 	/**
