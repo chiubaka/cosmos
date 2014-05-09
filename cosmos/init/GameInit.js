@@ -164,7 +164,7 @@ var GameInit = {
 					.id('genRandomAsteroid' + x + "," + y)
 					.streamMode(1)
 					.mount(server.spaceGameScene)
-					.grid(AsteroidGenerator.genProceduralAsteroid(20))
+					.grid(Padding.pad2DArray(AsteroidGenerator.genProceduralAsteroid(20),0))
 					.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
 			}
 		}
@@ -178,7 +178,7 @@ var GameInit = {
 					.id('littleAsteroid' + x + ',' + y)
 					.streamMode(1)
 					.mount(server.spaceGameScene)
-					.grid(AsteroidGenerator.singleBlock())
+					.grid(Padding.pad2DArray(AsteroidGenerator.singleBlock(),0))
 					.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
 			}
 		}

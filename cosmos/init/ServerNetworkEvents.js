@@ -34,7 +34,7 @@ var ServerNetworkEvents = {
 		if (!ige.server.players[clientId]) {
 			ige.server.players[clientId] = new Player(clientId)
 				.debugFixtures(false)//call this before calling setGrid()
-				.grid(ExampleShips.starterShipSingleMisplacedEngine())
+				.grid(Padding.pad2DArray(ExampleShips.starterShipSingleMisplacedEngine(),10))
 				.addSensor(300)
 				.attractionStrength(1)
 				.streamMode(1)
