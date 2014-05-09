@@ -21,7 +21,7 @@
 	 * so the capability can store state about the currently selected item on the toolbar.
 	 */
 	activate: function() {
-		console.log("Activating... registering event listener.", 'info');
+		this.log("Activating... registering event listener.", 'info');
 
 		var self = this;
 		this._toolbarListener = ige.on('toolbar tool selected', function(classId, toolName) {
