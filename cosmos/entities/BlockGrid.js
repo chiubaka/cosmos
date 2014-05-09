@@ -100,15 +100,19 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// TODO: This might be dangerous, since some of the event properties should be changed so that they are
 		// relative to the child's bounding box, but since we don't use any of those properties for the moment,
 		// ignore that.
-		if (this.getBlockFromBlockGrid(row+1, col) == undefined ||
-			this.getBlockFromBlockGrid(row-1, col) == undefined ||
-			this.getBlockFromBlockGrid(row, col+1) == undefined ||
-			this.getBlockFromBlockGrid(row, col-1) == undefined) {
+		if (this.getBlockFromGrid(row+1, col) == undefined ||
+			this.getBlockFromGrid(row-1, col) == undefined ||
+			this.getBlockFromGrid(row, col+1) == undefined ||
+			this.getBlockFromGrid(row, col-1) == undefined) {
 			block.mouseDown(event, control);
 		}
 	},
 
-	getBlockFromBlockGrid: function(row, col) {
+	/**
+	 * getBlockFromGrid returns the block in this block grid at row, col, but will return undefined if row, col is not a valid index into the grid.
+	 * Basically it's a safe (but slightly slower) way of indexing into the grid.
+	 */
+	getBlockFromGrid: function(row, col) {
 		// Check if row, col refers to a block that is off the edge of the block grid.
 		if(row < 0 || col < 0) {
 			return undefined;
@@ -228,23 +232,33 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 			// TODO: Vary mining speed based on block material
 			case 'mine':
-				// Blocks should only be mined by one player, for now.
-				if(block.busy()) {
-					return false;
-				}
-				block.busy(true);
+				block._decrementHealthIntervalId = setInterval(function() {
+					if (block._hp > 0) {
+						var damageData = {
+							blockGridId: data.blockGridId,
+							action: 'damage',
+							row: data.row,
+							col: data.col,
+							amount: 1
+						};
+						block.damage(1);
+						ige.network.send('blockAction', damageData);
+					}
 
-				setTimeout(function() {
-					// Emit a message saying that a block has been mined, but not
-					// necessarily collected. This is used for removing the laser.
-					var blockClassId = block.classId();
-					ige.emit('block mined', [player, blockClassId, block]);
+					if (block._hp == 0) {
+						clearInterval(block._decrementHealthIntervalId);
 
-					// Remove block server side, then send remove msg to client
-					self.remove(data.row, data.col);
-					data.action = 'remove';
-					ige.network.send('blockAction', data);
-				}, Block.prototype.MINING_TIME);
+						// Emit a message saying that a block has been mined, but not
+						// necessarily collected. This is used for removing the laser.
+						var blockClassId = block.classId();
+						ige.emit('block mined', [player, blockClassId, block]);
+
+						// Remove block server side, then send remove msg to client
+						self.remove(data.row, data.col);
+						data.action = 'remove';
+						ige.network.send('blockAction', data);
+					}
+				}, Block.prototype.MINING_TIME / block._maxHp);
 
 				return true;
 
@@ -262,7 +276,12 @@ var BlockGrid = IgeEntityBox2d.extend({
 				this.remove(data.row, data.col);
 				this._renderContainer.cacheDirty(true);
 				break;
+			case 'damage':
+				var block = this.getBlockFromGrid(data.row, data.col);
+				block.damage(data.amount);
 
+				console.log('Damaging block');
+				break;
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
 		}
@@ -414,25 +433,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 					.mount(this._renderContainer);
 			}
 		}
-	},
-
-	/**
-	 * getBlockFromGrid returns the block in this block grid at row, col, but will return undefined if row, col is not a valid index into the grid.
-	 * Basically it's a safe (but slightly slower) way of indexing into the grid.
-	 */
-	getBlockFromGrid: function(row, col) {
-		// Check if row, col refers to a block that is off the edge of the block grid.
-		if(row < 0 || col < 0) {
-			return undefined;
-		}
-		if (row >= this.grid().length) {
-			return undefined;
-		}
-		if (col >= this.grid()[row].length) {
-			return undefined;
-		}
-
-		return this.grid()[row][col];
 	},
 
 	maxRowLengthForGrid: function(grid) {
