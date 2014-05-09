@@ -49,7 +49,7 @@
 		if (this.enabled) {
 			console.info("Metrics: [PAGEVIEW] " + page);
 			if (title === undefined) {
-				ga('send', 'pageview', 'page');
+				ga('send', 'pageview', page);
 				return;
 			} else {
 				ga('send', 'pageview', {
