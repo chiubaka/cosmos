@@ -178,7 +178,7 @@ var GameInit = {
 					.id('littleAsteroid' + x + ',' + y)
 					.streamMode(1)
 					.mount(server.spaceGameScene)
-					.padding(4)
+					.padding(10)
 					.grid(AsteroidGenerator.singleBlock())
 					.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
 			}

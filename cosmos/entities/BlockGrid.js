@@ -8,8 +8,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	_renderContainer: undefined,
 	_constructionZoneOverlay: undefined,
 	_debugFixtures: false,
-	// Default 1 padding on all sides
-	_padding: 1,
+	// Default 10 padding on all sides
+	_padding: 10,
 
 	init: function(data) {
 		var self = this;
