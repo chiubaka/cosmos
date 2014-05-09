@@ -33,7 +33,7 @@ var Server = IgeClass.extend({
 		// Add the networking component
 		ige.addComponent(IgeNetIoComponent)
 			// Start the network server on a particular port
-			.network.start(2000, function () {
+			.network.start(process.env.PORT || 2000, function () {
 				// Networking has started so start the game engine
 				ige.start(function (success) {
 					// Check if the engine started successfully
