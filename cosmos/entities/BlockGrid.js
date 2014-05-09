@@ -2,7 +2,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	classId: 'BlockGrid',
 
 	/** Contains the grid of Block objects that make up this BlockGrid */
-	_grid: [],
+	_grid: undefined,
 	/** The rendering container for this BlockGrid, which essentially provides a cacheable location for the BlockGrid's
 	 * texture. */
 	_renderContainer: undefined,
@@ -318,6 +318,16 @@ var BlockGrid = IgeEntityBox2d.extend({
 	grid: function(grid) {
 		if (grid === undefined) {
 			return this._grid;
+		}
+
+		// If we're setting a new grid and a grid already exists, we need to destroy the old stuff
+		if (this._grid !== undefined) {
+			if (this._box2dBody) {
+				for (var key in this._box2dBody) {
+					console.log(key);
+				}
+				ige.box2d.destroyBody(this._box2dBody);
+			}
 		}
 
 		this._grid = grid;

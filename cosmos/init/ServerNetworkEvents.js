@@ -57,6 +57,10 @@ var ServerNetworkEvents = {
 
 		var player = ige.server.players[clientId];
 		player.translateTo((Math.random() -.5) * ige.server.PLAYER_START_DISTANCE, (Math.random() -.5) * ige.server.PLAYER_START_DISTANCE, 0);
+		player.grid(ExampleShips.starterShipSingleMisplacedEngine())
+			.addSensor(300)
+			.attractionStrength(1);
+		ige.network.send('respawn', clientId);
 	},
 
 	/**
