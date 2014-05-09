@@ -19,6 +19,11 @@
 	listenEvents: function() {
 		var self = this;
 
+		ige.on('ige network error', function() {
+			self.fireEvent('network', 'error');
+			self.fireEvent('engine', 'stop');
+		});
+
 		ige.on('clientstate selected cap changed', function(selectedCap) {
 			self.firePage(selectedCap);
 		});
