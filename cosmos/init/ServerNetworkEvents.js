@@ -80,6 +80,11 @@ var ServerNetworkEvents = {
 	// view. Make sure it's actually empty space
 	_onBackgroundClicked: function(data, clientId) {
 		//console.log("X: " + data.x + " Y: " + data.y);
+	},
+
+	// TODO: Verify valid construction zone
+	_onConstructionZoneClicked: function(data, clientId) {
+		//console.log("row: " + data.row + " col: " + data.col);
 	}
 
 };

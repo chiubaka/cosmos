@@ -132,8 +132,8 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 
 		var block = this._overlayGrid[row][col];
 
-		// Check if we have clicked on a valid block, if so we want to stop the
-		// click propagation so we don't construct a block at this location
+		// Check if we have clicked on a valid construction zone.
+		// If so, stop click propogation so we don't hit the ClickScene
 		if (block === undefined) {
 			return;
 		}
@@ -141,8 +141,14 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 			control.stopPropagation();
 		}
 
-		console.log('row: ' + row + ' col: ' + col);
+		// Send constructionZoneClicked message to server
+		var data = {
+			blockGridId: this._parent.id(),
+			row: row,
+			col: col
+		};
 
+		ige.network.send('constructionZoneClicked', data);
 	},
 
 	refreshNeeded: function (val) {
@@ -159,7 +165,6 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 			// detected
 
 			// TODO: Before fading in, if we need to recalculate the overlay, do so
-			// TODO: CacheDirty(true)
 			if (this._refreshNeeded) {
 				this._renderContainer.destroy();
 				this._renderContainer = new RenderContainer()
