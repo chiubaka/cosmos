@@ -41,9 +41,6 @@ var igeClientConfig = {
 		/* Click scene (captures background client's background clicks) */
 		'./entities/ClickScene.js',
 
-		/* Viewports */
-		'./entities/MainViewport.js',
-
 		/* === PLAYER STATE === */
 		'./entities/player/Player.js',
 		'./models/state/ClientState.js',
@@ -56,6 +53,7 @@ var igeClientConfig = {
 		/* === USER INTERFACE === */
 		/* HUD */
 		'./ui/HUDManager.js',
+		'./ui/GPSLabel.js',
 
 		/* Capbar */
 		'./ui/capbar/CapBar.js',

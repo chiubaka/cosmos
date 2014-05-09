@@ -41,7 +41,7 @@ var GameInit = {
 
 		// Create the main viewport and set the scene it will "look" at as the new scene1 we just created above.
 		// Surprisingly, this must exist on both the client and the server, or a blank screen will be displayed.
-		game.mainViewport = new MainViewport()
+		game.mainViewport = new IgeViewport()
 			.id('mainViewport')
 			.autoSize(true)
 			.scene(game.mainScene)
