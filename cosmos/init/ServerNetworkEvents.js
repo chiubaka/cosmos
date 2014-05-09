@@ -35,6 +35,7 @@ var ServerNetworkEvents = {
 	A player has connected to the server and asked for a player Entity to be created for him or her!
 	*/
 	_onPlayerEntity: function(data, clientId) {
+		distanceFromCenterPlayerShouldStartAt = 4000;
 		if (!ige.server.players[clientId]) {
 			ige.server.players[clientId] = new Player(clientId)
 				.debugFixtures(false)//call this before calling setGrid()
@@ -42,7 +43,8 @@ var ServerNetworkEvents = {
 				.addSensor(300)
 				.attractionStrength(1)
 				.streamMode(1)
-				.mount(ige.server.spaceGameScene);
+				.mount(ige.server.spaceGameScene)
+				.translateTo((Math.random() - .5) * distanceFromCenterPlayerShouldStartAt, (Math.random() - .5) * distanceFromCenterPlayerShouldStartAt, 0);
 
 			// Tell the client to track their player entity
 			ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
