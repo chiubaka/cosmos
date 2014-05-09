@@ -26,6 +26,9 @@ var ClientNetworkEvents = {
 					// Tell the camera to track out player entity
 					ClientNetworkEvents.initCameras(ige.$(data));
 
+					// Make it easy to find the player's entity
+					ige.client.player = entity;
+
 					// Set the time stream UI entity to monitor our player entity
 					// time stream data
 					//ige.client.tsVis.monitor(ige.$(data));
@@ -58,7 +61,7 @@ var ClientNetworkEvents = {
 	},
 
 	initCameras: function(entityToTrack) {
-		var cameraSmoothingAmount = 10;
+		var cameraSmoothingAmount = 0;
 
 		ige.$('mainViewport').camera.trackTranslate(entityToTrack, cameraSmoothingAmount);
 	}

@@ -10,6 +10,8 @@ var Server = IgeClass.extend({
 		self.LAYER_HUD = 90;
 		self.DEPTH_PLAYER = 90;
 
+		self.PLAYER_START_DISTANCE = 4000;
+
 		// Load our blocks
 		self.obj = [];
 
@@ -43,6 +45,9 @@ var Server = IgeClass.extend({
 						/* This is called when a player pushes down or releases a key */
 						ige.network.define('playerControlUpdate', self._onPlayerControlUpdate);
 
+						/* This is called when a player clicks the respawn button */
+						ige.network.define('respawn', self._onRespawnRequest);
+
 						/* This is called when a player clicks on a block */
 						ige.network.define('mineBlock', self._onMineBlock);
 						/* This is called when a player clicks on the background. */
@@ -55,7 +60,6 @@ var Server = IgeClass.extend({
 						ige.network.define('cargoRequest', self._onCargoRequest);
 						ige.network.define('cargoUpdate');
 						ige.network.define('cargoResponse');
-
 
 						/* When a client connects or disconnects */
 						ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js

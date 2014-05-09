@@ -2,7 +2,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	classId: 'BlockGrid',
 
 	/** Contains the grid of Block objects that make up this BlockGrid */
-	_grid: [],
+	_grid: undefined,
 	/** The rendering container for this BlockGrid, which essentially provides a cacheable location for the BlockGrid's
 	 * texture. */
 	_renderContainer: undefined,
@@ -28,7 +28,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 			this.mountGrid();
 			this.mouseDown(this.mouseDownHandler);
 		}
-
 	},
 
 	/*
@@ -216,18 +215,33 @@ var BlockGrid = IgeEntityBox2d.extend({
 				}
 				block.busy(true);
 
-				setTimeout(function() {
-					// Emit a message saying that a block has been mined, but not
-					// necessarily collected. This is used for removing the laser.
-					var blockClassId = block.classId();
-					ige.emit('block mined', [player, blockClassId, block]);
+				block._decrementHealthIntervalId = setInterval(function() {
+					if (block._hp > 0) {
+						var damageData = {
+							blockGridId: data.blockGridId,
+							action: 'damage',
+							row: data.row,
+							col: data.col,
+							amount: 1
+						};
+						block.damage(1);
+						ige.network.send('blockAction', damageData);
+					}
 
-					// Remove block server side, then send remove msg to client
-					self.remove(data.row, data.col);
-					data.action = 'remove';
-					ige.network.send('blockAction', data);
-				}, Block.prototype.MINING_TIME);
+					if (block._hp == 0) {
+						clearInterval(block._decrementHealthIntervalId);
 
+						// Emit a message saying that a block has been mined, but not
+						// necessarily collected. This is used for removing the laser.
+						var blockClassId = block.classId();
+						ige.emit('block mined', [player, blockClassId, block]);
+
+						// Remove block server side, then send remove msg to client
+						self.remove(data.row, data.col);
+						data.action = 'remove';
+						ige.network.send('blockAction', data);
+					}
+				}, Block.prototype.MINING_TIME / block._maxHp);
 				return true;
 
 			case 'add':
@@ -254,15 +268,18 @@ var BlockGrid = IgeEntityBox2d.extend({
 			case 'remove':
 				this.remove(data.row, data.col);
 				this._renderContainer.cacheDirty(true);
+				this._renderContainer.cacheDirty(true);
 				this._constructionZoneOverlay.refreshNeeded(true);
 				break;
-
+			case 'damage':
+				var block = this._grid.get2D(data.row, data.col);
+				block.damage(data.amount);
+				break;
 			case 'add':
 				this.add(data.row, data.col, data.blockClassId);
 				this._renderContainer.cacheDirty(true);
 				this._constructionZoneOverlay.refreshNeeded(true);
 				break;
-
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
 		}
@@ -370,17 +387,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this.height(Block.prototype.HEIGHT * this._grid.length);
 		this.width(Block.prototype.WIDTH * maxRowLength);
 
-		this.addFixtures();
-
-		return this;
-	},
-
-	/**
-	 * Adds fixtures. This should only be called when creating a BlockGrid from
-	 * scratch, otherwise there may be doubled fixtures.
-	 */
-	addFixtures: function() {
-		// Create the Box2D body which fixtures will be added on to
 		this.box2dBody({
 			type: 'dynamic',
 			linearDamping: 0.4,

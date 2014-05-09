@@ -102,10 +102,11 @@ var Block = IgeEntity.extend({
 	 * After health is decreased, the block may die.
 	 */
 	damage: function(amount) {
-		this.hp -= amount;
+		this._hp -= amount;
 
-		if (this.hp <= 0) {
-			this.onDeath();
+		if (!ige.isServer) {
+			this._displayHealth = true;
+			this.cacheDirty(true);
 		}
 	},
 
@@ -123,13 +124,6 @@ var Block = IgeEntity.extend({
 		}
 		return this._busy;
 	},
-
-	/**
-	onDeath will be called when the block reaches 0 or less hp
-	Objects that contain blocks should set the onDeath function to be something more useful.
-	For example, the blockGrid class should set the block's onDeath function to break off from the grid.
-	*/
-	onDeath: function() {},
 
 	blockFromClassId: function(classId) {
 		switch (classId) {

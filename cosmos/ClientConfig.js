@@ -60,6 +60,10 @@ var igeClientConfig = {
 		/* === USER INTERFACE === */
 		/* HUD */
 		'./ui/HUDManager.js',
+		'./ui/GPSLabel.js',
+
+		/* Buttons */
+		'./ui/buttons/RespawnButton.js',
 
 		/* Capbar */
 		'./ui/capbar/CapBar.js',

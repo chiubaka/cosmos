@@ -29,16 +29,6 @@
 			ige.client.metrics.fireEvent('player', 'attack', sender.classId());
 		}
 
-		sender.decrementHealthIntervalId = setInterval(function() {
-			if (sender._hp > 0) {
-				sender._hp--;
-				sender.cacheDirty(true);
-			}
-			if (sender._hp == 0) {
-				clearInterval(sender.decrementHealthIntervalId);
-			}
-		}, sender.MINING_TIME / sender._maxHp);
-
 		ige.network.send('mineBlock', data);
 	},
 });
