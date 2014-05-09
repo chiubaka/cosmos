@@ -8,6 +8,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	_renderContainer: undefined,
 	_constructionZoneOverlay: undefined,
 	_debugFixtures: false,
+	// Default 1 padding on all sides
 	_padding: 1,
 
 	init: function(data) {
@@ -273,6 +274,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * and also remove the fixture from the list of fixtures in the box2D object.
 	 */
 	remove: function(row, col) {
+		// TODO: Split BlockGrids and make 1x1 asteroids smallAsteroids so
+		// they get attracted
 		var block = this._grid[row][col];
 		if (block === undefined)
 			return;
@@ -316,7 +319,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		// Make sure we don't attract formely small asteroids
 		if (this.category() === 'smallAsteroid') {
-			this.category(undefined);
+			// Don't use getter/setter because undefined gets value
+			this._category = undefined;
 		}
 
 		var block = Block.prototype.blockFromClassId(blockClassId)
