@@ -59,47 +59,6 @@ var RespawnButton = IgeUiButton.extend({
 			console.log('Respawn button clicked');
 			ige.emit('respawn button clicked');
 		});
-	},
-
-	select: function() {
-		// Show the selected state of the button
-		this.id(this.ID_SELECTED);
-		this.applyStyle(ige.ui.style("#" + this.ID_SELECTED));
-
-		this._selected = true;
-		ige.emit('capbar cap selected', [this.classId()]);
-
-		if (this._toolbar !== undefined) {
-			this._toolbar.mount(this.parent());
-			this._toolbar._capParent = this;
-		}
-	},
-
-	deselect: function() {
-		if (this._selected) {
-			this._selected = false;
-
-			// Show the deselected state of the button
-			this.id(this.ID_NORMAL);
-			this.applyStyle(ige.ui.style("#" + this.ID_NORMAL));
-
-			if (this._toolbar !== undefined) {
-				this._toolbar.unMount();
-			}
-		}
-	},
-
-	_updateStyle: function() {
-		IgeUiElement.prototype._updateStyle.call(this);
-
-		if (this._label !== undefined) {
-			this._label._mouseStateOver = this._mouseStateOver;
-			this._label._updateStyle();
-		}
-	},
-
-	name: function() {
-		return this.CAP_NAME;
 	}
 });
 
