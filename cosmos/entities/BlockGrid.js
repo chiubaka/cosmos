@@ -219,11 +219,15 @@ var BlockGrid = IgeEntityBox2d.extend({
 				return true;
 
 			case 'add':
-					// Add block server side, then send add msg to client
-					self.add(data.row, data.col, data.blockClassId);
+				// Add block server side, then send add msg to client
+				if(!self.add(data.row, data.col, data.blockClassId)) {
+					return false;
+				}
+				else {
 					data.action = 'add';
 					ige.network.send('blockAction', data);
-				return true;
+					return true;
+				}
 
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
@@ -295,9 +299,14 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	add: function(row, col, blockClassId) {
 		// TODO: Handle expanding the BlockGrid
-		//if (!this._grid.is2DinBounds(row, col)) {
-			//return;
-		//}
+		if (!this._grid.is2DInBounds(row, col)) {
+			return false;
+		}
+
+		// Make sure we don't attract formely small asteroids
+		if (this.category() === 'smallAsteroid') {
+			this.category(undefined);
+		}
 
 		var block = Block.prototype.blockFromClassId(blockClassId)
 			.row(row)
@@ -321,6 +330,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 		if (ige.isServer) {
 			this.addFixture(this._box2dBody, block, row, col);
 		}
+
+		return true
 
 	},
 

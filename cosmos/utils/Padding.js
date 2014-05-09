@@ -22,6 +22,12 @@ var Padding = {
 		}
 
 		return newArr;
+	},
+
+	// Extracts a 1x1 array from a padded 2D array
+	extract1x1: function(array) {
+		var coordinate = (array.length - 1) / 2;
+		return array[coordinate][coordinate];
 	}
 };
 
