@@ -128,12 +128,6 @@
 		});
 	},
 
-	unMount: function() {
-		this.log('Unmounting ' + this.TOOL_NAME, 'info');
-		ige.off('toolbar tool selected', this._selectEvent);
-		IgeUiElement.prototype.unMount.call(this);
-	},
-
 	setQuantity: function(quantity) {
 		this._quantity = new IgeUiLabel()
 			.font("12pt Segoe UI Semibold")

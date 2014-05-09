@@ -55,7 +55,12 @@
 		IgeUiElement.prototype.unMount.call(this);
 	},
 
-	mountTools: function() {
+	mountTools: function(needToReselect) {
+		if (needToReselect === undefined) {
+				needToReselect = false;
+		}
+
+		// Put a placeholder message in the toolbar if there aren't any tools to put in it.
 		if (this._tools.length == 0) {
 			this._placeholderMsg
 				.value(this.PLACEHOLDER_EMPTY)
@@ -68,13 +73,14 @@
 			this._placeholderMsg.unMount();
 		}
 
+		var selectedTool = ige.client.state.currentCapability().selectedType;
 		var numTools = this._tools.length;
 
-		console.log("Number of tools to mount: " + numTools);
-
+		this.log("Number of tools to mount: " + numTools, 'info');
 		var toolbarWidth = (numTools * this.HEIGHT) + ((numTools - 1) * this.TOOL_SPACING);
 		this.width(toolbarWidth);
 
+		var persistedSelection = false;
 		for (var i = 0; i < this._tools.length; i++) {
 			var tool = this._tools[i];
 
@@ -84,6 +90,14 @@
 
 			tool.translateBy(xPos, 0, 0);
 			tool.mount(this);
+
+			if (needToReselect) {
+				tool.select();
+				needToReselect = false;
+			} else if (!persistedSelection && selectedTool === tool.TOOL_NAME) {
+				tool.select();
+				persistedSelection = true;
+			}
 		}
 
 		this.translateTo(this._capParent.translate().x() + (this._capParent.width()) - (this.width() / (numTools)), this.translate().y(), 0);
