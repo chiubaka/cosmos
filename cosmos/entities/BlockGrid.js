@@ -2,7 +2,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	classId: 'BlockGrid',
 
 	/** Contains the grid of Block objects that make up this BlockGrid */
-	_grid: [],
+	_grid: undefined,
 	/** The rendering container for this BlockGrid, which essentially provides a cacheable location for the BlockGrid's
 	 * texture. */
 	_renderContainer: undefined,

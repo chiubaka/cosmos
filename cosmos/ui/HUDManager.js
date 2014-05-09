@@ -10,6 +10,10 @@
 			.id("capbar")
 			.mount(ige.client.hudScene);
 
+		this._respawnButton = new RespawnButton()
+			.id("respawnButton")
+      .mount(ige.client.hudScene);
+
 		this._gpsLabel = new GPSLabel()
 			.id("gpsLabel")
 			.mount(ige.client.hudScene);
