@@ -106,9 +106,6 @@ var Client = IgeClass.extend({
 						// Called when the server needs to broadcast updates about a block
 						ige.network.define('blockAction', self._onBlockAction);
 
-						// Called when the server tells us to respawn the player
-						ige.network.define('respawn', self._onRespawnPlayer);
-
 						ige.network.define('cargoResponse', self._onCargoResponse);
 						ige.network.define('cargoUpdate', self._onCargoUpdate);
 						// Setup the network stream handler

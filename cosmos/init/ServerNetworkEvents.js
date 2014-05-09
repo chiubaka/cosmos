@@ -51,16 +51,8 @@ var ServerNetworkEvents = {
 	},
 
 	_onRespawnRequest: function(data, clientId) {
-		if (!ige.server.players[clientId]) {
-			return;
-		}
-
-		var player = ige.server.players[clientId];
-		player.grid(ExampleShips.starterShipSingleMisplacedEngine())
-			.addSensor(300)
-			.attractionStrength(1)
-			.translateTo((Math.random() -.5) * ige.server.PLAYER_START_DISTANCE, (Math.random() -.5) * ige.server.PLAYER_START_DISTANCE, 0);
-		ige.network.send('respawn', clientId);
+		ige.server._onPlayerDisconnect(clientId);
+		ige.server._onPlayerEntity(data, clientId);
 	},
 
 	/**

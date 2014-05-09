@@ -45,10 +45,6 @@ var ClientNetworkEvents = {
 		}
 	},
 
-	_onRespawnPlayer: function(data) {
-		ige.client.player.grid(ExampleShips.starterShipSingleMisplacedEngine());
-	},
-
 	_onBlockAction: function(data) {
 		var blockGrid = ige.$(data.blockGridId);
 		blockGrid.processBlockActionClient(data);

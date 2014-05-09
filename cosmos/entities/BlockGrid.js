@@ -320,32 +320,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 			return this._grid;
 		}
 
-		// If we're setting a new grid and a grid already exists, we need to destroy the old stuff
-		if (this._grid !== undefined) {
-			if (ige.isServer) {
-				if (this._box2dBody) {
-					ige.box2d.destroyBody(this._box2dBody);
-				}
-			}
-			for (var row = 0; row < this._grid.length; row++)
-			{
-				var blockList = this._grid[row];
-				for (var col = 0; col < blockList.length; col++) {
-					var block = blockList[col];
-					if (block === undefined) {
-						continue;
-					}
-					block.destroy();
-				}
-			}
-		}
-
-		if (!ige.isServer) {
-			this.gridFromStreamCreateData(this.streamCreateDataFromGrid(grid));
-			this.mountGrid();
-			return;
-		}
-
 		this._grid = grid;
 
 		var maxRowLength = this.maxRowLengthForGrid(this._grid);
