@@ -8,13 +8,14 @@ var BlockGrid = IgeEntityBox2d.extend({
 	_renderContainer: undefined,
 	_constructionZoneOverlay: undefined,
 	_debugFixtures: false,
+	_padding: 1,
 
 	init: function(data) {
 		var self = this;
 
 		IgeEntityBox2d.prototype.init.call(this);
 
-		if (data !== undefined) {
+		if (!ige.isServer) {
 			this.gridFromStreamCreateData(data);
 		}
 
@@ -115,7 +116,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	streamCreateData: function() {
 		// TODO: Use non padded method
-		return this.streamCreateDataFromGrid(this._smallGrid);
+		return [this.streamCreateDataFromGrid(this._smallGrid), this._padding];
 	},
 
 	streamCreateDataFromGrid: function(grid) {
@@ -136,11 +137,14 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	gridFromStreamCreateData: function(data) {
+		var rxGrid = data[0];
+		this._padding = data[1];
+		
 		this._grid = [];
-		for (var i = 0; i < data.length; i++) {
+		for (var i = 0; i < rxGrid.length; i++) {
 			var row = [];
-			for (var j = 0; j < data[i].length; j++) {
-				var classId = data[i][j];
+			for (var j = 0; j < rxGrid[i].length; j++) {
+				var classId = rxGrid[i][j];
 
 				var block = Block.prototype.blockFromClassId(classId)
 
@@ -154,7 +158,13 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 
 		// TODO: Use non padded method
-		this._grid = Padding.pad2DArray(this._grid, 0);
+		this._grid = Padding.pad2DArray(this._grid, this._padding);
+	},
+
+	// TODO: Use non padded method
+	padding: function(val) {
+		this._padding = val;
+		return this;
 	},
 
 	// Created on server, streamed to all clients
@@ -352,7 +362,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		// TODO: Get rid of padding and use expanding BlockGrids
 		this._smallGrid = grid;
-		this._grid = Padding.pad2DArray(grid, 0);
+		this._grid = Padding.pad2DArray(grid, this._padding);
 
 		var maxRowLength = this._grid.get2DMaxRowLength();
 
