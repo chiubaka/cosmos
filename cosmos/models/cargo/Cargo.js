@@ -385,11 +385,22 @@ var Cargo = IgeClass.extend({
 		this.getContainer(i).debugDump();
 	},
 
+	/**
+	 * Subscribes a client (according to the clientId) to receiving cargo updates whenever
+	 * the cargo is modified (add or extract block).
+	 * 
+	 * @param clientId the client to subscribe
+	 */
 	subscribeToUpdates: function(clientId) {
 		this.log("Registering clientId " + clientId + " to cargo updates", 'info');
 		this.updateList.push(clientId);
 	},
 
+	/**
+	 * Unsubscribes a client from receiving cargo updates.
+	 * 
+	 * @param clientId the client to unsubscribe
+	 */
 	unsubscribeFromUpdates: function(clientId) {
 		var clientIndex = this.updateList.indexOf(clientId);
 		if (clientIndex >= 0) {
@@ -398,11 +409,16 @@ var Cargo = IgeClass.extend({
 		}
 	},
 
+	/**
+	 * Iterate through the list of subscribed clients and send a cargo update to each one.
+	 */
 	sendUpdates: function() {
 		if (this.updateList.length === 0) {
 			return;
 		}
 
+		// TODO: this doesn't need to be a list now, but can be useful in the future
+		// when game mechanics require players to access each other's inventories.
 		for (var i = 0; i < this.updateList.length; i++) {
 			var cargoList = this.getItemList(true);
 			var clientId = this.updateList[i];
