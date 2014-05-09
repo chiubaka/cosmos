@@ -21,6 +21,10 @@ var RespawnButton = IgeUiButton.extend({
 		// Set up events
 		this.initEvents();
 
+		// For some reason this makes clicking the button work more consistently. Before adding this, I was having
+		// a problem where clicking on the button would go to the background ~half the time and to the button
+		// the other half of the time. With this, I just can't click the button until the camera seems to have
+		// settled on the ship again, which is convenient.
 		this.allowActive(false);
 	},
 
