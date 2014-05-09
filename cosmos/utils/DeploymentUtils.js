@@ -24,7 +24,7 @@
 				break;
 		}
 
-		this.log("DeploymentConfig: Client hostname at " + location.host + ", select server host " + selectedServer, 'info');
+		//console.log("DeploymentConfig: Client hostname at " + location.host + ", select server host " + selectedServer, 'info');
 		return selectedServer;
 	}
 };
