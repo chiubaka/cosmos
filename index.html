@@ -62,10 +62,18 @@
 					}
 					cbdiv.style.display = "block";
 					cbbut.innerHTML = "Close Chat";
+
+					if(ige !== undefined && ige.client !== undefined) {
+						ige.client.metrics.fireEvent('chat', 'open');
+					}
 				}
 				else {
 					cbdiv.style.display = "none";
 					cbbut.innerHTML = "Open Chat";
+					
+					if(ige !== undefined && ige.client !== undefined) {
+						ige.client.metrics.fireEvent('chat', 'close');
+					}
 				}
 				cbvis = !cbvis;
 				document.cookie = cbcookie+((cbvis)?1:0);
