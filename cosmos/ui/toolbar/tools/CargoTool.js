@@ -6,7 +6,7 @@
 	STUB_ICON: '',
 	ACTIVE_ICON: '',
 
-	BG_COLOR: 'rgb(3,131,255)',
+	BG_COLOR: 'rgb(2,108,210)',
 	ACTIVE_COLOR: 'rgb(0, 136, 255)',
 	HOVER_COLOR: 'rgb(0, 170, 255)',
 	STUB_COLOR: 'rgba(0, 0, 0, 0.5)',

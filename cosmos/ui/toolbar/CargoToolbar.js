@@ -50,7 +50,7 @@
 		this._tools.length = 0;
 
 		// If the selectedType is no longer in the cargo inventory, just select the first one in the list
-		var needToReselect = (!cargoItems.hasOwnProperty(selectedType));
+		var needToReselect = (selectedType !== undefined && !cargoItems.hasOwnProperty(selectedType));
 		var persistedSelection = false;
 
 		// Iterate through the cargo items and create a new 'tool' in the palette for the item.
