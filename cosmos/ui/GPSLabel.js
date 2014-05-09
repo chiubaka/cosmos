@@ -19,18 +19,26 @@ var GPSLabel = IgeUiLabel.extend({
 
 		this.font("12pt Segoe UI Semibold")
 			.padding(0)
+			.value(this.getCoordinatesString())
 			.styleClass('gpsLabel');
 
+		this.resize();
+
 		setInterval(function() {
-			var rect = ige.$('mainViewport').viewArea();
-			self.value("x: " + Math.floor(rect.x2) + ", y: " + Math.floor(rect.y2));
-			var calcWidth = self._fontEntity.measureTextWidth();
-			self.width(calcWidth + 10);
+			self.value(self.getCoordinatesString());
+			self.resize();
 		}, 300);
 	},
 
-	updateCoordinates: function() {
+	getCoordinatesString: function() {
+		var rect = ige.$('mainViewport').viewArea();
+		return "x: " + Math.floor(rect.x2) + ", y: " + Math.floor(rect.y2);
+	},
 
+	resize: function() {
+		var calcWidth = this._fontEntity.measureTextWidth();
+		// + 10 here because for some reason the label clips the text otherwise
+		this.width(calcWidth + 10);
 	}
  });
 
