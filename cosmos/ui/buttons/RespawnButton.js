@@ -1,14 +1,14 @@
-var RespawnButton = IgeUiElement.extend({
+var RespawnButton = IgeUiButton.extend({
 	classId: "RespawnButton",
 
 	/**
 	 * Defines the dimensions of a capability on the Capbar
 	 */
-	WIDTH: 64,
+	WIDTH: 128,
 	HEIGHT: 64,
 
 	init: function() {
-		IgeUiElement.prototype.init.call(this);
+		IgeUiButton.prototype.init.call(this);
 
 		this.log('init', 'info');
 
@@ -16,10 +16,12 @@ var RespawnButton = IgeUiElement.extend({
 		this.initStyles();
 
 		// Set up labels
-		//this.initLabel();
+		this.initLabel();
 
 		// Set up events
-		//this.initEvents();
+		this.initEvents();
+
+		this.allowActive(false);
 	},
 
 	initStyles: function() {
@@ -32,7 +34,7 @@ var RespawnButton = IgeUiElement.extend({
 		this.ID_SELECTED_HOVER = this.classId() + ':selected:hover';
 
 		this.applyStyle({
-			'backgroundColor': 'rgba(30,30,30,0.7)',
+			'backgroundColor': 'rgba(200,0,0,1)',
 			'borderColor': 'rgba(0,0,0,0)',
 			'top': 0,
 			'right': 0,
@@ -41,29 +43,21 @@ var RespawnButton = IgeUiElement.extend({
 	},
 
 	initLabel: function() {
-		this._label = new CapLabel(this.classId(), this.CAP_NAME, this.LABEL_COLOR)
-			.mount(this);
+		this.data('ui', {
+			'text': {
+				'font': '12pt Segoe UI Semibold',
+				'value': 'Respawn'
+			}
+		});
 	},
 
 	initEvents: function() {
 		var self = this;
 
-		this.on('mouseDown', function() {
-			if (!self._selected) {
-				self.select();
-			} else {
-				self.deselect();
-				ige.emit('capbar cap cleared', [self.classId()]);
-			}
-		});
-
-		ige.on('capbar cap selected', function(classId)
-		{
-			if (!self._selected && classId === self.classId()) {
-				self.select();
-			} else if(classId !== self.classId()) {
-				self.deselect();
-			}
+		this.mouseDown(function(event, control) {
+			ige.network.send('respawn');
+			console.log('Respawn button clicked');
+			ige.emit('respawn button clicked');
 		});
 	},
 
