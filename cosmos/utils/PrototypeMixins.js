@@ -26,6 +26,10 @@ Array.prototype.get2D = function(row, col) {
 
 // Returns true if the (row, col) is in bounds
 Array.prototype.is2DInBounds = function (row, col) {
+	if ((row < 0) || (col < 0)) {
+		return false;
+	}
+
 	var maxRowLength = this.length;
 	if (row < maxRowLength) {
 		if (this[row] === undefined) {
