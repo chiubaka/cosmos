@@ -232,7 +232,7 @@ var GameInit = {
 							return;
 						}
 						ige.emit('block collected',
-							[player, Padding.extract1x1(asteroid.grid()).classId()]);
+							[player, BlockGridPadding.extract1x1(asteroid.grid()).classId()]);
 						asteroid.destroy();
 					}
 				}

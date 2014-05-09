@@ -154,7 +154,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 
 		// TODO: Use non padded method
-		this._grid = Padding.pad2DArray(this._grid, 0);
+		this._grid = BlockGridPadding.padGrid(this._grid, 2);
 	},
 
 	// Created on server, streamed to all clients
@@ -352,7 +352,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		// TODO: Get rid of padding and use expanding BlockGrids
 		this._smallGrid = grid;
-		this._grid = Padding.pad2DArray(grid, 0);
+		this._grid = BlockGridPadding.padGrid(grid, 2);
 
 		var maxRowLength = this._grid.get2DMaxRowLength();
 
