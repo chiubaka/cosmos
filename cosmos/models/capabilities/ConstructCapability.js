@@ -56,6 +56,7 @@
 	 */
 	ClickScene_mouseDown: function(sender, event, data) {
 		data.selectedType = this.capability.selectedType;
+		ige.client.metrics.fireEvent('construct', 'new', this.capability.selectedType);
 		ige.network.send('constructNew', data);
 	}
 });

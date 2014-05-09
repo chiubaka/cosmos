@@ -23,6 +23,12 @@
 	Block_mouseDown: function(sender, event, data) {
 		sender._displayHealth = true;
 
+		if (sender.parent().parent().classId() === BlockGrid.prototype.classId()) {
+			ige.client.metrics.fireEvent('block', 'mine', sender.classId());
+		} else {
+			ige.client.metrics.fireEvent('player', 'attack', sender.classId());
+		}
+
 		sender.decrementHealthIntervalId = setInterval(function() {
 			if (sender._hp > 0) {
 				sender._hp--;

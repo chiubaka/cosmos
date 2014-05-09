@@ -76,6 +76,7 @@ var igeClientConfig = {
 		/* Helper utilities */
 		'./utils/DeploymentUtils.js',
 		'./utils/RandomInterval.js',
+		'./utils/MetricsHandler.js',
 
 		/* === GAME SETUP === */
 		/* Configuration */
