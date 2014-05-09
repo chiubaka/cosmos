@@ -15,7 +15,10 @@ var ClickScene = IgeScene2d.extend({
 			y: this.mousePosWorld().y
 		};
 
-		ige.network.send('backgroundClicked', data);
+		// TODO: Extend when clientState supports multiple current capabilities 
+		if (ige.client.state !== undefined) {
+			ige.client.state.currentCapability().tryPerformAction(this, event, data);
+		}
 	}
 
 

@@ -5,8 +5,8 @@ var IronBlock = Element.extend({
 		Element.prototype.init.call(this);
 
 		if (!ige.isServer) {
-			this.textureBackground = "rgb(252, 202, 202)";
-			this.textureOutline = "rgb(28, 28, 28)";
+			this.textureBackground = "rgb(200, 200, 200)";
+			this.textureOutline = "rgb(210, 210, 210)";
 		}
 	}
 });

@@ -36,6 +36,7 @@ var Cargo = IgeClass.extend({
 	init: function() {
 		this._containers = [];
 		this._items = [];
+		this.updateList = [];
 	},
 	
 	/**
@@ -120,6 +121,7 @@ var Cargo = IgeClass.extend({
 				var container = this.getContainer(i);
 				if (container.hasSpace(item)) {
 					var success = container.addItem(item);
+					this.sendUpdates();
 					return success;
 				} else {
 					continue;
@@ -239,6 +241,8 @@ var Cargo = IgeClass.extend({
 			}
 		}
 
+		this.sendUpdates();
+		
 		return extracted;
 	},
 
@@ -339,6 +343,39 @@ var Cargo = IgeClass.extend({
 	},
 
 	/**
+	 * Retrieves a list of all of the items in this cargo inventory.
+	 * 
+	 * @param coalesce Whether or not to coalesce items of the same type 
+	 * in separate containers into a single entry in the list.
+	 * @returns a dictionary of types, and the number of elements of each type
+	 */
+	getItemList: function(coalesce) {
+		var returnDict = {};
+
+		for (var i = 0; i < this.getNumContainers(); i++) {
+			var container = this.getContainer(i);
+
+			var containerItemList = container.getItemList();
+
+			for (var itemType in containerItemList) {
+				var storeType = itemType;
+
+				if (!coalesce) {
+					storeType += ":container" + i;
+				}
+
+				if (!returnDict.hasOwnProperty(storeType)) {
+					returnDict[storeType] = 0;
+				}
+
+				returnDict[storeType] += containerItemList[itemType];
+			}
+		}
+
+		return returnDict;
+	},
+
+	/**
 	 * Prints a debug log of a container to the console.
 	 * 
 	 * @params the container number
@@ -346,6 +383,47 @@ var Cargo = IgeClass.extend({
 	debugDump: function(i) {
 		console.log(":: cargo container #" + i);
 		this.getContainer(i).debugDump();
+	},
+
+	/**
+	 * Subscribes a client (according to the clientId) to receiving cargo updates whenever
+	 * the cargo is modified (add or extract block).
+	 * 
+	 * @param clientId the client to subscribe
+	 */
+	subscribeToUpdates: function(clientId) {
+		this.log("Registering clientId " + clientId + " to cargo updates", 'info');
+		this.updateList.push(clientId);
+	},
+
+	/**
+	 * Unsubscribes a client from receiving cargo updates.
+	 * 
+	 * @param clientId the client to unsubscribe
+	 */
+	unsubscribeFromUpdates: function(clientId) {
+		var clientIndex = this.updateList.indexOf(clientId);
+		if (clientIndex >= 0) {
+			this.log("Unregistering clientId " + clientId + " from cargo updates", 'info');
+			this.updateList.remove(clientIndex);
+		}
+	},
+
+	/**
+	 * Iterate through the list of subscribed clients and send a cargo update to each one.
+	 */
+	sendUpdates: function() {
+		if (this.updateList.length === 0) {
+			return;
+		}
+
+		// TODO: this doesn't need to be a list now, but can be useful in the future
+		// when game mechanics require players to access each other's inventories.
+		for (var i = 0; i < this.updateList.length; i++) {
+			var cargoList = this.getItemList(true);
+			var clientId = this.updateList[i];
+			ige.network.send('cargoUpdate', cargoList, clientId);
+		}
 	}
 });
 

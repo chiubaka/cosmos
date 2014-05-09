@@ -38,7 +38,15 @@ var Client = IgeClass.extend({
 			laserBeamTexture: new IgeTexture(gameRoot +
 				'assets/effects/laser/laserbeam.png'),
 			rectangleTexture: new IgeTexture(gameRoot +
-				'assets/effects/particles/Rectangle.js')
+				'assets/effects/particles/Rectangle.js'),
+
+			// Cap textures
+			mineCap_color: new IgeTexture(gameRoot + 'assets/ui/mine/mine-color.png'),
+			mineCap_white: new IgeTexture(gameRoot + 'assets/ui/mine/mine-white.png'),
+			constructCap_color: new IgeTexture(gameRoot + 'assets/ui/construct/construct-color.png'),
+			constructCap_white: new IgeTexture(gameRoot + 'assets/ui/construct/construct-white.png'),
+			baseCap_color: new IgeTexture(gameRoot + 'assets/ui/base/base-color.png'),
+			baseCap_white: new IgeTexture(gameRoot + 'assets/ui/base/base-white.png')
 		};
 
 		ige.on('texturesLoaded', function () {
@@ -81,6 +89,8 @@ var Client = IgeClass.extend({
 			ige.start(function (success) {
 				// Check if the engine started successfully
 				if (success) {
+					ige.client.metrics = new MetricsHandler();
+
 					// Start the networking (you can do this elsewhere if it
 					// makes sense to connect to the server later on rather
 					// than before the scene etc are created... maybe you want
@@ -88,11 +98,16 @@ var Client = IgeClass.extend({
 					// got a username or something?
 
 					// Use DeploymentUtils to get the appropriate game server to connect to.
-					ige.network.start(DeploymentUtils.getServerUrl(), function () {
+					ige.network.start(DeploymentUtils.getServerUrl(), function() {
+						ige.client.metrics.fireEvent('network', 'connect');
+
 						// Setup the network command listeners
 						ige.network.define('playerEntity', self._onPlayerEntity);
 						// Called when the server needs to broadcast updates about a block
 						ige.network.define('blockAction', self._onBlockAction);
+
+						ige.network.define('cargoResponse', self._onCargoResponse);
+						ige.network.define('cargoUpdate', self._onCargoUpdate);
 						// Setup the network stream handler
 						ige.network.addComponent(IgeStreamComponent)
 							.stream.renderLatency(80); // Render the simulation 160 milliseconds in the past
@@ -106,7 +121,7 @@ var Client = IgeClass.extend({
 				}
 			});
 		});
-	}
+	},
 });
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Client; }

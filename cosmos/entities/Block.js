@@ -54,19 +54,10 @@ var Block = IgeEntity.extend({
 			col: this._col
 		};
 
-		this._displayHealth = true;
-
-		self.decrementHealthIntervalId = setInterval(function() {
-			if (self._hp > 0) {
-				self._hp--;
-				self.cacheDirty(true);
-			}
-			if (self._hp == 0) {
-				clearInterval(self.decrementHealthIntervalId)
-			}
-		}, self.MINING_TIME / self._maxHp);
-
-		ige.network.send('blockClicked', data);
+		// TODO: Expand when clientState supports multiple current capabilities 
+		if (ige.isClient && ige.client !== undefined && ige.client.state !== undefined) {
+			ige.client.state.currentCapability().tryPerformAction(self, event, data);
+		}
 	},
 
 	blockGrid: function() {
@@ -144,6 +135,7 @@ var Block = IgeEntity.extend({
 		switch (classId) {
 			case Block.prototype.classId():
 				return new Block();
+			//ship parts
 			case CargoBlock.prototype.classId():
 				return new CargoBlock();
 			case ControlBlock.prototype.classId():
@@ -158,14 +150,20 @@ var Block = IgeEntity.extend({
 				return new PowerBlock();
 			case ThrusterBlock.prototype.classId():
 				return new ThrusterBlock();
+			//now the elements
 			case CarbonBlock.prototype.classId():
 				return new CarbonBlock();
 			case IceBlock.prototype.classId():
 				return new IceBlock();
 			case IronBlock.prototype.classId():
 				return new IronBlock();
-			case ConstructionZoneBlock.prototype.classId():
-				return new ConstructionZoneBlock();
+			case GoldBlock.prototype.classId():
+				return new GoldBlock();
+			case FluorineBlock.prototype.classId():
+				return new FluorineBlock();
+			case CobaltBlock.prototype.classId():
+				return new CobaltBlock();
+
 			default:
 				return undefined;
 		}
