@@ -49,30 +49,22 @@
 		}
 		this._tools.length = 0;
 
-		// If the selectedType is no longer in the cargo inventory, just select the first one in the list
-		var needToReselect = (selectedType !== undefined && !cargoItems.hasOwnProperty(selectedType));
-		var persistedSelection = false;
-
 		// Iterate through the cargo items and create a new 'tool' in the palette for the item.
 		for (var type in cargoItems) {
 			var quantity = cargoItems[type];
 			var tool = new CargoTool(type, quantity);
-
-			if (needToReselect) {
-				tool.select();
-				needToReselect = false;
-			}
-
-			if (!persistedSelection && selectedType === type) {
-				tool.select();
-				persistedSelection = true;
-			}
-
 			this._tools.push(tool);
 		}
 
-		ige.off('cargo response', this._cargoResponseEvent);		
-		this.mountTools();
+		// If this is our initial populate from a cargo response, we
+		// don't want to hear about it anymore.
+		if (this._cargoResponseEvent !== undefined) {
+			ige.off('cargo response', this._cargoResponseEvent);
+		}
+
+		// If the selectedType is no longer in the cargo inventory, just select the first one in the list
+		var needToReselect = (selectedType !== undefined && !cargoItems.hasOwnProperty(selectedType));
+		this.mountTools(needToReselect);
 	}
 });
 

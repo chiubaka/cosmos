@@ -21,14 +21,13 @@
 	 * so the capability can store state about the currently selected item on the toolbar.
 	 */
 	activate: function() {
-		console.log("Activating... registering event listener.", 'info');
+		this.log("Activating... registering event listener.", 'info');
 
 		var self = this;
 		this._toolbarListener = ige.on('toolbar tool selected', function(classId, toolName) {
 			if (classId === CargoTool.prototype.classId()) {
 				self.log("Selected item type " + toolName, 'info');
 				self.selectedType = toolName;
-				console.log(self.selectedType);
 			}
 		});
 
