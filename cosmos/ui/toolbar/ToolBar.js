@@ -70,7 +70,7 @@
 
 		var numTools = this._tools.length;
 
-		console.log("Number of tools to mount: " + numTools);
+		//console.log("Number of tools to mount: " + numTools);
 
 		var toolbarWidth = (numTools * this.HEIGHT) + ((numTools - 1) * this.TOOL_SPACING);
 		this.width(toolbarWidth);

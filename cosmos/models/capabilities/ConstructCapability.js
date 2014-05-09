@@ -28,7 +28,6 @@
 			if (classId === CargoTool.prototype.classId()) {
 				self.log("Selected item type " + toolName, 'info');
 				self.selectedType = toolName;
-				console.log(self.selectedType);
 			}
 		});
 
