@@ -55,7 +55,13 @@
 		IgeUiElement.prototype.unMount.call(this);
 	},
 
-	mountTools: function() {
+	mountTools: function(needToReselect) {
+		if (needToReselect === undefined) {
+				needToReselect = false;
+		}
+
+		var selectedType = ige.client.state.currentCapability().selectedType;
+
 		if (this._tools.length == 0) {
 			this._placeholderMsg
 				.value(this.PLACEHOLDER_EMPTY)
@@ -75,6 +81,8 @@
 		var toolbarWidth = (numTools * this.HEIGHT) + ((numTools - 1) * this.TOOL_SPACING);
 		this.width(toolbarWidth);
 
+		var persistedSelection = false;
+
 		for (var i = 0; i < this._tools.length; i++) {
 			var tool = this._tools[i];
 
@@ -84,6 +92,14 @@
 
 			tool.translateBy(xPos, 0, 0);
 			tool.mount(this);
+
+			if (needToReselect) {
+				tool.select();
+				needToReselect = false;
+			} else if (!persistedSelection && selectedType === tool.TOOL_NAME) {
+				tool.select();
+				persistedSelection = true;
+			}
 		}
 
 		this.translateTo(this._capParent.translate().x() + (this._capParent.width()) - (this.width() / (numTools)), this.translate().y(), 0);
