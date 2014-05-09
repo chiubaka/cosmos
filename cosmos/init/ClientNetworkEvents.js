@@ -53,7 +53,7 @@ var ClientNetworkEvents = {
 	},
 
 	_onCargoUpdate: function(cargoList) {
-		this.log("Received cargo update");
+		this.log("Received cargo update", 'info');
 		ige.emit('cargo update', [cargoList]);
 	},
 
