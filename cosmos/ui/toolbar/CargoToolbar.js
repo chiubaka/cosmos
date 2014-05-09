@@ -74,7 +74,7 @@
 		 * By changing the toolbar tool remount call to an event emission, the event deregistration can occur before an event
 		 * emission for that same event occurs, since the toolbar tool remount is guaranteed to occur after the event deregistration.
 		 */
-		ige.emit('toolbar refresh');
+		ige.emit('toolbar refresh', [needToReselect]);
 	}
 });
 

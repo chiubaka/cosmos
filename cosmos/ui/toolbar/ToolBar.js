@@ -46,8 +46,8 @@
 		this.bottom(elem.HEIGHT);
 
 		var self = this;
-		this._refreshEvent = ige.on('toolbar refresh', function() {
-			self.mountTools();
+		this._refreshEvent = ige.on('toolbar refresh', function(needToReselect) {
+			self.mountTools(needToReselect);
 		});
 
 		this.mountTools();
