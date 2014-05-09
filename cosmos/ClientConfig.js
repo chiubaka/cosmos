@@ -53,6 +53,7 @@ var igeClientConfig = {
 		/* === USER INTERFACE === */
 		/* HUD */
 		'./ui/HUDManager.js',
+		'./ui/GPSLabel.js',
 
 		/* Buttons */
 		'./ui/buttons/RespawnButton.js',
@@ -67,7 +68,7 @@ var igeClientConfig = {
 		'./ui/capbar/caps/ConstructCap.js',
 
 		/* Toolbars */
-		'./ui/toolbar/Toolbar.js',
+		'./ui/toolbar/ToolBar.js',
 		'./ui/toolbar/CargoToolbar.js',
 		'./ui/toolbar/tools/Tool.js',
 		'./ui/toolbar/tools/CargoTool.js',

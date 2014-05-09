@@ -17,10 +17,10 @@
 		Toolbar.prototype.mount.call(this, obj);
 
 		var self = this;
-		this._cargoResponseEvent = ige.on('cargo response', function(cargoItems) {
+		ige.on('cargo response', function(cargoItems) {
 			self.log("Received cargo response", 'info');
 			self.populateFromInventory(cargoItems);
-		});
+		}, self, true);
 
 		this._cargoUpdateEvent = ige.on('cargo update', function(cargoItems) {
 			self.log("Received cargo update", 'info');
@@ -54,12 +54,6 @@
 			var quantity = cargoItems[type];
 			var tool = new CargoTool(type, quantity);
 			this._tools.push(tool);
-		}
-
-		// If this is our initial populate from a cargo response, we
-		// don't want to hear about it anymore.
-		if (this._cargoResponseEvent !== undefined) {
-			ige.off('cargo response', this._cargoResponseEvent);
 		}
 
 		// If the selectedType is no longer in the cargo inventory, just select the first one in the list
