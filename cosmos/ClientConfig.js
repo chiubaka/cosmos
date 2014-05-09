@@ -54,6 +54,9 @@ var igeClientConfig = {
 		/* HUD */
 		'./ui/HUDManager.js',
 
+		/* Buttons */
+		'./ui/buttons/RespawnButton.js',
+
 		/* Capbar */
 		'./ui/capbar/CapBar.js',
 		'./ui/capbar/CapLabel.js',
