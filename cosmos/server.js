@@ -24,7 +24,7 @@ var Server = IgeClass.extend({
 			.mode(1)//Sets the world interval mode. In mode 0 (zero) the box2d simulation is synced to the framerate of the engine's renderer. In mode 1 the box2d simulation is stepped at a constant speed regardless of the engine's renderer. This must be set *before* calling the start() method in order for the setting to take effect.
 			.box2d.start();// this should be the last thing called
 
-    // Add the server-side game methods / event handlers
+		// Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);
 
 		// Define an object to hold references to our player entities
@@ -44,12 +44,17 @@ var Server = IgeClass.extend({
 						ige.network.define('playerControlUpdate', self._onPlayerControlUpdate);
 
 						/* This is called when a player clicks on a block */
-						ige.network.define('blockClicked', self._onBlockClicked);
+						ige.network.define('mineBlock', self._onMineBlock);
 						/* This is called when a player clicks on the background. */
-						ige.network.define('backgroundClicked', self._onBackgroundClicked);
+						ige.network.define('constructNew', self._onConstructNew);
 
 						/* Define this command so that we can use it on the client */
 						ige.network.define('blockAction');
+
+						ige.network.define('cargoRequest', self._onCargoRequest);
+						ige.network.define('cargoUpdate');
+						ige.network.define('cargoResponse');
+
 
 						/* When a client connects or disconnects */
 						ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js

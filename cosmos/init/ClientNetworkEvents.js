@@ -47,6 +47,16 @@ var ClientNetworkEvents = {
 		blockGrid.processBlockActionClient(data);
 	},
 
+	_onCargoResponse: function(cargoList) {
+		//console.log("Received cargo response", 'info');
+		ige.emit('cargo response', [cargoList]);
+	},
+
+	_onCargoUpdate: function(cargoList) {
+		//console.log("Received cargo update", 'info');
+		ige.emit('cargo update', [cargoList]);
+	},
+
 	initCameras: function(entityToTrack) {
 		var cameraSmoothingAmount = 10;
 
