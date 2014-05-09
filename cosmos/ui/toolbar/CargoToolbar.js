@@ -27,7 +27,7 @@
 			self.populateFromInventory(cargoItems);
 		});
 
-		this.log("Sending cargo request to server...", info);
+		this.log("Sending cargo request to server...", 'info');
 		var data = { requestUpdates: true };
 		ige.network.send('cargoRequest', data);
 	},
