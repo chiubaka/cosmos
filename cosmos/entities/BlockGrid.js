@@ -279,8 +279,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 			case 'damage':
 				var block = this.getBlockFromGrid(data.row, data.col);
 				block.damage(data.amount);
-
-				console.log('Damaging block');
 				break;
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
