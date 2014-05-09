@@ -218,6 +218,13 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 				return true;
 
+			case 'add':
+					// Add block server side, then send add msg to client
+					self.add(data.row, data.col, data.blockClassId);
+					data.action = 'add';
+					ige.network.send('blockAction', data);
+				return true;
+
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
 				return false;
@@ -280,6 +287,25 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this._grid[row][col] = undefined;
 	},
 
+	add: function(row, col, blockClassId) {
+		return;
+		// TODO: Handle expanding the BlockGrid
+		if (!this._grid.is2DinBounds(row, col)) {
+			return;
+		}
+
+		if (this._grid[row][col] === undefined) {
+			this._grid[row][col] =
+				BlockGrid.prototype.blockFromClassId(blockClassId);
+		}
+
+		// Update server's physics model
+		if (ige.isServer) {
+		
+		}
+
+	},
+
 	/**
 	 * Getter/setter for the grid property of the BlockGrid. If a parameter is passed, sets
 	 * the property and returns this. If not, returns the property.
@@ -308,6 +334,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * scratch, otherwise there may be doubled fixtures.
 	 */
 	addFixtures: function() {
+		// Create the Box2D body which fixtures will be added on to
 		this.box2dBody({
 			type: 'dynamic',
 			linearDamping: 0.4,
@@ -329,47 +356,52 @@ var BlockGrid = IgeEntityBox2d.extend({
 					continue;
 				}
 
+				this.addFixture(this._box2dBody, block, row, col);
 
-				var width = Block.prototype.WIDTH;
-				var height = Block.prototype.HEIGHT;
-
-				var x = width * col - this._bounds2d.x2 + block._bounds2d.x2;
-				var y = height * row - this._bounds2d.y2 + block._bounds2d.y2;
-
-				var fixtureDef = {
-					density: 1.0,
-					friction: 0.5,
-					restitution: 0.5,
-					shape: {
-						type: 'rectangle',
-						data: {
-							// The position of the fixture relative to the body
-							x: x,
-							y: y,
-							width: width / 2,
-							height: height / 2
-						}
-					}
-				};
-				var fixture = ige.box2d.addFixture(this._box2dBody, fixtureDef);
-				// Add fixture reference to Block so we can destroy fixture later.
-				block.fixture(fixture);
-				// Add fixtureDef reference so we can create a new BlockGrid later.
-				block.fixtureDef(fixtureDef);
-
-				if (this.debugFixtures()) {
-					new FixtureDebuggingEntity()
-						.mount(this)
-						.depth(this.depth() + 1)
-						.translateTo(fixtureDef.shape.data.x, fixtureDef.shape.data.y, 0)
-						.width(fixtureDef.shape.data.width * 2)
-						.height(fixtureDef.shape.data.height * 2)
-						.streamMode(1);
-				}
 			}
 		}
 
 		return this;
+	},
+
+	addFixture: function (box2dBody, block, row, col) {
+		var width = Block.prototype.WIDTH;
+		var height = Block.prototype.HEIGHT;
+
+		var x = width * col - this._bounds2d.x2 + block._bounds2d.x2;
+		var y = height * row - this._bounds2d.y2 + block._bounds2d.y2;
+
+		var fixtureDef = {
+			density: 1.0,
+			friction: 0.5,
+			restitution: 0.5,
+			shape: {
+				type: 'rectangle',
+				data: {
+					// The position of the fixture relative to the body
+					x: x,
+					y: y,
+					width: width / 2,
+					height: height / 2
+				}
+			}
+		};
+
+		var fixture = ige.box2d.addFixture(box2dBody, fixtureDef);
+		// Add fixture reference to Block so we can destroy fixture later.
+		block.fixture(fixture);
+		// Add fixtureDef reference so we can create a new BlockGrid later.
+		block.fixtureDef(fixtureDef);
+
+		if (this.debugFixtures()) {
+			new FixtureDebuggingEntity()
+				.mount(this)
+				.depth(this.depth() + 1)
+				.translateTo(fixtureDef.shape.data.x, fixtureDef.shape.data.y, 0)
+				.width(fixtureDef.shape.data.width * 2)
+				.height(fixtureDef.shape.data.height * 2)
+				.streamMode(1);
+		}
 	},
 
 	mountGrid: function() {

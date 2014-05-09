@@ -145,7 +145,9 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		var data = {
 			blockGridId: this._parent.id(),
 			row: row,
-			col: col
+			col: col,
+			// TODO: Vary block type
+			blockClassId: 'IronBlock'
 		};
 
 		ige.network.send('constructionZoneClicked', data);

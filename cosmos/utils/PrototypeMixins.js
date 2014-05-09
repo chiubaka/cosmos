@@ -11,7 +11,7 @@ Array.prototype.remove = function(from, to) {
 
 // Gets an item from a 2d array. Returns undefined if out of bounds.
 Array.prototype.get2D = function(row, col) {
-	if(row < 0 || col < 0) {
+	if (row < 0 || col < 0) {
 		return undefined;
 	}
 	if (row >= this.length) {
@@ -22,6 +22,17 @@ Array.prototype.get2D = function(row, col) {
 	}
 
 	return this[row][col];
+};
+
+Array.prototype.is2DInBounds = function (row, col) {
+	var maxRowLength = this.length;
+	if (row < maxRowLength) {
+		var maxColLength = this[row].length;
+		if (col < maxColLength) {
+			return true;
+		}
+	}
+	return false;
 };
 
 // Creates a new 2D array with specified dimensions and fills it

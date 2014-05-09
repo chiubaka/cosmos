@@ -71,8 +71,6 @@ var ServerNetworkEvents = {
 			player.addLaser(data.blockGridId, data.row, data.col);
 			blockGrid.addMiningParticles(data.blockGridId, data.row, data.col);
 		}
-
-
 	},
 
 	// Server receives client coordinates for construction
@@ -85,6 +83,10 @@ var ServerNetworkEvents = {
 	// TODO: Verify valid construction zone
 	_onConstructionZoneClicked: function(data, clientId) {
 		//console.log("row: " + data.row + " col: " + data.col);
+		var player = ige.server.players[clientId];
+		var blockGrid = ige.$(data.blockGridId);
+		data.action = 'add';
+		blockGrid.processBlockActionServer(data, player);
 	}
 
 };
