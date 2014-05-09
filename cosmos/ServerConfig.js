@@ -45,6 +45,9 @@ var config = {
 		{ name: 'Background', path: './entities/scenery/Background' },
 		{ name: 'AsteroidGenerator', path: './entities/scenery/AsteroidGenerator' },
 
+		/* Viewports */
+		{ name: 'MainViewport', path: './entities/MainViewport'},
+
 		/* === PLAYER STATE === */
 		{ name: 'Player', path: './entities/player/Player' },
 
