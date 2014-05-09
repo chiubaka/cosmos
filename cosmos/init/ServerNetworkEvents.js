@@ -83,7 +83,7 @@ var ServerNetworkEvents = {
 		var blockToPlace = player.cargo.extractType(data.selectedType)[0];
 
 		if (blockToPlace !== undefined) {
-			this.log("Placing item: " + blockToPlace.classId(), 'info');
+			//console.log("Placing item: " + blockToPlace.classId(), 'info');
 			new BlockGrid()
 				.category('smallAsteroid')
 				.id('littleAsteroid' + Math.random())
