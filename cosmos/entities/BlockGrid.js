@@ -143,7 +143,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			for (var j = 0; j < rxGrid[i].length; j++) {
 				var classId = rxGrid[i][j];
 
-				var block = Block.prototype.blockFromClassId(classId)
+				var block = Block.prototype.blockFromClassId(classId);
 
 				if (block !== undefined) {
 					block.row(i).col(j);
@@ -246,7 +246,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 			case 'add':
 				// Add block server side, then send add msg to client
-				if(!self.add(data.row, data.col, data.blockClassId)) {
+				if(!self.add(data.row, data.col, data.selectedType)) {
 					return false;
 				}
 				else {
@@ -268,7 +268,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			case 'remove':
 				this.remove(data.row, data.col);
 				this._renderContainer.cacheDirty(true);
-				this._renderContainer.cacheDirty(true);
+				//this._renderContainer.cacheDirty(true);
 				this._constructionZoneOverlay.refreshNeeded(true);
 				break;
 			case 'damage':
@@ -276,7 +276,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 				block.damage(data.amount);
 				break;
 			case 'add':
-				this.add(data.row, data.col, data.blockClassId);
+				this.add(data.row, data.col, data.selectedType);
 				this._renderContainer.cacheDirty(true);
 				this._constructionZoneOverlay.refreshNeeded(true);
 				break;

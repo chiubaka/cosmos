@@ -15,6 +15,23 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		this.createConstructionZones();
 		this.mountOverlayGrid();
 		this.mouseDown(this.mouseDownHandler);
+
+		var self = this;
+		ige.on('capbar cap selected', function(classId) {
+			if (classId === 'ConstructCap') {
+				self.show();
+			} else {
+				self.hide();
+			}
+		});
+		
+		ige.on('capbar cap cleared', function(classId) {
+			if (classId === 'ConstructCap') {
+				self.hide();
+			}
+		});
+
+		this.hide();
 	},
 
 	createConstructionZones: function() {
@@ -114,7 +131,7 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		// Check if the click was out of the grid area (happens because axis-aligned bounding boxes are larger
 		// than the non-axis-aligned grid area)
 		if (Math.abs(unrotatedX) > width / 2
-		 || Math.abs(unrotatedY) > height / 2) {
+			|| Math.abs(unrotatedY) > height / 2) {
 			return;
 		}
 
@@ -136,8 +153,7 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		// If so, stop click propogation so we don't hit the ClickScene
 		if (block === undefined) {
 			return;
-		}
-		else {
+		} else {
 			control.stopPropagation();
 		}
 
@@ -147,11 +163,11 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 			// Translate overlay coordinates into BlockGrid coordinates
 			row: row - 1,
 			col: col - 1,
-			// TODO: Vary block type
-			blockClassId: 'IronBlock'
 		};
 
-		ige.network.send('constructionZoneClicked', data);
+		if (ige.isClient && ige.client !== undefined && ige.client.state !== undefined) {
+			ige.client.state.currentCapability().tryPerformAction(this, event, data);
+		}
 	},
 
 	refreshNeeded: function (val) {
@@ -164,9 +180,6 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 
 	update: function(ctx) {
 		if (!ige.isServer) {
-			// TODO: Fade in construction overlay when construction capability is
-			// detected
-
 			// TODO: Before fading in, if we need to recalculate the overlay, do so
 			// TODO: Local refresh. Global refresh is slow with large BlockGrids
 			if (this._refreshNeeded) {
