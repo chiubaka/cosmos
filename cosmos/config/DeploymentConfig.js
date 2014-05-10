@@ -16,7 +16,7 @@
 	SERVERURL_DEV: "http://dev.srv.cosmos.teamleonine.com",
 	SERVERURL_STAGING: "http://stg.srv.cosmos.teamleonine.com",
 	SERVERURL_RELEASE: "http://srv.cosmos.teamleonine.com",
-	SERVERURL_PREVIEW: "http://preview.srv.teamleonine.com"
+	SERVERURL_PREVIEW: "http://preview.srv.cosmos.teamleonine.com"
 };
 
 if (typeof (module) !== 'undefined' && typeof (module.exports) !== 'undefined') {
