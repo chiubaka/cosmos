@@ -121,7 +121,7 @@
 
 		this._selectEvent = ige.on('toolbar tool selected', function(classId, toolName) {
 			if (!self._selected && self.classId() === classId && toolName === self.TOOL_NAME) {
-				self.select();
+				self.select(true);
 			} else if (self.classId() !== classId || toolName !== self.TOOL_NAME) {
 				self.deselect();
 			}
