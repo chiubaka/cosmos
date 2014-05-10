@@ -18,13 +18,17 @@
 			case DeploymentConfig.CLIENTURL_RELEASE:
 				selectedServer = DeploymentConfig.SERVERURL_RELEASE;
 				break;
+			case DeploymentConfig.CLIENTURL_PREVIEW:
+			case DeploymentConfig.CLIENTURL_PREVIEW_AZURE:
+				selectedServer = DeploymentConfig.SERVERURL_PREVIEW;
+				 break;
 			case undefined:
 			default:
 				selectedServer = DeploymentConfig.SERVERURL_LOCAL;
 				break;
 		}
 
-		//console.log("DeploymentConfig: Client hostname at " + location.host + ", select server host " + selectedServer, 'info');
+		console.log("DeploymentConfig: Client hostname at " + location.host + ", select server host " + selectedServer, 'info');
 		return selectedServer;
 	}
 };
