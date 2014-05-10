@@ -123,10 +123,13 @@ var ServerNetworkEvents = {
 		var player = ige.server.players[clientId];
 
 		// TODO: This extracts a block from the cargo and throws it away. Should use the result of this in the future!
-		player.cargo.extractType(data.selectedType);
-		var blockGrid = ige.$(data.blockGridId);
-		data.action = 'add';
-		blockGrid.processBlockActionServer(data, player);
+		var extractedBlocks = player.cargo.extractType(data.selectedType);
+
+		if (extractedBlocks.length > 0) {
+			var blockGrid = ige.$(data.blockGridId);
+			data.action = 'add';
+			blockGrid.processBlockActionServer(data, player);
+		}
 	}
 
 };
