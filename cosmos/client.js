@@ -17,7 +17,7 @@ var Client = IgeClass.extend({
 		self.LAYER_MODAL = 100;
 
 		// Enable IGE on screen editor
-		ige.addComponent(IgeEditorComponent);
+		//ige.addComponent(IgeEditorComponent);
 
 		// Enable networking
 		ige.addComponent(IgeNetIoComponent);
@@ -31,7 +31,7 @@ var Client = IgeClass.extend({
 		// Load the textures we want to use
 		this.textures = {
 			block: new IgeTexture(gameRoot + 'assets/BlockTexture.js'),
-			background_helix_nebula: new IgeTexture(gameRoot + 
+			background_helix_nebula: new IgeTexture(gameRoot +
 				'assets/backgrounds/helix_nebula.jpg'),
 			fixtureDebuggingTexture: new IgeTexture(gameRoot +
 				'assets/debug/FixtureDebuggingTexture.js'),
@@ -116,7 +116,7 @@ var Client = IgeClass.extend({
 						ige.network.send('playerEntity');
 
 						GameInit.init(self);
-						ige.editor.showStats();
+						//ige.editor.showStats();
 					});
 				}
 			});
