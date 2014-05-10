@@ -276,6 +276,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 				block.damage(data.amount);
 				break;
 			case 'add':
+				ige.client.metrics.fireEvent('construct', 'existing', data.selectedType);
 				this.add(data.row, data.col, data.selectedType);
 				this._renderContainer.cacheDirty(true);
 				this._constructionZoneOverlay.refreshNeeded(true);

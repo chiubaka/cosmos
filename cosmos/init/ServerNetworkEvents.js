@@ -99,6 +99,9 @@ var ServerNetworkEvents = {
 				.depth(100)
 				.grid([[blockToPlace]])
 				.translateTo(data.x, data.y, 0);
+
+			var confirmData = { category: 'construct', action: 'new', label: data.selectedType };
+			ige.network.send('confirm', confirmData, clientId);
 		}
 	},
 

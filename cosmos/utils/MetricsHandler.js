@@ -46,7 +46,7 @@
 
 		ige.on('respawn button clicked', function() {
 			self.fireEvent('respawn', 'click');
-		})
+		});
 	},
 
 	firePage: function(page, title) {

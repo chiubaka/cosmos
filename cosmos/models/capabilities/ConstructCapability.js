@@ -63,7 +63,7 @@
 	 */
 	ClickScene_mouseDown: function(sender, event, data) {
 		data.selectedType = this.capability.selectedType;
-		ige.client.metrics.fireEvent('construct', 'new', this.capability.selectedType);
+		ige.client.metrics.fireEvent('construct', 'attempt new', this.capability.selectedType);
 		ige.network.send('constructNew', data);
 	},
 
@@ -79,7 +79,7 @@
 	 */
 	ConstructionZoneOverlay_mouseDown: function(sender, event, data) {
 		data.selectedType = this.capability.selectedType;
-		ige.client.metrics.fireEvent('construct', 'existing', this.capability.selectedType);
+		ige.client.metrics.fireEvent('construct', 'attempt existing', this.capability.selectedType);
 		ige.network.send('constructionZoneClicked', data);
 	},
 });

@@ -60,6 +60,10 @@ var ClientNetworkEvents = {
 		ige.emit('cargo update', [cargoList]);
 	},
 
+	_onConfirm: function(data) {
+		ige.client.metrics.fireEvent(data.category, data.action, data.label);
+	},
+
 	initCameras: function(entityToTrack) {
 		var cameraSmoothingAmount = 0;
 
