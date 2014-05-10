@@ -241,7 +241,9 @@ var Cargo = IgeClass.extend({
 			}
 		}
 
-		this.sendUpdates();
+		if (extracted.length > 0) {
+			this.sendUpdates();
+		}
 		
 		return extracted;
 	},
