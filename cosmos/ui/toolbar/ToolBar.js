@@ -101,10 +101,10 @@
 			tool.mount(this);
 
 			if (needToReselect) {
-				tool.select();
+				tool.select(false);
 				needToReselect = false;
 			} else if (!persistedSelection && selectedTool === tool.TOOL_NAME) {
-				tool.select();
+				tool.select(true);
 				persistedSelection = true;
 			}
 		}

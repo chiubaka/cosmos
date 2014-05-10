@@ -143,7 +143,11 @@
 		this._quantity.width(this._quantity._fontEntity.measureTextWidth() + 10).bottom(-5);
 	},
 
-	select: function() {
+	select: function(suppress) {
+		if (suppress === undefined) {
+			suppress = false;
+		}
+
 		this.log('tool ' + this.TOOL_NAME + ' selected...', 'info');
 
 		// Show the selected state of the button
@@ -151,7 +155,10 @@
 		this.applyStyle(ige.ui.style("#" + this.ID_SELECTED));
 
 		this._selected = true;
-		ige.emit('toolbar tool selected', [this.classId(), this.TOOL_NAME]);
+
+		if (!suppress) {
+			ige.emit('toolbar tool selected', [this.classId(), this.TOOL_NAME]);
+		}
 	},
 
 	deselect: function() {
