@@ -6,21 +6,24 @@ var BlockGrid = IgeEntityBox2d.extend({
 	/** The rendering container for this BlockGrid, which essentially provides a cacheable location for the BlockGrid's
 	 * texture. */
 	_renderContainer: undefined,
-
+	_constructionZoneOverlay: undefined,
 	_debugFixtures: false,
+	// Default 10 padding on all sides
+	_padding: 10,
 
 	init: function(data) {
 		var self = this;
 
 		IgeEntityBox2d.prototype.init.call(this);
 
-		if (data !== undefined) {
-			this.gridFromStreamCreateData(data);
-		}
-
 		if (!ige.isServer) {
+			this.gridFromStreamCreateData(data);
 			this._renderContainer = new RenderContainer()
-				.mount(this)
+				.mount(this);
+
+			// TODO: Lazily create when needed to speed up load time.
+			this._constructionZoneOverlay = new ConstructionZoneOverlay(this._grid)
+				.mount(this);
 
 			this.mountGrid();
 			this.mouseDown(this.mouseDownHandler);
@@ -100,35 +103,17 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// TODO: This might be dangerous, since some of the event properties should be changed so that they are
 		// relative to the child's bounding box, but since we don't use any of those properties for the moment,
 		// ignore that.
-		if (this.getBlockFromGrid(row+1, col) == undefined ||
-			this.getBlockFromGrid(row-1, col) == undefined ||
-			this.getBlockFromGrid(row, col+1) == undefined ||
-			this.getBlockFromGrid(row, col-1) == undefined) {
+		if (this._grid.get2D(row+1, col) == undefined ||
+			this._grid.get2D(row-1, col) == undefined ||
+			this._grid.get2D(row, col+1) == undefined ||
+			this._grid.get2D(row, col-1) == undefined) {
 			block.mouseDown(event, control);
 		}
 	},
 
-	/**
-	 * getBlockFromGrid returns the block in this block grid at row, col, but will return undefined if row, col is not a valid index into the grid.
-	 * Basically it's a safe (but slightly slower) way of indexing into the grid.
-	 */
-	getBlockFromGrid: function(row, col) {
-		// Check if row, col refers to a block that is off the edge of the block grid.
-		if(row < 0 || col < 0) {
-			return undefined;
-		}
-		if (row >= this.grid().length) {
-			return undefined;
-		}
-		if (col >= this.grid()[row].length) {
-			return undefined;
-		}
-
-		return this.grid()[row][col];
-	},
-
 	streamCreateData: function() {
-		return this.streamCreateDataFromGrid(this._grid);
+		// TODO: Use non padded method
+		return [this.streamCreateDataFromGrid(this._smallGrid), this._padding];
 	},
 
 	streamCreateDataFromGrid: function(grid) {
@@ -149,13 +134,16 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	gridFromStreamCreateData: function(data) {
+		var rxGrid = data[0];
+		this._padding = data[1];
+		
 		this._grid = [];
-		for (var i = 0; i < data.length; i++) {
+		for (var i = 0; i < rxGrid.length; i++) {
 			var row = [];
-			for (var j = 0; j < data[i].length; j++) {
-				var classId = data[i][j];
+			for (var j = 0; j < rxGrid[i].length; j++) {
+				var classId = rxGrid[i][j];
 
-				var block = Block.prototype.blockFromClassId(classId)
+				var block = Block.prototype.blockFromClassId(classId);
 
 				if (block !== undefined) {
 					block.row(i).col(j);
@@ -165,26 +153,15 @@ var BlockGrid = IgeEntityBox2d.extend({
 			}
 			this._grid.push(row);
 		}
+
+		// TODO: Use non padded method
+		this._grid = BlockGridPadding.padGrid(this._grid, this._padding);
 	},
 
-	/**
-	Static function
-	Returns a new block grid with the given dimensions.
-
-	POTENTIAL BUG: are numCols and numRows switched?
-	*/
-	newGridFromDimensions: function (numCols, numRows) {
-		var grid = [];
-
-		for (x = 0; x < numCols; x++) {
-			var gridCol = [];
-			for (y = 0; y < numRows; y++) {
-				gridCol.push(new EngineBlock());
-			}
-			grid.push(gridCol);
-		}
-
-		return grid;
+	// TODO: Use non padded method
+	padding: function(val) {
+		this._padding = val;
+		return this;
 	},
 
 	// Created on server, streamed to all clients
@@ -220,10 +197,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	processBlockActionServer: function(data, player) {
 		var self = this;
-		var block = self._grid[data.row][data.col];
-		if (block === undefined) {
-			return false;
-		}
 
 		switch (data.action) {
 			case 'remove':
@@ -232,6 +205,16 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 			// TODO: Vary mining speed based on block material
 			case 'mine':
+				var block = self._grid.get2D(data.row, data.col);
+				if (block === undefined) {
+					return false;
+				}
+				// Blocks should only be mined by one player, for now.
+				if((block === undefined) || block.busy()) {
+					return false;
+				}
+				block.busy(true);
+
 				block._decrementHealthIntervalId = setInterval(function() {
 					if (block._hp > 0) {
 						var damageData = {
@@ -259,8 +242,18 @@ var BlockGrid = IgeEntityBox2d.extend({
 						ige.network.send('blockAction', data);
 					}
 				}, Block.prototype.MINING_TIME / block._maxHp);
-
 				return true;
+
+			case 'add':
+				// Add block server side, then send add msg to client
+				if(!self.add(data.row, data.col, data.selectedType)) {
+					return false;
+				}
+				else {
+					data.action = 'add';
+					ige.network.send('blockAction', data);
+					return true;
+				}
 
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
@@ -275,10 +268,17 @@ var BlockGrid = IgeEntityBox2d.extend({
 			case 'remove':
 				this.remove(data.row, data.col);
 				this._renderContainer.cacheDirty(true);
+				//this._renderContainer.cacheDirty(true);
+				this._constructionZoneOverlay.refreshNeeded(true);
 				break;
 			case 'damage':
-				var block = this.getBlockFromGrid(data.row, data.col);
+				var block = this._grid.get2D(data.row, data.col);
 				block.damage(data.amount);
+				break;
+			case 'add':
+				this.add(data.row, data.col, data.selectedType);
+				this._renderContainer.cacheDirty(true);
+				this._constructionZoneOverlay.refreshNeeded(true);
 				break;
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
@@ -291,6 +291,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * and also remove the fixture from the list of fixtures in the box2D object.
 	 */
 	remove: function(row, col) {
+		// TODO: Split BlockGrids and make 1x1 asteroids smallAsteroids so
+		// they get attracted
 		var block = this._grid[row][col];
 		if (block === undefined)
 			return;
@@ -326,6 +328,45 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this._grid[row][col] = undefined;
 	},
 
+	add: function(row, col, blockClassId) {
+		// TODO: Handle expanding the BlockGrid
+		if (!this._grid.is2DInBounds(row, col)) {
+			return false;
+		}
+
+		// Make sure we don't attract formely small asteroids
+		if (this.category() === 'smallAsteroid') {
+			// Don't use getter/setter because undefined gets value
+			this._category = undefined;
+		}
+
+		var block = Block.prototype.blockFromClassId(blockClassId)
+			.row(row)
+			.col(col);
+
+		this._grid[row][col] = block;
+
+		// Update client's scenegraph
+		if (!ige.isServer) {
+			this._renderContainer.height(this.height());
+			this._renderContainer.width(this.width());
+
+			var x = Block.prototype.WIDTH * col - this._bounds2d.x2 + block._bounds2d.x2;
+			var y = Block.prototype.HEIGHT * row - this._bounds2d.y2 + block._bounds2d.y2;
+
+			block.translateTo(x, y, 0)
+				.mount(this._renderContainer);
+		}
+
+		// Update server's physics model
+		if (ige.isServer) {
+			this.addFixture(this._box2dBody, block, row, col);
+		}
+
+		return true
+
+	},
+
 	/**
 	 * Getter/setter for the grid property of the BlockGrid. If a parameter is passed, sets
 	 * the property and returns this. If not, returns the property.
@@ -337,12 +378,14 @@ var BlockGrid = IgeEntityBox2d.extend({
 			return this._grid;
 		}
 
-		this._grid = grid;
+		// TODO: Get rid of padding and use expanding BlockGrids
+		this._smallGrid = grid;
+		this._grid = BlockGridPadding.padGrid(grid, this._padding);
 
-		var maxRowLength = this.maxRowLengthForGrid(this._grid);
+		var maxRowLength = this._grid.get2DMaxRowLength();
 
-		this.height(Block.prototype.HEIGHT * this._grid.length)
-			.width(Block.prototype.WIDTH * maxRowLength);
+		this.height(Block.prototype.HEIGHT * this._grid.length);
+		this.width(Block.prototype.WIDTH * maxRowLength);
 
 		this.box2dBody({
 			type: 'dynamic',
@@ -365,51 +408,56 @@ var BlockGrid = IgeEntityBox2d.extend({
 					continue;
 				}
 
+				this.addFixture(this._box2dBody, block, row, col);
 
-				var width = Block.prototype.WIDTH;
-				var height = Block.prototype.HEIGHT;
-
-				var x = width * col - this._bounds2d.x2 + block._bounds2d.x2;
-				var y = height * row - this._bounds2d.y2 + block._bounds2d.y2;
-
-				var fixtureDef = {
-					density: 1.0,
-					friction: 0.5,
-					restitution: 0.5,
-					shape: {
-						type: 'rectangle',
-						data: {
-							// The position of the fixture relative to the body
-							x: x,
-							y: y,
-							width: width / 2,
-							height: height / 2
-						}
-					}
-				};
-				var fixture = ige.box2d.addFixture(this._box2dBody, fixtureDef);
-				// Add fixture reference to Block so we can destroy fixture later.
-				block.fixture(fixture);
-				// Add fixtureDef reference so we can create a new BlockGrid later.
-				block.fixtureDef(fixtureDef);
-
-				if (this.debugFixtures()) {
-					new FixtureDebuggingEntity()
-						.mount(this)
-						.depth(this.depth() + 1)
-						.translateTo(fixtureDef.shape.data.x, fixtureDef.shape.data.y, 0)
-						.width(fixtureDef.shape.data.width * 2)
-						.height(fixtureDef.shape.data.height * 2)
-						.streamMode(1);
-				}
 			}
 		}
 
 		return this;
 	},
 
+	addFixture: function (box2dBody, block, row, col) {
+		var width = Block.prototype.WIDTH;
+		var height = Block.prototype.HEIGHT;
+
+		var x = width * col - this._bounds2d.x2 + block._bounds2d.x2;
+		var y = height * row - this._bounds2d.y2 + block._bounds2d.y2;
+
+		var fixtureDef = {
+			density: 1.0,
+			friction: 0.5,
+			restitution: 0.5,
+			shape: {
+				type: 'rectangle',
+				data: {
+					// The position of the fixture relative to the body
+					x: x,
+					y: y,
+					width: width / 2,
+					height: height / 2
+				}
+			}
+		};
+
+		var fixture = ige.box2d.addFixture(box2dBody, fixtureDef);
+		// Add fixture reference to Block so we can destroy fixture later.
+		block.fixture(fixture);
+		// Add fixtureDef reference so we can create a new BlockGrid later.
+		block.fixtureDef(fixtureDef);
+
+		if (this.debugFixtures()) {
+			new FixtureDebuggingEntity()
+				.mount(this)
+				.depth(this.depth() + 1)
+				.translateTo(fixtureDef.shape.data.x, fixtureDef.shape.data.y, 0)
+				.width(fixtureDef.shape.data.width * 2)
+				.height(fixtureDef.shape.data.height * 2)
+				.streamMode(1);
+		}
+	},
+
 	mountGrid: function() {
-		var maxRowLength = this.maxRowLengthForGrid(this._grid);
+		var maxRowLength = this._grid.get2DMaxRowLength();
 
 		this.height(Block.prototype.HEIGHT * this._grid.length)
 			.width(Block.prototype.WIDTH * maxRowLength);
@@ -433,16 +481,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 	},
 
-	maxRowLengthForGrid: function(grid) {
-		var maxRowLength = 0;
-		for (var row = 0; row < grid.length; row++) {
-			if (grid[row].length > maxRowLength) {
-				maxRowLength = grid[row].length;
-			}
-		}
-
-		return maxRowLength;
-	},
 
 	/**
 	 * Call this before calling setGrid to create a bunch of entities which will help to visualize the box2D fixtures

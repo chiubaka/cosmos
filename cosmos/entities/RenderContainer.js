@@ -1,8 +1,6 @@
 var RenderContainer = IgeEntity.extend({
 	classId: 'RenderContainer',
 
-	_blockGrid: undefined,
-
 	init: function () {
 		IgeEntity.prototype.init.call(this);
 		this.compositeCache(true);

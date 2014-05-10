@@ -38,6 +38,7 @@ var ServerNetworkEvents = {
 		if (!ige.server.players[clientId]) {
 			ige.server.players[clientId] = new Player(clientId)
 				.debugFixtures(false)//call this before calling setGrid()
+				.padding(10)
 				.grid(ExampleShips.starterShipSingleMisplacedEngine())
 				.addSensor(300)
 				.attractionStrength(1)
@@ -115,6 +116,19 @@ var ServerNetworkEvents = {
 
 		ige.network.send('cargoResponse', playerCargo.getItemList(true), clientId);
 	},
+
+	// TODO: Verify valid construction zone
+	_onConstructionZoneClicked: function(data, clientId) {
+		//console.log("row: " + data.row + " col: " + data.col);
+		var player = ige.server.players[clientId];
+
+		// TODO: This extracts a block from the cargo and throws it away. Should use the result of this in the future!
+		player.cargo.extractType(data.selectedType);
+		var blockGrid = ige.$(data.blockGridId);
+		data.action = 'add';
+		blockGrid.processBlockActionServer(data, player);
+	}
+
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = ServerNetworkEvents; }

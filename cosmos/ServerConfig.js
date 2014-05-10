@@ -11,6 +11,7 @@ var config = {
 		/* Blocks */
 		{ name: 'Block', path: './entities/Block' },
 		{ name: 'BlockGrid', path: './entities/BlockGrid' },
+		{ name: 'ConstructionZoneBlock', path: 'entities/blocks/ConstructionZoneBlock' },
 
 		/* Ship part blocks */
 		{ name: 'Part', path: './entities/blocks/Part' },
@@ -60,6 +61,7 @@ var config = {
 		/* Helper Utilities */
 		{ name: 'PrototypeMixins', path: './utils/PrototypeMixins' },
 		{ name: 'RandomInterval', path: './utils/RandomInterval' },
+		{ name: 'BlockGridPadding', path: './utils/BlockGridPadding' },
 
 		/* === EXTERNAL LIBRARIES === */
 		{ name: 'WeightedSelection', path: './lib/weighted' },

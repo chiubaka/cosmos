@@ -11,6 +11,13 @@
 					conditionFunc: this.ClickScene_canMouseDown,
 					actionFunc: this.ClickScene_mouseDown
 				}
+			},
+			'ConstructionZoneOverlay': {
+				'mousedown': {
+					capability: this,
+					conditionFunc: this.ConstructionZoneOverlay_canMouseDown,
+					actionFunc: this.ConstructionZoneOverlay_mouseDown
+				}
 			}
 			// TODO: Implement construction on existing block grids here.
 		};
@@ -58,5 +65,21 @@
 		data.selectedType = this.capability.selectedType;
 		ige.client.metrics.fireEvent('construct', 'new', this.capability.selectedType);
 		ige.network.send('constructNew', data);
-	}
+	},
+
+	/**
+	 * Checks to see if the player has the construct cap selected and an itemType selected.
+	 */
+	ConstructionZoneOverlay_canMouseDown: function(sender, event, data) {
+		return (ige.client.state.selectedCap() === 'construct' && this.capability.selectedType !== undefined);
+	},
+
+	/**
+	 * Sends a command to the server to create a new block at the point clicked.
+	 */
+	ConstructionZoneOverlay_mouseDown: function(sender, event, data) {
+		data.selectedType = this.capability.selectedType;
+		ige.client.metrics.fireEvent('construct', 'existing', this.capability.selectedType);
+		ige.network.send('constructionZoneClicked', data);
+	},
 });

@@ -52,7 +52,8 @@ var Server = IgeClass.extend({
 						ige.network.define('mineBlock', self._onMineBlock);
 						/* This is called when a player clicks on the background. */
 						ige.network.define('constructNew', self._onConstructNew);
-
+						/* Called when player clicks on a construction zone */
+						ige.network.define('constructionZoneClicked', self._onConstructionZoneClicked);
 						/* Define this command so that we can use it on the client */
 						ige.network.define('blockAction');
 
