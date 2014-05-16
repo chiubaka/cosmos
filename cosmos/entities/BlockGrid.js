@@ -134,7 +134,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	gridFromStreamCreateData: function(data) {
 		var rxGrid = data;
-		
+
 		this._grid = [];
 		for (var i = 0; i < rxGrid.length; i++) {
 			var row = [];
@@ -425,10 +425,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 				type: 'rectangle',
 				data: {
 					// The position of the fixture relative to the body
-					x: x,
-					y: y,
-					width: width / 2 - 1,
-					height: height / 2 - 1
+					x: x + .1,
+					y: y + .1,
+					width: width / 2 - .2,
+					height: height / 2 - .2
 				}
 			}
 		};
