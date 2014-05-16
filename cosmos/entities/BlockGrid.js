@@ -513,8 +513,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 				thisBody.ApplyImpulse(impulse, thisBody.GetWorldCenter());
 			}
 
-			//console.log(this.translate().x());
 
+			//This is just a little bit larger than the background image. That's why I chose this size.
 			var MAX_X = 7000;
 			var MAX_Y = 7000;
 			var x = this.translate().x();
