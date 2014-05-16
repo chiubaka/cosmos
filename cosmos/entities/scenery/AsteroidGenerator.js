@@ -232,6 +232,13 @@ var AsteroidGenerator = {
 			"IceBlock": 0.0,
 			"IronBlock": 0.5,
 			"CarbonBlock": 0.5
+		},
+
+		SHIP_PARTS: {
+			"EngineBlock": .25,
+			"FuelBlock": .25,
+			"PowerBlock": .25,
+			"ThrusterBlock": .25
 		}
 	}
 };
