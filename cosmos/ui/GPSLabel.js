@@ -11,7 +11,7 @@ var GPSLabel = IgeUiLabel.extend({
 		});
 
 		ige.ui.style('.gpsLabel', {
-			'color': 'rgba(255, 255, 255, 1)',
+			'color': 'rgb(255, 255, 255)',
 			'padding': 0
 		});
 

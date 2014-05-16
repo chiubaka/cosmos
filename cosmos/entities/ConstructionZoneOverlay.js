@@ -19,19 +19,20 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		var self = this;
 		ige.on('capbar cap selected', function(classId) {
 			if (classId === 'ConstructCap') {
-				self.show();
+				self.enableUpdate(true);
 			} else {
-				self.hide();
+				self.enableUpdate(false);
 			}
 		});
 		
 		ige.on('capbar cap cleared', function(classId) {
 			if (classId === 'ConstructCap') {
-				self.hide();
+				self.enableUpdate(false);
 			}
 		});
 
-		this.hide();
+		self.enableUpdate(false);
+
 	},
 
 	createConstructionZones: function() {

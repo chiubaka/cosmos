@@ -376,7 +376,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		// TODO: Get rid of padding and use expanding BlockGrids
 		this._grid = BlockGridPadding.padGrid(grid, this._padding);
-
 		var maxRowLength = this._grid.get2DMaxRowLength();
 
 		this.height(Block.prototype.HEIGHT * this._grid.length);
