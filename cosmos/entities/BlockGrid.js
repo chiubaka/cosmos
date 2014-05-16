@@ -136,7 +136,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	gridFromStreamCreateData: function(data) {
 		var rxGrid = data[0];
 		this._padding = data[1];
-		
+
 		this._grid = [];
 		for (var i = 0; i < rxGrid.length; i++) {
 			var row = [];
@@ -496,6 +496,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return this;
 	},
 
+	/**
+	 * Is update called once per time-step per viewport, or just once per time-step?
+	*/
 	update: function(ctx) {
 		if (ige.isServer) {
 			// Attract the block grid to another body. For example, small asteroids
@@ -508,6 +511,20 @@ var BlockGrid = IgeEntityBox2d.extend({
 				impulse.Subtract(thisBody.GetWorldCenter());
 				impulse.Multiply(this.attractedTo.attractionStrength());
 				thisBody.ApplyImpulse(impulse, thisBody.GetWorldCenter());
+			}
+
+			//console.log(this.translate().x());
+
+			var MAX_X = 7000;
+			var MAX_Y = 7000;
+			var x = this.translate().x();
+			var y = this.translate().y();
+
+			if (x > MAX_X || x < -MAX_X) {
+				this.translateTo(-x, y, 0);
+			}
+			if (y > MAX_Y || y < -MAX_Y) {
+				this.translateTo(x, -y, 0);
 			}
 		}
 
