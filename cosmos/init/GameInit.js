@@ -183,6 +183,21 @@ var GameInit = {
 					.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
 			}
 		}
+
+		var asteroidSpacing = 300;
+		var asteroidOffset = -500;
+		for (var x = -5; x < 0; x++) {
+			for (var y = -5; y < 0; y++) {
+				new BlockGrid()
+					.id('spaceShip' + x + ',' + y)
+					.streamMode(1)
+					.mount(server.spaceGameScene)
+					.padding(1)
+					//note that the signature of gen.. is genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution)
+					.grid(AsteroidGenerator.genProceduralAsteroid(20, 100, AsteroidGenerator.blockDistributions.SHIP_PARTS))
+					.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
+			}
+		}
 	},
 
 	/**
