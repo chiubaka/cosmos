@@ -490,6 +490,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return this;
 	},
 
+	/**
+	 * Is update called once per time-step per viewport, or just once per time-step?
+	*/
 	update: function(ctx) {
 		if (ige.isServer) {
 			// Attract the block grid to another body. For example, small asteroids
@@ -502,6 +505,20 @@ var BlockGrid = IgeEntityBox2d.extend({
 				impulse.Subtract(thisBody.GetWorldCenter());
 				impulse.Multiply(this.attractedTo.attractionStrength());
 				thisBody.ApplyImpulse(impulse, thisBody.GetWorldCenter());
+			}
+
+
+			//This is just a little bit larger than the background image. That's why I chose this size.
+			var MAX_X = 7000;
+			var MAX_Y = 7000;
+			var x = this.translate().x();
+			var y = this.translate().y();
+
+			if (x > MAX_X || x < -MAX_X) {
+				this.translateTo(-x, y, 0);
+			}
+			if (y > MAX_Y || y < -MAX_Y) {
+				this.translateTo(x, -y, 0);
 			}
 		}
 
