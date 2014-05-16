@@ -112,8 +112,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	streamCreateData: function() {
-		// TODO: Use non padded method
-		return [this.streamCreateDataFromGrid(this._smallGrid), this._padding];
+		return this.streamCreateDataFromGrid(this._grid);
 	},
 
 	streamCreateDataFromGrid: function(grid) {
@@ -134,9 +133,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	gridFromStreamCreateData: function(data) {
-		var rxGrid = data[0];
-		this._padding = data[1];
-
+		var rxGrid = data;
+		
 		this._grid = [];
 		for (var i = 0; i < rxGrid.length; i++) {
 			var row = [];
@@ -153,9 +151,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 			}
 			this._grid.push(row);
 		}
-
-		// TODO: Use non padded method
-		this._grid = BlockGridPadding.padGrid(this._grid, this._padding);
 	},
 
 	// TODO: Use non padded method
@@ -380,7 +375,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 
 		// TODO: Get rid of padding and use expanding BlockGrids
-		this._smallGrid = grid;
 		this._grid = BlockGridPadding.padGrid(grid, this._padding);
 
 		var maxRowLength = this._grid.get2DMaxRowLength();
