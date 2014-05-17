@@ -18,20 +18,20 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		var self = this;
 		ige.on('capbar cap selected', function(classId) {
 			if (classId === 'ConstructCap') {
-				self.enableUpdate(true);
+				self.show();
 			} else {
-				self.enableUpdate(false);
+				self.hide();
 			}
 		});
 		
 		ige.on('capbar cap cleared', function(classId) {
 			if (classId === 'ConstructCap') {
-				self.enableUpdate(false);
+				self.hide();
 			}
 		});
 
-		self.enableUpdate(false);
-
+		// Hide the construction zone overlays initially
+		this.hide();
 	},
 
 	createConstructionZones: function() {
@@ -171,6 +171,8 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		}
 	},
 
+	// Recalculate construction zones. Called upon removal or addition of blocks
+	// to the BlockGrid.
 	refresh: function () {
 		this._renderContainer.destroy();
 		this._renderContainer = new RenderContainer()
