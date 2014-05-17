@@ -90,6 +90,7 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 					.mount(this._renderContainer);
 			}
 		}
+		this._renderContainer.refresh();
 	},
 
 	// TODO: Consolidate this function with the BlockGrid one
@@ -189,7 +190,6 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 					.mount(this)
 					.opacity(0.5);
 				this.createConstructionZones();
-				this._renderContainer.cacheDirty(true);
 				this.mountOverlayGrid();
 				this._refreshNeeded = false;
 			}
