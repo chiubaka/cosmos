@@ -263,7 +263,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			case 'remove':
 				this.remove(data.row, data.col);
 				this._renderContainer.refresh();
-				this._constructionZoneOverlay.refreshNeeded(true);
+				this._constructionZoneOverlay.refresh();
 				break;
 			case 'damage':
 				var block = this._grid.get2D(data.row, data.col);
@@ -273,7 +273,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 				ige.client.metrics.fireEvent('construct', 'existing', data.selectedType);
 				this.add(data.row, data.col, data.selectedType);
 				this._renderContainer.refresh();
-				this._constructionZoneOverlay.refreshNeeded(true);
+				this._constructionZoneOverlay.refresh();
 				break;
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
