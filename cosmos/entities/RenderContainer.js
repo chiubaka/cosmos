@@ -3,7 +3,13 @@ var RenderContainer = IgeEntity.extend({
 
 	init: function () {
 		IgeEntity.prototype.init.call(this);
+		this.manualUpdate(true);
 		this.compositeCache(true);
+	},
+
+	refresh: function () {
+		this.manualUpdateNeeded(true);
+		this.cacheDirty(true);
 	}
 
 });

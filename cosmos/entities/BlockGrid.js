@@ -262,8 +262,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		switch (data.action) {
 			case 'remove':
 				this.remove(data.row, data.col);
-				this._renderContainer.cacheDirty(true);
-				//this._renderContainer.cacheDirty(true);
+				this._renderContainer.refresh();
 				this._constructionZoneOverlay.refreshNeeded(true);
 				break;
 			case 'damage':
@@ -273,7 +272,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			case 'add':
 				ige.client.metrics.fireEvent('construct', 'existing', data.selectedType);
 				this.add(data.row, data.col, data.selectedType);
-				this._renderContainer.cacheDirty(true);
+				this._renderContainer.refresh();
 				this._constructionZoneOverlay.refreshNeeded(true);
 				break;
 			default:
@@ -473,6 +472,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 					.mount(this._renderContainer);
 			}
 		}
+
+		this._renderContainer.refresh();
 	},
 
 
