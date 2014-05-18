@@ -155,33 +155,40 @@ var GameInit = {
 	 */
 	initEnvironment: function() {
 		var server = ige.server;
-		var asteroidSpacing = 1500;
-		var asteroidOffset = 500;
-		for (var x = 0; x < 3; x++) {
-			for (var y = 0; y < 3; y++) {
-				new BlockGrid()
-					.id('genRandomAsteroid' + x + "," + y)
-					.streamMode(1)
-					.mount(server.spaceGameScene)
-					.padding(10)
-					.grid(AsteroidGenerator.genProceduralAsteroid(20))
-					.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
-			}
+
+		var NUM_NORMAL_ASTEROIDS = 20;
+		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
+			var asteroid = new BlockGrid()
+				.id('genRandomAsteroid' + asteroidNumber)
+				.streamMode(1)
+				.mount(server.spaceGameScene)
+				.padding(10)
+				.grid(AsteroidGenerator.genProceduralAsteroid(20))
+			this.moveRandomly(asteroid);
 		}
 
-		var asteroidSpacing = 30;
-		var asteroidOffset = -300;
-		for (var x = -10; x < 0; x++) {
-			for (var y = -10; y < 0; y++) {
-				new BlockGrid()
-					.category('smallAsteroid')
-					.id('littleAsteroid' + x + ',' + y)
-					.streamMode(1)
-					.mount(server.spaceGameScene)
-					.padding(1)
-					.grid(AsteroidGenerator.singleBlock())
-					.translateTo(x * asteroidSpacing + asteroidOffset, y * asteroidSpacing + asteroidOffset, 0);
-			}
+		var NUM_SMALL_ASTEROIDS = 80;
+		for (var asteroidNumber = 0; asteroidNumber < NUM_SMALL_ASTEROIDS; asteroidNumber++) {
+			var asteroid = new BlockGrid()
+				.category('smallAsteroid')
+				.id('littleAsteroid' + asteroidNumber)
+				.streamMode(1)
+				.mount(server.spaceGameScene)
+				.padding(1)
+				.grid(AsteroidGenerator.singleBlock());
+			this.moveRandomly(asteroid);
+		}
+
+		var NUM_DERELICT_SPACESHIPS = 10;
+		for (var asteroidNumber = 0; asteroidNumber < NUM_DERELICT_SPACESHIPS; asteroidNumber++) {
+			var asteroid = new BlockGrid()
+				.id('spaceShip' + asteroidNumber)
+				.streamMode(1)
+				.mount(server.spaceGameScene)
+				.padding(10)
+				//note that the signature of gen.. is genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution)
+				.grid(AsteroidGenerator.genProceduralAsteroid(20, 20, AsteroidGenerator.blockDistributions.SHIP_PARTS, true));
+			this.moveRandomly(asteroid);
 		}
 	},
 
@@ -315,6 +322,13 @@ var GameInit = {
 		ige.watchStart(client.custom2);
 		ige.watchStart(client.custom3);
 		ige.watchStart(client.custom4);
+	},
+
+	// TODO: Move this to a helper function that operates on IgeEntities
+	moveRandomly: function(entity) {
+		//this is the maximum distance that we will translate entities to
+		var MAX_DISTANCE = 6000;
+		entity.translateTo((Math.random() - .5) * MAX_DISTANCE, (Math.random() - .5) * MAX_DISTANCE, 0);
 	}
 };
 

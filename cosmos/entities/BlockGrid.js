@@ -112,8 +112,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	streamCreateData: function() {
-		// TODO: Use non padded method
-		return [this.streamCreateDataFromGrid(this._smallGrid), this._padding];
+		return this.streamCreateDataFromGrid(this._grid);
 	},
 
 	streamCreateDataFromGrid: function(grid) {
@@ -134,9 +133,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	gridFromStreamCreateData: function(data) {
-		var rxGrid = data[0];
-		this._padding = data[1];
-		
+		var rxGrid = data;
+
 		this._grid = [];
 		for (var i = 0; i < rxGrid.length; i++) {
 			var row = [];
@@ -153,9 +151,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 			}
 			this._grid.push(row);
 		}
-
-		// TODO: Use non padded method
-		this._grid = BlockGridPadding.padGrid(this._grid, this._padding);
 	},
 
 	// TODO: Use non padded method
@@ -267,9 +262,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 		switch (data.action) {
 			case 'remove':
 				this.remove(data.row, data.col);
-				this._renderContainer.cacheDirty(true);
-				//this._renderContainer.cacheDirty(true);
-				this._constructionZoneOverlay.refreshNeeded(true);
+				this._renderContainer.refresh();
+				this._constructionZoneOverlay.refresh();
 				break;
 			case 'damage':
 				var block = this._grid.get2D(data.row, data.col);
@@ -278,8 +272,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 			case 'add':
 				ige.client.metrics.fireEvent('construct', 'existing', data.selectedType);
 				this.add(data.row, data.col, data.selectedType);
-				this._renderContainer.cacheDirty(true);
-				this._constructionZoneOverlay.refreshNeeded(true);
+				this._renderContainer.refresh();
+				this._constructionZoneOverlay.refresh();
 				break;
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
@@ -380,9 +374,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 
 		// TODO: Get rid of padding and use expanding BlockGrids
-		this._smallGrid = grid;
 		this._grid = BlockGridPadding.padGrid(grid, this._padding);
-
 		var maxRowLength = this._grid.get2DMaxRowLength();
 
 		this.height(Block.prototype.HEIGHT * this._grid.length);
@@ -410,7 +402,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 				}
 
 				this.addFixture(this._box2dBody, block, row, col);
-
 			}
 		}
 
@@ -432,10 +423,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 				type: 'rectangle',
 				data: {
 					// The position of the fixture relative to the body
-					x: x,
-					y: y,
-					width: width / 2,
-					height: height / 2
+					// The fixtures are slightly smaller than the actual block grid so that you can fit into a whole which is exactly the same width (in terms of blocks) as your ship
+					x: x + .1,
+					y: y + .1,
+					width: width / 2 - .2,
+					height: height / 2 - .2
 				}
 			}
 		};
@@ -480,6 +472,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 					.mount(this._renderContainer);
 			}
 		}
+
+		this._renderContainer.refresh();
 	},
 
 
@@ -496,6 +490,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return this;
 	},
 
+	/**
+	 * Is update called once per time-step per viewport, or just once per time-step?
+	*/
 	update: function(ctx) {
 		if (ige.isServer) {
 			// Attract the block grid to another body. For example, small asteroids
@@ -508,6 +505,20 @@ var BlockGrid = IgeEntityBox2d.extend({
 				impulse.Subtract(thisBody.GetWorldCenter());
 				impulse.Multiply(this.attractedTo.attractionStrength());
 				thisBody.ApplyImpulse(impulse, thisBody.GetWorldCenter());
+			}
+
+
+			//This is just a little bit larger than the background image. That's why I chose this size.
+			var MAX_X = 7000;
+			var MAX_Y = 7000;
+			var x = this.translate().x();
+			var y = this.translate().y();
+
+			if (x > MAX_X || x < -MAX_X) {
+				this.translateTo(-x, y, 0);
+			}
+			if (y > MAX_Y || y < -MAX_Y) {
+				this.translateTo(x, -y, 0);
 			}
 		}
 

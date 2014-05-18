@@ -5,8 +5,11 @@
 	 * The height of the capbar.
 	 */
 	HEIGHT: 64,
+	STUB_HEIGHT: 10,
 
 	CAP_SPACING: 10,
+
+	STUB_COLOR: 'rgb(70, 70, 70)',
 
 	_caps: undefined,
 
@@ -15,8 +18,9 @@
 		IgeUiElement.prototype.init.call(this);
 
 		this.applyStyle({
-			'backgroundColor': 'rgba(30,30,30,0.7)',
-			'borderColor': 'rgba(0,0,0,0)',
+			'backgroundColor': 'rgb(30,30,30)',
+			'borderBottomColor': this.STUB_COLOR,
+			'borderBottomWidth': this.STUB_HEIGHT,
 			'bottom': 0,
 			'left': 0,
 			'right': 0,
