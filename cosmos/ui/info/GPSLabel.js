@@ -2,8 +2,6 @@ var GPSLabel = IgeUiLabel.extend({
 	classId: "GPSLabel",
 
 	init: function() {
-		var self = this;
-
 		IgeUiLabel.prototype.init.call(this);
 
 		this.applyStyle({
@@ -19,15 +17,7 @@ var GPSLabel = IgeUiLabel.extend({
 
 		this.font("12pt Segoe UI Semibold")
 			.padding(0)
-			.value(this.getCoordinatesString())
 			.styleClass('gpsLabel');
-
-		this.resize();
-
-		setInterval(function() {
-			self.value(self.getCoordinatesString());
-			self.resize();
-		}, 300);
 	},
 
 	getCoordinatesString: function() {
@@ -39,8 +29,16 @@ var GPSLabel = IgeUiLabel.extend({
 		var calcWidth = this._fontEntity.measureTextWidth();
 		// + 10 here because for some reason the label clips the text otherwise
 		this.width(calcWidth + 10);
+	},
+
+	update: function(ctx) {
+		this.value(this.getCoordinatesString());
+		this.resize();
+
+		IgeUiLabel.prototype.update.call(this, ctx);
 	}
- });
+
+});
 
 if (typeof (module) !== 'undefined' && typeof (module.exports) !== 'undefined') {
 	module.exports = GPSLabel;
