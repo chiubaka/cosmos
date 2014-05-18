@@ -3,12 +3,12 @@ var RenderContainer = IgeEntity.extend({
 
 	init: function () {
 		IgeEntity.prototype.init.call(this);
-		this.manualUpdate(true);
+		this.updateChildren(true);
 		this.compositeCache(true);
 	},
 
 	refresh: function () {
-		this.manualUpdateNeeded(true);
+		this.updateChildrenNeeded(true);
 		this.cacheDirty(true);
 	}
 
