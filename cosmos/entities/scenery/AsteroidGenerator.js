@@ -38,14 +38,20 @@ var AsteroidGenerator = {
 	/**
 	 * Procedurally generates an asteroid recursively
 	 */
-	genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution) {
-		var maxSize = maxSize || this.DEFAULT_MAX_SIZE;
-		var blockDistribution = blockDistribution || this.blockDistributions.STANDARD;
+	genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution, symmetric) {
+		// Whether or not to generate a symmetric asteroid
+		symmetric = symmetric || false;
+
+		// The maximum size of a single asteroid dimension
+		maxSize = maxSize || this.DEFAULT_MAX_SIZE;
+
+		// The block distribution to seed the procedural block type generator with
+		blockDistribution = blockDistribution || this.blockDistributions.STANDARD;
 
 		// Dimensions of this generated asteroid. Guaranteed to be at least 0.25 of the upper bound.
 		// Weighted so that we don't get super small asteroids
 		var asteroidDim = Math.floor(this.weightedRandom(maxSize, maxSize, 0.75));
-		var maxNumBlocks = (maxNumBlocks || asteroidDim * asteroidDim);
+		maxNumBlocks = (maxNumBlocks || asteroidDim * asteroidDim);
 
 		// Number of blocks that can be contained in this asteroid.
 		var numBlocks = Math.floor(this.weightedRandom(maxNumBlocks, maxNumBlocks * 0.75, 0.25));
@@ -87,10 +93,17 @@ var AsteroidGenerator = {
 			}
 
 			if (first) {
-				asteroidConstr[block.x][block.y] = new IceBlock();
+				var newBlock = new IceBlock();
 				first = false;
 			} else {
-				asteroidConstr[block.x][block.y] = this.getBlockType(asteroidConstr, block.x, block.y, blockDistribution);
+				var newBlock = this.getBlockType(asteroidConstr, block.x, block.y, blockDistribution);
+			}
+
+			asteroidConstr[block.x][block.y] = newBlock;
+
+			if (symmetric) {
+				asteroidConstr[block.x][(asteroidDim - 1) - block.y] = Block.prototype.blockFromClassId(newBlock.classId());
+				blocksRemaining--;
 			}
 
 			blocksRemaining--;
@@ -208,18 +221,18 @@ var AsteroidGenerator = {
 
 	blockDistributions: {
 		STANDARD: {
-			"IceBlock": 0.469,
+			"IceBlock": 0.468,
 			"IronBlock": 0.3,
 			"CarbonBlock": 0.2,
 			//here are some rare things
 			"GoldBlock": 0.01,
 			"CobaltBlock": 0.01,
 			"FluorineBlock": 0.01,
-			//here are some easter-egg type things, which will add up to 0.001
-			"EngineBlock": 0.001 * .25,
-			"FuelBlock": 0.001 * .25,
-			"PowerBlock": 0.001 * .25,
-			"ThrusterBlock": 0.001 * .25
+			//here are some easter-egg type things, which will add up to 0.002
+			"EngineBlock": 0.002 * .25,
+			"FuelBlock": 0.002 * .25,
+			"PowerBlock": 0.002 * .25,
+			"ThrusterBlock": 0.002 * .25
 		},
 
 		ICY: {
@@ -232,6 +245,13 @@ var AsteroidGenerator = {
 			"IceBlock": 0.0,
 			"IronBlock": 0.5,
 			"CarbonBlock": 0.5
+		},
+
+		SHIP_PARTS: {
+			"EngineBlock": .25,
+			"FuelBlock": .25,
+			"PowerBlock": .25,
+			"ThrusterBlock": .25
 		}
 	}
 };
