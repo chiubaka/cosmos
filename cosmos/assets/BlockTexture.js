@@ -17,7 +17,7 @@ var image = {
 		ctx.fill();
 
 		// Draw block outline
-		ctx.strokeStyle = entity.textureOutline || 'rgba(201, 201, 201, 1)';
+		ctx.strokeStyle = entity.textureOutline || 'rgb(201, 201, 201)';
 		ctx.beginPath();
 		ctx.moveTo(-entity._bounds2d.x2, -entity._bounds2d.y2);
 		ctx.lineTo(entity._bounds2d.x2, -entity._bounds2d.y2);
