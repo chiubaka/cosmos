@@ -4,7 +4,6 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 	_overlayGrid: undefined,
 	_grid: undefined,
 	_renderContainer: undefined,
-	_refreshNeeded: false,
 
 	init: function (grid) {
 		IgeEntity.prototype.init.call(this);
@@ -31,6 +30,7 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 			}
 		});
 
+		// Hide the construction zone overlays initially
 		this.hide();
 	},
 
@@ -89,6 +89,7 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 					.mount(this._renderContainer);
 			}
 		}
+		this._renderContainer.refresh();
 	},
 
 	// TODO: Consolidate this function with the BlockGrid one
@@ -170,31 +171,15 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		}
 	},
 
-	refreshNeeded: function (val) {
-	if (val !== undefined) {
-			this._refreshNeeded = val;
-			return this;
-		}
-		return this._refreshNeeded;
-	},
-
-	update: function(ctx) {
-		if (!ige.isServer) {
-			// TODO: Before fading in, if we need to recalculate the overlay, do so
-			// TODO: Local refresh. Global refresh is slow with large BlockGrids
-			if (this._refreshNeeded) {
-				this._renderContainer.destroy();
-				this._renderContainer = new RenderContainer()
-					.mount(this)
-					.opacity(0.5);
-				this.createConstructionZones();
-				this._renderContainer.cacheDirty(true);
-				this.mountOverlayGrid();
-				this._refreshNeeded = false;
-			}
-		}
-
-		IgeEntity.prototype.update.call(this, ctx);
+	// Recalculate construction zones. Called upon removal or addition of blocks
+	// to the BlockGrid.
+	refresh: function () {
+		this._renderContainer.destroy();
+		this._renderContainer = new RenderContainer()
+			.mount(this)
+			.opacity(0.5);
+		this.createConstructionZones();
+		this.mountOverlayGrid();
 	}
 
 });

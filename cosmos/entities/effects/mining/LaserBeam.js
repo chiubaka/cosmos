@@ -59,6 +59,11 @@ var LaserBeam = IgeEntity.extend({
 				return;
 			}
 
+			// We need the current world matrix of the block for correct
+			// worldPosition. Since the renderContainer's children do not
+			// get automatically updated, we have to manually update the
+			// block's tranform.
+			block.updateTransform();
 			// Calculate length and angle of laser
 			var deltaX = block.worldPosition().x - laserMount.worldPosition().x;
 			var deltaY = block.worldPosition().y - laserMount.worldPosition().y;
