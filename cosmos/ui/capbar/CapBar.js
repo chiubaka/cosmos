@@ -15,8 +15,8 @@
 		IgeUiElement.prototype.init.call(this);
 
 		this.applyStyle({
-			'backgroundColor': 'rgb(30,30,30)',
-			'borderColor': 'rgb(0,0,0)',
+			'backgroundColor': 'rgba(30,30,30,0.7)',
+			'borderColor': 'rgba(0,0,0,0)',
 			'bottom': 0,
 			'left': 0,
 			'right': 0,
