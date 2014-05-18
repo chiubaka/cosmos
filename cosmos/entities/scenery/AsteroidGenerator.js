@@ -38,8 +38,7 @@ var AsteroidGenerator = {
 	/**
 	 * Procedurally generates an asteroid recursively
 	 */
-	genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution, symmetric) {
-		symmetric = symmetric || false;
+	genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution) {
 		var maxSize = maxSize || this.DEFAULT_MAX_SIZE;
 		var blockDistribution = blockDistribution || this.blockDistributions.STANDARD;
 
@@ -88,17 +87,10 @@ var AsteroidGenerator = {
 			}
 
 			if (first) {
-				var newBlock = new IceBlock();
+				asteroidConstr[block.x][block.y] = new IceBlock();
 				first = false;
 			} else {
-				var newBlock = this.getBlockType(asteroidConstr, block.x, block.y, blockDistribution);
-			}
-
-			asteroidConstr[block.x][block.y] = newBlock;
-
-			if (symmetric) {
-				asteroidConstr[block.x][(asteroidDim - 1) - block.y] = Block.prototype.blockFromClassId(newBlock.classId());
-				blocksRemaining--;
+				asteroidConstr[block.x][block.y] = this.getBlockType(asteroidConstr, block.x, block.y, blockDistribution);
 			}
 
 			blocksRemaining--;

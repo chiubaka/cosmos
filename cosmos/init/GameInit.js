@@ -187,7 +187,7 @@ var GameInit = {
 				.mount(server.spaceGameScene)
 				.padding(10)
 				//note that the signature of gen.. is genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution)
-				.grid(AsteroidGenerator.genProceduralAsteroid(20, 20, AsteroidGenerator.blockDistributions.SHIP_PARTS, true));
+				.grid(AsteroidGenerator.genProceduralAsteroid(20, 20, AsteroidGenerator.blockDistributions.SHIP_PARTS));
 			this.moveRandomly(asteroid);
 		}
 	},
