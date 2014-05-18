@@ -134,7 +134,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	gridFromStreamCreateData: function(data) {
 		var rxGrid = data;
-		
+
 		this._grid = [];
 		for (var i = 0; i < rxGrid.length; i++) {
 			var row = [];
@@ -404,7 +404,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 				}
 
 				this.addFixture(this._box2dBody, block, row, col);
-
 			}
 		}
 
@@ -426,10 +425,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 				type: 'rectangle',
 				data: {
 					// The position of the fixture relative to the body
-					x: x,
-					y: y,
-					width: width / 2,
-					height: height / 2
+					// The fixtures are slightly smaller than the actual block grid so that you can fit into a whole which is exactly the same width (in terms of blocks) as your ship
+					x: x + .1,
+					y: y + .1,
+					width: width / 2 - .2,
+					height: height / 2 - .2
 				}
 			}
 		};
