@@ -6,7 +6,7 @@ var IceBlock = Element.extend({
 
 		if (!ige.isServer) {
 			this.textureBackground = "rgba(63, 175, 221, 0.3)";
-			this.textureOutline = "rgb(129, 206, 226)";
+			this.textureOutline = "rgba(129, 206, 226, 0.3)";
 		}
 	}
 });
