@@ -39,14 +39,19 @@ var AsteroidGenerator = {
 	 * Procedurally generates an asteroid recursively
 	 */
 	genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution, symmetric) {
+		// Whether or not to generate a symmetric asteroid
 		symmetric = symmetric || false;
-		var maxSize = maxSize || this.DEFAULT_MAX_SIZE;
-		var blockDistribution = blockDistribution || this.blockDistributions.STANDARD;
+
+		// The maximum size of a single asteroid dimension
+		maxSize = maxSize || this.DEFAULT_MAX_SIZE;
+
+		// The block distribution to seed the procedural block type generator with
+		blockDistribution = blockDistribution || this.blockDistributions.STANDARD;
 
 		// Dimensions of this generated asteroid. Guaranteed to be at least 0.25 of the upper bound.
 		// Weighted so that we don't get super small asteroids
 		var asteroidDim = Math.floor(this.weightedRandom(maxSize, maxSize, 0.75));
-		var maxNumBlocks = (maxNumBlocks || asteroidDim * asteroidDim);
+		maxNumBlocks = (maxNumBlocks || asteroidDim * asteroidDim);
 
 		// Number of blocks that can be contained in this asteroid.
 		var numBlocks = Math.floor(this.weightedRandom(maxNumBlocks, maxNumBlocks * 0.75, 0.25));
