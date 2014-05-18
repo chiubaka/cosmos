@@ -38,8 +38,8 @@ var RespawnButton = IgeUiButton.extend({
 		this.ID_SELECTED_HOVER = this.classId() + ':selected:hover';
 
 		this.applyStyle({
-			'backgroundColor': 'rgb(200,0,0)',
-			'borderColor': 'rgb(0,0,0)',
+			'backgroundColor': 'rgba(200,0,0,1)',
+			'borderColor': 'rgba(0,0,0,0)',
 			'top': 0,
 			'right': 0,
 			'height': this.HEIGHT
