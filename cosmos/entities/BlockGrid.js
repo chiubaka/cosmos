@@ -262,9 +262,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 		switch (data.action) {
 			case 'remove':
 				this.remove(data.row, data.col);
-				this._renderContainer.cacheDirty(true);
-				//this._renderContainer.cacheDirty(true);
-				this._constructionZoneOverlay.refreshNeeded(true);
+				this._renderContainer.refresh();
+				this._constructionZoneOverlay.refresh();
 				break;
 			case 'damage':
 				var block = this._grid.get2D(data.row, data.col);
@@ -273,8 +272,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 			case 'add':
 				ige.client.metrics.fireEvent('construct', 'existing', data.selectedType);
 				this.add(data.row, data.col, data.selectedType);
-				this._renderContainer.cacheDirty(true);
-				this._constructionZoneOverlay.refreshNeeded(true);
+				this._renderContainer.refresh();
+				this._constructionZoneOverlay.refresh();
 				break;
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
@@ -376,7 +375,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		// TODO: Get rid of padding and use expanding BlockGrids
 		this._grid = BlockGridPadding.padGrid(grid, this._padding);
-
 		var maxRowLength = this._grid.get2DMaxRowLength();
 
 		this.height(Block.prototype.HEIGHT * this._grid.length);
@@ -474,6 +472,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 					.mount(this._renderContainer);
 			}
 		}
+
+		this._renderContainer.refresh();
 	},
 
 
