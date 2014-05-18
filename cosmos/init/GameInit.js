@@ -324,6 +324,7 @@ var GameInit = {
 		ige.watchStart(client.custom4);
 	},
 
+	// TODO: Move this to a helper function that operates on IgeEntities
 	moveRandomly: function(entity) {
 		//this is the maximum distance that we will translate entities to
 		var MAX_DISTANCE = 6000;
