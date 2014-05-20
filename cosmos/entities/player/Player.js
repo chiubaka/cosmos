@@ -252,6 +252,8 @@ var Player = BlockGrid.extend({
 						var block = blockRow[col];
 
 						if(block && block.classId() === "EngineBlock") {
+							//TODO: Fixtures should have their own position in box2d units. Something like block.fixture().m_shape.m_centroid should work. But this is a little tricky because box2D fixtures don't seem to compute their own world coordinates or rotated offsets. They only store the unrotated offset. Talk with @rafaelCosman if you want help doing this TODO.
+						
 							// I'm deviding by 10 because that's the scale factor between IGE and Box2D
 							var pointToApplyTo = {x: (this.translate().x() + block.translate().x()) / 10.0, y: (this.translate().y() - block.translate().y()) / 10.0};
 							pointToApplyTo.x = 2 * this._box2dBody.GetWorldCenter().x - pointToApplyTo.x
