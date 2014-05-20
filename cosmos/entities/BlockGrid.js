@@ -32,7 +32,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	/**
 	 * Counts how many blocks in this blockGrid have the same classId and the classId passed
-	*/
+	 * @param classID the classId we're trying to count up
+	 * @returns the number of blocks in the grid with the classId passed
+	 */
 	countBlocksOfType: function(classId) {
 		var count = 0;
 
