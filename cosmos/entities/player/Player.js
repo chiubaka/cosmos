@@ -20,14 +20,12 @@ var Player = BlockGrid.extend({
 			}
 		};
 
-		this.translateTo(-200, -200, 0);
-
 		if (ige.isClient) {
 			this.initClient();
 		} else {
 			this.initServer();
 		}
-		
+
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);
 	},
