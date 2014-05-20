@@ -30,6 +30,29 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 	},
 
+	/**
+	 * Counts how many blocks in this blockGrid have the same classId and the classId passed
+	 * @param classID the classId we're trying to count up
+	 * @returns the number of blocks in the grid with the classId passed
+	 * TODO: A faster way is to hook into the functions that add stuff to the ship and remove stuff from the ship and keep a dictionary from block-types to counts of those block-types.
+	 */
+	numBlocksOfType: function(classId) {
+		var count = 0;
+
+		for (var i = 0; i < this._grid.length; i++) {
+			for (var j = 0; j < this._grid[i].length; j++) {
+				var block = this._grid[i][j];
+				if (block !== undefined) {
+					if (block.classId() === classId) {
+						count++;
+					}
+				}
+			}
+		}
+
+		return count;
+	},
+
 	/*
 	* The general strategy for handling clicks is to:
 	* 1. Unrotate the click coordinate
