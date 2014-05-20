@@ -253,11 +253,8 @@ var Player = BlockGrid.extend({
 						var block = blockRow[col];
 
 						if(block && block.classId() === "EngineBlock") {
-							// I'm deviding by 10 because that's the scale factor between IGE and Box2D
-							var pointToApplyTo = {x: (this.translate().x() + block.translate().x()) / 10.0, y: (this.translate().y() - block.translate().y()) / 10.0};
-							pointToApplyTo.x = 2 * this._box2dBody.GetWorldCenter().x - pointToApplyTo.x
-							pointToApplyTo.y = 2 * this._box2dBody.GetWorldCenter().y - pointToApplyTo.y
-							this._box2dBody.ApplyImpulse(impulse, pointToApplyTo);
+							//TODO: make this actually apply the impulse at the location of the engine block
+							this._box2dBody.ApplyImpulse(impulse, location);
 						}
 					}
 				}
