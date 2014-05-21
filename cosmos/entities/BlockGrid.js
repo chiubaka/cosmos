@@ -112,10 +112,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	streamCreateData: function() {
-		return this.streamCreateDataFromGrid(this._grid);
+		return this.serializeGrid(this._grid);
 	},
 
-	streamCreateDataFromGrid: function(grid) {
+	serializeGrid: function(grid) {
 		var data = [];
 		for (var i = 0; i < grid.length; i++) {
 			var row = [];
