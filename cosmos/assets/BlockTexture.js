@@ -66,7 +66,7 @@ var image = {
 				}
 			}
 			else {
-				var iconScaleFactor = 0.8;
+				var iconScaleFactor = 0.85;
 				ctx.drawImage(entity.textureImage, -entity._bounds2d.x2 * iconScaleFactor, -entity._bounds2d.y2 * iconScaleFactor, entity.width() * iconScaleFactor, entity.height() * iconScaleFactor);
 			}
 		}
