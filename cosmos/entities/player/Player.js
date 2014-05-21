@@ -218,7 +218,7 @@ var Player = BlockGrid.extend({
 		if (ige.isServer) {
 			// This determines how fast you can rotate your spaceship
 			// It's some constant times the number of thrusters you have
-			var angularImpulse = -3000 * this.countBlocksOfType('ThrusterBlock');
+			var angularImpulse = -3000 * this.numBlocksOfType('ThrusterBlock');
 
 			if (this.controls.key.left) {
 				this._box2dBody.ApplyTorque(angularImpulse);
