@@ -32,8 +32,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	/**
 	 * Counts how many blocks in this blockGrid have the same classId and the classId passed
-	*/
-	countBlocksOfType: function(classId) {
+	 * @param classID the classId we're trying to count up
+	 * @returns the number of blocks in the grid with the classId passed
+	 * TODO: A faster way is to hook into the functions that add stuff to the ship and remove stuff from the ship and keep a dictionary from block-types to counts of those block-types.
+	 */
+	numBlocksOfType: function(classId) {
 		var count = 0;
 
 		for (var i = 0; i < this._grid.length; i++) {

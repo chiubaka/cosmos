@@ -20,8 +20,6 @@ var Player = BlockGrid.extend({
 			}
 		};
 
-		this.translateTo(-200, -200, 0);
-
 		if (ige.isClient) {
 			this.initClient();
 		} else {
