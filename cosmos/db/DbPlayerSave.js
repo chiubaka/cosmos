@@ -1,7 +1,8 @@
 var DbPlayerSave = {
 	save: function(player) {
 		ige.mongo.connect(function(err, db) {
-			ige.mongo.insert('user', {id: 2, username: 'test2', password: 'moo'})
+			var ship = DbPlayerSave.serializeGrid(player.grid());
+			ige.mongo.insert('players', {ship: ship});
 		}
 	)},
 

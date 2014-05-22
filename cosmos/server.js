@@ -29,9 +29,6 @@ var Server = IgeClass.extend({
 		// Add MongoDB component
 		ige.addComponent(IgeMongoDbComponent, DbConfig.db)
 
-		//DbPlayerSave.save()
-
-
 		// Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);
 

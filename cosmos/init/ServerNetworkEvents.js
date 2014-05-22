@@ -17,17 +17,20 @@ var ServerNetworkEvents = {
 	This function removes all trace of the player from the 'players' list
 	*/
 	_onPlayerDisconnect: function(clientId) {
-		if (ige.server.players[clientId]) {
+		var player = ige.server.players[clientId];
+		if (player) {
 			// Handle destroying player state first
 			// Unsubscribe players from updates
-			ige.server.players[clientId].cargo.unsubscribeFromUpdates(clientId);
+			player.cargo.unsubscribeFromUpdates(clientId);
 
+
+			DbPlayerSave.save(player)
 			// Remove the player from the game
-			ige.server.players[clientId].destroy();
+			player.destroy();
 
 			// Remove the reference to the player entity
 			// so that we don't leak memory
-			delete ige.server.players[clientId];
+			delete player;
 		}
 	},
 
