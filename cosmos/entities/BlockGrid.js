@@ -17,7 +17,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		IgeEntityBox2d.prototype.init.call(this);
 
 		if (!ige.isServer) {
-			this.gridFromStreamCreateData(data);
+			this._grid = this.rehydrateGrid(data);
 			this._renderContainer = new RenderContainer()
 				.mount(this);
 
@@ -132,10 +132,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return data;
 	},
 
-	gridFromStreamCreateData: function(data) {
+	rehydrateGrid: function(data) {
 		var rxGrid = data;
 
-		this._grid = [];
+		var grid = [];
 		for (var i = 0; i < rxGrid.length; i++) {
 			var row = [];
 			for (var j = 0; j < rxGrid[i].length; j++) {
@@ -149,8 +149,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 				row.push(block);
 			}
-			this._grid.push(row);
+			grid.push(row);
 		}
+
+		return grid;
 	},
 
 	// TODO: Use non padded method

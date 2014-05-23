@@ -39,18 +39,21 @@ var ServerNetworkEvents = {
 	*/
 	_onPlayerEntity: function(data, clientId) {
 		if (!ige.server.players[clientId]) {
-			ige.server.players[clientId] = new Player(clientId)
-				.debugFixtures(false)//call this before calling setGrid()
-				.padding(10)
-				.grid(ExampleShips.starterShipSingleMisplacedEngine())
-				.addSensor(300)
-				.attractionStrength(1)
-				.streamMode(1)
-				.mount(ige.server.spaceGameScene)
-				.translateTo((Math.random() - .5) * ige.server.PLAYER_START_DISTANCE, (Math.random() - .5) * ige.server.PLAYER_START_DISTANCE, 0);
+			DbPlayerLoad.load('dummy auth token', function(err, ship) {
+				ige.server.players[clientId] = new Player(clientId)
+					.debugFixtures(false)//call this before calling setGrid()
+					.padding(10)
+					//.grid(ExampleShips.starterShipSingleMisplacedEngine())
+					.grid(BlockGrid.prototype.rehydrateGrid(ship))
+					.addSensor(300)
+					.attractionStrength(1)
+					.streamMode(1)
+					.mount(ige.server.spaceGameScene)
+					.translateTo((Math.random() - .5) * ige.server.PLAYER_START_DISTANCE, (Math.random() - .5) * ige.server.PLAYER_START_DISTANCE, 0);
 
-			// Tell the client to track their player entity
-			ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
+				// Tell the client to track their player entity
+				ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
+			});
 		}
 	},
 
