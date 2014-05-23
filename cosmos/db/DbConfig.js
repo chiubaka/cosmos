@@ -2,8 +2,8 @@ var DbConfig = {
 	db: undefined,
 
 	config: {
-		username: 'cosmos-admin',
-		password: 'CS210-l3on1ne!',
+		user: 'cosmos-admin',
+		pass: 'CS210-l3on1ne!',
 		host: 'ds030827.mongolab.com',
 		port: '30827',
 		dbName: 'cosmos-dev-db',
@@ -18,7 +18,7 @@ var DbConfig = {
 		this.Collection = require(module_path).Collection;
 	},
 
-	connect: function () {
+	connect: function (callback) {
 		var self = this;
 
 		// Build mongoDB URI string
@@ -35,7 +35,12 @@ var DbConfig = {
 			// TODO: Use IGE component and logging system
 			assert.equal(err, null, "DB connect error");
 			self.db = db;
+			callback()
 		});
+	},
+
+	disconnect: function () {
+		this.db.close();
 	}
 
 };
