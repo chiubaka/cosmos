@@ -1,10 +1,8 @@
 var DbPlayerSave = {
-	save: function(player) {
-		ige.mongo.connect(function(err, db) {
-			var ship = DbPlayerSave.serializeGrid(player.grid());
-			ige.mongo.insert('players', {ship: ship});
-		}
-	)},
+	save: function(player, callback) {
+		var ship = DbPlayerSave.serializeGrid(player.grid());
+		ige.mongo.insert('players', {ship: ship}, callback);
+	},
 
 	serializeGrid: function (grid) {
 		// Trim the padding
