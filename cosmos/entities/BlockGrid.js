@@ -227,7 +227,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 				if (block === undefined) {
 					return false;
 				}
-				// Blocks should only be mined by one player, for now.
+				// Blocks should only be mined by one player, for now. Note that there is a race condition here.
 				if((block === undefined) || block.busy()) {
 					return false;
 				}
