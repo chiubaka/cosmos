@@ -31,7 +31,7 @@ var Block = IgeEntity.extend({
 
 	/**
 	 * Construct a new block
-	 * Note that block doesn't have any texture. This is because subclasses of Block are expected to have their own textures.
+   * Note that subclasses of Block are expected to have their own textures.
 	 */
 	init: function () {
 		IgeEntity.prototype.init.call(this);
