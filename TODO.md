@@ -10,7 +10,11 @@ add regular ship blocks to the derilict space ships
 rename asteroid generator to be "random block grid generator" or something like that
 	(ready to pull-request)
 make asteroids actually have different types
-	(ready to pull-request)
+	(ready to pull-request) (f/make-asteroids-have-different-types)
+	Also do the following:
+	Spread out starting asteroids over a larger area
+	Beaause they are ending up on top of eachother a lot.
+	Also make aseroids have fewer blocks, but maintain their current maximum size.
 rename basic ship-blocks to something other than "block". They should be called ShipBlocks or something like that.
 	(ready to pull-request) (r/make-BasicBlock)
 	This is actually a different issue -- there needs to be a ship block type which is like "buildingBlock" or something like that
@@ -26,9 +30,6 @@ Edit the starter ship to have more cargo
 	So we'll be able to hold more than two types of blocks
 Don't attract blocks that you can't hold
 	This might be hard to implement...
-Spread out starting asteroids over a larger area
-	Beaause they are ending up on top of eachother a lot.
-	Also make aseroids have fewer blocks, but maintain their current maximum size.
 
 Major Refactoring of how Physics works (rafael)
 	1st step is to make rows of blocks into fixtures. See if this works. t/ branch.
