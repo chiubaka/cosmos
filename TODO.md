@@ -22,6 +22,8 @@ Make different blocks take different amounts of time to mine
 Make it so you can't mine if you don't have a mining laser
 	(ready to pull-request)
 	f/having-more-mining-lasers-should-increase-mining-speed
+Number of cargo blocks should govern how large a player's cargo is
+	(working on this now)
 
 Major Refactoring of how Physics works (rafael)
 	1st step is to make rows of blocks into fixtures. See if this works. t/ branch.
