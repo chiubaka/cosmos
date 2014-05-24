@@ -8,6 +8,7 @@ Things that Rafael wants to work on on his flight to NY
 add regular ship blocks to the derilict space ships (ready to pull-request)
 rename asteroid generator to be "random block grid generator" or something like that (ready to pull-request)
 make asteroids actually have different types
+	f/make-asteroids-have-different-types
 rename basic ship-blocks to something other than "block". They should be called ShipBlocks or something like that.
 
 
