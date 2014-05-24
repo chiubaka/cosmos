@@ -46,12 +46,6 @@ It would be really nice if Master was automatically tested (Derrick?)
 	Like even just to see if the ige game server will successfully run the game.
 	We can add more fancy test scripts later.
 
-Element blocks
-	review ice pull request (Daniel)
-
-Asteroid generator (rafael)
-	blocks in the asteroid should be adjacent to other blocks, esp. of similar type
-
 spec out the board game (Rafael)
 
 Client-side entity interpolation (long-term)
@@ -59,22 +53,6 @@ Client-side entity interpolation (long-term)
 improving streaming (long-term)
 	use stream mode 2 and static IGE entities
 
-refactor code to be consistent with IGE's getters and setters. This should be in an r/ branch.
-
-you should be able to move backwards
-	FInished! Submit the pull request (rafael)
-
-make many asteroids (that don't overlap)
-	submit pull request (rafael)
-
-merge the approved pull request (Rafael)
-
 You should be able to Zoom with the mouse. To a certain extent.
 
-Submit pull request for refactor game init (rafael)
-
-make rotation impulse proportional to the number of ThrusterBlocks on your ship (Rafael)
-
 allow option for camera to track rotation as well?
-
-fix multiplayer (rafael)
