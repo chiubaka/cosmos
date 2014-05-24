@@ -237,9 +237,9 @@ var AsteroidGenerator = {
 		},
 
 		ICY: {
-			"IceBlock": 0.8,
-			"IronBlock": 0.1,
-			"CarbonBlock": 0.1
+			"IceBlock": 0.9,
+			"IronBlock": 0.05,
+			"CarbonBlock": 0.05
 		},
 
 		ROCKY: {
@@ -253,6 +253,18 @@ var AsteroidGenerator = {
 			"FuelBlock": .25,
 			"PowerBlock": .25,
 			"ThrusterBlock": .25
+		},
+
+		randomDistribution: function() {
+			var rand = Math.random();
+
+			if (rand < .5) {
+				return AsteroidGenerator.blockDistributions.STANDARD;
+			} else if (rand < .75) {
+				return AsteroidGenerator.blockDistributions.ICY;
+			} else /*if (rand < 1)*/ {
+				return AsteroidGenerator.blockDistributions.ROCKY;
+			}
 		}
 	}
 };
