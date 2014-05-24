@@ -8,6 +8,7 @@ Things that Rafael wants to work on on his flight to NY
 add regular ship blocks to the derilict space ships
 rename asteroid generator to be "random block grid generator" or something like that
 make asteroids actually have different types
+rename basic ship-blocks to something other than "block". They should be called ShipBlocks or something like that.
 
 
 Major Refactoring of how Physics works (rafael)
