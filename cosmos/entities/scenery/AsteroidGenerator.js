@@ -224,7 +224,7 @@ var AsteroidGenerator = {
 			"IceBlock": 0.468,
 			"IronBlock": 0.3,
 			"CarbonBlock": 0.2,
-			//here are some rare things
+			//here are some rare things. These guys should look really cool.
 			"GoldBlock": 0.01,
 			"CobaltBlock": 0.01,
 			"FluorineBlock": 0.01,
