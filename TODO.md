@@ -20,6 +20,7 @@ Make different blocks take different amounts of time to mine
 	there seems to already be a variable in the block class for this
 	/blocks-take-different-amounts-of-time-to-mine
 Make it so you can't mine if you don't have a mining laser
+	(working on this)
 
 
 Major Refactoring of how Physics works (rafael)
