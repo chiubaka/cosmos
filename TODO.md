@@ -7,8 +7,9 @@ Things that Rafael wants to work on on his flight to NY
 -----------------------------------------------
 add regular ship blocks to the derilict space ships (ready to pull-request)
 rename asteroid generator to be "random block grid generator" or something like that (ready to pull-request)
-make asteroids actually have different types
+make asteroids actually have different types (ready to pull-request)
 rename basic ship-blocks to something other than "block". They should be called ShipBlocks or something like that.
+	This is actually a different issue -- there needs to be a ship block type which is like "buildingBlock" or something like that
 Make different blocks take different amounts of time to mine
 Make it so you can't mine if you don't have a mining laser
 
