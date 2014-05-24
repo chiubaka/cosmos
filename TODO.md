@@ -11,8 +11,9 @@ make asteroids actually have different types (ready to pull-request)
 rename basic ship-blocks to something other than "block". They should be called ShipBlocks or something like that. (ready to pull-request)
 	This is actually a different issue -- there needs to be a ship block type which is like "buildingBlock" or something like that
 	r/make-BasicBlock
-Make different blocks take different amounts of time to mine
+Make different blocks take different amounts of time to mine (ready to pull-request)
 	there seems to already be a variable in the block class for this
+	/blocks-take-different-amounts-of-time-to-mine
 Make it so you can't mine if you don't have a mining laser
 
 
