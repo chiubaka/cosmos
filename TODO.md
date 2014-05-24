@@ -18,10 +18,10 @@ rename basic ship-blocks to something other than "block". They should be called 
 Make different blocks take different amounts of time to mine
 	(ready to pull-request)
 	there seems to already be a variable in the block class for this
-	/blocks-take-different-amounts-of-time-to-mine
+	f/blocks-take-different-amounts-of-time-to-mine
 Make it so you can't mine if you don't have a mining laser
 	(working on this)
-
+	f/having-more-mining-lasers-should-increase-mining-speed
 
 Major Refactoring of how Physics works (rafael)
 	1st step is to make rows of blocks into fixtures. See if this works. t/ branch.
