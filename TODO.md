@@ -2,6 +2,13 @@ List of things TODO.
 If this gets to long or unweildy, we'll use something else. It works for now.
 Please always commit this file directly to master.
 -----------------------------------------------------------------------------------------------
+
+Things that Rafael wants to work on on his flight to NY
+-----------------------------------------------
+add regular ship blocks to the derilict space ships
+
+
+
 Major Refactoring of how Physics works (rafael)
 	1st step is to make rows of blocks into fixtures. See if this works. t/ branch.
 
