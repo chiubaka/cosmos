@@ -12,20 +12,17 @@ rename asteroid generator to be "random block grid generator" or something like 
 make asteroids actually have different types
 	(ready to pull-request)
 rename basic ship-blocks to something other than "block". They should be called ShipBlocks or something like that.
-	(ready to pull-request)
+	(ready to pull-request) (r/make-BasicBlock)
 	This is actually a different issue -- there needs to be a ship block type which is like "buildingBlock" or something like that
-	r/make-BasicBlock
 Make different blocks take different amounts of time to mine
-	(ready to pull-request)
+	(ready to pull-request) (f/blocks-take-different-amounts-of-time-to-mine)
 	there seems to already be a variable in the block class for this
-	f/blocks-take-different-amounts-of-time-to-mine
 Make it so you can't mine if you don't have a mining laser
-	(ready to pull-request)
-	f/having-more-mining-lasers-should-increase-mining-speed
+	(ready to pull-request) (f/having-more-mining-lasers-should-increase-mining-speed)
 Number of cargo blocks should govern how large a player's cargo is
-	(ready to pull-request)
-	f/cargo-blocks-should-affect-cargo-capacity
+	(ready to pull-request) (f/cargo-blocks-should-affect-cargo-capacity)
 Edit the starter ship to have more cargo
+	(ready to pull-request) (f/make-starting-ship-have-more-cargo)
 	So we'll be able to hold more than two types of blocks
 Don't attract blocks that you can't hold
 	This might be hard to implement...
