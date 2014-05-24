@@ -29,6 +29,8 @@ Edit the starter ship to have more cargo
 	So we'll be able to hold more than two types of blocks
 Don't attract blocks that you can't hold
 	This might be hard to implement...
+Spread out starting asteroids over a larger area
+	Beaause they are ending up on top of eachother a lot.
 
 Major Refactoring of how Physics works (rafael)
 	1st step is to make rows of blocks into fixtures. See if this works. t/ branch.
