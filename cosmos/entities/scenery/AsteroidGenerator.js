@@ -229,6 +229,7 @@ var AsteroidGenerator = {
 			"CobaltBlock": 0.01,
 			"FluorineBlock": 0.01,
 			//here are some easter-egg type things, which will add up to 0.002
+			// The idea is to make mining more exciting by having really unusual things buried inside of asteroids.
 			"EngineBlock": 0.002 * .25,
 			"FuelBlock": 0.002 * .25,
 			"PowerBlock": 0.002 * .25,
