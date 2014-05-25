@@ -26,7 +26,7 @@ Make it so you can't mine if you don't have a mining laser
 Number of cargo blocks should govern how large a player's cargo is
 	(WAITING FOR REVIEW) (f/cargo-blocks-should-affect-cargo-capacity)
 Edit the starter ship to have more cargo
-	(ready to pull-request) (f/make-starting-ship-have-more-cargo)
+	(WAITING FOR REVIEW) (f/make-starting-ship-have-more-cargo)
 	So we'll be able to hold more than two types of blocks
 Don't attract blocks that you can't hold
 	This might be hard to implement...
