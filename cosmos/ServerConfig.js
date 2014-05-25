@@ -44,7 +44,7 @@ var config = {
 
 		/* Scenery */
 		{ name: 'Background', path: './entities/scenery/Background' },
-		{ name: 'AsteroidGenerator', path: './entities/scenery/AsteroidGenerator' },
+		{ name: 'BlockGridGenerator', path: './entities/scenery/BlockGridGenerator' },
 
 		/* === PLAYER STATE === */
 		{ name: 'Player', path: './entities/player/Player' },

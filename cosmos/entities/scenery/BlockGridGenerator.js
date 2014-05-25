@@ -1,4 +1,4 @@
-var AsteroidGenerator = {
+var BlockGridGenerator = {
 	/**
 	 * Asteroid constants
 	 */
@@ -258,5 +258,5 @@ var AsteroidGenerator = {
 };
 
 if (typeof (module) !== 'undefined' && typeof (module.exports) !== 'undefined') {
-	module.exports = AsteroidGenerator;
+	module.exports = BlockGridGenerator;
 }
