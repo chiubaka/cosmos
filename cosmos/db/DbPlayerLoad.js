@@ -1,7 +1,6 @@
 var DbPlayerLoad = {
 
 	load: function(authToken, callback) {
-		var self = this;
 		ige.mongo.db.collection('players', function(err, players) {
 			players.count(function(err, count) {
 				// Get a random space ship from the db

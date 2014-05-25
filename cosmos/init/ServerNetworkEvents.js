@@ -23,14 +23,19 @@ var ServerNetworkEvents = {
 			// Unsubscribe players from updates
 			player.cargo.unsubscribeFromUpdates(clientId);
 
+			var self = this;
+			DbPlayerSave.save(player, function(err, result) {
+				if (err) {
+					self.log('Cannot save player in database!', 'error')
+				}
 
-			DbPlayerSave.save(player)
-			// Remove the player from the game
-			player.destroy();
+				// Remove the player from the game
+				player.destroy();
 
-			// Remove the reference to the player entity
-			// so that we don't leak memory
-			delete player;
+				// Remove the reference to the player entity
+				// so that we don't leak memory
+				delete player;
+			});
 		}
 	},
 
@@ -38,8 +43,12 @@ var ServerNetworkEvents = {
 	A player has connected to the server and asked for a player Entity to be created for him or her!
 	*/
 	_onPlayerEntity: function(data, clientId) {
+		var self = this;
 		if (!ige.server.players[clientId]) {
 			DbPlayerLoad.load('dummy auth token', function(err, ship) {
+				if (err) {
+					self.log('Cannot load player from database!', 'error')
+				}
 				ige.server.players[clientId] = new Player(clientId)
 					.debugFixtures(false)//call this before calling setGrid()
 					.padding(10)
