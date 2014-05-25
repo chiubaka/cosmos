@@ -19,7 +19,7 @@ rename basic ship-blocks to something other than "block". They should be called 
 	(WAITING FOR REVIEW) (r/make-BasicBlock)
 	This is actually a different issue -- there needs to be a ship block type which is like "buildingBlock" or something like that
 Make different blocks take different amounts of time to mine
-	(ready to pull-request) (f/blocks-take-different-amounts-of-time-to-mine)
+	(WAITING FOR REVIEW) (f/blocks-take-different-amounts-of-time-to-mine)
 	there seems to already be a variable in the block class for this
 Make it so you can't mine if you don't have a mining laser
 	(ready to pull-request) (f/having-more-mining-lasers-should-increase-mining-speed)
