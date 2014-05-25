@@ -10,7 +10,7 @@ add regular ship blocks to the derilict space ships
 rename asteroid generator to be "random block grid generator" or something like that
 	(ready to pull-request)
 make asteroids actually have different types
-	(ready to pull-request) (f/make-asteroids-have-different-types)
+	(WAITING FOR REVIEW)	(f/make-asteroids-have-different-types)
 	Also do the following:
 	Spread out starting asteroids over a larger area
 	Beaause they are ending up on top of eachother a lot.
