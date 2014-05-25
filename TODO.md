@@ -24,7 +24,7 @@ Make different blocks take different amounts of time to mine
 Make it so you can't mine if you don't have a mining laser
 	(WAITING FOR REVIEW) (f/having-more-mining-lasers-should-increase-mining-speed)
 Number of cargo blocks should govern how large a player's cargo is
-	(ready to pull-request) (f/cargo-blocks-should-affect-cargo-capacity)
+	(WAITING FOR REVIEW) (f/cargo-blocks-should-affect-cargo-capacity)
 Edit the starter ship to have more cargo
 	(ready to pull-request) (f/make-starting-ship-have-more-cargo)
 	So we'll be able to hold more than two types of blocks
