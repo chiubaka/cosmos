@@ -16,7 +16,7 @@ make asteroids actually have different types
 	Beaause they are ending up on top of eachother a lot.
 	Also make aseroids have fewer blocks, but maintain their current maximum size.
 rename basic ship-blocks to something other than "block". They should be called ShipBlocks or something like that.
-	(ready to pull-request) (r/make-BasicBlock)
+	(WAITING FOR REVIEW) (r/make-BasicBlock)
 	This is actually a different issue -- there needs to be a ship block type which is like "buildingBlock" or something like that
 Make different blocks take different amounts of time to mine
 	(ready to pull-request) (f/blocks-take-different-amounts-of-time-to-mine)
