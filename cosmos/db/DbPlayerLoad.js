@@ -6,7 +6,8 @@ var DbPlayerLoad = {
 				// Get a random space ship from the db
 				var randomNum = Math.floor((Math.random() * count));
 				players.find({},{'limit':-1, 'skip':randomNum}).toArray(function(err, docs) {
-					callback(err, docs[0].ship);
+					// Go back to player creation
+					callback(err, docs[0].ship, docs[0].cargo);
 				});
 			});
 		});

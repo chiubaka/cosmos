@@ -449,6 +449,12 @@ var Cargo = IgeClass.extend({
 	 * Rehydrates cargo information from a database
 	 */
 	rehydrateCargo: function(data) {
+		// TODO: Sentinal value for empty cargo
+		// Player has no cargo saved in DB
+		if (data === undefined) {
+			return;
+		}
+
 		for (var i = 0; i < data.length; i++) {
 			var container = data[i];
 			var numSlots = container.containerMeta.numSlots;
