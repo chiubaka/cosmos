@@ -1,4 +1,4 @@
-var AsteroidGenerator = {
+var BlockGridGenerator = {
 	/**
 	 * Asteroid constants
 	 */
@@ -224,11 +224,12 @@ var AsteroidGenerator = {
 			"IceBlock": 0.468,
 			"IronBlock": 0.3,
 			"CarbonBlock": 0.2,
-			//here are some rare things
+			//here are some rare things. These guys should look really cool.
 			"GoldBlock": 0.01,
 			"CobaltBlock": 0.01,
 			"FluorineBlock": 0.01,
 			//here are some easter-egg type things, which will add up to 0.002
+			// The idea is to make mining more exciting by having really unusual things buried inside of asteroids.
 			"EngineBlock": 0.002 * .25,
 			"FuelBlock": 0.002 * .25,
 			"PowerBlock": 0.002 * .25,
@@ -257,5 +258,5 @@ var AsteroidGenerator = {
 };
 
 if (typeof (module) !== 'undefined' && typeof (module.exports) !== 'undefined') {
-	module.exports = AsteroidGenerator;
+	module.exports = BlockGridGenerator;
 }

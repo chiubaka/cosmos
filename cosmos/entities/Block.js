@@ -1,3 +1,7 @@
+/**
+ * This class is the superclass of all blocks, and it contains all of the logic for the blocks.
+ * Other blocks just describe the way they are drawn and nothing else.
+ */
 var Block = IgeEntity.extend({
 	classId: 'Block',
 
@@ -27,7 +31,7 @@ var Block = IgeEntity.extend({
 
 	/**
 	 * Construct a new block
-	 * Note that block doesn't have any texture. This is because subclasses of Block are expected to have their own textures.
+   * Note that subclasses of Block are expected to have their own textures.
 	 */
 	init: function () {
 		IgeEntity.prototype.init.call(this);
@@ -54,7 +58,7 @@ var Block = IgeEntity.extend({
 			col: this._col
 		};
 
-		// TODO: Expand when clientState supports multiple current capabilities 
+		// TODO: Expand when clientState supports multiple current capabilities
 		if (ige.isClient && ige.client !== undefined && ige.client.state !== undefined) {
 			ige.client.state.currentCapability().tryPerformAction(self, event, data);
 		}
