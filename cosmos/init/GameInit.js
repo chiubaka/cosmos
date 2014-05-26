@@ -163,7 +163,7 @@ var GameInit = {
 				.streamMode(1)
 				.mount(server.spaceGameScene)
 				.padding(10)
-				.grid(AsteroidGenerator.genProceduralAsteroid(20))
+				.grid(BlockGridGenerator.genProceduralAsteroid(20))
 				.scaleBy(10);
 			this.moveRandomly(asteroid);
 		}
