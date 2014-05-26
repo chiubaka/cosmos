@@ -20,14 +20,12 @@ var Player = BlockGrid.extend({
 			}
 		};
 
-		this.translateTo(-200, -200, 0);
-
 		if (ige.isClient) {
 			this.initClient();
 		} else {
 			this.initServer();
 		}
-		
+
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);
 	},
@@ -217,7 +215,8 @@ var Player = BlockGrid.extend({
 
 		if (ige.isServer) {
 			// This determines how fast you can rotate your spaceship
-			var angularImpulse = -10000;
+			// It's some constant times the number of thrusters you have
+			var angularImpulse = -3000 * this.numBlocksOfType('ThrusterBlock');
 
 			if (this.controls.key.left) {
 				this._box2dBody.ApplyTorque(angularImpulse);
@@ -252,8 +251,14 @@ var Player = BlockGrid.extend({
 						var block = blockRow[col];
 
 						if(block && block.classId() === "EngineBlock") {
-							//TODO: make this actually apply the impulse at the location of the engine block
-							this._box2dBody.ApplyImpulse(impulse, location);
+							//TODO: Fixtures should have their own position in box2d units. Something like block.fixture().m_shape.m_centroid should work. But this is a little tricky because box2D fixtures don't seem to compute their own world coordinates or rotated offsets. They only store the unrotated offset. Talk with @rafaelCosman if you want help doing this TODO.
+						
+							// I'm deviding by 10 because that's the scale factor between IGE and Box2D
+							var pointToApplyTo = {x: (this.translate().x() + block.translate().x()) / 10.0, y: (this.translate().y() - block.translate().y()) / 10.0};
+							pointToApplyTo.x = 2 * this._box2dBody.GetWorldCenter().x - pointToApplyTo.x
+							pointToApplyTo.y = 2 * this._box2dBody.GetWorldCenter().y - pointToApplyTo.y
+							this._box2dBody.ApplyImpulse(impulse, pointToApplyTo);
+
 						}
 					}
 				}
