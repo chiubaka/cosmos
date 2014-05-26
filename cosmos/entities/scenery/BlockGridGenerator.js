@@ -1,4 +1,4 @@
-var AsteroidGenerator = {
+var BlockGridGenerator = {
 	/**
 	 * Asteroid constants
 	 */
@@ -259,16 +259,16 @@ var AsteroidGenerator = {
 			var rand = Math.random();
 
 			if (rand < .5) {
-				return AsteroidGenerator.blockDistributions.STANDARD;
+				return BlockGridGenerator.blockDistributions.STANDARD;
 			} else if (rand < .75) {
-				return AsteroidGenerator.blockDistributions.ICY;
+				return BlockGridGenerator.blockDistributions.ICY;
 			} else /*if (rand < 1)*/ {
-				return AsteroidGenerator.blockDistributions.ROCKY;
+				return BlockGridGenerator.blockDistributions.ROCKY;
 			}
 		}
 	}
 };
 
 if (typeof (module) !== 'undefined' && typeof (module.exports) !== 'undefined') {
-	module.exports = AsteroidGenerator;
+	module.exports = BlockGridGenerator;
 }
