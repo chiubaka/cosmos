@@ -8,7 +8,7 @@ Things that Rafael wants to work on on his flight to NY
 add regular ship blocks to the derilict space ships
 	(ready to pull-request) (f/add-regular-ship-blocks-to-derelict-spaceships)
 rename asteroid generator to be "random block grid generator" or something like that
-	(ready to pull-request) (r/rename-asteroid-generator)
+	(WAITING FOR REVIEW) (r/rename-asteroid-generator)
 make asteroids actually have different types
 	(WAITING FOR REVIEW)	(f/make-asteroids-have-different-types)
 	Also do the following:
