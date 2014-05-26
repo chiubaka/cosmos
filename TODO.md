@@ -34,6 +34,10 @@ Create giant block-grids.
 	Spacestations?
 	Planets?
 	Stars?
+You should be able to mine an engine off of someone else's ship.
+	Right now, they will for sure end up attracting the engine instead of you. I think whoever mined it should have priortiy.
+Redesign BlockGrid
+
 
 Major Refactoring of how Physics works (rafael)
 	1st step is to make rows of blocks into fixtures. See if this works. t/ branch.
