@@ -41,6 +41,13 @@ Add a world-map view
 Zoom with the mouse
 	(Ready for a PRELIMINARY pull request. This needs to be discussed and iterated on.) (f/zoom-with-the-mouse)
 	It's somewhat awkward right now. At least with the trackpad on my mac.
+Randomly generate background
+	Maybe use particle effects?
+Fix misleading name in player.js
+	addEngineParticles: function() {
+	var player = this;
+	*this.laserParticleEmitter = new*
+	
 
 Major Refactoring of how Physics works (rafael)
 	1st step is to make rows of blocks into fixtures. See if this works. t/ branch.
