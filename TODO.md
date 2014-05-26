@@ -38,6 +38,8 @@ You should be able to mine an engine off of someone else's ship.
 	Right now, they will for sure end up attracting the engine instead of you. I think whoever mined it should have priortiy.
 Redesign BlockGrid
 Add a world-map view
+Zoom with the mouse
+	(Ready for a PRELIMINARY pull request. This needs to be discussed and iterated on.)
 
 
 Major Refactoring of how Physics works (rafael)
