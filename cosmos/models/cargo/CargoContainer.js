@@ -36,9 +36,14 @@ var CargoContainer = IgeClass.extend({
 	 * Initialize a cargo container.
 	 * 
 	 * @param numSlots the number of slots this container should have
+	 * @param itemStore the intial itemStore (optional)
 	 */
-	init: function(numSlots) {
-		this._itemStore = {};
+	init: function(numSlots, itemStore) {
+		if (itemStore !== undefined) {
+			this._itemStore = itemStore;
+		} else {
+			this._itemStore = {};
+		}
 
 		this._numSlots = this.DEFAULT_CONTAINER_SLOTS;
 		if (numSlots !== undefined) {

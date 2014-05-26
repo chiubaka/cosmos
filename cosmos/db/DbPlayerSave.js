@@ -1,7 +1,8 @@
 var DbPlayerSave = {
 	save: function(player, callback) {
 		var ship = DbPlayerSave.serializeGrid(player.grid());
-		ige.mongo.insert('players', {ship: ship}, function(err, result) {
+		var cargo = player.cargo.serializeCargo();
+		ige.mongo.insert('players', {ship: ship, cargo: cargo}, function(err, result) {
 			callback(err, result);
 		});
 	},

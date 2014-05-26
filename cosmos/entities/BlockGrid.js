@@ -138,6 +138,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return this.serializeGrid(this._grid);
 	},
 
+	// TODO: Make this object oriented. Change DB operations to OO style.
 	serializeGrid: function(grid) {
 		var data = [];
 		for (var i = 0; i < grid.length; i++) {

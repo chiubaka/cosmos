@@ -100,7 +100,7 @@ var Cargo = IgeClass.extend({
 			// Do nothing, abort.
 			return false;
 		}
-		
+
 		if (this.getNumContainers() == 0) {
 			// No container exists for this item. This means
 			// that the ship has no cargo blocks.
@@ -426,7 +426,39 @@ var Cargo = IgeClass.extend({
 			var clientId = this.updateList[i];
 			ige.network.send('cargoUpdate', cargoList, clientId);
 		}
+	},
+
+	/**
+	 * Serializes the cargo containers and its contents for insertion
+	 * into a database.
+	 */
+	serializeCargo: function() {
+		var data = [];
+		for (var i = 0; i < this.getNumContainers(); i++) {
+			var container = this.getContainer(i);
+			// Serialize container properties, like numSlots
+			var containerMeta = {numSlots: container.numSlots()};
+			// Serialize container items
+			var containerData = container.getItemList();
+			data.push({containerMeta: containerMeta, containerData: containerData});
+		}
+		return data;
+	},
+
+	/**
+	 * Rehydrates cargo information from a database
+	 */
+	rehydrateCargo: function(data) {
+		for (var i = 0; i < data.length; i++) {
+			var container = data[i];
+			var numSlots = container.containerMeta.numSlots;
+			var itemStore = container.containerData;
+			var cargoContainer = new CargoContainer(numSlots, itemStore);
+
+			this._containers.push(cargoContainer);
+		}
 	}
+
 });
 
 if (typeof (module) !== 'undefined' && typeof (module.exports) !== 'undefined') {
