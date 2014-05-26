@@ -40,9 +40,9 @@ Major Refactoring of how Physics works (rafael)
 
 LEO-256: Players should be able to mine blocks from asteroids (Daniel/Rafael)
 	LEO-257: Remove a block from the BlockGrid it is attached to when it is clicked
-    LEO-258: Move a block to its own BlockGrid when it is clicked (i.e. clicking a block in a BlockGrid causes it to break-off and form its own BlockGrid)
-    LEO-259: Modify the Box2D fixtures of a BlockGrid when a block is removed from it
-    LEO-260: Allow player to pick up single floating blocks if they are within a certain proximity of the player's ship (rafael)
+		LEO-258: Move a block to its own BlockGrid when it is clicked (i.e. clicking a block in a BlockGrid causes it to break-off and form its own BlockGrid)
+		LEO-259: Modify the Box2D fixtures of a BlockGrid when a block is removed from it
+		LEO-260: Allow player to pick up single floating blocks if they are within a certain proximity of the player's ship (rafael)
 
 cargo hold
 	list of blocks (rafael)

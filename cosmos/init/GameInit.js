@@ -163,7 +163,7 @@ var GameInit = {
 				.streamMode(1)
 				.mount(server.spaceGameScene)
 				.padding(10)
-				.grid(AsteroidGenerator.genProceduralAsteroid(20))
+				.grid(BlockGridGenerator.genProceduralAsteroid(20))
 				.scaleBy(10);
 			this.moveRandomly(asteroid);
 		}
@@ -175,8 +175,7 @@ var GameInit = {
 				.streamMode(1)
 				.mount(server.spaceGameScene)
 				.padding(10)
-				.grid(AsteroidGenerator.genProceduralAsteroid(20))
-				.scaleBy(10)
+				.grid(BlockGridGenerator.genProceduralAsteroid(20))
 			this.moveRandomly(asteroid);
 		}
 
@@ -188,7 +187,7 @@ var GameInit = {
 				.streamMode(1)
 				.mount(server.spaceGameScene)
 				.padding(1)
-				.grid(AsteroidGenerator.singleBlock());
+				.grid(BlockGridGenerator.singleBlock());
 			this.moveRandomly(asteroid);
 		}
 
@@ -200,7 +199,7 @@ var GameInit = {
 				.mount(server.spaceGameScene)
 				.padding(10)
 				//note that the signature of gen.. is genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution)
-				.grid(AsteroidGenerator.genProceduralAsteroid(20, 20, AsteroidGenerator.blockDistributions.SHIP_PARTS, true));
+				.grid(BlockGridGenerator.genProceduralAsteroid(20, 20, BlockGridGenerator.blockDistributions.SHIP_PARTS, true));
 			this.moveRandomly(asteroid);
 		}
 	},
