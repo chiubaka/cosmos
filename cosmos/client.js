@@ -98,8 +98,6 @@ var Client = IgeClass.extend({
 					// a splash screen or a menu first? Then connect after you've
 					// got a username or something?
 
-					console.log(self.getSessionId());
-
 					// Use DeploymentUtils to get the appropriate game server to connect to.
 					ige.network.start(DeploymentUtils.getServerUrl(), function() {
 						ige.client.metrics.fireEvent('network', 'connect');
@@ -117,7 +115,7 @@ var Client = IgeClass.extend({
 							.stream.renderLatency(80); // Render the simulation 160 milliseconds in the past
 
 						// Ask the server to create an entity for us
-						ige.network.send('playerEntity');
+						ige.network.send('playerEntity', {sid: self.getSessionId()});
 
 						GameInit.init(self);
 						//ige.editor.showStats();
@@ -136,9 +134,7 @@ var Client = IgeClass.extend({
 	},
 
 	parseCookie: function() {
-		console.log(document.cookie);
 		var cookieArray = document.cookie.split(';');
-		console.log(cookieArray);
 		var cookie = {};
 		cookieArray.each(function(element) {
 			var split = element.split('=');
