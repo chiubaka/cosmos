@@ -24,7 +24,7 @@ var ServerNetworkEvents = {
 			player.cargo.unsubscribeFromUpdates(clientId);
 
 			var self = this;
-			DbPlayerSave.save(player, function(err, result) {
+			DbPlayer.save(player, function(err, result) {
 				if (err) {
 					self.log('Cannot save player in database!', 'error')
 				}
@@ -56,7 +56,7 @@ var ServerNetworkEvents = {
 
 				console.log('playerId: ' + playerId);
 			});
-			DbPlayerLoad.load('dummy auth token', function(err, ship, cargo) {
+			DbPlayer.load('dummy auth token', function(err, ship, cargo) {
 				if (err) {
 					self.log('Cannot load player from database!', 'error')
 				}

@@ -56,8 +56,7 @@ var config = {
 
 		/* Database */
 		{ name: 'DbConfig', path: './db/DbConfig' },
-		{ name: 'DbPlayerLoad', path: './db/DbPlayerLoad' },
-		{ name: 'DbPlayerSave', path: './db/DbPlayerSave' },
+		{ name: 'DbPlayer', path: './db/DbPlayer' },
 		{ name: 'DbSession', path: './db/DbSession' },
 
 		/* === SUPPLEMENTAL FUNCTIONALITY=== */
