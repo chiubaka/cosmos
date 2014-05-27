@@ -20,6 +20,8 @@ var MICROSOFT_CLIENT_SECRET = "wpNliQi3hxndft-KdgzmAUrQABtJyD4r";
 var FACEBOOK_APP_ID = "1506916002863082";
 var FACEBOOK_APP_SECRET = "adcf2894f7024a5d8afcce03201ce434";
 
+var SUCCESS_REDIRECT_PATH = "/cosmos";
+
 passport.serializeUser(function (user, done) {
 	done(null, user);
 });
@@ -140,29 +142,33 @@ app.get('/auth/msft',
     // this function will not be called.
   });
 
-app.get('/auth/msft/callback', passport.authenticate('windowslive', {
+app.get('/auth/msft/callback',
+	passport.authenticate('windowslive', {
 		failureRedirect: '/login'
 	}),
 	function(req, res) {
 		console.log("logged in");
-		res.redirect('/');
-	});
+		res.redirect(SUCCESS_REDIRECT_PATH);
+	}
+);
 
 /**
  * Facebook authentication
  */
 app.get('/auth/fb',
-  passport.authenticate('facebook'),
-  function(req, res){
-    // The request will be redirected to Facebook for authentication, so this
-    // function will not be called.
-  });
+	passport.authenticate('facebook'),
+	function(req, res){
+    	// The request will be redirected to Facebook for authentication, so this
+		// function will not be called.
+	}
+);
 
 app.get('/auth/fb/callback', 
-  passport.authenticate('facebook', { failureRedirect: '/login' }),
-  function(req, res) {
-    res.redirect('/');
-  });
+	passport.authenticate('facebook', { failureRedirect: '/login' }),
+	function(req, res) {
+		res.redirect(SUCCESS_REDIRECT_PATH);
+	}
+);
 
 /**
  * Google Account authentication
@@ -171,11 +177,12 @@ app.get('/auth/google',
   passport.authenticate('google'));
 
 app.get('/auth/google/return', 
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  function(req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/');
-  });
+	passport.authenticate('google', { failureRedirect: '/login' }),
+	function(req, res) {
+		// Successful authentication, redirect home.
+		res.redirect(SUCCESS_REDIRECT_PATH);
+	}
+);
 
 app.get('/logout', function(req, res) {
 	req.logout();
