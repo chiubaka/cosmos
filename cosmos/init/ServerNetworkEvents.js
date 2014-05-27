@@ -45,7 +45,17 @@ var ServerNetworkEvents = {
 	_onPlayerEntity: function(data, clientId) {
 		var self = this;
 		if (!ige.server.players[clientId]) {
-			console.log('Session ID: ' + data.sid);
+			DbSession.playerIdForSession(data.sid, function(err, playerId) {
+				if (err) {
+					self.log('Cannot load session from database!', 'error');
+				}
+				// No player associated with this session! Playing as a guest.
+				else if (playerId === undefined) {
+
+				}
+
+				console.log('playerId: ' + playerId);
+			});
 			DbPlayerLoad.load('dummy auth token', function(err, ship, cargo) {
 				if (err) {
 					self.log('Cannot load player from database!', 'error')

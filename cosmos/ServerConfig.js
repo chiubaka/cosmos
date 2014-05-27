@@ -58,6 +58,7 @@ var config = {
 		{ name: 'DbConfig', path: './db/DbConfig' },
 		{ name: 'DbPlayerLoad', path: './db/DbPlayerLoad' },
 		{ name: 'DbPlayerSave', path: './db/DbPlayerSave' },
+		{ name: 'DbSession', path: './db/DbSession' },
 
 		/* === SUPPLEMENTAL FUNCTIONALITY=== */
 		/* Debugging */
