@@ -8,6 +8,9 @@ var ServerNetworkEvents = {
 	 * @private
 	 */
 	_onPlayerConnect: function(socket) {
+		// TODO: Reject the client connection if this is the same player connecting
+		// more than once.
+
 		// Don't reject the client connection
 		return false;
 	},
