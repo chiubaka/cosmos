@@ -92,7 +92,7 @@ passport.use(new GoogleStrategy({
 var app = express();
 
 app.configure(function () {
-	app.set('port', 3000);
+	app.set('port', process.env.PORT || 2001);
 	app.set('views', __dirname + '/views');
 	app.set('view engine', 'jade');
 	app.use(express.favicon());
