@@ -24,7 +24,7 @@ var ServerNetworkEvents = {
 			player.cargo.unsubscribeFromUpdates(clientId);
 
 			var self = this;
-			DbPlayer.save(player, function(err, result) {
+			DbPlayer.update(player.dbId(), player, function(err, result) {
 				if (err) {
 					self.log('Cannot save player in database!', 'error')
 				}
@@ -54,29 +54,35 @@ var ServerNetworkEvents = {
 
 				}
 
-				console.log('playerId: ' + playerId);
-			});
-			DbPlayer.load('dummy auth token', function(err, ship, cargo) {
-				if (err) {
-					self.log('Cannot load player from database!', 'error')
-				}
-				var player = new Player(clientId)
-					.debugFixtures(false)//call this before calling setGrid()
-					.padding(10)
-					//.grid(ExampleShips.starterShipSingleMisplacedEngine())
-					.grid(BlockGrid.prototype.rehydrateGrid(ship))
-					.addSensor(300)
-					.attractionStrength(1)
-					.streamMode(1)
-					.mount(ige.server.spaceGameScene)
-					.translateTo((Math.random() - .5) * ige.server.PLAYER_START_DISTANCE, (Math.random() - .5) * ige.server.PLAYER_START_DISTANCE, 0);
+				DbPlayer.load(playerId, function(err, ship, cargo) {
+					if (err) {
+						self.log('Cannot load player from database!', 'error')
+					}
+					var player = new Player();
 
-				player.cargo.rehydrateCargo(cargo);
+					if (ship === undefined) {
+						player.grid(ExampleShips.starterShipSingleMisplacedEngine());
+					}
+					else {
+						player.grid(BlockGrid.prototype.rehydrateGrid(ship));
+					}
 
-				ige.server.players[clientId] = player;
+					player.dbId(playerId)
+						.debugFixtures(false)//call this before calling setGrid()
+						.padding(10)
+						.addSensor(300)
+						.attractionStrength(1)
+						.streamMode(1)
+						.mount(ige.server.spaceGameScene)
+						.translateTo((Math.random() - .5) * ige.server.PLAYER_START_DISTANCE, (Math.random() - .5) * ige.server.PLAYER_START_DISTANCE, 0);
 
-				// Tell the client to track their player entity
-				ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
+					player.cargo.rehydrateCargo(cargo);
+
+					ige.server.players[clientId] = player;
+
+					// Tell the client to track their player entity
+					ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
+				});
 			});
 		}
 	},

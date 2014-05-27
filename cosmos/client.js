@@ -138,7 +138,7 @@ var Client = IgeClass.extend({
 		var cookie = {};
 		cookieArray.each(function(element) {
 			var split = element.split('=');
-			cookie[split[0]] = decodeURIComponent(split[1]);
+			cookie[split[0].trim()] = decodeURIComponent(split[1]);
 		});
 
 		return cookie;

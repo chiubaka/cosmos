@@ -1,5 +1,6 @@
 var Player = BlockGrid.extend({
 	classId: 'Player',
+	_dbId: undefined,
 
 	init: function(data) {
 		BlockGrid.prototype.init.call(this, data);
@@ -28,6 +29,14 @@ var Player = BlockGrid.extend({
 
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);
+	},
+
+	dbId: function(val) {
+		if (val === undefined) {
+			return _dbId;
+		}
+		_dbId = val;
+		return this;
 	},
 
 	/**
