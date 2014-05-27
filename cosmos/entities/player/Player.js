@@ -33,9 +33,9 @@ var Player = BlockGrid.extend({
 
 	dbId: function(val) {
 		if (val === undefined) {
-			return _dbId;
+			return this._dbId;
 		}
-		_dbId = val;
+		this._dbId = val;
 		return this;
 	},
 

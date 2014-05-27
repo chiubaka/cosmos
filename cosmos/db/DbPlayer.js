@@ -18,12 +18,14 @@ var DbPlayer = {
 	 * already exist.
 	 * @param playerId
 	 * @param player
-	 * @param calback
+	 * @param callback
 	 */
 	update: function(playerId, player, callback) {
 		if (playerId === undefined) {
+			callback(undefined, undefined);
 			return;
 		}
+
 		ige.mongo.db.collection('players', function(err, players) {
 			var ship = DbPlayer.serializeGrid(player.grid());
 			var cargo = player.cargo.serializeCargo();

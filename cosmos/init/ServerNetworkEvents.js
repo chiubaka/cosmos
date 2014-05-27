@@ -67,8 +67,11 @@ var ServerNetworkEvents = {
 						player.grid(BlockGrid.prototype.rehydrateGrid(ship));
 					}
 
-					player.dbId(playerId)
-						.debugFixtures(false)//call this before calling setGrid()
+					if (playerId !== undefined) {
+						player.dbId(playerId);
+					}
+
+					player.debugFixtures(false)//call this before calling setGrid()
 						.padding(10)
 						.addSensor(300)
 						.attractionStrength(1)

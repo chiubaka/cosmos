@@ -5,11 +5,11 @@ var DbSession = {
 			sessions.findOne({_id: sid}, function(err, doc) {
 				var session = JSON.parse(doc.session);
 
-				if (session.passport.user.id) {
+				if (session.passport.user && session.passport.user.id) {
 					callback(err, session.passport.user.id);
 				}
 				// Google authentication uses identifier rather than id
-				else if (session.passport.user.identifier) {
+				else if (session.passport.user && session.passport.user.identifier) {
 					// Google identifier comes back in the format:
 					// https://www.google.com/accounts/o8/id?id=<id>
 					var identifier = session.passport.user.identifier;
