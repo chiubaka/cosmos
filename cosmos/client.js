@@ -98,6 +98,8 @@ var Client = IgeClass.extend({
 					// a splash screen or a menu first? Then connect after you've
 					// got a username or something?
 
+					console.log(self.getSessionId());
+
 					// Use DeploymentUtils to get the appropriate game server to connect to.
 					ige.network.start(DeploymentUtils.getServerUrl(), function() {
 						ige.client.metrics.fireEvent('network', 'connect');
@@ -124,6 +126,27 @@ var Client = IgeClass.extend({
 			});
 		});
 	},
+
+	getSessionId: function() {
+		var cookie = this.parseCookie();
+		var sid = cookie['connect.sid'];
+
+		// connect.sid comes in the form: s:<id>.<???>+<???>
+		return sid.substring(sid.indexOf(':') + 1, sid.indexOf('.'));
+	},
+
+	parseCookie: function() {
+		console.log(document.cookie);
+		var cookieArray = document.cookie.split(';');
+		console.log(cookieArray);
+		var cookie = {};
+		cookieArray.each(function(element) {
+			var split = element.split('=');
+			cookie[split[0]] = decodeURIComponent(split[1]);
+		});
+
+		return cookie;
+	}
 });
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Client; }

@@ -105,7 +105,18 @@ app.configure(function () {
 			url: 'mongodb://cosmos-admin:CS210-l3on1ne!@ds030827.mongolab.com:30827/cosmos-dev-db'
 		}),
 		secret: "pleaseworkpleaseworkpleasework",
-		cookie: { maxAge: 432000000 /* 5 days */ }
+		cookie: {
+			// 5 days
+			maxAge: 432000000,
+			// TODO: httpOnly disabled may expose us to XSS attacks since JavaScript
+			// embedded in the page will be able to read the JavaScript cookie. This is
+			// only a problem if malicious JavaScript is allowed to run on the page, and
+			// then the only thing that is stolen is the user's session.
+			// Realistically, right now we need to be able to access the cookie via
+			// JavaScript so that IGE can read the session ID and send it along when the
+			// websocket connection opens.
+			httpOnly: false,
+		}
 	}));
 	app.use(passport.initialize());
 	app.use(passport.session());
