@@ -328,3 +328,6 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+
+#Rafael's TODO.md file
+TODO.md
