@@ -7,7 +7,7 @@ var DbSession = {
 
 				if (session.passport.user && session.passport.user.id) {
 					callback(err, session.passport.user.id);
-				}
+				} else {
 					callback(err);
 				}
 			});
