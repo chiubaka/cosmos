@@ -14,11 +14,24 @@ var express = require('express'),
 	GoogleStrategy = require('passport-google').Strategy,
 	FacebookStrategy = require('passport-facebook').Strategy;
 
-// Client secrets, etc
+// Local server
+// TODO: CHANGE THIS BASED ON LOCATION AND ENVIRONMENT
+var SERVER_HOST = "http://tl-cosmos.localtest.me:2001";
+
+// Client secrets and callback URLs
+// Microsoft
 var MICROSOFT_CLIENT_ID = "000000004011FE88";
 var MICROSOFT_CLIENT_SECRET = "wpNliQi3hxndft-KdgzmAUrQABtJyD4r";
+var MICROSOFT_SCOPE = ['wl.signin', 'wl.basic', 'wl.emails'];
+var MICROSOFT_AUTH_ROUTE = "/auth/msft";
+var MICROSOFT_CALLBACK = MICROSOFT_AUTH_ROUTE + "/callback";
+
+// Facebook
 var FACEBOOK_APP_ID = "1506916002863082";
 var FACEBOOK_APP_SECRET = "adcf2894f7024a5d8afcce03201ce434";
+var FACEBOOK_AUTH_ROUTE = "/auth/fb";
+var FACEBOOK_CALLBACK = FACEBOOK_AUTH_ROUTE + "/callback";
+
 
 var SUCCESS_REDIRECT_PATH = "/cosmos";
 
@@ -36,7 +49,7 @@ passport.deserializeUser(function (obj, done) {
 passport.use(new MicrosoftStrategy({
 		clientID: MICROSOFT_CLIENT_ID,
 		clientSecret: MICROSOFT_CLIENT_SECRET,
-		callbackURL: "http://teamleonine-chplus.localtest.me:3000/auth/msft/callback"
+		callbackURL: SERVER_HOST + MICROSOFT_CALLBACK
 	},
 	function (accessToken, refreshToken, profile, done) {
 		// asynchronous verification, for effect...
@@ -55,7 +68,7 @@ passport.use(new MicrosoftStrategy({
 passport.use(new FacebookStrategy({
 		clientID: FACEBOOK_APP_ID,
 		clientSecret: FACEBOOK_APP_SECRET,
-		callbackURL: "http://teamleonine-chplus.localtest.me:3000/auth/fb/callback"
+		callbackURL: SERVER_HOST + FACEBOOK_CALLBACK
 	},
 	function (accessToken, refreshToken, profile, done) {
 		// asynchronous verification, for effect...
@@ -72,8 +85,8 @@ passport.use(new FacebookStrategy({
 ));
 
 passport.use(new GoogleStrategy({
-    returnURL: 'http://localhost:3000/auth/google/return',
-    realm: 'http://localhost:3000/'
+    returnURL: 'http://localhost:2001/auth/google/return',
+    realm: 'http://localhost:2001/'
   },
   function(identifier, profile, done) {
     process.nextTick(function () {
@@ -146,14 +159,14 @@ app.get('/cosmos', routes.cosmos);
 /**
  * Microsoft Account authentication
  */
-app.get('/auth/msft',
-  passport.authenticate('windowslive', { scope: ['wl.signin', 'wl.basic', 'wl.emails'] }),
+app.get(MICROSOFT_AUTH_ROUTE,
+  passport.authenticate('windowslive', { scope: MICROSOFT_SCOPE }),
   function(req, res){
     // The request will be redirected to Windows Live for authentication, so
     // this function will not be called.
   });
 
-app.get('/auth/msft/callback',
+app.get(MICROSOFT_CALLBACK,
 	passport.authenticate('windowslive', {
 		failureRedirect: '/login'
 	}),
@@ -166,7 +179,7 @@ app.get('/auth/msft/callback',
 /**
  * Facebook authentication
  */
-app.get('/auth/fb',
+app.get(FACEBOOK_AUTH_ROUTE,
 	passport.authenticate('facebook'),
 	function(req, res){
     	// The request will be redirected to Facebook for authentication, so this
@@ -174,7 +187,7 @@ app.get('/auth/fb',
 	}
 );
 
-app.get('/auth/fb/callback', 
+app.get(FACEBOOK_CALLBACK, 
 	passport.authenticate('facebook', { failureRedirect: '/login' }),
 	function(req, res) {
 		res.redirect(SUCCESS_REDIRECT_PATH);
