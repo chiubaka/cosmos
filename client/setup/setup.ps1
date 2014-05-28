@@ -1,0 +1,1 @@
+[Environment]::SetEnvironmentVariable("NODE_ENV", "development", "User")

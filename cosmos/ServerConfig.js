@@ -54,6 +54,11 @@ var config = {
 		{ name: 'CargoContainer', path: './models/cargo/CargoContainer' },
 		{ name: 'CargoItem', path: './models/cargo/CargoItem' },
 
+		/* Database */
+		{ name: 'DbConfig', path: './db/DbConfig' },
+		{ name: 'DbPlayer', path: './db/DbPlayer' },
+		{ name: 'DbSession', path: './db/DbSession' },
+
 		/* === SUPPLEMENTAL FUNCTIONALITY=== */
 		/* Debugging */
 		{ name: 'FixtureDebuggingEntity', path: './debug/FixtureDebuggingEntity' },

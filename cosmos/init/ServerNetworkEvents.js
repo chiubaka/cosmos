@@ -8,6 +8,9 @@ var ServerNetworkEvents = {
 	 * @private
 	 */
 	_onPlayerConnect: function(socket) {
+		// TODO: Reject the client connection if this is the same player connecting
+		// more than once.
+
 		// Don't reject the client connection
 		return false;
 	},
@@ -17,17 +20,25 @@ var ServerNetworkEvents = {
 	This function removes all trace of the player from the 'players' list
 	*/
 	_onPlayerDisconnect: function(clientId) {
-		if (ige.server.players[clientId]) {
+		var player = ige.server.players[clientId];
+		if (player) {
 			// Handle destroying player state first
 			// Unsubscribe players from updates
-			ige.server.players[clientId].cargo.unsubscribeFromUpdates(clientId);
+			player.cargo.unsubscribeFromUpdates(clientId);
 
-			// Remove the player from the game
-			ige.server.players[clientId].destroy();
+			var self = this;
+			DbPlayer.update(player.dbId(), player, function(err, result) {
+				if (err) {
+					self.log('Cannot save player in database!', 'error')
+				}
 
-			// Remove the reference to the player entity
-			// so that we don't leak memory
-			delete ige.server.players[clientId];
+				// Remove the player from the game
+				player.destroy();
+
+				// Remove the reference to the player entity
+				// so that we don't leak memory
+				delete player;
+			});
 		}
 	},
 
@@ -35,22 +46,54 @@ var ServerNetworkEvents = {
 	A player has connected to the server and asked for a player Entity to be created for him or her!
 	*/
 	_onPlayerEntity: function(data, clientId) {
+		var self = this;
 		if (!ige.server.players[clientId]) {
-			ige.server.players[clientId] = new Player(clientId)
-				.debugFixtures(false)//call this before calling setGrid()
-				.padding(10)
-				.grid(ExampleShips.starterShipSingleMisplacedEngine())
-				.addSensor(300)
-				.attractionStrength(1)
-				.streamMode(1)
-				.mount(ige.server.spaceGameScene)
-				.translateTo((Math.random() - .5) * ige.server.PLAYER_START_DISTANCE, (Math.random() - .5) * ige.server.PLAYER_START_DISTANCE, 0);
+			DbSession.playerIdForSession(data.sid, function(err, playerId) {
+				if (err) {
+					self.log('Cannot load session from database!', 'error');
+				}
+				// No player associated with this session! Playing as a guest.
+				else if (playerId === undefined) {
 
-			// Tell the client to track their player entity
-			ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
+				}
+
+				DbPlayer.load(playerId, function(err, ship, cargo) {
+					if (err) {
+						self.log('Cannot load player from database!', 'error')
+					}
+					var player = new Player();
+
+					if (ship === undefined) {
+						player.grid(ExampleShips.starterShipSingleMisplacedEngine());
+					}
+					else {
+						player.grid(BlockGrid.prototype.rehydrateGrid(ship));
+					}
+
+					if (playerId !== undefined) {
+						player.dbId(playerId);
+					}
+
+					player.debugFixtures(false)//call this before calling setGrid()
+						.padding(10)
+						.addSensor(300)
+						.attractionStrength(1)
+						.streamMode(1)
+						.mount(ige.server.spaceGameScene)
+						.translateTo((Math.random() - .5) * ige.server.PLAYER_START_DISTANCE, (Math.random() - .5) * ige.server.PLAYER_START_DISTANCE, 0);
+
+					player.cargo.rehydrateCargo(cargo);
+
+					ige.server.players[clientId] = player;
+
+					// Tell the client to track their player entity
+					ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
+				});
+			});
 		}
 	},
 
+	// TODO: Fix player respawn (broken by new DB code)
 	_onRespawnRequest: function(data, clientId) {
 		ige.server._onPlayerDisconnect(clientId);
 		ige.server._onPlayerEntity(data, clientId);

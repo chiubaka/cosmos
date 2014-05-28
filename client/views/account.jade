@@ -1,0 +1,8 @@
+﻿extends layout
+
+block content
+  h1= title
+  p ID: #{user.id}
+  p Name: #{user.displayName}
+  each val, key in user
+    p #{key}: #{val}
