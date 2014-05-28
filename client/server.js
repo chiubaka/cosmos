@@ -93,21 +93,20 @@ passport.use(new FacebookStrategy({
 ));
 
 passport.use(new GoogleStrategy({
-    returnURL: 'http://localhost:2001/auth/google/return',
-    realm: 'http://localhost:2001/'
-  },
-  function(identifier, profile, done) {
-    process.nextTick(function () {
-
-      // To keep the example simple, the user's Google profile is returned to
-      // represent the logged-in user.  In a typical application, you would want
-      // to associate the Google account with a user record in your database,
-      // and return that user instead.
-      profile.identifier = identifier;
-	  profile.provider = "Google";
-      return done(null, profile);
-    });
-  }
+		clientID: GOOGLE_CLIENT_ID,
+		clientSecret: GOOGLE_CLIENT_SECRET,
+		callbackURL: SERVER_HOST + GOOGLE_CALLBACK
+	},
+	function(accessToken, refreshToken, profile, done) {
+		process.nextTick(function () {
+			// To keep the example simple, the user's Google profile is returned to
+			// represent the logged-in user.  In a typical application, you would want
+			// to associate the Google account with a user record in your database,
+			// and return that user instead.
+			profile.provider = "Google";
+			return done(null, profile);
+		});
+	}
 ));
 
 var app = express();
