@@ -8,14 +8,6 @@ var DbSession = {
 				if (session.passport.user && session.passport.user.id) {
 					callback(err, session.passport.user.id);
 				}
-				// Google authentication uses identifier rather than id
-				else if (session.passport.user && session.passport.user.identifier) {
-					// Google identifier comes back in the format:
-					// https://www.google.com/accounts/o8/id?id=<id>
-					var identifier = session.passport.user.identifier;
-					callback(err, identifier.substring(identifier.indexOf('id=') + 3));
-				}
-				else {
 					callback(err);
 				}
 			});

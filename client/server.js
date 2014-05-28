@@ -11,7 +11,7 @@ var express = require('express'),
 	session = require('express-session'),
 	MongoStore = require('connect-mongo')(session)
 	MicrosoftStrategy = require('passport-windowslive').Strategy,
-	GoogleStrategy = require('passport-google').Strategy,
+	GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
 	FacebookStrategy = require('passport-facebook').Strategy;
 
 // Local server
@@ -32,7 +32,15 @@ var FACEBOOK_APP_SECRET = "adcf2894f7024a5d8afcce03201ce434";
 var FACEBOOK_AUTH_ROUTE = "/auth/fb";
 var FACEBOOK_CALLBACK = FACEBOOK_AUTH_ROUTE + "/callback";
 
+// Google
+var GOOGLE_CLIENT_ID = "1055686652049-kph26b01itelhuqhhd3ekb2sum79a320.apps.googleusercontent.com";
+var GOOGLE_CLIENT_SECRET = "cBDD90FxmHn4NkANKvXxnIUk";
+var GOOGLE_SCOPE = ['https://www.googleapis.com/auth/userinfo.profile',
+									  'https://www.googleapis.com/auth/userinfo.email'];
+var GOOGLE_AUTH_ROUTE = "/auth/google"
+var GOOGLE_CALLBACK = GOOGLE_AUTH_ROUTE + "/callback";
 
+// Redirect to this URL when authentication is successful.
 var SUCCESS_REDIRECT_PATH = "/cosmos";
 
 passport.serializeUser(function (user, done) {
@@ -197,10 +205,10 @@ app.get(FACEBOOK_CALLBACK,
 /**
  * Google Account authentication
  */
-app.get('/auth/google',
-  passport.authenticate('google'));
+app.get(GOOGLE_AUTH_ROUTE,
+  passport.authenticate('google', { scope: GOOGLE_SCOPE }));
 
-app.get('/auth/google/return', 
+app.get(GOOGLE_CALLBACK, 
 	passport.authenticate('google', { failureRedirect: '/login' }),
 	function(req, res) {
 		// Successful authentication, redirect home.
