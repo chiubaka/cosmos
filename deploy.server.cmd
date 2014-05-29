@@ -88,38 +88,38 @@ goto :EOF
 :Deployment
 echo Processing Cosmos Server endpoint development.
 
-:: 0. Update remote submodules 
+:: Update remote submodules 
 pushd "%DEPLOYMENT_SOURCE%" 
 echo Updating remote submodules before Kudu syncs...
 call :ExecuteCmd git submodule update --init --recursive --remote
 popd
 
-:: 1. Copy over web.config for this endpoint
-echo Using Web.server.config
-pushd "%DEPLOYMENT_SOURCE%"
-call :ExecuteCmd copy /A /Y "config\Web.server.config" "Web.config"
-IF !ERRORLEVEL! NEQ 0 goto error
-popd
-
-:: 2. Copy over package.json for this endpoint
-echo Using package.server.json
-pushd "%DEPLOYMENT_SOURCE%"
-call :ExecuteCmd copy /A /Y "config\package.server.json" "package.json"
-IF !ERRORLEVEL! NEQ 0 goto error
-popd
-
-:: 3. KuduSync
+:: KuduSync
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
   call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
   IF !ERRORLEVEL! NEQ 0 goto error
 )
 
-:: 4. Select node version
+:: Copy over web.config for this endpoint
+echo Using Web.server.config
+pushd "%DEPLOYMENT_TARGET%"
+call :ExecuteCmd copy /A /Y "config\Web.server.config" "Web.config"
+IF !ERRORLEVEL! NEQ 0 goto error
+popd
+
+:: Copy over package.json for this endpoint
+echo Using package.server.json
+pushd "%DEPLOYMENT_TARGET%"
+call :ExecuteCmd copy /A /Y "config\package.server.json" "package.json"
+IF !ERRORLEVEL! NEQ 0 goto error
+popd
+
+:: Select node version
 call :SelectNodeVersion
 
-:: 5. Install NPM packages for IGE server
-echo Installing IGE server NPM packages.
-pushd "%DEPLOYMENT_TARGET%\ige\server"
+:: Install NPM packages for server
+echo Installing server NPM packages.
+pushd "%DEPLOYMENT_TARGET%\server"
 call :ExecuteCmd !NPM_CMD! install --production
 IF !ERRORLEVEL! NEQ 0 goto error
 popd
