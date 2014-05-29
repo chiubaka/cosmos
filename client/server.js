@@ -16,7 +16,7 @@ var express = require('express'),
 
 // Local server
 // TODO: CHANGE THIS BASED ON LOCATION AND ENVIRONMENT
-var SERVER_HOST = "http://tl-cosmos.localtest.me:2001";
+var SERVER_HOST = "http://dev.cosmos.teamleonine.com";
 
 // Client secrets and callback URLs
 // Microsoft
