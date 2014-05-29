@@ -90,32 +90,39 @@ echo Processing Cosmos Client endpoint development.
 
 :: 0. Update remote submodules 
 pushd "%DEPLOYMENT_SOURCE%" 
-echo Updating remote submodules before Kudu synchro...
+echo Updating remote submodules before Kudu syncs...
 call :ExecuteCmd git submodule update --init --recursive --remote
 popd
 
-:: 1. KuduSync
+:: 1. Copy over web.config for this endpoint
+echo Using Web.client.config
+pushd "%DEPLOYMENT_SOURCE%"
+call :ExecuteCmd copy /A /Y "config\Web.client.config" "Web.config"
+IF !ERRORLEVEL! NEQ 0 goto error
+popd
+
+:: 2. Copy over package.json for this endpoint
+echo Using package.client.json
+pushd "%DEPLOYMENT_SOURCE%"
+call :ExecuteCmd copy /A /Y "config\package.client.json" "package.json"
+IF !ERRORLEVEL! NEQ 0 goto error
+popd
+
+:: 3. KuduSync
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
   call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
   IF !ERRORLEVEL! NEQ 0 goto error
 )
 
-:: 2. Select node version
+:: 4. Select node version
 call :SelectNodeVersion
 
-:: 3. Install NPM packages for express client
-echo Installing IGE server NPM packages.
+:: 5. Install NPM packages for client
+echo Installing client NPM packages.
 pushd "%DEPLOYMENT_TARGET%\client"
 call :ExecuteCmd !NPM_CMD! install --production
 IF !ERRORLEVEL! NEQ 0 goto error
 popd
-
-:: 4. Copy over web.config for this endpoint
-echo Using Web.client.config
-call :ExecuteCmd copy /A /Y "%DEPLOYMENT_TARGET%\config\Web.client.config" "%DEPLOYMENT_TARGET%\Web.config"
-IF !ERRORLEVEL! NEQ 0 goto error
-popd
-
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :: Post deployment stub
