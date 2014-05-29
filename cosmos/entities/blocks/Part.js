@@ -1,3 +1,6 @@
+/**
+ * A part is a block that players can use to improve their ship.
+ */
 var Part = Block.extend({
 	classId: 'Part',
 

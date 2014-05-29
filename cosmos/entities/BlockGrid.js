@@ -1,3 +1,8 @@
+/**
+ * The block grid class is one of the most fundamental classes in Cosmos. It stores a 2D grid of blocks.
+ * BlockGrid is the superclass of all ships and asteroids.
+ * TODO redesign the underlying representation of BlockGrid such that blocks can be of different sizes
+ */
 var BlockGrid = IgeEntityBox2d.extend({
 	classId: 'BlockGrid',
 

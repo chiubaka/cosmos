@@ -1,3 +1,8 @@
+/**
+ * Mining lasers allow you to mine asteroids. Better mining lasers will allow you to (1) mine better blocks and (2) mine faster.
+ * If you don't have a mining laser you can't mine.
+ * Also note that mining lasers are the only weapon for combat currently.
+ */
 var MiningLaserBlock = Part.extend({
 	classId: 'MiningLaserBlock',
 

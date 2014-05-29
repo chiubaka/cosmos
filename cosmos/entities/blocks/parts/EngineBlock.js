@@ -1,3 +1,7 @@
+/**
+ * The engine block provides thrust for your ship.
+ * Having more engine blocks allows you to (1) accelerate more rapidly and (2) increase your maximum speed.
+ */
 var EngineBlock = Part.extend({
 	classId: 'EngineBlock',
 

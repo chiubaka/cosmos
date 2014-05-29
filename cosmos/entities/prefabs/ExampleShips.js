@@ -1,3 +1,6 @@
+/**
+ * This class contains all of the example ships that we have created for testing purposes, and also any ships that we want players to start with.
+ */
 var ExampleShips = {
 	/**
 	 * This is the ship in beginning of the video

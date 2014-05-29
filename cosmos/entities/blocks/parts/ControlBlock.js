@@ -1,3 +1,7 @@
+/**
+ * The control block allows you to control your ship.
+ * TODO when you lose your control block you should lose control of your ship.
+ */
 var ControlBlock = Part.extend({
 	classId: 'ControlBlock',
 
