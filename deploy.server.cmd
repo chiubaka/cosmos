@@ -54,6 +54,11 @@ goto Deployment
 
 :SelectNodeVersion
 
+:: SET NPM_CMD=npm
+:: SET NODE_EXE=node
+
+:: goto :EOF
+
 IF DEFINED KUDU_SELECT_NODE_VERSION_CMD (
   :: The following are done only on Windows Azure Websites environment
   call %KUDU_SELECT_NODE_VERSION_CMD% "%DEPLOYMENT_SOURCE%" "%DEPLOYMENT_TARGET%" "%DEPLOYMENT_TEMP%"
@@ -87,34 +92,46 @@ goto :EOF
 
 :Deployment
 echo Processing Cosmos Server endpoint development.
+echo %DEPLOYMENT_SOURCE%
+echo %DEPLOYMENT_TARGET%
 
-:: 0. Update remote submodules 
+:: Update remote submodules 
 pushd "%DEPLOYMENT_SOURCE%" 
 echo Updating remote submodules before Kudu syncs...
 call :ExecuteCmd git submodule update --init --recursive --remote
 popd
 
-:: 1. KuduSync
+:: Copy over web.config for this endpoint
+echo Using Web.server.config
+pushd "%DEPLOYMENT_SOURCE%"
+call :ExecuteCmd xcopy /Y "config\Web.server.config" "Web.config"
+IF !ERRORLEVEL! NEQ 0 goto error
+popd
+
+:: Copy over package.json for this endpoint
+echo Using package.server.json
+pushd "%DEPLOYMENT_SOURCE%"
+call :ExecuteCmd xcopy /Y "config\package.server.json" "package.json"
+IF !ERRORLEVEL! NEQ 0 goto error
+popd
+
+:: KuduSync
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
   call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
   IF !ERRORLEVEL! NEQ 0 goto error
 )
 
-:: 2. Select node version
+:: Select node version
 call :SelectNodeVersion
 
-:: 3. Install NPM packages for IGE server
-echo Installing IGE server NPM packages.
-pushd "%DEPLOYMENT_TARGET%\ige\server"
-call :ExecuteCmd !NPM_CMD! install --production
-IF !ERRORLEVEL! NEQ 0 goto error
-popd
-
-:: 4. Copy over web.config for this endpoint
-echo Using Web.server.config
-call :ExecuteCmd copy /A /Y "config/Web.server.config" Web.config
-IF !ERRORLEVEL! NEQ 0 goto error
-popd
+:: Install NPM packages for server
+echo Installing server NPM packages.
+IF EXIST "%DEPLOYMENT_TARGET%\ige\server\package.json" (
+  pushd "%DEPLOYMENT_TARGET%\ige\server"
+  call :ExecuteCmd !NPM_CMD! install --production
+  IF !ERRORLEVEL! NEQ 0 goto error
+  popd
+)
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 

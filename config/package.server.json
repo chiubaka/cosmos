@@ -1,8 +1,8 @@
 {
 	"name": "cosmos",
 	"version": "0.0.1",
-	"author":"Team Leonine <ops@teamleonine.com>",
-	"description":"The Cosmos video game - running 'npm start' will start the Cosmos server.",
+	"author": "Team Leonine <ops@teamleonine.com>",
+	"description": "The Cosmos video game - running 'npm start' will start the Cosmos server.",
 	"contributors": [
 		{ 
 			"name": "Daniel Chiu",
