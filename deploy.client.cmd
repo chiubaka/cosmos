@@ -54,6 +54,11 @@ goto Deployment
 
 :SelectNodeVersion
 
+SET NPM_CMD=npm
+SET NODE_EXE=node
+
+goto :EOF
+
 IF DEFINED KUDU_SELECT_NODE_VERSION_CMD (
   :: The following are done only on Windows Azure Websites environment
   call %KUDU_SELECT_NODE_VERSION_CMD% "%DEPLOYMENT_SOURCE%" "%DEPLOYMENT_TARGET%" "%DEPLOYMENT_TEMP%"
@@ -75,8 +80,7 @@ IF DEFINED KUDU_SELECT_NODE_VERSION_CMD (
 
   SET NPM_CMD="!NODE_EXE!" "!NPM_JS_PATH!"
 ) ELSE (
-  SET NPM_CMD=npm
-  SET NODE_EXE=node
+  
 )
 
 goto :EOF
@@ -87,11 +91,27 @@ goto :EOF
 
 :Deployment
 echo Processing Cosmos Client endpoint development.
+echo %DEPLOYMENT_SOURCE%
+echo %DEPLOYMENT_TARGET%
 
 :: Update remote submodules 
 pushd "%DEPLOYMENT_SOURCE%" 
 echo Updating remote submodules before Kudu syncs...
 call :ExecuteCmd git submodule update --init --recursive --remote
+popd
+
+:: Copy over web.config for this endpoint
+echo Using Web.client.config
+pushd "%DEPLOYMENT_SOURCE%"
+call :ExecuteCmd copy /A /Y "config\Web.client.config" "Web.config"
+IF !ERRORLEVEL! NEQ 0 goto error
+popd
+
+:: Copy over package.json for this endpoint
+echo Using package.client.json
+pushd "%DEPLOYMENT_SOURCE%"
+call :ExecuteCmd copy /A /Y "config\package.client.json" "package.json"
+IF !ERRORLEVEL! NEQ 0 goto error
 popd
 
 :: KuduSync
@@ -100,29 +120,18 @@ IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
   IF !ERRORLEVEL! NEQ 0 goto error
 )
 
-:: Copy over web.config for this endpoint
-echo Using Web.client.config
-pushd "%DEPLOYMENT_TARGET%"
-call :ExecuteCmd copy /A /Y "config\Web.client.config" "Web.config"
-IF !ERRORLEVEL! NEQ 0 goto error
-popd
-
-:: Copy over package.json for this endpoint
-echo Using package.client.json
-pushd "%DEPLOYMENT_TARGET%"
-call :ExecuteCmd copy /A /Y "config\package.client.json" "package.json"
-IF !ERRORLEVEL! NEQ 0 goto error
-popd
-
 :: Select node version
 call :SelectNodeVersion
 
 :: Install NPM packages for client
 echo Installing client NPM packages.
-pushd "%DEPLOYMENT_TARGET%\client"
-call :ExecuteCmd !NPM_CMD! install --production
-IF !ERRORLEVEL! NEQ 0 goto error
-popd
+IF EXIST "%DEPLOYMENT_TARGET%\client\package.json" (
+  pushd "%DEPLOYMENT_TARGET%\client"
+  call :ExecuteCmd !NPM_CMD! install --production
+  IF !ERRORLEVEL! NEQ 0 goto error
+  popd
+)
+
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :: Post deployment stub

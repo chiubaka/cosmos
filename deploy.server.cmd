@@ -54,6 +54,11 @@ goto Deployment
 
 :SelectNodeVersion
 
+SET NPM_CMD=npm
+SET NODE_EXE=node
+
+goto :EOF
+
 IF DEFINED KUDU_SELECT_NODE_VERSION_CMD (
   :: The following are done only on Windows Azure Websites environment
   call %KUDU_SELECT_NODE_VERSION_CMD% "%DEPLOYMENT_SOURCE%" "%DEPLOYMENT_TARGET%" "%DEPLOYMENT_TEMP%"
@@ -87,6 +92,8 @@ goto :EOF
 
 :Deployment
 echo Processing Cosmos Server endpoint development.
+echo %DEPLOYMENT_SOURCE%
+echo %DEPLOYMENT_TARGET%
 
 :: Update remote submodules 
 pushd "%DEPLOYMENT_SOURCE%" 
@@ -94,25 +101,25 @@ echo Updating remote submodules before Kudu syncs...
 call :ExecuteCmd git submodule update --init --recursive --remote
 popd
 
-:: KuduSync
-IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
-  call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
-  IF !ERRORLEVEL! NEQ 0 goto error
-)
-
 :: Copy over web.config for this endpoint
 echo Using Web.server.config
-pushd "%DEPLOYMENT_TARGET%"
+pushd "%DEPLOYMENT_SOURCE%"
 call :ExecuteCmd copy /A /Y "config\Web.server.config" "Web.config"
 IF !ERRORLEVEL! NEQ 0 goto error
 popd
 
 :: Copy over package.json for this endpoint
 echo Using package.server.json
-pushd "%DEPLOYMENT_TARGET%"
+pushd "%DEPLOYMENT_SOURCE%"
 call :ExecuteCmd copy /A /Y "config\package.server.json" "package.json"
 IF !ERRORLEVEL! NEQ 0 goto error
 popd
+
+:: KuduSync
+IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
+  call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
+  IF !ERRORLEVEL! NEQ 0 goto error
+)
 
 :: Select node version
 call :SelectNodeVersion
