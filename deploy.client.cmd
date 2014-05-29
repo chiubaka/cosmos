@@ -54,10 +54,10 @@ goto Deployment
 
 :SelectNodeVersion
 
-SET NPM_CMD=npm
-SET NODE_EXE=node
+:: SET NPM_CMD=npm
+:: SET NODE_EXE=node
 
-goto :EOF
+:: goto :EOF
 
 IF DEFINED KUDU_SELECT_NODE_VERSION_CMD (
   :: The following are done only on Windows Azure Websites environment
