@@ -78,7 +78,7 @@ passport.deserializeUser(function (obj, done) {
 passport.use(new MicrosoftStrategy({
 		clientID: MICROSOFT_CLIENT_ID[ENDPOINT_LAYER],
 		clientSecret: MICROSOFT_CLIENT_SECRET[ENDPOINT_LAYER],
-		callbackURL: SERVER_HOST + MICROSOFT_CALLBACK
+		callbackURL: SERVER_HOST[ENDPOINT_LAYER] + MICROSOFT_CALLBACK
 	},
 	function (accessToken, refreshToken, profile, done) {
 		// asynchronous verification, for effect...
@@ -97,7 +97,7 @@ passport.use(new MicrosoftStrategy({
 passport.use(new FacebookStrategy({
 		clientID: FACEBOOK_APP_ID[ENDPOINT_LAYER],
 		clientSecret: FACEBOOK_APP_SECRET[ENDPOINT_LAYER],
-		callbackURL: SERVER_HOST + FACEBOOK_CALLBACK
+		callbackURL: SERVER_HOST[ENDPOINT_LAYER] + FACEBOOK_CALLBACK
 	},
 	function (accessToken, refreshToken, profile, done) {
 		// asynchronous verification, for effect...
@@ -116,7 +116,7 @@ passport.use(new FacebookStrategy({
 passport.use(new GoogleStrategy({
 		clientID: GOOGLE_CLIENT_ID,
 		clientSecret: GOOGLE_CLIENT_SECRET,
-		callbackURL: SERVER_HOST + GOOGLE_CALLBACK
+		callbackURL: SERVER_HOST[ENDPOINT_LAYER] + GOOGLE_CALLBACK
 	},
 	function(accessToken, refreshToken, profile, done) {
 		process.nextTick(function () {
