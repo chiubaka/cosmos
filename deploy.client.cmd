@@ -104,14 +104,14 @@ popd
 :: Copy over web.config for this endpoint
 echo Using Web.client.config
 pushd "%DEPLOYMENT_SOURCE%"
-call :ExecuteCmd xcopy /Y "config\Web.client.config" "Web.config"
+call :ExecuteCmd copy /Y "config\Web.client.config" "Web.config"
 IF !ERRORLEVEL! NEQ 0 goto error
 popd
 
 :: Copy over package.json for this endpoint
 echo Using package.client.json
 pushd "%DEPLOYMENT_SOURCE%"
-call :ExecuteCmd xcopy /Y "config\package.client.json" "package.json"
+call :ExecuteCmd copy /Y "config\package.client.json" "package.json"
 IF !ERRORLEVEL! NEQ 0 goto error
 popd
 
