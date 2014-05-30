@@ -163,10 +163,11 @@ var GameInit = {
 				.streamMode(1)
 				.mount(server.spaceGameScene)
 				.padding(10)
-				.grid(BlockGridGenerator.genProceduralAsteroid(20))
+				.grid(BlockGridGenerator.genProceduralAsteroid(20, undefined, BlockGridGenerator.blockDistributions.randomDistribution()))
 			this.moveRandomly(asteroid);
 		}
 
+		// Instead of creating a bunch of these up front, we might want to create them just ahead of a user as he's flying, and delete them right behind. This will be more efficient.
 		var NUM_SMALL_ASTEROIDS = 80;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_SMALL_ASTEROIDS; asteroidNumber++) {
 			var asteroid = new BlockGrid()
@@ -327,7 +328,7 @@ var GameInit = {
 	// TODO: Move this to a helper function that operates on IgeEntities
 	moveRandomly: function(entity) {
 		//this is the maximum distance that we will translate entities to
-		var MAX_DISTANCE = 6000;
+		var MAX_DISTANCE = 7000;
 		entity.translateTo((Math.random() - .5) * MAX_DISTANCE, (Math.random() - .5) * MAX_DISTANCE, 0);
 	}
 };
