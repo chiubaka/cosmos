@@ -48,7 +48,7 @@ var ServerNetworkEvents = {
 	*/
 	_onPlayerEntity: function(data, clientId) {
 		var self = this;
-		//if (!ige.server.players[clientId]) {
+		if (!ige.server.players[clientId]) {
 			DbSession.playerIdForSession(data.sid, function(err, playerId) {
 				if (err) {
 					self.log('Cannot load session from database!', 'error');
@@ -91,7 +91,7 @@ var ServerNetworkEvents = {
 					ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
 				});
 			});
-		//}
+		}
 	},
 
 	_onRespawnRequest: function(data, clientId) {
