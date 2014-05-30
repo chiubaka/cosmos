@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -20,19 +19,22 @@ var ENDPOINT_LAYER = process.env.ENDPOINT_LAYER || "local";
 // TODO: CHANGE THIS BASED ON LOCATION AND ENVIRONMENT
 var SERVER_HOST = {
 	local: "http://tl-cosmos.localtest.me:2001", 
-	dev: "http://dev.cosmos.teamleonine.com"
+	dev: "http://dev.cosmos.teamleonine.com",
+	preview: "http://preview.cosmos.teamleonine.com"
 };
 
 // Client secrets and callback URLs
 // Microsoft
 var MICROSOFT_CLIENT_ID = {
 	local: "000000004011FE88", 
-	dev: "000000004C11BAB2"
+	dev: "000000004C11BAB2",
+	preview: "000000004C11C46D"
 };
 
 var MICROSOFT_CLIENT_SECRET = {
 	local: "wpNliQi3hxndft-KdgzmAUrQABtJyD4r",
-	dev: "I5Mts54jjXJcvVCjmSZbLFhFYyJeoOAq"
+	dev: "I5Mts54jjXJcvVCjmSZbLFhFYyJeoOAq",
+	preview: "7gLCN5eNz0xvOGtDyLJSXAedQmp-C9XO"
 };
 
 var MICROSOFT_SCOPE = ['wl.signin', 'wl.basic', 'wl.emails'];
@@ -42,12 +44,14 @@ var MICROSOFT_CALLBACK = MICROSOFT_AUTH_ROUTE + "/callback";
 // Facebook
 var FACEBOOK_APP_ID = {
 	local: "1506916002863082",
-	dev: "1510324745855541"
+	dev: "1510324745855541",
+	preview: "1506885042866178"
 };
 
 var FACEBOOK_APP_SECRET = {
 	local: "adcf2894f7024a5d8afcce03201ce434",
-	dev: "2b9e9ad392bf334b4dfe52b70bc956f4"
+	dev: "2b9e9ad392bf334b4dfe52b70bc956f4",
+	preview: "a659dfec5c98fc5e0f1941da279d1202"
 };
 
 var FACEBOOK_AUTH_ROUTE = "/auth/fb";
