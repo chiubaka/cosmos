@@ -152,7 +152,7 @@ var Client = IgeClass.extend({
 	startClientPerformanceMetrics: function() {
 		setInterval(function() {
 			ige.client.metrics.fireEvent('engine', 'performance', 'FPS', ige.fps());
-		}, 10000);
+		}, 10000); // Send every 10s
 	}
 });
 
