@@ -239,9 +239,9 @@ var BlockGridGenerator = {
 		},
 
 		ICY: {
-			"IceBlock": 0.8,
-			"IronBlock": 0.1,
-			"CarbonBlock": 0.1
+			"IceBlock": 0.9,
+			"IronBlock": 0.05,
+			"CarbonBlock": 0.05
 		},
 
 		ROCKY: {
@@ -256,6 +256,18 @@ var BlockGridGenerator = {
 			"PowerBlock": .2,
 			"ThrusterBlock": .1,
 			"Block": .4
+		},
+
+		randomDistribution: function() {
+			var rand = Math.random();
+
+			if (rand < .5) {
+				return BlockGridGenerator.blockDistributions.STANDARD;
+			} else if (rand < .75) {
+				return BlockGridGenerator.blockDistributions.ICY;
+			} else /*if (rand < 1)*/ {
+				return BlockGridGenerator.blockDistributions.ROCKY;
+			}
 		}
 	}
 };
