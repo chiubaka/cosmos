@@ -1,0 +1,4 @@
+[submodule "public/cosmos"]
+	path = public/cosmos
+	url = https://teamleonine:ixmN2PQ9ZUTnqySqCv7XEaS6CGBspzI8@bitbucket.org/teamleonine/cosmos.git
+  branch = master

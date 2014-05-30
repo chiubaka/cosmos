@@ -91,6 +91,7 @@ var Client = IgeClass.extend({
 				// Check if the engine started successfully
 				if (success) {
 					ige.client.metrics = new MetricsHandler();
+					ige.client.startClientPerformanceMetrics();
 
 					// Start the networking (you can do this elsewhere if it
 					// makes sense to connect to the server later on rather
@@ -115,7 +116,7 @@ var Client = IgeClass.extend({
 							.stream.renderLatency(80); // Render the simulation 160 milliseconds in the past
 
 						// Ask the server to create an entity for us
-						ige.network.send('playerEntity');
+						ige.network.send('playerEntity', {sid: self.getSessionId()});
 
 						GameInit.init(self);
 						//ige.editor.showStats();
@@ -124,6 +125,35 @@ var Client = IgeClass.extend({
 			});
 		});
 	},
+
+	getSessionId: function() {
+		var cookie = this.parseCookie();
+		var sid = cookie['connect.sid'];
+
+		if (sid === undefined) {
+			return undefined;
+		}
+		// connect.sid comes in the form: s:<id>.<???>+<???>
+		return sid.substring(sid.indexOf(':') + 1, sid.indexOf('.'));
+	},
+
+	parseCookie: function() {
+		var cookieArray = document.cookie.split(';');
+		var cookie = {};
+		cookieArray.each(function(element) {
+			var split = element.split('=');
+			cookie[split[0].trim()] = decodeURIComponent(split[1]);
+		});
+
+		return cookie;
+	},
+
+	/* Send performance metrics to Google analytics */
+	startClientPerformanceMetrics: function() {
+		setInterval(function() {
+			ige.client.metrics.fireEvent('engine', 'performance', 'FPS', ige.fps());
+		}, 10000); // Send every 10s
+	}
 });
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Client; }
