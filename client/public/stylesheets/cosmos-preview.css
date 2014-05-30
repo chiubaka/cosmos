@@ -40,18 +40,59 @@ body {
   top: -50px;
 }
 
+@-moz-keyframes fadePulse {
+    0% { opacity:0.5; }
+    50% { opacity:1; }
+    100% { opacity:0.5; }
+}
+@keyframes fadePulse {
+    0% { opacity:0.5; }
+    50% { opacity:1; }
+    100% { opacity:0.5; }
+}
+@-moz-keyframes spinPulse {
+    0% { -moz-transform:rotate(160deg); opacity:0; box-shadow:0 0 1px #2187e7;}
+    50% { -moz-transform:rotate(135deg); opacity:1; }
+    100% { -moz-transform:rotate(-320deg); opacity:0; }
+}
+@-moz-keyframes spinoffPulse {
+    0% { -moz-transform:rotate(0deg); }
+    100% { -moz-transform:rotate(360deg);  }
+}
+@keyframes fadePulse {
+    0% { opacity:0.5; }
+    50% { opacity:1; }
+    100% { opacity:0.5; }
+}
+@-webkit-keyframes fadePulse {
+    0% { opacity:0.5; }
+    50% { opacity:1; }
+    100% { opacity:0.5; }
+}
+@-webkit-keyframes spinPulse {
+    0% { -webkit-transform:rotate(160deg); opacity:0; box-shadow:0 0 1px #2187e7; }
+    50% { -webkit-transform:rotate(135deg); opacity:1;}
+    100% { -webkit-transform:rotate(-320deg); opacity:0; }
+}
+@-webkit-keyframes spinoffPulse {
+    0% { -webkit-transform:rotate(0deg); }
+    100% { -webkit-transform:rotate(360deg); }
+}
+
 .preview .loadingText {
+    z-index: 100;
     position: absolute;
-    bottom: -20px;
+    top: 15px;
+    left: 0px;
     color: white;
-    font-family: Verdana, sans-serif;
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
     font-size: 14px;
     text-align: center;
-    width: 200px;
-    margin-left: -100px;
+    width: 100%;
     text-transform: uppercase;
-    -moz-animation: fadePulse 1s infinite linear;
-    -webkit-animation: fadePulse 1s infinite linear;
+    -moz-animation: fadePulse 2s infinite linear;
+    -webkit-animation: fadePulse 2s infinite linear;
+    animation: fadePulse 2s infinite linear;
 }
 
 .preview #loadingProgress {
@@ -62,14 +103,26 @@ body {
     bottom: 0px;
     left: 50%;
     margin-left: -50%;
-    background: rgba(255, 255, 255, 0.1);
+}
+
+.preview #loadingProgress progress {
+    z-index: 10;
+    width: 100%;
+    height: 7px;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 50%;
+    margin-left: -50%;
+    color: #08f;
 }
 
 .preview #loadingProgressBar {
+    z-index: 20;
     bottom: 0px;
     width: 0px;
-    height: 5px;
-    background: #ffffff;
+    height: 7px;
+    background: #08f;
 }
 
 .sgButton {
