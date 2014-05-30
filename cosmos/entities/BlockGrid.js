@@ -262,7 +262,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 						data.action = 'remove';
 						ige.network.send('blockAction', data);
 					}
-				}, Block.prototype.MINING_TIME / block._maxHp);
+				}, Block.prototype.MINING_TIME);
 				return true;
 
 			case 'add':
