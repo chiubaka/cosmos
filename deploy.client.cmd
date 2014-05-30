@@ -131,6 +131,15 @@ IF EXIST "%DEPLOYMENT_TARGET%\client\public\js\cosmos" (
   popd
 )
 
+:: KuduSync
+IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
+  call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
+  IF !ERRORLEVEL! NEQ 0 goto error
+)
+
+:: Select node version
+call :SelectNodeVersion
+
 :: Install NPM packages for server
 echo Installing server NPM packages.
 IF EXIST "%DEPLOYMENT_TARGET%\ige\server\package.json" (
@@ -142,19 +151,10 @@ IF EXIST "%DEPLOYMENT_TARGET%\ige\server\package.json" (
 
 :: Compile and compress IGE
 echo Compiling and compressing IGE
-pushd "%DEPLOYMENT_SOURCE%\ige"
+pushd "%DEPLOYMENT_TARGET%\ige"
 call :ExecuteCmd node "server/ige.js" -deploy "../cosmos" -to "../client/public/js/cosmos"
 IF !ERRORLEVEL! NEQ 0 goto error
 popd
-
-:: KuduSync
-IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
-  call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
-  IF !ERRORLEVEL! NEQ 0 goto error
-)
-
-:: Select node version
-call :SelectNodeVersion
 
 :: Install NPM packages for client
 echo Installing client NPM packages.
