@@ -120,7 +120,6 @@ var Block = IgeEntity.extend({
 	 */
 	damage: function(amount) {
 		this._hp -= amount;
-		console.log(this._hp);
 
 		if (!ige.isServer) {
 			this._displayHealth = true;
