@@ -38,7 +38,7 @@ var NewShipButton = IgeUiButton.extend({
 		this.ID_SELECTED_HOVER = this.classId() + ':selected:hover';
 
 		this.applyStyle({
-			'backgroundColor': 'rgb(2,108,210)',
+			'backgroundColor': 'rgb(200,0,0)',
 			'borderColor': 'rgb(0,0,0)',
 			// The button should show up on the right, underneath the respawn button
 			'top': RelocateButton.prototype.HEIGHT,
