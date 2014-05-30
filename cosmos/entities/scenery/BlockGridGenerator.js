@@ -221,19 +221,21 @@ var BlockGridGenerator = {
 
 	blockDistributions: {
 		STANDARD: {
-			"IceBlock": 0.468,
+			"IceBlock": 0.47,
 			"IronBlock": 0.3,
 			"CarbonBlock": 0.2,
 			//here are some rare things. These guys should look really cool.
 			"GoldBlock": 0.01,
 			"CobaltBlock": 0.01,
-			"FluorineBlock": 0.01,
+			"FluorineBlock": 0.01
 			//here are some easter-egg type things, which will add up to 0.002
+			/* //I've commented this out per LEO-522
 			// The idea is to make mining more exciting by having really unusual things buried inside of asteroids.
 			"EngineBlock": 0.002 * .25,
 			"FuelBlock": 0.002 * .25,
 			"PowerBlock": 0.002 * .25,
 			"ThrusterBlock": 0.002 * .25
+			*/
 		},
 
 		ICY: {
