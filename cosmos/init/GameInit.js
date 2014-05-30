@@ -163,7 +163,7 @@ var GameInit = {
 				.streamMode(1)
 				.mount(server.spaceGameScene)
 				.padding(10)
-				.grid(BlockGridGenerator.genProceduralAsteroid(20, 100, BlockGridGenerator.blockDistributions.randomDistribution()))
+				.grid(BlockGridGenerator.genProceduralAsteroid(20, undefined, BlockGridGenerator.blockDistributions.randomDistribution()))
 			this.moveRandomly(asteroid);
 		}
 
