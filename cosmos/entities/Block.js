@@ -34,7 +34,7 @@ var Block = IgeEntity.extend({
    * Note that subclasses of Block are expected to have their own textures.
 	 * @param data an optional dictionary containing initialization information.
 	 */
-	init: function (data) {
+	init: function(data) {
 		IgeEntity.prototype.init.call(this);
 
 		// Use an even number so values don't have to become approximate when we divide by two
