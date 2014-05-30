@@ -1,0 +1,56 @@
+if user
+	#login-flow.authenticated
+		.login-greet
+			Hi #{user.displayName.split()[0]}! 
+		#login-container
+			.login-screen#login-authenticated
+				ul.login-options
+					li.login-option#option-play
+						img.option-icon(src='/images/icons/icon_play.png')
+						span.option-caption Play now
+						.option-description
+							| Pick up where you left off.
+					li.login-option.disabled#option-settings
+						img.option-icon(src='/images/icons/icon_gear.png')
+						span.option-caption Account (coming soon)
+						.option-description
+							| View information about your account
+					li.login-option#option-signout
+						img.option-icon(src='/images/icons/icon_exit.png')
+						span.option-caption Sign out
+						.option-description
+							| Sign out of Cosmos
+else
+	#login-flow.anonymous
+		#login-container
+			.login-screen#login-intro
+				ul.login-options
+					li.login-option#option-play
+						a.option-link(href='#game')
+						img.option-icon(src='/images/icons/icon_play.png')
+						span.option-caption Play now
+						.option-description
+							| Start playing instantly, with no registration up front. We'll ask you if you want to sign in and save your progress later.
+					li.login-option#option-signin
+						a.option-link(href='#signin')
+						img.option-icon(src='/images/icons/icon_key.png')
+						span.option-caption Sign in
+						.option-description
+							| Sign in with your Microsoft, Facebook, or Google account to pick up where you left off.
+			.login-screen#login-providers
+				.login-banner Sign in using
+				ul.login-options
+					li.login-option#option-provider-msft
+						a.option-link(href='/auth/msft')
+						img.option-icon(src='/images/icons/icon_msft.png')
+						span.option-caption Microsoft
+					li.login-option#option-provider-fb
+						a.option-link(href='/auth/fb')
+						img.option-icon(src='/images/icons/icon_fb.png')
+						span.option-caption Facebook
+					li.login-option#option-provider-google
+						a.option-link(href='/auth/google')
+						img.option-icon(src='/images/icons/icon_google.png')
+						span.option-caption Google
+				.screen-back.clearfix
+					a(href='#') Go back

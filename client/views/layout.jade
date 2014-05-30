@@ -2,19 +2,14 @@ doctype html
 html
   head
     title= title
+    link(rel='stylesheet', href='/stylesheets/reset.css')
+    link(rel='stylesheet', href='/stylesheets/ui-dark.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js')
+    script(src='/js/winjs/base.js')
+    script(src='/js/winjs/ui.js')
+    script(src='/js/index.js')
   body
-    if !user
-      p
-        a(href='/') Home
-        | |
-        a(href="/login") Log In
-    else
-      p
-        a(href="/") Home
-        | |
-        a(href="/account") Account
-        | | 
-        a(href="/logout") Log Out
-
     block content
+  footer
+    include includes/globalFooter.jade
