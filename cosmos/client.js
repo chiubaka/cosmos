@@ -91,6 +91,7 @@ var Client = IgeClass.extend({
 				// Check if the engine started successfully
 				if (success) {
 					ige.client.metrics = new MetricsHandler();
+					ige.client.startClientPerformanceMetrics();
 
 					// Start the networking (you can do this elsewhere if it
 					// makes sense to connect to the server later on rather
@@ -145,6 +146,13 @@ var Client = IgeClass.extend({
 		});
 
 		return cookie;
+	},
+
+	/* Send performance metrics to Google analytics */
+	startClientPerformanceMetrics: function() {
+		setInterval(function() {
+			ige.client.metrics.fireEvent('engine', 'performance', 'FPS', ige.fps());
+		}, 10000);
 	}
 });
 
