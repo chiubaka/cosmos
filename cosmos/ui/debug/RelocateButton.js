@@ -38,7 +38,7 @@ var RelocateButton = IgeUiButton.extend({
 		this.ID_SELECTED_HOVER = this.classId() + ':selected:hover';
 
 		this.applyStyle({
-			'backgroundColor': 'rgb(200,0,0)',
+			'backgroundColor': 'rgb(2,108,210)',
 			'borderColor': 'rgb(0,0,0)',
 			'top': 0,
 			'right': 0,
