@@ -8,15 +8,16 @@ html
     meta(name='game-engine-origin', content='http://www.isogenicengine.com')
     meta(http-equiv='X-UA-Compatible', content='IE=Edge')
     title Cosmos Private Preview
-    //
-       STYLES 
+    // STYLES 
     link(href='/stylesheets/cosmos-preview.css', rel='stylesheet', type='text/css')
-    //
-       Copy this script into your html file to enable Application Insights 
+    link(href='/stylesheets/winjs/ui-dark.css', rel='stylesheet', type='text/css')
+
+    // Application Insights
     script(type='text/javascript').
       window.appInsights={queue:[],applicationInsightsId:null,accountId:null,appUserId:null,configUrl:null,start:function(n){function u(n,t){n[t]=function(){var i=arguments;n.queue.push(function(){n[t].apply(n,i)})}}function f(n){var t=document.createElement("script");return t.type="text/javascript",t.src=n,t.async=!0,t}function r(){i.appendChild(f("//az416426.vo.msecnd.net/scripts/ai.0.js"))}var i,t;this.applicationInsightsId=n;u(this,"logEvent");u(this,"logPageView");i=document.getElementsByTagName("script")[0].parentNode;this.configUrl===null?r():(t=f(this.configUrl),t.onload=r,t.onerror=r,i.appendChild(t));this.start=function(){}}};
       appInsights.start("0ffd4afb-c64a-4b6a-80b5-54e6103955c4");
       appInsights.logPageView();
+      
     //
        Isogenic Loader 
     if process.env.NODE_ENV === 'production'
@@ -43,8 +44,9 @@ html
       .tutorial
         img(src='/images/tutorial.png')
     .igeLoading.loadingFloat.preview
+      include includes/progress-ring.jade
       #loadingText.loadingText
-        | Loading
+        | Loading... 
       #loadingProgress
         #loadingProgressBar
     div(style='position: absolute; right: 0; bottom: 0;')
