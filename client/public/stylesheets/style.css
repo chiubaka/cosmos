@@ -207,6 +207,15 @@ ul.login-options {
 	color: #08f;
 }
 
+.login-disclaimer {
+	margin-top: 10px;
+	text-align: center;
+	font-size: 10pt;
+	display: block;
+	width: 300px;
+	color: #777;
+}
+
 .screen-back a {
 	color: #08f;
 }
