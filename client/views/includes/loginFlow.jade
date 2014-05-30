@@ -31,14 +31,22 @@ else
 						img.option-icon(src='/images/icons/icon_play.png')
 						span.option-caption Play now
 						.option-description
-							| Start playing instantly, with no registration up front.
+							| Start playing instantly
+							br
+							| with no registration up front.
 					li.login-option#option-signin
 						a.option-link(href='#signin')
 						img.option-icon(src='/images/icons/icon_key.png')
 						span.option-caption Sign in
 						.option-description
-							| Sign in with your Microsoft, Facebook, or Google account
-							| and pick up where you left off.
+							| Sign in to save your progress
+							br 
+							| or pick up where you left off.
+							br
+							br
+							| You can sign in securely using a
+							br
+							| Microsoft, Facebook, or Google account.
 			.login-screen#login-providers
 				.login-banner Sign in using
 				ul.login-options
@@ -56,3 +64,7 @@ else
 						span.option-caption Google
 				.screen-back.clearfix
 					a(href='#') Go back
+				.login-disclaimer
+					| Signing in is securely handled by your provider. 
+					br
+					| We never have access to your password.
