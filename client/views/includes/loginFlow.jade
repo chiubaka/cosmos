@@ -1,11 +1,11 @@
 if user
 	#login-flow.authenticated
-		.login-greet
-			Hi #{user.displayName.split()[0]}! 
+		.login-banner Hi #{user.displayName.split(' ')[0]}! 
 		#login-container
 			.login-screen#login-authenticated
 				ul.login-options
 					li.login-option#option-play
+						a.option-link(href='#game')
 						img.option-icon(src='/images/icons/icon_play.png')
 						span.option-caption Play now
 						.option-description
@@ -16,10 +16,11 @@ if user
 						.option-description
 							| View information about your account
 					li.login-option#option-signout
+						a.option-link(href='/logout')
 						img.option-icon(src='/images/icons/icon_exit.png')
 						span.option-caption Sign out
 						.option-description
-							| Sign out of Cosmos
+							| Sign out of Cosmos :(
 else
 	#login-flow.anonymous
 		#login-container
@@ -36,7 +37,8 @@ else
 						img.option-icon(src='/images/icons/icon_key.png')
 						span.option-caption Sign in
 						.option-description
-							| Sign in with your Microsoft, Facebook, or Google account to pick up where you left off.
+							| Sign in with your Microsoft, Facebook, or Google account
+							| and pick up where you left off.
 			.login-screen#login-providers
 				.login-banner Sign in using
 				ul.login-options
