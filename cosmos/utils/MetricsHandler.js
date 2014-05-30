@@ -49,14 +49,6 @@
 		});
 	},
 
-	setDimension: function(dimension, value) {
-		if (!this.enabled) {
-			return;
-		}
-		console.info("Metrics: [DIMENSION] " + dimension + " - " + value);
-		ga('set', dimension, value);
-	},
-
 	firePage: function(page, title) {
 		if (!this.enabled) {
 			return;

@@ -30,7 +30,6 @@ var ClientNetworkEvents = {
 					ige.client.player = entity;
 
 					ige.client.metrics.fireEvent('player', 'connect', data.playerId);
-					//ige.client.metrics.setDimension(MetricsHandler.PLAYER_DIMENSION, data.playerId);
 
 					// Set the time stream UI entity to monitor our player entity
 					// time stream data
