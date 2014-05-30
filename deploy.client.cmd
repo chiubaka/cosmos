@@ -129,7 +129,7 @@ IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
 )
 
 :: Copy all assets from cosmos/assets to public/assets
-IF EXIST "%DEPLOYMENT_TARGET%\client\public\js\cosmos" (
+IF NOT EXIST "%DEPLOYMENT_TARGET%\client\public\js\cosmos" (
   echo Create folder for IGE deployment
   pushd "%DEPLOYMENT_TARGET%"
   call :ExecuteCmd mkdir "%DEPLOYMENT_TARGET%/client/public/js/cosmos"
