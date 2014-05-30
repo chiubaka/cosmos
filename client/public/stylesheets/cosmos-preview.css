@@ -15,6 +15,50 @@ body {
     overflow: hidden;
 }
 
+#cboxbutton {
+    position: fixed;
+    bottom: 0px;
+    right: 10px;
+    width: 40px;
+    height: 38px;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    background-image: url('../images/icons/icon_chat.png');
+    background-repeat: no-repeat;
+    background-size: 100%;
+    font-size: 14px;'
+}
+
+#cboxbutton.chat-closed {
+    background-color: rgb(30,30,30);
+    border-bottom: 6px #007536 solid;
+}
+
+#cboxbutton.chat-closed:hover {
+    background-color: #007536;
+    border-bottom: 6px #00b454 solid;
+}
+
+#cboxbutton.chat-open {
+    background-color: #00b454;
+    border-bottom: 6px #fff solid;
+}
+
+#cboxdiv {
+    display: none;
+    position: fixed;
+    bottom: 64px;
+    right: 10px;
+    width: 200px;
+    background: #00b454;
+    padding: 5px;
+    line-height: 0;
+    border: none;
+    box-shadow: #004c23 0px 0px 5px;
+}
+
 .loadingFloat.preview {
   position: fixed;
   left: 50%;
@@ -40,18 +84,60 @@ body {
   top: -50px;
 }
 
+@-moz-keyframes fadePulse {
+    0% { opacity:0.5; }
+    50% { opacity:1; }
+    100% { opacity:0.5; }
+}
+@keyframes fadePulse {
+    0% { opacity:0.5; }
+    50% { opacity:1; }
+    100% { opacity:0.5; }
+}
+@-moz-keyframes spinPulse {
+    0% { -moz-transform:rotate(160deg); opacity:0; box-shadow:0 0 1px #2187e7;}
+    50% { -moz-transform:rotate(135deg); opacity:1; }
+    100% { -moz-transform:rotate(-320deg); opacity:0; }
+}
+@-moz-keyframes spinoffPulse {
+    0% { -moz-transform:rotate(0deg); }
+    100% { -moz-transform:rotate(360deg);  }
+}
+@keyframes fadePulse {
+    0% { opacity:0.5; }
+    50% { opacity:1; }
+    100% { opacity:0.5; }
+}
+@-webkit-keyframes fadePulse {
+    0% { opacity:0.5; }
+    50% { opacity:1; }
+    100% { opacity:0.5; }
+}
+@-webkit-keyframes spinPulse {
+    0% { -webkit-transform:rotate(160deg); opacity:0; box-shadow:0 0 1px #2187e7; }
+    50% { -webkit-transform:rotate(135deg); opacity:1;}
+    100% { -webkit-transform:rotate(-320deg); opacity:0; }
+}
+@-webkit-keyframes spinoffPulse {
+    0% { -webkit-transform:rotate(0deg); }
+    100% { -webkit-transform:rotate(360deg); }
+}
+
 .preview .loadingText {
+    z-index: 100;
     position: absolute;
-    bottom: -20px;
+    top: 15px;
+    left: 60px;
     color: white;
-    font-family: Verdana, sans-serif;
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
     font-size: 14px;
-    text-align: center;
-    width: 200px;
-    margin-left: -100px;
+    text-align: left;
+    width: 100%;
     text-transform: uppercase;
-    -moz-animation: fadePulse 1s infinite linear;
-    -webkit-animation: fadePulse 1s infinite linear;
+    -moz-animation: fadePulse 2s infinite linear;
+    -webkit-animation: fadePulse 2s infinite linear;
+    animation: fadePulse 2s infinite linear;
+    float: left;
 }
 
 .preview #loadingProgress {
@@ -62,14 +148,202 @@ body {
     bottom: 0px;
     left: 50%;
     margin-left: -50%;
-    background: rgba(255, 255, 255, 0.1);
+}
+
+.loadingFloat .progress-ring
+{
+    z-index: 100;
+    position: absolute;
+    left: 20px;
+    top: 10px;
+}
+
+.progress-ring {
+  position: relative;
+  padding-top: 8px;
+  width: 20px;
+  height: 20px;
+  margin: auto;
+}
+.progress-ring .progress-ring__wrap {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+}
+.progress-ring .progress-ring__wrap .progress-ring__circle {
+  -webkit-transform: rotate(225deg);
+  -ms-transform: rotate(225deg);
+  transform: rotate(225deg);
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  -webkit-animation-name: orbit;
+  animation-name: orbit;
+  -webkit-animation-duration: 4000ms;
+  animation-duration: 4000ms;
+  width: 18px;
+  height: 18px;
+  opacity: 0;
+}
+.progress-ring .progress-ring__wrap .progress-ring__circle:after {
+  content: '';
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: 0px 0px 5% #ffffff;
+  box-shadow: 0px 0px 5% #ffffff;
+  background: #ffffff;
+  /* Pick a color */
+}
+.progress-ring .progress-ring__wrap:nth-child(2) {
+  -webkit-transform: rotate(-14deg);
+  -ms-transform: rotate(-14deg);
+  transform: rotate(-14deg);
+}
+.progress-ring .progress-ring__wrap:nth-child(2) .progress-ring__circle {
+  -webkit-animation-delay: 133.33333333ms;
+  animation-delay: 133.33333333ms;
+}
+.progress-ring .progress-ring__wrap:nth-child(3) {
+  -webkit-transform: rotate(-28deg);
+  -ms-transform: rotate(-28deg);
+  transform: rotate(-28deg);
+}
+.progress-ring .progress-ring__wrap:nth-child(3) .progress-ring__circle {
+  -webkit-animation-delay: 266.66666667ms;
+  animation-delay: 266.66666667ms;
+}
+.progress-ring .progress-ring__wrap:nth-child(4) {
+  -webkit-transform: rotate(-42deg);
+  -ms-transform: rotate(-42deg);
+  transform: rotate(-42deg);
+}
+.progress-ring .progress-ring__wrap:nth-child(4) .progress-ring__circle {
+  -webkit-animation-delay: 400ms;
+  animation-delay: 400ms;
+}
+.progress-ring .progress-ring__wrap:nth-child(5) {
+  -webkit-transform: rotate(-56deg);
+  -ms-transform: rotate(-56deg);
+  transform: rotate(-56deg);
+}
+.progress-ring .progress-ring__wrap:nth-child(5) .progress-ring__circle {
+  -webkit-animation-delay: 533.33333333ms;
+  animation-delay: 533.33333333ms;
+}
+@-webkit-keyframes orbit {
+  0% {
+    -webkit-transform: rotate(225deg);
+    transform: rotate(225deg);
+    opacity: 1;
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+  7% {
+    -webkit-transform: rotate(345deg);
+    transform: rotate(345deg);
+    -webkit-animation-timing-function: linear;
+    animation-timing-function: linear;
+  }
+  35% {
+    -webkit-transform: rotate(495deg);
+    transform: rotate(495deg);
+    -webkit-animation-timing-function: ease-in-out;
+    animation-timing-function: ease-in-out;
+  }
+  42% {
+    -webkit-transform: rotate(690deg);
+    transform: rotate(690deg);
+    -webkit-animation-timing-function: linear;
+    animation-timing-function: linear;
+  }
+  70% {
+    -webkit-transform: rotate(835deg);
+    transform: rotate(835deg);
+    opacity: 1;
+    -webkit-animation-timing-function: linear;
+    animation-timing-function: linear;
+  }
+  76% {
+    opacity: 1;
+  }
+  77% {
+    -webkit-transform: rotate(955deg);
+    transform: rotate(955deg);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+  }
+  78% {
+    -webkit-transform: rotate(955deg);
+    transform: rotate(955deg);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: rotate(955deg);
+    transform: rotate(955deg);
+    opacity: 0;
+  }
+}
+@keyframes orbit {
+  0% {
+    -webkit-transform: rotate(225deg);
+    transform: rotate(225deg);
+    opacity: 1;
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+  7% {
+    -webkit-transform: rotate(345deg);
+    transform: rotate(345deg);
+    -webkit-animation-timing-function: linear;
+    animation-timing-function: linear;
+  }
+  35% {
+    -webkit-transform: rotate(495deg);
+    transform: rotate(495deg);
+    -webkit-animation-timing-function: ease-in-out;
+    animation-timing-function: ease-in-out;
+  }
+  42% {
+    -webkit-transform: rotate(690deg);
+    transform: rotate(690deg);
+    -webkit-animation-timing-function: linear;
+    animation-timing-function: linear;
+  }
+  70% {
+    -webkit-transform: rotate(835deg);
+    transform: rotate(835deg);
+    opacity: 1;
+    -webkit-animation-timing-function: linear;
+    animation-timing-function: linear;
+  }
+  76% {
+    opacity: 1;
+  }
+  77% {
+    -webkit-transform: rotate(955deg);
+    transform: rotate(955deg);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+  }
+  78% {
+    -webkit-transform: rotate(955deg);
+    transform: rotate(955deg);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: rotate(955deg);
+    transform: rotate(955deg);
+    opacity: 0;
+  }
 }
 
 .preview #loadingProgressBar {
+    z-index: 100;
     bottom: 0px;
     width: 0px;
-    height: 5px;
-    background: #ffffff;
+    height: 7px;
+    background: #08f;
 }
 
 .sgButton {

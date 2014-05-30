@@ -4,7 +4,7 @@
  */
 
 exports.index = function(req, res){
-	res.render('index', { title: 'Cosmos Authentication Prototype', user: req.user });
+	res.render('index', { title: 'Cosmos', user: req.user });
 };
 
 exports.account = function(req, res){
@@ -12,7 +12,7 @@ exports.account = function(req, res){
 };
 
 exports.login = function(req, res) {
-	res.render('login', { title: 'Please sign in', user: req.user });
+	res.render('login', { title: 'Cosmos - Please sign in', user: req.user });
 };
 
 exports.cosmos = function(req, res) {

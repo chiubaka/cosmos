@@ -1,5 +1,5 @@
-var RespawnButton = IgeUiButton.extend({
-	classId: "RespawnButton",
+var RelocateButton = IgeUiButton.extend({
+	classId: "RelocateButton",
 
 	/**
 	 * Defines the dimensions of a capability on the Capbar
@@ -50,7 +50,7 @@ var RespawnButton = IgeUiButton.extend({
 		this.data('ui', {
 			'text': {
 				'font': '12pt Segoe UI Semibold',
-				'value': 'Respawn'
+				'value': 'Relocate'
 			}
 		});
 	},
@@ -59,13 +59,12 @@ var RespawnButton = IgeUiButton.extend({
 		var self = this;
 
 		this.mouseDown(function(event, control) {
-			ige.network.send('respawn');
-			console.log('Respawn button clicked');
-			ige.emit('respawn button clicked');
+			ige.network.send('relocate');
+			ige.emit('relocate button clicked');
 		});
 	}
 });
 
 if (typeof (module) !== 'undefined' && typeof (module.exports) !== 'undefined') {
-	module.exports = RespawnButton;
+	module.exports = RelocateButton;
 }

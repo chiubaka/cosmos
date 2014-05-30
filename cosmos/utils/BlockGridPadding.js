@@ -44,9 +44,11 @@ var BlockGridPadding = {
 		var startRow = grid.length;
 		var endRow = 0;
 
+		var gridHasBlocks = false;
 		for (var row = 0; row < grid.length; row++) {
 			for (var col = 0; col < grid[row].length; col++) {
 				if (grid[row][col] !== undefined) {
+					gridHasBlocks = true;
 					if (col < startCol)
 						startCol = col;
 					if (col > endCol)
@@ -60,8 +62,8 @@ var BlockGridPadding = {
 		}
 
 		// Make a new grid with the correct minimum boundaries
-		var minGridRows = endRow - startRow + 1;
-		var minGridCols = endCol - startCol + 1;
+		var minGridRows = gridHasBlocks ? endRow - startRow + 1 : 0;
+		var minGridCols = gridHasBlocks ? endCol - startCol + 1 : 0;
 		var minGrid = new Array(minGridRows);
 		for (var i = 0; i < minGridRows; i++) {
 			minGrid[i] = new Array(minGridCols);

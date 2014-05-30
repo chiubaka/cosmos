@@ -2,7 +2,7 @@ var ExampleShips = {
 	/**
 	 * This is the ship in beginning of the video
 	 */
-	starterShip: function () {
+	starterShip: function() {
 		return [
 			[undefined,           undefined,   new MiningLaserBlock(), undefined,   undefined],
 			[undefined,           new Block(), new Block(),            new Block(), undefined],
@@ -18,7 +18,7 @@ var ExampleShips = {
 	/**
 	 * This is the ship in the middle of the video
 	 */
-	starterShipSingleMisplacedEngine: function () {
+	starterShipSingleMisplacedEngine: function() {
 		return [
 			[undefined,           undefined,         new MiningLaserBlock(), undefined,         undefined],
 			[undefined,           new Block(),       new Block(),            new Block(),       undefined],
@@ -35,7 +35,7 @@ var ExampleShips = {
 	/**
 	 * This is the ship at the end of the video
 	 */
-	starterShipDoubleEngines: function () {
+	starterShipDoubleEngines: function() {
 		return [
 			[undefined,           undefined,         new MiningLaserBlock(), undefined,         undefined],
 			[undefined,           new Block(),       new Block(),            new Block(),       undefined],
@@ -46,6 +46,19 @@ var ExampleShips = {
 			[undefined,           new Block(),       new FuelBlock,          new Block(),       undefined],
 			[undefined,           new Block(),       undefined,              new Block(),       undefined],
 			[undefined,           new EngineBlock(), undefined,              new EngineBlock(), undefined]
+		]
+	},
+
+	/**
+	 * This is an empty ship for use in testing
+	 */
+	emptyShip: function() {
+		return [
+			[undefined, undefined, undefined, undefined, undefined],
+			[undefined, undefined, undefined, undefined, undefined],
+			[undefined, undefined, undefined, undefined, undefined],
+			[undefined, undefined, undefined, undefined, undefined],
+			[undefined, undefined, undefined, undefined, undefined]
 		]
 	}
 };
