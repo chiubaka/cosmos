@@ -1,0 +1,14 @@
+extends layout
+
+block content
+	#container
+		#cosmos-landing
+			header#cosmos-header
+				h1#cosmos-logo= title
+			#cosmos-login
+				include includes/loginFlow.jade
+		#cosmos-greeting
+			.cosmos-logo
+				img(src='/images/cosmos-preview.jpg')
+			.tutorial
+				img(src='/images/tutorial.png')

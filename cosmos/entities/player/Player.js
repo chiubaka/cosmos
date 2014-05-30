@@ -1,6 +1,12 @@
 var Player = BlockGrid.extend({
 	classId: 'Player',
 
+	PLAYER_START_DISTANCE: 4000,
+
+	/** The session ID associated with this player's client. */
+	_sid: undefined,
+	_dbId: undefined,
+
 	init: function(data) {
 		BlockGrid.prototype.init.call(this, data);
 
@@ -28,6 +34,27 @@ var Player = BlockGrid.extend({
 
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);
+	},
+
+	/**
+	 * Getter/setter for the _sid parameter, which stores the session ID of this player.
+	 * @param val The new value to use or undefined if we are invoking this function as the getter.
+	 * @returns {*} Either the current _sid or this object so that we can chain setter calls.
+	 */
+	sid: function(val) {
+		if (val === undefined) {
+			return this._sid;
+		}
+		this._sid = val;
+		return this;
+	},
+
+	dbId: function(val) {
+		if (val === undefined) {
+			return this._dbId;
+		}
+		this._dbId = val;
+		return this;
 	},
 
 	/**
@@ -173,6 +200,17 @@ var Player = BlockGrid.extend({
 			this._attractionStrength = strength;
 			return this;
 		}
+	},
+
+	/**
+	 * Changes the player's location to a random new location.
+	 */
+	relocate: function() {
+		this.translateTo(
+			(Math.random() - .5) * Player.prototype.PLAYER_START_DISTANCE,
+			(Math.random() - .5) * Player.prototype.PLAYER_START_DISTANCE,
+			0
+		);
 	},
 
 	/**

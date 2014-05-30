@@ -50,28 +50,32 @@
 	},
 
 	firePage: function(page, title) {
-		if (this.enabled) {
-			console.info("Metrics: [PAGEVIEW] " + page);
-			if (title === undefined) {
-				ga('send', 'pageview', page);
-				return;
-			} else {
-				ga('send', 'pageview', {
-					'page': page,
-					'title': title
-				});
-			}
+		if (!this.enabled) {
+			return;
+		}
+		console.info("Metrics: [PAGEVIEW] " + page);
+		if (title === undefined) {
+			ga('send', 'pageview', page);
+			return;
+		} else {
+			ga('send', 'pageview', {
+				'page': page,
+				'title': title
+			});
 		}
 	},
 
 	fireEvent: function(category, action, label, value) {
-		if (this.enabled) {
-			if (label !== undefined) {
-				console.info("Metrics: [EVENT] " + category + "/" + action + " - " + label);
-			} else {
-				console.info("Metrics: [EVENT] " + category + "/" + action);
-			}
-			ga('send', 'event', category, action, label, value);
+		if (!this.enabled) {
+			return;
 		}
+		if (label !== undefined) {
+			console.info("Metrics: [EVENT] " + category + "/" + action + " - " + label);
+		} else {
+			console.info("Metrics: [EVENT] " + category + "/" + action);
+		}
+		ga('send', 'event', category, action, label, value);
 	},
 });
+
+MetricsHandler.PLAYER_DIMENSION = 'dimension1';

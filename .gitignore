@@ -149,7 +149,6 @@ Session.vim
 *.sln.docstates
 
 # Build results
-[Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
@@ -328,3 +327,6 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+
+#Rafael's TODO.md file
+TODO.md
