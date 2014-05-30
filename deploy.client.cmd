@@ -131,7 +131,16 @@ IF EXIST "%DEPLOYMENT_TARGET%\client\public\js\cosmos" (
   popd
 )
 
-:: Copy all assets from cosmos/assets to public/assets
+:: Install NPM packages for server
+echo Installing server NPM packages.
+IF EXIST "%DEPLOYMENT_TARGET%\ige\server\package.json" (
+  pushd "%DEPLOYMENT_TARGET%\ige\server"
+  call :ExecuteCmd !NPM_CMD! install --production
+  IF !ERRORLEVEL! NEQ 0 goto error
+  popd
+)
+
+:: Compile and compress IGE
 echo Compiling and compressing IGE
 pushd "%DEPLOYMENT_SOURCE%\ige"
 call :ExecuteCmd node "server/ige.js" -deploy "../cosmos" -to "../client/public/js/cosmos"
