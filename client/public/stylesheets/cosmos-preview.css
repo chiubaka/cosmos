@@ -15,6 +15,50 @@ body {
     overflow: hidden;
 }
 
+#cboxbutton {
+    position: fixed;
+    bottom: 0px;
+    right: 10px;
+    width: 40px;
+    height: 38px;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    background-image: url('../images/icons/icon_chat.png');
+    background-repeat: no-repeat;
+    background-size: 100%;
+    font-size: 14px;'
+}
+
+#cboxbutton.chat-closed {
+    background-color: rgb(30,30,30);
+    border-bottom: 6px #007536 solid;
+}
+
+#cboxbutton.chat-closed:hover {
+    background-color: #007536;
+    border-bottom: 6px #00b454 solid;
+}
+
+#cboxbutton.chat-open {
+    background-color: #00b454;
+    border-bottom: 6px #fff solid;
+}
+
+#cboxdiv {
+    display: none;
+    position: fixed;
+    bottom: 64px;
+    right: 10px;
+    width: 200px;
+    background: #00b454;
+    padding: 5px;
+    line-height: 0;
+    border: none;
+    box-shadow: #004c23 0px 0px 5px;
+}
+
 .loadingFloat.preview {
   position: fixed;
   left: 50%;
