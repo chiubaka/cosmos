@@ -66,6 +66,7 @@ var igeClientConfig = {
 
 		/* Debugging actions*/
 		'./ui/debug/RespawnButton.js',
+		'./ui/debug/NewShipButton.js',
 
 		/* Capbar */
 		'./ui/capbar/CapBar.js',

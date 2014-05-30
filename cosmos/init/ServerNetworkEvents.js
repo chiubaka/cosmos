@@ -16,10 +16,23 @@ var ServerNetworkEvents = {
 	},
 
 	/**
-	A player has disconnected from the server
-	This function removes all trace of the player from the 'players' list
-	*/
+	 * Called when a player disconnects from the game. Makes sure to save the player's state in the database if the
+	 * player is logged in.
+	 * @param clientId ID of the client that disconnected from the game.
+	 * @private
+	 */
 	_onPlayerDisconnect: function(clientId) {
+		ige.server._destroyPlayer(clientId);
+		delete ige.server.players[clientId];
+	},
+
+	/**
+	 * Destroys the state for the player with the associated client ID. Saves this state in the database if the player
+	 * is logged in.
+	 * @param clientId ID of the client whose player to destroy.
+	 * @private
+	 */
+	_destroyPlayer: function(clientId) {
 		var player = ige.server.players[clientId];
 		if (player) {
 			// Handle destroying player state first
@@ -40,63 +53,79 @@ var ServerNetworkEvents = {
 				delete player;
 			});
 		}
-		delete ige.server.players[clientId];
 	},
 
 	/**
-	A player has connected to the server and asked for a player Entity to be created for him or her!
-	*/
-	_onPlayerEntity: function(data, clientId) {
+	 * Called when a new player entity is required. Registered on the "playerEntity" network command, but also called
+	 * when trying to generate a newShip.
+	 * @param data Data sent by the client.
+	 * @param clientId ID of the client that triggered this network event.
+	 * @param newShip True when we should force creation of a new ship. This will be the case when the new ship button
+	 * is pressed.
+	 * @private
+	 */
+	_onPlayerEntity: function(data, clientId, newShip) {
 		var self = this;
-		if (!ige.server.players[clientId]) {
-			DbSession.playerIdForSession(data.sid, function(err, playerId) {
+		DbSession.playerIdForSession(data.sid, function(err, playerId) {
+			if (err) {
+				self.log('Cannot load session from database!', 'error');
+			}
+			// No player associated with this session! Playing as a guest.
+			else if (playerId === undefined) {
+
+			}
+
+			DbPlayer.load(playerId, function(err, ship, cargo) {
 				if (err) {
-					self.log('Cannot load session from database!', 'error');
+					self.log('Cannot load player from database!', 'error')
 				}
-				// No player associated with this session! Playing as a guest.
-				else if (playerId === undefined) {
+				var player = new Player();
 
+				if (ship === undefined || newShip === true) {
+					player.grid(ExampleShips.starterShipSingleMisplacedEngine());
+				}
+				else {
+					player.grid(BlockGrid.prototype.rehydrateGrid(ship));
 				}
 
-				DbPlayer.load(playerId, function(err, ship, cargo) {
-					if (err) {
-						self.log('Cannot load player from database!', 'error')
-					}
-					var player = new Player();
+				if (playerId !== undefined) {
+					player.dbId(playerId);
+				}
 
-					if (ship === undefined) {
-						player.grid(ExampleShips.starterShipSingleMisplacedEngine());
-					}
-					else {
-						player.grid(BlockGrid.prototype.rehydrateGrid(ship));
-					}
+				player.sid(data.sid)
+					.debugFixtures(false)//call this before calling setGrid()
+					.padding(10)
+					.addSensor(300)
+					.attractionStrength(1)
+					.streamMode(1)
+					.mount(ige.server.spaceGameScene)
+					.spawn();
 
-					if (playerId !== undefined) {
-						player.dbId(playerId);
-					}
+				player.cargo.rehydrateCargo(cargo);
 
-					player.debugFixtures(false)//call this before calling setGrid()
-						.padding(10)
-						.addSensor(300)
-						.attractionStrength(1)
-						.streamMode(1)
-						.mount(ige.server.spaceGameScene)
-						.spawn();
+				ige.server.players[clientId] = player;
 
-					player.cargo.rehydrateCargo(cargo);
-
-					ige.server.players[clientId] = player;
-
-					// Tell the client to track their player entity
-					ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
-				});
+				// Tell the client to track their player entity
+				ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
 			});
-		}
+		});
 	},
 
 	_onRespawnRequest: function(data, clientId) {
 		var player = ige.server.players[clientId];
 		player.spawn();
+	},
+
+	/**
+	 * Called when the "new ship" network command is received. Generates a new starter ship for the player.
+	 * @param data The data object sent by the client.
+	 * @param clientId ID of the client that sent the network command.
+	 * @private
+	 */
+	_onNewShipRequest: function(data, clientId) {
+		var sid = ige.server.players[clientId].sid();
+		ige.server._destroyPlayer(clientId);
+		ige.server._onPlayerEntity({sid: sid}, clientId, true);
 	},
 
 	/**

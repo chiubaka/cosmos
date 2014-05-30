@@ -12,7 +12,11 @@
 
 		this._respawnButton = new RespawnButton()
 			.id("respawnButton")
-      .mount(ige.client.hudScene);
+			.mount(ige.client.hudScene);
+
+		this._newShipButton = new NewShipButton()
+			.id("newShipButton")
+			.mount(ige.client.hudScene);
 
 		this._gpsLabel = new GPSLabel()
 			.id("gpsLabel")
