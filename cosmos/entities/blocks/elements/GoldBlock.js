@@ -4,7 +4,7 @@ var GoldBlock = Element.extend({
 	MAX_HP: 50,
 
 	init: function () {
-		data = {maxHp: this.MAX_HP};
+		data = {MAX_HP: this.MAX_HP};
 		Element.prototype.init.call(this, data);
 
 

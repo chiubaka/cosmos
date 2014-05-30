@@ -32,6 +32,7 @@ var Block = IgeEntity.extend({
 	/**
 	 * Construct a new block
    * Note that subclasses of Block are expected to have their own textures.
+	 * @param data an optional dictionary containing initialization information.
 	 */
 	init: function (data) {
 		IgeEntity.prototype.init.call(this);
@@ -52,15 +53,6 @@ var Block = IgeEntity.extend({
 			this.compositeCache(true);
 			this.cacheSmoothing(true);
 		}
-	},
-
-	maxHp: function(newMaxHp) {
-		if (newMaxHp !== undefined) {
-			this._maxHp = newMaxHp;
-			return this;
-		}
-
-		return this._maxHp;
 	},
 
 	mouseDown: function(event, control) {

@@ -4,7 +4,7 @@ var CargoBlock = Part.extend({
 	MAX_HP: 20,
 
 	init: function () {
-		data = {maxHp: this.MAX_HP};
+		data = {MAX_HP: this.MAX_HP};
 		Part.prototype.init.call(this, data);
 
 		if (!ige.isServer) {

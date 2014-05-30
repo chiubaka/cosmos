@@ -4,7 +4,7 @@ var IronBlock = Element.extend({
 	MAX_HP: 25,
 
 	init: function () {
-		data = {maxHp: this.MAX_HP};
+		data = {MAX_HP: this.MAX_HP};
 		Element.prototype.init.call(this, data);
 
 
