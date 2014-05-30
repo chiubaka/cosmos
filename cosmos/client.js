@@ -129,6 +129,9 @@ var Client = IgeClass.extend({
 		var cookie = this.parseCookie();
 		var sid = cookie['connect.sid'];
 
+		if (sid === undefined) {
+			return undefined;
+		}
 		// connect.sid comes in the form: s:<id>.<???>+<???>
 		return sid.substring(sid.indexOf(':') + 1, sid.indexOf('.'));
 	},

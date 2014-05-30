@@ -1,6 +1,9 @@
 var DbSession = {
 
 	playerIdForSession: function(sid, callback) {
+		if (sid === undefined) {
+			callback();
+		}
 		ige.mongo.db.collection('sessions', function(err, sessions) {
 			sessions.findOne({_id: sid}, function(err, doc) {
 				var session = JSON.parse(doc.session);

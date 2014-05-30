@@ -115,14 +115,46 @@ call :ExecuteCmd copy /Y "config\package.client.json" "package.json"
 IF !ERRORLEVEL! NEQ 0 goto error
 popd
 
+:: Copy all assets from cosmos/assets to public/assets
+echo Copying assets to public directory
+pushd "%DEPLOYMENT_SOURCE%"
+call :ExecuteCmd xcopy "cosmos\assets\*" "client\public\assets" /Y /i /s
+IF !ERRORLEVEL! NEQ 0 goto error
+popd
+
 :: KuduSync
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
   call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
   IF !ERRORLEVEL! NEQ 0 goto error
 )
 
+:: Copy all assets from cosmos/assets to public/assets
+IF NOT EXIST "%DEPLOYMENT_TARGET%\client\public\js\cosmos" (
+  echo Create folder for IGE deployment
+  pushd "%DEPLOYMENT_TARGET%"
+  call :ExecuteCmd mkdir "%DEPLOYMENT_TARGET%/client/public/js/cosmos"
+  IF !ERRORLEVEL! NEQ 0 goto error
+  popd
+)
+
 :: Select node version
 call :SelectNodeVersion
+
+:: Install NPM packages for server
+echo Installing server NPM packages.
+IF EXIST "%DEPLOYMENT_TARGET%\ige\server\package.json" (
+  pushd "%DEPLOYMENT_TARGET%\ige\server"
+  call :ExecuteCmd !NPM_CMD! install --production
+  IF !ERRORLEVEL! NEQ 0 goto error
+  popd
+)
+
+:: Compile and compress IGE
+echo Compiling and compressing IGE
+pushd "%DEPLOYMENT_TARGET%\ige"
+call :ExecuteCmd node "server/ige.js" -deploy "../cosmos" -to "../client/public/js/cosmos"
+IF !ERRORLEVEL! NEQ 0 goto error
+popd
 
 :: Install NPM packages for client
 echo Installing client NPM packages.

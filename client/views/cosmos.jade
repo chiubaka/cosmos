@@ -17,12 +17,17 @@ html
       window.appInsights={queue:[],applicationInsightsId:null,accountId:null,appUserId:null,configUrl:null,start:function(n){function u(n,t){n[t]=function(){var i=arguments;n.queue.push(function(){n[t].apply(n,i)})}}function f(n){var t=document.createElement("script");return t.type="text/javascript",t.src=n,t.async=!0,t}function r(){i.appendChild(f("//az416426.vo.msecnd.net/scripts/ai.0.js"))}var i,t;this.applicationInsightsId=n;u(this,"logEvent");u(this,"logPageView");i=document.getElementsByTagName("script")[0].parentNode;this.configUrl===null?r():(t=f(this.configUrl),t.onload=r,t.onerror=r,i.appendChild(t));this.start=function(){}}};
       appInsights.start("0ffd4afb-c64a-4b6a-80b5-54e6103955c4");
       appInsights.logPageView();
-
-    // Isogenic Loader 
-    script(type='text/javascript').
-      var igeRoot = '/ige/engine/';
-      var gameRoot = '/cosmos/';
-    script(type='text/javascript', src='/ige/engine/loader.js')
+      
+    //
+       Isogenic Loader 
+    if process.env.NODE_ENV === 'production'
+      script(type='text/javascript').
+        var igeRoot = './';
+        var gameRoot = './';
+    else
+      script(type='text/javascript').
+        var igeRoot = '/ige/engine/';
+        var gameRoot = '/cosmos/';
 
     // Google Analytics
     script.
@@ -35,9 +40,9 @@ html
   body
     .igeLoading.greeting
       .cosmos-logo
-        img(src='images/cosmos-preview.jpg')
+        img(src='/images/cosmos-preview.jpg')
       .tutorial
-        img(src='images/tutorial.png')
+        img(src='/images/tutorial.png')
     .igeLoading.loadingFloat.preview
       #loadingText.loadingText
         | Loading... 
@@ -83,3 +88,7 @@ html
         togglecbox();
         }
         }
+    if process.env.NODE_ENV === 'production'
+      script(type="text/javascript", src="/js/cosmos/game.js")
+    else
+      script(type='text/javascript', src='/ige/engine/loader.js')
