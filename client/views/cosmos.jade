@@ -50,9 +50,8 @@ html
       #loadingProgress
         #loadingProgressBar
     div(style='position: absolute; right: 0; bottom: 0;')
-      #cboxbutton(style='position: fixed; bottom: 8px; right: 16px; width: 200px; padding: 3px; text-align: center; cursor: pointer; background-color: #EDF3F7; border: #C3D7E5 1px solid; border-radius: 3px; font-family: Tahoma, sans-serif; font-size: 14px;', onclick='togglecbox()')
-        b Open Chat
-      #cboxdiv(style='display: none; position: fixed; bottom: 48px; right: 16px; width: 200px; background: #EDF3F7; padding: 3px; line-height: 0; border: #C3D7E5 1px solid; border-radius: 3px;')
+      #cboxbutton.chat-closed(onclick='togglecbox()')
+      #cboxdiv
       script(type='text/javascript').
         var cbvis = false;
         var cbload = false;
@@ -66,14 +65,14 @@ html
         cbload = true;
         }
         cbdiv.style.display = "block";
-        cbbut.innerHTML = "Close Chat";
+        cbbut.className = "chat-open";
         if(ige !== undefined && ige.client !== undefined) {
         ige.client.metrics.fireEvent('chat', 'open');
         }
         }
         else {
         cbdiv.style.display = "none";
-        cbbut.innerHTML = "Open Chat";
+        cbbut.className = "chat-closed";
         if(ige !== undefined && ige.client !== undefined) {
         ige.client.metrics.fireEvent('chat', 'close');
         }
