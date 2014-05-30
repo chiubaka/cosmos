@@ -40,8 +40,8 @@ var Block = IgeEntity.extend({
 		// Use an even number so values don't have to become approximate when we divide by two
 		this.width(this.WIDTH).height(this.HEIGHT);
 
-		if (data && data.maxHp) {
-			this.MAX_HP = data.maxHp;
+		if (data && data.MAX_HP) {
+			this.MAX_HP = data.MAX_HP;
 		}
 
 		this._hp = this.MAX_HP;

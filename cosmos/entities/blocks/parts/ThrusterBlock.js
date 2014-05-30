@@ -1,7 +1,7 @@
 var ThrusterBlock = Part.extend({
 	classId: 'ThrusterBlock',
 
-	MAX_HP: 50,
+	MAX_HP: 40,
 
 	init: function () {
 		data = {MAX_HP: this.MAX_HP};

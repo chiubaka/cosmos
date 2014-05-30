@@ -1,7 +1,7 @@
 var ControlBlock = Part.extend({
 	classId: 'ControlBlock',
 
-	MAX_HP: 70,
+	MAX_HP: 45,
 
 	init: function () {
 		data = {MAX_HP: this.MAX_HP};

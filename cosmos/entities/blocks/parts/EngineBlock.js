@@ -1,7 +1,7 @@
 var EngineBlock = Part.extend({
 	classId: 'EngineBlock',
 
-	MAX_HP: 50,
+	MAX_HP: 40,
 
 	init: function () {
 		data = {MAX_HP: this.MAX_HP};
