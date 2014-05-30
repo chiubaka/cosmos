@@ -99,7 +99,7 @@ var ServerNetworkEvents = {
 					.attractionStrength(1)
 					.streamMode(1)
 					.mount(ige.server.spaceGameScene)
-					.spawn();
+					.relocate();
 
 				player.cargo.rehydrateCargo(cargo);
 
@@ -119,7 +119,7 @@ var ServerNetworkEvents = {
 	 */
 	_onRelocateRequest: function(data, clientId) {
 		var player = ige.server.players[clientId];
-		player.spawn();
+		player.relocate();
 	},
 
 	/**

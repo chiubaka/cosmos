@@ -202,7 +202,10 @@ var Player = BlockGrid.extend({
 		}
 	},
 
-	spawn: function() {
+	/**
+	 * Changes the player's location to a random new location.
+	 */
+	relocate: function() {
 		this.translateTo(
 			(Math.random() - .5) * Player.prototype.PLAYER_START_DISTANCE,
 			(Math.random() - .5) * Player.prototype.PLAYER_START_DISTANCE,
