@@ -24,7 +24,6 @@ var Block = IgeEntity.extend({
 	_fixtureDef: undefined,
 
 	MAX_HP: 30,
-	_maxHp: undefined,
 	_hp: undefined,
 	_displayHealth: false,
 
@@ -41,12 +40,10 @@ var Block = IgeEntity.extend({
 		this.width(this.WIDTH).height(this.HEIGHT);
 
 		if (data && data.maxHp) {
-			this._maxHp = data.maxHp;
-		} else {
-			this._maxHp = this.MAX_HP;
+			this.MAX_HP = data.maxHp;
 		}
 
-		this._hp = this._maxHp;
+		this._hp = this.MAX_HP;
 
 		if (!ige.isServer) {
 			this.texture(ige.client.textures.block);
