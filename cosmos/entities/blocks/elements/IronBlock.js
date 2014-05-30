@@ -1,8 +1,12 @@
 var IronBlock = Element.extend({
 	classId: 'IronBlock',
 
+	MAX_HP: 25,
+
 	init: function () {
-		Element.prototype.init.call(this);
+		data = {MAX_HP: this.MAX_HP};
+		Element.prototype.init.call(this, data);
+
 
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(200, 200, 200)";
