@@ -1,8 +1,11 @@
 var IceBlock = Element.extend({
 	classId: 'IceBlock',
 
+	MAX_HP: 8,
+
 	init: function () {
-		Element.prototype.init.call(this);
+		data = {maxHp: this.MAX_HP};
+		Element.prototype.init.call(this, data);
 
 		if (!ige.isServer) {
 			this.textureBackground = "rgba(63, 175, 221, 0.3)";

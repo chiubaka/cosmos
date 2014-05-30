@@ -15,7 +15,7 @@ var Block = IgeEntity.extend({
 
 	// The time it takes to mine a block in milliseconds
 	// TODO: Make this an instance variable and let the value vary for different block types
-	MINING_TIME: 2000,
+	MINING_TIME: 100,
 
 	_row: undefined,
 	_col: undefined,
@@ -23,7 +23,8 @@ var Block = IgeEntity.extend({
 	_fixture: undefined,
 	_fixtureDef: undefined,
 
-	_maxHp: 10,
+	MAX_HP: 30,
+	_maxHp: undefined,
 	_hp: undefined,
 	_displayHealth: false,
 
@@ -33,11 +34,17 @@ var Block = IgeEntity.extend({
 	 * Construct a new block
    * Note that subclasses of Block are expected to have their own textures.
 	 */
-	init: function () {
+	init: function (data) {
 		IgeEntity.prototype.init.call(this);
 
 		// Use an even number so values don't have to become approximate when we divide by two
 		this.width(this.WIDTH).height(this.HEIGHT);
+
+		if (data && data.maxHp) {
+			this._maxHp = data.maxHp;
+		} else {
+			this._maxHp = this.MAX_HP;
+		}
 
 		this._hp = this._maxHp;
 
@@ -48,6 +55,15 @@ var Block = IgeEntity.extend({
 			this.compositeCache(true);
 			this.cacheSmoothing(true);
 		}
+	},
+
+	maxHp: function(newMaxHp) {
+		if (newMaxHp !== undefined) {
+			this._maxHp = newMaxHp;
+			return this;
+		}
+
+		return this._maxHp;
 	},
 
 	mouseDown: function(event, control) {
@@ -107,6 +123,7 @@ var Block = IgeEntity.extend({
 	 */
 	damage: function(amount) {
 		this._hp -= amount;
+		console.log(this._hp);
 
 		if (!ige.isServer) {
 			this._displayHealth = true;

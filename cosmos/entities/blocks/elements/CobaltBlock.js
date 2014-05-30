@@ -1,8 +1,12 @@
 var CobaltBlock = Element.extend({
 	classId: 'CobaltBlock',
 
+	MAX_HP: 60,
+
 	init: function () {
-		Element.prototype.init.call(this);
+		data = {maxHp: this.MAX_HP};
+		Element.prototype.init.call(this, data);
+
 
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(42, 42, 242)";

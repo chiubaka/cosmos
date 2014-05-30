@@ -1,8 +1,11 @@
 var FuelBlock = Part.extend({
 	classId: 'FuelBlock',
 
+	MAX_HP: 10,
+
 	init: function () {
-		Part.prototype.init.call(this);
+		data = {maxHp: this.MAX_HP};
+		Part.prototype.init.call(this, data);
 
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(242, 242, 242)";

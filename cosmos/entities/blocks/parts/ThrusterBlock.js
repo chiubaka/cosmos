@@ -1,8 +1,11 @@
 var ThrusterBlock = Part.extend({
 	classId: 'ThrusterBlock',
 
+	MAX_HP: 50,
+
 	init: function () {
-		Part.prototype.init.call(this);
+		data = {maxHp: this.MAX_HP};
+		Part.prototype.init.call(this, data);
 
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(64, 64, 64)";
