@@ -156,18 +156,6 @@ var GameInit = {
 	initEnvironment: function() {
 		var server = ige.server;
 
-		//Creat a planet.
-		{
-			var asteroid = new BlockGrid()
-				.id('planet')
-				.streamMode(1)
-				.mount(server.spaceGameScene)
-				.padding(10)
-				.grid(BlockGridGenerator.genProceduralAsteroid(20))
-				.scaleBy(10);
-			this.moveRandomly(asteroid);
-		}
-
 		var NUM_NORMAL_ASTEROIDS = 20;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
 			var asteroid = new BlockGrid()

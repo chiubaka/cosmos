@@ -1,5 +1,5 @@
 ##############################
-### Cosmos Game .gitignore ###
+###     TL .gitignore      ###
 ###         from           ###
  github.com/github/gitignore
 ##############################
@@ -96,6 +96,7 @@ build/Release
 # Commenting this out is preferred by some people, see
 # https://npmjs.org/doc/faq.html#Should-I-check-my-node_modules-folder-into-git
 node_modules
+node_modules/
 
 # Users Environment Variables
 .lock-wscript
@@ -328,6 +329,3 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
-
-#Rafael's TODO.md file
-TODO.md

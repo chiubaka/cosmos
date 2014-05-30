@@ -249,10 +249,11 @@ var BlockGridGenerator = {
 		},
 
 		SHIP_PARTS: {
-			"EngineBlock": .25,
-			"FuelBlock": .25,
-			"PowerBlock": .25,
-			"ThrusterBlock": .25
+			"EngineBlock": .1,
+			"FuelBlock": .2,
+			"PowerBlock": .2,
+			"ThrusterBlock": .1,
+			"Block": .4
 		},
 
 		randomDistribution: function() {
