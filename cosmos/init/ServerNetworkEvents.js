@@ -64,7 +64,7 @@ var ServerNetworkEvents = {
 	 * is pressed.
 	 * @private
 	 */
-	_onPlayerEntity: function(data, clientId, newShip) {
+	_onPlayerEntity: function(data, clientId) {
 		var self = this;
 		DbSession.playerIdForSession(data.sid, function(err, playerId) {
 			if (err) {
@@ -79,36 +79,48 @@ var ServerNetworkEvents = {
 				if (err) {
 					self.log('Cannot load player from database!', 'error')
 				}
-				var player = new Player();
 
-				if (ship === undefined || newShip === true) {
-					player.grid(ExampleShips.starterShipSingleMisplacedEngine());
-				}
-				else {
-					player.grid(BlockGrid.prototype.rehydrateGrid(ship));
-				}
-
-				if (playerId !== undefined) {
-					player.dbId(playerId);
-				}
-
-				player.sid(data.sid)
-					.debugFixtures(false)//call this before calling setGrid()
-					.padding(10)
-					.addSensor(300)
-					.attractionStrength(1)
-					.streamMode(1)
-					.mount(ige.server.spaceGameScene)
-					.relocate();
-
-				player.cargo.rehydrateCargo(cargo);
-
-				ige.server.players[clientId] = player;
-
-				// Tell the client to track their player entity
-				ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
+				ige.server._createPlayer(clientId, playerId, ship, cargo);
 			});
 		});
+	},
+
+	/**
+	 * Creates a new player ship and streams it to the client
+	 * @param clientId ID of the client to send the ship to
+	 * @param playerId Database ID of this player
+	 * @param ship The ship to use to create this ship. If none is specified, the starter ship will be used.
+	 * @param cargo The cargo to give the player. If none is specified, the player will be given an empty cargo.
+	 * @private
+	 */
+	_createPlayer: function(clientId, playerId, ship, cargo) {
+		var player = new Player();
+
+		if (ship === undefined) {
+			player.grid(ExampleShips.starterShipSingleMisplacedEngine());
+		}
+		else {
+			player.grid(BlockGrid.prototype.rehydrateGrid(ship));
+		}
+
+		if (playerId !== undefined) {
+			player.dbId(playerId);
+		}
+
+		player.debugFixtures(false)//call this before calling setGrid()
+			.padding(10)
+			.addSensor(300)
+			.attractionStrength(1)
+			.streamMode(1)
+			.mount(ige.server.spaceGameScene)
+			.relocate();
+
+		player.cargo.rehydrateCargo(cargo);
+
+		ige.server.players[clientId] = player;
+
+		// Tell the client to track their player entity
+		ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
 	},
 
 	/**
@@ -129,9 +141,10 @@ var ServerNetworkEvents = {
 	 * @private
 	 */
 	_onNewShipRequest: function(data, clientId) {
-		var sid = ige.server.players[clientId].sid();
+		var playerId = ige.server.players[clientId].dbId();
 		ige.server._destroyPlayer(clientId);
-		ige.server._onPlayerEntity({sid: sid}, clientId, true);
+		// We pass no third or fourth argument to _createPlayer() here, which requests a completely new ship
+		ige.server._createPlayer(clientId, playerId);
 	},
 
 	/**
