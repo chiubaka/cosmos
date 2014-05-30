@@ -122,19 +122,19 @@ call :ExecuteCmd xcopy "cosmos\assets\*" "client\public\assets" /Y /i /s
 IF !ERRORLEVEL! NEQ 0 goto error
 popd
 
-:: Copy all assets from cosmos/assets to public/assets
-IF EXIST "%DEPLOYMENT_TARGET%\client\public\js\cosmos" (
-  echo Create folder for IGE deployment
-  pushd "%DEPLOYMENT_SOURCE%"
-  call :ExecuteCmd mkdir "client/public/js/cosmos"
-  IF !ERRORLEVEL! NEQ 0 goto error
-  popd
-)
-
 :: KuduSync
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
   call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
   IF !ERRORLEVEL! NEQ 0 goto error
+)
+
+:: Copy all assets from cosmos/assets to public/assets
+IF EXIST "%DEPLOYMENT_TARGET%\client\public\js\cosmos" (
+  echo Create folder for IGE deployment
+  pushd "%DEPLOYMENT_TARGET%"
+  call :ExecuteCmd mkdir "%DEPLOYMENT_TARGET%/client/public/js/cosmos"
+  IF !ERRORLEVEL! NEQ 0 goto error
+  popd
 )
 
 :: Select node version
