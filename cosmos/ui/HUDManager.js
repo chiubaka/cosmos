@@ -10,8 +10,8 @@
 			.id("capbar")
 			.mount(ige.client.hudScene);
 
-		this._respawnButton = new RespawnButton()
-			.id("respawnButton")
+		this._relocateButton = new RelocateButton()
+			.id("relocateButton")
 			.mount(ige.client.hudScene);
 
 		this._newShipButton = new NewShipButton()

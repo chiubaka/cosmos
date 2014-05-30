@@ -65,7 +65,7 @@ var igeClientConfig = {
 		'./ui/info/GPSLabel.js',
 
 		/* Debugging actions*/
-		'./ui/debug/RespawnButton.js',
+		'./ui/debug/RelocateButton.js',
 		'./ui/debug/NewShipButton.js',
 
 		/* Capbar */

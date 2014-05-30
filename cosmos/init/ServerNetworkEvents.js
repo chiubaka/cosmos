@@ -111,7 +111,13 @@ var ServerNetworkEvents = {
 		});
 	},
 
-	_onRespawnRequest: function(data, clientId) {
+	/**
+	 * Called in response to a "relocate" network command. Relocates the player to a new, randomized location.
+	 * @param data Data object sent by the client.
+	 * @param clientId ID of the client that sent the network command.
+	 * @private
+	 */
+	_onRelocateRequest: function(data, clientId) {
 		var player = ige.server.players[clientId];
 		player.spawn();
 	},
