@@ -119,8 +119,13 @@ var ServerNetworkEvents = {
 
 		ige.server.players[clientId] = player;
 
+		var sendData = {
+			entityId: ige.server.players[clientId].id(),
+			playerId: playerId !== undefined ? playerId : "undefined"
+		};
+
 		// Tell the client to track their player entity
-		ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
+		ige.network.send('playerEntity', sendData, clientId);
 	},
 
 	/**
