@@ -1,5 +1,9 @@
 var Player = BlockGrid.extend({
 	classId: 'Player',
+
+	PLAYER_START_DISTANCE: 4000,
+
+	_sid: undefined,
 	_dbId: undefined,
 
 	init: function(data) {
@@ -29,6 +33,14 @@ var Player = BlockGrid.extend({
 
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);
+	},
+
+	sid: function(val) {
+		if (val === undefined) {
+			return this._sid;
+		}
+		this._sid = val;
+		return this;
 	},
 
 	dbId: function(val) {
@@ -182,6 +194,14 @@ var Player = BlockGrid.extend({
 			this._attractionStrength = strength;
 			return this;
 		}
+	},
+
+	spawn: function() {
+		this.translateTo(
+			(Math.random() - .5) * Player.prototype.PLAYER_START_DISTANCE,
+			(Math.random() - .5) * Player.prototype.PLAYER_START_DISTANCE,
+			0
+		);
 	},
 
 	/**

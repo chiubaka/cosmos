@@ -40,6 +40,7 @@ var ServerNetworkEvents = {
 				delete player;
 			});
 		}
+		delete ige.server.players[clientId];
 	},
 
 	/**
@@ -47,7 +48,7 @@ var ServerNetworkEvents = {
 	*/
 	_onPlayerEntity: function(data, clientId) {
 		var self = this;
-		if (!ige.server.players[clientId]) {
+		//if (!ige.server.players[clientId]) {
 			DbSession.playerIdForSession(data.sid, function(err, playerId) {
 				if (err) {
 					self.log('Cannot load session from database!', 'error');
@@ -74,13 +75,14 @@ var ServerNetworkEvents = {
 						player.dbId(playerId);
 					}
 
-					player.debugFixtures(false)//call this before calling setGrid()
+					player.sid(data.sid)
+						.debugFixtures(false)//call this before calling setGrid()
 						.padding(10)
 						.addSensor(300)
 						.attractionStrength(1)
 						.streamMode(1)
 						.mount(ige.server.spaceGameScene)
-						.translateTo((Math.random() - .5) * ige.server.PLAYER_START_DISTANCE, (Math.random() - .5) * ige.server.PLAYER_START_DISTANCE, 0);
+						.spawn();
 
 					player.cargo.rehydrateCargo(cargo);
 
@@ -90,13 +92,12 @@ var ServerNetworkEvents = {
 					ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
 				});
 			});
-		}
+		//}
 	},
 
-	// TODO: Fix player respawn (broken by new DB code)
 	_onRespawnRequest: function(data, clientId) {
-		ige.server._onPlayerDisconnect(clientId);
-		ige.server._onPlayerEntity(data, clientId);
+		var player = ige.server.players[clientId];
+		player.spawn();
 	},
 
 	/**

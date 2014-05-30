@@ -10,8 +10,6 @@ var Server = IgeClass.extend({
 		self.LAYER_HUD = 90;
 		self.DEPTH_PLAYER = 90;
 
-		self.PLAYER_START_DISTANCE = 4000;
-
 		// Load our blocks
 		self.obj = [];
 
