@@ -75,8 +75,7 @@ var ServerNetworkEvents = {
 						player.dbId(playerId);
 					}
 
-					player.sid(data.sid)
-						.debugFixtures(false)//call this before calling setGrid()
+					player.debugFixtures(false)//call this before calling setGrid()
 						.padding(10)
 						.addSensor(300)
 						.attractionStrength(1)
