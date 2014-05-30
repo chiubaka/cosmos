@@ -163,8 +163,6 @@ app.configure(function () {
 	app.use(passport.session());
 	app.use(app.router);
 	app.use(express.static(path.join(__dirname, 'public')));
-	app.use('/ige', express.static('../ige'));
-	app.use('/cosmos', express.static('../cosmos'));
 });
 
 app.configure('development', function () {
@@ -173,6 +171,8 @@ app.configure('development', function () {
 		dumpExceptions: true,
 		showStack: true,
 	}));
+	app.use('/ige', express.static('../ige'));
+	app.use('/cosmos', express.static('../cosmos'));
 });
 
 app.configure('production', function () {
