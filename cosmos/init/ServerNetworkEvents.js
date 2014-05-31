@@ -22,8 +22,13 @@ var ServerNetworkEvents = {
 	 * @private
 	 */
 	_onPlayerDisconnect: function(clientId) {
-		ige.server._destroyPlayer(clientId);
-		delete ige.server.players[clientId];
+		var player = ige.server.players[clientId];
+		if (player === undefined) {
+			return;
+		}
+
+		ige.server._destroyPlayer(clientId, player);
+		delete player;
 	},
 
 	/**
@@ -32,27 +37,24 @@ var ServerNetworkEvents = {
 	 * @param clientId ID of the client whose player to destroy.
 	 * @private
 	 */
-	_destroyPlayer: function(clientId) {
-		var player = ige.server.players[clientId];
-		if (player) {
-			// Handle destroying player state first
-			// Unsubscribe players from updates
-			player.cargo.unsubscribeFromUpdates(clientId);
+	_destroyPlayer: function(clientId, player) {
+		// Handle destroying player state first
+		// Unsubscribe players from updates
+		player.cargo.unsubscribeFromUpdates(clientId);
 
-			var self = this;
-			DbPlayer.update(player.dbId(), player, function(err, result) {
-				if (err) {
-					self.log('Cannot save player in database!', 'error')
-				}
+		var self = this;
+		DbPlayer.update(player.dbId(), player, function(err, result) {
+			if (err) {
+				self.log('Cannot save player in database!', 'error')
+			}
 
-				// Remove the player from the game
-				player.destroy();
+			// Remove the player from the game
+			player.destroy();
 
-				// Remove the reference to the player entity
-				// so that we don't leak memory
-				delete player;
-			});
-		}
+			// Remove the reference to the player entity
+			// so that we don't leak memory
+			delete player;
+		});
 	},
 
 	/**
@@ -136,6 +138,10 @@ var ServerNetworkEvents = {
 	 */
 	_onRelocateRequest: function(data, clientId) {
 		var player = ige.server.players[clientId];
+		if (player === undefined) {
+			return;
+		}
+
 		player.relocate();
 	},
 
@@ -146,8 +152,13 @@ var ServerNetworkEvents = {
 	 * @private
 	 */
 	_onNewShipRequest: function(data, clientId) {
-		var playerId = ige.server.players[clientId].dbId();
-		ige.server._destroyPlayer(clientId);
+		var player = ige.server.players[clientId];
+		if (player === undefined) {
+			return;
+		}
+
+		var playerId = player.dbId();
+		ige.server._destroyPlayer(clientId, player);
 		// We pass no third or fourth argument to _createPlayer() here, which requests a completely new ship
 		ige.server._createPlayer(clientId, playerId);
 	},
@@ -157,13 +168,21 @@ var ServerNetworkEvents = {
 	data in this case represents the *new* state of the player's controls
 	*/
 	_onPlayerControlUpdate: function(data, clientId) {
-		ige.server.players[clientId].controls = data;
+		var player = ige.server.players[clientId];
+		if (player === undefined) {
+			return;
+		}
+
+		player.controls = data;
 	},
 
 	// TODO: User access control. Restrict what players can do based on clientId
 	// TODO: Guard against undefined blocks (do not trust client) so server doesn't crash
 	_onMineBlock: function(data, clientId) {
 		var player = ige.server.players[clientId];
+		if (player === undefined) {
+			return;
+		}
 
 		// Do not start mining if we are already mining
 		if (player.laserBeam !== undefined) {
@@ -185,8 +204,12 @@ var ServerNetworkEvents = {
 	},
 
 	_onConstructNew: function(data, clientId) {
-		// TODO: Extract this into a new method and call it with an event emission!
 		var player = ige.server.players[clientId];
+		if (player === undefined) {
+			return;
+		}
+
+		// TODO: Extract this into a new method and call it with an event emission!
 		var blockToPlace = player.cargo.extractType(data.selectedType)[0];
 
 		if (blockToPlace !== undefined) {
@@ -207,6 +230,10 @@ var ServerNetworkEvents = {
 
 	_onCargoRequest: function(data, clientId) {
 		var player = ige.server.players[clientId];
+		if (player === undefined) {
+			return;
+		}
+
 		var playerCargo = player.cargo;
 
 		if (data !== undefined && data !== null) {
@@ -222,8 +249,10 @@ var ServerNetworkEvents = {
 
 	// TODO: Verify valid construction zone
 	_onConstructionZoneClicked: function(data, clientId) {
-		//console.log("row: " + data.row + " col: " + data.col);
 		var player = ige.server.players[clientId];
+		if (player === undefined) {
+			return;
+		}
 
 		// TODO: This extracts a block from the cargo and throws it away. Should use the result of this in the future!
 		var extractedBlocks = player.cargo.extractType(data.selectedType);
