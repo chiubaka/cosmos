@@ -637,7 +637,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 			case 'add':
 				// Add block server side, then send add msg to client
-				if(!self.add(data.row, data.col, data.selectedType)) {
+				if(!self.add(data.row, data.col, Block.prototype.blockFromClassId(data.selectedType))) {
 					return false;
 				}
 				else {
@@ -666,7 +666,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 				block.damage(data.amount);
 				break;
 			case 'add':
-				ige.client.metrics.fireEvent('construct', 'existing', data.selectedType);
+				ige.client.metrics.fireEvent(
+					'construct',
+					'existing',
+					Block.prototype.blockFromClassId(data.selectedType)
+				);
 				this.add(data.row, data.col, data.selectedType);
 				this._renderContainer.refresh();
 				this._constructionZoneOverlay.refresh();
@@ -675,7 +679,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
 		}
 	},
-
 
 	/**
 	 * Remove is intended to remove the block from the grid,
@@ -792,7 +795,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this._renderContainer.refresh();
 	},
 
-
 	/**
 	 * Call this before calling setGrid to create a bunch of entities which will help to visualize the box2D fixtures
 	 * @param flag true iff you want to debug the fixtures
@@ -808,7 +810,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	/**
 	 * Is update called once per time-step per viewport, or just once per time-step?
-	*/
+	 */
 	update: function(ctx) {
 		if (ige.isServer) {
 			// Attract the block grid to another body. For example, small asteroids
