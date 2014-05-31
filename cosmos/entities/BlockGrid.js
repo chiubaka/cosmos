@@ -25,7 +25,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * entries in the grid. This is done so that it is easy to access a Block based on its index, which will be
 	 * important for finding the neighbors of blocks when applying flood fill algorithms.
 	 */
-	_grid: undefined,
+	_grid: {},
 	/** The rendering container for this BlockGrid, which essentially provides a cacheable location for the BlockGrid's
 	 * texture. */
 	_renderContainer: undefined,
@@ -51,6 +51,147 @@ var BlockGrid = IgeEntityBox2d.extend({
 			this.mountGrid();
 			this.mouseDown(this.mouseDownHandler);
 		}
+	},
+
+	/**
+	 * Returns the block at a given row and column in the BlockGrid.
+	 * @param row {int} The row index to get
+	 * @param col {int} The col index to get
+	 * @returns {*} The Block object at (row, col) or undefined if no Block exists at the specified row and column
+	 */
+	get: function(row, col) {
+		// Check whether or not the dictionary has any entries for the given row value and the given column value.
+		if (this._grid[row] === undefined || this._grid[row][col] === undefined) {
+			return undefined;
+		}
+
+		return this._grid[row][col];
+	},
+
+	/**
+	 * Adds a Block at the specified row and col.
+	 * @param row {int} The row to add at
+	 * @param col {int} The col to add at
+	 * @param block {Block} The Block to add to the grid.
+	 * @returns {boolean} True if the Block was added successfully to the grid. False otherwise. A Block may not be
+	 * successfully added to the grid if another Block already exists in the grid at the specified location or if the
+	 * parameters passed to this function are invalid.
+	 */
+	add: function(row, col, block) {
+		// Guard against invalid parameters
+		if (row === undefined || col === undefined || block === undefined) {
+			return false;
+		}
+
+		if (!_canAdd(row, col, block)) {
+			return false;
+		}
+
+		for (var y = 0; y < block.heightInGrid(); y++) {
+			for (var x = 0; x < block.widthInGrid(); x++) {
+				_set(row + y, col + x, block);
+			}
+		}
+
+		return true;
+	},
+
+	/**
+	 * Checks whether or not the given block can be added at the specified row and col. For blocks that are larger than
+	 * 1x1, row and col specify the top left grid space coordinate of the block.
+	 * @param row {int} The row to add at. If the block is larger than 1x1, this is the row for the top left corner of
+	 * the block
+	 * @param col {int} The col to add at. If the block is larger than 1x1, this is the col for the top left corner of
+	 * the block
+	 * @param block {Block} The block to add. If the block is larger than 1x1, all spaces where the block would occupy
+	 * are checked.
+	 * @returns {boolean} True if nothing prevents this block from being placed at the given row and col. False
+	 * otherwise.
+	 * @private
+	 */
+	_canAdd: function(row, col, block) {
+		for (var y = 0; y < block.heightInGrid(); y++) {
+			for (var x = 0; x < block.widthInGrid(); x++) {
+				if (_isOccupied(row, col)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	},
+
+	/**
+	 * Checks whether or not a grid location is occupied.
+	 * @param row {int} The row to check.
+	 * @param col {int} The col to check.
+	 * @returns {boolean} True if the grid location is occupied (occupant !== undefined). False otherwise.
+	 * @private
+	 */
+	_isOccupied: function(row, col) {
+		return this._grid[row] !== undefined && this._grid[row][col] !== undefined;
+	},
+
+	/**
+	 * Sets a location in the grid. Makes sure that the necessary sub-dictionaries exist and have been created. This
+	 * function sets ONE GRID SPACE. In order to set for blocks larger than 1x1, _set() must be called multiple times.
+	 * @param row {int} The row to set.
+	 * @param col {int} The col to set.
+	 * @param block {Block} The block reference to place at the specified grid location.
+	 * @private
+	 */
+	_set: function(row, col, block) {
+		if (!_hasColInRow(row, col)) {
+			_createColInRow(row, col);
+		}
+
+		this._grid[row][col] = block;
+	},
+
+	/**
+	 * Checks whether or not the grid has the specified row. Since the grid is represented sparsely, it is possible we
+	 * have not added an entry for this row yet.
+	 * @param row {int} The row to check for.
+	 * @returns {boolean} True if the grid already has this row. False otherwise.
+	 * @private
+	 */
+	_hasRow: function(row) {
+		return this._grid[row] !== undefined;
+	},
+
+	/**
+	 * Creates an empty dictionary for the specified row.
+	 * @param row {int} The row to create.
+	 * @private
+	 */
+	_createRow: function(row) {
+		this._grid[row] = {};
+	},
+
+	/**
+	 * Checks whether or not the grid has the specified col in the specified row. Since the grid is represented
+	 * sparsely, it is possible we have not added an entry for this row and col yet.
+	 * @param row {int} The row to check.
+	 * @param col {int} The col to check.
+	 * @returns {boolean} True if the grid already has this row and col. False otherwise.
+	 * @private
+	 */
+	_hasColInRow: function(row, col) {
+		return this._grid[row] !== undefined && this._grid[row][col] !== undefined;
+	},
+
+	/**
+	 * Creates an empty dictionary for the specified col in the specified row. If the specified row does not already
+	 * exist, the row is also created.
+	 * @param row {int} The row to create the col in.
+	 * @param col {int} The col to create.
+	 * @private
+	 */
+	_createColInRow: function(row, col) {
+		if (!_hasRow(row)) {
+			_createRow(row);
+		}
+
+		this._grid[row][col] = {};
 	},
 
 	/**
