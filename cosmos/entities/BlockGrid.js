@@ -51,9 +51,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 		IgeEntityBox2d.prototype.init.call(this);
 
 		if (!ige.isServer) {
-			this._grid = this.rehydrateGrid(data);
 			this._renderContainer = new RenderContainer()
 				.mount(this);
+			this.fromBlockTypeMatrix(data);
 
 			// TODO: Lazily create when needed to speed up load time.
 			this._constructionZoneOverlay = new ConstructionZoneOverlay(this._grid)
@@ -185,6 +185,59 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 
 		return _blocksByType[classId].length;
+	},
+
+	/**
+	 * Resets this BlockGrid's internal state to represent the grid that is represented by the provided block type
+	 * matrix, which is a matrix of class ID's where each class ID represents a block type in the grid.
+	 * @param blockTypeMatrix {Array} An array of arrays that holds classId's for Block objects. undefined is used to
+	 * indicate that a space in the blockTypeMatrix does not include a Block. The blockTypeMatrix must be a rectangular
+	 * matrix (every row has the same number of columns and every column has the same number of rows, but the total number
+	 * of rows and total number of columns is not required to be the same).
+	 * @returns {BlockGrid} Return this object to make function chaining convenient.
+	 */
+	fromBlockTypeMatrix: function(blockTypeMatrix) {
+		// Remove all existing blocks from this grid and start fresh!
+		this.removeAll();
+
+		for (var row = 0; row < blockTypeMatrix.length; row++) {
+			for (var col = 0; col < blockTypeMatrix[row].length; col++) {
+				// The add() function knows how to deal with receiving undefined
+				this.add(row, col, blockTypeMatrix[row][col]);
+			}
+		}
+
+		return this;
+	},
+
+	/**
+	 * Takes this BlockGrid and converts it to a matrix of class ID's, where each class ID represents a single type of block
+	 * in the BlockGrid.
+	 * @returns {Array} An array of arrays that holds classId's for Block objects. undefined is used to
+	 * indicate that a space in the blockTypeMatrix does not include a Block. The blockTypeMatrix must be a rectangular
+	 * matrix (every row has the same number of columns and every column has the same number of rows, but the total number
+	 * of rows and total number of columns is not required to be the same).
+	 */
+	toBlockTypeMatrix: function() {
+		var blockTypeMatrix = [];
+		var endRow = grid.endRow();
+		var endCol = grid.endCol();
+
+		for (var row = grid.startRow(); row <= endRow; row++) {
+			var rowList = [];
+			for (var col = grid.startCol(); col <= endCol; col++) {
+				var block = grid.get(row, col);
+				if (block === undefined) {
+					row.push(undefined);
+				}
+				else {
+					row.push(block.classId());
+				}
+			}
+			blockTypeMatrix.push(rowList);
+		}
+
+		return blockTypeMatrix;
 	},
 
 	/**
@@ -905,63 +958,5 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 });
-
-/** Static function declarations */
-
-/**
- * Creates and returns a new BlockGrid given a matrix of class ID's that represent the types of blocks to be included
- * in the grid.
- * @param blockTypeMatrix {Array} An array of arrays that holds classId's for Block objects. undefined is used to
- * indicate that a space in the blockTypeMatrix does not include a Block. The blockTypeMatrix must be a rectangular
- * matrix (every row has the same number of columns and every column has the same number of rows, but the total number
- * of rows and total number of columns is not required to be the same).
- * @returns {BlockGrid} A newly instantiated BlockGrid object that includes Blocks that match the types and locations
- * provided in the blockTypeMatrix.
- * @static
- */
-BlockGrid.fromBlockTypeMatrix = function(blockTypeMatrix) {
-	var grid = new BlockGrid();
-
-	for (var row = 0; row < blockTypeMatrix.length; row++) {
-		for (var col = 0; col < blockTypeMatrix[row].length; col++) {
-			// The add() function knows how to deal with receiving undefined
-			grid.add(row, col, blockTypeMatrix[row][col]);
-		}
-	}
-
-	return grid;
-};
-
-/**
- * Takes an existing BlockGrid and returns a matrix of class ID's, where each class ID represents a single type of block
- * in the BlockGrid.
- * @param grid {BlockGrid} The BlockGrid to turn into a block type matrix.
- * @returns {Array} An array of arrays that holds classId's for Block objects. undefined is used to
- * indicate that a space in the blockTypeMatrix does not include a Block. The blockTypeMatrix must be a rectangular
- * matrix (every row has the same number of columns and every column has the same number of rows, but the total number
- * of rows and total number of columns is not required to be the same).
- * @static
- */
-BlockGrid.toBlockTypeMatrix = function(grid) {
-	var blockTypeMatrix = [];
-	var endRow = grid.endRow();
-	var endCol = grid.endCol();
-
-	for (var row = grid.startRow(); row <= endRow; row++) {
-		var rowList = [];
-		for (var col = grid.startCol(); col <= endCol; col++) {
-			var block = grid.get(row, col);
-			if (block === undefined) {
-				row.push(undefined);
-			}
-			else {
-				row.push(block.classId());
-			}
-		}
-		blockTypeMatrix.push(rowList);
-	}
-
-	return blockTypeMatrix;
-};
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = BlockGrid; }
