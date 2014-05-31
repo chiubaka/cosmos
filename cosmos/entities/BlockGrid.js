@@ -366,6 +366,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		delete this._grid[row][col];
 
+		// TODO: Object.keys() likely requires linear time in the number of elements to help us figure out if the row
+		// is empty. Consider storing the number of elements in each row and column separately, since this linear check
+		// will not be worth it most of the time (since most rows will be larger than one element large), and will thus
+		// be a waste of time in general. We will eventually want removal to be very fast, and this is one potential
+		// bottleneck.
 		if (Object.keys(this._grid[row]).length === 0) {
 			delete this._grid[row];
 		}
@@ -442,6 +447,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 			return;
 		}
 
+		// TODO: Using a list for the blocks may not be the right approach here. For lists that have lots of blocks,
+		// this operation will make block removal slow. In the future, block removal may happen very frequently and
+		// we will want to make block removal as fast as possible. This is one potential bottleneck, since indexOf()
+		// is an O(n) search for a block.
 		var index = list.indexOf(block);
 		if (index !== -1) {
 			return;
