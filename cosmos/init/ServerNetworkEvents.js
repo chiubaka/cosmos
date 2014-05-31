@@ -172,6 +172,10 @@ var ServerNetworkEvents = {
 
 		// TODO: Guard against bogus blockGridId from client
 		var blockGrid = ige.$(data.blockGridId);
+		if (blockGrid === undefined) {
+			return;
+		}
+
 		data.action = 'mine';
 		if(blockGrid.processBlockActionServer(data, player)) {
 			// Activate mining laser
