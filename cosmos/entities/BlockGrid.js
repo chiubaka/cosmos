@@ -98,11 +98,25 @@ var BlockGrid = IgeEntityBox2d.extend({
 			return false;
 		}
 
+		// Check if we need to change the category of this object so that it is not considered for being attracted
+		// into the player's ship.
+		this._checkSmallAsteroidCategory();
+
+		// Store the row and col in the block so that we can figure out where we are from the block.
+		block.row(row).col(col);
+
 		// Now that we know it is OK to add the block, we should set the reference at each grid location to be a
 		// reference to the provided block.
 		this._setBlock(row, col, block);
 
+		// Keep track of this block in the dictionary of lists that keeps a separate list of blocks by classId
 		this._addToBlockTypes(block);
+
+		// Mount the block for rendering purposes.
+		this._mountBlock(row, col, block);
+
+		// Add fixtures to update the server's physics model.
+		this._addFixture(row, col, block, this._box2dBody);
 
 		this._numBlocks++;
 
@@ -204,6 +218,21 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	/**
+	 * Checks whether or not the category of this BlockGrid should be changed. BlockGrids with single blocks are
+	 * considered small asteroids and marked to be attracted by nearby players. However, when a block is added to a
+	 * small asteroid BlockGrid, it is no longer a single block BlockGrid and is not considered a small asteroid, so
+	 * attraction will no longer work on this BlockGrid.
+	 * @private
+	 */
+	_checkSmallAsteroidCategory: function() {
+		// Make sure we don't attract formerly small asteroids
+		if (this.category() === 'smallAsteroid') {
+			// Don't use getter/setter because undefined gets value
+			this._category = undefined;
+		}
+	},
+
+	/**
 	 * Calls the _set() function for all of the spaces associated with a Block.
 	 * @param row {int} The row for the top left corner of the block.
 	 * @param col {int} The col for the top left corner of the block.
@@ -292,6 +321,83 @@ var BlockGrid = IgeEntityBox2d.extend({
 			this._blocksByType[block.classId()] = [];
 		}
 		this._blocksByType[block.classId()].push(block);
+	},
+
+	/**
+	 * Handles actually mounting the block to the render container
+	 * @param row {int} The row for the top left corner of the block
+	 * @param col {int} The col for the top left corner of the block
+	 * @param block {Block} The block to mount.
+	 * @private
+	 */
+	_mountBlock: function(row, col, block) {
+		// Rendering of the blocks only occurs on the client.
+		if (ige.isServer) {
+			return;
+		}
+
+		this._renderContainer.height(this.height());
+		this._renderContainer.width(this.width());
+
+		var x = Block.prototype.WIDTH * col - this._bounds2d.x2 + block._bounds2d.x2;
+		var y = Block.prototype.HEIGHT * row - this._bounds2d.y2 + block._bounds2d.y2;
+
+		block.translateTo(x, y, 0)
+			.mount(this._renderContainer);
+	},
+
+	/**
+	 * Adds a Box2D fixture to the physics model on the server for this Block.
+	 * @param row {int} The row for the top left corner of the block.
+	 * @param col {int} The col for the top left corner of the block.
+	 * @param block {Block} The block that we are adding a fixture for.
+	 * @param box2dBody {Box2dBody} The Box2dBody for this BlockGrid, which we will add the fixture to.
+	 * @private
+	 */
+	_addFixture: function(row, col, block, box2dBody) {
+		// The physics model is only run on the server.
+		if (!ige.isServer) {
+			return;
+		}
+
+		var width = Block.prototype.WIDTH;
+		var height = Block.prototype.HEIGHT;
+
+		var x = width * col - this._bounds2d.x2 + block._bounds2d.x2;
+		var y = height * row - this._bounds2d.y2 + block._bounds2d.y2;
+
+		var fixtureDef = {
+			density: 1.0,
+			friction: 0.5,
+			restitution: 0.5,
+			shape: {
+				type: 'rectangle',
+				data: {
+					// The position of the fixture relative to the body
+					// The fixtures are slightly smaller than the actual block grid so that you can fit into a whole which is exactly the same width (in terms of blocks) as your ship
+					x: x + .1,
+					y: y + .1,
+					width: width / 2 - .2,
+					height: height / 2 - .2
+				}
+			}
+		};
+
+		var fixture = ige.box2d.addFixture(box2dBody, fixtureDef);
+		// Add fixture reference to Block so we can destroy fixture later.
+		block.fixture(fixture);
+		// Add fixtureDef reference so we can create a new BlockGrid later.
+		block.fixtureDef(fixtureDef);
+
+		if (this.debugFixtures()) {
+			new FixtureDebuggingEntity()
+				.mount(this)
+				.depth(this.depth() + 1)
+				.translateTo(fixtureDef.shape.data.x, fixtureDef.shape.data.y, 0)
+				.width(fixtureDef.shape.data.width * 2)
+				.height(fixtureDef.shape.data.height * 2)
+				.streamMode(1);
+		}
 	},
 
 	/**
@@ -613,45 +719,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this._grid[row][col] = undefined;
 	},
 
-	add: function(row, col, blockClassId) {
-		// TODO: Handle expanding the BlockGrid
-		if (!this._grid.is2DInBounds(row, col)) {
-			return false;
-		}
-
-		// Make sure we don't attract formely small asteroids
-		if (this.category() === 'smallAsteroid') {
-			// Don't use getter/setter because undefined gets value
-			this._category = undefined;
-		}
-
-		var block = Block.prototype.blockFromClassId(blockClassId)
-			.row(row)
-			.col(col);
-
-		this._grid[row][col] = block;
-
-		// Update client's scenegraph
-		if (!ige.isServer) {
-			this._renderContainer.height(this.height());
-			this._renderContainer.width(this.width());
-
-			var x = Block.prototype.WIDTH * col - this._bounds2d.x2 + block._bounds2d.x2;
-			var y = Block.prototype.HEIGHT * row - this._bounds2d.y2 + block._bounds2d.y2;
-
-			block.translateTo(x, y, 0)
-				.mount(this._renderContainer);
-		}
-
-		// Update server's physics model
-		if (ige.isServer) {
-			this.addFixture(this._box2dBody, block, row, col);
-		}
-
-		return true
-
-	},
-
 	/**
 	 * Getter/setter for the grid property of the BlockGrid. If a parameter is passed, sets
 	 * the property and returns this. If not, returns the property.
@@ -696,47 +763,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 
 		return this;
-	},
-
-	addFixture: function (box2dBody, block, row, col) {
-		var width = Block.prototype.WIDTH;
-		var height = Block.prototype.HEIGHT;
-
-		var x = width * col - this._bounds2d.x2 + block._bounds2d.x2;
-		var y = height * row - this._bounds2d.y2 + block._bounds2d.y2;
-
-		var fixtureDef = {
-			density: 1.0,
-			friction: 0.5,
-			restitution: 0.5,
-			shape: {
-				type: 'rectangle',
-				data: {
-					// The position of the fixture relative to the body
-					// The fixtures are slightly smaller than the actual block grid so that you can fit into a whole which is exactly the same width (in terms of blocks) as your ship
-					x: x + .1,
-					y: y + .1,
-					width: width / 2 - .2,
-					height: height / 2 - .2
-				}
-			}
-		};
-
-		var fixture = ige.box2d.addFixture(box2dBody, fixtureDef);
-		// Add fixture reference to Block so we can destroy fixture later.
-		block.fixture(fixture);
-		// Add fixtureDef reference so we can create a new BlockGrid later.
-		block.fixtureDef(fixtureDef);
-
-		if (this.debugFixtures()) {
-			new FixtureDebuggingEntity()
-				.mount(this)
-				.depth(this.depth() + 1)
-				.translateTo(fixtureDef.shape.data.x, fixtureDef.shape.data.y, 0)
-				.width(fixtureDef.shape.data.width * 2)
-				.height(fixtureDef.shape.data.height * 2)
-				.streamMode(1);
-		}
 	},
 
 	mountGrid: function() {
