@@ -28,6 +28,13 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * important for finding the neighbors of blocks when applying flood fill algorithms.
 	 */
 	_grid: {},
+	/**
+	 * Categorizes all of the blocks in this grid into lists of blocks that have the same classId. This is useful for
+	 * cases where we need to know, for example, how many EngineBlocks are in a BlockGrid. Again, the BlockGrid is
+	 * intended to support basic querying on this structure, but it SHOULD NOT handle higher level logic regarding the
+	 * contents of the grid.
+	 */
+	_blocksByType: {},
 	/** The rendering container for this BlockGrid, which essentially provides a cacheable location for the BlockGrid's
 	 * texture. */
 	_renderContainer: undefined,
@@ -91,13 +98,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 			return false;
 		}
 
-		// Now that we know we can add to the BlockGrid, set the grid locations to reference the block we were given.
-		// Need to loop in order to support blocks that are larger than 1x1.
-		for (var y = 0; y < block.heightInGrid(); y++) {
-			for (var x = 0; x < block.widthInGrid(); x++) {
-				this._set(row + y, col + x, block);
-			}
-		}
+		// Now that we know it is OK to add the block, we should set the reference at each grid location to be a
+		// reference to the provided block.
+		this._setBlock(row, col, block);
 
 		this._numBlocks++;
 
@@ -124,16 +127,30 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 
 		// Check to see if the spaces the provided block will occupy are already occupied.
-		for (var y = 0; y < block.heightInGrid(); y++) {
-			for (var x = 0; x < block.widthInGrid(); x++) {
-				if (this._isOccupied(row + y, col + y)) {
-					return false;
-				}
-			}
+		if (this._isOccupiedBlock(row, col, block)) {
+			return false;
 		}
 
 		// Make sure that the block will be connected to the existing structure. Disjoint structures are not allowed.
 		return this._hasNeighbors(row, col, block);
+	},
+
+	/**
+	 * Calls the _isOccupied function for all
+	 * @param row {int} The row for the top left corner of the block.
+	 * @param col {int} The col for the top left corner of the block.
+	 * @param block {Block} The block to check space for.
+	 * @returns {boolean}
+	 * @private
+	 */
+	_isOccupiedBlock: function(row, col, block) {
+		for (var y = 0; y < block.heightInGrid(); y++) {
+			for (var x = 0; x < block.widthInGrid(); x++) {
+				if (this._isOccupied(row + y, col + y)) {
+					return true;
+				}
+			}
+		}
 	},
 
 	/**
@@ -182,6 +199,21 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 
 		return false;
+	},
+
+	/**
+	 * Calls the _set() function for all of the spaces associated with a Block.
+	 * @param row {int} The row for the top left corner of the block.
+	 * @param col {int} The col for the top left corner of the block.
+	 * @param block {Block} The block reference to set at each location.
+	 * @private
+	 */
+	_setBlock: function(row, col, block) {
+		for (var y = 0; y < block.heightInGrid(); y++) {
+			for (var x = 0; x < block.widthInGrid(); x++) {
+				this._set(row + y, col + x, block);
+			}
+		}
 	},
 
 	/**
