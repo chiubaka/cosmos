@@ -1,7 +1,30 @@
+/**
+ * The BlockGrid class is a data structure. This is one of the most important structures in the game, since it is the
+ * backing for all structures in the game world.
+ *
+ * The BlockGrid should never concern itself with specific game logic. The BlockGrid is a data structure, and it aims
+ * to store blocks in a format that is convenient, accessible, and efficient.
+ */
 var BlockGrid = IgeEntityBox2d.extend({
 	classId: 'BlockGrid',
 
-	/** Contains the grid of Block objects that make up this BlockGrid */
+	/**
+	 * The main backing structure of the BlockGrid. _grid is a dictionary. At the top level, the dictionary keys are
+	 * x-coordinates in the grid space. Each top level x-coordinate dictionary key maps to another dictionary as its
+	 * value. The second-level dictionary keys are y-coordinates in the grid space. The values for the second-level keys
+	 * are references to objects of the Block type and its subclasses.
+	 *
+	 * We choose this representation of the grid because it creates a sparse representation of the Blocks in the grid.
+	 * Previously, we had a design where the grid was a rectangular matrix where all spaces that were not filled with
+	 * blocks had to hold an "undefined" value. The sparser design eliminates the need for placeholders such as these,
+	 * and makes the grid representation more flexible (we no longer need to resize and copy our arrays in order to
+	 * resize the grid).
+	 *
+	 * This design also supports blocks of varying sizes. The general strategy for this is to store multiple references
+	 * to the same Block object in several indices in the grid. A 2x2 Block would therefore have four neighboring
+	 * entries in the grid. This is done so that it is easy to access a Block based on its index, which will be
+	 * important for finding the neighbors of blocks when applying flood fill algorithms.
+	 */
 	_grid: undefined,
 	/** The rendering container for this BlockGrid, which essentially provides a cacheable location for the BlockGrid's
 	 * texture. */
