@@ -8,6 +8,8 @@
 var BlockGrid = IgeEntityBox2d.extend({
 	classId: 'BlockGrid',
 
+	/** The total number of blocks that are in this grid. */
+	_numBlocks: 0,
 	/**
 	 * The main backing structure of the BlockGrid. _grid is a dictionary. At the top level, the dictionary keys are
 	 * x-coordinates in the grid space. Each top level x-coordinate dictionary key maps to another dictionary as its
@@ -61,7 +63,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 */
 	get: function(row, col) {
 		// Check whether or not the dictionary has any entries for the given row value and the given column value.
-		if (this._grid[row] === undefined || this._grid[row][col] === undefined) {
+		if (row === undefined || col === undefined || this._grid[row] === undefined
+			|| this._grid[row][col] === undefined) {
 			return undefined;
 		}
 
@@ -83,15 +86,20 @@ var BlockGrid = IgeEntityBox2d.extend({
 			return false;
 		}
 
-		if (!_canAdd(row, col, block)) {
+		// See if this would be a valid addition to the BlockGrid.
+		if (!this._canAdd(row, col, block)) {
 			return false;
 		}
 
+		// Now that we know we can add to the BlockGrid, set the grid locations to reference the block we were given.
+		// Need to loop in order to support blocks that are larger than 1x1.
 		for (var y = 0; y < block.heightInGrid(); y++) {
 			for (var x = 0; x < block.widthInGrid(); x++) {
-				_set(row + y, col + x, block);
+				this._set(row + y, col + x, block);
 			}
 		}
+
+
 
 		return true;
 	},
@@ -110,14 +118,22 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @private
 	 */
 	_canAdd: function(row, col, block) {
+		// If this is the first block we are placing in the grid, there are no restrictions.
+		if (this._numBlocks === 0) {
+			return true;
+		}
+
+		// Check to see if the spaces the provided block will occupy are already occupied.
 		for (var y = 0; y < block.heightInGrid(); y++) {
 			for (var x = 0; x < block.widthInGrid(); x++) {
-				if (_isOccupied(row + y, col + y)) {
+				if (this._isOccupied(row + y, col + y)) {
 					return false;
 				}
 			}
 		}
-		return true;
+
+		// Make sure that the block will be connected to the existing structure. Disjoint structures are not allowed.
+		return this._hasNeighbors(row, col, block);
 	},
 
 	/**
@@ -132,6 +148,43 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	/**
+	 * Checks whether or not the provided block would has neighbors if placed at the specified row and col.
+	 * @param row {int} The row representing the top left corner of the block.
+	 * @param col {int} The col representing the top left corner of the block.
+	 * @param block {Block} The block to check neighbors for.
+	 * @returns {boolean} True if an adjacent grid location is occupied. False otherwise.
+	 * @private
+	 */
+	_hasNeighbors: function(row, col, block) {
+		var blockWidth = block.widthInGrid();
+		var blockHeight = block.heightInGrid();
+
+		// Check top and bottom boundaries
+		var startCol = col;
+		var topRow = row - 1;
+		var bottomRow = row + blockHeight;
+
+		for (var x = 0; x < blockWidth; x++) {
+			if (this._isOccupied(topRow, startCol + x) || this._isOccupied(bottomRow, startCol + x)) {
+				return true;
+			}
+		}
+
+		// Check left and right boundary
+		var startRow = row;
+		var leftCol = col - 1;
+		var rightCol = col + blockWidth;
+
+		for (var y = 0; y < blockHeight; y++) {
+			if (this._isOccupied(startRow + y, leftCol) || this._isOccupied(startRow + y, rightCol)) {
+				return true;
+			}
+		}
+
+		return false;
+	},
+
+	/**
 	 * Sets a location in the grid. Makes sure that the necessary sub-dictionaries exist and have been created. This
 	 * function sets ONE GRID SPACE. In order to set for blocks larger than 1x1, _set() must be called multiple times.
 	 * @param row {int} The row to set.
@@ -140,8 +193,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @private
 	 */
 	_set: function(row, col, block) {
-		if (!_hasColInRow(row, col)) {
-			_createColInRow(row, col);
+		if (!this._hasColInRow(row, col)) {
+			this._createColInRow(row, col);
 		}
 
 		this._grid[row][col] = block;
@@ -187,8 +240,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @private
 	 */
 	_createColInRow: function(row, col) {
-		if (!_hasRow(row)) {
-			_createRow(row);
+		if (!this._hasRow(row)) {
+			this._createRow(row);
 		}
 
 		this._grid[row][col] = {};
