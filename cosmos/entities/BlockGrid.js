@@ -174,6 +174,19 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	/**
+	 * Returns the number of blocks in the grid that have the specified class ID
+	 * @param classId {String} The class ID of the type of block that the caller wants the number of
+	 * @returns {int} The number of blocks in the grid with the specified class ID
+	 */
+	numBlocksOfType: function(classId) {
+		if (_blocksByType[classId] === undefined) {
+			return 0;
+		}
+
+		return _blocksByType[classId].length;
+	},
+
+	/**
 	 * Checks whether or not the given block can be added at the specified row and col. For blocks that are larger than
 	 * 1x1, row and col specify the top left grid space coordinate of the block.
 	 * @param row {int} The row to add at. If the block is larger than 1x1, this is the row for the top left corner of
@@ -501,29 +514,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 				.height(fixtureDef.shape.data.height * 2)
 				.streamMode(1);
 		}
-	},
-
-	/**
-	 * Counts how many blocks in this blockGrid have the same classId and the classId passed
-	 * @param classID the classId we're trying to count up
-	 * @returns the number of blocks in the grid with the classId passed
-	 * TODO: A faster way is to hook into the functions that add stuff to the ship and remove stuff from the ship and keep a dictionary from block-types to counts of those block-types.
-	 */
-	numBlocksOfType: function(classId) {
-		var count = 0;
-
-		for (var i = 0; i < this._grid.length; i++) {
-			for (var j = 0; j < this._grid[i].length; j++) {
-				var block = this._grid[i][j];
-				if (block !== undefined) {
-					if (block.classId() === classId) {
-						count++;
-					}
-				}
-			}
-		}
-
-		return count;
 	},
 
 	/*
