@@ -110,7 +110,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this._setBlock(row, col, block);
 
 		// Keep track of this block in the dictionary of lists that keeps a separate list of blocks by classId
-		this._addToBlockTypes(block);
+		this._addToBlocksByType(block);
 
 		// Mount the block for rendering purposes.
 		this._mountBlock(row, col, block);
@@ -121,6 +121,56 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this._numBlocks++;
 
 		return true;
+	},
+
+
+	/**
+	 * Removes the block at the specified row and column from the grid.
+	 * @param row {int} The row of the block to remove.
+	 * @param col {int} The col of the block to remove.
+	 */
+	remove: function(row, col) {
+		if (row === undefined || col === undefined) {
+			return;
+		}
+
+		var block = this.get(row, col);
+		this._unsetBlock(block);
+		this._removeFromBlocksByType(block);
+
+		if (ige.isServer) {
+			this._box2dBody.DestroyFixture(block.fixture());
+
+			// Calculate position of new BlockGrid, taking into account rotation
+			var gridX = this.translate().x();
+			var gridY = this.translate().y();
+			var fixtureX = block.fixtureDef().shape.data.x;
+			var fixtureY = block.fixtureDef().shape.data.y;
+			var theta = this.rotate().z();
+
+			var finalX = 	Math.cos(theta) * fixtureX -
+				Math.sin(theta) * fixtureY + gridX;
+			var finalY =	Math.sin(theta) * fixtureX +
+				Math.cos(theta) * fixtureY + gridY;
+
+			// Create new IgeEntityBox2d separate from parent
+			var newGrid = new BlockGrid()
+				.category('smallAsteroid')
+				.mount(ige.server.spaceGameScene)
+				.grid([[Block.prototype.blockFromClassId(block.classId())]])
+				.translateTo(finalX, finalY, 0)
+				.rotate().z(theta)
+				.streamMode(1);
+
+			// TODO: Compute correct velocities for new bodies, if needed
+
+			// TODO: Split BlockGrids and make 1x1 asteroids smallAsteroids so
+			// they get attracted
+		}
+
+		_numBlocks--;
+
+		block.destroy();
 	},
 
 	/**
@@ -264,6 +314,40 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	/**
+	 * Calls the _unset() function for all of the spaces associated with a Block.
+	 * @param block {Block} The block to unset.
+	 * @private
+	 */
+	_unsetBlock: function(block) {
+		var row = block.row();
+		var col = block.col();
+		for (var y = 0; y < block.heightInGrid(); y++) {
+			for (var x = 0; x < block.widthInGrid(); x++) {
+				this._unset(row + y, col + x);
+			}
+		}
+	},
+
+	/**
+	 * Unsets a single location in the grid. If unsetting this location would result in an empty row, the row is
+	 * deleted from the grid as well.
+	 * @param row {int} The row to unset.
+	 * @param col {col} The col to unset.
+	 * @private
+	 */
+	_unset: function(row, col) {
+		if (!this._hasColInRow(row, col)) {
+			return;
+		}
+
+		delete this._grid[row][col];
+
+		if (Object.keys(this._grid[row]).length === 0) {
+			delete this._grid[row];
+		}
+	},
+
+	/**
 	 * Checks whether or not the grid has the specified row. Since the grid is represented sparsely, it is possible we
 	 * have not added an entry for this row yet.
 	 * @param row {int} The row to check for.
@@ -316,11 +400,30 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @param block {Block} The block to keep track of.
 	 * @private
 	 */
-	_addToBlockTypes: function(block) {
+	_addToBlocksByType: function(block) {
 		if (this._blocksByType[block.classId()] === undefined) {
 			this._blocksByType[block.classId()] = [];
 		}
 		this._blocksByType[block.classId()].push(block);
+	},
+
+	/**
+	 * Removes the provided block from the _blocksByType dictionary.
+	 * @param block {Block} The block to remove from the _blocksByType dictionary.
+	 * @private
+	 */
+	_removeFromBlocksByType: function(block) {
+		var list = _blocksByType[block.classId()];
+		if (list === undefined) {
+			return;
+		}
+
+		var index = list.indexOf(block);
+		if (index !== -1) {
+			return;
+		}
+
+		list.splice(index, 1);
 	},
 
 	/**
@@ -678,48 +781,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
 		}
-	},
-
-	/**
-	 * Remove is intended to remove the block from the grid,
-	 * and also remove the fixture from the list of fixtures in the box2D object.
-	 */
-	remove: function(row, col) {
-		// TODO: Split BlockGrids and make 1x1 asteroids smallAsteroids so
-		// they get attracted
-		var block = this._grid[row][col];
-		if (block === undefined)
-			return;
-
-		if (ige.isServer) {
-			this._box2dBody.DestroyFixture(block.fixture());
-
-			// Calculate position of new BlockGrid, taking into account rotation
-			var gridX = this.translate().x();
-			var gridY = this.translate().y();
-			var fixtureX = block.fixtureDef().shape.data.x;
-			var fixtureY = block.fixtureDef().shape.data.y;
-			var theta = this.rotate().z();
-
-			var finalX = 	Math.cos(theta) * fixtureX -
-										Math.sin(theta) * fixtureY + gridX;
-			var finalY =	Math.sin(theta) * fixtureX +
-										Math.cos(theta) * fixtureY + gridY;
-
-			// Create new IgeEntityBox2d separate from parent
-			var newGrid = new BlockGrid()
-				.category('smallAsteroid')
-				.mount(ige.server.spaceGameScene)
-				.grid([[Block.prototype.blockFromClassId(block.classId())]])
-				.translateTo(finalX, finalY, 0)
-				.rotate().z(theta)
-				.streamMode(1);
-
-			// TODO: Compute correct velocities for new bodies, if needed
-		}
-
-		block.destroy();
-		this._grid[row][col] = undefined;
 	},
 
 	/**
