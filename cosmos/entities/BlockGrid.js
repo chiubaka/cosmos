@@ -187,16 +187,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return _blocksByType[classId].length;
 	},
 
-	removeAll: function() {
-		// TODO: Remove all existing blocks in the grid
-
-		// TODO: This will happen anyway as a result of removing all of the blocks in the grid
-		// Reset the internal grid structure
-		this._grid = {};
-		// Reset the block type mapping
-		this._blocksByType = {};
-	},
-
 	/**
 	 * Checks whether or not the given block can be added at the specified row and col. For blocks that are larger than
 	 * 1x1, row and col specify the top left grid space coordinate of the block.
@@ -927,6 +917,7 @@ var BlockGrid = IgeEntityBox2d.extend({
  * of rows and total number of columns is not required to be the same).
  * @returns {BlockGrid} A newly instantiated BlockGrid object that includes Blocks that match the types and locations
  * provided in the blockTypeMatrix.
+ * @static
  */
 BlockGrid.fromBlockTypeMatrix = function(blockTypeMatrix) {
 	var grid = new BlockGrid();
@@ -949,6 +940,7 @@ BlockGrid.fromBlockTypeMatrix = function(blockTypeMatrix) {
  * indicate that a space in the blockTypeMatrix does not include a Block. The blockTypeMatrix must be a rectangular
  * matrix (every row has the same number of columns and every column has the same number of rows, but the total number
  * of rows and total number of columns is not required to be the same).
+ * @static
  */
 BlockGrid.toBlockTypeMatrix = function(grid) {
 	var blockTypeMatrix = [];
