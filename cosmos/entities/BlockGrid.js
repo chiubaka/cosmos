@@ -112,7 +112,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	_canAdd: function(row, col, block) {
 		for (var y = 0; y < block.heightInGrid(); y++) {
 			for (var x = 0; x < block.widthInGrid(); x++) {
-				if (_isOccupied(row, col)) {
+				if (_isOccupied(row + y, col + y)) {
 					return false;
 				}
 			}
