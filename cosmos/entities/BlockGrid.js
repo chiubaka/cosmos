@@ -102,6 +102,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// reference to the provided block.
 		this._setBlock(row, col, block);
 
+		this._addToBlockTypes(block);
+
 		this._numBlocks++;
 
 		return true;
@@ -277,6 +279,19 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 
 		this._grid[row][col] = {};
+	},
+
+	/**
+	 * Adds the provided block to the _blocksByType dictionary. If this is the first block of this type that we are
+	 * encountering, this function will also create the list.
+	 * @param block {Block} The block to keep track of.
+	 * @private
+	 */
+	_addToBlockTypes: function(block) {
+		if (this._blocksByType[block.classId()] === undefined) {
+			this._blocksByType[block.classId()] = [];
+		}
+		this._blocksByType[block.classId()].push(block);
 	},
 
 	/**
