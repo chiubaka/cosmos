@@ -99,7 +99,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			}
 		}
 
-
+		this._numBlocks++;
 
 		return true;
 	},
