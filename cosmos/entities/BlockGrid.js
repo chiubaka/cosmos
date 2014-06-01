@@ -118,8 +118,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 			// TODO: Lazily create when needed to speed up load time.
 			// TODO: Examine ConstructionZoneOverlay to make sure it is compatible with new BlockGrid backing.
-			this._constructionZoneOverlay = new ConstructionZoneOverlay(this._grid)
-				.mount(this);
+			// TODO: Uncomment this. Commented out so I can test the new BlockGrid class without getting errors from
+			// the ConstructionZoneOverlay class.
+			//this._constructionZoneOverlay = new ConstructionZoneOverlay(this._grid)
+			//	.mount(this);
 
 			this.mouseDown(this.mouseDownHandler);
 		}
