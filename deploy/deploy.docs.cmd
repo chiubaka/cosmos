@@ -95,7 +95,7 @@ popd
 :: Copy over package.json for this endpoint
 echo Using package.docs.json
 pushd "%DEPLOYMENT_SOURCE%"
-call :ExecuteCmd copy /Y "config\package.docs.json" "package.json"
+call :ExecuteCmd copy /Y "deploy\package.docs.json" "package.json"
 IF !ERRORLEVEL! NEQ 0 goto error
 popd
 
