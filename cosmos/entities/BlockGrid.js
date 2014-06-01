@@ -47,6 +47,38 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 */
 	_blocksByType: {},
 	/**
+	 * The leftmost row index of the structure contained within this {@link BlockGrid}. Necessary because indices
+	 * within the BlockGrid can become arbitrarily defined as the {@link BlockGrid} expands.
+	 * This property is edited internally by {@link BlockGrid}, but should only ever read by outsiders, never modified.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	_startRow: undefined,
+	/**
+	 * The rightmost row index of the structure contained within this {@link BlockGrid}. Necessary because indices
+	 * within the BlockGrid can become arbitrarily defined as the {@link BlockGrid} expands.
+	 * @memberof BlockGrid
+	 * @instance
+	 * This property is edited internally by {@link BlockGrid}, but should only ever read by outsiders, never modified.
+	 */
+	_endRow: undefined,
+	/**
+	 * The topmost col index of the structure contained within this {@link BlockGrid}. Necessary because indices
+	 * within the BlockGrid can become arbitrarily defined as the {@link BlockGrid} expands.
+	 * @memberof BlockGrid
+	 * @instance
+	 * This property is edited internally by {@link BlockGrid}, but should only ever read by outsiders, never modified.
+	 */
+	_startCol: undefined,
+	/**
+	 * The bottommost col index of the structure contained within this {@link BlockGrid}. Necessary because indices
+	 * within the BlockGrid can become arbitrarily defined as the {@link BlockGrid} expands.
+	 * @memberof BlockGrid
+	 * @instance
+	 * This property is edited internally by {@link BlockGrid}, but should only ever read by outsiders, never modified.
+	 */
+	_endCol: undefined,
+	/**
 	 * The rendering container for this BlockGrid, which essentially provides a cacheable location for the BlockGrid's
 	 * texture.
 	 */
@@ -77,8 +109,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	/**
 	 * Returns the block at a given row and column in the BlockGrid.
-	 * @param row {int} The row index to get
-	 * @param col {int} The col index to get
+	 * @param row {number} The row index to get
+	 * @param col {number} The col index to get
 	 * @returns {*} The Block object at (row, col) or undefined if no Block exists at the specified row and column
 	 * @memberof BlockGrid
 	 * @instance
@@ -95,14 +127,16 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	/**
 	 * Adds a Block at the specified row and col.
-	 * @param row {int} The row to add at
-	 * @param col {int} The col to add at
+	 * @param row {number} The row to add at
+	 * @param col {number} The col to add at
 	 * @param block {Block} The Block to add to the grid.
 	 * @returns {boolean} True if the Block was added successfully to the grid. False otherwise. A Block may not be
 	 * successfully added to the grid if another Block already exists in the grid at the specified location or if the
 	 * parameters passed to this function are invalid.
 	 * @memberof BlockGrid
 	 * @instance
+	 * @todo Figure out if modifying the height and width of the {@link BlockGrid#_renderContainer|_renderContainer}
+	 * has unintended side effects on rendering.
 	 */
 	add: function(row, col, block) {
 		// Guard against invalid parameters
@@ -135,24 +169,27 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// Add fixtures to update the server's physics model.
 		this._addFixture(row, col, block, this._box2dBody);
 
-		this._updateGridRanges();
+		// Recompute the starting row and column of this BlockGrid based on the newly added block
+		this._addToGridRange(row, col, block);
 
 		this._numBlocks++;
 
-		// TODO: Modify height and width of renderContainer. Be careful when doing this, because it changes the meaning
-		// of the "translateTo" function, since this function references the center of the RenderContainer, and changing
-		// the height and width also changes the center.
+		// Modify the height and width of the entities to match the new size of the BlockGrid.
+		this.height(this.numRows() * Block.WIDTH);
+		this.width(this.numCols() * Block.WIDTH);
+		this._renderContainer.height(this.height());
+		this._renderContainer.width(this.width());
+
+		// Refresh the _renderContainer to invalidate its cache and redraw it.
 		this._renderContainer.refresh();
-		// TODO: Modify the height and width of the BlockGrid based on the range of rows and cols that this BlockGrid
-		// now spans
 
 		return true;
 	},
 
 	/**
 	 * Removes the block at the specified row and column from the grid.
-	 * @param row {int} The row of the block to remove.
-	 * @param col {int} The col of the block to remove.
+	 * @param row {number} The row of the block to remove.
+	 * @param col {number} The col of the block to remove.
 	 * @memberof BlockGrid
 	 * @instance
 	 */
@@ -204,8 +241,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	/**
 	 * Returns the number of blocks in the grid that have the specified class ID
-	 * @param classId {String} The class ID of the type of block that the caller wants the number of
-	 * @returns {int} The number of blocks in the grid with the specified class ID
+	 * @param classId {string} The class ID of the type of block that the caller wants the number of
+	 * @returns {number} The number of blocks in the grid with the specified class ID
 	 * @memberof BlockGrid
 	 * @instance
 	 */
@@ -218,9 +255,33 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	/**
+	 * Returns the number of rows that this {@link BlockGrid} spans. Effectively, this is the length of the longest
+	 * column in the {@link BlockGrid}.
+	 * @returns {number} The number of rows that this {@link BlockGrid} spans.
+	 * @memberof BlockGrid
+	 * @instance
+	 * @readonly
+	 */
+	numRows: function() {
+		return this.endRow() - this.startRow() + 1;
+	},
+
+	/**
+	 * Returns the number of cols that this {@link BlockGrid} spans. Effectively, this is the length of the longest
+	 * row in the {@link BlockGrid}.
+	 * @returns {number} The number of cols that this {@link BlockGrid} spans.
+	 * @memberof BlockGrid
+	 * @instance
+	 * @readonly
+	 */
+	numCols: function() {
+		return this.endCol() - this.startCol() + 1;
+	},
+
+	/**
 	 * Resets this BlockGrid's internal state to represent the grid that is represented by the provided block type
 	 * matrix, which is a matrix of class ID's where each class ID represents a block type in the grid.
-	 * @param blockTypeMatrix {Array} An array of arrays that holds classId's for Block objects. undefined is used to
+	 * @param blockTypeMatrix {*[]} An array of arrays that holds classId's for Block objects. undefined is used to
 	 * indicate that a space in the blockTypeMatrix does not include a Block. The blockTypeMatrix must be a rectangular
 	 * matrix (every row has the same number of columns and every column has the same number of rows, but the total number
 	 * of rows and total number of columns is not required to be the same).
@@ -245,7 +306,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	/**
 	 * Takes this BlockGrid and converts it to a matrix of class ID's, where each class ID represents a single type of block
 	 * in the BlockGrid.
-	 * @returns {Array} An array of arrays that holds classId's for Block objects. undefined is used to
+	 * @returns {*[]} An array of arrays that holds classId's for Block objects. undefined is used to
 	 * indicate that a space in the blockTypeMatrix does not include a Block. The blockTypeMatrix must be a rectangular
 	 * matrix (every row has the same number of columns and every column has the same number of rows, but the total number
 	 * of rows and total number of columns is not required to be the same).
@@ -299,9 +360,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 	/**
 	 * Checks whether or not the given block can be added at the specified row and col. For blocks that are larger than
 	 * 1x1, row and col specify the top left grid space coordinate of the block.
-	 * @param row {int} The row to add at. If the block is larger than 1x1, this is the row for the top left corner of
+	 * @param row {number} The row to add at. If the block is larger than 1x1, this is the row for the top left corner of
 	 * the block
-	 * @param col {int} The col to add at. If the block is larger than 1x1, this is the col for the top left corner of
+	 * @param col {number} The col to add at. If the block is larger than 1x1, this is the col for the top left corner of
 	 * the block
 	 * @param block {Block} The block to add. If the block is larger than 1x1, all spaces where the block would occupy
 	 * are checked.
@@ -328,8 +389,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	/**
 	 * Calls the _isOccupied function for all
-	 * @param row {int} The row for the top left corner of the block.
-	 * @param col {int} The col for the top left corner of the block.
+	 * @param row {number} The row for the top left corner of the block.
+	 * @param col {number} The col for the top left corner of the block.
 	 * @param block {Block} The block to check space for.
 	 * @returns {boolean}
 	 * @memberof BlockGrid
@@ -348,8 +409,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	/**
 	 * Checks whether or not a grid location is occupied.
-	 * @param row {int} The row to check.
-	 * @param col {int} The col to check.
+	 * @param row {number} The row to check.
+	 * @param col {number} The col to check.
 	 * @returns {boolean} True if the grid location is occupied (occupant !== undefined). False otherwise.
 	 * @memberof BlockGrid
 	 * @private
@@ -361,8 +422,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	/**
 	 * Checks whether or not the provided block would has neighbors if placed at the specified row and col.
-	 * @param row {int} The row representing the top left corner of the block.
-	 * @param col {int} The col representing the top left corner of the block.
+	 * @param row {number} The row representing the top left corner of the block.
+	 * @param col {number} The col representing the top left corner of the block.
 	 * @param block {Block} The block to check neighbors for.
 	 * @returns {boolean} True if an adjacent grid location is occupied. False otherwise.
 	 * @memberof BlockGrid
@@ -417,8 +478,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	/**
 	 * Calls the _set() function for all of the spaces associated with a Block.
-	 * @param row {int} The row for the top left corner of the block.
-	 * @param col {int} The col for the top left corner of the block.
+	 * @param row {number} The row for the top left corner of the block.
+	 * @param col {number} The col for the top left corner of the block.
 	 * @param block {Block} The block reference to set at each location.
 	 * @memberof BlockGrid
 	 * @private
@@ -435,8 +496,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	/**
 	 * Sets a location in the grid. Makes sure that the necessary sub-dictionaries exist and have been created. This
 	 * function sets ONE GRID SPACE. In order to set for blocks larger than 1x1, _set() must be called multiple times.
-	 * @param row {int} The row to set.
-	 * @param col {int} The col to set.
+	 * @param row {number} The row to set.
+	 * @param col {number} The col to set.
 	 * @param block {Block} The block reference to place at the specified grid location.
 	 * @memberof BlockGrid
 	 * @private
@@ -470,8 +531,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	/**
 	 * Unsets a single location in the grid. If unsetting this location would result in an empty row, the row is
 	 * deleted from the grid as well.
-	 * @param row {int} The row to unset.
-	 * @param col {col} The col to unset.
+	 * @param row {number} The row to unset.
+	 * @param col {number} The col to unset.
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
@@ -496,7 +557,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	/**
 	 * Checks whether or not the grid has the specified row. Since the grid is represented sparsely, it is possible we
 	 * have not added an entry for this row yet.
-	 * @param row {int} The row to check for.
+	 * @param row {number} The row to check for.
 	 * @returns {boolean} True if the grid already has this row. False otherwise.
 	 * @memberof BlockGrid
 	 * @private
@@ -508,7 +569,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	/**
 	 * Creates an empty dictionary for the specified row.
-	 * @param row {int} The row to create.
+	 * @param row {number} The row to create.
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
@@ -520,8 +581,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	/**
 	 * Checks whether or not the grid has the specified col in the specified row. Since the grid is represented
 	 * sparsely, it is possible we have not added an entry for this row and col yet.
-	 * @param row {int} The row to check.
-	 * @param col {int} The col to check.
+	 * @param row {number} The row to check.
+	 * @param col {number} The col to check.
 	 * @returns {boolean} True if the grid already has this row and col. False otherwise.
 	 * @memberof BlockGrid
 	 * @private
@@ -534,8 +595,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	/**
 	 * Creates an empty dictionary for the specified col in the specified row. If the specified row does not already
 	 * exist, the row is also created.
-	 * @param row {int} The row to create the col in.
-	 * @param col {int} The col to create.
+	 * @param row {number} The row to create the col in.
+	 * @param col {number} The col to create.
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
@@ -590,8 +651,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	/**
 	 * Handles actually mounting the block to the render container
-	 * @param row {int} The row for the top left corner of the block
-	 * @param col {int} The col for the top left corner of the block
+	 * @param row {number} The row for the top left corner of the block
+	 * @param col {number} The col for the top left corner of the block
 	 * @param block {Block} The block to mount.
 	 * @memberof BlockGrid
 	 * @private
@@ -615,8 +676,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	/**
 	 * Adds a Box2D fixture to the physics model on the server for this Block.
-	 * @param row {int} The row for the top left corner of the block.
-	 * @param col {int} The col for the top left corner of the block.
+	 * @param row {number} The row for the top left corner of the block.
+	 * @param col {number} The col for the top left corner of the block.
 	 * @param block {Block} The block that we are adding a fixture for.
 	 * @param box2dBody {Box2dBody} The Box2dBody for this BlockGrid, which we will add the fixture to.
 	 * @memberof BlockGrid
@@ -669,6 +730,17 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 	},
 
+	/**
+	 * Updates the {@link BlockGrid#_startRow|_startRow}, {@link BlockGrid#_startCol|_startCol},
+	 * {@link BlockGrid#_endRow|_endRow}, and {@link BlockGrid#_endCol|_endCol} properties based on the addition of
+	 * the given {@link Block} to this {@link BlockGrid}.
+	 * @param startRow {number} The starting row of the given {@link Block}.
+	 * @param startCol {number} The starting col of the given {@link Block}.
+	 * @param block {Block} The {@link Block} that is being added to the {@link BlockGrid}.
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
 	_addToGridRange: function(startRow, startCol, block) {
 		var endRow = row + block.heightInGrid() - 1;
 		var endCol = col + block.widthInGrid() - 1;
@@ -705,18 +777,50 @@ var BlockGrid = IgeEntityBox2d.extend({
 		
 	},
 
+	/**
+	 * Setter for {@link BlockGrid#_startRow|_startRow}. Private because {@link BlockGrid#_startRow|_startRow} is
+	 * read-only to the outside world.
+	 * @param newStartRow {number} The new start row of the {@link BlockGrid}.
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
 	_setStartRow: function(newStartRow) {
 		this._startRow = newStartRow;
 	},
 
+	/**
+	 * Setter for {@link BlockGrid#_endRow|_endRow}. Private because {@link BlockGrid#_endRow|_endRow} is
+	 * read-only to the outside world.
+	 * @param newEndRow {number} The new end row of the {@link BlockGrid}.
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
 	_setEndRow: function(newEndRow) {
 		this._endRow = newEndRow;
 	},
 
+	/**
+	 * Setter for {@link BlockGrid#_startCol|_startCol}. Private because {@link BlockGrid#_startCol|_startCol} is
+	 * read-only to the outside world.
+	 * @param newStartCol {number} The new start col of the {@link BlockGrid}.
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
 	_setStartCol: function(newStartCol) {
 		this._startCol = newStartCol;
 	},
 
+	/**
+	 * Setter for {@link BlockGrid#_endCol|_endCol}. Private because {@link BlockGrid#_endCol|_endCol} is
+	 * read-only to the outside world.
+	 * @param newEndCol {number} The new end col of the {@link BlockGrid}.
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
 	_setEndCol: function(newEndCol) {
 		this._endCol = newEndCol;
 	},
