@@ -1,23 +1,28 @@
 @if "%SCM_TRACE_LEVEL%" NEQ "4" @echo off
+echo Deployment switchboard:
 
 CALL :endpoint_%ENDPOINT_TYPE%
-IF ERRORLEVEL 1 CALL :default
+if "%ERRORLEVEL%" NEQ "0" CALL :default
 
-echo done.
+echo Deployment switchboard complete.
 exit /b 1
 
 :endpoint_client
-	deploy\deploy.client.cmd
+  echo Deploying client endpoint.
+	call deploy\deploy.client.cmd
   goto end
 :endpoint_server
-  deploy\deploy.server.cmd
+  echo Deploying server endpoint.
+  call deploy\deploy.server.cmd
   goto end
 :endpoint_docs
-  deploy\deploy.docs.cmd
+  echo Deploying docs endpoint.
+  call deploy\deploy.docs.cmd
   goto end
 :default 
   echo You have to set the ENDPOINT_TYPE setting to 'client', 'server', or 'docs'
-  goto :end
+  goto end
 :end
+  VER > NUL 
   echo Deployment complete!
   goto :EOF
