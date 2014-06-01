@@ -27,7 +27,7 @@ var DbPlayer = {
 		}
 
 		ige.mongo.db.collection('players', function(err, players) {
-			var ship = DbPlayer.serializeGrid(player.grid());
+			var ship = player.toBlockTypeMatrix();
 			var cargo = player.cargo.serializeCargo();
 			players.update(
 				{_id: playerId},
@@ -36,15 +36,6 @@ var DbPlayer = {
 				callback
 			);
 		});
-	},
-
-	// TODO: This is really the BlockGrid's responsibility
-	// TODO: Make this compatible with the new BlockGrid backing
-	serializeGrid: function (grid) {
-		// Trim the padding
-		var minimumGrid = BlockGridPadding.extractMinimumGrid(grid);
-		var serializedGrid = BlockGrid.prototype.serializeGrid(minimumGrid);
-		return serializedGrid;
 	}
 };
 
