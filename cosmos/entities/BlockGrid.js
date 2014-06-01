@@ -684,7 +684,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @instance
 	 */
 	_removeFromBlocksByType: function(block) {
-		var list = _blocksByType[block.classId()];
+		var list = this._blocksByType[block.classId()];
 		if (list === undefined) {
 			return;
 		}
