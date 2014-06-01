@@ -233,7 +233,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			var newGrid = new BlockGrid()
 				.category('smallAsteroid')
 				.mount(ige.server.spaceGameScene)
-				.grid([[Block.prototype.blockFromClassId(block.classId())]])
+				.fromBlockTypeMatrix([[Block.prototype.blockFromClassId(block.classId())]])
 				.translateTo(finalX, finalY, 0)
 				.rotate().z(theta)
 				.streamMode(1);
