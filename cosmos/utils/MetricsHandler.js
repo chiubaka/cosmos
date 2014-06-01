@@ -1,6 +1,18 @@
-﻿var MetricsHandler = IgeClass.extend({
+﻿/**
+ * The MetricsHandler class handles in game metrics like what UI elements
+ * are being clicked and FPS.
+ * Currently, this uses Google Analytics.
+ * @class
+ * @typedef {Object} MetricsHandler
+ * @namespace
+ */
+var MetricsHandler = IgeClass.extend({
 	classId: "MetricsHandler",
-
+	/**
+	 * Enables sending metrics to Google Analytics 
+	 * @memberof MetricsHandler
+	 * @instance
+	 */
 	enabled: false,
 
 	init: function() {
@@ -16,6 +28,12 @@
 		this.listenEvents();
 	},
 	
+	/**
+	 * Sets up event listeners to various events so we can report metrics on
+	 * them.
+	 * @memberof MetricsHandler
+	 * @instance
+	 */
 	listenEvents: function() {
 		var self = this;
 
@@ -49,6 +67,13 @@
 		});
 	},
 
+	/**
+	 * Fires a Google Analytics pageview event
+	 * @param page {String}
+	 * @param title {String}
+	 * @memberof MetricsHandler
+	 * @instance
+	 */
 	firePage: function(page, title) {
 		if (!this.enabled) {
 			return;
@@ -65,6 +90,15 @@
 		}
 	},
 
+	/**
+	 * Fires a Google Analytics event
+	 * @param category {String}
+	 * @param action {String}
+	 * @param label {String}
+	 * @param value {=String}
+	 * @memberof MetricsHandler
+	 * @instance
+	 */
 	fireEvent: function(category, action, label, value) {
 		if (!this.enabled) {
 			return;
