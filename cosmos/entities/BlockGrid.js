@@ -100,7 +100,18 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		IgeEntityBox2d.prototype.init.call(this);
 
-		if (!ige.isServer) {
+		if (ige.isServer) {
+			this.box2dBody({
+				type: 'dynamic',
+				linearDamping: 0.4,
+				angularDamping: 0.8,
+				allowSleep: true,
+				bullet: false,
+				gravitic: false,
+				fixedRotation: false,
+			});
+		}
+		else {
 			this._renderContainer = new RenderContainer()
 				.mount(this);
 			this.fromBlockTypeMatrix(data);
@@ -1079,15 +1090,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this.height(Block.prototype.HEIGHT * this._grid.length);
 		this.width(Block.prototype.WIDTH * maxRowLength);
 
-		this.box2dBody({
-			type: 'dynamic',
-			linearDamping: 0.4,
-			angularDamping: 0.8,
-			allowSleep: true,
-			bullet: false,
-			gravitic: false,
-			fixedRotation: false,
-		});
+
 
 		for(var row = 0; row < this._grid.length; row++)
 		{
