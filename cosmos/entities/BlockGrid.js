@@ -14,6 +14,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	/**
 	 * The total number of blocks that are in this grid.
 	 * @memberof BlockGrid
+	 * @private
 	 * @instance
 	 */
 	_numBlocks: 0,
@@ -34,6 +35,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * entries in the grid. This is done so that it is easy to access a Block based on its index, which will be
 	 * important for finding the neighbors of blocks when applying flood fill algorithms.
 	 * @memberof BlockGrid
+	 * @private
 	 * @instance
 	 */
 	_grid: {},
@@ -43,6 +45,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * intended to support basic querying on this structure, but it SHOULD NOT handle higher level logic regarding the
 	 * contents of the grid.
 	 * @memberof BlockGrid
+	 * @private
 	 * @instance
 	 */
 	_blocksByType: {},
@@ -51,31 +54,35 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * within the BlockGrid can become arbitrarily defined as the {@link BlockGrid} expands.
 	 * This property is edited internally by {@link BlockGrid}, but should only ever read by outsiders, never modified.
 	 * @memberof BlockGrid
+	 * @private
 	 * @instance
 	 */
 	_startRow: undefined,
 	/**
 	 * The rightmost row index of the structure contained within this {@link BlockGrid}. Necessary because indices
 	 * within the BlockGrid can become arbitrarily defined as the {@link BlockGrid} expands.
-	 * @memberof BlockGrid
-	 * @instance
 	 * This property is edited internally by {@link BlockGrid}, but should only ever read by outsiders, never modified.
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
 	 */
 	_endRow: undefined,
 	/**
 	 * The topmost col index of the structure contained within this {@link BlockGrid}. Necessary because indices
 	 * within the BlockGrid can become arbitrarily defined as the {@link BlockGrid} expands.
-	 * @memberof BlockGrid
-	 * @instance
 	 * This property is edited internally by {@link BlockGrid}, but should only ever read by outsiders, never modified.
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
 	 */
 	_startCol: undefined,
 	/**
 	 * The bottommost col index of the structure contained within this {@link BlockGrid}. Necessary because indices
 	 * within the BlockGrid can become arbitrarily defined as the {@link BlockGrid} expands.
-	 * @memberof BlockGrid
-	 * @instance
 	 * This property is edited internally by {@link BlockGrid}, but should only ever read by outsiders, never modified.
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
 	 */
 	_endCol: undefined,
 	/**
