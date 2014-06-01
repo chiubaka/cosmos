@@ -267,6 +267,46 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	/**
+	 * Gets the leftmost row that any {@link Block} occupies in this {@link BlockGrid}.
+	 * @returns {number}
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	startRow: function() {
+		return this._startRow;
+	},
+
+	/**
+	 * Gets the rightmost row that any {@link Block} occupies in this {@link BlockGrid}.
+	 * @returns {number}
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	endRow: function() {
+		return this._endRow;
+	},
+
+	/**
+	 * Gets the topmost row that any {@link Block} occupies in this {@link BlockGrid}.
+	 * @returns {number}
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	startCol: function() {
+		return this._startCol;
+	},
+
+	/**
+	 * Gets the bottommost row that any {@link Block} occupies in this {@link BlockGrid}.
+	 * @returns {number}
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	endCol: function() {
+		return this._endCol;
+	},
+
+	/**
 	 * Returns the number of rows that this {@link BlockGrid} spans. Effectively, this is the length of the longest
 	 * column in the {@link BlockGrid}.
 	 * @returns {number} The number of rows that this {@link BlockGrid} spans.
@@ -754,8 +794,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @instance
 	 */
 	_addToGridRange: function(startRow, startCol, block) {
-		var endRow = row + block.numRows() - 1;
-		var endCol = col + block.numCols() - 1;
+		var endRow = startRow + block.numRows() - 1;
+		var endCol = startCol + block.numCols() - 1;
 
 		if (this._numBlocks === 0) {
 			this._setStartRow(startRow);
