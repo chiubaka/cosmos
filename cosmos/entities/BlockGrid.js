@@ -174,14 +174,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		this._numBlocks++;
 
-		// Modify the height and width of the entities to match the new size of the BlockGrid.
-		this.height(this.numRows() * Block.WIDTH);
-		this.width(this.numCols() * Block.WIDTH);
-		this._renderContainer.height(this.height());
-		this._renderContainer.width(this.width());
-
-		// Refresh the _renderContainer to invalidate its cache and redraw it.
-		this._renderContainer.refresh();
+		// Updates the height and width and refreshes the _renderContainer so it is redrawn.
+		this._updateDimensions();
 
 		return true;
 	},
@@ -823,6 +817,25 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 */
 	_setEndCol: function(newEndCol) {
 		this._endCol = newEndCol;
+	},
+
+	/**
+	 * Updates the dimensions of this {@link BlockGrid} and its {@link BlockGrid#_renderContainer|_renderContainer}.
+	 * Dirties the {@link BlockGrid#_renderContainer|_renderContainer} cache so that it is redrawn to reflect the
+	 * dimensions change.
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
+	_updateDimensions: function() {
+		// Modify the height and width of the entities to match the new size of the BlockGrid.
+		this.height(this.numRows() * Block.WIDTH);
+		this.width(this.numCols() * Block.WIDTH);
+		this._renderContainer.height(this.height());
+		this._renderContainer.width(this.width());
+
+		// Refresh the _renderContainer to invalidate its cache and redraw it now that we have changed the dimensions.
+		this._renderContainer.refresh();
 	},
 
 	/*
