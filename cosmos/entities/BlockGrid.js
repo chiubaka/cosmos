@@ -375,10 +375,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 			for (var col = this.startCol(); col <= endCol; col++) {
 				var block = this.get(row, col);
 				if (block === undefined) {
-					row.push(undefined);
+					rowList.push(undefined);
 				}
 				else {
-					row.push(block.classId());
+					rowList.push(block.classId());
 				}
 			}
 			blockTypeMatrix.push(rowList);
