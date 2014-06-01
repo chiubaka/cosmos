@@ -4,11 +4,18 @@
  *
  * The BlockGrid should never concern itself with specific game logic. The BlockGrid is a data structure, and it aims
  * to store blocks in a format that is convenient, accessible, and efficient.
+ * @class
+ * @typedef {Object} BlockGrid
+ * @namespace
  */
 var BlockGrid = IgeEntityBox2d.extend({
 	classId: 'BlockGrid',
 
-	/** The total number of blocks that are in this grid. */
+	/**
+	 * The total number of blocks that are in this grid.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
 	_numBlocks: 0,
 	/**
 	 * The main backing structure of the BlockGrid. _grid is a dictionary. At the top level, the dictionary keys are
@@ -26,6 +33,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * to the same Block object in several indices in the grid. A 2x2 Block would therefore have four neighboring
 	 * entries in the grid. This is done so that it is easy to access a Block based on its index, which will be
 	 * important for finding the neighbors of blocks when applying flood fill algorithms.
+	 * @memberof BlockGrid
+	 * @instance
 	 */
 	_grid: {},
 	/**
@@ -33,6 +42,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * cases where we need to know, for example, how many EngineBlocks are in a BlockGrid. Again, the BlockGrid is
 	 * intended to support basic querying on this structure, but it SHOULD NOT handle higher level logic regarding the
 	 * contents of the grid.
+	 * @memberof BlockGrid
+	 * @instance
 	 */
 	_blocksByType: {},
 	/**
@@ -56,7 +67,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			this.fromBlockTypeMatrix(data);
 
 			// TODO: Lazily create when needed to speed up load time.
-			// TODO: Examine ConstructionZoneOverlay to make sure it is compatibile with new BlockGrid backing.
+			// TODO: Examine ConstructionZoneOverlay to make sure it is compatible with new BlockGrid backing.
 			this._constructionZoneOverlay = new ConstructionZoneOverlay(this._grid)
 				.mount(this);
 
@@ -69,6 +80,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @param row {int} The row index to get
 	 * @param col {int} The col index to get
 	 * @returns {*} The Block object at (row, col) or undefined if no Block exists at the specified row and column
+	 * @memberof BlockGrid
+	 * @instance
 	 */
 	get: function(row, col) {
 		// Check whether or not the dictionary has any entries for the given row value and the given column value.
@@ -88,6 +101,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @returns {boolean} True if the Block was added successfully to the grid. False otherwise. A Block may not be
 	 * successfully added to the grid if another Block already exists in the grid at the specified location or if the
 	 * parameters passed to this function are invalid.
+	 * @memberof BlockGrid
+	 * @instance
 	 */
 	add: function(row, col, block) {
 		// Guard against invalid parameters
@@ -120,6 +135,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// Add fixtures to update the server's physics model.
 		this._addFixture(row, col, block, this._box2dBody);
 
+		this._updateGridRanges();
+
 		this._numBlocks++;
 
 		// TODO: Modify height and width of renderContainer. Be careful when doing this, because it changes the meaning
@@ -136,6 +153,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * Removes the block at the specified row and column from the grid.
 	 * @param row {int} The row of the block to remove.
 	 * @param col {int} The col of the block to remove.
+	 * @memberof BlockGrid
+	 * @instance
 	 */
 	remove: function(row, col) {
 		if (row === undefined || col === undefined) {
@@ -174,6 +193,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 			// TODO: Split BlockGrids and make 1x1 asteroids smallAsteroids so
 			// they get attracted
+
+			// TODO: Implement flood fill algorithm to disconnect disjoint bodies from each other.
 		}
 
 		_numBlocks--;
@@ -185,6 +206,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * Returns the number of blocks in the grid that have the specified class ID
 	 * @param classId {String} The class ID of the type of block that the caller wants the number of
 	 * @returns {int} The number of blocks in the grid with the specified class ID
+	 * @memberof BlockGrid
+	 * @instance
 	 */
 	numBlocksOfType: function(classId) {
 		if (_blocksByType[classId] === undefined) {
@@ -202,6 +225,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * matrix (every row has the same number of columns and every column has the same number of rows, but the total number
 	 * of rows and total number of columns is not required to be the same).
 	 * @returns {BlockGrid} Return this object to make function chaining convenient.
+	 * @memberof BlockGrid
+	 * @instance
 	 */
 	fromBlockTypeMatrix: function(blockTypeMatrix) {
 		// Remove all existing blocks from this grid and start fresh!
@@ -224,6 +249,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * indicate that a space in the blockTypeMatrix does not include a Block. The blockTypeMatrix must be a rectangular
 	 * matrix (every row has the same number of columns and every column has the same number of rows, but the total number
 	 * of rows and total number of columns is not required to be the same).
+	 * @memberof BlockGrid
+	 * @instance
 	 */
 	toBlockTypeMatrix: function() {
 		var blockTypeMatrix = [];
@@ -249,7 +276,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	/**
 	 * Removes all existing blocks from the grid.
+	 * @memberof BlockGrid
 	 * @private
+	 * @instance
 	 */
 	_removeAll: function() {
 		for (var row in this._grid) {
@@ -278,7 +307,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * are checked.
 	 * @returns {boolean} True if nothing prevents this block from being placed at the given row and col. False
 	 * otherwise.
+	 * @memberof BlockGrid
 	 * @private
+	 * @instance
 	 */
 	_canAdd: function(row, col, block) {
 		// If this is the first block we are placing in the grid, there are no restrictions.
@@ -301,7 +332,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @param col {int} The col for the top left corner of the block.
 	 * @param block {Block} The block to check space for.
 	 * @returns {boolean}
+	 * @memberof BlockGrid
 	 * @private
+	 * @instance
 	 */
 	_isOccupiedBlock: function(row, col, block) {
 		for (var y = 0; y < block.heightInGrid(); y++) {
@@ -318,7 +351,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @param row {int} The row to check.
 	 * @param col {int} The col to check.
 	 * @returns {boolean} True if the grid location is occupied (occupant !== undefined). False otherwise.
+	 * @memberof BlockGrid
 	 * @private
+	 * @instance
 	 */
 	_isOccupied: function(row, col) {
 		return this._grid[row] !== undefined && this._grid[row][col] !== undefined;
@@ -330,7 +365,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @param col {int} The col representing the top left corner of the block.
 	 * @param block {Block} The block to check neighbors for.
 	 * @returns {boolean} True if an adjacent grid location is occupied. False otherwise.
+	 * @memberof BlockGrid
 	 * @private
+	 * @instance
 	 */
 	_hasNeighbors: function(row, col, block) {
 		var blockWidth = block.widthInGrid();
@@ -366,7 +403,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * considered small asteroids and marked to be attracted by nearby players. However, when a block is added to a
 	 * small asteroid BlockGrid, it is no longer a single block BlockGrid and is not considered a small asteroid, so
 	 * attraction will no longer work on this BlockGrid.
+	 * @memberof BlockGrid
 	 * @private
+	 * @instance
 	 */
 	_checkSmallAsteroidCategory: function() {
 		// Make sure we don't attract formerly small asteroids
@@ -381,7 +420,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @param row {int} The row for the top left corner of the block.
 	 * @param col {int} The col for the top left corner of the block.
 	 * @param block {Block} The block reference to set at each location.
+	 * @memberof BlockGrid
 	 * @private
+	 * @instance
 	 */
 	_setBlock: function(row, col, block) {
 		for (var y = 0; y < block.heightInGrid(); y++) {
@@ -397,7 +438,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @param row {int} The row to set.
 	 * @param col {int} The col to set.
 	 * @param block {Block} The block reference to place at the specified grid location.
+	 * @memberof BlockGrid
 	 * @private
+	 * @instance
 	 */
 	_set: function(row, col, block) {
 		if (!this._hasColInRow(row, col)) {
@@ -410,7 +453,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 	/**
 	 * Calls the _unset() function for all of the spaces associated with a Block.
 	 * @param block {Block} The block to unset.
+	 * @memberof BlockGrid
 	 * @private
+	 * @instance
 	 */
 	_unsetBlock: function(block) {
 		var row = block.row();
@@ -427,7 +472,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * deleted from the grid as well.
 	 * @param row {int} The row to unset.
 	 * @param col {col} The col to unset.
+	 * @memberof BlockGrid
 	 * @private
+	 * @instance
 	 */
 	_unset: function(row, col) {
 		if (!this._hasColInRow(row, col)) {
@@ -451,7 +498,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * have not added an entry for this row yet.
 	 * @param row {int} The row to check for.
 	 * @returns {boolean} True if the grid already has this row. False otherwise.
+	 * @memberof BlockGrid
 	 * @private
+	 * @instance
 	 */
 	_hasRow: function(row) {
 		return this._grid[row] !== undefined;
@@ -460,7 +509,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 	/**
 	 * Creates an empty dictionary for the specified row.
 	 * @param row {int} The row to create.
+	 * @memberof BlockGrid
 	 * @private
+	 * @instance
 	 */
 	_createRow: function(row) {
 		this._grid[row] = {};
@@ -472,7 +523,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @param row {int} The row to check.
 	 * @param col {int} The col to check.
 	 * @returns {boolean} True if the grid already has this row and col. False otherwise.
+	 * @memberof BlockGrid
 	 * @private
+	 * @instance
 	 */
 	_hasColInRow: function(row, col) {
 		return this._grid[row] !== undefined && this._grid[row][col] !== undefined;
@@ -483,7 +536,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * exist, the row is also created.
 	 * @param row {int} The row to create the col in.
 	 * @param col {int} The col to create.
+	 * @memberof BlockGrid
 	 * @private
+	 * @instance
 	 */
 	_createColInRow: function(row, col) {
 		if (!this._hasRow(row)) {
@@ -497,7 +552,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * Adds the provided block to the _blocksByType dictionary. If this is the first block of this type that we are
 	 * encountering, this function will also create the list.
 	 * @param block {Block} The block to keep track of.
+	 * @memberof BlockGrid
 	 * @private
+	 * @instance
 	 */
 	_addToBlocksByType: function(block) {
 		if (this._blocksByType[block.classId()] === undefined) {
@@ -509,7 +566,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 	/**
 	 * Removes the provided block from the _blocksByType dictionary.
 	 * @param block {Block} The block to remove from the _blocksByType dictionary.
+	 * @memberof BlockGrid
 	 * @private
+	 * @instance
 	 */
 	_removeFromBlocksByType: function(block) {
 		var list = _blocksByType[block.classId()];
@@ -534,7 +593,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @param row {int} The row for the top left corner of the block
 	 * @param col {int} The col for the top left corner of the block
 	 * @param block {Block} The block to mount.
+	 * @memberof BlockGrid
 	 * @private
+	 * @instance
 	 */
 	_mountBlock: function(row, col, block) {
 		// Rendering of the blocks only occurs on the client.
@@ -558,7 +619,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @param col {int} The col for the top left corner of the block.
 	 * @param block {Block} The block that we are adding a fixture for.
 	 * @param box2dBody {Box2dBody} The Box2dBody for this BlockGrid, which we will add the fixture to.
+	 * @memberof BlockGrid
 	 * @private
+	 * @instance
 	 */
 	_addFixture: function(row, col, block, box2dBody) {
 		// The physics model is only run on the server.
@@ -604,6 +667,58 @@ var BlockGrid = IgeEntityBox2d.extend({
 				.height(fixtureDef.shape.data.height * 2)
 				.streamMode(1);
 		}
+	},
+
+	_addToGridRange: function(startRow, startCol, block) {
+		var endRow = row + block.heightInGrid() - 1;
+		var endCol = col + block.widthInGrid() - 1;
+
+		if (this._numBlocks === 0) {
+			this._setStartRow(startRow);
+			this._setEndRow(endRow);
+
+			this._setStartCol(startCol);
+			this._setEndCol(endCol);
+
+			return;
+		}
+
+		// If the newly added block starts higher than the rest of the blocks in the grid
+		if (startRow < this.startRow()) {
+			this._setStartRow(startRow);
+		}
+		// If the newly added block starts more to the left than the rest of the blocks in the grid
+		if (startCol < this.startCol()) {
+			this._setStartCol(startCol);
+		}
+		// If the newly added block ends more to the right than the rest of the blocks in the grid
+		if (this.endRow() < endRow) {
+			this._setStartRow(startRow);
+		}
+		// If the newly added block ends lower than the rest of the blocks in the grid
+		if (this.endCol() < endCol) {
+			this._setEndCol(endCol);
+		}
+	},
+
+	_removeFromGridRange: function(row, col, block) {
+		
+	},
+
+	_setStartRow: function(newStartRow) {
+		this._startRow = newStartRow;
+	},
+
+	_setEndRow: function(newEndRow) {
+		this._endRow = newEndRow;
+	},
+
+	_setStartCol: function(newStartCol) {
+		this._startCol = newStartCol;
+	},
+
+	_setEndCol: function(newEndCol) {
+		this._endCol = newEndCol;
 	},
 
 	/*
