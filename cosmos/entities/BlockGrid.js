@@ -259,7 +259,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @instance
 	 */
 	numBlocksOfType: function(classId) {
-		if (_blocksByType[classId] === undefined) {
+		if (this._blocksByType[classId] === undefined) {
 			return 0;
 		}
 
