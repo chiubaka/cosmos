@@ -246,7 +246,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			// TODO: Implement flood fill algorithm to disconnect disjoint bodies from each other.
 		}
 
-		_numBlocks--;
+		this._numBlocks--;
 
 		block.destroy();
 	},
