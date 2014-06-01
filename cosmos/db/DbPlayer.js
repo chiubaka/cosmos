@@ -39,6 +39,7 @@ var DbPlayer = {
 	},
 
 	// TODO: This is really the BlockGrid's responsibility
+	// TODO: Make this compatible with the new BlockGrid backing
 	serializeGrid: function (grid) {
 		// Trim the padding
 		var minimumGrid = BlockGridPadding.extractMinimumGrid(grid);

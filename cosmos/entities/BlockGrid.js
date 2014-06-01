@@ -227,13 +227,13 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 */
 	toBlockTypeMatrix: function() {
 		var blockTypeMatrix = [];
-		var endRow = grid.endRow();
-		var endCol = grid.endCol();
+		var endRow = this.endRow();
+		var endCol = this.endCol();
 
-		for (var row = grid.startRow(); row <= endRow; row++) {
+		for (var row = this.startRow(); row <= endRow; row++) {
 			var rowList = [];
-			for (var col = grid.startCol(); col <= endCol; col++) {
-				var block = grid.get(row, col);
+			for (var col = this.startCol(); col <= endCol; col++) {
+				var block = this.get(row, col);
 				if (block === undefined) {
 					row.push(undefined);
 				}
@@ -688,48 +688,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	streamCreateData: function() {
-		return this.serializeGrid(this._grid);
-	},
-
-	// TODO: Make this object oriented. Change DB operations to OO style.
-	serializeGrid: function(grid) {
-		var data = [];
-		for (var i = 0; i < grid.length; i++) {
-			var row = [];
-			for (var j = 0; j < grid[i].length; j++) {
-				var block = grid[i][j];
-				if (block === undefined) {
-					row.push(undefined);
-					continue;
-				}
-				row.push(block.classId());
-			}
-			data.push(row);
-		}
-		return data;
-	},
-
-	rehydrateGrid: function(data) {
-		var rxGrid = data;
-
-		var grid = [];
-		for (var i = 0; i < rxGrid.length; i++) {
-			var row = [];
-			for (var j = 0; j < rxGrid[i].length; j++) {
-				var classId = rxGrid[i][j];
-
-				var block = Block.prototype.blockFromClassId(classId);
-
-				if (block !== undefined) {
-					block.row(i).col(j);
-				}
-
-				row.push(block);
-			}
-			grid.push(row);
-		}
-
-		return grid;
+		return this.toBlockTypeMatrix();
 	},
 
 	// TODO: Use non padded method
