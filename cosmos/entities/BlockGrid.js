@@ -285,7 +285,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 */
 	fromBlockTypeMatrix: function(blockTypeMatrix) {
 		// Remove all existing blocks from this grid and start fresh!
-		this.removeAll();
+		this._removeAll();
 
 		for (var row = 0; row < blockTypeMatrix.length; row++) {
 			for (var col = 0; col < blockTypeMatrix[row].length; col++) {
@@ -1060,7 +1060,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @parameter grid the grid to set (optional)
 	 * @return this if we set the grid or the current grid otherwise
 	 */
-	grid: function(grid) {
+	/*grid: function(grid) {
 		if (grid === undefined) {
 			return this._grid;
 		}
@@ -1093,12 +1093,12 @@ var BlockGrid = IgeEntityBox2d.extend({
 					continue;
 				}
 
-				this.addFixture(this._box2dBody, block, row, col);
+				this._addFixture(this._box2dBody, block, row, col);
 			}
 		}
 
 		return this;
-	},
+	},*/
 
 	mountGrid: function() {
 		var maxRowLength = this._grid.get2DMaxRowLength();
