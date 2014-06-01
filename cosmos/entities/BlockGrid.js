@@ -392,8 +392,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @instance
 	 */
 	_isOccupiedBlock: function(row, col, block) {
-		for (var y = 0; y < block.heightInGrid(); y++) {
-			for (var x = 0; x < block.widthInGrid(); x++) {
+		for (var y = 0; y < block.numRows(); y++) {
+			for (var x = 0; x < block.numCols(); x++) {
 				if (this._isOccupied(row + y, col + y)) {
 					return true;
 				}
@@ -425,15 +425,15 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @instance
 	 */
 	_hasNeighbors: function(row, col, block) {
-		var blockWidth = block.widthInGrid();
-		var blockHeight = block.heightInGrid();
+		var blockNumRows = block.numRows();
+		var blockNumCols = block.numCols();
 
 		// Check top and bottom boundaries
 		var startCol = col;
 		var topRow = row - 1;
-		var bottomRow = row + blockHeight;
+		var bottomRow = row + blockNumRows;
 
-		for (var x = 0; x < blockWidth; x++) {
+		for (var x = 0; x < blockNumCols; x++) {
 			if (this._isOccupied(topRow, startCol + x) || this._isOccupied(bottomRow, startCol + x)) {
 				return true;
 			}
@@ -442,9 +442,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// Check left and right boundary
 		var startRow = row;
 		var leftCol = col - 1;
-		var rightCol = col + blockWidth;
+		var rightCol = col + blockNumCols;
 
-		for (var y = 0; y < blockHeight; y++) {
+		for (var y = 0; y < blockNumRows; y++) {
 			if (this._isOccupied(startRow + y, leftCol) || this._isOccupied(startRow + y, rightCol)) {
 				return true;
 			}
@@ -480,8 +480,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @instance
 	 */
 	_setBlock: function(row, col, block) {
-		for (var y = 0; y < block.heightInGrid(); y++) {
-			for (var x = 0; x < block.widthInGrid(); x++) {
+		for (var y = 0; y < block.numRows(); y++) {
+			for (var x = 0; x < block.numCols(); x++) {
 				this._set(row + y, col + x, block);
 			}
 		}
@@ -515,8 +515,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	_unsetBlock: function(block) {
 		var row = block.row();
 		var col = block.col();
-		for (var y = 0; y < block.heightInGrid(); y++) {
-			for (var x = 0; x < block.widthInGrid(); x++) {
+		for (var y = 0; y < block.numRows(); y++) {
+			for (var x = 0; x < block.numCols(); x++) {
 				this._unset(row + y, col + x);
 			}
 		}
@@ -736,8 +736,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @instance
 	 */
 	_addToGridRange: function(startRow, startCol, block) {
-		var endRow = row + block.heightInGrid() - 1;
-		var endCol = col + block.widthInGrid() - 1;
+		var endRow = row + block.numRows() - 1;
+		var endCol = col + block.numCols() - 1;
 
 		if (this._numBlocks === 0) {
 			this._setStartRow(startRow);

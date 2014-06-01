@@ -1,6 +1,10 @@
 /**
  * This class is the superclass of all blocks, and it contains all of the logic for the blocks.
  * Other blocks just describe the way they are drawn and nothing else.
+ *
+ * @class
+ * @typedef {Object} Block
+ * @namespace
  */
 var Block = IgeEntity.extend({
 	classId: 'Block',
@@ -20,6 +24,23 @@ var Block = IgeEntity.extend({
 	_row: undefined,
 	_col: undefined,
 
+	/**
+	 * The number of rows that this {@link Block} takes up.
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 * @todo Add code allow the {@link Block#_numRows|_numRows} to vary.
+	 */
+	_numRows: 1,
+	/**
+	 * The number of cols that this {@link Block} takes up.
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 * @todo Add code allow the {@link Block#_numCols|_numCols} to vary.
+	 */
+	_numCols: 1,
+
 	_fixture: undefined,
 	_fixtureDef: undefined,
 
@@ -31,7 +52,7 @@ var Block = IgeEntity.extend({
 
 	/**
 	 * Construct a new block
-   * Note that subclasses of Block are expected to have their own textures.
+	 * Note that subclasses of Block are expected to have their own textures.
 	 * @param data an optional dictionary containing initialization information.
 	 */
 	init: function(data) {
@@ -53,6 +74,26 @@ var Block = IgeEntity.extend({
 			this.compositeCache(true);
 			this.cacheSmoothing(true);
 		}
+	},
+
+	/**
+	 * Getter for {@link Block#_numRows|_numCols}.
+	 * @returns {number}
+	 * @memberof Block
+	 * @instance
+	 */
+	numRows: function() {
+		return this._numRows;
+	},
+
+	/**
+	 * Getter for {@link Block#_numCols|_numCols}.
+	 * @returns {number}
+	 * @memberof Block
+	 * @instance
+	 */
+	numCols: function() {
+		return this._numCols;
 	},
 
 	mouseDown: function(event, control) {
