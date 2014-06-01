@@ -886,6 +886,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @instance
 	 */
 	_updateDimensions: function() {
+		// The _renderContainer only exists on the client, so just skip this if this is called from the server.
+		if (ige.isServer) {
+			return;
+		}
 		// Modify the height and width of the entities to match the new size of the BlockGrid.
 		this.height(this.numRows() * Block.WIDTH);
 		this.width(this.numCols() * Block.WIDTH);
