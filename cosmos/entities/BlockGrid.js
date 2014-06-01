@@ -348,7 +348,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		for (var row = 0; row < blockTypeMatrix.length; row++) {
 			for (var col = 0; col < blockTypeMatrix[row].length; col++) {
 				// The add() function knows how to deal with receiving undefined
-				this.add(row, col, blockTypeMatrix[row][col]);
+				this.add(row, col, Block.prototype.blockFromClassId(blockTypeMatrix[row][col]));
 			}
 		}
 
@@ -1107,7 +1107,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 					'existing',
 					Block.prototype.blockFromClassId(data.selectedType)
 				);
-				this.add(data.row, data.col, data.selectedType);
+				this.add(data.row, data.col, Block.prototype.blockFromClassId(data.selectedType));
 				this._renderContainer.refresh();
 				this._constructionZoneOverlay.refresh();
 				break;
