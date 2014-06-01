@@ -281,7 +281,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	/**
 	 * Resets this BlockGrid's internal state to represent the grid that is represented by the provided block type
 	 * matrix, which is a matrix of class ID's where each class ID represents a block type in the grid.
-	 * @param blockTypeMatrix {*[]} An array of arrays that holds classId's for Block objects. undefined is used to
+	 * @param blockTypeMatrix {Array} An array of arrays that holds classId's for Block objects. undefined is used to
 	 * indicate that a space in the blockTypeMatrix does not include a Block. The blockTypeMatrix must be a rectangular
 	 * matrix (every row has the same number of columns and every column has the same number of rows, but the total number
 	 * of rows and total number of columns is not required to be the same).
@@ -306,7 +306,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	/**
 	 * Takes this BlockGrid and converts it to a matrix of class ID's, where each class ID represents a single type of block
 	 * in the BlockGrid.
-	 * @returns {*[]} An array of arrays that holds classId's for Block objects. undefined is used to
+	 * @returns {Array} An array of arrays that holds classId's for Block objects. undefined is used to
 	 * indicate that a space in the blockTypeMatrix does not include a Block. The blockTypeMatrix must be a rectangular
 	 * matrix (every row has the same number of columns and every column has the same number of rows, but the total number
 	 * of rows and total number of columns is not required to be the same).
