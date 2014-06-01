@@ -56,10 +56,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 			this.fromBlockTypeMatrix(data);
 
 			// TODO: Lazily create when needed to speed up load time.
+			// TODO: Examine ConstructionZoneOverlay to make sure it is compatibile with new BlockGrid backing.
 			this._constructionZoneOverlay = new ConstructionZoneOverlay(this._grid)
 				.mount(this);
 
-			this.mountGrid();
 			this.mouseDown(this.mouseDownHandler);
 		}
 	},
@@ -121,6 +121,13 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this._addFixture(row, col, block, this._box2dBody);
 
 		this._numBlocks++;
+
+		// TODO: Modify height and width of renderContainer. Be careful when doing this, because it changes the meaning
+		// of the "translateTo" function, since this function references the center of the RenderContainer, and changing
+		// the height and width also changes the center.
+		this._renderContainer.refresh();
+		// TODO: Modify the height and width of the BlockGrid based on the range of rows and cols that this BlockGrid
+		// now spans
 
 		return true;
 	},
@@ -238,6 +245,26 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 
 		return blockTypeMatrix;
+	},
+
+	/**
+	 * Removes all existing blocks from the grid.
+	 * @private
+	 */
+	_removeAll: function() {
+		for (var row in this._grid) {
+			if (!this._grid.hasOwnProperty(row)) {
+				continue;
+			}
+
+			for (var col in this._grid[row]) {
+				if (!this._grid[row].hasOwnProperty(col)) {
+					continue;
+				}
+
+				this.remove(row, col);
+			}
+		}
 	},
 
 	/**

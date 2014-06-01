@@ -97,10 +97,10 @@ var ServerNetworkEvents = {
 		var player = new Player();
 
 		if (ship === undefined) {
-			player.grid(ExampleShips.starterShipSingleMisplacedEngine());
+			player.fromBlockTypeMatrix(ExampleShips.starterShipSingleMisplacedEngine());
 		}
 		else {
-			player.grid(BlockGrid.prototype.rehydrateGrid(ship));
+			player.fromBlockTypeMatrix(ship);
 		}
 
 		if (playerId !== undefined) {
