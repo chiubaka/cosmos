@@ -9,15 +9,18 @@ exit /b 1
 
 :endpoint_client
   echo Deploying client endpoint.
-	call deploy\deploy.client.cmd
+  copy /Y "deploy\deploy.client.cmd" "deploy.client.cmd"
+	deploy.client.cmd
   goto end
 :endpoint_server
   echo Deploying server endpoint.
-  call deploy\deploy.server.cmd
+  copy /Y "deploy\deploy.server.cmd" "deploy.server.cmd"
+  call deploy.server.cmd
   goto end
 :endpoint_docs
   echo Deploying docs endpoint.
-  call deploy\deploy.docs.cmd
+  copy /Y "deploy\deploy.docs.cmd" "deploy.docs.cmd"
+  call deploy.docs.cmd
   goto end
 :default 
   echo You have to set the ENDPOINT_TYPE setting to 'client', 'server', or 'docs'
