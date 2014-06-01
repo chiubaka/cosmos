@@ -7,13 +7,13 @@ echo done.
 exit /b 1
 
 :endpoint_client
-	deploy.client.cmd
+	deploy\deploy.client.cmd
   goto end
 :endpoint_server
-  deploy.server.cmd
+  deploy\deploy.server.cmd
   goto end
 :endpoint_docs
-  deploy.docs.cmd
+  deploy\deploy.docs.cmd
   goto end
 :default 
   echo You have to set the ENDPOINT_TYPE setting to 'client', 'server', or 'docs'
