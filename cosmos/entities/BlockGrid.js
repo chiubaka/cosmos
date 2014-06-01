@@ -128,6 +128,33 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	/**
+	 * Returns an iterator object, which has a next() function that returns the next {@link Block} in this
+	 * {@link BlockGrid}. This should be used whenever iterating over all of the {@link Block}s in a {@link BlockGrid}
+	 * because it decouples the interface from the underlying {@link BlockGrid} implementation.
+	 * @returns {{list: Array, i: number, next: next}}
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	iterator: function() {
+		var self = this;
+
+		var iterator = {
+			list: self._getBlockList(),
+			i: 0,
+			hasNext: function() {
+				return this.i < this.list.length;
+			},
+			next: function() {
+				var block = this.list[this.i];
+				this.i++;
+				return block;
+			}
+		};
+
+		return iterator;
+	},
+
+	/**
 	 * Returns the block at a given row and column in the BlockGrid.
 	 * @param row {number} The row index to get
 	 * @param col {number} The col index to get
@@ -158,14 +185,19 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @todo Figure out if modifying the height and width of the {@link BlockGrid#_renderContainer|_renderContainer}
 	 * has unintended side effects on rendering.
 	 */
-	add: function(row, col, block) {
+	add: function(row, col, block, checkForNeighbors) {
 		// Guard against invalid parameters
 		if (row === undefined || col === undefined || block === undefined) {
+			console.log("Add returned false due to undefined parameters."
+				+ " row: " + (row !== undefined ? row : "undefined")
+				+ ", col: " + (col !== undefined ? col : "undefined")
+				+ ", block: " + (block !== undefined ? block.classId() : "undefined"));
 			return false;
 		}
 
 		// See if this would be a valid addition to the BlockGrid.
-		if (!this._canAdd(row, col, block)) {
+		if (!this._canAdd(row, col, block, checkForNeighbors)) {
+			console.log("Add returned false because of an invalid addition to the grid.");
 			return false;
 		}
 
@@ -196,6 +228,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		// Updates the height and width and refreshes the _renderContainer so it is redrawn.
 		this._updateDimensions();
+
+		console.log(this.toString());
 
 		return true;
 	},
@@ -235,7 +269,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			var newGrid = new BlockGrid()
 				.category('smallAsteroid')
 				.mount(ige.server.spaceGameScene)
-				.fromBlockTypeMatrix([[Block.prototype.blockFromClassId(block.classId())]])
+				.fromBlockTypeMatrix([[block.classId()]])
 				.translateTo(finalX, finalY, 0)
 				.rotate().z(theta)
 				.streamMode(1);
@@ -254,6 +288,23 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	/**
+	 * Given a {@link Block} type as a class ID, returns a list of the {@link Block}s in this {@link BlockGrid} that
+	 * have that type.
+	 * @param classId {string} The type of {@link Block}s to return.
+	 * @returns {Array} An array of the {@link Block}s in this {@link BlockGrid} that have the given classId. If an
+	 * undefined or non-{@link Block} type classId is passed, this function will return an empty array.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	blocksOfType: function(classId) {
+		if (this._blocksByType[classId] === undefined) {
+			return [];
+		}
+
+		return this._blocksByType[classId];
+	},
+
+	/**
 	 * Returns the number of blocks in the grid that have the specified class ID
 	 * @param classId {string} The class ID of the type of block that the caller wants the number of
 	 * @returns {number} The number of blocks in the grid with the specified class ID
@@ -261,11 +312,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @instance
 	 */
 	numBlocksOfType: function(classId) {
-		if (this._blocksByType[classId] === undefined) {
-			return 0;
-		}
-
-		return _blocksByType[classId].length;
+		return this.blocksOfType(classId).length;
 	},
 
 	/**
@@ -343,14 +390,18 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @memberof BlockGrid
 	 * @instance
 	 */
-	fromBlockTypeMatrix: function(blockTypeMatrix) {
+	fromBlockTypeMatrix: function(blockTypeMatrix, checkForNeighbors) {
 		// Remove all existing blocks from this grid and start fresh!
-		this._removeAll();
+		//this._removeAll();
+
+		console.log("fromBlockTypeMatrix: ");
+		console.log(blockTypeMatrix);
 
 		for (var row = 0; row < blockTypeMatrix.length; row++) {
 			for (var col = 0; col < blockTypeMatrix[row].length; col++) {
+				//console.log(blockTypeMatrix[row][col]);
 				// The add() function knows how to deal with receiving undefined
-				this.add(row, col, Block.prototype.blockFromClassId(blockTypeMatrix[row][col]));
+				this.add(row, col, Block.prototype.blockFromClassId(blockTypeMatrix[row][col]), checkForNeighbors);
 			}
 		}
 
@@ -390,6 +441,60 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	/**
+	 * Resets this BlockGrid's internal state to represent the grid that is represented by the provided {@link Block}
+	 * matrix, which is a matrix of {@link Block}s. undefined is used to indicate that a space in the matrix is empty.
+	 * @param blockMatrix {Array} An array of arrays that holds {@link Block objects}. undefined is used to indicate
+	 * that a space in the blockMatrix is empty. The blockMatrix must be a rectangular matrix (every row has the same
+	 * number of columns and every column has the same number of rows, but the total number of rows and total number
+	 * of columns is not required to be the same).
+	 * @return {BlockGrid} Return this object to make function chaining convenient.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	fromBlockMatrix: function(blockMatrix, checkForNeighbors) {
+		this._removeAll();
+
+		for (var row = 0; row < blockMatrix.length; row++) {
+			for (var col = 0; col < blockMatrix[row].length; col++) {
+				this.add(row, col, blockMatrix[row][col], checkForNeighbors);
+			}
+		}
+
+		return this;
+	},
+
+	toString: function() {
+		return this.toBlockTypeMatrix();
+	},
+
+	/**
+	 * Creates and returns a list of all of the {@link Block}s in this {@link BlockGrid}. There is no guarantee about
+	 * the order of the {@link Block}s returned by this function.
+	 * @returns {Array} An array that contains all of the {@link Block} objects kept in this {@link BlockGrid}.
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
+	_getBlockList: function() {
+		var blockList = [];
+		for (var row in this._grid) {
+			if (this._grid.hasOwnProperty(row)) {
+				continue;
+			}
+
+			for (var col in this._grid[row]) {
+				if (this._grid[row].hasOwnProperty(col)) {
+					continue;
+				}
+
+				blockList.push(this.get(row, col));
+			}
+		}
+
+		return blockList;
+	},
+
+	/**
 	 * Removes all existing blocks from the grid.
 	 * @memberof BlockGrid
 	 * @private
@@ -426,7 +531,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @private
 	 * @instance
 	 */
-	_canAdd: function(row, col, block) {
+	_canAdd: function(row, col, block, checkForNeighbors) {
 		// If this is the first block we are placing in the grid, there are no restrictions.
 		if (this._numBlocks === 0) {
 			return true;
@@ -434,11 +539,26 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		// Check to see if the spaces the provided block will occupy are already occupied.
 		if (this._isOccupiedBlock(row, col, block)) {
+			console.log("Cannot add because the proposed addition overlaps with an occupied block."
+				+ " row: " + row
+				+ ", col: " + col
+				+ ", block: " + block.classId()
+			);
 			return false;
 		}
 
 		// Make sure that the block will be connected to the existing structure. Disjoint structures are not allowed.
-		return this._hasNeighbors(row, col, block);
+		if ((checkForNeighbors !== undefined && checkForNeighbors !== true) || this._hasNeighbors(row, col, block)) {
+			return true;
+		}
+		else {
+			console.log("Cannot add because the proposed addition is not attached to the existing structure."
+				+ " row: " + row
+				+ ", col: " + col
+				+ ", block: " + block.classId()
+			);
+			return false;
+		}
 	},
 
 	/**
@@ -819,7 +939,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 		// If the newly added block ends more to the right than the rest of the blocks in the grid
 		if (this.endRow() < endRow) {
-			this._setStartRow(startRow);
+			this._setEndRow(endRow);
 		}
 		// If the newly added block ends lower than the rest of the blocks in the grid
 		if (this.endCol() < endCol) {

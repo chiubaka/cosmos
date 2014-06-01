@@ -97,15 +97,17 @@ var ServerNetworkEvents = {
 		var player = new Player();
 
 		if (ship === undefined) {
-			player.fromBlockTypeMatrix(ExampleShips.starterShipSingleMisplacedEngine());
+			player.fromBlockMatrix(ExampleShips.starterShipSingleMisplacedEngine(), false);
 		}
 		else {
-			player.fromBlockTypeMatrix(ship);
+			player.fromBlockTypeMatrix(ship, false);
 		}
 
 		if (playerId !== undefined) {
 			player.dbId(playerId);
 		}
+
+		console.log(player.toString());
 
 		player.debugFixtures(false)//call this before calling setGrid()
 			.padding(10)
