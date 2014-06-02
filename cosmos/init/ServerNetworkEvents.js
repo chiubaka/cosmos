@@ -107,8 +107,6 @@ var ServerNetworkEvents = {
 			player.dbId(playerId);
 		}
 
-		console.log(player.toString());
-
 		player.debugFixtures(false)//call this before calling setGrid()
 			.padding(10)
 			.addSensor(300)

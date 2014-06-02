@@ -197,16 +197,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 	add: function(row, col, block, checkForNeighbors) {
 		// Guard against invalid parameters
 		if (row === undefined || col === undefined || block === undefined) {
-			console.log("Add returned false due to undefined parameters."
-				+ " row: " + (row !== undefined ? row : "undefined")
-				+ ", col: " + (col !== undefined ? col : "undefined")
-				+ ", block: " + (block !== undefined ? block.classId() : "undefined"));
 			return false;
 		}
 
 		// See if this would be a valid addition to the BlockGrid.
 		if (!this._canAdd(row, col, block, checkForNeighbors)) {
-			console.log("Add returned false because of an invalid addition to the grid.");
 			return false;
 		}
 
@@ -256,16 +251,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		// Add fixtures to update the server's physics model.
 		this._addFixture(block, this._box2dBody);
-
-		console.log("Height: " + this.height());
-		console.log("Width: " + this.width());
-
-		if (!ige.isServer) {
-			console.log("Render Container Height: " + this._renderContainer.height());
-			console.log("Render Container Width: " + this._renderContainer.width());
-		}
-
-		console.log("Num Blocks: " + this._numBlocks);
 
 		return true;
 	},
@@ -431,14 +416,12 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 */
 	fromBlockTypeMatrix: function(blockTypeMatrix, checkForNeighbors) {
 		// Remove all existing blocks from this grid and start fresh!
+		// TODO: Uncomment this.
 		//this._removeAll();
 
-		console.log("fromBlockTypeMatrix: ");
-		console.log(blockTypeMatrix);
 
 		for (var row = 0; row < blockTypeMatrix.length; row++) {
 			for (var col = 0; col < blockTypeMatrix[row].length; col++) {
-				//console.log(blockTypeMatrix[row][col]);
 				// The add() function knows how to deal with receiving undefined
 				this.add(row, col, Block.prototype.blockFromClassId(blockTypeMatrix[row][col]), checkForNeighbors);
 			}
@@ -1034,9 +1017,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 			return;
 		}
 
-		console.log("Num rows: " + this.numRows());
-		console.log("Num cols: " + this.numCols());
-
 		// Modify the height and width of the entities to match the new size of the BlockGrid.
 		this.height(this.numRows() * Block.HEIGHT);
 		this.width(this.numCols() * Block.WIDTH);
@@ -1046,18 +1026,12 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// Translate all existing blocks so that they are in the correct positions relative to the new center.
 		var translationData = {x: 0, y: 0};
 		var iterator = this.iterator();
-		console.log("Iterating over all of the blocks.");
 		while (iterator.hasNext()) {
 			var block = iterator.next();
-			console.log(block.classId());
 			translationData = this._translateBlock(block);
 		}
 
-		console.log("x translation: " + translationData.x);
-		console.log("y translation: " + translationData.y);
-
-
-		// TODO: Translate the _renderContainer so that each block appears to be in the same position as it was before.
+		// Translate the _renderContainer so that each block appears to be in the same position as it was before.
 		this._renderContainer.translateBy(-translationData.x, -translationData.y, 0);
 	},
 
