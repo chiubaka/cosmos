@@ -217,7 +217,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// It is important that this call occur before the call to BlockGrid#_updateDimensions, because
 		// BlockGrid#_updateDimensions relies upon BlockGrid#numRows and BlockGrid#numCols, whose values are not
 		// updated until after BlockGrid#_addToGridRange is called.
-		this._addToGridRange(row, col, block);
+		this._addToGridRange(block);
 
 		// Updates the height and width of the BlockGrid#_renderContainer and the BlockGrid itself.
 		// BlockGrid#_updateDimensions relies on BlockGrid#numRows and BlockGrid#numCols, which are updated by
@@ -243,7 +243,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		// Now that we know it is OK to add the block, we should set the reference at each grid location to be a
 		// reference to the provided block.
-		this._setBlock(row, col, block);
+		this._setBlock(block);
 
 		// Keep track of this block in the dictionary of lists that keeps a separate list of blocks by classId
 		this._addToBlocksByType(block);
@@ -255,7 +255,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this._numBlocks++;
 
 		// Add fixtures to update the server's physics model.
-		this._addFixture(row, col, block, this._box2dBody);
+		this._addFixture(block, this._box2dBody);
 
 		console.log("Height: " + this.height());
 		console.log("Width: " + this.width());
@@ -676,14 +676,15 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	/**
 	 * Calls the _set() function for all of the spaces associated with a Block.
-	 * @param row {number} The row for the top left corner of the block.
-	 * @param col {number} The col for the top left corner of the block.
-	 * @param block {Block} The block reference to set at each location.
+	 * @param block {Block} The {@link Block} reference to set at each location. The {@link Block} should have its
+	 * row and column properties set already.
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
 	 */
-	_setBlock: function(row, col, block) {
+	_setBlock: function(block) {
+		var row = block.row();
+		var col = block.col();
 		for (var y = 0; y < block.numRows(); y++) {
 			for (var x = 0; x < block.numCols(); x++) {
 				this._set(row + y, col + x, block);
@@ -849,7 +850,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	/**
 	 * Handles actually mounting the block to the render container
-	 * @param block {Block} The block to mount.
+	 * @param block {Block} The {@link Block} to mount. The {@link Block} should have its row and column properties
+	 * set already.
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
@@ -866,19 +868,21 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	/**
 	 * Adds a Box2D fixture to the physics model on the server for this Block.
-	 * @param row {number} The row for the top left corner of the block.
-	 * @param col {number} The col for the top left corner of the block.
-	 * @param block {Block} The block that we are adding a fixture for.
+	 * @param block {Block} The {@link Block} that we are adding a fixture for. The {@link Block} should have its row
+	 * and column properties set already.
 	 * @param box2dBody {Box2dBody} The Box2dBody for this BlockGrid, which we will add the fixture to.
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
 	 */
-	_addFixture: function(row, col, block, box2dBody) {
+	_addFixture: function(block, box2dBody) {
 		// The physics model is only run on the server.
 		if (!ige.isServer) {
 			return;
 		}
+
+		var row = block.row();
+		var col = block.col();
 
 		var width = Block.WIDTH;
 		var height = Block.HEIGHT;
@@ -924,14 +928,15 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * Updates the {@link BlockGrid#_startRow|_startRow}, {@link BlockGrid#_startCol|_startCol},
 	 * {@link BlockGrid#_endRow|_endRow}, and {@link BlockGrid#_endCol|_endCol} properties based on the addition of
 	 * the given {@link Block} to this {@link BlockGrid}.
-	 * @param startRow {number} The starting row of the given {@link Block}.
-	 * @param startCol {number} The starting col of the given {@link Block}.
-	 * @param block {Block} The {@link Block} that is being added to the {@link BlockGrid}.
+	 * @param block {Block} The {@link Block} that is being added to the {@link BlockGrid}. The {@link Block} should
+	 * have its row and column properties set already.
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
 	 */
-	_addToGridRange: function(startRow, startCol, block) {
+	_addToGridRange: function(block) {
+		var startRow = block.row();
+		var startCol = block.col();
 		var endRow = startRow + block.numRows() - 1;
 		var endCol = startCol + block.numCols() - 1;
 
