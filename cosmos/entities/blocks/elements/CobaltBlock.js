@@ -9,8 +9,8 @@ var CobaltBlock = Element.extend({
 
 
 		if (!ige.isServer) {
-			this.textureBackground = "rgb(42, 42, 242)";
-			this.textureOutline = "rgb(38, 38, 38)";
+			this.textureBackground = "rgb(0, 71, 171)";
+			this.textureOutline = "rgb(0, 0, 128)";
 		}
 	}
 });
