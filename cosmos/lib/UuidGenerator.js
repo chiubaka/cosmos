@@ -3,6 +3,7 @@
 	 * Generates a UUID according to RFC4122, that is practically unique.
 	 * The UUID has a negligible chance of collision.
 	 * @returns {string}
+	 * @memberof UuidGenerator
 	 */
 	gen: function() {
 		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
