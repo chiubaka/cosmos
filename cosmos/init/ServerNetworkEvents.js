@@ -96,7 +96,10 @@ var ServerNetworkEvents = {
 	 * @private
 	 */
 	_createPlayer: function(clientId, playerId, ship, cargo) {
-		var player = new Player();
+		var player = new Player()
+			// Call BlockGrid#debugFixtures before calling BlockGrid#fromBlockMatrix, since debugging entities are
+			// added when fixtures are added.
+			.debugFixtures(true);
 
 		if (ship === undefined) {
 			player.fromBlockMatrix(ExampleShips.starterShip(), false);
@@ -109,8 +112,7 @@ var ServerNetworkEvents = {
 			player.dbId(playerId);
 		}
 
-		player.debugFixtures(false)//call this before calling setGrid()
-			.padding(10)
+		player.padding(10)
 			.addSensor(300)
 			.attractionStrength(1)
 			.streamMode(1)

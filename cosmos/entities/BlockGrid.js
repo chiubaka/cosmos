@@ -95,6 +95,26 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 */
 	_endCol: undefined,
 	/**
+	 * The row value of the very first {@link Block} added to this {@link BlockGrid}. Stored as a reference point so
+	 * that we can easily place the fixtures for future {@link Block}s in the right place relative to a common
+	 * reference point that does not change as the height and width of the {@link BlockGrid} and its
+	 * {@link BlockGrid#_renderContainer|_renderContainer} change.
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
+	_physicsReferenceRow: undefined,
+	/**
+	 * The col value of the very first {@link Block} added to this {@link BlockGrid}. Stored as a reference point so
+	 * that we can easily place the fixtures for future {@link Block}s in the right place relative to a common
+	 * reference point that does not change as the height and width of the {@link BlockGrid} and its
+	 * {@link BlockGrid#_renderContainer|_renderContainer} change.
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
+	_physicsReferenceCol: undefined,
+	/**
 	 * The rendering container for this BlockGrid, which essentially provides a cacheable location for the BlockGrid's
 	 * texture.
 	 */
@@ -247,10 +267,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// into the player's ship.
 		this._checkSmallAsteroidCategory();
 
-		this._numBlocks++;
-
 		// Add fixtures to update the server's physics model.
-		this._addFixture(block, this._box2dBody);
+		this._addFixture(block);
+
+		this._numBlocks++;
 
 		return true;
 	},
@@ -853,12 +873,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * Adds a Box2D fixture to the physics model on the server for this Block.
 	 * @param block {Block} The {@link Block} that we are adding a fixture for. The {@link Block} should have its row
 	 * and column properties set already.
-	 * @param box2dBody {Box2dBody} The Box2dBody for this BlockGrid, which we will add the fixture to.
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
 	 */
-	_addFixture: function(block, box2dBody) {
+	_addFixture: function(block) {
 		// The physics model is only run on the server.
 		if (!ige.isServer) {
 			return;
@@ -867,8 +886,13 @@ var BlockGrid = IgeEntityBox2d.extend({
 		var row = block.row();
 		var col = block.col();
 
-		var x = Block.WIDTH * (col - this.startCol()) - this._bounds2d.x2 + block._bounds2d.x2;
-		var y = Block.HEIGHT * (row - this.startRow()) - this._bounds2d.y2 + block._bounds2d.y2;
+		if (this._numBlocks === 0) {
+			this._physicsReferenceRow = row;
+			this._physicsReferenceCol = col;
+		}
+
+		var x = Block.WIDTH * (col - this._physicsReferenceCol);
+		var y = Block.HEIGHT * (row - this._physicsReferenceRow);
 
 		var fixtureDef = {
 			density: 1.0,
@@ -881,13 +905,13 @@ var BlockGrid = IgeEntityBox2d.extend({
 					// The fixtures are slightly smaller than the actual block grid so that you can fit into a whole which is exactly the same width (in terms of blocks) as your ship
 					x: x + .1,
 					y: y + .1,
-					width: Block.WIDTH / 2 - .2,
-					height: Block.HEIGHT / 2 - .2
+					width: (block.numCols() * Block.WIDTH) / 2 - .2,
+					height: (block.numRows() * Block.HEIGHT) / 2 - .2
 				}
 			}
 		};
 
-		var fixture = ige.box2d.addFixture(box2dBody, fixtureDef);
+		var fixture = ige.box2d.addFixture(this._box2dBody, fixtureDef);
 		// Add fixture reference to Block so we can destroy fixture later.
 		block.fixture(fixture);
 		// Add fixtureDef reference so we can create a new BlockGrid later.
