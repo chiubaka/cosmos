@@ -17,7 +17,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @private
 	 * @instance
 	 */
-	_numBlocks: 0,
+	_numBlocks: undefined,
 	/**
 	 * The main backing structure of the BlockGrid. _grid is a dictionary. At the top level, the dictionary keys are
 	 * x-coordinates in the grid space. Each top level x-coordinate dictionary key maps to another dictionary as its
@@ -38,7 +38,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @private
 	 * @instance
 	 */
-	_grid: {},
+	_grid: undefined,
 	/**
 	 * Categorizes all of the blocks in this grid into lists of blocks that have the same classId. This is useful for
 	 * cases where we need to know, for example, how many EngineBlocks are in a BlockGrid. Again, the BlockGrid is
@@ -48,7 +48,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @private
 	 * @instance
 	 */
-	_blocksByType: {},
+	_blocksByType: undefined,
 	/**
 	 * Stores all of the blocks in this grid. Useful in cases where we need to iterate over all of the blocks in this
 	 * grid.
@@ -57,7 +57,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @private
 	 * @instance
 	 */
-	_blocksList: [],
+	_blocksList: undefined,
 	/**
 	 * The leftmost row index of the structure contained within this {@link BlockGrid}. Necessary because indices
 	 * within the BlockGrid can become arbitrarily defined as the {@link BlockGrid} expands.
@@ -128,6 +128,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 		var self = this;
 
 		IgeEntityBox2d.prototype.init.call(this);
+
+		this._numBlocks = 0;
+		this._grid = {};
+		this._blocksByType = {};
+		this._blocksList = [];
 
 		if (ige.isServer) {
 			this.box2dBody({
@@ -528,18 +533,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @instance
 	 */
 	_removeAll: function() {
-		for (var row in this._grid) {
-			if (!this._grid.hasOwnProperty(row)) {
-				continue;
-			}
-
-			for (var col in this._grid[row]) {
-				if (!this._grid[row].hasOwnProperty(col)) {
-					continue;
-				}
-
-				this.remove(row, col);
-			}
+		var iterator = this.iterator();
+		while (iterator.hasNext()) {
+			var block = iterator.next();
+			this.remove(block.row(), block.col());
 		}
 	},
 
