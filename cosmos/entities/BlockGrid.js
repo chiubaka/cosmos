@@ -215,12 +215,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// Keep track of this block in the dictionary of lists that keeps a separate list of blocks by classId
 		this._addToBlocksByType(block);
 
-		// Mount the block for rendering purposes.
-		this._mountBlock(row, col, block);
-
-		// Add fixtures to update the server's physics model.
-		this._addFixture(row, col, block, this._box2dBody);
-
 		// Recompute the starting row and column of this BlockGrid based on the newly added block
 		this._addToGridRange(row, col, block);
 
@@ -228,6 +222,12 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		// Updates the height and width and refreshes the _renderContainer so it is redrawn.
 		this._updateDimensions();
+
+		// Mount the block for rendering purposes.
+		this._mountBlock(row, col, block);
+
+		// Add fixtures to update the server's physics model.
+		this._addFixture(row, col, block, this._box2dBody);
 
 		console.log(this.toString());
 
@@ -838,14 +838,13 @@ var BlockGrid = IgeEntityBox2d.extend({
 			return;
 		}
 
-		this._renderContainer.height(this.height());
-		this._renderContainer.width(this.width());
-
 		var x = Block.prototype.WIDTH * col - this._bounds2d.x2 + block._bounds2d.x2;
 		var y = Block.prototype.HEIGHT * row - this._bounds2d.y2 + block._bounds2d.y2;
 
 		block.translateTo(x, y, 0)
 			.mount(this._renderContainer);
+
+		this._renderContainer.refresh();
 	},
 
 	/**
