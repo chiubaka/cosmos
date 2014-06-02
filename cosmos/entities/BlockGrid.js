@@ -867,11 +867,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 		var row = block.row();
 		var col = block.col();
 
-		var width = Block.WIDTH;
-		var height = Block.HEIGHT;
-
-		var x = width * col - this._bounds2d.x2 + block._bounds2d.x2;
-		var y = height * row - this._bounds2d.y2 + block._bounds2d.y2;
+		var x = Block.WIDTH * (col - this.startCol()) - this._bounds2d.x2 + block._bounds2d.x2;
+		var y = Block.HEIGHT * (row - this.startRow()) - this._bounds2d.y2 + block._bounds2d.y2;
 
 		var fixtureDef = {
 			density: 1.0,
@@ -884,8 +881,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 					// The fixtures are slightly smaller than the actual block grid so that you can fit into a whole which is exactly the same width (in terms of blocks) as your ship
 					x: x + .1,
 					y: y + .1,
-					width: width / 2 - .2,
-					height: height / 2 - .2
+					width: Block.WIDTH / 2 - .2,
+					height: Block.HEIGHT / 2 - .2
 				}
 			}
 		};
