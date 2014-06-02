@@ -69,8 +69,8 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 	mountOverlayGrid: function() {
 		var maxRowLength = this._overlayGrid.get2DMaxRowLength();
 
-		this.height(Block.prototype.HEIGHT * this._overlayGrid.length);
-		this.width(Block.prototype.WIDTH * maxRowLength);
+		this.height(Block.HEIGHT * this._overlayGrid.length);
+		this.width(Block.WIDTH * maxRowLength);
 		this._renderContainer.height(this.height());
 		this._renderContainer.width(this.width());
 
@@ -82,8 +82,8 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 					continue;
 				}
 
-				var x = Block.prototype.WIDTH * col - this._bounds2d.x2 + block._bounds2d.x2;
-				var y = Block.prototype.HEIGHT * row - this._bounds2d.y2 + block._bounds2d.y2;
+				var x = Block.WIDTH * col - this._bounds2d.x2 + block._bounds2d.x2;
+				var y = Block.HEIGHT * row - this._bounds2d.y2 + block._bounds2d.y2;
 
 				block.translateTo(x, y, 0)
 					.mount(this._renderContainer);
@@ -145,8 +145,8 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		var gridX = unrotatedX - topLeftCornerX;
 		var gridY = unrotatedY - topLeftCornerY;
 
-		var row = Math.floor(gridY / Block.prototype.HEIGHT);
-		var col = Math.floor(gridX / Block.prototype.WIDTH);
+		var row = Math.floor(gridY / Block.HEIGHT);
+		var col = Math.floor(gridX / Block.WIDTH);
 
 		var block = this._overlayGrid[row][col];
 

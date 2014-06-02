@@ -229,7 +229,13 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// Add fixtures to update the server's physics model.
 		this._addFixture(row, col, block, this._box2dBody);
 
-		console.log(this.toString());
+		console.log("Height: " + this.height());
+		console.log("Width: " + this.width());
+
+		if (!ige.isServer) {
+			console.log("Render Container Height: " + this._renderContainer.height());
+			console.log("Render Container Width: " + this._renderContainer.width());
+		}
 
 		return true;
 	},
@@ -838,8 +844,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 			return;
 		}
 
-		var x = Block.prototype.WIDTH * col - this._bounds2d.x2 + block._bounds2d.x2;
-		var y = Block.prototype.HEIGHT * row - this._bounds2d.y2 + block._bounds2d.y2;
+		var x = Block.WIDTH * col - this._bounds2d.x2 + block._bounds2d.x2;
+		var y = Block.HEIGHT * row - this._bounds2d.y2 + block._bounds2d.y2;
 
 		block.translateTo(x, y, 0)
 			.mount(this._renderContainer);
@@ -863,8 +869,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 			return;
 		}
 
-		var width = Block.prototype.WIDTH;
-		var height = Block.prototype.HEIGHT;
+		var width = Block.WIDTH;
+		var height = Block.HEIGHT;
 
 		var x = width * col - this._bounds2d.x2 + block._bounds2d.x2;
 		var y = height * row - this._bounds2d.y2 + block._bounds2d.y2;
@@ -1011,8 +1017,12 @@ var BlockGrid = IgeEntityBox2d.extend({
 		if (ige.isServer) {
 			return;
 		}
+
+		console.log("Num rows: " + this.numRows());
+		console.log("Num cols: " + this.numCols());
+
 		// Modify the height and width of the entities to match the new size of the BlockGrid.
-		this.height(this.numRows() * Block.WIDTH);
+		this.height(this.numRows() * Block.HEIGHT);
 		this.width(this.numCols() * Block.WIDTH);
 		this._renderContainer.height(this.height());
 		this._renderContainer.width(this.width());
@@ -1077,8 +1087,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 		var gridX = unrotatedX - topLeftCornerX;
 		var gridY = unrotatedY - topLeftCornerY;
 
-		var row = Math.floor(gridY / Block.prototype.HEIGHT);
-		var col = Math.floor(gridX / Block.prototype.WIDTH);
+		var row = Math.floor(gridY / Block.HEIGHT);
+		var col = Math.floor(gridX / Block.WIDTH);
 
 		var block = this._grid[row][col];
 
@@ -1117,9 +1127,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 		var block = ige.$(blockGridId).grid()[row][col];
 		// Calculate where to put our effect mount
 		// with respect to the BlockGrid
-		var x = Block.prototype.WIDTH * col -
+		var x = Block.WIDTH * col -
 						this._bounds2d.x2 + block._bounds2d.x2;
-		var y = Block.prototype.HEIGHT * row -
+		var y = Block.HEIGHT * row -
 						this._bounds2d.y2 + block._bounds2d.y2;
 
 		// Store the effectsMount in the block so we can remove it later
@@ -1252,8 +1262,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this._grid = BlockGridPadding.padGrid(grid, this._padding);
 		var maxRowLength = this._grid.get2DMaxRowLength();
 
-		this.height(Block.prototype.HEIGHT * this._grid.length);
-		this.width(Block.prototype.WIDTH * maxRowLength);
+		this.height(Block.HEIGHT * this._grid.length);
+		this.width(Block.WIDTH * maxRowLength);
 
 
 
@@ -1278,8 +1288,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	mountGrid: function() {
 		var maxRowLength = this._grid.get2DMaxRowLength();
 
-		this.height(Block.prototype.HEIGHT * this._grid.length)
-			.width(Block.prototype.WIDTH * maxRowLength);
+		this.height(Block.HEIGHT * this._grid.length)
+			.width(Block.WIDTH * maxRowLength);
 		this._renderContainer.height(this.height())
 			.width(this.width());
 
@@ -1291,8 +1301,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 					continue;
 				}
 
-				var x = Block.prototype.WIDTH * col - this._bounds2d.x2 + block._bounds2d.x2;
-				var y = Block.prototype.HEIGHT * row - this._bounds2d.y2 + block._bounds2d.y2;
+				var x = Block.WIDTH * col - this._bounds2d.x2 + block._bounds2d.x2;
+				var y = Block.HEIGHT * row - this._bounds2d.y2 + block._bounds2d.y2;
 
 				block.translateTo(x, y, 0)
 					.mount(this._renderContainer);

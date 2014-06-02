@@ -9,9 +9,6 @@
 var Block = IgeEntity.extend({
 	classId: 'Block',
 
-	WIDTH: 26,
-	HEIGHT: 26,
-
 	// The pixel margin between the drawn health bar and the border of the block
 	HEALTH_BAR_MARGIN: 3,
 	// The pixel height of the health bar
@@ -213,5 +210,18 @@ var Block = IgeEntity.extend({
 		}
 	}
 });
+
+/**
+ * Constant for the width of a {@link Block} as drawn in the world.
+ * @constant {number}
+ * @memberof Block
+ */
+Block.WIDTH = 26;
+/**
+ * Constant for the height of a {@link Block} as drawn in the world.
+ * @constant {number}
+ * @memberof Block
+ */
+Block.HEIGHT = 26;
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Block; }
