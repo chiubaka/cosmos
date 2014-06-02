@@ -1150,10 +1150,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// TODO: This might be dangerous, since some of the event properties should be changed so that they are
 		// relative to the child's bounding box, but since we don't use any of those properties for the moment,
 		// ignore that.
-		if (this._grid.get2D(row+1, col) == undefined ||
-			this._grid.get2D(row-1, col) == undefined ||
-			this._grid.get2D(row, col+1) == undefined ||
-			this._grid.get2D(row, col-1) == undefined) {
+		if (this.get(row + 1, col) == undefined ||
+			this.get(row - 1, col) == undefined ||
+			this.get(row, col + 1) == undefined ||
+			this.get(row, col - 1) == undefined) {
 			block.mouseDown(event, control);
 		}
 	},
@@ -1170,7 +1170,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	// Created on server, streamed to all clients
 	addMiningParticles: function(blockGridId, row, col) {
-		var block = ige.$(blockGridId).grid()[row][col];
+		var block = ige.$(blockGridId).get(row, col);
 		// Calculate where to put our effect mount
 		// with respect to the BlockGrid
 		var x = Block.WIDTH * col -
@@ -1209,7 +1209,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 			// TODO: Vary mining speed based on block material
 			case 'mine':
-				var block = self._grid.get2D(data.row, data.col);
+				var block = self.get(data.row, data.col);
 				if (block === undefined) {
 					return false;
 				}
@@ -1272,10 +1272,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 			case 'remove':
 				this.remove(data.row, data.col);
 				this._renderContainer.refresh();
-				this._constructionZoneOverlay.refresh();
+				//this._constructionZoneOverlay.refresh();
 				break;
 			case 'damage':
-				var block = this._grid.get2D(data.row, data.col);
+				var block = this.get(data.row, data.col);
 				block.damage(data.amount);
 				break;
 			case 'add':
