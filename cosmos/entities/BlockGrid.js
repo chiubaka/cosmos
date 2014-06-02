@@ -1331,33 +1331,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return this;
 	},*/
 
-	mountGrid: function() {
-		var maxRowLength = this._grid.get2DMaxRowLength();
-
-		this.height(Block.HEIGHT * this._grid.length)
-			.width(Block.WIDTH * maxRowLength);
-		this._renderContainer.height(this.height())
-			.width(this.width());
-
-		for (var row = 0; row < this._grid.length; row++) {
-			for (var col = 0; col < this._grid[row].length; col++) {
-				var block = this._grid[row][col];
-
-				if (block === undefined) {
-					continue;
-				}
-
-				var x = Block.WIDTH * col - this._bounds2d.x2 + block._bounds2d.x2;
-				var y = Block.HEIGHT * row - this._bounds2d.y2 + block._bounds2d.y2;
-
-				block.translateTo(x, y, 0)
-					.mount(this._renderContainer);
-			}
-		}
-
-		this._renderContainer.refresh();
-	},
-
 	/**
 	 * Call this before calling setGrid to create a bunch of entities which will help to visualize the box2D fixtures
 	 * @param flag true iff you want to debug the fixtures

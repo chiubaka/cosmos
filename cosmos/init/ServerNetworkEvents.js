@@ -99,7 +99,7 @@ var ServerNetworkEvents = {
 		var player = new Player()
 			// Call BlockGrid#debugFixtures before calling BlockGrid#fromBlockMatrix, since debugging entities are
 			// added when fixtures are added.
-			.debugFixtures(true);
+			.debugFixtures(false);
 
 		if (ship === undefined) {
 			player.fromBlockMatrix(ExampleShips.starterShip(), false);
