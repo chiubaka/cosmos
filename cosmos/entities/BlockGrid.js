@@ -213,7 +213,32 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// Store the row and col in the block so that we can figure out where we are from the block.
 		block.row(row).col(col);
 
-		// Add this block to the list of all blocks in the BlockGrid.
+		// Recompute the starting row and column of this BlockGrid based on the newly added block.
+		// It is important that this call occur before the call to BlockGrid#_updateDimensions, because
+		// BlockGrid#_updateDimensions relies upon BlockGrid#numRows and BlockGrid#numCols, whose values are not
+		// updated until after BlockGrid#_addToGridRange is called.
+		this._addToGridRange(row, col, block);
+
+		// Updates the height and width of the BlockGrid#_renderContainer and the BlockGrid itself.
+		// BlockGrid#_updateDimensions relies on BlockGrid#numRows and BlockGrid#numCols, which are updated by
+		// BlockGrid#_addToGridRange, so it is imperative that this call happen after BlockGrid#_addToGridRange when
+		// adding new blocks.
+		this._updateDimensions();
+
+		// Mount the block for rendering purposes. Also translates the new block to where it should be.
+		this._mountBlock(block);
+
+		if (!ige.isServer) {
+			// Forces the BlockGrid#_renderContainer to redraw itself. It is important that this call be made after
+			// BlockGrid#_mountBlock and BlockGrid#_updateDimensions so that the rendering data is actually changed before
+			// we ask the BlockGrid#_renderContainer to redraw itself.
+			this._renderContainer.refresh();
+		}
+
+		// Add this block to the list of all blocks in the BlockGrid. It is important that this occur after
+		// BlockGrid#_updateDimensions because BlockGrid#_updateDimensions uses BlockGrid#_blocksList to determine
+		// which blocks to translate. We don't want BlockGrid#_updateDimensions to see the new block, because this
+		// messes with its calculation of how much to translate the BlockGrid#_renderContainer by.
 		this._blocksList.push(block);
 
 		// Now that we know it is OK to add the block, we should set the reference at each grid location to be a
@@ -223,20 +248,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// Keep track of this block in the dictionary of lists that keeps a separate list of blocks by classId
 		this._addToBlocksByType(block);
 
-		// Recompute the starting row and column of this BlockGrid based on the newly added block
-		this._addToGridRange(row, col, block);
-
 		// Check if we need to change the category of this object so that it is not considered for being attracted
 		// into the player's ship.
 		this._checkSmallAsteroidCategory();
 
 		this._numBlocks++;
-
-		// Updates the height and width and refreshes the _renderContainer so it is redrawn.
-		this._updateDimensions();
-
-		// Mount the block for rendering purposes.
-		this._mountBlock(row, col, block);
 
 		// Add fixtures to update the server's physics model.
 		this._addFixture(row, col, block, this._box2dBody);
@@ -833,14 +849,12 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	/**
 	 * Handles actually mounting the block to the render container
-	 * @param row {number} The row for the top left corner of the block
-	 * @param col {number} The col for the top left corner of the block
 	 * @param block {Block} The block to mount.
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
 	 */
-	_mountBlock: function(row, col, block) {
+	_mountBlock: function(block) {
 		// Rendering of the blocks only occurs on the client.
 		if (ige.isServer) {
 			return;
@@ -848,8 +862,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		block.mount(this._renderContainer);
 		this._translateBlock(block);
-
-		this._renderContainer.refresh();
 	},
 
 	/**
@@ -1027,7 +1039,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this._renderContainer.width(this.width());
 
 		// Translate all existing blocks so that they are in the correct positions relative to the new center.
-		var translationData;
+		var translationData = {x: 0, y: 0};
 		var iterator = this.iterator();
 		console.log("Iterating over all of the blocks.");
 		while (iterator.hasNext()) {
@@ -1041,7 +1053,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 
 		// TODO: Translate the _renderContainer so that each block appears to be in the same position as it was before.
-		//this._renderContainer.translateBy(-translationData.x, -translationData.y, 0);
+		this._renderContainer.translateBy(-translationData.x, -translationData.y, 0);
 	},
 
 	/**
@@ -1057,8 +1069,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	_translateBlock: function(block) {
 		var oldX = block.translate().x();
 		var oldY = block.translate().y();
-		var x = Block.WIDTH * block.col() - this._bounds2d.x2 + block._bounds2d.x2;
-		var y = Block.HEIGHT * block.row() - this._bounds2d.y2 + block._bounds2d.y2;
+		var x = Block.WIDTH * (block.col() - this.startCol()) - this._bounds2d.x2 + block._bounds2d.x2;
+		var y = Block.HEIGHT * (block.row() - this.startRow()) - this._bounds2d.y2 + block._bounds2d.y2;
 
 		block.translateTo(x, y, 0)
 
