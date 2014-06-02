@@ -97,7 +97,7 @@ var ServerNetworkEvents = {
 		var player = new Player();
 
 		if (ship === undefined) {
-			player.fromBlockMatrix(ExampleShips.starterShipSingleMisplacedEngine(), false);
+			player.fromBlockMatrix(ExampleShips.starterShipDoubleEngines(), false);
 		}
 		else {
 			player.fromBlockTypeMatrix(ship, false);
