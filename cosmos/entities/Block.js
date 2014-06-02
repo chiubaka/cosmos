@@ -56,7 +56,7 @@ var Block = IgeEntity.extend({
 		IgeEntity.prototype.init.call(this);
 
 		// Use an even number so values don't have to become approximate when we divide by two
-		this.width(this.WIDTH).height(this.HEIGHT);
+		this.width(Block.WIDTH).height(Block.HEIGHT);
 
 		if (data && data.MAX_HP) {
 			this.MAX_HP = data.MAX_HP;

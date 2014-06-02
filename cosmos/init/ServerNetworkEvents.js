@@ -97,7 +97,7 @@ var ServerNetworkEvents = {
 		var player = new Player();
 
 		if (ship === undefined) {
-			player.fromBlockMatrix(ExampleShips.justAnEngine(), false);
+			player.fromBlockMatrix(ExampleShips.starterShip(), false);
 		}
 		else {
 			player.fromBlockTypeMatrix(ship, false);

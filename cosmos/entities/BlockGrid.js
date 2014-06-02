@@ -50,6 +50,15 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 */
 	_blocksByType: {},
 	/**
+	 * Stores all of the blocks in this grid. Useful in cases where we need to iterate over all of the blocks in this
+	 * grid.
+	 * @type {Array}
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
+	_blocksList: [],
+	/**
 	 * The leftmost row index of the structure contained within this {@link BlockGrid}. Necessary because indices
 	 * within the BlockGrid can become arbitrarily defined as the {@link BlockGrid} expands.
 	 * This property is edited internally by {@link BlockGrid}, but should only ever read by outsiders, never modified.
@@ -114,7 +123,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		else {
 			this._renderContainer = new RenderContainer()
 				.mount(this);
-			this.fromBlockTypeMatrix(data);
+			this.fromBlockTypeMatrix(data, false);
 
 			// TODO: Lazily create when needed to speed up load time.
 			// TODO: Examine ConstructionZoneOverlay to make sure it is compatible with new BlockGrid backing.
@@ -201,12 +210,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 			return false;
 		}
 
-		// Check if we need to change the category of this object so that it is not considered for being attracted
-		// into the player's ship.
-		this._checkSmallAsteroidCategory();
-
 		// Store the row and col in the block so that we can figure out where we are from the block.
 		block.row(row).col(col);
+
+		// Add this block to the list of all blocks in the BlockGrid.
+		this._blocksList.push(block);
 
 		// Now that we know it is OK to add the block, we should set the reference at each grid location to be a
 		// reference to the provided block.
@@ -217,6 +225,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		// Recompute the starting row and column of this BlockGrid based on the newly added block
 		this._addToGridRange(row, col, block);
+
+		// Check if we need to change the category of this object so that it is not considered for being attracted
+		// into the player's ship.
+		this._checkSmallAsteroidCategory();
 
 		this._numBlocks++;
 
@@ -237,6 +249,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 			console.log("Render Container Width: " + this._renderContainer.width());
 		}
 
+		console.log("Num Blocks: " + this._numBlocks);
+
 		return true;
 	},
 
@@ -253,6 +267,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 
 		var block = this.get(row, col);
+
+		// Remove this block from the list of all blocks in this BlockGrid.
+		this._blocksList.splice(this._blocksList.indexOf(block), 1);
 		this._unsetBlock(block);
 		this._removeFromBlocksByType(block);
 
@@ -482,22 +499,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @instance
 	 */
 	_getBlockList: function() {
-		var blockList = [];
-		for (var row in this._grid) {
-			if (this._grid.hasOwnProperty(row)) {
-				continue;
-			}
-
-			for (var col in this._grid[row]) {
-				if (this._grid[row].hasOwnProperty(col)) {
-					continue;
-				}
-
-				blockList.push(this.get(row, col));
-			}
-		}
-
-		return blockList;
+		return this._blocksList;
 	},
 
 	/**
@@ -844,11 +846,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 			return;
 		}
 
-		var x = Block.WIDTH * col - this._bounds2d.x2 + block._bounds2d.x2;
-		var y = Block.HEIGHT * row - this._bounds2d.y2 + block._bounds2d.y2;
-
-		block.translateTo(x, y, 0)
-			.mount(this._renderContainer);
+		block.mount(this._renderContainer);
+		this._translateBlock(block);
 
 		this._renderContainer.refresh();
 	},
@@ -1027,8 +1026,43 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this._renderContainer.height(this.height());
 		this._renderContainer.width(this.width());
 
-		// Refresh the _renderContainer to invalidate its cache and redraw it now that we have changed the dimensions.
-		this._renderContainer.refresh();
+		// Translate all existing blocks so that they are in the correct positions relative to the new center.
+		var translationData;
+		var iterator = this.iterator();
+		console.log("Iterating over all of the blocks.");
+		while (iterator.hasNext()) {
+			var block = iterator.next();
+			console.log(block.classId());
+			translationData = this._translateBlock(block);
+		}
+
+		console.log("x translation: " + translationData.x);
+		console.log("y translation: " + translationData.y);
+
+
+		// TODO: Translate the _renderContainer so that each block appears to be in the same position as it was before.
+		//this._renderContainer.translateBy(-translationData.x, -translationData.y, 0);
+	},
+
+	/**
+	 * Given a block, translates the block to where it should be in this {@link BlockGrid}'s
+	 * {@link BlockGrid#_renderContainer|_renderContainer}.
+	 * @param block {Block} The {@link Block} to translate. Contains row and column information inside of it as
+	 * properties
+	 * @returns {{x: number, y: number}}
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
+	_translateBlock: function(block) {
+		var oldX = block.translate().x();
+		var oldY = block.translate().y();
+		var x = Block.WIDTH * block.col() - this._bounds2d.x2 + block._bounds2d.x2;
+		var y = Block.HEIGHT * block.row() - this._bounds2d.y2 + block._bounds2d.y2;
+
+		block.translateTo(x, y, 0)
+
+		return {x: x - oldX, y: y - oldY};
 	},
 
 	/*
