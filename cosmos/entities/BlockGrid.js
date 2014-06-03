@@ -1030,7 +1030,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 				type: 'rectangle',
 				data: {
 					// The position of the fixture relative to the body
-					// The fixtures are slightly smaller than the actual block grid so that you can fit into a whole which is exactly the same width (in terms of blocks) as your ship
+					// The fixtures are slightly smaller than the actual block grid so that you can fit into a hole
+					// which is exactly the same width (in terms of blocks) as your ship
 					x: x + BlockGrid.BLOCK_FIXTURE_PADDING,
 					y: y + BlockGrid.BLOCK_FIXTURE_PADDING,
 					width: (block.numCols() * Block.WIDTH) / 2 - (2 * BlockGrid.BLOCK_FIXTURE_PADDING),
@@ -1450,44 +1451,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
 		}
 	},
-
-	/**
-	 * Getter/setter for the grid property of the BlockGrid. If a parameter is passed, sets
-	 * the property and returns this. If not, returns the property.
-	 * @parameter grid the grid to set (optional)
-	 * @return this if we set the grid or the current grid otherwise
-	 */
-	/*grid: function(grid) {
-		if (grid === undefined) {
-			return this._grid;
-		}
-
-		// TODO: Get rid of padding and use expanding BlockGrids
-		this._grid = BlockGridPadding.padGrid(grid, this._padding);
-		var maxRowLength = this._grid.get2DMaxRowLength();
-
-		this.height(Block.HEIGHT * this._grid.length);
-		this.width(Block.WIDTH * maxRowLength);
-
-
-
-		for(var row = 0; row < this._grid.length; row++)
-		{
-			var blockList = this._grid[row];
-			for(var col = 0; col < blockList.length; col++)
-			{
-				var block = blockList[col];
-
-				if (block === undefined) {
-					continue;
-				}
-
-				this._addFixture(this._box2dBody, block, row, col);
-			}
-		}
-
-		return this;
-	},*/
 
 	/**
 	 * Call this before calling setGrid to create a bunch of entities which will help to visualize the box2D fixtures

@@ -92,7 +92,6 @@ var igeClientConfig = {
 		'./utils/RandomInterval.js',
 		'./utils/MetricsHandler.js',
 		'./utils/PrototypeMixins.js',
-		'./utils/BlockGridPadding.js',
 
 		/* === GAME SETUP === */
 		/* Configuration */

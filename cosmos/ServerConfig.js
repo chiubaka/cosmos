@@ -66,7 +66,6 @@ var config = {
 		/* Helper Utilities */
 		{ name: 'PrototypeMixins', path: './utils/PrototypeMixins' },
 		{ name: 'RandomInterval', path: './utils/RandomInterval' },
-		{ name: 'BlockGridPadding', path: './utils/BlockGridPadding' },
 
 		/* === EXTERNAL LIBRARIES === */
 		{ name: 'WeightedSelection', path: './lib/weighted' },
