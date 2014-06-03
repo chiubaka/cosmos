@@ -1169,11 +1169,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 			}
 		}
 
-		// Translate this entity so that each block appears to be in the same position as it was before.
-		// This needs to be the BlockGrid itself, not the _renderContainer, because translating the _renderContainer
-		// will just move the _renderContainer within the BlockGrid, which will create strange calculation issues.
-		this.translateBy(-translationData.x, -translationData.y, 0);
-
 		return true;
 	},
 
