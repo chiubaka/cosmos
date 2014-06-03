@@ -666,7 +666,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 */
 	_checkSmallAsteroidCategory: function() {
 		// Make sure we don't attract formerly small asteroids
-		if (this.category() === 'smallAsteroid') {
+		if (this.category() === 'smallAsteroid' && this._numBlocks > 1) {
 			// Don't use getter/setter because undefined gets value
 			this._category = undefined;
 		}

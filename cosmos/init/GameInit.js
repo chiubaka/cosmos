@@ -206,6 +206,7 @@ var GameInit = {
 				// If player ship is near small asteroids, attract them
 				if (contact.igeEitherCategory('player') &&
 					contact.igeEitherCategory('smallAsteroid')) {
+					console.log("Attraction!");
 					var asteroid = contact.igeEntityByCategory('smallAsteroid');
 					var player = contact.igeEntityByCategory('player');
 

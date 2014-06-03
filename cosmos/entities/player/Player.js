@@ -15,8 +15,6 @@ var Player = BlockGrid.extend({
 		this.category('player');
 		this._attractionStrength = 1;
 
-		this.drawBounds(false);
-
 		this.controls = {
 			key: {
 				left: false,
