@@ -439,8 +439,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 */
 	fromBlockTypeMatrix: function(blockTypeMatrix, checkForNeighbors) {
 		// Remove all existing blocks from this grid and start fresh!
-		// TODO: Uncomment this.
-		//this._removeAll();
+		this._removeAll();
 
 
 		for (var row = 0; row < blockTypeMatrix.length; row++) {
@@ -497,6 +496,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @instance
 	 */
 	fromBlockMatrix: function(blockMatrix, checkForNeighbors) {
+		// Remove all existing blocks from this grid and start fresh!
 		this._removeAll();
 
 		for (var row = 0; row < blockMatrix.length; row++) {
