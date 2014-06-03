@@ -4,7 +4,7 @@ var image = {
 		ctx.globalCompositeOperation = "source-over";
 
 		// Width of the outline
-		ctx.lineWidth = entity.textureOutlineWidth || 4;
+		ctx.lineWidth = Block.prototype.WIDTH / 6;
 
 		// Draw block background
 		ctx.fillStyle = entity.textureBackground || "rgb(217, 217, 217)";

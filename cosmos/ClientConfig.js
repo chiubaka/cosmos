@@ -23,6 +23,17 @@ var igeClientConfig = {
 		'./entities/blocks/parts/MiningLaserBlock.js',
 		'./entities/blocks/parts/ThrusterBlock.js',
 
+		/* Ship armor blocks */
+		'./entities/blocks/Armor.js',
+		'./entities/blocks/armor/CloakBlock.js',
+		'./entities/blocks/armor/KryptoniteBlock.js',
+		'./entities/blocks/armor/MithrilBlock.js',
+		'./entities/blocks/armor/AdamantiumBlock.js',
+		'./entities/blocks/armor/DragonBlock.js',
+		'./entities/blocks/armor/TitaniumBlock.js',
+		'./entities/blocks/armor/VioletBlock.js',
+		'./entities/blocks/armor/OrangeBlock.js',
+
 		/* Element blocks */
 		'./entities/blocks/Element.js',
 		'./entities/blocks/elements/IronBlock.js',

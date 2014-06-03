@@ -22,6 +22,16 @@ var config = {
 		{ name: 'ControlBlock', path: './entities/blocks/parts/ControlBlock' },
 		{ name: 'MiningLaserBlock', path: './entities/blocks/parts/MiningLaserBlock' },
 		{ name: 'ThrusterBlock', path: './entities/blocks/parts/ThrusterBlock' },
+		/* Ship armor blocks */
+		{ name: 'Armor', path: './entities/blocks/Armor' },
+		{ name: 'CloakBlock', path: './entities/blocks/armor/CloakBlock' },
+		{ name: 'KryptoniteBlock', path: './entities/blocks/armor/KryptoniteBlock' },
+		{ name: 'MithrilBlock', path: './entities/blocks/armor/MithrilBlock' },
+		{ name: 'AdamantiumBlock', path: './entities/blocks/armor/AdamantiumBlock' },
+		{ name: 'DragonBlock', path: './entities/blocks/armor/DragonBlock' },
+		{ name: 'TitaniumBlock', path: './entities/blocks/armor/TitaniumBlock' },
+		{ name: 'VioletBlock', path: './entities/blocks/armor/VioletBlock' },
+		{ name: 'OrangeBlock', path: './entities/blocks/armor/OrangeBlock' },
 
 		/* Element blocks */
 		{ name: 'Element', path: './entities/blocks/Element' },
