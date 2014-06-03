@@ -1049,8 +1049,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 			translationData = this._translateBlock(block);
 		}
 
-		// Translate the _renderContainer so that each block appears to be in the same position as it was before.
-		this._renderContainer.translateBy(-translationData.x, -translationData.y, 0);
+		// Translate this entity so that each block appears to be in the same position as it was before.
+		// This needs to be the BlockGrid itself, not the _renderContainer, because translating the _renderContainer
+		// will just move the _renderContainer within the BlockGrid, which will create strange calculation issues.
+		this.translateBy(-translationData.x, -translationData.y, 0);
 	},
 
 	/**
@@ -1088,21 +1090,35 @@ var BlockGrid = IgeEntityBox2d.extend({
 		var worldX = mousePosWorld.x;
 		var worldY = mousePosWorld.y;
 
+		console.log("World coordinates: ");
+		console.log("worldX: " + worldX);
+		console.log("worldY: " + worldY);
+
 		// The coordinates of the center of the axis-aligned bounding box of the render container in
 		// world coordinates
 		var aabb = this.aabb();
 		var aabbX = aabb.x + aabb.width / 2;
 		var aabbY = aabb.y + aabb.height / 2;
 
+		console.log("AABB coordinates:");
+		console.log("aabbX: " + aabbX);
+		console.log("aabbY: " + aabbY);
+
 		// Translate the mouse position to a reference system where the center of the axis-aligned
 		// bounding box is the center
 		var aabbRelativeX = worldX - aabbX;
 		var aabbRelativeY = worldY - aabbY;
 
+		console.log("AABB relative coordinates: ");
+		console.log("aabbRelativeX: " + aabbRelativeX);
+		console.log("aabbRelativeY: " + aabbRelativeY);
+
 		// This is the BlockGrid's rotation, not the render container's, since the render container does
 		// not rotate with respect to its parent.
 		// Negative because we want to reverse the rotation.
 		var theta = -this._rotate.z;
+
+		console.log("theta: " + theta);
 
 		// The unrotated coordinates for comparison against an unrotated grid with respect to the center of the
 		// entity
@@ -1349,6 +1365,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			// Attract the block grid to another body. For example, small asteroids
 			// are attracted to player ships.
 			if (this.attractedTo !== undefined) {
+				console.log("Attraction detected.");
 				var attractedToBody = this.attractedTo._box2dBody;
 				var thisBody = this._box2dBody;
 				var impulse = new ige.box2d.b2Vec2(0, 0);

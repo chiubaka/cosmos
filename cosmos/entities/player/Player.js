@@ -172,7 +172,8 @@ var Player = BlockGrid.extend({
 					y: 0
 				}
 			}
-		}
+		};
+
 		var tempFixture = ige.box2d.createFixture(fixtureDef);
 		var tempShape = new ige.box2d.b2CircleShape();
 
@@ -183,6 +184,8 @@ var Player = BlockGrid.extend({
 		tempFixture.shape = tempShape;
 
 		this._box2dBody.CreateFixture(tempFixture);
+
+		console.log("Sensor added!");
 
 		return this;
 	},
