@@ -88,6 +88,7 @@ var igeClientConfig = {
 		'./debug/FixtureDebuggingEntity.js',
 
 		/* Helper utilities */
+		'./utils/BlockGridPadding.js',
 		'./utils/DeploymentUtils.js',
 		'./utils/RandomInterval.js',
 		'./utils/MetricsHandler.js',

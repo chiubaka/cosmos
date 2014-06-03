@@ -64,6 +64,7 @@ var config = {
 		{ name: 'FixtureDebuggingEntity', path: './debug/FixtureDebuggingEntity' },
 
 		/* Helper Utilities */
+		{ name: 'BlockGridPadding', path: './utils/BlockGridPadding' },
 		{ name: 'PrototypeMixins', path: './utils/PrototypeMixins' },
 		{ name: 'RandomInterval', path: './utils/RandomInterval' },
 

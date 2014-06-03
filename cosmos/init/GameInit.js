@@ -180,7 +180,9 @@ var GameInit = {
 			this.moveRandomly(asteroid);
 		}
 
-		var NUM_DERELICT_SPACESHIPS = 10;
+		// TODO: The procedural generation algorithm is causing strange problems with the new BlockGrid system. Leave
+		// this stuff commented out until it is figured out.
+		/*var NUM_DERELICT_SPACESHIPS = 10;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_DERELICT_SPACESHIPS; asteroidNumber++) {
 			var asteroid = new BlockGrid()
 				.id('spaceShip' + asteroidNumber)
@@ -188,9 +190,9 @@ var GameInit = {
 				.mount(server.spaceGameScene)
 				.padding(10)
 				//note that the signature of gen.. is genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution)
-				.fromBlockMatrix(BlockGridGenerator.genProceduralAsteroid(20, 20, BlockGridGenerator.blockDistributions.SHIP_PARTS, true), false);
+				.fromBlockMatrix(BlockGridPadding.extractMinimumGrid(BlockGridGenerator.genProceduralAsteroid(20, 20, BlockGridGenerator.blockDistributions.SHIP_PARTS, true)), false);
 			this.moveRandomly(asteroid);
-		}
+		}*/
 	},
 
 	/**
