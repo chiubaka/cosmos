@@ -134,6 +134,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this._blocksByType = {};
 		this._blocksList = [];
 
+		this._startCol = 0;
+		this._startRow = 0;
+		this._endCol = 0;
+		this._endRow = 0;
+
 		if (ige.isServer) {
 			this.box2dBody({
 				type: 'dynamic',
@@ -154,8 +159,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 			// TODO: Examine ConstructionZoneOverlay to make sure it is compatible with new BlockGrid backing.
 			// TODO: Uncomment this. Commented out so I can test the new BlockGrid class without getting errors from
 			// the ConstructionZoneOverlay class.
-			//this._constructionZoneOverlay = new ConstructionZoneOverlay(this._grid)
-			//	.mount(this);
+			this._constructionZoneOverlay = new ConstructionZoneOverlay(this)
+				.mount(this);
 
 			this.mouseDown(this.mouseDownHandler);
 		}
@@ -508,8 +513,60 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return this;
 	},
 
+	/**
+	 * Overrides the Object#toString method.
+	 * @returns {Array} An array, which can be written out as a string. The array contains the class ID's for the
+	 * {@link Block} in this {@link BlockGrid}.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
 	toString: function() {
 		return this.toBlockTypeMatrix();
+	},
+
+	/**
+	 * Creates a list of all locations around this {@link BlockGrid} where a new {@link Block} could be placed.
+	 * @returns {Array} A list of all locations around this {@link BlockGrid} where a new {@link Block} can be placed.
+	 * Location objects are in the format {row: number, col: number}.
+	 * @memberof BlockGrid
+	 * @instance
+	 * @todo Modify this to support taking a block size and returning only the locations that can support a block of
+	 * that size
+	 */
+	constructionZoneLocations: function() {
+		var constructionZoneLocations = [];
+		var iterator = this.iterator();
+		while (iterator.hasNext()) {
+			var block = iterator.next();
+			// Fancy way of concatenating two arrays. Referenced from here:
+			// http://stackoverflow.com/questions/4156101/javascript-push-array-values-into-another-array
+			constructionZoneLocations.push.apply(constructionZoneLocations, this._emptyNeighboringLocations(block));
+		}
+		return constructionZoneLocations;
+	},
+
+	/**
+	 * Given a {@link Block}, returns the neighboring locations to the {@link Block} that do not have other blocks.
+	 * @param block {Block} The {@link Block} to get the emptying neighboring locations for.
+	 * @returns {Array} A list of location objects, which are of the format {row: number, col: number}. Each location
+	 * represents a location neighboring the given {@link Block} that did not have a neighbor.
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
+	_emptyNeighboringLocations: function(block) {
+		var emptyNeighboringLocations = [];
+		var neighboringLocations = this._neighboringLocations(block.row(), block.col(), block);
+
+		for (var i = 0; i < neighboringLocations.length; i++) {
+			var location = neighboringLocations[i];
+
+			if (!this._isOccupied(location.row, location.col)) {
+				emptyNeighboringLocations.push(location);
+			}
+		}
+
+		return emptyNeighboringLocations;
 	},
 
 	/**
@@ -627,6 +684,29 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @instance
 	 */
 	_hasNeighbors: function(row, col, block) {
+		var neighboringLocations = this._neighboringLocations(row, col, block);
+
+		for (var i = 0; i < neighboringLocations.length; i++) {
+			var location = neighboringLocations[i];
+			if (this._isOccupied(location.row, location.col)) {
+				return true;
+			}
+		}
+	},
+
+	/**
+	 * Creates a list of the locations that neighbor this {@link Block}. Utility function that makes it easy for other
+	 * functions that need to check locations that neighbor a {@link Block} to iterate over neighbors of a
+	 * {@link Block}.
+	 * @param row {number} The top left row of the {@link Block}.
+	 * @param col {number} The top left col of the {@link Block}.
+	 * @param block {Block} The {@link Block} to find neighboring locations for.
+	 * @returns {Array} A list of the locations that neighbor the given {@link Block}. Location objects are in the
+	 * format {row: number, col: number}.
+	 * @private
+	 */
+	_neighboringLocations: function(row, col, block) {
+		var neighboringLocations = [];
 		var blockNumRows = block.numRows();
 		var blockNumCols = block.numCols();
 
@@ -636,9 +716,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 		var bottomRow = row + blockNumRows;
 
 		for (var x = 0; x < blockNumCols; x++) {
-			if (this._isOccupied(topRow, startCol + x) || this._isOccupied(bottomRow, startCol + x)) {
-				return true;
-			}
+			neighboringLocations.push({row: topRow, col: startCol + x});
+			neighboringLocations.push({row: bottomRow, col: startCol + x});
 		}
 
 		// Check left and right boundary
@@ -647,12 +726,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 		var rightCol = col + blockNumCols;
 
 		for (var y = 0; y < blockNumRows; y++) {
-			if (this._isOccupied(startRow + y, leftCol) || this._isOccupied(startRow + y, rightCol)) {
-				return true;
-			}
+			neighboringLocations.push({row: startRow + y, col: leftCol});
+			neighboringLocations.push({row: startRow + y, col: rightCol});
 		}
 
-		return false;
+		return neighboringLocations;
 	},
 
 	/**
@@ -1357,7 +1435,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			case 'remove':
 				this.remove(data.row, data.col);
 				this._renderContainer.refresh();
-				//this._constructionZoneOverlay.refresh();
+				this._constructionZoneOverlay.refresh();
 				break;
 			case 'damage':
 				var block = this.get(data.row, data.col);

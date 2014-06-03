@@ -2,12 +2,12 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 	classId: 'ConstructionZoneOverlay',
 
 	_overlayGrid: undefined,
-	_grid: undefined,
+	_blockGrid: undefined,
 	_renderContainer: undefined,
 
-	init: function (grid) {
+	init: function (blockGrid) {
 		IgeEntity.prototype.init.call(this);
-		this._grid = grid;
+		this._blockGrid = blockGrid;
 		this._renderContainer = new RenderContainer()
 			.mount(this)
 			.opacity(0.5);
@@ -35,33 +35,17 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 	},
 
 	createConstructionZones: function() {
-		//First create an array that's two larger in each dimensions than the current grid
-		var gridNumRows = this._grid.length;
-		var gridNumCols = this._grid.get2DMaxRowLength();
-
-		var overlayNumRows = gridNumRows + 2;
-		var overlayNumCols = gridNumCols + 2;
+		var overlayNumRows = this._blockGrid.numRows() + 2;
+		var overlayNumCols = this._blockGrid.numCols() + 2;
 
 		this._overlayGrid = Array.prototype.new2DArray(overlayNumRows, overlayNumCols);
 
-		//Traverse the two dimensional array looking for spaces where the following
-		// conditions hold:
-		// (1) The space is undefined
-		// (2) The space has a 4-neighbor that is defined
-		// This is a image processing operation called morphological dilation
-		for (var row = 0; row < overlayNumRows; row++) {
-			for (var col = 0; col < overlayNumCols; col++) {
-				var gridRow = row - 1;
-				var gridCol = col - 1;
-				if (this._grid.get2D(gridRow, gridCol) === undefined){
-					if (this._grid.get2D(gridRow + 1, gridCol) ||
-							this._grid.get2D(gridRow, gridCol + 1) ||
-							this._grid.get2D(gridRow - 1, gridCol) ||
-							this._grid.get2D(gridRow, gridCol - 1)) {
-						this._overlayGrid[row][col] = new ConstructionZoneBlock();
-					}
-				}
-			}
+		var constructionZoneLocations = this._blockGrid.constructionZoneLocations();
+		for (var i = 0; i < constructionZoneLocations.length; i++) {
+			var location = constructionZoneLocations[i];
+			var row = location.row - this._blockGrid.startRow() + 1;
+			var col = location.col - this._blockGrid.startCol() + 1;
+			this._overlayGrid[row][col] = new ConstructionZoneBlock();
 		}
 	},
 
