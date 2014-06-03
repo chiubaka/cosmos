@@ -40,6 +40,14 @@ var Block = IgeEntity.extend({
 
 	_fixture: undefined,
 	_fixtureDef: undefined,
+	/**
+	 * An entity associated with this {@link Block} which is used to visualize a {@link BlockGrid}'s fixtures. Only
+	 * used if this {@link Block} is in a {@link BlockGrid} that has debugFixtures set to true.
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 */
+	_fixtureDebuggingEntity: undefined,
 
 	MAX_HP: 30,
 	_hp: undefined,
@@ -143,6 +151,20 @@ var Block = IgeEntity.extend({
 		return this._fixtureDef;
 	},
 
+	/**
+	 * Getter/setter for the {@link Block#_fixtureDebuggingEntity|_fixtureDebuggingEntity} property.
+	 * @param fixtureDebuggingEntity {FixtureDebuggingEntity} Optional parameter. If provided, this is the new
+	 * {@link FixtureDebuggingEntity} for this {@link Block}.
+	 * @returns {*} The existing {@link FixtureDebuggingEntity} if no argument is provided, or this object if an
+	 * argument is provided in order to make function call chaining convenient.
+	 */
+	fixtureDebuggingEntity: function(fixtureDebuggingEntity) {
+		if (fixtureDebuggingEntity !== undefined) {
+			this._fixtureDebuggingEntity = fixtureDebuggingEntity;
+			return this;
+		}
+		return this._fixtureDebuggingEntity;
+	},
 
 	/**
 	 * Decreases the block's health by the amount passed.

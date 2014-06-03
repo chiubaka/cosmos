@@ -216,8 +216,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * parameters passed to this function are invalid.
 	 * @memberof BlockGrid
 	 * @instance
-	 * @todo Figure out if modifying the height and width of the {@link BlockGrid#_renderContainer|_renderContainer}
-	 * has unintended side effects on rendering.
 	 */
 	add: function(row, col, block, checkForNeighbors) {
 		// Guard against invalid parameters
@@ -880,49 +878,70 @@ var BlockGrid = IgeEntityBox2d.extend({
 			return;
 		}
 
-		var row = block.row();
-		var col = block.col();
+		// TODO: Don't bother to do this if the number of rows and number of columns hasn't changed.
+		var iterator = this.iterator();
+		while (iterator.hasNext()) {
+			var block = iterator.next();
 
-		if (this._numBlocks === 0) {
-			this._physicsReferenceRow = row;
-			this._physicsReferenceCol = col;
+			// Update the fixture def
+			var fixtureDef = this._createFixtureDef(block);
+			block.fixtureDef(fixtureDef);
+
+
+			// Destroy the existing fixture
+			if (block.fixture() !== undefined) {
+				this._box2dBody.DestroyFixture(block.fixture());
+			}
+
+			// Add a new fixture based on the new fixture def
+			block.fixture(ige.box2d.addFixture(this._box2dBody, fixtureDef));
+
+			if (this.debugFixtures()) {
+				if (block.fixtureDebuggingEntity() !== undefined) {
+					block.fixtureDebuggingEntity().destroy();
+				}
+
+				var fixtureDebuggingEntity = new FixtureDebuggingEntity()
+					.mount(this)
+					.depth(this.depth() + 1)
+					.translateTo(fixtureDef.shape.data.x, fixtureDef.shape.data.y, 0)
+					.width(fixtureDef.shape.data.width * 2)
+					.height(fixtureDef.shape.data.height * 2)
+					.streamMode(1);
+
+				block.fixtureDebuggingEntity(fixtureDebuggingEntity);
+			}
 		}
+	},
 
-		var x = Block.WIDTH * (col - this._physicsReferenceCol);
-		var y = Block.HEIGHT * (row - this._physicsReferenceRow);
-
-		var fixtureDef = {
-			density: 1.0,
-			friction: 0.5,
-			restitution: 0.5,
+	/**
+	 * Creates and returns a fixture def object for the given {@link Block} by computing the fixture's x, y, width,
+	 * and height based on the {@link Block}'s properties.
+	 * @param block {Block} The {@link Block} to make a fixture def for.
+	 * @returns {b2FixtureDef} A Box2d FixtureDef object, used to create an actual Box2d fixture.
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
+	_createFixtureDef: function(block) {
+		var x = Block.WIDTH * (block.col() - this.startCol()) - this._bounds2d.x2 + block._bounds2d.x2;
+		var y = Block.HEIGHT * (block.row() - this.startRow()) - this._bounds2d.y2 + block._bounds2d.y2;
+		return {
+			density: BlockGrid.BLOCK_FIXTURE_DENSITY,
+			friction: BlockGrid.BLOCK_FIXTURE_FRICTION,
+			restitution: BlockGrid.BLOCK_FIXTURE_RESTITUTION,
 			shape: {
 				type: 'rectangle',
 				data: {
 					// The position of the fixture relative to the body
 					// The fixtures are slightly smaller than the actual block grid so that you can fit into a whole which is exactly the same width (in terms of blocks) as your ship
-					x: x + .1,
-					y: y + .1,
-					width: (block.numCols() * Block.WIDTH) / 2 - .2,
-					height: (block.numRows() * Block.HEIGHT) / 2 - .2
+					x: x + BlockGrid.BLOCK_FIXTURE_PADDING,
+					y: y + BlockGrid.BLOCK_FIXTURE_PADDING,
+					width: (block.numCols() * Block.WIDTH) / 2 - (2 * BlockGrid.BLOCK_FIXTURE_PADDING),
+					height: (block.numRows() * Block.HEIGHT) / 2 - (2 * BlockGrid.BLOCK_FIXTURE_PADDING)
 				}
 			}
 		};
-
-		var fixture = ige.box2d.addFixture(this._box2dBody, fixtureDef);
-		// Add fixture reference to Block so we can destroy fixture later.
-		block.fixture(fixture);
-		// Add fixtureDef reference so we can create a new BlockGrid later.
-		block.fixtureDef(fixtureDef);
-
-		if (this.debugFixtures()) {
-			new FixtureDebuggingEntity()
-				.mount(this)
-				.depth(this.depth() + 1)
-				.translateTo(fixtureDef.shape.data.x, fixtureDef.shape.data.y, 0)
-				.width(fixtureDef.shape.data.width * 2)
-				.height(fixtureDef.shape.data.height * 2)
-				.streamMode(1);
-		}
 	},
 
 	/**
@@ -1025,34 +1044,66 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * Updates the dimensions of this {@link BlockGrid} and its {@link BlockGrid#_renderContainer|_renderContainer}.
 	 * Dirties the {@link BlockGrid#_renderContainer|_renderContainer} cache so that it is redrawn to reflect the
 	 * dimensions change.
+	 * @returns {boolean} True if the dimensions of this BlockGrid needed to be updated. False otherwise.
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
 	 */
 	_updateDimensions: function() {
-		// The _renderContainer only exists on the client, so just skip this if this is called from the server.
-		if (ige.isServer) {
-			return;
-		}
-
 		// Modify the height and width of the entities to match the new size of the BlockGrid.
 		this.height(this.numRows() * Block.HEIGHT);
 		this.width(this.numCols() * Block.WIDTH);
-		this._renderContainer.height(this.height());
-		this._renderContainer.width(this.width());
 
-		// Translate all existing blocks so that they are in the correct positions relative to the new center.
-		var translationData = {x: 0, y: 0};
-		var iterator = this.iterator();
-		while (iterator.hasNext()) {
-			var block = iterator.next();
-			translationData = this._translateBlock(block);
+		var translationData = this._computeBlockTranslation();
+
+		if (translationData.x === 0 && translationData.y === 0) {
+			return false;
+		}
+
+		if (!ige.isServer) {
+			this._renderContainer.height(this.height());
+			this._renderContainer.width(this.width());
+
+			// Translate all existing blocks so that they are in the correct positions relative to the new center.
+			//var translationData = {x: 0, y: 0};
+			var iterator = this.iterator();
+			while (iterator.hasNext()) {
+				var block = iterator.next();
+				block.translateBy(translationData.x, translationData.y, 0);
+			}
 		}
 
 		// Translate this entity so that each block appears to be in the same position as it was before.
 		// This needs to be the BlockGrid itself, not the _renderContainer, because translating the _renderContainer
 		// will just move the _renderContainer within the BlockGrid, which will create strange calculation issues.
 		this.translateBy(-translationData.x, -translationData.y, 0);
+
+		return true;
+	},
+
+	/**
+	 * Computes the distance that the {@link Block}s in this {@link BlockGrid} will need to be translated in order to
+	 * compensate for the {@link BlockGrid}'s bounding box changing.
+	 * @returns {{x: number, y: number}} An object that contains the x translation amount and y translation amount that
+	 * a {@link Block} will need to be translated to compensate for the resizing of the {@link BlockGrid}.
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
+	_computeBlockTranslation: function() {
+		if (this._numBlocks === 0) {
+			return {x: 0, y: 0};
+		}
+
+		// Just get the first block from the list, since the translation will be the same for all Blocks
+		var block = this._blocksList[0];
+
+		var oldX = block.translate().x();
+		var oldY = block.translate().y();
+		var x = Block.WIDTH * (block.col() - this.startCol()) - this._bounds2d.x2 + block._bounds2d.x2;
+		var y = Block.HEIGHT * (block.row() - this.startRow()) - this._bounds2d.y2 + block._bounds2d.y2;
+
+		return {x: x - oldX, y: y - oldY};
 	},
 
 	/**
@@ -1362,6 +1413,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 */
 	update: function(ctx) {
 		if (ige.isServer) {
+
 			// Attract the block grid to another body. For example, small asteroids
 			// are attracted to player ships.
 			if (this.attractedTo !== undefined) {
@@ -1394,5 +1446,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 });
+
+BlockGrid.BLOCK_FIXTURE_DENSITY = 1.0;
+BlockGrid.BLOCK_FIXTURE_FRICTION = 0.5;
+BlockGrid.BLOCK_FIXTURE_RESTITUTION = 0.5;
+BlockGrid.BLOCK_FIXTURE_PADDING = .1;
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = BlockGrid; }

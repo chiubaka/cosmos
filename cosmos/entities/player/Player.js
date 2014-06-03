@@ -185,8 +185,6 @@ var Player = BlockGrid.extend({
 
 		this._box2dBody.CreateFixture(tempFixture);
 
-		console.log("Sensor added!");
-
 		return this;
 	},
 
