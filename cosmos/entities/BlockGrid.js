@@ -1236,6 +1236,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			this.get(row - 1, col) == undefined ||
 			this.get(row, col + 1) == undefined ||
 			this.get(row, col - 1) == undefined) {
+			console.log("Block has neighbors. Propagating click event!");
 			block.mouseDown(event, control);
 		}
 	},
@@ -1293,10 +1294,12 @@ var BlockGrid = IgeEntityBox2d.extend({
 			case 'mine':
 				var block = self.get(data.row, data.col);
 				if (block === undefined) {
+					console.log("Request to mine undefined block. row: " + data.row + ", col: " + data.col);
 					return false;
 				}
 				// Blocks should only be mined by one player, for now. Note that there is a race condition here.
 				if((block === undefined) || block.busy()) {
+					console.log("Request to mine undefined or busy block. row: " + data.row + ", col: " + data.col);
 					return false;
 				}
 				block.busy(true);

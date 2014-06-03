@@ -156,19 +156,16 @@ var GameInit = {
 	initEnvironment: function() {
 		var server = ige.server;
 
-		/*var NUM_NORMAL_ASTEROIDS = 20;
+		var NUM_NORMAL_ASTEROIDS = 20;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
 			var asteroid = new BlockGrid()
 				.id('genRandomAsteroid' + asteroidNumber)
 				.streamMode(1)
 				.mount(server.spaceGameScene)
 				.padding(10)
-				.debugFixtures(true)
 				.fromBlockMatrix(BlockGridGenerator.genProceduralAsteroid(20, undefined, BlockGridGenerator.blockDistributions.randomDistribution()), false)
 			this.moveRandomly(asteroid);
-		}*/
-
-		/*
+		}
 
 		// Instead of creating a bunch of these up front, we might want to create them just ahead of a user as he's flying, and delete them right behind. This will be more efficient.
 		var NUM_SMALL_ASTEROIDS = 80;
@@ -183,8 +180,6 @@ var GameInit = {
 			this.moveRandomly(asteroid);
 		}
 
-		//*/
-
 		var NUM_DERELICT_SPACESHIPS = 10;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_DERELICT_SPACESHIPS; asteroidNumber++) {
 			var asteroid = new BlockGrid()
@@ -193,7 +188,6 @@ var GameInit = {
 				.mount(server.spaceGameScene)
 				.padding(10)
 				//note that the signature of gen.. is genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution)
-				.debugFixtures(true)
 				.fromBlockMatrix(BlockGridGenerator.genProceduralAsteroid(20, 20, BlockGridGenerator.blockDistributions.SHIP_PARTS, true), false);
 			this.moveRandomly(asteroid);
 		}
