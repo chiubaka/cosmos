@@ -218,11 +218,12 @@ var ServerNetworkEvents = {
 			//console.log("Placing item: " + blockToPlace.classId(), 'info');
 			new BlockGrid()
 				.category('smallAsteroid')
+				// TODO: Math.random() isn't safe here! Also, there's no good reason to set an id on this BlockGrid.
 				.id('littleAsteroid' + Math.random())
 				.streamMode(1)
 				.mount(ige.$("spaceGameScene"))
 				.depth(100)
-				.grid([[blockToPlace]])
+				.fromBlockMatrix([[blockToPlace]])
 				.translateTo(data.x, data.y, 0);
 
 			var confirmData = { category: 'construct', action: 'new', label: data.selectedType };
