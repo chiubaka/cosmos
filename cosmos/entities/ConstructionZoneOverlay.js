@@ -146,8 +146,8 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		var data = {
 			blockGridId: this._parent.id(),
 			// Translate overlay coordinates into BlockGrid coordinates
-			row: row - 1,
-			col: col - 1,
+			row: row + this._blockGrid.startRow() - 1,
+			col: col + this._blockGrid.startCol() - 1,
 		};
 
 		if (ige.isClient && ige.client !== undefined && ige.client.state !== undefined) {
