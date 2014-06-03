@@ -241,7 +241,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// BlockGrid#_updateDimensions relies on BlockGrid#numRows and BlockGrid#numCols, which are updated by
 		// BlockGrid#_addToGridRange, so it is imperative that this call happen after BlockGrid#_addToGridRange when
 		// adding new blocks.
-		this._updateDimensions();
+		var updated = this._updateDimensions();
 
 		// Mount the block for rendering purposes. Also translates the new block to where it should be.
 		this._mountBlock(block);
@@ -271,7 +271,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this._checkSmallAsteroidCategory();
 
 		// Add fixtures to update the server's physics model.
-		this._addFixture(block);
+		this._addFixtures(block, updated);
 
 		this._numBlocks++;
 
@@ -865,52 +865,70 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	/**
-	 * Adds a Box2D fixture to the physics model on the server for this Block.
+	 * Adds a Box2D fixture to the physics model on the server for this {@link Block}. Updates all of the other
+	 * fixtures in this {@link BlockGrid} if necessary.
 	 * @param block {Block} The {@link Block} that we are adding a fixture for. The {@link Block} should have its row
 	 * and column properties set already.
+	 * @param updated {boolean} Whether or not the number of rows or number of columns has changed with the addition
+	 * of the new block.
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
 	 */
-	_addFixture: function(block) {
+	_addFixtures: function(block, updated) {
 		// The physics model is only run on the server.
 		if (!ige.isServer) {
 			return;
 		}
 
-		// TODO: Don't bother to do this if the number of rows and number of columns hasn't changed.
+		// If the dimensions haven't changed, then we just need to add a fixture for the block we were given
+		if (!updated) {
+			this._addFixture(block);
+			return;
+		}
+
+		// If the dimensions have changed, then we need to update the fixtures for all of the blocks.
 		var iterator = this.iterator();
 		while (iterator.hasNext()) {
-			var block = iterator.next();
+			var currentBlock = iterator.next();
+			this._addFixture(currentBlock);
+		}
+	},
 
-			// Update the fixture def
-			var fixtureDef = this._createFixtureDef(block);
-			block.fixtureDef(fixtureDef);
+	/**
+	 * Adds a Box2D fixture to the physics model on the server for the given {@link Block}.
+	 * @param block {Block} The {@link Block} that we are adding a fixture for. The {@link Block} should have its row
+	 * and column properties set already.
+	 * @private
+	 */
+	_addFixture: function(block) {
+		// Update the fixture def
+		var fixtureDef = this._createFixtureDef(block);
+		block.fixtureDef(fixtureDef);
 
 
-			// Destroy the existing fixture
-			if (block.fixture() !== undefined) {
-				this._box2dBody.DestroyFixture(block.fixture());
+		// Destroy the existing fixture
+		if (block.fixture() !== undefined) {
+			this._box2dBody.DestroyFixture(block.fixture());
+		}
+
+		// Add a new fixture based on the new fixture def
+		block.fixture(ige.box2d.addFixture(this._box2dBody, fixtureDef));
+
+		if (this.debugFixtures()) {
+			if (block.fixtureDebuggingEntity() !== undefined) {
+				block.fixtureDebuggingEntity().destroy();
 			}
 
-			// Add a new fixture based on the new fixture def
-			block.fixture(ige.box2d.addFixture(this._box2dBody, fixtureDef));
+			var fixtureDebuggingEntity = new FixtureDebuggingEntity()
+				.mount(this)
+				.depth(this.depth() + 1)
+				.translateTo(fixtureDef.shape.data.x, fixtureDef.shape.data.y, 0)
+				.width(fixtureDef.shape.data.width * 2)
+				.height(fixtureDef.shape.data.height * 2)
+				.streamMode(1);
 
-			if (this.debugFixtures()) {
-				if (block.fixtureDebuggingEntity() !== undefined) {
-					block.fixtureDebuggingEntity().destroy();
-				}
-
-				var fixtureDebuggingEntity = new FixtureDebuggingEntity()
-					.mount(this)
-					.depth(this.depth() + 1)
-					.translateTo(fixtureDef.shape.data.x, fixtureDef.shape.data.y, 0)
-					.width(fixtureDef.shape.data.width * 2)
-					.height(fixtureDef.shape.data.height * 2)
-					.streamMode(1);
-
-				block.fixtureDebuggingEntity(fixtureDebuggingEntity);
-			}
+			block.fixtureDebuggingEntity(fixtureDebuggingEntity);
 		}
 	},
 
