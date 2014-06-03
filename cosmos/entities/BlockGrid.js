@@ -1167,6 +1167,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			while (iterator.hasNext()) {
 				var block = iterator.next();
 				block.translateBy(translationData.x, translationData.y, 0);
+				block.cacheDirty(true);
 			}
 		}
 
