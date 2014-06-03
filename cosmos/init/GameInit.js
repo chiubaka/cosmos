@@ -206,7 +206,6 @@ var GameInit = {
 				// If player ship is near small asteroids, attract them
 				if (contact.igeEitherCategory('player') &&
 					contact.igeEitherCategory('smallAsteroid')) {
-					console.log("Attraction!");
 					var asteroid = contact.igeEntityByCategory('smallAsteroid');
 					var player = contact.igeEntityByCategory('player');
 
@@ -241,8 +240,9 @@ var GameInit = {
 						if (asteroid === undefined || !asteroid.alive()) {
 							return;
 						}
+						var block = asteroid.iterator().next();
 						ige.emit('block collected',
-							[player, BlockGridPadding.extract1x1(asteroid.grid()).classId()]);
+							[player, block.classId()]);
 						asteroid.destroy();
 					}
 				}

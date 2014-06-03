@@ -1438,7 +1438,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 			// Attract the block grid to another body. For example, small asteroids
 			// are attracted to player ships.
 			if (this.attractedTo !== undefined) {
-				console.log("Attraction detected.");
 				var attractedToBody = this.attractedTo._box2dBody;
 				var thisBody = this._box2dBody;
 				var impulse = new ige.box2d.b2Vec2(0, 0);
