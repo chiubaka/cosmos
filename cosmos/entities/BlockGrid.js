@@ -336,7 +336,13 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		this._numBlocks--;
 
+		this._removeFromGridRange(block);
+
+		this._updateDimensions();
+
 		block.destroy();
+
+		// TODO: Delete this BlockGrid if there are no more blocks?
 	},
 
 	/**
@@ -868,6 +874,27 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	/**
+	 * Checks whether or not the grid has the specified col.
+	 * @param col {number} The col to check.
+	 * @returns {boolean} True if the grid has this column. False otherwise.
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
+	_hasCol: function(col) {
+		for (var row in this._grid) {
+			if (!this._grid.hasOwnProperty(row)) {
+				continue;
+			}
+
+			if (this._hasColInRow(row, col)) {
+				return true;
+			}
+		}
+		return false;
+	},
+
+	/**
 	 * Creates an empty dictionary for the specified col in the specified row. If the specified row does not already
 	 * exist, the row is also created.
 	 * @param row {number} The row to create the col in.
@@ -1085,8 +1112,64 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 	},
 
-	_removeFromGridRange: function(row, col, block) {
-		
+	/**
+	 * Updates the {@link BlockGrid#_startRow|_startRow}, {@link BlockGrid#_startCol|_startCol},
+	 * {@link BlockGrid#_endRow|_endRow}, and {@link BlockGrid#_endCol|_endCol} properties based on the removal of
+	 * the given {@link Block} to this {@link BlockGrid}.
+	 * @param block {Block} The {@link Block} that is being removed from the {@link BlockGrid}. The {@link Block} should
+	 * have its row and column properties set already.
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
+	_removeFromGridRange: function(block) {
+		if (this._numBlocks === 0) {
+			this._setStartRow(0);
+			this._setStartCol(0);
+			this._setEndRow(0);
+			this._setEndCol(0);
+		}
+
+		var startRow = block.row();
+		var startCol = block.col();
+		var endRow = startRow + block.numRows() - 1;
+		var endCol = startCol + block.numCols() - 1;
+
+		var row, col;
+
+		if (startRow === this.startRow()) {
+			row = startRow;
+			while (!this._hasRow(row)) {
+				row++;
+			}
+			this._setStartRow(row);
+		}
+
+		if (startCol === this.startCol()) {
+			col = startCol;
+			while (!this._hasCol(col)) {
+				col++;
+			}
+			this._setStartCol(col);
+		}
+
+		if (endRow === this.endRow()) {
+			row = endRow;
+			while (!this._hasRow(row)) {
+				row--;
+			}
+			this._setEndRow(row);
+		}
+
+		if (endCol === this.endCol()) {
+			console.log("May need to resize.")
+			col = endCol;
+			while (!this._hasCol(col)) {
+				col--;
+			}
+			console.log("New end col: " + col);
+			this._setEndCol(col);
+		}
 	},
 
 	/**
