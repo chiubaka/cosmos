@@ -258,12 +258,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 			this._renderContainer.refresh();
 		}
 
-		// Add this block to the list of all blocks in the BlockGrid. It is important that this occur after
-		// BlockGrid#_updateDimensions because BlockGrid#_updateDimensions uses BlockGrid#_blocksList to determine
-		// which blocks to translate. We don't want BlockGrid#_updateDimensions to see the new block, because this
-		// messes with its calculation of how much to translate the BlockGrid#_renderContainer by.
-		this._blocksList.push(block);
-
 		// Now that we know it is OK to add the block, we should set the reference at each grid location to be a
 		// reference to the provided block.
 		this._setBlock(block);
@@ -275,8 +269,18 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// into the player's ship.
 		this._checkSmallAsteroidCategory();
 
-		// Add fixtures to update the server's physics model.
-		this._addFixtures(block, updated);
+		if (updated) {
+			// Add fixtures to update the server's physics model.
+			this._updateFixtures();
+		}
+
+		this._addFixture(block);
+
+		// Add this block to the list of all blocks in the BlockGrid. It is important that this occur after
+		// BlockGrid#_updateDimensions because BlockGrid#_updateDimensions uses BlockGrid#_blocksList to determine
+		// which blocks to translate. We don't want BlockGrid#_updateDimensions to see the new block, because this
+		// messes with its calculation of how much to translate the BlockGrid#_renderContainer by.
+		this._blocksList.push(block);
 
 		this._numBlocks++;
 
@@ -304,6 +308,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		if (ige.isServer) {
 			this._box2dBody.DestroyFixture(block.fixture());
+			if (this._debugFixtures) {
+				block.fixtureDebuggingEntity().destroy();
+			}
 
 			// Calculate position of new BlockGrid, taking into account rotation
 			var gridX = this.translate().x();
@@ -338,7 +345,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		this._removeFromGridRange(block);
 
-		this._updateDimensions();
+		var updated = this._updateDimensions();
+
+		if (updated) {
+			this._updateFixtures();
+		}
 
 		block.destroy();
 
@@ -970,25 +981,15 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	/**
-	 * Adds a Box2D fixture to the physics model on the server for this {@link Block}. Updates all of the other
-	 * fixtures in this {@link BlockGrid} if necessary.
-	 * @param block {Block} The {@link Block} that we are adding a fixture for. The {@link Block} should have its row
-	 * and column properties set already.
-	 * @param updated {boolean} Whether or not the number of rows or number of columns has changed with the addition
-	 * of the new block.
+	 * Updates the Box2D fixtures of the physics model on the server for this {@link BlockGrid}. This effectively
+	 * destroys all fixtures and readds them.
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
 	 */
-	_addFixtures: function(block, updated) {
+	_updateFixtures: function() {
 		// The physics model is only run on the server.
 		if (!ige.isServer) {
-			return;
-		}
-
-		// If the dimensions haven't changed, then we just need to add a fixture for the block we were given
-		if (!updated) {
-			this._addFixture(block);
 			return;
 		}
 
@@ -1007,6 +1008,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @private
 	 */
 	_addFixture: function(block) {
+		// The physics model is only run on the server
+		if (!ige.isServer) {
+			return;
+		}
+
 		// Update the fixture def
 		var fixtureDef = this._createFixtureDef(block);
 		block.fixtureDef(fixtureDef);
@@ -1162,12 +1168,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 
 		if (endCol === this.endCol()) {
-			console.log("May need to resize.")
 			col = endCol;
 			while (!this._hasCol(col)) {
 				col--;
 			}
-			console.log("New end col: " + col);
 			this._setEndCol(col);
 		}
 	},
@@ -1252,6 +1256,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 				block.translateBy(translationData.x, translationData.y, 0);
 				block.cacheDirty(true);
 			}
+
 		}
 
 		return true;
