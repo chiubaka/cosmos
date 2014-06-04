@@ -955,7 +955,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// we will want to make block removal as fast as possible. This is one potential bottleneck, since indexOf()
 		// is an O(n) search for a block.
 		var index = list.indexOf(block);
-		if (index !== -1) {
+		if (index === -1) {
 			return;
 		}
 
