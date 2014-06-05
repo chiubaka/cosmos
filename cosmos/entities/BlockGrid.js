@@ -168,7 +168,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			this._constructionZoneOverlay = new ConstructionZoneOverlay(this)
 				.mount(this);
 
-			this.mouseDown(this.mouseDownHandler);
+			this.mouseDown(this._mouseDownHandler);
 		}
 	},
 
@@ -1520,13 +1520,19 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return {x: x - oldX, y: y - oldY};
 	},
 
-	/*
-	* The general strategy for handling clicks is to:
-	* 1. Unrotate the click coordinate
-	* 2. Compare the unrotated click coordinate to where the blocks would be if the BlockGrid were not rotated
-	* 3. Fire the mouseDown() event on the appropriate block
-	*/
-	mouseDownHandler: function(event, control) {
+	/**
+	 * The general strategy for handling clicks is to:
+	 * 1. Unrotate the click coordinate
+	 * 2. Compare the unrotated click coordinate to where the blocks would be if the BlockGrid were not rotated
+	 * 3. Fire the mouseDown() event on the appropriate block
+	 * @param event {Object} Information about the event that was fired.
+	 * @param control {Object} Information about the control that was used when the event was fired. (Not really sure
+	 * what this is.)
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
+	_mouseDownHandler: function(event, control) {
 		// event.igeBaseX and event.igeBaseY give coordinates relative to the clicked entity's origin (center)
 
 		// The position of the click in world coordinates
