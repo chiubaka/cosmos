@@ -145,6 +145,18 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	/**
+	 * Packages data to send from the server to the client when this entity is created. Returned data will be passed
+	 * to the client-side entity in the {@link BlockGrid#init} function.
+	 * @returns {Array} A matrix of block class ID's, which can be used to reconstruct the types of blocks in this
+	 * {@link BlockGrid}.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	streamCreateData: function() {
+		return this.toBlockTypeMatrix();
+	},
+
+	/**
 	 * Returns an iterator object, which has a next() function that returns the next {@link Block} in this
 	 * {@link BlockGrid}. This should be used whenever iterating over all of the {@link Block}s in a {@link BlockGrid}
 	 * because it decouples the interface from the underlying {@link BlockGrid} implementation.
@@ -541,6 +553,192 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 		return constructionZoneLocations;
 	},
+
+	// Created on server, streamed to all clients
+	addMiningParticles: function(blockGridId, row, col) {
+		var block = ige.$(blockGridId).get(row, col);
+		// Calculate where to put our effect mount
+		// with respect to the BlockGrid
+		var x = Block.WIDTH * col -
+			this._bounds2d.x2 + block._bounds2d.x2;
+		var y = Block.HEIGHT * row -
+			this._bounds2d.y2 + block._bounds2d.y2;
+
+		// Store the effectsMount in the block so we can remove it later
+		block.effectsMount = new EffectsMount()
+			.mount(this)
+			.streamMode(1)
+			.translateBy(x, y, 0)
+
+		block.blockParticleEmitter = new BlockParticleEmitter()
+			.streamMode(1)
+			.mount(block.effectsMount)
+
+		return this;
+	},
+
+	/**
+	 * Called every time a ship mines a block
+	 */
+	blockMinedListener: function (player, blockClassId, block) {
+		block.blockParticleEmitter.destroy();
+		block.effectsMount.destroy();
+	},
+
+	processBlockActionServer: function(data, player) {
+		var self = this;
+
+		switch (data.action) {
+			case 'remove':
+				this.remove(data.row, data.col);
+				return true;
+
+			// TODO: Vary mining speed based on block material
+			case 'mine':
+				var block = self.get(data.row, data.col);
+				if (block === undefined) {
+					console.log("Request to mine undefined block. row: " + data.row + ", col: " + data.col);
+					return false;
+				}
+				// Blocks should only be mined by one player, for now. Note that there is a race condition here.
+				if((block === undefined) || block.busy()) {
+					console.log("Request to mine undefined or busy block. row: " + data.row + ", col: " + data.col);
+					return false;
+				}
+				block.busy(true);
+
+				block._decrementHealthIntervalId = setInterval(function() {
+					if (block._hp > 0) {
+						var damageData = {
+							blockGridId: data.blockGridId,
+							action: 'damage',
+							row: data.row,
+							col: data.col,
+							amount: 1
+						};
+						block.damage(1);
+						ige.network.send('blockAction', damageData);
+					}
+
+					if (block._hp == 0) {
+						clearInterval(block._decrementHealthIntervalId);
+
+						// Emit a message saying that a block has been mined, but not
+						// necessarily collected. This is used for removing the laser.
+						var blockClassId = block.classId();
+						ige.emit('block mined', [player, blockClassId, block]);
+
+						// Remove block server side, then send remove msg to client
+						self.remove(data.row, data.col);
+						data.action = 'remove';
+						ige.network.send('blockAction', data);
+					}
+				}, Block.prototype.MINING_TIME);
+				return true;
+
+			case 'add':
+				// Add block server side, then send add msg to client
+				if(!self.add(data.row, data.col, Block.prototype.blockFromClassId(data.selectedType))) {
+					return false;
+				}
+				else {
+					data.action = 'add';
+					ige.network.send('blockAction', data);
+					return true;
+				}
+
+			default:
+				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
+				return false;
+		}
+	},
+
+	processBlockActionClient: function(data) {
+		var self = this;
+
+		switch (data.action) {
+			case 'remove':
+				this.remove(data.row, data.col);
+				this._renderContainer.refresh();
+				this._constructionZoneOverlay.refresh();
+				break;
+			case 'damage':
+				var block = this.get(data.row, data.col);
+				block.damage(data.amount);
+				break;
+			case 'add':
+				ige.client.metrics.fireEvent(
+					'construct',
+					'existing',
+					Block.prototype.blockFromClassId(data.selectedType)
+				);
+				this.add(data.row, data.col, Block.prototype.blockFromClassId(data.selectedType));
+				this._renderContainer.refresh();
+				this._constructionZoneOverlay.refresh();
+				break;
+			default:
+				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
+		}
+	},
+
+	/**
+	 * Gets/sets the {@link BlockGrid#_debugFixtures|_debugFixtures}, which tells the {@link BlockGrid} whether or not
+	 * it should create shadow entities for the fixtures of this {@link BlockGrid}. This helps to visualize the fixtures
+	 * so that they can be debugged. The {@link BlockGrid#_debugFixtures|_debugFixtures} flag must be set to true
+	 * before any {@link Block}s are added to this {@link BlockGrid} for visualization to occur.
+	 * @param flag {boolean} Optional parameter. If provided, the flag will be used as the new value of
+	 * {@link BlockGrid#_debugFixtures|_debugFixtures}
+	 * @return {*} If no argument is provided, returns the current value of
+	 * {@link BlockGrid#_debugFixtures|_debugFixtures}. Otherwise, returns this object to make setter call chaining
+	 * convenient.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	debugFixtures: function(flag) {
+		if (flag === undefined) {
+			return this._debugFixtures;
+		}
+
+		this._debugFixtures = flag;
+		return this;
+	},
+
+	/**
+	 * Is update called once per time-step per viewport, or just once per time-step?
+	 */
+	update: function(ctx) {
+		if (ige.isServer) {
+
+			// Attract the block grid to another body. For example, small asteroids
+			// are attracted to player ships.
+			if (this.attractedTo !== undefined) {
+				var attractedToBody = this.attractedTo._box2dBody;
+				var thisBody = this._box2dBody;
+				var impulse = new ige.box2d.b2Vec2(0, 0);
+				impulse.Add(attractedToBody.GetWorldCenter());
+				impulse.Subtract(thisBody.GetWorldCenter());
+				impulse.Multiply(this.attractedTo.attractionStrength());
+				thisBody.ApplyImpulse(impulse, thisBody.GetWorldCenter());
+			}
+
+
+			//This is just a little bit larger than the background image. That's why I chose this size.
+			var MAX_X = 7000;
+			var MAX_Y = 7000;
+			var x = this.translate().x();
+			var y = this.translate().y();
+
+			if (x > MAX_X || x < -MAX_X) {
+				this.translateTo(-x, y, 0);
+			}
+			if (y > MAX_Y || y < -MAX_Y) {
+				this.translateTo(x, -y, 0);
+			}
+		}
+
+		IgeEntityBox2d.prototype.update.call(this, ctx);
+	},
+
 
 	/**
 	 * Given a {@link Block}, returns the neighboring locations to the {@link Block} that do not have other blocks.
@@ -1372,187 +1570,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 			block.mouseDown(event, control);
 		}
 	},
-
-	streamCreateData: function() {
-		return this.toBlockTypeMatrix();
-	},
-
-	// Created on server, streamed to all clients
-	addMiningParticles: function(blockGridId, row, col) {
-		var block = ige.$(blockGridId).get(row, col);
-		// Calculate where to put our effect mount
-		// with respect to the BlockGrid
-		var x = Block.WIDTH * col -
-						this._bounds2d.x2 + block._bounds2d.x2;
-		var y = Block.HEIGHT * row -
-						this._bounds2d.y2 + block._bounds2d.y2;
-
-		// Store the effectsMount in the block so we can remove it later
-		block.effectsMount = new EffectsMount()
-			.mount(this)
-			.streamMode(1)
-			.translateBy(x, y, 0)
-
-		block.blockParticleEmitter = new BlockParticleEmitter()
-			.streamMode(1)
-			.mount(block.effectsMount)
-
-		return this;
-	},
-
-	/**
-	 * Called every time a ship mines a block
-	 */
-	blockMinedListener: function (player, blockClassId, block) {
-		block.blockParticleEmitter.destroy();
-		block.effectsMount.destroy();
-	},
-
-	processBlockActionServer: function(data, player) {
-		var self = this;
-
-		switch (data.action) {
-			case 'remove':
-				this.remove(data.row, data.col);
-				return true;
-
-			// TODO: Vary mining speed based on block material
-			case 'mine':
-				var block = self.get(data.row, data.col);
-				if (block === undefined) {
-					console.log("Request to mine undefined block. row: " + data.row + ", col: " + data.col);
-					return false;
-				}
-				// Blocks should only be mined by one player, for now. Note that there is a race condition here.
-				if((block === undefined) || block.busy()) {
-					console.log("Request to mine undefined or busy block. row: " + data.row + ", col: " + data.col);
-					return false;
-				}
-				block.busy(true);
-
-				block._decrementHealthIntervalId = setInterval(function() {
-					if (block._hp > 0) {
-						var damageData = {
-							blockGridId: data.blockGridId,
-							action: 'damage',
-							row: data.row,
-							col: data.col,
-							amount: 1
-						};
-						block.damage(1);
-						ige.network.send('blockAction', damageData);
-					}
-
-					if (block._hp == 0) {
-						clearInterval(block._decrementHealthIntervalId);
-
-						// Emit a message saying that a block has been mined, but not
-						// necessarily collected. This is used for removing the laser.
-						var blockClassId = block.classId();
-						ige.emit('block mined', [player, blockClassId, block]);
-
-						// Remove block server side, then send remove msg to client
-						self.remove(data.row, data.col);
-						data.action = 'remove';
-						ige.network.send('blockAction', data);
-					}
-				}, Block.prototype.MINING_TIME);
-				return true;
-
-			case 'add':
-				// Add block server side, then send add msg to client
-				if(!self.add(data.row, data.col, Block.prototype.blockFromClassId(data.selectedType))) {
-					return false;
-				}
-				else {
-					data.action = 'add';
-					ige.network.send('blockAction', data);
-					return true;
-				}
-
-			default:
-				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
-				return false;
-		}
-	},
-
-	processBlockActionClient: function(data) {
-		var self = this;
-
-		switch (data.action) {
-			case 'remove':
-				this.remove(data.row, data.col);
-				this._renderContainer.refresh();
-				this._constructionZoneOverlay.refresh();
-				break;
-			case 'damage':
-				var block = this.get(data.row, data.col);
-				block.damage(data.amount);
-				break;
-			case 'add':
-				ige.client.metrics.fireEvent(
-					'construct',
-					'existing',
-					Block.prototype.blockFromClassId(data.selectedType)
-				);
-				this.add(data.row, data.col, Block.prototype.blockFromClassId(data.selectedType));
-				this._renderContainer.refresh();
-				this._constructionZoneOverlay.refresh();
-				break;
-			default:
-				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
-		}
-	},
-
-	/**
-	 * Call this before calling setGrid to create a bunch of entities which will help to visualize the box2D fixtures
-	 * @param flag true iff you want to debug the fixtures
-	 */
-	debugFixtures: function(flag) {
-		if (flag === undefined)
-			return this._debugFixtures;
-
-		this._debugFixtures = flag;
-
-		return this;
-	},
-
-	/**
-	 * Is update called once per time-step per viewport, or just once per time-step?
-	 */
-	update: function(ctx) {
-		if (ige.isServer) {
-
-			// Attract the block grid to another body. For example, small asteroids
-			// are attracted to player ships.
-			if (this.attractedTo !== undefined) {
-				var attractedToBody = this.attractedTo._box2dBody;
-				var thisBody = this._box2dBody;
-				var impulse = new ige.box2d.b2Vec2(0, 0);
-				impulse.Add(attractedToBody.GetWorldCenter());
-				impulse.Subtract(thisBody.GetWorldCenter());
-				impulse.Multiply(this.attractedTo.attractionStrength());
-				thisBody.ApplyImpulse(impulse, thisBody.GetWorldCenter());
-			}
-
-
-			//This is just a little bit larger than the background image. That's why I chose this size.
-			var MAX_X = 7000;
-			var MAX_Y = 7000;
-			var x = this.translate().x();
-			var y = this.translate().y();
-
-			if (x > MAX_X || x < -MAX_X) {
-				this.translateTo(-x, y, 0);
-			}
-			if (y > MAX_Y || y < -MAX_Y) {
-				this.translateTo(x, -y, 0);
-			}
-		}
-
-		IgeEntityBox2d.prototype.update.call(this, ctx);
-	},
-
 });
 
 BlockGrid.BLOCK_FIXTURE_DENSITY = 1.0;
