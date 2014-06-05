@@ -195,7 +195,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	iterator: function() {
 		var self = this;
 
-		var iterator = {
+		return {
 			list: self._getBlockList(),
 			i: 0,
 			hasNext: function() {
@@ -207,8 +207,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 				return block;
 			}
 		};
-
-		return iterator;
 	},
 
 	/**
@@ -234,6 +232,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @param row {number} The row to add at
 	 * @param col {number} The col to add at
 	 * @param block {Block} The Block to add to the grid.
+	 * @param checkForNeighbors {boolean} Whether or not we should validate that the given {@link Block} will be
+	 * attached to the existing structure in this {@link BlockGrid}.
 	 * @returns {boolean} True if the Block was added successfully to the grid. False otherwise. A Block may not be
 	 * successfully added to the grid if another Block already exists in the grid at the specified location or if the
 	 * parameters passed to this function are invalid.
@@ -474,6 +474,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * indicate that a space in the blockTypeMatrix does not include a Block. The blockTypeMatrix must be a rectangular
 	 * matrix (every row has the same number of columns and every column has the same number of rows, but the total number
 	 * of rows and total number of columns is not required to be the same).
+	 * @param checkForNeighbors {boolean} Whether or not we should validate that each {@link Block} will be
+	 * attached to the existing structure in this {@link BlockGrid}.
 	 * @returns {BlockGrid} Return this object to make function chaining convenient.
 	 * @memberof BlockGrid
 	 * @instance
@@ -533,6 +535,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * that a space in the blockMatrix is empty. The blockMatrix must be a rectangular matrix (every row has the same
 	 * number of columns and every column has the same number of rows, but the total number of rows and total number
 	 * of columns is not required to be the same).
+	 * @param checkForNeighbors {boolean} Whether or not we should validate that each {@link Block} will be
+	 * attached to the existing structure in this {@link BlockGrid}.
 	 * @return {BlockGrid} Return this object to make function chaining convenient.
 	 * @memberof BlockGrid
 	 * @instance
@@ -827,6 +831,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * the block
 	 * @param block {Block} The block to add. If the block is larger than 1x1, all spaces where the block would occupy
 	 * are checked.
+	 * @param checkForNeighbors {boolean} Whether or not we should validate that the given {@link Block} will be
+	 * attached to the existing structure in this {@link BlockGrid}.
 	 * @returns {boolean} True if nothing prevents this block from being placed at the given row and col. False
 	 * otherwise.
 	 * @memberof BlockGrid
