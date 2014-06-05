@@ -35,6 +35,7 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 	},
 
 	createConstructionZones: function() {
+		// We want a buffer of size 1 on the top, bottom, right, and left. Hence the +2s everywhere.
 		var overlayNumRows = this._blockGrid.numRows() + 2;
 		var overlayNumCols = this._blockGrid.numCols() + 2;
 
