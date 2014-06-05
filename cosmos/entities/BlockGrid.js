@@ -371,7 +371,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		block.destroy();
 
-		// TODO: Delete this BlockGrid if there are no more blocks?
+		// Destroy this BlockGrid to clean up memory.
+		if (this._numBlocks === 0) {
+			this.destroy();
+		}
 	},
 
 	/**
@@ -481,10 +484,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @instance
 	 */
 	fromBlockTypeMatrix: function(blockTypeMatrix, checkForNeighbors) {
-		// Remove all existing blocks from this grid and start fresh!
-		this._removeAll();
-
-
 		for (var row = 0; row < blockTypeMatrix.length; row++) {
 			for (var col = 0; col < blockTypeMatrix[row].length; col++) {
 				// The add() function knows how to deal with receiving undefined
@@ -542,9 +541,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @instance
 	 */
 	fromBlockMatrix: function(blockMatrix, checkForNeighbors) {
-		// Remove all existing blocks from this grid and start fresh!
-		this._removeAll();
-
 		for (var row = 0; row < blockMatrix.length; row++) {
 			for (var col = 0; col < blockMatrix[row].length; col++) {
 				this.add(row, col, blockMatrix[row][col], checkForNeighbors);
@@ -1346,6 +1342,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			this._setStartCol(0);
 			this._setEndRow(0);
 			this._setEndCol(0);
+			return;
 		}
 
 		var startRow = block.row();
