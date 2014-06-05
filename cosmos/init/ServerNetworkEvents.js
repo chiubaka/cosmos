@@ -112,8 +112,7 @@ var ServerNetworkEvents = {
 			player.dbId(playerId);
 		}
 
-		player.padding(10)
-			.addSensor(300)
+		player.addSensor(300)
 			.attractionStrength(1)
 			.streamMode(1)
 			.mount(ige.server.spaceGameScene)

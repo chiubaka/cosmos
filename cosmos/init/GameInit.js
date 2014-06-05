@@ -162,7 +162,6 @@ var GameInit = {
 				.id('genRandomAsteroid' + asteroidNumber)
 				.streamMode(1)
 				.mount(server.spaceGameScene)
-				.padding(10)
 				.fromBlockMatrix(BlockGridGenerator.genProceduralAsteroid(20, undefined, BlockGridGenerator.blockDistributions.randomDistribution()), false)
 			this.moveRandomly(asteroid);
 		}
@@ -175,7 +174,6 @@ var GameInit = {
 				.id('littleAsteroid' + asteroidNumber)
 				.streamMode(1)
 				.mount(server.spaceGameScene)
-				.padding(1)
 				.fromBlockMatrix(BlockGridGenerator.singleBlock(), false);
 			this.moveRandomly(asteroid);
 		}
@@ -188,7 +186,6 @@ var GameInit = {
 				.id('spaceShip' + asteroidNumber)
 				.streamMode(1)
 				.mount(server.spaceGameScene)
-				.padding(10)
 				//note that the signature of gen.. is genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution)
 				.fromBlockMatrix(BlockGridPadding.extractMinimumGrid(BlockGridGenerator.genProceduralAsteroid(20, 20, BlockGridGenerator.blockDistributions.SHIP_PARTS, true)), false);
 			this.moveRandomly(asteroid);
