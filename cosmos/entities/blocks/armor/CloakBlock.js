@@ -9,8 +9,8 @@ var CloakBlock = Armor.extend({
 
 
 		if (!ige.isServer) {
-			this.textureBackground = "rgba(40, 40, 40, 0.3)";
-			this.textureOutline = "rgba(20, 20, 20, 0.5)";
+			this.textureBackground = "rgba(0, 0, 0, 0.7)";
+			this.textureOutline = "rgba(200, 200, 200, 0.5)"
 		}
 	}
 });

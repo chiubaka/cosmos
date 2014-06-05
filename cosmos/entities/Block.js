@@ -5,8 +5,8 @@
 var Block = IgeEntity.extend({
 	classId: 'Block',
 
-	WIDTH: 26,
-	HEIGHT: 26,
+	WIDTH: 30,
+	HEIGHT: 30,
 
 	// The pixel margin between the drawn health bar and the border of the block
 	HEALTH_BAR_MARGIN: 3,
@@ -157,6 +157,12 @@ var Block = IgeEntity.extend({
 			// Armor
 			case CloakBlock.prototype.classId():
 				return new CloakBlock();
+			case CloakBlockLight.prototype.classId():
+				return new CloakBlockLight();
+			case CloakBlockViolet.prototype.classId():
+				return new CloakBlockViolet();
+			case CloakBlockVioletLight.prototype.classId():
+				return new CloakBlockVioletLight();
 			case KryptoniteBlock.prototype.classId():
 				return new KryptoniteBlock();
 			case MithrilBlock.prototype.classId():

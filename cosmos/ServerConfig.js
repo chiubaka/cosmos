@@ -25,6 +25,9 @@ var config = {
 		/* Ship armor blocks */
 		{ name: 'Armor', path: './entities/blocks/Armor' },
 		{ name: 'CloakBlock', path: './entities/blocks/armor/CloakBlock' },
+		{ name: 'CloakBlockLight', path: './entities/blocks/armor/CloakBlockLight' },
+		{ name: 'CloakBlockViolet', path: './entities/blocks/armor/CloakBlockViolet' },
+		{ name: 'CloakBlockVioletLight', path: './entities/blocks/armor/CloakBlockVioletLight' },
 		{ name: 'KryptoniteBlock', path: './entities/blocks/armor/KryptoniteBlock' },
 		{ name: 'MithrilBlock', path: './entities/blocks/armor/MithrilBlock' },
 		{ name: 'AdamantiumBlock', path: './entities/blocks/armor/AdamantiumBlock' },
@@ -77,6 +80,7 @@ var config = {
 		{ name: 'PrototypeMixins', path: './utils/PrototypeMixins' },
 		{ name: 'RandomInterval', path: './utils/RandomInterval' },
 		{ name: 'BlockGridPadding', path: './utils/BlockGridPadding' },
+		{ name: 'Enlarge', path: './utils/Enlarge'},
 
 		/* === EXTERNAL LIBRARIES === */
 		{ name: 'WeightedSelection', path: './lib/weighted' },

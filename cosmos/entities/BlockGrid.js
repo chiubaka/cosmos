@@ -126,12 +126,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// TODO: This might be dangerous, since some of the event properties should be changed so that they are
 		// relative to the child's bounding box, but since we don't use any of those properties for the moment,
 		// ignore that.
-		if (this._grid.get2D(row+1, col) == undefined ||
-			this._grid.get2D(row-1, col) == undefined ||
-			this._grid.get2D(row, col+1) == undefined ||
-			this._grid.get2D(row, col-1) == undefined) {
 			block.mouseDown(event, control);
-		}
+		
 	},
 
 	streamCreateData: function() {
@@ -400,7 +396,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 
 		// TODO: Get rid of padding and use expanding BlockGrids
-		this._grid = BlockGridPadding.padGrid(grid, this._padding);
+		this._grid = BlockGridPadding.padGrid(grid, 10);
 		var maxRowLength = this._grid.get2DMaxRowLength();
 
 		this.height(Block.prototype.HEIGHT * this._grid.length);

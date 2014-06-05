@@ -63,7 +63,7 @@ var Player = BlockGrid.extend({
 	initClient: function() {
 		this.depth(1);
 		// TODO: Add engine particles dynamically as engine blocks are added
-		this.addEngineParticles();
+		//this.addEngineParticles();
 	},
 
 	/**
