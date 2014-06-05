@@ -13,6 +13,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	/**
 	 * The total number of blocks that are in this grid.
+	 * @type {number}
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
@@ -34,6 +35,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * to the same Block object in several indices in the grid. A 2x2 Block would therefore have four neighboring
 	 * entries in the grid. This is done so that it is easy to access a Block based on its index, which will be
 	 * important for finding the neighbors of blocks when applying flood fill algorithms.
+	 * @type {Object}
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
@@ -44,6 +46,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * cases where we need to know, for example, how many EngineBlocks are in a BlockGrid. Again, the BlockGrid is
 	 * intended to support basic querying on this structure, but it SHOULD NOT handle higher level logic regarding the
 	 * contents of the grid.
+	 * @type {Object}
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
@@ -62,6 +65,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * The leftmost row index of the structure contained within this {@link BlockGrid}. Necessary because indices
 	 * within the BlockGrid can become arbitrarily defined as the {@link BlockGrid} expands.
 	 * This property is edited internally by {@link BlockGrid}, but should only ever read by outsiders, never modified.
+	 * @type {number}
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
@@ -71,6 +75,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * The rightmost row index of the structure contained within this {@link BlockGrid}. Necessary because indices
 	 * within the BlockGrid can become arbitrarily defined as the {@link BlockGrid} expands.
 	 * This property is edited internally by {@link BlockGrid}, but should only ever read by outsiders, never modified.
+	 * @type {number}
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
@@ -80,6 +85,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * The topmost col index of the structure contained within this {@link BlockGrid}. Necessary because indices
 	 * within the BlockGrid can become arbitrarily defined as the {@link BlockGrid} expands.
 	 * This property is edited internally by {@link BlockGrid}, but should only ever read by outsiders, never modified.
+	 * @type {number}
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
@@ -89,17 +95,39 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * The bottommost col index of the structure contained within this {@link BlockGrid}. Necessary because indices
 	 * within the BlockGrid can become arbitrarily defined as the {@link BlockGrid} expands.
 	 * This property is edited internally by {@link BlockGrid}, but should only ever read by outsiders, never modified.
+	 * @type {number}
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
 	 */
 	_endCol: undefined,
 	/**
-	 * The rendering container for this BlockGrid, which essentially provides a cacheable location for the BlockGrid's
-	 * texture.
+	 * The rendering container for this BlockGrid, which essentially provides a cacheable location for the
+	 * {@link BlockGrid}'s texture. Without this, the {@link BlockGrid} is re-drawn on each tick, which kills
+	 * performance on most machines.
+	 * @type {IgeEntity}
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
 	 */
 	_renderContainer: undefined,
+	/**
+	 * Construction zone overlay for showing and hiding locations that players can click on in order to place a block
+	 * on an existing structure.
+	 * @type {IgeEntity}
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
 	_constructionZoneOverlay: undefined,
+	/**
+	 * Flag for determining whether or not debug shadow entities should be added to track the location of this
+	 * {@link BlockGrid}'s Box2D fixtures.
+	 * @type {boolean}
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
 	_debugFixtures: false,
 
 	init: function(data) {

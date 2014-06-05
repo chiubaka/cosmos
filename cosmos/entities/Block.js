@@ -82,7 +82,7 @@ var Block = IgeEntity.extend({
 	},
 
 	/**
-	 * Getter for {@link Block#_numRows|_numCols}.
+	 * Getter for {@link Block#_numRows|_numRows}.
 	 * @returns {number}
 	 * @memberof Block
 	 * @instance
