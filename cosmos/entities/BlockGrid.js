@@ -95,34 +95,12 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 */
 	_endCol: undefined,
 	/**
-	 * The row value of the very first {@link Block} added to this {@link BlockGrid}. Stored as a reference point so
-	 * that we can easily place the fixtures for future {@link Block}s in the right place relative to a common
-	 * reference point that does not change as the height and width of the {@link BlockGrid} and its
-	 * {@link BlockGrid#_renderContainer|_renderContainer} change.
-	 * @memberof BlockGrid
-	 * @private
-	 * @instance
-	 */
-	_physicsReferenceRow: undefined,
-	/**
-	 * The col value of the very first {@link Block} added to this {@link BlockGrid}. Stored as a reference point so
-	 * that we can easily place the fixtures for future {@link Block}s in the right place relative to a common
-	 * reference point that does not change as the height and width of the {@link BlockGrid} and its
-	 * {@link BlockGrid#_renderContainer|_renderContainer} change.
-	 * @memberof BlockGrid
-	 * @private
-	 * @instance
-	 */
-	_physicsReferenceCol: undefined,
-	/**
 	 * The rendering container for this BlockGrid, which essentially provides a cacheable location for the BlockGrid's
 	 * texture.
 	 */
 	_renderContainer: undefined,
 	_constructionZoneOverlay: undefined,
 	_debugFixtures: false,
-	// Default 10 padding on all sides
-	_padding: 10,
 
 	init: function(data) {
 		var self = this;
@@ -1395,12 +1373,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	streamCreateData: function() {
 		return this.toBlockTypeMatrix();
-	},
-
-	// TODO: Use non padded method
-	padding: function(val) {
-		this._padding = val;
-		return this;
 	},
 
 	// Created on server, streamed to all clients
