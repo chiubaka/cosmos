@@ -594,9 +594,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 		var block = ige.$(blockGridId).get(row, col);
 		// Calculate where to put our effect mount
 		// with respect to the BlockGrid
-		var x = Block.WIDTH * col -
+		var x = Block.WIDTH * (col - this.startCol()) -
 			this._bounds2d.x2 + block._bounds2d.x2;
-		var y = Block.HEIGHT * row -
+		var y = Block.HEIGHT * (row - this.startRow()) -
 			this._bounds2d.y2 + block._bounds2d.y2;
 
 		// Store the effectsMount in the block so we can remove it later
