@@ -46,7 +46,7 @@ var Block = IgeEntity.extend({
 	 */
 	_blockGrid: undefined,
 	/**
-	 * The row an column of the {@link BlockGrid} that this block inhabits if any.
+	 * The row and column of the {@link BlockGrid} that this block inhabits if any.
 	 */
 	_row: undefined,
 	_col: undefined,
