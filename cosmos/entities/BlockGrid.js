@@ -159,7 +159,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		else {
 			this._renderContainer = new RenderContainer()
 				.mount(this);
-			this.fromBlockTypeMatrix(data, false);
+			this.fromBlockTypeMatrix(data.blockTypeMatrix, false, data.startRow, data.startCol);
 
 			// TODO: Lazily create when needed to speed up load time.
 			// TODO: Examine ConstructionZoneOverlay to make sure it is compatible with new BlockGrid backing.
@@ -181,7 +181,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @instance
 	 */
 	streamCreateData: function() {
-		return this.toBlockTypeMatrix();
+		return {
+			startRow: this.startRow(),
+			startCol: this.startCol(),
+			blockTypeMatrix: this.toBlockTypeMatrix()
+		}
 	},
 
 	/**
@@ -233,7 +237,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @param col {number} The col to add at
 	 * @param block {Block} The Block to add to the grid.
 	 * @param checkForNeighbors {boolean} Whether or not we should validate that the given {@link Block} will be
-	 * attached to the existing structure in this {@link BlockGrid}.
+	 * attached to the existing structure in this {@link BlockGrid}. Default behavior is to check for neighbors.
 	 * @returns {boolean} True if the Block was added successfully to the grid. False otherwise. A Block may not be
 	 * successfully added to the grid if another Block already exists in the grid at the specified location or if the
 	 * parameters passed to this function are invalid.
@@ -514,16 +518,19 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * matrix (every row has the same number of columns and every column has the same number of rows, but the total number
 	 * of rows and total number of columns is not required to be the same).
 	 * @param checkForNeighbors {boolean} Whether or not we should validate that each {@link Block} will be
-	 * attached to the existing structure in this {@link BlockGrid}.
+	 * attached to the existing structure in this {@link BlockGrid}. Default behavior is to check for neighbors.
 	 * @returns {BlockGrid} Return this object to make function chaining convenient.
 	 * @memberof BlockGrid
 	 * @instance
 	 */
-	fromBlockTypeMatrix: function(blockTypeMatrix, checkForNeighbors) {
+	fromBlockTypeMatrix: function(blockTypeMatrix, checkForNeighbors, startRow, startCol) {
+		startRow = startRow || 0;
+		startCol = startCol || 0;
+
 		for (var row = 0; row < blockTypeMatrix.length; row++) {
 			for (var col = 0; col < blockTypeMatrix[row].length; col++) {
 				// The add() function knows how to deal with receiving undefined
-				this.add(row, col, Block.prototype.blockFromClassId(blockTypeMatrix[row][col]), checkForNeighbors);
+				this.add(startRow + row, startCol + col, Block.prototype.blockFromClassId(blockTypeMatrix[row][col]), checkForNeighbors);
 			}
 		}
 
@@ -571,7 +578,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * number of columns and every column has the same number of rows, but the total number of rows and total number
 	 * of columns is not required to be the same).
 	 * @param checkForNeighbors {boolean} Whether or not we should validate that each {@link Block} will be
-	 * attached to the existing structure in this {@link BlockGrid}.
+	 * attached to the existing structure in this {@link BlockGrid}. Default behavior is to check for neighbors.
 	 * @return {BlockGrid} Return this object to make function chaining convenient.
 	 * @memberof BlockGrid
 	 * @instance
@@ -623,9 +630,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 		var block = ige.$(blockGridId).get(row, col);
 		// Calculate where to put our effect mount
 		// with respect to the BlockGrid
-		var x = Block.WIDTH * col -
+		var x = Block.WIDTH * (col - this.startCol()) -
 			this._bounds2d.x2 + block._bounds2d.x2;
-		var y = Block.HEIGHT * row -
+		var y = Block.HEIGHT * (row - this.startRow()) -
 			this._bounds2d.y2 + block._bounds2d.y2;
 
 		// Store the effectsMount in the block so we can remove it later
@@ -670,6 +677,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 					return false;
 				}
 				block.busy(true);
+				console.log("Mining block. row: " + data.row + ", col: " + data.col);
 
 				block._decrementHealthIntervalId = setInterval(function() {
 					if (block._hp > 0) {
@@ -864,7 +872,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @param block {Block} The block to add. If the block is larger than 1x1, all spaces where the block would occupy
 	 * are checked.
 	 * @param checkForNeighbors {boolean} Whether or not we should validate that the given {@link Block} will be
-	 * attached to the existing structure in this {@link BlockGrid}.
+	 * attached to the existing structure in this {@link BlockGrid}. Default behavior is to check for neighbors.
 	 * @returns {boolean} True if nothing prevents this block from being placed at the given row and col. False
 	 * otherwise.
 	 * @memberof BlockGrid
