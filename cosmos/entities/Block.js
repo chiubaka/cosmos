@@ -14,12 +14,12 @@ var Block = IgeEntity.extend({
 	// The pixel height of the health bar
 	HEALTH_BAR_HEIGHT: 4,
 
-	// The time it takes to mine a block in milliseconds
-	// TODO: Make this an instance variable and let the value vary for different block types
+	/**
+	 * How long (in milliseconds) it takes for a ship with a single mining laser to decrease a block's HP by 1.
+	 * Note that even though MINING_TIME is the same for all blocks,
+	 * blocks take different amounts of time to completely mine because they have different amounts of HP.
+	 */
 	MINING_TIME: 100,
-
-	_row: undefined,
-	_col: undefined,
 
 	/**
 	 * The number of rows that this {@link Block} takes up.
@@ -45,6 +45,11 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	_blockGrid: undefined,
+	/**
+	 * The row an column of the {@link BlockGrid} that this block inhabits if any.
+	 */
+	_row: undefined,
+	_col: undefined,
 	/**
 	 * An IgeEntity that all of the effects for this {@link Block} get mounted to.
 	 * @type {IgeEntity}
