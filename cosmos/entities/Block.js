@@ -14,9 +14,8 @@ var Block = IgeEntity.extend({
 	// The pixel height of the health bar
 	HEALTH_BAR_HEIGHT: 4,
 
-	// The time it takes to mine a block in milliseconds
-	// TODO: Make this an instance variable and let the value vary for different block types
-	MINING_TIME: 100,
+	// How long it takes for a block to lose one health.
+	MINING_INTERVAL: 100,
 
 	_row: undefined,
 	_col: undefined,
