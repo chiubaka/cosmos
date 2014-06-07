@@ -16,7 +16,7 @@ var Block = IgeEntity.extend({
 
 	/**
 	 * How long (in milliseconds) it takes for a ship with a single mining laser to decrease a block's HP by 1.
-	 * Note that even though MINING_TIME is the same for all blocks,
+	 * Note that even though MINING_INTERVAL is the same for all blocks,
 	 * blocks take different amounts of time to completely mine because they have different amounts of HP.
 	 */
 	MINING_INTERVAL: 100,
