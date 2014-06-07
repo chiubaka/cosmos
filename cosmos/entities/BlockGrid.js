@@ -159,7 +159,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		else {
 			this._renderContainer = new RenderContainer()
 				.mount(this);
-			this.fromBlockTypeMatrix(data, false);
+			this.fromBlockTypeMatrix(data.blockTypeMatrix, false, data.startRow, data.startCol);
 
 			// TODO: Lazily create when needed to speed up load time.
 			// TODO: Examine ConstructionZoneOverlay to make sure it is compatible with new BlockGrid backing.
@@ -181,7 +181,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @instance
 	 */
 	streamCreateData: function() {
-		return this.toBlockTypeMatrix();
+		return {
+			startRow: this.startRow(),
+			startCol: this.startCol(),
+			blockTypeMatrix: this.toBlockTypeMatrix()
+		}
 	},
 
 	/**
@@ -483,9 +487,12 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @memberof BlockGrid
 	 * @instance
 	 */
-	fromBlockTypeMatrix: function(blockTypeMatrix, checkForNeighbors) {
-		for (var row = 0; row < blockTypeMatrix.length; row++) {
-			for (var col = 0; col < blockTypeMatrix[row].length; col++) {
+	fromBlockTypeMatrix: function(blockTypeMatrix, checkForNeighbors, startRow, startCol) {
+		startRow = startRow || 0;
+		startCol = startCol || 0;
+
+		for (var row = startRow; row < blockTypeMatrix.length; row++) {
+			for (var col = startCol; col < blockTypeMatrix[row].length; col++) {
 				// The add() function knows how to deal with receiving undefined
 				this.add(row, col, Block.prototype.blockFromClassId(blockTypeMatrix[row][col]), checkForNeighbors);
 			}

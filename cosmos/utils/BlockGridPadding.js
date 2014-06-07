@@ -3,7 +3,12 @@ var BlockGridPadding = {
 	// Regular meaning all rows have same number of columns
 	extractMinimumGrid: function(grid) {
 		// Find the boundaries of the minimum grid within the padded grid
-		var startCol = grid[0].length;
+		if (grid[0] !== undefined) {
+			var startCol = grid[0].length;
+		} else {
+			var startCol = 0;
+		}
+		
 		var endCol = 0;
 		var startRow = grid.length;
 		var endRow = 0;
