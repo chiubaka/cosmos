@@ -60,8 +60,6 @@ var Player = BlockGrid.extend({
 	 */
 	initClient: function() {
 		this.depth(1);
-		// TODO: Add engine particles dynamically as engine blocks are added
-		//this.addEngineParticles();
 	},
 
 	/**
@@ -69,54 +67,6 @@ var Player = BlockGrid.extend({
 	 */
 	initServer: function() {
 		this.cargo = new Cargo();
-	},
-
-	// Created on server, streamed to all clients
-	addLaser: function(blockGridId, row, col) {
-		// Hack because we can't mount on mining laser block
-		// (Server has no blocks mounted)
-		if(this.laserMount === undefined) {
-			this.laserMount = new EffectsMount()
-				.mount(this)
-				.streamMode(1)
-				// TODO: Vary the position depending on where mining laser is,
-				// or implement server streaming of blocks.
-				// Right now, we translate the laser mount to the location of the mining
-				// laser block.
-				.translateBy(0, -115, 0)
-		}
-
-		this.laserBeam = new LaserBeam()
-			.setTarget(blockGridId, row, col)
-			.streamMode(1)
-			.mount(this.laserMount);
-
-		return this;
-	},
-
-	addEngineParticles: function() {
-		var player = this;
-		this.laserParticleEmitter = new IgeParticleEmitter()
-			// Set the particle entity to generate for each particle
-			.particle(EngineParticle)
-			// Set particle life to 300ms
-			.lifeBase(300)
-			// Set output to 60 particles a second (1000ms)
-			.quantityBase(60)
-			.quantityTimespan(1000)
-			// Set the particle's death opacity to zero so it fades out as it's lifespan runs out
-			.deathOpacityBase(0)
-			// Set velocity vector to y = 0.05, with variance values
-			//.velocityVector(new IgePoint3d(0, 0.05, 0), new IgePoint3d(-0.04, 0.05, 0), new IgePoint3d(0.04, 0.15, 0))
-			.translateVarianceY(-10, 10)
-			.translateVarianceX(-10, 10)
-			// Mount new particles to the object scene
-			.particleMountTarget(ige.client.spaceGameScene)
-			// Move the particle emitter to the bottom of the ship
-			.translateTo(0, 100, 0)
-			.mount(player)
-			// Mount the emitter to the ship
-			.start();
 	},
 
 	/**
@@ -213,14 +163,6 @@ var Player = BlockGrid.extend({
 	},
 
 	/**
-	 * Called every time a ship mines a block
-	 */
-	blockMinedListener: function (player, blockClassId) {
-		//player.laserBeam.destroy();
-		player.laserBeam = undefined;
-	},
-
-	/**
 	 * Called every time a ship collects a block
 	 */
 	blockCollectListener: function (player, blockClassId) {
@@ -306,8 +248,8 @@ var Player = BlockGrid.extend({
 
 					// I'm dividing by 10 because that's the scale factor between IGE and Box2D
 					var pointToApplyTo = {x: (this.translate().x() + engine.translate().x()) / 10.0, y: (this.translate().y() - engine.translate().y()) / 10.0};
-					pointToApplyTo.x = 2 * this._box2dBody.GetWorldCenter().x - pointToApplyTo.x
-					pointToApplyTo.y = 2 * this._box2dBody.GetWorldCenter().y - pointToApplyTo.y
+					pointToApplyTo.x = 2 * this._box2dBody.GetWorldCenter().x - pointToApplyTo.x;
+					pointToApplyTo.y = 2 * this._box2dBody.GetWorldCenter().y - pointToApplyTo.y;
 					this._box2dBody.ApplyImpulse(impulse, pointToApplyTo);
 				}
 			}

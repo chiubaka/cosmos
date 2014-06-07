@@ -200,8 +200,7 @@ var ServerNetworkEvents = {
 		if(blockGrid.processBlockActionServer(data, player)) {
 			var targetBlock = blockGrid.get(data.row, data.col);
 
-			// Activate mining laser
-			//player.addLaser(data.blockGridId, data.row, data.col);
+			// Activate mining lasers
 			player.fireMiningLasers(targetBlock);
 		}
 	},

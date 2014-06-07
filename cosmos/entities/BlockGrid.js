@@ -632,37 +632,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return constructionZoneLocations;
 	},
 
-	// Created on server, streamed to all clients
-	addMiningParticles: function(blockGridId, row, col) {
-		var block = ige.$(blockGridId).get(row, col);
-		// Calculate where to put our effect mount
-		// with respect to the BlockGrid
-		var x = Block.WIDTH * (col - this.startCol()) -
-			this._bounds2d.x2 + block._bounds2d.x2;
-		var y = Block.HEIGHT * (row - this.startRow()) -
-			this._bounds2d.y2 + block._bounds2d.y2;
-
-		// Store the effectsMount in the block so we can remove it later
-		block.effectsMount = new EffectsMount()
-			.mount(this)
-			.streamMode(1)
-			.translateBy(x, y, 0)
-
-		block.blockParticleEmitter = new BlockParticleEmitter()
-			.streamMode(1)
-			.mount(block.effectsMount)
-
-		return this;
-	},
-
-	/**
-	 * Called every time a ship mines a block
-	 */
-	blockMinedListener: function (player, blockClassId, block) {
-		//block.blockParticleEmitter.destroy();
-		//block.effectsMount.destroy();
-	},
-
 	processBlockActionServer: function(data, player) {
 		var self = this;
 
@@ -684,7 +653,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 					return false;
 				}
 				block.busy(true);
-				console.log("Mining block. row: " + data.row + ", col: " + data.col);
 
 				block._decrementHealthIntervalId = setInterval(function() {
 					if (block._hp > 0) {
