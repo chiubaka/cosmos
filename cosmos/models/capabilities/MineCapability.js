@@ -21,8 +21,6 @@
 
 
 	Block_mouseDown: function(sender, event, data) {
-		sender._displayHealth = true;
-
 		if (sender.parent().parent().classId() === BlockGrid.prototype.classId()) {
 			ige.client.metrics.fireEvent('block', 'mine', sender.classId());
 		} else {
