@@ -34,6 +34,10 @@ var MiningLaserBlock = Part.extend({
 		targetBlockGrid.createEffectsMount(targetBlock);
 		// TODO: Actually add the mining laser.
 
+		this.laserBeam = new LaserBeam()
+			.setTarget(effect.targetBlock.blockGridId, effect.targetBlock.row, effect.targetBlock.col)
+			.mount(this.effectsMount());
+
 		var targetEffect = NetworkUtils.effect('miningParticles');
 		targetEffect.sourceBlock = effect.targetBlock;
 

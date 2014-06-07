@@ -201,8 +201,7 @@ var ServerNetworkEvents = {
 			var targetBlock = blockGrid.get(data.row, data.col);
 
 			// Activate mining laser
-			player.addLaser(data.blockGridId, data.row, data.col);
-			//blockGrid.addMiningParticles(data.blockGridId, data.row, data.col);
+			//player.addLaser(data.blockGridId, data.row, data.col);
 			var miningLasers = player.blocksOfType(MiningLaserBlock.prototype.classId());
 			for (var i = 0; i < miningLasers.length; i++) {
 				var miningLaser = miningLasers[i];

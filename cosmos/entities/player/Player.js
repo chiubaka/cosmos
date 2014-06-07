@@ -216,7 +216,7 @@ var Player = BlockGrid.extend({
 	 * Called every time a ship mines a block
 	 */
 	blockMinedListener: function (player, blockClassId) {
-		player.laserBeam.destroy();
+		//player.laserBeam.destroy();
 		player.laserBeam = undefined;
 	},
 
