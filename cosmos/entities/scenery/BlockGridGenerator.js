@@ -24,8 +24,8 @@ var BlockGridGenerator = {
 
 		// Start the generation algorithm at a specific cell in the asteroid.
 		var startingCell = {
-			row: 10,
-			col: 10
+			row: 0,
+			col: 0
 		};
 
 		// Initialize the block bag.

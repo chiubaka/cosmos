@@ -641,6 +641,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 					return false;
 				}
 				block.busy(true);
+				console.log("Mining block. row: " + data.row + ", col: " + data.col);
 
 				block._decrementHealthIntervalId = setInterval(function() {
 					if (block._hp > 0) {
