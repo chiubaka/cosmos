@@ -15,13 +15,13 @@ var MiningLaserBlock = Part.extend({
 	},
 
 	addEffect: function(effect) {
-		console.log("MiningLaserBlock#addEffect: " + effect.type);
+		// This must be called before anything else. Block#addEffect makes sure that the effects mount exists before
+		// adding the effect.
+		Part.prototype.addEffect.call(this, effect);
+
 		switch (effect.type) {
 			case 'miningLaser':
 				this._addMiningLaserEffect(effect);
-				break;
-			default:
-				Part.prototype.addEffect.call(this, effect);
 				break;
 		}
 	},
@@ -34,14 +34,14 @@ var MiningLaserBlock = Part.extend({
 				break;
 		}
 
+		// This must be called after everything else. Block#removeEffect makes sure to clean up the effects mount if
+		// it is no longer needed.
 		Part.prototype.removeEffect.call(this, effect);
 	},
 
 	_addMiningLaserEffect: function(effect) {
 		var targetBlockGrid = ige.$(effect.targetBlock.blockGridId);
 		var targetBlock = targetBlockGrid.get(effect.targetBlock.row, effect.targetBlock.col);
-
-		targetBlockGrid.createEffectsMount(targetBlock);
 
 		if (this.laserBeam !== undefined) {
 			this.laserBeam.destroy();

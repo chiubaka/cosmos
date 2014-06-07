@@ -391,8 +391,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 	addEffect: function(effect) {
 		var block = this.get(effect.sourceBlock.row, effect.sourceBlock.col);
 
-		this.createEffectsMount(block)
-
 		block.addEffect(effect);
 	},
 

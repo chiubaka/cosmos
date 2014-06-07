@@ -154,6 +154,10 @@ var Block = IgeEntity.extend({
 	},
 
 	addEffect: function(effect) {
+		if (this._effectsMount === undefined) {
+			this.blockGrid().createEffectsMount(this);
+		}
+
 		switch (effect.type) {
 			case 'miningParticles':
 				this._addMiningParticles();
