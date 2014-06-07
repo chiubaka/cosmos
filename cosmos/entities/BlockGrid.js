@@ -675,6 +675,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 						var blockClassId = block.classId();
 						ige.emit('block mined', [player, blockClassId, block]);
 
+						player.mining = false;
 						player.turnOffMiningLasers(block);
 
 						// Remove block server side, then send remove msg to client

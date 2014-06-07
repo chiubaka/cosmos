@@ -7,6 +7,8 @@ var Player = BlockGrid.extend({
 	_sid: undefined,
 	_dbId: undefined,
 
+	mining: false,
+
 	init: function(data) {
 		BlockGrid.prototype.init.call(this, data);
 

@@ -186,7 +186,7 @@ var ServerNetworkEvents = {
 		}
 
 		// Do not start mining if we are already mining
-		if (player.laserBeam !== undefined) {
+		if (player.mining) {
 			return;
 		}
 
@@ -198,8 +198,9 @@ var ServerNetworkEvents = {
 
 		data.action = 'mine';
 		if(blockGrid.processBlockActionServer(data, player)) {
-			var targetBlock = blockGrid.get(data.row, data.col);
+			player.mining = true;
 
+			var targetBlock = blockGrid.get(data.row, data.col);
 			// Activate mining lasers
 			player.fireMiningLasers(targetBlock);
 		}
