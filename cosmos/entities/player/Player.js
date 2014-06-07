@@ -15,8 +15,6 @@ var Player = BlockGrid.extend({
 		this.category('player');
 		this._attractionStrength = 1;
 
-		this.drawBounds(false);
-
 		this.controls = {
 			key: {
 				left: false,
@@ -172,7 +170,8 @@ var Player = BlockGrid.extend({
 					y: 0
 				}
 			}
-		}
+		};
+
 		var tempFixture = ige.box2d.createFixture(fixtureDef);
 		var tempShape = new ige.box2d.b2CircleShape();
 
@@ -280,25 +279,18 @@ var Player = BlockGrid.extend({
 				var y_comp = Math.sin(angle) * linearImpulse;
 
 				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
-				var location = this._box2dBody.GetWorldCenter(); //center of gravity
 
-				var grid = this.grid();
-				for (row = 0; row < grid.length; row++) {
-					var blockRow = grid[row];
-					for (col = 0; col < blockRow.length; col++) {
-						var block = blockRow[col];
+				var engines = this.blocksOfType(EngineBlock.prototype.classId());
 
-						if(block && block.classId() === "EngineBlock") {
-							//TODO: Fixtures should have their own position in box2d units. Something like block.fixture().m_shape.m_centroid should work. But this is a little tricky because box2D fixtures don't seem to compute their own world coordinates or rotated offsets. They only store the unrotated offset. Talk with @rafaelCosman if you want help doing this TODO.
-						
-							// I'm deviding by 10 because that's the scale factor between IGE and Box2D
-							var pointToApplyTo = {x: (this.translate().x() + block.translate().x()) / 10.0, y: (this.translate().y() - block.translate().y()) / 10.0};
-							pointToApplyTo.x = 2 * this._box2dBody.GetWorldCenter().x - pointToApplyTo.x
-							pointToApplyTo.y = 2 * this._box2dBody.GetWorldCenter().y - pointToApplyTo.y
-							this._box2dBody.ApplyImpulse(impulse, pointToApplyTo);
+				for (var i = 0; i < engines.length; i++) {
+					var engine = engines[i];
+					//TODO: Fixtures should have their own position in box2d units. Something like block.fixture().m_shape.m_centroid should work. But this is a little tricky because box2D fixtures don't seem to compute their own world coordinates or rotated offsets. They only store the unrotated offset. Talk with @rafaelCosman if you want help doing this TODO.
 
-						}
-					}
+					// I'm dividing by 10 because that's the scale factor between IGE and Box2D
+					var pointToApplyTo = {x: (this.translate().x() + engine.translate().x()) / 10.0, y: (this.translate().y() - engine.translate().y()) / 10.0};
+					pointToApplyTo.x = 2 * this._box2dBody.GetWorldCenter().x - pointToApplyTo.x
+					pointToApplyTo.y = 2 * this._box2dBody.GetWorldCenter().y - pointToApplyTo.y
+					this._box2dBody.ApplyImpulse(impulse, pointToApplyTo);
 				}
 			}
 		}

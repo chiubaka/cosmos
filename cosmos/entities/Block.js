@@ -1,12 +1,13 @@
 /**
  * This class is the superclass of all blocks, and it contains all of the logic for the blocks.
  * Other blocks just describe the way they are drawn and nothing else.
+ *
+ * @class
+ * @typedef {Object} Block
+ * @namespace
  */
 var Block = IgeEntity.extend({
 	classId: 'Block',
-
-	WIDTH: 26,
-	HEIGHT: 26,
 
 	// The pixel margin between the drawn health bar and the border of the block
 	HEALTH_BAR_MARGIN: 3,
@@ -20,8 +21,33 @@ var Block = IgeEntity.extend({
 	_row: undefined,
 	_col: undefined,
 
+	/**
+	 * The number of rows that this {@link Block} takes up.
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 * @todo Add code allow the {@link Block#_numRows|_numRows} to vary.
+	 */
+	_numRows: 1,
+	/**
+	 * The number of cols that this {@link Block} takes up.
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 * @todo Add code allow the {@link Block#_numCols|_numCols} to vary.
+	 */
+	_numCols: 1,
+
 	_fixture: undefined,
 	_fixtureDef: undefined,
+	/**
+	 * An entity associated with this {@link Block} which is used to visualize a {@link BlockGrid}'s fixtures. Only
+	 * used if this {@link Block} is in a {@link BlockGrid} that has debugFixtures set to true.
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 */
+	_fixtureDebuggingEntity: undefined,
 
 	MAX_HP: 30,
 	_hp: undefined,
@@ -31,14 +57,14 @@ var Block = IgeEntity.extend({
 
 	/**
 	 * Construct a new block
-   * Note that subclasses of Block are expected to have their own textures.
+	 * Note that subclasses of Block are expected to have their own textures.
 	 * @param data an optional dictionary containing initialization information.
 	 */
 	init: function(data) {
 		IgeEntity.prototype.init.call(this);
 
 		// Use an even number so values don't have to become approximate when we divide by two
-		this.width(this.WIDTH).height(this.HEIGHT);
+		this.width(Block.WIDTH).height(Block.HEIGHT);
 
 		if (data && data.MAX_HP) {
 			this.MAX_HP = data.MAX_HP;
@@ -53,6 +79,26 @@ var Block = IgeEntity.extend({
 			this.compositeCache(true);
 			this.cacheSmoothing(true);
 		}
+	},
+
+	/**
+	 * Getter for {@link Block#_numRows|_numRows}.
+	 * @returns {number}
+	 * @memberof Block
+	 * @instance
+	 */
+	numRows: function() {
+		return this._numRows;
+	},
+
+	/**
+	 * Getter for {@link Block#_numCols|_numCols}.
+	 * @returns {number}
+	 * @memberof Block
+	 * @instance
+	 */
+	numCols: function() {
+		return this._numCols;
 	},
 
 	mouseDown: function(event, control) {
@@ -105,6 +151,20 @@ var Block = IgeEntity.extend({
 		return this._fixtureDef;
 	},
 
+	/**
+	 * Getter/setter for the {@link Block#_fixtureDebuggingEntity|_fixtureDebuggingEntity} property.
+	 * @param fixtureDebuggingEntity {FixtureDebuggingEntity} Optional parameter. If provided, this is the new
+	 * {@link FixtureDebuggingEntity} for this {@link Block}.
+	 * @returns {*} The existing {@link FixtureDebuggingEntity} if no argument is provided, or this object if an
+	 * argument is provided in order to make function call chaining convenient.
+	 */
+	fixtureDebuggingEntity: function(fixtureDebuggingEntity) {
+		if (fixtureDebuggingEntity !== undefined) {
+			this._fixtureDebuggingEntity = fixtureDebuggingEntity;
+			return this;
+		}
+		return this._fixtureDebuggingEntity;
+	},
 
 	/**
 	 * Decreases the block's health by the amount passed.
@@ -172,5 +232,18 @@ var Block = IgeEntity.extend({
 		}
 	}
 });
+
+/**
+ * Constant for the width of a {@link Block} as drawn in the world.
+ * @constant {number}
+ * @memberof Block
+ */
+Block.WIDTH = 26;
+/**
+ * Constant for the height of a {@link Block} as drawn in the world.
+ * @constant {number}
+ * @memberof Block
+ */
+Block.HEIGHT = 26;
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Block; }

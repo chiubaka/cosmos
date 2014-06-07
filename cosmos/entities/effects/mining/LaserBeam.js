@@ -48,7 +48,7 @@ var LaserBeam = IgeEntity.extend({
 			var blockGrid = ige.$(this._targetId);
 			var block = undefined;
 			if (blockGrid !== undefined) {
-				block = blockGrid.grid()[this._targetRow][this._targetCol];
+				block = blockGrid.get(this._targetRow, this._targetCol);
 			}
 
 			// Check if the block is undefined. This happens in the update() ticks

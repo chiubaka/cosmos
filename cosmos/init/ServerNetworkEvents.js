@@ -96,22 +96,23 @@ var ServerNetworkEvents = {
 	 * @private
 	 */
 	_createPlayer: function(clientId, playerId, ship, cargo) {
-		var player = new Player();
+		var player = new Player()
+			// Call BlockGrid#debugFixtures before calling BlockGrid#fromBlockMatrix, since debugging entities are
+			// added when fixtures are added.
+			.debugFixtures(false);
 
 		if (ship === undefined) {
-			player.grid(ExampleShips.starterShipSingleMisplacedEngine());
+			player.fromBlockMatrix(ExampleShips.starterShip(), false);
 		}
 		else {
-			player.grid(BlockGrid.prototype.rehydrateGrid(ship));
+			player.fromBlockTypeMatrix(ship, false);
 		}
 
 		if (playerId !== undefined) {
 			player.dbId(playerId);
 		}
 
-		player.debugFixtures(false)//call this before calling setGrid()
-			.padding(10)
-			.addSensor(300)
+		player.addSensor(300)
 			.attractionStrength(1)
 			.streamMode(1)
 			.mount(ige.server.spaceGameScene)
@@ -216,11 +217,12 @@ var ServerNetworkEvents = {
 			//console.log("Placing item: " + blockToPlace.classId(), 'info');
 			new BlockGrid()
 				.category('smallAsteroid')
+				// TODO: Math.random() isn't safe here! Also, there's no good reason to set an id on this BlockGrid.
 				.id('littleAsteroid' + Math.random())
 				.streamMode(1)
 				.mount(ige.$("spaceGameScene"))
 				.depth(100)
-				.grid([[blockToPlace]])
+				.fromBlockMatrix([[blockToPlace]])
 				.translateTo(data.x, data.y, 0);
 
 			var confirmData = { category: 'construct', action: 'new', label: data.selectedType };
