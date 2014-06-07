@@ -331,6 +331,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this._unsetBlock(block);
 		this._removeFromBlocksByType(block);
 
+		if (block.effectsMount() !== undefined) {
+			block.effectsMount().unMount();
+		}
+
 		if (ige.isServer) {
 			this._box2dBody.DestroyFixture(block.fixture());
 			if (this._debugFixtures) {
@@ -1507,6 +1511,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 				var block = iterator.next();
 				block.translateBy(translationData.x, translationData.y, 0);
 				block.cacheDirty(true);
+				this.updateEffect(block);
 			}
 
 		}
