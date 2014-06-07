@@ -24,8 +24,8 @@ var BlockGridGenerator = {
 
 		// Start the generation algorithm at a specific cell in the asteroid.
 		var startingCell = {
-			x: 0,
-			y: 0
+			row: 10,
+			col: 10
 		};
 
 		// Initialize the block bag.
@@ -38,12 +38,12 @@ var BlockGridGenerator = {
 			var blockIndex = Math.floor(Math.random() * blocksToPlace.length);
 			var block = blocksToPlace[blockIndex];
 			/*
-			if (asteroidConstr[block.x] !== undefined && asteroidConstr[block.x][block.y] !== undefined) {
+			if (asteroidConstr[block.row] !== undefined && asteroidConstr[block.row][block.col] !== undefined) {
 				blocksToPlace.remove(blockIndex);
 				continue;
 			}
 			*/
-			if (blockGrid.get(block.x, block.y) !== undefined) {
+			if (blockGrid.get(block.row, block.col) !== undefined) {
 				blocksToPlace.remove(blockIndex);
 				continue;
 			}
@@ -52,25 +52,25 @@ var BlockGridGenerator = {
 				var newBlock = new IceBlock();/*
 				first = false;
 			} else {
-				var newBlock = this.getBlockType(blockGrid, block.x, block.y, blockDistribution);
+				var newBlock = this.getBlockType(blockGrid, block.row, block.col, blockDistribution);
 			}*/
 
 			// If the block can be added, add it!
-			//if (blockGrid.add(block.x, block.y, newBlock)) {
+			//if (blockGrid.add(block.row, block.col, newBlock)) {
 			{
-				blockGrid.add(block.x, block.y, newBlock);
+				blockGrid.add(block.row, block.col, newBlock, false);
 				blocksRemaining--;
 
-				if (symmetric) {
-					blockGrid.add(block.x, -block.y, Block.prototype.blockFromClassId(newBlock.classId()));
+				/*if (symmetric) {
+					blockGrid.add(block.row, -block.col, Block.prototype.blockFromClassId(newBlock.classId()), false);
 					blocksRemaining--;
-				}
+				}*/
 
 				// Push cardinal neighbors into block bag.
-				blocksToPlace.push({ x: block.x - 1, y: block.y });
-				blocksToPlace.push({ x: block.x + 1, y: block.y });
-				blocksToPlace.push({ x: block.x, y: block.y - 1 });
-				blocksToPlace.push({ x: block.x, y: block.y + 1 });
+				blocksToPlace.push({ row: block.row - 1, col: block.col });
+				blocksToPlace.push({ row: block.row + 1, col: block.col });
+				blocksToPlace.push({ row: block.row, col: block.col - 1 });
+				blocksToPlace.push({ row: block.row, col: block.col + 1 });
 			}
 
 			// Remove the block
