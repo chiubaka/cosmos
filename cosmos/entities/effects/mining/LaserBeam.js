@@ -5,10 +5,6 @@ var LaserBeam = IgeEntity.extend({
 		IgeEntity.prototype.init.call(this);
 
 		if (!ige.isServer) {
-			this._targetId = createData[0];
-			this._targetRow = createData[1];
-			this._targetCol = createData[2];
-
 			this.texture(ige.client.textures.laserBeamTexture)
 
 			// Fade in the laser beam

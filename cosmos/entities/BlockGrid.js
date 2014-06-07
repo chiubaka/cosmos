@@ -157,6 +157,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			});
 		}
 		else {
+			this.depth(BlockGrid.DEPTH);
 			this._renderContainer = new RenderContainer()
 				.mount(this);
 			this.fromBlockTypeMatrix(data.blockTypeMatrix, false, data.startRow, data.startCol);
@@ -258,6 +259,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// Store the row and col in the block so that we can figure out where we are from the block.
 		block.row(row).col(col);
 
+		// Give the block a back pointer to this BlockGrid.
+		block.blockGrid(this);
+
 		// Recompute the starting row and column of this BlockGrid based on the newly added block.
 		// It is important that this call occur before the call to BlockGrid#_updateDimensions, because
 		// BlockGrid#_updateDimensions relies upon BlockGrid#numRows and BlockGrid#numCols, whose values are not
@@ -306,6 +310,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		this._numBlocks++;
 
+		block.onAdded();
+
 		return true;
 	},
 
@@ -327,6 +333,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this._blocksList.splice(this._blocksList.indexOf(block), 1);
 		this._unsetBlock(block);
 		this._removeFromBlocksByType(block);
+
+		if (block.effectsMount() !== undefined) {
+			block.effectsMount().unMount();
+		}
 
 		if (ige.isServer) {
 			this._box2dBody.DestroyFixture(block.fixture());
@@ -373,12 +383,76 @@ var BlockGrid = IgeEntityBox2d.extend({
 			this._updateFixtures();
 		}
 
+		block.onRemoved();
+
 		block.destroy();
 
 		// Destroy this BlockGrid to clean up memory.
 		if (this._numBlocks === 0) {
 			this.destroy();
 		}
+	},
+
+	/**
+	 * Adds an effect to a {@link Block} in this {@link BlockGrid}
+	 * @param effect {Object} An effect object containing information for the type of effect, the source block
+	 * (block on which to mount the effect), and an optional target block for effects like the mining laser.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	addEffect: function(effect) {
+		var block = this.get(effect.sourceBlock.row, effect.sourceBlock.col);
+
+		block.addEffect(effect);
+	},
+
+	/**
+	 * Removes an effect from a {@link Block} in this {@link BlockGrid}
+	 * @param effect {Object} An effect object containing information for the type of effect, the source block
+	 * (block on which to mount the effect), and an optional target block for effects like the mining laser.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	removeEffect: function(effect) {
+		var block = this.get(effect.sourceBlock.row, effect.sourceBlock.col);
+
+		block.removeEffect(effect);
+	},
+
+	/**
+	 * Creates the effects mount for the given {@link Block} and moves the mount to the correct location based on where
+	 * the {@link Block} is in the grid. An effects mount is a blank IGE Entity that is used to correctly position
+	 * effects for blocks (e.g. mining particles or engine particles). Effects mounts are associated with {@link Block}s
+	 * and their location is updated anytime the {@link Block}s in this {@link BlockGrid} move.
+	 * @param block {Block} The {@link Block} to create an effects mount for.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	createEffectsMount: function(block) {
+		block.createEffectsMount();
+		this.updateEffect(block);
+	},
+
+	/**
+	 * Moves the effects mount of the given {@link Block} to the correct position based on the {@link Block}'s position
+	 * in the grid. Also handles mounting the effect mount of the {@link Block} to this {@link BlockGrid} if it has not
+	 * already been mounted.
+	 * @param block {Block} The {@link Block} to update the effects mount for.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	updateEffect: function(block) {
+		var effectsMount = block.effectsMount();
+		if (effectsMount === undefined) {
+			return;
+		}
+
+		if (effectsMount.parent() !== this) {
+			effectsMount.mount(this);
+		}
+
+		var drawLocation = this._drawLocationForBlock(block);
+		effectsMount.translateTo(drawLocation.x, drawLocation.y, 0);
 	},
 
 	/**
@@ -589,37 +663,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return constructionZoneLocations;
 	},
 
-	// Created on server, streamed to all clients
-	addMiningParticles: function(blockGridId, row, col) {
-		var block = ige.$(blockGridId).get(row, col);
-		// Calculate where to put our effect mount
-		// with respect to the BlockGrid
-		var x = Block.WIDTH * (col - this.startCol()) -
-			this._bounds2d.x2 + block._bounds2d.x2;
-		var y = Block.HEIGHT * (row - this.startRow()) -
-			this._bounds2d.y2 + block._bounds2d.y2;
-
-		// Store the effectsMount in the block so we can remove it later
-		block.effectsMount = new EffectsMount()
-			.mount(this)
-			.streamMode(1)
-			.translateBy(x, y, 0)
-
-		block.blockParticleEmitter = new BlockParticleEmitter()
-			.streamMode(1)
-			.mount(block.effectsMount)
-
-		return this;
-	},
-
-	/**
-	 * Called every time a ship mines a block
-	 */
-	blockMinedListener: function (player, blockClassId, block) {
-		block.blockParticleEmitter.destroy();
-		block.effectsMount.destroy();
-	},
-
 	processBlockActionServer: function(data, player) {
 		var self = this;
 
@@ -641,7 +684,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 					return false;
 				}
 				block.busy(true);
-				console.log("Mining block. row: " + data.row + ", col: " + data.col);
 
 				block._decrementHealthIntervalId = setInterval(function() {
 					if (block._hp > 0) {
@@ -663,6 +705,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 						// necessarily collected. This is used for removing the laser.
 						var blockClassId = block.classId();
 						ige.emit('block mined', [player, blockClassId, block]);
+
+						player.mining = false;
+						player.turnOffMiningLasers(block);
 
 						// Remove block server side, then send remove msg to client
 						self.remove(data.row, data.col);
@@ -1269,8 +1314,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @instance
 	 */
 	_createFixtureDef: function(block) {
-		var x = Block.WIDTH * (block.col() - this.startCol()) - this._bounds2d.x2 + block._bounds2d.x2;
-		var y = Block.HEIGHT * (block.row() - this.startRow()) - this._bounds2d.y2 + block._bounds2d.y2;
+		var drawLocation = this._drawLocationForBlock(block);
 		return {
 			density: BlockGrid.BLOCK_FIXTURE_DENSITY,
 			friction: BlockGrid.BLOCK_FIXTURE_FRICTION,
@@ -1281,8 +1325,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 					// The position of the fixture relative to the body
 					// The fixtures are slightly smaller than the actual block grid so that you can fit into a hole
 					// which is exactly the same width (in terms of blocks) as your ship
-					x: x + BlockGrid.BLOCK_FIXTURE_PADDING,
-					y: y + BlockGrid.BLOCK_FIXTURE_PADDING,
+					x: drawLocation.x + BlockGrid.BLOCK_FIXTURE_PADDING,
+					y: drawLocation.y + BlockGrid.BLOCK_FIXTURE_PADDING,
 					width: (block.numCols() * Block.WIDTH) / 2 - (2 * BlockGrid.BLOCK_FIXTURE_PADDING),
 					height: (block.numRows() * Block.HEIGHT) / 2 - (2 * BlockGrid.BLOCK_FIXTURE_PADDING)
 				}
@@ -1472,6 +1516,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 				var block = iterator.next();
 				block.translateBy(translationData.x, translationData.y, 0);
 				block.cacheDirty(true);
+				this.updateEffect(block);
 			}
 
 		}
@@ -1498,10 +1543,16 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		var oldX = block.translate().x();
 		var oldY = block.translate().y();
+		var drawLocation = this._drawLocationForBlock(block);
+
+		return {x: drawLocation.x - oldX, y: drawLocation.y - oldY};
+	},
+
+	_drawLocationForBlock: function(block) {
 		var x = Block.WIDTH * (block.col() - this.startCol()) - this._bounds2d.x2 + block._bounds2d.x2;
 		var y = Block.HEIGHT * (block.row() - this.startRow()) - this._bounds2d.y2 + block._bounds2d.y2;
 
-		return {x: x - oldX, y: y - oldY};
+		return {x: x, y: y};
 	},
 
 	/**
@@ -1517,12 +1568,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 	_translateBlock: function(block) {
 		var oldX = block.translate().x();
 		var oldY = block.translate().y();
-		var x = Block.WIDTH * (block.col() - this.startCol()) - this._bounds2d.x2 + block._bounds2d.x2;
-		var y = Block.HEIGHT * (block.row() - this.startRow()) - this._bounds2d.y2 + block._bounds2d.y2;
+		var drawLocation = this._drawLocationForBlock(block);
 
-		block.translateTo(x, y, 0)
+		block.translateTo(drawLocation.x, drawLocation.y, 0)
 
-		return {x: x - oldX, y: y - oldY};
+		return {x: drawLocation.x - oldX, y: drawLocation.y - oldY};
 	},
 
 	/**
@@ -1621,5 +1671,18 @@ BlockGrid.BLOCK_FIXTURE_DENSITY = 1.0;
 BlockGrid.BLOCK_FIXTURE_FRICTION = 0.5;
 BlockGrid.BLOCK_FIXTURE_RESTITUTION = 0.5;
 BlockGrid.BLOCK_FIXTURE_PADDING = .1;
+
+/**
+ * The depth layer to place {@link BlockGrid}s on.
+ * @constant {number}
+ * @memberof BlockGrid
+ */
+BlockGrid.DEPTH = 0;
+/**
+ * The depth layer to place the block effects on.
+ * @constant {number}
+ * @memberof BlockGrid
+ */
+BlockGrid.EFFECTS_DEPTH = BlockGrid.DEPTH + 1;
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = BlockGrid; }

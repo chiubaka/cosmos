@@ -60,6 +60,8 @@ var Server = IgeClass.extend({
 						ige.network.define('constructionZoneClicked', self._onConstructionZoneClicked);
 						/* Define this command so that we can use it on the client */
 						ige.network.define('blockAction');
+						ige.network.define('addEffect');
+						ige.network.define('removeEffect');
 
 						ige.network.define('cargoRequest', self._onCargoRequest);
 						ige.network.define('cargoUpdate');
