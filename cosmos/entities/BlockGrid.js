@@ -393,23 +393,54 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 	},
 
+	/**
+	 * Adds an effect to a {@link Block} in this {@link BlockGrid}
+	 * @param effect {Object} An effect object containing information for the type of effect, the source block
+	 * (block on which to mount the effect), and an optional target block for effects like the mining laser.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
 	addEffect: function(effect) {
 		var block = this.get(effect.sourceBlock.row, effect.sourceBlock.col);
 
 		block.addEffect(effect);
 	},
 
+	/**
+	 * Removes an effect from a {@link Block} in this {@link BlockGrid}
+	 * @param effect {Object} An effect object containing information for the type of effect, the source block
+	 * (block on which to mount the effect), and an optional target block for effects like the mining laser.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
 	removeEffect: function(effect) {
 		var block = this.get(effect.sourceBlock.row, effect.sourceBlock.col);
 
 		block.removeEffect(effect);
 	},
 
+	/**
+	 * Creates the effects mount for the given {@link Block} and moves the mount to the correct location based on where
+	 * the {@link Block} is in the grid. An effects mount is a blank IGE Entity that is used to correctly position
+	 * effects for blocks (e.g. mining particles or engine particles). Effects mounts are associated with {@link Block}s
+	 * and their location is updated anytime the {@link Block}s in this {@link BlockGrid} move.
+	 * @param block {Block} The {@link Block} to create an effects mount for.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
 	createEffectsMount: function(block) {
 		block.createEffectsMount();
 		this.updateEffect(block);
 	},
 
+	/**
+	 * Moves the effects mount of the given {@link Block} to the correct position based on the {@link Block}'s position
+	 * in the grid. Also handles mounting the effect mount of the {@link Block} to this {@link BlockGrid} if it has not
+	 * already been mounted.
+	 * @param block {Block} The {@link Block} to update the effects mount for.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
 	updateEffect: function(block) {
 		var effectsMount = block.effectsMount();
 		if (effectsMount === undefined) {
@@ -1641,9 +1672,17 @@ BlockGrid.BLOCK_FIXTURE_FRICTION = 0.5;
 BlockGrid.BLOCK_FIXTURE_RESTITUTION = 0.5;
 BlockGrid.BLOCK_FIXTURE_PADDING = .1;
 
-BlockGrid.EFFECT_TARGET_SUFFIX = 'Target';
-// TODO: Make this one more than the BlockGrid depth
+/**
+ * The depth layer to place {@link BlockGrid}s on.
+ * @constant {number}
+ * @memberof BlockGrid
+ */
 BlockGrid.DEPTH = 0;
+/**
+ * The depth layer to place the block effects on.
+ * @constant {number}
+ * @memberof BlockGrid
+ */
 BlockGrid.EFFECTS_DEPTH = BlockGrid.DEPTH + 1;
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = BlockGrid; }
