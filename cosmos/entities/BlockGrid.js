@@ -491,10 +491,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 		startRow = startRow || 0;
 		startCol = startCol || 0;
 
-		for (var row = startRow; row < blockTypeMatrix.length; row++) {
-			for (var col = startCol; col < blockTypeMatrix[row].length; col++) {
+		for (var row = 0; row < blockTypeMatrix.length; row++) {
+			for (var col = 0; col < blockTypeMatrix[row].length; col++) {
 				// The add() function knows how to deal with receiving undefined
-				this.add(row, col, Block.prototype.blockFromClassId(blockTypeMatrix[row][col]), checkForNeighbors);
+				this.add(startRow + row, startCol + col, Block.prototype.blockFromClassId(blockTypeMatrix[row][col]), checkForNeighbors);
 			}
 		}
 
