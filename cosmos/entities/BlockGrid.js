@@ -233,7 +233,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @param col {number} The col to add at
 	 * @param block {Block} The Block to add to the grid.
 	 * @param checkForNeighbors {boolean} Whether or not we should validate that the given {@link Block} will be
-	 * attached to the existing structure in this {@link BlockGrid}.
+	 * attached to the existing structure in this {@link BlockGrid}. Default behavior is to check for neighbors.
 	 * @returns {boolean} True if the Block was added successfully to the grid. False otherwise. A Block may not be
 	 * successfully added to the grid if another Block already exists in the grid at the specified location or if the
 	 * parameters passed to this function are invalid.
@@ -478,7 +478,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * matrix (every row has the same number of columns and every column has the same number of rows, but the total number
 	 * of rows and total number of columns is not required to be the same).
 	 * @param checkForNeighbors {boolean} Whether or not we should validate that each {@link Block} will be
-	 * attached to the existing structure in this {@link BlockGrid}.
+	 * attached to the existing structure in this {@link BlockGrid}. Default behavior is to check for neighbors.
 	 * @returns {BlockGrid} Return this object to make function chaining convenient.
 	 * @memberof BlockGrid
 	 * @instance
@@ -535,7 +535,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * number of columns and every column has the same number of rows, but the total number of rows and total number
 	 * of columns is not required to be the same).
 	 * @param checkForNeighbors {boolean} Whether or not we should validate that each {@link Block} will be
-	 * attached to the existing structure in this {@link BlockGrid}.
+	 * attached to the existing structure in this {@link BlockGrid}. Default behavior is to check for neighbors.
 	 * @return {BlockGrid} Return this object to make function chaining convenient.
 	 * @memberof BlockGrid
 	 * @instance
@@ -828,7 +828,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @param block {Block} The block to add. If the block is larger than 1x1, all spaces where the block would occupy
 	 * are checked.
 	 * @param checkForNeighbors {boolean} Whether or not we should validate that the given {@link Block} will be
-	 * attached to the existing structure in this {@link BlockGrid}.
+	 * attached to the existing structure in this {@link BlockGrid}. Default behavior is to check for neighbors.
 	 * @returns {boolean} True if nothing prevents this block from being placed at the given row and col. False
 	 * otherwise.
 	 * @memberof BlockGrid
