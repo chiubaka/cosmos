@@ -12,6 +12,32 @@ var MiningLaserBlock = Part.extend({
 			this.textureOutline = "rgb(255, 0, 0)";
 			this.textureSvg = ige.client.svgs.miningLaser;
 		}
+	},
+
+	addEffect: function(effect) {
+		console.log("MiningLaserBlock#addEffect: " + effect.type);
+		switch (effect.type) {
+			case 'miningLaser':
+				this._addMiningLaserEffect(effect);
+				break;
+			default:
+				Part.prototype.addEffect.call(this, effect);
+				break;
+		}
+	},
+
+	_addMiningLaserEffect: function(effect) {
+		console.log('MiningLaserBlock#_addMiningLaserEffect');
+		var targetBlockGrid = ige.$(effect.targetBlock.blockGridId);
+		var targetBlock = targetBlockGrid.get(effect.targetBlock.row, effect.targetBlock.col);
+
+		targetBlockGrid.createEffectsMount(targetBlock);
+		// TODO: Actually add the mining laser.
+
+		var targetEffect = NetworkUtils.effect('miningParticles');
+		targetEffect.sourceBlock = effect.targetBlock;
+
+		targetBlock.addEffect(targetEffect);
 	}
 });
 

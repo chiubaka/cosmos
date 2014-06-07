@@ -254,6 +254,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// Store the row and col in the block so that we can figure out where we are from the block.
 		block.row(row).col(col);
 
+		// Give the block a back pointer to this BlockGrid.
+		block.blockGrid(this);
+
 		// Recompute the starting row and column of this BlockGrid based on the newly added block.
 		// It is important that this call occur before the call to BlockGrid#_updateDimensions, because
 		// BlockGrid#_updateDimensions relies upon BlockGrid#numRows and BlockGrid#numCols, whose values are not
@@ -375,6 +378,39 @@ var BlockGrid = IgeEntityBox2d.extend({
 		if (this._numBlocks === 0) {
 			this.destroy();
 		}
+	},
+
+	addEffect: function(effect) {
+		console.log("BlockGrid#addEffect");
+		var block = this.get(effect.sourceBlock.row, effect.sourceBlock.col);
+
+		this.createEffectsMount(block)
+
+		block.addEffect(effect);
+	},
+
+	createEffectsMount: function(block) {
+		block.createEffectsMount();
+		this.updateEffect(block);
+	},
+
+	updateEffect: function(block) {
+		console.log("BlockGrid#updateEffect");
+		var effectsMount = block.effectsMount();
+		if (effectsMount === undefined) {
+			console.log("BlockGrid#updateEffect: effects mount was undefined");
+			return;
+		}
+
+		if (effectsMount.parent() !== this) {
+			console.log("BlockGrid#updateEffect: mounted effects mount");
+			effectsMount.mount(this);
+		}
+
+		var drawLocation = this._drawLocationForBlock(block);
+		effectsMount.translateTo(drawLocation.x, drawLocation.y, 0);
+
+		console.log("BlockGrid#updateEffect: translated effects mount: x=" + drawLocation.x + " , y=" + drawLocation.y);
 	},
 
 	/**
@@ -609,8 +645,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * Called every time a ship mines a block
 	 */
 	blockMinedListener: function (player, blockClassId, block) {
-		block.blockParticleEmitter.destroy();
-		block.effectsMount.destroy();
+		//block.blockParticleEmitter.destroy();
+		//block.effectsMount.destroy();
 	},
 
 	processBlockActionServer: function(data, player) {
@@ -1261,8 +1297,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @instance
 	 */
 	_createFixtureDef: function(block) {
-		var x = Block.WIDTH * (block.col() - this.startCol()) - this._bounds2d.x2 + block._bounds2d.x2;
-		var y = Block.HEIGHT * (block.row() - this.startRow()) - this._bounds2d.y2 + block._bounds2d.y2;
+		var drawLocation = this._drawLocationForBlock(block);
 		return {
 			density: BlockGrid.BLOCK_FIXTURE_DENSITY,
 			friction: BlockGrid.BLOCK_FIXTURE_FRICTION,
@@ -1273,8 +1308,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 					// The position of the fixture relative to the body
 					// The fixtures are slightly smaller than the actual block grid so that you can fit into a hole
 					// which is exactly the same width (in terms of blocks) as your ship
-					x: x + BlockGrid.BLOCK_FIXTURE_PADDING,
-					y: y + BlockGrid.BLOCK_FIXTURE_PADDING,
+					x: drawLocation.x + BlockGrid.BLOCK_FIXTURE_PADDING,
+					y: drawLocation.y + BlockGrid.BLOCK_FIXTURE_PADDING,
 					width: (block.numCols() * Block.WIDTH) / 2 - (2 * BlockGrid.BLOCK_FIXTURE_PADDING),
 					height: (block.numRows() * Block.HEIGHT) / 2 - (2 * BlockGrid.BLOCK_FIXTURE_PADDING)
 				}
@@ -1490,10 +1525,16 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		var oldX = block.translate().x();
 		var oldY = block.translate().y();
+		var drawLocation = this._drawLocationForBlock(block);
+
+		return {x: drawLocation.x - oldX, y: drawLocation.y - oldY};
+	},
+
+	_drawLocationForBlock: function(block) {
 		var x = Block.WIDTH * (block.col() - this.startCol()) - this._bounds2d.x2 + block._bounds2d.x2;
 		var y = Block.HEIGHT * (block.row() - this.startRow()) - this._bounds2d.y2 + block._bounds2d.y2;
 
-		return {x: x - oldX, y: y - oldY};
+		return {x: x, y: y};
 	},
 
 	/**
@@ -1509,12 +1550,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 	_translateBlock: function(block) {
 		var oldX = block.translate().x();
 		var oldY = block.translate().y();
-		var x = Block.WIDTH * (block.col() - this.startCol()) - this._bounds2d.x2 + block._bounds2d.x2;
-		var y = Block.HEIGHT * (block.row() - this.startRow()) - this._bounds2d.y2 + block._bounds2d.y2;
+		var drawLocation = this._drawLocationForBlock(block);
 
-		block.translateTo(x, y, 0)
+		block.translateTo(drawLocation.x, drawLocation.y, 0)
 
-		return {x: x - oldX, y: y - oldY};
+		return {x: drawLocation.x - oldX, y: drawLocation.y - oldY};
 	},
 
 	/**
@@ -1613,5 +1653,7 @@ BlockGrid.BLOCK_FIXTURE_DENSITY = 1.0;
 BlockGrid.BLOCK_FIXTURE_FRICTION = 0.5;
 BlockGrid.BLOCK_FIXTURE_RESTITUTION = 0.5;
 BlockGrid.BLOCK_FIXTURE_PADDING = .1;
+
+BlockGrid.EFFECT_TARGET_SUFFIX = 'Target';
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = BlockGrid; }

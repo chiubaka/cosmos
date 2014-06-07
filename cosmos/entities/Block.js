@@ -37,6 +37,24 @@ var Block = IgeEntity.extend({
 	 * @todo Add code allow the {@link Block#_numCols|_numCols} to vary.
 	 */
 	_numCols: 1,
+	/**
+	 * The {@link BlockGrid} that this {@link Block} is a part of.
+	 * @type {BlockGrid}
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 */
+	_blockGrid: undefined,
+	/**
+	 * An IgeEntity that all of the effects for this {@link Block} get mounted to.
+	 * @type {IgeEntity}
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 */
+	_effectsMount: undefined,
+
+	_effects: undefined,
 
 	_fixture: undefined,
 	_fixtureDef: undefined,
@@ -74,6 +92,8 @@ var Block = IgeEntity.extend({
 
 		if (!ige.isServer) {
 			this.texture(ige.client.textures.block);
+
+			this._effects = {};
 
 			// Enable caching so that the smart textures aren't reevaluated every time.
 			this.compositeCache(true);
@@ -115,8 +135,57 @@ var Block = IgeEntity.extend({
 		}
 	},
 
-	blockGrid: function() {
-		return this._parent._parent;
+	createEffectsMount: function() {
+		if (this._effectsMount !== undefined) {
+			return;
+		}
+
+		this._effectsMount = new IgeEntity().depth(this.blockGrid().depth() + 1);
+	},
+
+	/**
+	 * Getter for the {@link Block#_effectsMount|_effectsMount} property.
+	 * @returns {IgeEntity}
+	 * @memberof Block
+	 * @instance
+	 */
+	effectsMount: function() {
+		return this._effectsMount;
+	},
+
+	addEffect: function(effect) {
+		console.log("Block#addEffect: " + effect.type);
+		switch (effect.type) {
+			case 'miningParticles':
+				this._addMiningParticles();
+				break;
+		}
+	},
+
+	_addMiningParticles: function() {
+		console.log("Block#_addMiningParticles");
+		if (this._effectsMount === undefined) {
+			console.log("Block#_addMiningParticles: no effects mount");
+		}
+		this._effects['miningParticles'] = new BlockParticleEmitter().mount(this._effectsMount);
+	},
+
+	/**
+	 * Getter/setter for the {@link Block#_blockGrid|_blockGrid} parameter. MUST be set! Many things depend on this.
+	 * @param newBlockGrid {BlockGrid} Optional parameter. The new {@link BlockGrid} to associate with this
+	 * {@link Block}.
+	 * @returns {*} The current {@link BlockGrid} associated with this {@link Block} if the getter is called, or this
+	 * object if the setter is called to make setter chaining convenient.
+	 * @memberof Block
+	 * @instance
+	 */
+	blockGrid: function(newBlockGrid) {
+		if (newBlockGrid === undefined) {
+			return this._blockGrid;
+		}
+
+		this._blockGrid = newBlockGrid;
+		return this;
 	},
 
 	row: function(val) {

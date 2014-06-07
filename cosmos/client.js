@@ -17,7 +17,7 @@ var Client = IgeClass.extend({
 		self.LAYER_MODAL = 100;
 
 		// Enable IGE on screen editor
-		//ige.addComponent(IgeEditorComponent);
+		ige.addComponent(IgeEditorComponent);
 
 		// Enable networking
 		ige.addComponent(IgeNetIoComponent);
@@ -107,6 +107,8 @@ var Client = IgeClass.extend({
 						ige.network.define('playerEntity', self._onPlayerEntity);
 						// Called when the server needs to broadcast updates about a block
 						ige.network.define('blockAction', self._onBlockAction);
+						// Called when the server wants to add an effect to a block
+						ige.network.define('addEffect', self._onAddEffect);
 
 						ige.network.define('cargoResponse', self._onCargoResponse);
 						ige.network.define('cargoUpdate', self._onCargoUpdate);
@@ -119,7 +121,7 @@ var Client = IgeClass.extend({
 						ige.network.send('playerEntity', {sid: self.getSessionId()});
 
 						GameInit.init(self);
-						//ige.editor.showStats();
+						ige.editor.showStats();
 					});
 				}
 			});
