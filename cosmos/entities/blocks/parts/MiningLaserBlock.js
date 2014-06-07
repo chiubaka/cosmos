@@ -1,6 +1,18 @@
+/**
+ * The {@link MiningLaserBlock} class represents a block that can mine blocks.
+ * @typedef {MiningLaserBlock}
+ * @class
+ * @namespace
+ */
 var MiningLaserBlock = Part.extend({
 	classId: 'MiningLaserBlock',
 
+	/**
+	 * The maximum HP for a {@link MiningLaserBlock}. See {@link Block#MAX_HP}.
+	 * @constant {number}
+	 * @memberof {MiningLaserBlock}
+	 * @instance
+	 */
 	MAX_HP: 50,
 
 	init: function () {
@@ -14,6 +26,17 @@ var MiningLaserBlock = Part.extend({
 		}
 	},
 
+	/**
+	 * Overrides superclass addEffect function. The mining laser supports effects for adding the mining laser graphic
+	 * between this {@link Block} and a target {@link Block}. This function handles adding effects to the
+	 * {@link MiningLaserBlock}
+	 * @param effect {Object} An effect object, which stores the effect type and two
+	 * network-converted {@link Block} objects as returned from {@link NetworkUtils#block}. The source block is the block
+	 * that the effect is being added to. The target block is a secondary block that is required for certain effects like
+	 * the mining laser effect.
+	 * @memberof MiningLaserBlock
+	 * @instance
+	 */
 	addEffect: function(effect) {
 		// This must be called before anything else. Block#addEffect makes sure that the effects mount exists before
 		// adding the effect.
@@ -26,6 +49,15 @@ var MiningLaserBlock = Part.extend({
 		}
 	},
 
+	/**
+	 * Overrides superclass removeEffect function. Removes effects from the {@link MiningLaserBlock}.
+	 * @param effect {Object} An effect object, which stores the effect type and two
+	 * network-converted {@link Block} objects as returned from {@link NetworkUtils#block}. The source block is the block
+	 * that the effect is being added to. The target block is a secondary block that is required for certain effects like
+	 * the mining laser effect.
+	 * @memberof MiningLaserBlock
+	 * @instance
+	 */
 	removeEffect: function(effect) {
 
 		switch (effect.type) {
@@ -39,6 +71,16 @@ var MiningLaserBlock = Part.extend({
 		Part.prototype.removeEffect.call(this, effect);
 	},
 
+	/**
+	 * Handles adding the mining laser effect to this {@link MiningLaserBlock}.
+	 * @param effect {Object} An effect object, which stores the effect type and two
+	 * network-converted {@link Block} objects as returned from {@link NetworkUtils#block}. The source block is the block
+	 * that the effect is being added to. The target block is a secondary block that is required for certain effects like
+	 * the mining laser effect.
+	 * @memberof MiningLaserBlock
+	 * @private
+	 * @instance
+	 */
 	_addMiningLaserEffect: function(effect) {
 		var targetBlockGrid = ige.$(effect.targetBlock.blockGridId);
 		var targetBlock = targetBlockGrid.get(effect.targetBlock.row, effect.targetBlock.col);
@@ -57,6 +99,16 @@ var MiningLaserBlock = Part.extend({
 		targetBlock.addEffect(targetEffect);
 	},
 
+	/**
+	 * Removes the mining laser effect from this {@link MiningLaserBlock}.
+	 * @param effect {Object}  An effect object, which stores the effect type and two
+	 * network-converted {@link Block} objects as returned from {@link NetworkUtils#block}. The source block is the block
+	 * that the effect is being added to. The target block is a secondary block that is required for certain effects like
+	 * the mining laser effect.
+	 * @memberof MiningLaserBlock
+	 * @private
+	 * @instance
+	 */
 	_removeMiningLaserEffect: function(effect) {
 		if (this.laserBeam !== undefined) {
 			this.laserBeam.destroy();
