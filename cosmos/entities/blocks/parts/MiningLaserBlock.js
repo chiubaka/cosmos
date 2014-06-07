@@ -10,7 +10,7 @@ var MiningLaserBlock = Part.extend({
 	/**
 	 * The maximum HP for a {@link MiningLaserBlock}. See {@link Block#MAX_HP}.
 	 * @constant {number}
-	 * @memberof {MiningLaserBlock}
+	 * @memberof MiningLaserBlock
 	 * @instance
 	 */
 	MAX_HP: 50,

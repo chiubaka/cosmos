@@ -1,3 +1,9 @@
+/**
+ * The {@link Player} class represents a player in the game.
+ * @typedef {Player}
+ * @class
+ * @namespace
+ */
 var Player = BlockGrid.extend({
 	classId: 'Player',
 
@@ -7,6 +13,12 @@ var Player = BlockGrid.extend({
 	_sid: undefined,
 	_dbId: undefined,
 
+	/**
+	 * Whether or not this {@link Player} is mining. Used to restrict players from mining more than one {@link Block}
+	 * at a time.
+	 * @memberof Player
+	 * @instance
+	 */
 	mining: false,
 
 	init: function(data) {
@@ -173,8 +185,13 @@ var Player = BlockGrid.extend({
 		player.cargo.addBlock(blockClassId);
 	},
 
-	// TODO: The fireMiningLasers and turnOffMiningLasers functions should be in the Ship class, but it doesn't
-	// exist yet.
+	/**
+	 * Sends messages to clients to tell them to turn on all of the mining lasers for this player.
+	 * @param targetBlock {Block} The {@link Block} that the mining lasers will be focused on.
+	 * @memberof Player
+	 * @instance
+	 * @todo : The fireMiningLasers should be in the Ship class, but it doesn't exist yet.
+	 */
 	fireMiningLasers: function(targetBlock) {
 		var miningLasers = this.blocksOfType(MiningLaserBlock.prototype.classId());
 		for (var i = 0; i < miningLasers.length; i++) {
@@ -183,6 +200,13 @@ var Player = BlockGrid.extend({
 		}
 	},
 
+	/**
+	 * Sends messages to clients to tell them to turn off all of the mining lasers for this player.
+	 * @param targetBlock {Block} The {@link Block} that the mining lasers were focused on.
+	 * @memberof Player
+	 * @instance
+	 * @todo : The turnOffMiningLasers should be in the Ship class, but it doesn't exist yet.
+	 */
 	turnOffMiningLasers: function(targetBlock) {
 		var miningLasers = this.blocksOfType('MiningLaserBlock');
 		for (var i = 0; i < miningLasers.length; i++) {
