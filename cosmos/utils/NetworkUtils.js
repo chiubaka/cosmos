@@ -8,7 +8,7 @@ NetworkUtils.block = function(block) {
 	}
 
 	return {
-		blockGridId: block.blockGrid().id(),
+		blockGridId: block.blockGrid() !== undefined? block.blockGrid().id() : undefined,
 		row: block.row(),
 		col: block.col()
 	};

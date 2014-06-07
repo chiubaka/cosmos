@@ -135,12 +135,20 @@ var Block = IgeEntity.extend({
 		}
 	},
 
+	onAdded: function() {
+
+	},
+
+	onRemoved: function() {
+
+	},
+
 	createEffectsMount: function() {
 		if (this._effectsMount !== undefined) {
 			return;
 		}
 
-		this._effectsMount = new IgeEntity().depth(this.blockGrid().depth() + 1);
+		this._effectsMount = new IgeEntity().depth(BlockGrid.EFFECTS_DEPTH);
 	},
 
 	/**

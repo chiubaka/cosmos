@@ -157,6 +157,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			});
 		}
 		else {
+			this.depth(BlockGrid.DEPTH);
 			this._renderContainer = new RenderContainer()
 				.mount(this);
 			this.fromBlockTypeMatrix(data.blockTypeMatrix, false, data.startRow, data.startCol);
@@ -309,6 +310,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		this._numBlocks++;
 
+		block.onAdded();
+
 		return true;
 	},
 
@@ -379,6 +382,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 		if (updated) {
 			this._updateFixtures();
 		}
+
+		block.onRemoved();
 
 		block.destroy();
 
@@ -1668,5 +1673,8 @@ BlockGrid.BLOCK_FIXTURE_RESTITUTION = 0.5;
 BlockGrid.BLOCK_FIXTURE_PADDING = .1;
 
 BlockGrid.EFFECT_TARGET_SUFFIX = 'Target';
+// TODO: Make this one more than the BlockGrid depth
+BlockGrid.DEPTH = 0;
+BlockGrid.EFFECTS_DEPTH = BlockGrid.DEPTH + 1;
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = BlockGrid; }
