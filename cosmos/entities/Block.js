@@ -53,7 +53,15 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	_effectsMount: undefined,
-
+	/**
+	 * An object used as a map to store data about the various effects on a {@link Block}. The map keys are the effect
+	 * types, and the values are typically objects. Each value can be specific to the effect, since different effects
+	 * have different state needs.
+	 * @type {Object}
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 */
 	_effects: undefined,
 
 	_fixture: undefined,
@@ -135,14 +143,34 @@ var Block = IgeEntity.extend({
 		}
 	},
 
+	/**
+	 * Called just after this {@link Block} has been added to a {@link BlockGrid}. Default is just a stub since the
+	 * basic {@link Block} does nothing when added to a {@link BlockGrid}. Override this function in subclasses of
+	 * the {@link Block} to do things like add effects to all {@link Block}s of a certain type.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
 	onAdded: function() {
 
 	},
 
+	/**
+	 * Called just before this {@link Block} is removed from a {@link BlockGrid}. Default is just a stub since the
+	 * basic {@link Block} does nothing when removed from a {@link BlockGrid}. Override this function in subclasses of
+	 * the {@link Block} if needed.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
 	onRemoved: function() {
 
 	},
 
+	/**
+	 * Creates the effects mount entity for this {@link Block} and stores it in an instance variable. If the
+	 * effects mount has already been created for this {@link Block}, this function does nothing.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
 	createEffectsMount: function() {
 		if (this._effectsMount !== undefined) {
 			return;
@@ -161,6 +189,15 @@ var Block = IgeEntity.extend({
 		return this._effectsMount;
 	},
 
+	/**
+	 * Adds an effect to this {@link Block}. Also takes care of making sure that an effects mount is created for this
+	 * {@link Block} if one does not already exist. It is expected that all subclasses call this function at the
+	 * beginning of their own addEffect function.
+	 * @param effect {Object} An effect object containing information for the type of effect, the source block
+	 * (block on which to mount the effect), and an optional target block for effects like the mining laser.
+	 * @memberof Block
+	 * @instance
+	 */
 	addEffect: function(effect) {
 		if (this._effectsMount === undefined) {
 			this.blockGrid().createEffectsMount(this);
@@ -173,6 +210,15 @@ var Block = IgeEntity.extend({
 		}
 	},
 
+	/**
+	 * Removes an effect from this {@link Block}. Also takes care of making sure that the effects mount is destroyed
+	 * if there are no more effects on this {@link Block}. It is expected that all subclasses call this function at
+	 * the end of their own removeEffect function.
+	 * @param effect {Object} An effect object containing information for the type of effect, the source block
+	 * (block on which to mount the effect), and an optional target block for effects like the mining laser.
+	 * @memberof Block
+	 * @instance
+	 */
 	removeEffect: function(effect) {
 		switch (effect.type) {
 			case 'miningParticles':
@@ -185,10 +231,27 @@ var Block = IgeEntity.extend({
 		}
 	},
 
+	/**
+	 * Checks whether or not this {@link Block} has any effects. It is imperative that all effects code clean up after
+	 * itself by deleting its key from the {@link Block#_effects|_effects} map when no longer needed, since this code
+	 * checks how many keys are in that map.
+	 * @returns {boolean}
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 */
 	_hasEffects: function() {
 		return Object.keys(this._effects).length === 0;
 	},
 
+	/**
+	 * Adds the mining particles effect to this {@link Block}. At some point, multiple ships will be able to mine a
+	 * {@link Block} at once, so the mining particles effects state includes a counter so we know when we should really
+	 * remove this effect.
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 */
 	_addMiningParticles: function() {
 		if (this._effects['miningParticles'] === undefined) {
 			this._effects['miningParticles'] = {
@@ -201,6 +264,14 @@ var Block = IgeEntity.extend({
 		this._effects['miningParticles'].particleEmitter = new BlockParticleEmitter().mount(this._effectsMount);
 	},
 
+	/**
+	 * Removes mining particles effect from this {@link Block}. If there are multiple people mining this {@link Block},
+	 * then the counter in the mining particles effect state may not go down to zero during this call, in which case
+	 * we will not actually remove the mining particles effect (because somebody else is still mining!).
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 */
 	_removeMiningParticles: function() {
 		this._effects['miningParticles'].counter--;
 
