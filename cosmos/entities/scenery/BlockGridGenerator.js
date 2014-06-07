@@ -48,23 +48,21 @@ var BlockGridGenerator = {
 				continue;
 			}
 
-			//if (first) {
-				var newBlock = new IceBlock();/*
+			if (first) {
+				var newBlock = new IceBlock();
 				first = false;
 			} else {
 				var newBlock = this.getBlockType(blockGrid, block.row, block.col, blockDistribution);
-			}*/
+			}
 
-			// If the block can be added, add it!
-			//if (blockGrid.add(block.row, block.col, newBlock)) {
 			{
 				blockGrid.add(block.row, block.col, newBlock, false);
 				blocksRemaining--;
 
-				/*if (symmetric) {
+				if (symmetric) {
 					blockGrid.add(block.row, -block.col, Block.prototype.blockFromClassId(newBlock.classId()), false);
 					blocksRemaining--;
-				}*/
+				}
 
 				// Push cardinal neighbors into block bag.
 				blocksToPlace.push({ row: block.row - 1, col: block.col });
