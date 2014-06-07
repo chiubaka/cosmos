@@ -181,17 +181,22 @@ var Block = IgeEntity.extend({
 			return;
 		}
 
-		this._effectsMount = new IgeEntity().depth(BlockGrid.EFFECTS_DEPTH);
+		this.effectsMount(new IgeEntity().depth(BlockGrid.EFFECTS_DEPTH));
 	},
 
 	/**
-	 * Getter for the {@link Block#_effectsMount|_effectsMount} property.
-	 * @returns {IgeEntity}
+	 * Getter and setter for the {@link Block#_effectsMount|_effectsMount} property.
+	 * @returns {IgeEntity} this if newEffectsMount was defined (for chaining) and this._effectsMount otherwise.
 	 * @memberof Block
 	 * @instance
 	 */
-	effectsMount: function() {
-		return this._effectsMount;
+	effectsMount: function(newEffectsMount) {
+		if (newEffectsMount === undefined) {
+			return this._effectsMount;
+		}
+
+		this._effectsMount = newEffectsMount;
+		return this;
 	},
 
 	/**
