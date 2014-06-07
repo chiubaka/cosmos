@@ -186,7 +186,7 @@ var ServerNetworkEvents = {
 		}
 
 		// Do not start mining if we are already mining or if the player does not have any mining lasers.
-		if (player.mining || player.blocksOfType(MiningLaserBlock.prototype.classId()).length === 0) {
+		if (player.mining || player.numBlocksOfType(MiningLaserBlock.prototype.classId()) === 0) {
 			return;
 		}
 
