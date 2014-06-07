@@ -202,11 +202,7 @@ var ServerNetworkEvents = {
 
 			// Activate mining laser
 			//player.addLaser(data.blockGridId, data.row, data.col);
-			var miningLasers = player.blocksOfType(MiningLaserBlock.prototype.classId());
-			for (var i = 0; i < miningLasers.length; i++) {
-				var miningLaser = miningLasers[i];
-				ige.network.send('addEffect', NetworkUtils.effect('miningLaser', miningLaser, targetBlock));
-			}
+			player.fireMiningLasers(targetBlock);
 		}
 	},
 

@@ -154,7 +154,6 @@ var Block = IgeEntity.extend({
 	},
 
 	addEffect: function(effect) {
-		console.log("Block#addEffect: " + effect.type);
 		switch (effect.type) {
 			case 'miningParticles':
 				this._addMiningParticles();
@@ -162,12 +161,41 @@ var Block = IgeEntity.extend({
 		}
 	},
 
-	_addMiningParticles: function() {
-		console.log("Block#_addMiningParticles");
-		if (this._effectsMount === undefined) {
-			console.log("Block#_addMiningParticles: no effects mount");
+	removeEffect: function(effect) {
+		switch (effect.type) {
+			case 'miningParticles':
+				this._removeMiningParticles();
+				break;
 		}
-		this._effects['miningParticles'] = new BlockParticleEmitter().mount(this._effectsMount);
+
+		if (!this._hasEffects() && this._effectsMount !== undefined) {
+			this._effectsMount.destroy();
+		}
+	},
+
+	_hasEffects: function() {
+		return Object.keys(this._effects).length === 0;
+	},
+
+	_addMiningParticles: function() {
+		if (this._effects['miningParticles'] === undefined) {
+			this._effects['miningParticles'] = {
+				counter: 0,
+				particleEmitter: undefined
+			};
+		}
+
+		this._effects['miningParticles'].counter++;
+		this._effects['miningParticles'].particleEmitter = new BlockParticleEmitter().mount(this._effectsMount);
+	},
+
+	_removeMiningParticles: function() {
+		this._effects['miningParticles'].counter--;
+
+		if (this._effects['miningParticles'].counter === 0) {
+			this._effects['miningParticles'].particleEmitter.destroy();
+			delete this._effects['miningParticls'];
+		}
 	},
 
 	/**

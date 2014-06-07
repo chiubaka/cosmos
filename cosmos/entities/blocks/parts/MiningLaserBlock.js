@@ -26,13 +26,26 @@ var MiningLaserBlock = Part.extend({
 		}
 	},
 
+	removeEffect: function(effect) {
+
+		switch (effect.type) {
+			case 'miningLaser':
+				this._removeMiningLaserEffect(effect);
+				break;
+		}
+
+		Part.prototype.removeEffect.call(this, effect);
+	},
+
 	_addMiningLaserEffect: function(effect) {
-		console.log('MiningLaserBlock#_addMiningLaserEffect');
 		var targetBlockGrid = ige.$(effect.targetBlock.blockGridId);
 		var targetBlock = targetBlockGrid.get(effect.targetBlock.row, effect.targetBlock.col);
 
 		targetBlockGrid.createEffectsMount(targetBlock);
-		// TODO: Actually add the mining laser.
+
+		if (this.laserBeam !== undefined) {
+			this.laserBeam.destroy();
+		}
 
 		this.laserBeam = new LaserBeam()
 			.setTarget(effect.targetBlock.blockGridId, effect.targetBlock.row, effect.targetBlock.col)
@@ -42,6 +55,32 @@ var MiningLaserBlock = Part.extend({
 		targetEffect.sourceBlock = effect.targetBlock;
 
 		targetBlock.addEffect(targetEffect);
+	},
+
+	_removeMiningLaserEffect: function(effect) {
+		if (this.laserBeam !== undefined) {
+			this.laserBeam.destroy();
+		}
+
+		var targetBlockGrid = ige.$(effect.targetBlock.blockGridId);
+
+		// targetBlockGrid could be undefined if its last Block was just mined off.
+		if (targetBlockGrid === undefined) {
+			return;
+		}
+
+		var targetBlock = targetBlockGrid.get(effect.targetBlock.row, effect.targetBlock.col);
+
+		// targetBlock could be undefined if it has already been removed from the BlockGrid, in which case the
+		// mining particle effects have been destroyed anyway!
+		if (targetBlock === undefined) {
+			return;
+		}
+
+		var targetEffect = NetworkUtils.effect('miningParticles');
+		targetEffect.sourceBlock = effect.targetBlock;
+
+		targetBlock.removeEffect(targetEffect);
 	}
 });
 

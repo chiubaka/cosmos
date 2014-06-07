@@ -229,6 +229,24 @@ var Player = BlockGrid.extend({
 		player.cargo.addBlock(blockClassId);
 	},
 
+	// TODO: The fireMiningLasers and turnOffMiningLasers functions should be in the Ship class, but it doesn't
+	// exist yet.
+	fireMiningLasers: function(targetBlock) {
+		var miningLasers = this.blocksOfType(MiningLaserBlock.prototype.classId());
+		for (var i = 0; i < miningLasers.length; i++) {
+			var miningLaser = miningLasers[i];
+			ige.network.send('addEffect', NetworkUtils.effect('miningLaser', miningLaser, targetBlock));
+		}
+	},
+
+	turnOffMiningLasers: function(targetBlock) {
+		var miningLasers = this.blocksOfType('MiningLaserBlock');
+		for (var i = 0; i < miningLasers.length; i++) {
+			var miningLaser = miningLasers[i];
+			ige.network.send('removeEffect', NetworkUtils.effect('miningLaser', miningLaser, targetBlock));
+		}
+	},
+
 	update: function(ctx) {
 		if (!ige.isServer) {
 			/* Save the old control state for comparison later */

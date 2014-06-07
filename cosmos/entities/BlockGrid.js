@@ -389,12 +389,17 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	addEffect: function(effect) {
-		console.log("BlockGrid#addEffect");
 		var block = this.get(effect.sourceBlock.row, effect.sourceBlock.col);
 
 		this.createEffectsMount(block)
 
 		block.addEffect(effect);
+	},
+
+	removeEffect: function(effect) {
+		var block = this.get(effect.sourceBlock.row, effect.sourceBlock.col);
+
+		block.removeEffect(effect);
 	},
 
 	createEffectsMount: function(block) {
@@ -403,22 +408,17 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	updateEffect: function(block) {
-		console.log("BlockGrid#updateEffect");
 		var effectsMount = block.effectsMount();
 		if (effectsMount === undefined) {
-			console.log("BlockGrid#updateEffect: effects mount was undefined");
 			return;
 		}
 
 		if (effectsMount.parent() !== this) {
-			console.log("BlockGrid#updateEffect: mounted effects mount");
 			effectsMount.mount(this);
 		}
 
 		var drawLocation = this._drawLocationForBlock(block);
 		effectsMount.translateTo(drawLocation.x, drawLocation.y, 0);
-
-		console.log("BlockGrid#updateEffect: translated effects mount: x=" + drawLocation.x + " , y=" + drawLocation.y);
 	},
 
 	/**
@@ -703,6 +703,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 						// necessarily collected. This is used for removing the laser.
 						var blockClassId = block.classId();
 						ige.emit('block mined', [player, blockClassId, block]);
+
+						player.turnOffMiningLasers(block);
 
 						// Remove block server side, then send remove msg to client
 						self.remove(data.row, data.col);

@@ -61,6 +61,7 @@ var Server = IgeClass.extend({
 						/* Define this command so that we can use it on the client */
 						ige.network.define('blockAction');
 						ige.network.define('addEffect');
+						ige.network.define('removeEffect');
 
 						ige.network.define('cargoRequest', self._onCargoRequest);
 						ige.network.define('cargoUpdate');
