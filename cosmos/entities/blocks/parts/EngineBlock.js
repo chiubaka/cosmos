@@ -1,6 +1,18 @@
+/**
+ * The {@link EngineBlock} class represents a {@link Block} that propels a ship.
+ * @typedef {EngineBlock}
+ * @class
+ * @namespace
+ */
 var EngineBlock = Part.extend({
 	classId: 'EngineBlock',
 
+	/**
+	 * The maximum HP for an {@link EngineBlock}. See {@link Block#MAX_HP}.
+	 * @constant {number}
+	 * @memberof EngineBlock
+	 * @instance
+	 */
 	MAX_HP: 40,
 
 	init: function () {
@@ -14,18 +26,39 @@ var EngineBlock = Part.extend({
 		}
 	},
 
+	/**
+	 * Overrides the superclass onAdded function. Makes sure that all engines that are on players ships have particle
+	 * effects when they are added to a {@link Player} {@link BlockGrid}.
+	 * @memberof EngineBlock
+	 * @instance
+	 */
 	onAdded: function() {
 		if (!ige.isServer && this.blockGrid().classId() === 'Player') {
 			this.addEffect(NetworkUtils.effect('engineParticles', this));
 		}
 	},
 
+	/**
+	 * Overrides the superclass onRemoved function. Makes sure that engine particle effects are properly removed and
+	 * cleaned up when this {@link EngineBlock} is removed from a {@link Player}.
+	 * @memberof EngineBlock
+	 * @instance
+	 */
 	onRemove: function() {
 		if (!ige.isServer && this.blockGrid().classId() === 'Player') {
 			this.removeEffect(NetworkUtils.effect('engineParticles', this));
 		}
 	},
 
+	/**
+	 * Overrides the superclass addEffect function. The EngineBlock supports engine particles.
+	 * @param effect {Object} An effect object, which stores the effect type and two
+	 * network-converted {@link Block} objects as returned from {@link NetworkUtils#block}. The source block is the block
+	 * that the effect is being added to. The target block is a secondary block that is required for certain effects like
+	 * the mining laser effect.
+	 * @memberof EngineBlock
+	 * @instance
+	 */
 	addEffect: function(effect) {
 		Part.prototype.addEffect.call(this, effect);
 
@@ -36,6 +69,12 @@ var EngineBlock = Part.extend({
 		}
 	},
 
+	/**
+	 * Handles adding the engine particle effect to this {@link EngineBlock}
+	 * @memberof EngineBlock
+	 * @private
+	 * @instance
+	 */
 	_addEngineParticlesEffect: function() {
 		this._effects['engineParticles'] = new IgeParticleEmitter()
 			// Set the particle entity to generate for each particle
@@ -60,6 +99,12 @@ var EngineBlock = Part.extend({
 			.start();
 	},
 
+	/**
+	 * Handles removing the engine particle effect from this {@link EngineBlock}
+	 * @memberof EngineBlock
+	 * @private
+	 * @instance
+	 */
 	_removeEngineParticlesEffect: function() {
 		if (this._effects['engineParticles'] !== undefined) {
 			this._effects['engineParticles'].destroy();
