@@ -19,7 +19,7 @@ var Block = IgeEntity.extend({
 	 * Note that even though MINING_TIME is the same for all blocks,
 	 * blocks take different amounts of time to completely mine because they have different amounts of HP.
 	 */
-	MINING_TIME: 100,
+	MINING_INTERVAL: 100,
 
 	/**
 	 * The number of rows that this {@link Block} takes up.

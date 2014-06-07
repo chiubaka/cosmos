@@ -714,7 +714,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 						data.action = 'remove';
 						ige.network.send('blockAction', data);
 					}
-				}, Block.prototype.MINING_TIME);
+				}, Block.prototype.MINING_INTERVAL / player.numBlocksOfType(MiningLaserBlock.prototype.classId()));
 				return true;
 
 			case 'add':
@@ -896,11 +896,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		// Check to see if the spaces the provided block will occupy are already occupied.
 		if (this._isOccupiedBlock(row, col, block)) {
-			console.log("Cannot add because the proposed addition overlaps with an occupied block."
-				+ " row: " + row
-				+ ", col: " + col
-				+ ", block: " + block.classId()
-			);
 			return false;
 		}
 
@@ -1640,14 +1635,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 		var row = Math.floor(gridY / Block.HEIGHT) + this.startRow();
 		var col = Math.floor(gridX / Block.WIDTH) + this.startCol();
 
-		console.log("row: " + row + ", col: " + col);
-
 		var block = this.get(row, col);
 
 		// Check if we have clicked on a valid block, if so we want to stop the
 		// click propagation so we don't construct a block at this location
 		if (block === undefined) {
-			console.log("Block was undefined.");
 			return;
 		}
 		else {
@@ -1661,7 +1653,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 			this.get(row - 1, col) == undefined ||
 			this.get(row, col + 1) == undefined ||
 			this.get(row, col - 1) == undefined) {
-			console.log("Block has neighbors. Propagating click event!");
 			block.mouseDown(event, control);
 		}
 	},
