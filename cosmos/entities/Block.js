@@ -185,12 +185,12 @@ var Block = IgeEntity.extend({
 	},
 
 	/**
-	 * Getter and setter for the {@link Block#_effectsMount|_effectsMount} property.
-	 * @returns {IgeEntity} this if newEffectsMount was defined (for chaining) and this._effectsMount otherwise.
+	 * Getter for the {@link Block#_effectsMount|_effectsMount} property.
+	 * @returns {IgeEntity} the effects mount
 	 * @memberof Block
 	 * @instance
 	 */
-	effectsMount: function(newEffectsMount) {
+	effectsMount: function() {
 		return this._effectsMount;
 	},
 
