@@ -181,7 +181,7 @@ var Block = IgeEntity.extend({
 			return;
 		}
 
-		this.effectsMount(new IgeEntity().depth(BlockGrid.EFFECTS_DEPTH));
+		this._effectsMount = new IgeEntity().depth(BlockGrid.EFFECTS_DEPTH);
 	},
 
 	/**
@@ -191,12 +191,7 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	effectsMount: function(newEffectsMount) {
-		if (newEffectsMount === undefined) {
-			return this._effectsMount;
-		}
-
-		this._effectsMount = newEffectsMount;
-		return this;
+		return this._effectsMount;
 	},
 
 	/**
