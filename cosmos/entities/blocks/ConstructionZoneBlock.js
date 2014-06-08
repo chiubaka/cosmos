@@ -1,6 +1,8 @@
 /**
  * The construction zone is an area around every block grid where players can add blocks. This allows them to 'construct' onto the block grid.
  * The construction zone is only visible to the player when she is in construction mode.
+ * @class
+ * @namespace
  */
 var ConstructionZoneBlock = Block.extend({
 	classId: 'ConstructionZoneBlock',
