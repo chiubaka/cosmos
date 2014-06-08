@@ -1,0 +1,21 @@
+@font-face {
+    font-family: 'Segoe UI';
+    src: url('../fonts/segoeui-webfont.eot');
+    src: url('../fonts/segoeui-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/segoeui-webfont.woff') format('woff'),
+         url('../fonts/segoeui-webfont.ttf') format('truetype'),
+         url('../fonts/segoeui-webfont.svg#segoe_uiregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Segoe UI Semibold';
+    src: url('../fonts/seguisb-webfont.eot');
+    src: url('../fonts/seguisb-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/seguisb-webfont.woff') format('woff'),
+         url('../fonts/seguisb-webfont.ttf') format('truetype'),
+         url('../fonts/seguisb-webfont.svg#segoe_uisemibold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}

@@ -4,8 +4,8 @@
 var Part = Block.extend({
 	classId: 'Part',
 
-	init: function () {
-		Block.prototype.init.call(this);
+	init: function(data) {
+		Block.prototype.init.call(this, data);
 	}
 });
 

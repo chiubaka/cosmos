@@ -91,6 +91,7 @@ var Client = IgeClass.extend({
 				// Check if the engine started successfully
 				if (success) {
 					ige.client.metrics = new MetricsHandler();
+					ige.client.startClientPerformanceMetrics();
 
 					// Start the networking (you can do this elsewhere if it
 					// makes sense to connect to the server later on rather
@@ -106,6 +107,10 @@ var Client = IgeClass.extend({
 						ige.network.define('playerEntity', self._onPlayerEntity);
 						// Called when the server needs to broadcast updates about a block
 						ige.network.define('blockAction', self._onBlockAction);
+						// Called when the server wants to add an effect to a block
+						ige.network.define('addEffect', self._onAddEffect);
+						// Called when the server wants to remove an effect from a block
+						ige.network.define('removeEffect', self._onRemoveEffect);
 
 						ige.network.define('cargoResponse', self._onCargoResponse);
 						ige.network.define('cargoUpdate', self._onCargoUpdate);
@@ -129,6 +134,9 @@ var Client = IgeClass.extend({
 		var cookie = this.parseCookie();
 		var sid = cookie['connect.sid'];
 
+		if (sid === undefined) {
+			return undefined;
+		}
 		// connect.sid comes in the form: s:<id>.<???>+<???>
 		return sid.substring(sid.indexOf(':') + 1, sid.indexOf('.'));
 	},
@@ -142,6 +150,13 @@ var Client = IgeClass.extend({
 		});
 
 		return cookie;
+	},
+
+	/* Send performance metrics to Google analytics */
+	startClientPerformanceMetrics: function() {
+		setInterval(function() {
+			ige.client.metrics.fireEvent('engine', 'performance', 'FPS', ige.fps());
+		}, 10000); // Send every 10s
 	}
 });
 

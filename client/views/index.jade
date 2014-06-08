@@ -1,9 +1,14 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
-  if !user
-    h2 Please log in
-  else
-    h2 Hi #{user.displayName}! You're signed in using your #{user.provider} account!
+	#container
+		#cosmos-landing
+			header#cosmos-header
+				h1#cosmos-logo= title
+			#cosmos-login
+				include includes/loginFlow.jade
+		#cosmos-greeting
+			.cosmos-logo
+				img(src='/images/cosmos-preview.jpg')
+			.tutorial
+				img(src='/images/tutorial.png')

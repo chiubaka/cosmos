@@ -5,8 +5,11 @@
 var PowerBlock = Part.extend({
 	classId: 'PowerBlock',
 
+	MAX_HP: 40,
+
 	init: function () {
-		Part.prototype.init.call(this);
+		data = {MAX_HP: this.MAX_HP};
+		Part.prototype.init.call(this, data);
 
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(242, 242, 242)";

@@ -2,12 +2,12 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 	classId: 'ConstructionZoneOverlay',
 
 	_overlayGrid: undefined,
-	_grid: undefined,
+	_blockGrid: undefined,
 	_renderContainer: undefined,
 
-	init: function (grid) {
+	init: function (blockGrid) {
 		IgeEntity.prototype.init.call(this);
-		this._grid = grid;
+		this._blockGrid = blockGrid;
 		this._renderContainer = new RenderContainer()
 			.mount(this)
 			.opacity(0.5);
@@ -35,33 +35,18 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 	},
 
 	createConstructionZones: function() {
-		//First create an array that's two larger in each dimensions than the current grid
-		var gridNumRows = this._grid.length;
-		var gridNumCols = this._grid.get2DMaxRowLength();
-
-		var overlayNumRows = gridNumRows + 2;
-		var overlayNumCols = gridNumCols + 2;
+		// We want a buffer of size 1 on the top, bottom, right, and left. Hence the +2s everywhere.
+		var overlayNumRows = this._blockGrid.numRows() + 2;
+		var overlayNumCols = this._blockGrid.numCols() + 2;
 
 		this._overlayGrid = Array.prototype.new2DArray(overlayNumRows, overlayNumCols);
 
-		//Traverse the two dimensional array looking for spaces where the following
-		// conditions hold:
-		// (1) The space is undefined
-		// (2) The space has a 4-neighbor that is defined
-		// This is a image processing operation called morphological dilation
-		for (var row = 0; row < overlayNumRows; row++) {
-			for (var col = 0; col < overlayNumCols; col++) {
-				var gridRow = row - 1;
-				var gridCol = col - 1;
-				if (this._grid.get2D(gridRow, gridCol) === undefined){
-					if (this._grid.get2D(gridRow + 1, gridCol) ||
-							this._grid.get2D(gridRow, gridCol + 1) ||
-							this._grid.get2D(gridRow - 1, gridCol) ||
-							this._grid.get2D(gridRow, gridCol - 1)) {
-						this._overlayGrid[row][col] = new ConstructionZoneBlock();
-					}
-				}
-			}
+		var constructionZoneLocations = this._blockGrid.constructionZoneLocations();
+		for (var i = 0; i < constructionZoneLocations.length; i++) {
+			var location = constructionZoneLocations[i];
+			var row = location.row - this._blockGrid.startRow() + 1;
+			var col = location.col - this._blockGrid.startCol() + 1;
+			this._overlayGrid[row][col] = new ConstructionZoneBlock();
 		}
 	},
 
@@ -69,8 +54,8 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 	mountOverlayGrid: function() {
 		var maxRowLength = this._overlayGrid.get2DMaxRowLength();
 
-		this.height(Block.prototype.HEIGHT * this._overlayGrid.length);
-		this.width(Block.prototype.WIDTH * maxRowLength);
+		this.height(Block.HEIGHT * this._overlayGrid.length);
+		this.width(Block.WIDTH * maxRowLength);
 		this._renderContainer.height(this.height());
 		this._renderContainer.width(this.width());
 
@@ -82,8 +67,8 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 					continue;
 				}
 
-				var x = Block.prototype.WIDTH * col - this._bounds2d.x2 + block._bounds2d.x2;
-				var y = Block.prototype.HEIGHT * row - this._bounds2d.y2 + block._bounds2d.y2;
+				var x = Block.WIDTH * col - this._bounds2d.x2 + block._bounds2d.x2;
+				var y = Block.HEIGHT * row - this._bounds2d.y2 + block._bounds2d.y2;
 
 				block.translateTo(x, y, 0)
 					.mount(this._renderContainer);
@@ -145,8 +130,8 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		var gridX = unrotatedX - topLeftCornerX;
 		var gridY = unrotatedY - topLeftCornerY;
 
-		var row = Math.floor(gridY / Block.prototype.HEIGHT);
-		var col = Math.floor(gridX / Block.prototype.WIDTH);
+		var row = Math.floor(gridY / Block.HEIGHT);
+		var col = Math.floor(gridX / Block.WIDTH);
 
 		var block = this._overlayGrid[row][col];
 
@@ -162,8 +147,8 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		var data = {
 			blockGridId: this._parent.id(),
 			// Translate overlay coordinates into BlockGrid coordinates
-			row: row - 1,
-			col: col - 1,
+			row: row + this._blockGrid.startRow() - 1,
+			col: col + this._blockGrid.startCol() - 1,
 		};
 
 		if (ige.isClient && ige.client !== undefined && ige.client.state !== undefined) {

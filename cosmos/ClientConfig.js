@@ -65,7 +65,8 @@ var igeClientConfig = {
 		'./ui/info/GPSLabel.js',
 
 		/* Debugging actions*/
-		'./ui/debug/RespawnButton.js',
+		'./ui/debug/RelocateButton.js',
+		'./ui/debug/NewShipButton.js',
 
 		/* Capbar */
 		'./ui/capbar/CapBar.js',
@@ -87,11 +88,12 @@ var igeClientConfig = {
 		'./debug/FixtureDebuggingEntity.js',
 
 		/* Helper utilities */
-		'./utils/DeploymentUtils.js',
-		'./utils/RandomInterval.js',
-		'./utils/MetricsHandler.js',
-		'./utils/PrototypeMixins.js',
 		'./utils/BlockGridPadding.js',
+		'./utils/DeploymentUtils.js',
+		'./utils/MetricsHandler.js',
+		'./utils/NetworkUtils.js',
+		'./utils/RandomInterval.js',
+		'./utils/PrototypeMixins.js',
 
 		/* === GAME SETUP === */
 		/* Configuration */

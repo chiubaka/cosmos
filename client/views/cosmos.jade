@@ -8,43 +8,60 @@ html
     meta(name='game-engine-origin', content='http://www.isogenicengine.com')
     meta(http-equiv='X-UA-Compatible', content='IE=Edge')
     title Cosmos Private Preview
-    //
-       STYLES 
+    // STYLES 
+    link(href='/stylesheets/ui-dark.css', rel='stylesheet', type='text/css')
     link(href='/stylesheets/cosmos-preview.css', rel='stylesheet', type='text/css')
-    //
-       Copy this script into your html file to enable Application Insights 
+    link(href='/stylesheets/cosmos-fonts.css', rel='stylesheet', type='text/css')
+
+    // Application Insights
     script(type='text/javascript').
       window.appInsights={queue:[],applicationInsightsId:null,accountId:null,appUserId:null,configUrl:null,start:function(n){function u(n,t){n[t]=function(){var i=arguments;n.queue.push(function(){n[t].apply(n,i)})}}function f(n){var t=document.createElement("script");return t.type="text/javascript",t.src=n,t.async=!0,t}function r(){i.appendChild(f("//az416426.vo.msecnd.net/scripts/ai.0.js"))}var i,t;this.applicationInsightsId=n;u(this,"logEvent");u(this,"logPageView");i=document.getElementsByTagName("script")[0].parentNode;this.configUrl===null?r():(t=f(this.configUrl),t.onload=r,t.onerror=r,i.appendChild(t));this.start=function(){}}};
       appInsights.start("0ffd4afb-c64a-4b6a-80b5-54e6103955c4");
       appInsights.logPageView();
+
     //
        Isogenic Loader 
-    script(type='text/javascript').
-      var igeRoot = '/ige/engine/';
-      var gameRoot = '/cosmos/';
-    script(type='text/javascript', src='/ige/engine/loader.js')
-    script.
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-      ga('create', 'UA-50808232-1', 'teamleonine.com');
-      ga('send', 'pageview');
+    if process.env.NODE_ENV === 'production'
+      script(type='text/javascript').
+        var igeRoot = './';
+        var gameRoot = './';
+    else
+      script(type='text/javascript').
+        var igeRoot = '/ige/engine/';
+        var gameRoot = '/cosmos/';
+
+    // Google Analytics
+    if process.env.NODE_ENV === 'production'
+      script.
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-50808232-2', 'teamleonine.com');
+        ga('send', 'pageview');
+    else
+      script.
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-50808232-1', {'cookieDomain': 'none'});
+        ga('send', 'pageview');
   body
     .igeLoading.greeting
       .cosmos-logo
-        img(src='images/cosmos-preview.jpg')
+        img(src='/images/cosmos-preview.jpg')
       .tutorial
-        img(src='images/tutorial.png')
+        img(src='/images/tutorial.png')
     .igeLoading.loadingFloat.preview
+      include includes/progress-ring.jade
       #loadingText.loadingText
-        | Loading
+        | Loading... 
       #loadingProgress
         #loadingProgressBar
     div(style='position: absolute; right: 0; bottom: 0;')
-      #cboxbutton(style='position: fixed; bottom: 8px; right: 16px; width: 200px; padding: 3px; text-align: center; cursor: pointer; background-color: #EDF3F7; border: #C3D7E5 1px solid; border-radius: 3px; font-family: Tahoma, sans-serif; font-size: 14px;', onclick='togglecbox()')
-        b Open Chat
-      #cboxdiv(style='display: none; position: fixed; bottom: 48px; right: 16px; width: 200px; background: #EDF3F7; padding: 3px; line-height: 0; border: #C3D7E5 1px solid; border-radius: 3px;')
+      #cboxbutton.chat-closed(onclick='togglecbox()')
+      #cboxdiv
       script(type='text/javascript').
         var cbvis = false;
         var cbload = false;
@@ -58,14 +75,14 @@ html
         cbload = true;
         }
         cbdiv.style.display = "block";
-        cbbut.innerHTML = "Close Chat";
+        cbbut.className = "chat-open";
         if(ige !== undefined && ige.client !== undefined) {
         ige.client.metrics.fireEvent('chat', 'open');
         }
         }
         else {
         cbdiv.style.display = "none";
-        cbbut.innerHTML = "Open Chat";
+        cbbut.className = "chat-closed";
         if(ige !== undefined && ige.client !== undefined) {
         ige.client.metrics.fireEvent('chat', 'close');
         }
@@ -80,3 +97,7 @@ html
         togglecbox();
         }
         }
+    if process.env.NODE_ENV === 'production'
+      script(type="text/javascript", src="/js/cosmos/game.js")
+    else
+      script(type='text/javascript', src='/ige/engine/loader.js')

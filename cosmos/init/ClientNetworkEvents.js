@@ -10,24 +10,26 @@ var ClientNetworkEvents = {
 	_onPlayerEntity: function(data) {
 		var self = this;
 
-		if (ige.$(data)) {
-			ClientNetworkEvents.initCameras(ige.$(data));
+		if (ige.$(data.entityId)) {
+			ClientNetworkEvents.initCameras(ige.$(data.entityId));
 
 			// Set the time stream UI entity to monitor our player entity
 			// time stream data
-			ige.client.tsVis.monitor(ige.$(data));
+			ige.client.tsVis.monitor(ige.$(data.entityId));
 		} else {
 			// The client has not yet received the entity via the network
 			// stream so lets ask the stream to tell us when it creates a
 			// new entity and then check if that entity is the one we
 			// should be tracking!
 			self._eventListener = ige.network.stream.on('entityCreated', function (entity) {
-				if (entity.id() === data) {
+				if (entity.id() === data.entityId) {
 					// Tell the camera to track out player entity
-					ClientNetworkEvents.initCameras(ige.$(data));
+					ClientNetworkEvents.initCameras(ige.$(data.entityId));
 
 					// Make it easy to find the player's entity
 					ige.client.player = entity;
+
+					ige.client.metrics.fireEvent('player', 'connect', data.playerId);
 
 					// Set the time stream UI entity to monitor our player entity
 					// time stream data
@@ -48,6 +50,16 @@ var ClientNetworkEvents = {
 	_onBlockAction: function(data) {
 		var blockGrid = ige.$(data.blockGridId);
 		blockGrid.processBlockActionClient(data);
+	},
+
+	_onAddEffect: function(effect) {
+		var blockGrid = ige.$(effect.sourceBlock.blockGridId);
+		blockGrid.addEffect(effect);
+	},
+
+	_onRemoveEffect: function(effect) {
+		var blockGrid = ige.$(effect.sourceBlock.blockGridId);
+		blockGrid.removeEffect(effect);
 	},
 
 	_onCargoResponse: function(cargoList) {

@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -14,21 +13,47 @@ var express = require('express'),
 	GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
 	FacebookStrategy = require('passport-facebook').Strategy;
 
+var ENDPOINT_LAYER = process.env.ENDPOINT_LAYER || "local";
+
 // Local server
 // TODO: CHANGE THIS BASED ON LOCATION AND ENVIRONMENT
-var SERVER_HOST = "http://tl-cosmos.localtest.me:2001";
+var SERVER_HOST = {
+	local: "http://tl-cosmos.localtest.me:2001", 
+	dev: "http://dev.cosmos.teamleonine.com",
+	preview: "http://preview.cosmos.teamleonine.com"
+};
 
 // Client secrets and callback URLs
 // Microsoft
-var MICROSOFT_CLIENT_ID = "000000004011FE88";
-var MICROSOFT_CLIENT_SECRET = "wpNliQi3hxndft-KdgzmAUrQABtJyD4r";
+var MICROSOFT_CLIENT_ID = {
+	local: "000000004011FE88", 
+	dev: "000000004C11BAB2",
+	preview: "000000004C11C46D"
+};
+
+var MICROSOFT_CLIENT_SECRET = {
+	local: "wpNliQi3hxndft-KdgzmAUrQABtJyD4r",
+	dev: "I5Mts54jjXJcvVCjmSZbLFhFYyJeoOAq",
+	preview: "7gLCN5eNz0xvOGtDyLJSXAedQmp-C9XO"
+};
+
 var MICROSOFT_SCOPE = ['wl.signin', 'wl.basic', 'wl.emails'];
 var MICROSOFT_AUTH_ROUTE = "/auth/msft";
 var MICROSOFT_CALLBACK = MICROSOFT_AUTH_ROUTE + "/callback";
 
 // Facebook
-var FACEBOOK_APP_ID = "1506916002863082";
-var FACEBOOK_APP_SECRET = "adcf2894f7024a5d8afcce03201ce434";
+var FACEBOOK_APP_ID = {
+	local: "1506916002863082",
+	dev: "1510324745855541",
+	preview: "1506885042866178"
+};
+
+var FACEBOOK_APP_SECRET = {
+	local: "adcf2894f7024a5d8afcce03201ce434",
+	dev: "2b9e9ad392bf334b4dfe52b70bc956f4",
+	preview: "a659dfec5c98fc5e0f1941da279d1202"
+};
+
 var FACEBOOK_AUTH_ROUTE = "/auth/fb";
 var FACEBOOK_CALLBACK = FACEBOOK_AUTH_ROUTE + "/callback";
 
@@ -55,9 +80,9 @@ passport.deserializeUser(function (obj, done) {
  * Use the Microsoft account login strategy
  */
 passport.use(new MicrosoftStrategy({
-		clientID: MICROSOFT_CLIENT_ID,
-		clientSecret: MICROSOFT_CLIENT_SECRET,
-		callbackURL: SERVER_HOST + MICROSOFT_CALLBACK
+		clientID: MICROSOFT_CLIENT_ID[ENDPOINT_LAYER],
+		clientSecret: MICROSOFT_CLIENT_SECRET[ENDPOINT_LAYER],
+		callbackURL: SERVER_HOST[ENDPOINT_LAYER] + MICROSOFT_CALLBACK
 	},
 	function (accessToken, refreshToken, profile, done) {
 		// asynchronous verification, for effect...
@@ -74,9 +99,9 @@ passport.use(new MicrosoftStrategy({
 ));
 
 passport.use(new FacebookStrategy({
-		clientID: FACEBOOK_APP_ID,
-		clientSecret: FACEBOOK_APP_SECRET,
-		callbackURL: SERVER_HOST + FACEBOOK_CALLBACK
+		clientID: FACEBOOK_APP_ID[ENDPOINT_LAYER],
+		clientSecret: FACEBOOK_APP_SECRET[ENDPOINT_LAYER],
+		callbackURL: SERVER_HOST[ENDPOINT_LAYER] + FACEBOOK_CALLBACK
 	},
 	function (accessToken, refreshToken, profile, done) {
 		// asynchronous verification, for effect...
@@ -95,7 +120,7 @@ passport.use(new FacebookStrategy({
 passport.use(new GoogleStrategy({
 		clientID: GOOGLE_CLIENT_ID,
 		clientSecret: GOOGLE_CLIENT_SECRET,
-		callbackURL: SERVER_HOST + GOOGLE_CALLBACK
+		callbackURL: SERVER_HOST[ENDPOINT_LAYER] + GOOGLE_CALLBACK
 	},
 	function(accessToken, refreshToken, profile, done) {
 		process.nextTick(function () {
@@ -142,8 +167,6 @@ app.configure(function () {
 	app.use(passport.session());
 	app.use(app.router);
 	app.use(express.static(path.join(__dirname, 'public')));
-	app.use('/ige', express.static('../ige'));
-	app.use('/cosmos', express.static('../cosmos'));
 });
 
 app.configure('development', function () {
@@ -152,6 +175,8 @@ app.configure('development', function () {
 		dumpExceptions: true,
 		showStack: true,
 	}));
+	app.use('/ige', express.static('../ige'));
+	app.use('/cosmos', express.static('../cosmos'));
 });
 
 app.configure('production', function () {

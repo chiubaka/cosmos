@@ -10,8 +10,6 @@ var Server = IgeClass.extend({
 		self.LAYER_HUD = 90;
 		self.DEPTH_PLAYER = 90;
 
-		self.PLAYER_START_DISTANCE = 4000;
-
 		// Load our blocks
 		self.obj = [];
 
@@ -50,7 +48,9 @@ var Server = IgeClass.extend({
 						ige.network.define('playerControlUpdate', self._onPlayerControlUpdate);
 
 						/* This is called when a player clicks the respawn button */
-						ige.network.define('respawn', self._onRespawnRequest);
+						ige.network.define('relocate', self._onRelocateRequest);
+						/* This is called when a player clicks the new ship button */
+						ige.network.define('new ship', self._onNewShipRequest);
 
 						/* This is called when a player clicks on a block */
 						ige.network.define('mineBlock', self._onMineBlock);
@@ -60,6 +60,8 @@ var Server = IgeClass.extend({
 						ige.network.define('constructionZoneClicked', self._onConstructionZoneClicked);
 						/* Define this command so that we can use it on the client */
 						ige.network.define('blockAction');
+						ige.network.define('addEffect');
+						ige.network.define('removeEffect');
 
 						ige.network.define('cargoRequest', self._onCargoRequest);
 						ige.network.define('cargoUpdate');
