@@ -46,9 +46,20 @@ var Block = IgeEntity.extend({
 	 */
 	_blockGrid: undefined,
 	/**
-	 * The row and column of the {@link BlockGrid} that this block inhabits if any.
+	 * The row of the {@link BlockGrid} that this block inhabits if any.
+	 * The value of this instance variable is meaningless unless _blockGrid is defined.
+	 * @memberof Block
+	 * @private
+	 * @instance
 	 */
 	_row: undefined,
+	/**
+	* The column of the {@link BlockGrid} that this block inhabits if any.
+	* The value of this instance variable is meaningless unless _blockGrid is defined.
+	* @memberof Block
+	* @private
+	* @instance
+	*/
 	_col: undefined,
 	/**
 	 * An IgeEntity that all of the effects for this {@link Block} get mounted to.
