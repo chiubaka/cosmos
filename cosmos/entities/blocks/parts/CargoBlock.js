@@ -1,6 +1,8 @@
 /**
  * The cargo block is a ship part which will hold cargo.
  * The current plan is to have each cargo block allow you to hold one more type of block in your inventory
+ * @class
+ * @namespace
  */
 var CargoBlock = Part.extend({
 	classId: 'CargoBlock',
