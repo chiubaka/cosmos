@@ -1,6 +1,8 @@
 /**
  * Power blocks provide power to electrically powered components like the mining laser.
  * TODO right now power blocks don't do anything. They should be neccesary for powering mining lasers.
+ * @class
+ * @namespace
  */
 var PowerBlock = Part.extend({
 	classId: 'PowerBlock',
