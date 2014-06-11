@@ -1,5 +1,11 @@
 var DbPlayer = {
-
+	/**
+	 * Loads the player from the database with the specified playerId.
+	 * If the player is not in the database, the callback's ship and cargo
+	 * arguments are undefined.
+	 * @param playerId
+	 * @param callback
+	 */
 	load: function(playerId, callback) {
 		ige.mongo.db.collection('players', function(err, players) {
 			players.findOne({_id: playerId}, function(err, player) {
