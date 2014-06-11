@@ -14,11 +14,12 @@ var Block = IgeEntity.extend({
 	// The pixel height of the health bar
 	HEALTH_BAR_HEIGHT: 4,
 
-	// How long it takes for a block to lose one health.
+	/**
+	 * How long (in milliseconds) it takes for a ship with a single mining laser to decrease a block's HP by 1.
+	 * Note that even though MINING_INTERVAL is the same for all blocks,
+	 * blocks take different amounts of time to completely mine because they have different amounts of HP.
+	 */
 	MINING_INTERVAL: 100,
-
-	_row: undefined,
-	_col: undefined,
 
 	/**
 	 * The number of rows that this {@link Block} takes up.
@@ -44,6 +45,22 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	_blockGrid: undefined,
+	/**
+	 * The row of the {@link BlockGrid} that this block inhabits if any.
+	 * The value of this instance variable is meaningless unless _blockGrid is defined.
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 */
+	_row: undefined,
+	/**
+	* The column of the {@link BlockGrid} that this block inhabits if any.
+	* The value of this instance variable is meaningless unless _blockGrid is defined.
+	* @memberof Block
+	* @private
+	* @instance
+	*/
+	_col: undefined,
 	/**
 	 * An IgeEntity that all of the effects for this {@link Block} get mounted to.
 	 * @type {IgeEntity}
@@ -180,7 +197,7 @@ var Block = IgeEntity.extend({
 
 	/**
 	 * Getter for the {@link Block#_effectsMount|_effectsMount} property.
-	 * @returns {IgeEntity}
+	 * @returns {IgeEntity} the effects mount
 	 * @memberof Block
 	 * @instance
 	 */
