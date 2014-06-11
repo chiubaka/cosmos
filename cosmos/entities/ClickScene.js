@@ -1,3 +1,9 @@
+/**
+ * The ClickScene is a scene that intercepts all clicks on the background.
+ * Think of it like a catch-all for all clicks that aren't intercepted by an actual entity above this scene.
+ * @class
+ * @namespace
+ */
 var ClickScene = IgeScene2d.extend({
 	classId: 'ClickScene',
 
@@ -15,7 +21,7 @@ var ClickScene = IgeScene2d.extend({
 			y: this.mousePosWorld().y
 		};
 
-		// TODO: Extend when clientState supports multiple current capabilities 
+		// TODO: Extend when clientState supports multiple current capabilities
 		if (ige.client.state !== undefined) {
 			ige.client.state.currentCapability().tryPerformAction(this, event, data);
 		}

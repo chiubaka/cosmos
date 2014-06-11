@@ -1,3 +1,9 @@
+/**
+ * Fuel blocks provide fuel for the engines.
+ * TODO engines should actually consume fuel blocks or something. Right now fuel blocks don't do anything.
+ * @class
+ * @namespace
+ */
 var FuelBlock = Part.extend({
 	classId: 'FuelBlock',
 
