@@ -1,10 +1,18 @@
+/**
+ * Operations on the "players" collection.
+ * Loading/saving player state from the database happens here.
+ * @class
+ * @namespace
+ */
+
 var DbPlayer = {
 	/**
 	 * Loads the player from the database with the specified playerId.
 	 * If the player is not in the database, the callback's ship and cargo
 	 * arguments are undefined.
-	 * @param playerId
-	 * @param callback
+	 * @param playerId {string}
+	 * @param callback {function}
+	 * @memberof DbPlayer
 	 */
 	load: function(playerId, callback) {
 		ige.mongo.db.collection('players', function(err, players) {
@@ -22,9 +30,10 @@ var DbPlayer = {
 	/**
 	 * Updates the player with the specified ID or creates one if one does not
 	 * already exist.
-	 * @param playerId
-	 * @param player
-	 * @param callback
+	 * @param playerId {string}
+	 * @param player {Player}
+	 * @param callback {function}
+	 * @memberof DbPlayer
 	 */
 	update: function(playerId, player, callback) {
 		if (playerId === undefined) {

@@ -1,5 +1,17 @@
+/**
+ * Operations on the "sessions" collection.
+ * Each document contains the session id, the session cookie, and the
+ * expiry date of the session. 
+ * @class
+ * @namespace
+ */
 var DbSession = {
-
+	/**
+	 * Given a session id, finds the corresponding player id in the
+	 * "sessions" collection.
+	 * @param sid {string}
+	 * @param callback {function}
+	 */
 	playerIdForSession: function(sid, callback) {
 		if (sid === undefined) {
 			callback();
