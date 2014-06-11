@@ -158,7 +158,7 @@ var GameInit = {
 
 		var NUM_NORMAL_ASTEROIDS = 20;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
-			var asteroid = BlockGridGenerator.genProceduralAsteroid(200, BlockGridGenerator.blockDistributions.randomDistribution())
+			var asteroid = BlockGridGenerator.genProceduralAsteroid(200, BlockGridGenerator.elementDistributions.randomDistribution())
 				.id('genRandomAsteroid' + asteroidNumber)
 				.streamMode(1)
 				.mount(server.spaceGameScene)
@@ -182,7 +182,7 @@ var GameInit = {
 		var NUM_DERELICT_SPACESHIPS = 10;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_DERELICT_SPACESHIPS; asteroidNumber++) {
 			//note that the signature of gen.. is genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution)
-			var asteroid = BlockGridGenerator.genProceduralAsteroid(20, BlockGridGenerator.blockDistributions.SHIP_PARTS, true)
+			var asteroid = BlockGridGenerator.genProceduralAsteroid(20, BlockGridGenerator.partDistributions.randomDistribution(), true)
 				.id('spaceShip' + asteroidNumber)
 				.streamMode(1)
 				.mount(server.spaceGameScene)
