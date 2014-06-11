@@ -5,10 +5,6 @@ var LaserBeam = IgeEntity.extend({
 		IgeEntity.prototype.init.call(this);
 
 		if (!ige.isServer) {
-			this._targetId = createData[0];
-			this._targetRow = createData[1];
-			this._targetCol = createData[2];
-
 			this.texture(ige.client.textures.laserBeamTexture)
 
 			// Fade in the laser beam
@@ -48,7 +44,7 @@ var LaserBeam = IgeEntity.extend({
 			var blockGrid = ige.$(this._targetId);
 			var block = undefined;
 			if (blockGrid !== undefined) {
-				block = blockGrid.grid()[this._targetRow][this._targetCol];
+				block = blockGrid.get(this._targetRow, this._targetCol);
 			}
 
 			// Check if the block is undefined. This happens in the update() ticks

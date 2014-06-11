@@ -88,11 +88,12 @@ var igeClientConfig = {
 		'./debug/FixtureDebuggingEntity.js',
 
 		/* Helper utilities */
-		'./utils/DeploymentUtils.js',
-		'./utils/RandomInterval.js',
-		'./utils/MetricsHandler.js',
-		'./utils/PrototypeMixins.js',
 		'./utils/BlockGridPadding.js',
+		'./utils/DeploymentUtils.js',
+		'./utils/MetricsHandler.js',
+		'./utils/NetworkUtils.js',
+		'./utils/RandomInterval.js',
+		'./utils/PrototypeMixins.js',
 
 		/* === GAME SETUP === */
 		/* Configuration */
