@@ -1,17 +1,61 @@
 ﻿var MineCap = Cap.extend({
 	classId: "MineCap",
 
+	/**
+	 * The name of the Cap and the title used by the attached CapLabel.
+	 * @constant {string}
+	 * @default
+	 * @memberof MineCap
+	 * @instance
+	 */
 	CAP_NAME: "Mine",
+
+	/**
+	 * The MineCap's stub RGB color value.
+	 * @constant {string}
+	 * @default
+	 * @memberof MineCap
+	 * @instance
+	 */
 	STUB_COLOR: "rgb(200,32,32)",
+
+	/**
+	 * The MineCap's background RGB color value when the player clicks
+	 * on the Cap.
+	 * @constant {string}
+	 * @default
+	 * @memberof MineCap
+	 * @instance
+	 */
 	ACTIVE_COLOR: "rgb(200, 32, 32)",
+
+	/**
+	 * The MineCap's stub RGB color value when the player clicks on 
+	 * the Cap.
+	 * @constant {string}
+	 * @default
+	 * @memberof MineCap
+	 * @instance
+	 */
 	ACTIVE_STUB_COLOR: "rgb(255, 64, 64)",
+
+	/**
+	 * The MineCap's background RGB color value when the player hovers 
+	 * over the Cap.
+	 * @constant {string}
+	 * @default
+	 * @memberof MineCap
+	 * @instance
+	 */
 	HOVER_COLOR: 'rgb(255, 64, 64)',
 
-	STUB_ICON: undefined,
-	ACTIVE_ICON: undefined,
-
+	/**
+	 * Sets the MineCap's icons and defers to the {@link Cap#init} function.
+	 * @memberof MineCap
+	 * @instance
+	 */
 	init: function() {
-		this.STUB_ICON = ige.client.textures.mineCap_color;
+		this.NORMAL_ICON = ige.client.textures.mineCap_color;
 		this.ACTIVE_ICON = ige.client.textures.mineCap_white;
 
 		Cap.prototype.init.call(this);
