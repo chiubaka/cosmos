@@ -5,7 +5,7 @@ CALL :endpoint_%ENDPOINT_TYPE%
 if "%ERRORLEVEL%" NEQ "0" CALL :default
 
 echo Deployment switchboard complete.
-exit /b 1
+goto deploy_end
 
 :endpoint_client
   echo Deploying client endpoint.
@@ -29,3 +29,7 @@ exit /b 1
   VER > NUL 
   echo Deployment complete!
   goto :EOF
+
+:deploy_end
+endlocal
+echo Deployment ended successfully.
