@@ -96,7 +96,7 @@ var MetricsHandler = IgeClass.extend({
 	 * @param category {String} Major category of event, e.g. construct
 	 * @param action {String} Action of event, e.g. existing
 	 * @param label {String} Label of event, e.g. CarbonBlock
-	 * @param value {=String} Specific value (optional) used for FPS value
+	 * @param value {String=} Specific value (optional) used for FPS value
 	 * @memberof MetricsHandler
 	 * @instance
 	 */
