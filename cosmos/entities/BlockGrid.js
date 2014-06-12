@@ -218,7 +218,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * Returns the block at a given row and column in the BlockGrid.
 	 * @param row {number} The row index to get
 	 * @param col {number} The col index to get
-	 * @returns {*} The Block object at (row, col) or undefined if no Block exists at the specified row and column
+	 * @returns {Block|undefined} The Block object at (row, col) or undefined if no Block exists at the specified row and column
 	 * @memberof BlockGrid
 	 * @instance
 	 */
@@ -237,7 +237,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @param row {number} The row to add at
 	 * @param col {number} The col to add at
 	 * @param block {Block} The Block to add to the grid.
-	 * @param checkForNeighbors {boolean} Whether or not we should validate that the given {@link Block} will be
+	 * @param checkForNeighbors {boolean?} Whether or not we should validate that the given {@link Block} will be
 	 * attached to the existing structure in this {@link BlockGrid}. Default behavior is to check for neighbors.
 	 * @returns {boolean} True if the Block was added successfully to the grid. False otherwise. A Block may not be
 	 * successfully added to the grid if another Block already exists in the grid at the specified location or if the
