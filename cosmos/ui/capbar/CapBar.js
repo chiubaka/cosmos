@@ -17,6 +17,7 @@ var CapBar = IgeUiElement.extend({
 	/**
 	 * The default height of the CapBar.
 	 * @constant {number}
+	 * @default
 	 * @memberof CapBar
 	 * @instance
 	 */
@@ -25,6 +26,7 @@ var CapBar = IgeUiElement.extend({
 	/**
 	 * The default height of the CapBar's bottom border ('stub').
 	 * @constant {number}
+	 * @default
 	 * @memberof CapBar
 	 * @instance
 	 */
@@ -33,6 +35,7 @@ var CapBar = IgeUiElement.extend({
 	/**
 	 * The default number of pixels of spacing to leave between each Cap in the CapBar.
 	 * @constant {number}
+	 * @default
 	 * @memberof CapBar
 	 * @instance
 	 */
@@ -41,6 +44,7 @@ var CapBar = IgeUiElement.extend({
 	/**
 	 * The default RGB Color of CapBar's stub.
 	 * @constant {string}
+	 * @default
 	 * @memberof CapBar
 	 * @instance
 	 */
@@ -49,6 +53,7 @@ var CapBar = IgeUiElement.extend({
 	/**
 	 * The default RGB Color of CapBar's background.
 	 * @constant {string}
+	 * @default
 	 * @memberof CapBar
 	 * @instance
 	 */

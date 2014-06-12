@@ -15,6 +15,7 @@
 	 * @constant {number}
 	 * @memberof CapLabel
 	 * @instance
+	 * @default
 	 */
 	LABEL_MARGIN: 10,
 
