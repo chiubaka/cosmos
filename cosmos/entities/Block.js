@@ -10,11 +10,6 @@
 var Block = IgeEntity.extend({
 	classId: 'Block',
 
-	// The pixel margin between the drawn health bar and the border of the block
-	HEALTH_BAR_MARGIN: 3,
-	// The pixel height of the health bar
-	HEALTH_BAR_HEIGHT: 4,
-
 	/**
 	 * The number of rows that this {@link Block} takes up.
 	 * @memberof Block
@@ -435,7 +430,6 @@ Block.WIDTH = 26;
  * @memberof Block
  */
 Block.HEIGHT = 26;
-
 /**
  * How long (in milliseconds) it takes for a ship with a single mining laser to decrease a block's HP by 1.
  * Note that even though MINING_INTERVAL is the same for all blocks,
@@ -444,5 +438,18 @@ Block.HEIGHT = 26;
  * @memberof Block
  */
 Block.MINING_INTERVAL = 100;
+/**
+ * The amount of spacing between a {@link Block}'s health bar and the sides of the {@link Block} when the {@link Block}
+ * is rendered. This value is measured in pixels.
+ * @constant {number}
+ * @memberof Block
+ */
+Block.HEALTH_BAR_MARGIN = 3;
+/**
+ * The height of the displayed health bar for a {@link Block}. This value is measured in pixels.
+ * @constant {number}
+ * @memberof Block
+ */
+Block.HEALTH_BAR_HEIGHT = 4;
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Block; }
