@@ -1,5 +1,6 @@
 /**
- * An {@link IgeEntity} that serves as a caching layer for the rendering of the {@link Block}s of a {@link BlockGrid}.
+ * An {@link IgeEntity} that serves as a caching layer for the rendering of the {@link Block}s that are part of a
+ * larger construct like a {@link BlockGrid} or a {@link ConstructionZoneOverlay}.
  * @class
  * @typedef {RenderContainer}
  * @namespace

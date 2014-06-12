@@ -105,7 +105,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * The rendering container for this BlockGrid, which essentially provides a cacheable location for the
 	 * {@link BlockGrid}'s texture. Without this, the {@link BlockGrid} is re-drawn on each tick, which kills
 	 * performance on most machines.
-	 * @type {IgeEntity}
+	 * @type {RenderContainer}
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
@@ -114,7 +114,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	/**
 	 * Construction zone overlay for showing and hiding locations that players can click on in order to place a block
 	 * on an existing structure.
-	 * @type {IgeEntity}
+	 * @type {ConstructionZoneOverlay}
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
