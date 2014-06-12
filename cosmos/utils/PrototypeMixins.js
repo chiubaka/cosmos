@@ -74,7 +74,7 @@ Array.prototype.is2DInBounds = function (row, col) {
  *  with data. If data is undefined, fill with undefined.
  * @param numRows {Integer} Number of rows in new 2D array
  * @param numCols {Integer} Number of cols in new 2D array
- * @param data {=*} Optional array fill parameter
+ * @param data {*=} Optional array fill parameter
  * @returns {Array} Newly created 2D array
  * @memberof Array
  */
