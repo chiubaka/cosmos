@@ -9,8 +9,8 @@
  *      array.remove(1,2);
  *      // Remove the last and second-to-last items from the array
  *      array.remove(-2,-1);
- * @param from {Integer}
- * @param to {Integer}
+ * @param from {Integer} From index, inclusive
+ * @param to {Integer} To index, inclusive
  * @returns {Integer} The new array length
  * @memberof Array
  * Referenced from http://ejohn.org/blog/javascript-array-remove/
@@ -45,10 +45,10 @@ Array.prototype.get2D = function(row, col) {
 };
 
 /**
- * Returns true if the (row, col) is in bounds
+ * Safely checks to see if a (row, col) is in bounds.
  * @param row {Integer}
  * @param col {Integer}
- * @returns {Boolean}
+ * @returns {Boolean} True if (row, col) is in bounds
  * @memberof Array
  */
 Array.prototype.is2DInBounds = function (row, col) {
