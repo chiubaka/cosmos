@@ -1,5 +1,6 @@
 /**
  * The {@link EngineBlock} class represents a {@link Block} that propels a ship.
+ * Having more engine blocks allows you to (1) accelerate more rapidly and (2) travel at a greater maximum speed.
  * @typedef {EngineBlock}
  * @class
  * @namespace

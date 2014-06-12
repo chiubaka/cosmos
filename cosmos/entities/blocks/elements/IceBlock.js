@@ -1,3 +1,8 @@
+/**
+ * The ice block is special in that it provides little to no nutritional value but it can be mined very easily.
+ * @class
+ * @namespace
+ */
 var IceBlock = Element.extend({
 	classId: 'IceBlock',
 

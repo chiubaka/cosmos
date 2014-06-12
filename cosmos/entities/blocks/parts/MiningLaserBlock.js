@@ -1,5 +1,7 @@
 /**
- * The {@link MiningLaserBlock} class represents a block that can mine blocks.
+ * The {@link MiningLaserBlock} class represents a block that can mine blocks. Better mining lasers will allow you to (1) mine better blocks and (2) mine faster.
+ * If you don't have a mining laser you can't mine.
+ * Also, note that mining lasers are currently the only weapon for combat.
  * @typedef {MiningLaserBlock}
  * @class
  * @namespace

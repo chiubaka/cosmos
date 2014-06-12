@@ -1,5 +1,7 @@
 /**
  * The {@link Player} class represents a player in the game.
+ * The player class contains all of the additional data and functionality (beyond a mere block grid) that is needed to represent a player in Cosmos.
+ * TODO this design should be replaced by something more natural (like there should be a ship class) and/or something component-based.
  * @typedef {Player}
  * @class
  * @namespace

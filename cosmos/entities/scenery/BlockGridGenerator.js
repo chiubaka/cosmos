@@ -14,7 +14,7 @@ var BlockGridGenerator = {
 		symmetric = symmetric || false;
 
 		// The block distribution to seed the procedural block type generator with
-		blockDistribution = blockDistribution || this.blockDistributions.STANDARD;
+		blockDistribution = blockDistribution || this.elementDistributions.STANDARD;
 
 		maxNumBlocks = maxNumBlocks || 100;
 
@@ -145,7 +145,7 @@ var BlockGridGenerator = {
 	},
 
 	singleBlock: function(distribution) {
-		distribution = distribution || this.blockDistributions.STANDARD;
+		distribution = distribution || this.elementDistributions.STANDARD;
 		var blockGrid = new BlockGrid();
 		blockGrid.add(0, 0, this.drawFromDistribution(distribution));
 
@@ -153,7 +153,7 @@ var BlockGridGenerator = {
 	},
 
 	littleAsteroid: function(distribution) {
-		distribution = distribution || this.blockDistributions.STANDARD;
+		distribution = distribution || this.elementDistributions.STANDARD;
 		return [
 			[this.drawFromDistribution(distribution), this.drawFromDistribution(distribution)],
 			[this.drawFromDistribution(distribution), this.drawFromDistribution(distribution)]
@@ -161,7 +161,7 @@ var BlockGridGenerator = {
 	},
 
 	hollowAsteroid: function(distribution) {
-		distribution = distribution || this.blockDistributions.STANDARD;
+		distribution = distribution || this.elementDistributions.STANDARD;
 		return [
 			[this.drawFromDistribution(distribution), this.drawFromDistribution(distribution), this.drawFromDistribution(distribution)],
 			[this.drawFromDistribution(distribution), undefined, this.drawFromDistribution(distribution)],
@@ -178,7 +178,7 @@ var BlockGridGenerator = {
 		return new IceBlock();
 	},
 
-	blockDistributions: {
+	elementDistributions: {
 		STANDARD: {
 			"IceBlock": 0.47,
 			"IronBlock": 0.3,
@@ -209,23 +209,46 @@ var BlockGridGenerator = {
 			"CarbonBlock": 0.5
 		},
 
-		SHIP_PARTS: {
+		randomDistribution: function() {
+			var rand = Math.random();
+
+			if (rand < .5) {
+				return BlockGridGenerator.elementDistributions.STANDARD;
+			} else if (rand < .75) {
+				return BlockGridGenerator.elementDistributions.ICY;
+			} else /*if (rand < 1)*/ {
+				return BlockGridGenerator.elementDistributions.ROCKY;
+			}
+		}
+	},
+
+	partDistributions: {
+		STANDARD: {
 			"EngineBlock": .1,
 			"FuelBlock": .2,
-			"PowerBlock": .2,
+			"PowerBlock": .1,
 			"ThrusterBlock": .1,
-			"Block": .4
+			"CargoBlock": .1,
+			"Block": .3,
+			"MiningLaserBlock": .1
+		},
+
+		HIGH_CARGO: {
+			"EngineBlock": .05,
+			"FuelBlock": .05,
+			"PowerBlock": .05,
+			"ThrusterBlock": .05,
+			"CargoBlock": .5,
+			"Block": .3
 		},
 
 		randomDistribution: function() {
 			var rand = Math.random();
 
-			if (rand < .5) {
-				return BlockGridGenerator.blockDistributions.STANDARD;
-			} else if (rand < .75) {
-				return BlockGridGenerator.blockDistributions.ICY;
+			if (rand < .75) {
+				return BlockGridGenerator.partDistributions.STANDARD;
 			} else /*if (rand < 1)*/ {
-				return BlockGridGenerator.blockDistributions.ROCKY;
+				return BlockGridGenerator.partDistributions.HIGH_CARGO;
 			}
 		}
 	}
