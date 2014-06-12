@@ -568,7 +568,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		for (var row = 0; row < blockTypeMatrix.length; row++) {
 			for (var col = 0; col < blockTypeMatrix[row].length; col++) {
 				// The add() function knows how to deal with receiving undefined
-				this.add(startRow + row, startCol + col, Block.prototype.blockFromClassId(blockTypeMatrix[row][col]), checkForNeighbors);
+				this.add(startRow + row, startCol + col, Block.blockFromClassId(blockTypeMatrix[row][col]), checkForNeighbors);
 			}
 		}
 
@@ -719,7 +719,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 			case 'add':
 				// Add block server side, then send add msg to client
-				if(!self.add(data.row, data.col, Block.prototype.blockFromClassId(data.selectedType))) {
+				if(!self.add(data.row, data.col, Block.blockFromClassId(data.selectedType))) {
 					return false;
 				}
 				else {
@@ -751,9 +751,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 				ige.client.metrics.fireEvent(
 					'construct',
 					'existing',
-					Block.prototype.blockFromClassId(data.selectedType)
+					Block.blockFromClassId(data.selectedType)
 				);
-				this.add(data.row, data.col, Block.prototype.blockFromClassId(data.selectedType));
+				this.add(data.row, data.col, Block.blockFromClassId(data.selectedType));
 				this._renderContainer.refresh();
 				this._constructionZoneOverlay.refresh();
 				break;

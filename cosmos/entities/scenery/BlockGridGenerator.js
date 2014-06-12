@@ -60,7 +60,7 @@ var BlockGridGenerator = {
 				blocksRemaining--;
 
 				if (symmetric) {
-					blockGrid.add(block.row, -block.col, Block.prototype.blockFromClassId(newBlock.classId()), false);
+					blockGrid.add(block.row, -block.col, Block.blockFromClassId(newBlock.classId()), false);
 					blocksRemaining--;
 				}
 
@@ -137,7 +137,7 @@ var BlockGridGenerator = {
 
 		// Now, with a weighted probability, randomly select an element from the weights to be the type.
 		var selection = WeightedSelection.select(weights);
-		return Block.prototype.blockFromClassId(selection);
+		return Block.blockFromClassId(selection);
 	},
 
 	weightedRandom: function(value, upperBound, weight) {
@@ -171,7 +171,7 @@ var BlockGridGenerator = {
 
 	drawFromDistribution: function(distribution) {
 		var selection = WeightedSelection.select(distribution);
-		return Block.prototype.blockFromClassId(selection);
+		return Block.blockFromClassId(selection);
 	},
 
 	getDefaultBlock: function() {
