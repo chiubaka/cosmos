@@ -1,3 +1,9 @@
+/**
+ * An {@link IgeEntity} which represents the background of the game.
+ * @class
+ * @typedef {Background}
+ * @namespace
+ */
 var Background = IgeEntity.extend({
 	classId: 'Background',
 

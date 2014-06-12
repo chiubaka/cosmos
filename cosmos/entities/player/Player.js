@@ -67,8 +67,8 @@ var Player = BlockGrid.extend({
 
 	/**
 	 * Getter/setter for the _sid parameter, which stores the session ID of this player.
-	 * @param val The new value to use or undefined if we are invoking this function as the getter.
-	 * @returns {*} Either the current _sid or this object so that we can chain setter calls.
+	 * @param val {string?} The new value to use or undefined if we are invoking this function as the getter.
+	 * @returns {string|Player} Either the current _sid or this object so that we can chain setter calls.
 	 * @memberof Player
 	 * @instance
 	 */
@@ -82,8 +82,8 @@ var Player = BlockGrid.extend({
 
 	/**
 	 * Getter/setter for the dbId parameter, which stores the database ID of this player.
-	 * @param val The new value to use or undefined if we are invoking this function as the getter.
-	 * @returns {*} Either the current database ID or this object so that we can chain setter calls.
+	 * @param val {string?} The new value to use or undefined if we are invoking this function as the getter.
+	 * @returns {string|Player} Either the current database ID or this object so that we can chain setter calls.
 	 * @memberof Player
 	 * @instance
 	 */
@@ -156,7 +156,7 @@ var Player = BlockGrid.extend({
 
 	/**
 	 * Get/set the strength of attraction
-	 * @param strength {?number} A multiplier for attraction force
+	 * @param strength {number?} A multiplier for attraction force
 	 * @return {(number|Player)} The current attraction strength if no argument is passed or this object if an argument
 	 * is passed in order to support setter chaining.
 	 * @memberof Player
@@ -190,7 +190,7 @@ var Player = BlockGrid.extend({
 	 * @memberof Player
 	 * @instance
 	 * @todo Make this a static function because it doesn't use instance data
-	 * @todo Adda cool animation or sound here, or on another listener
+	 * @todo Add a cool animation or sound here, or on another listener
 	 */
 	blockCollectListener: function (player, blockClassId) {
 		player.cargo.addBlock(blockClassId);
@@ -310,6 +310,5 @@ var Player = BlockGrid.extend({
  * @memberof Player
  */
 Player.PLAYER_START_RADIUS = 4000;
-
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Player; }
