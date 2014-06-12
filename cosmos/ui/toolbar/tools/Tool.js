@@ -1,32 +1,152 @@
-﻿var Tool = IgeUiElement.extend({
+﻿/**
+ * A tool represents an individual item on a Toolbar that the player can select
+ * to modify the way that a capability works.
+ *
+ * @class
+ * @typedef {Object} Tool
+ * @namespace 
+ */
+var Tool = IgeUiElement.extend({
 	classId: "Tool",
 
 	/**
-	 * Defines the dimensions of a capability on the tool
+	 * The width of the Tool.
+	 * @constant {number}
+	 * @default
+	 * @memberof Toolbar
+	 * @instance
 	 */
 	WIDTH: 64,
-	HEIGHT: 64,
 
 	/**
-	 * Defines the styling and colors of the tool
+	 * The height of the Tool.
+	 * @constant {number}
+	 * @default
+	 * @memberof Toolbar
+	 * @instance
 	 */
+	HEIGHT: 64,
+
+	// Defines the styling and colors of the tool
 	// TODO: Move these into a centralized styles config
-	STUB_COLOR: 'rgb(70, 70, 70)',
-	HOVER_STUB_COLOR: 'rgb(255, 255, 255)',
-	ACTIVE_STUB_COLOR: 'rgba(255, 255, 255, 0.5)',
-	ACTIVE_COLOR: 'rgb(100, 100, 100)',
-	HOVER_COLOR: 'rgb(200, 200, 200)',
-	BG_COLOR: 'rgb(50, 50, 50)',
-	FG_COLOR: 'rgb(255, 255, 255)',
-	INACTIVE_COLOR: 'rgba(0, 0, 0, 0)',
-	LABEL_COLOR: 'rgb(255, 255, 255)',
+
+	/**
+	 * The height of a Tool's bottom border ('stub') on the Toolbar.
+	 * @constant {number}
+	 * @default
+	 * @memberof Tool
+	 * @instance
+	 */
 	STUB_HEIGHT: 2,
-	STUB_ICON: undefined,
+
+	/**
+	 * The Tool's default stub RGB color value.
+	 * @constant {string}
+	 * @default
+	 * @memberof Tool
+	 * @instance
+	 */
+	STUB_COLOR: 'rgb(70, 70, 70)',
+
+	/**
+	 * The Tool's default stub RGB color value when the player hovers over 
+	 * the Tool.
+	 * @constant {string}
+	 * @default
+	 * @memberof Tool
+	 * @instance
+	 */
+	HOVER_STUB_COLOR: 'rgb(255, 255, 255)',
+
+	/**
+	 * The Tool's default stub RGB color value when the player clicks on 
+	 * the Tool.
+	 * @constant {string}
+	 * @default
+	 * @memberof Tool
+	 * @instance
+	 */
+	ACTIVE_STUB_COLOR: 'rgba(255, 255, 255, 0.5)',
+
+	/**
+	 * The Tool's default background RGB color value when the player hovers 
+	 * over the Tool.
+	 * @constant {string}
+	 * @default
+	 * @memberof Tool
+	 * @instance
+	 */
+	HOVER_COLOR: 'rgb(200, 200, 200)',
+
+	/**
+	 * The Tool's default background RGB color value when the player clicks
+	 * on the Tool.
+	 * @constant {string}
+	 * @default
+	 * @memberof Tool
+	 * @instance
+	 */
+	ACTIVE_COLOR: 'rgb(100, 100, 100)',
+
+	/**
+	 * The Tool's default background RGB color value.
+	 * @constant {string}
+	 * @default
+	 * @memberof Tool
+	 * @instance
+	 */
+	BG_COLOR: 'rgb(50, 50, 50)',
+
+	/**
+	 * The Tool's default label RGB color value.
+	 * @constant {string}
+	 * @default
+	 * @memberof Tool
+	 * @instance
+	 */
+	LABEL_COLOR: 'rgb(255, 255, 255)',
+
+	/**
+	 * The Tool's unselected icon image as an IGE texture.
+	 * @memberof Tool
+	 * @type {Object}
+	 * @private
+	 * @instance
+	 */
+	NORMAL_ICON: undefined,
+
+	/**
+	 * The Tool's selected icon image as an IGE texture.
+	 * @memberof Tool
+	 * @type {Object}
+	 * @private
+	 * @instance
+	 */
 	ACTIVE_ICON: undefined,
 
+	/**
+	 * The name of the Tool and the title used by the attached CapLabel.
+	 * @constant {string}
+	 * @default
+	 * @memberof Tool
+	 * @instance
+	 */
 	TOOL_NAME: "DefaultTool",
+
+	/**
+	 * The default style class for a Tool.
+	 * @constant {string}
+	 * @default
+	 * @memberof Tool
+	 * @instance
+	 */
 	DEFAULT_CLASS: ".toolbar-tool",
 
+	/**
+	 * Initializes the Tool's styles, label, associated quantity, and attaches event emitters and listeners.
+	 * @memberof Tool
+	 * @instance
+	 */
 	init: function(name, quantity) {
 		IgeUiElement.prototype.init.call(this);
 
@@ -49,6 +169,12 @@
 		}
 	},
 
+	/**
+	 * Initializes the Tool's normal, hover, and active styles. Uses IGE's style 
+	 * system, which is similar to CSS element selection.
+	 * @memberof Tool
+	 * @instance
+	 */
 	initStyles: function() {
 		var toolId = this.classId() + "-" + this.TOOL_NAME;
 		this.TOOL_ID = toolId;
@@ -56,8 +182,8 @@
 		this.width(this.WIDTH);
 		this.height(this.HEIGHT);
 
-		if (this.STUB_ICON === undefined) {
-			this.STUB_ICON = ige.client.textures.baseCap_color;
+		if (this.NORMAL_ICON === undefined) {
+			this.NORMAL_ICON = ige.client.textures.baseCap_color;
 			this.ACTIVE_ICON = ige.client.textures.baseCap_white;
 		}
 
@@ -102,11 +228,23 @@
 		this.id(toolId);
 	},
 
+	/**
+	 * Initializes the Tool's attached CapLabel and mounts it to the Tool. This is
+	 * used for the on-hover label, not for quantities.
+	 * @memberof Tool
+	 * @instance
+	 */
 	initLabel: function() {
 		this._label = new CapLabel(this.ID_NORMAL, this.TOOL_NAME, this.LABEL_COLOR)
 			.mount(this);
 	},
 
+	/**
+	 * Initializes event listeners for player interaction events and client events
+	 * that may trigger a toolbar state change.
+	 * @memberof Tool
+	 * @instance
+	 */
 	initEvents: function() {
 		var self = this;
 
@@ -128,11 +266,25 @@
 		});
 	},
 
+	/**
+	 * Overrides the IgeUiElement destroy method to deregister the tool from receiving tool selection events.
+	 * This prevents multiple instances of a single tool ID that might persist across toolbar opening and closing
+	 * to respond to the same toolbar selection event and create metrics / behavioral bugs.
+	 * @memberof Tool
+	 * @instance
+	 */
 	destroy: function() {
-		ige.off('toolbar tool selected', this._selectEvent, function(removed) { console.log("removed? ", removed);  });
+		ige.off('toolbar tool selected', this._selectEvent);
 		IgeUiElement.prototype.destroy.call(this);
 	},
 
+	/**
+	 * Sets the quantity value for the quantity label if the quantity of the tool 
+	 * is > 1.
+	 * @param quantity {number} the quantity to display
+	 * @memberof Tool
+	 * @instance
+	 */
 	setQuantity: function(quantity) {
 		this._quantity = new IgeUiLabel()
 			.font("12pt Segoe UI Semibold")
@@ -143,6 +295,14 @@
 		this._quantity.width(this._quantity._fontEntity.measureTextWidth() + 10).bottom(-5);
 	},
 
+	/**
+	 * Triggered when the Tool is selected via a player interaction or via another
+	 * client event. Upon selection, applies appropriate selection styles, and if
+	 * event emission is not suppressed, emits a toolbar selection event.
+	 * @param suppress {boolean} Whether or not to suppress the toolbar selection event emission. Set to false or omitted if select is called from a toolbar selection event handler.
+	 * @memberof Cap
+	 * @instance
+	 */
 	select: function(suppress) {
 		if (suppress === undefined) {
 			suppress = false;
@@ -161,6 +321,12 @@
 		}
 	},
 
+	/**
+	 * Triggered when the Tool is deselected via a player interaction or via another
+	 * client event. Applies normal styles.
+	 * @memberof Tool
+	 * @instance
+	 */
 	deselect: function() {
 		if (this._selected) {
 			this._selected = false;
@@ -171,6 +337,13 @@
 		}
 	},
 
+	/**
+	 * Overrides the IgeUiElement _updateStyle method so we can apply hover styles
+	 * for the Tool to its attached label.
+	 * @memberof Tool
+	 * @private
+	 * @instance
+	 */
 	_updateStyle: function() {
 		IgeUiElement.prototype._updateStyle.call(this);
 
@@ -180,8 +353,13 @@
 		}
 	},
 
+	/**
+	 * Gets the name of this Tool.
+	 * @memberof Tool
+	 * @instance
+	 */
 	name: function() {
-		return this.CAP_NAME;
+		return this.TOOL_NAME;
 	}
 });
 
