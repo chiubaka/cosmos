@@ -1,4 +1,13 @@
-﻿var MineCap = Cap.extend({
+﻿/**
+ * The MineCap allows players to interface with the mining game mechanic. Players
+ * select the MineCap on the CapBar to enter mining mode, which allows them to
+ * mine blocks on the outside of BlockGrids.
+ *
+ * @class
+ * @typedef {Object} MineCap
+ * @namespace  
+ */
+var MineCap = Cap.extend({
 	classId: "MineCap",
 
 	/**

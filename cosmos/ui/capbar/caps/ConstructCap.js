@@ -1,4 +1,16 @@
-﻿var ConstructCap = Cap.extend({
+﻿/**
+ * The ConstructCap allows players to interface with the construction game mechanic.
+ *
+ * Players select the ConstructCap on the CapBar to enter construction mode. A 
+ * construction toolbar is displayed on the screen, from which the player can
+ * select blocks to place in the world, either on existing BlockGrids or to form
+ * new BlockGrids.
+ *
+ * @class
+ * @typedef {Object} ConstructCap
+ * @namespace  
+ */
+var ConstructCap = Cap.extend({
 	classId: "ConstructCap",
 
 	/**
