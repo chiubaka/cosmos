@@ -1,12 +1,12 @@
 ﻿/**
  * CargoItem.js
- * @author Derrick Liu
  * 
  * The CargoItem class represents the type of a block to insert into the cargo inventory.
  * 
  * The base CargoItem is intended to provide a common interface for other Cargo interfaces
  * to build upon in a way that extends the player's cargo inventory functionality.
  *
+ * @author Derrick Liu
  * @class
  * @typedef {Object} CargoItem
  * @namespace  

@@ -1,11 +1,10 @@
 ﻿/**
  * CargoContainer2D.js
- * @author Derrick Liu
- * 
  * WIP: A 2D extension of a CargoContainer that represents a physical cargo block and its dimensions
  * on a player's ship.
  * 
  * This is an example of how CargoContainers can be extended. Many methods have not been implemented yet.
+ * @author Derrick Liu
  */
 // var CargoContainer2D = CargoContainer.extend({
 // 	classId: 'CargoContainer2D',

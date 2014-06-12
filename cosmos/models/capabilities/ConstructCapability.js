@@ -1,12 +1,11 @@
 ﻿/**  
  * ConstructCapability.js
- * @author Derrick Liu
- *
  * The ConstructCapability implementation encapsulates state checking and event
  * handling that drives the construction game mechanic. Specifically, it listens
  * for clicks on existing blocks, and on the background, for CXB (construction
  * on existing blockgrids) and CNB (construction of new blockgrids).
  * 
+ * @author Derrick Liu
  * @class
  * @typedef {Object} ConstructCapability
  * @namespace  

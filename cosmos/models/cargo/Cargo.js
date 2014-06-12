@@ -1,6 +1,5 @@
 ﻿/**
  * Cargo.js
- * @author Derrick Liu
  * 
  * The Cargo class represents a player's entire cargo inventory. 
  * This class provides a high-level interface for managing cargo items.
@@ -8,6 +7,7 @@
  * In the future, other classes can extend the base CargoContainer and CargoItem classes
  * to provide additional functionality reasonably easily.
  *
+ * @author Derrick Liu
  * @class
  * @typedef {Object} Cargo
  * @namespace  

@@ -1,12 +1,11 @@
 ﻿/**  
  * Capability.js
- * @author Derrick Liu
- *
  * Capabilities are modules that encapsulate gameplay state, state-checking,
  * and functions that perform actions in a way that is easily extensible and
  * maintainable. Capabilities can also store info that's related to a particular
  * state.
- * 
+ *
+ * @author Derrick Liu 
  * @class
  * @typedef {Object} Capability
  * @namespace  

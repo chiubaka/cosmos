@@ -1,6 +1,5 @@
 ﻿/**
  * ChunkedCargoItem.js
- * @author Derrick Liu
  * 
  * WIP: An example of extending CargoItems to serve as chunk containers.
  * 
@@ -8,6 +7,7 @@
  * represent the viable material that is collected from the mining process.
  * After a certain number of mined chunks are collected, these chunk containers
  * could be coalesced into whole blocks of a particular element.
+ * @author Derrick Liu
  */
 // var ChunkedCargoItem = CargoItem.extend({
 // 	classId: 'ChunkedCargoItem',

@@ -1,11 +1,11 @@
 ﻿/**  
  * MineCapability.js
- * @author Derrick Liu
- *
  * The MineCapability implementation encapsulates state checking and event
  * handling that drives the mining game mechanic. Specifically, it listens
  * for clicks on existing blocks and checks to see if they're minable.
  * 
+ * @author Derrick Liu
+ *
  * @class
  * @typedef {Object} MineCapability
  * @namespace  

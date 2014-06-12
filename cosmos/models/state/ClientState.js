@@ -1,10 +1,10 @@
 ﻿/**
  * ClientState.js
- * @author Derrick Liu
  *
  * The ClientState object manages the current client state and handles switching
  * between different client game states and activating each states' associated capabilities.
  *
+ * @author Derrick Liu
  * @class
  * @typedef {Object} Capability
  * @namespace  

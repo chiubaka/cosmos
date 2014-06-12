@@ -1,12 +1,12 @@
 ﻿/**
  * CargoContainer.js
- * @author Derrick Liu
- * 
  * The CargoContainer class represents a container owned by the player that holds some blocks.
  * 
  * The base CargoContainer is intended to provide a common interface for other CargoInterfaces
  * to build upon in a way that extends the player's cargo inventory functionality.
  *
+ * @author Derrick Liu
+ * 
  * @class
  * @typedef {Object} CargoContainer
  * @namespace  

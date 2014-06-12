@@ -1,8 +1,8 @@
 ﻿/**
  * CargoItemEntity.js
- * @author Derrick Liu
  * 
  * Don't use this yet, we haven't implemented support for it and it doesn't work.
+ * @author Derrick Liu
  */
 // var CargoItem = IgeClass.extend({
 //     classId: 'CargoItem',
