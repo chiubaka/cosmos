@@ -1,6 +1,7 @@
 /**
- * This class is the superclass of all blocks, and it contains all of the logic for the blocks.
- * Other blocks just describe the way they are drawn and nothing else.
+ * This class is the superclass of all blocks, and it contains all of the basic logic for the blocks. The
+ * Block class is abstract, so should not be instantiated. Subclasses of the Block extend functionality and
+ * override abstract methods.
  *
  * @class
  * @typedef {Object} Block
@@ -13,13 +14,6 @@ var Block = IgeEntity.extend({
 	HEALTH_BAR_MARGIN: 3,
 	// The pixel height of the health bar
 	HEALTH_BAR_HEIGHT: 4,
-
-	/**
-	 * How long (in milliseconds) it takes for a ship with a single mining laser to decrease a block's HP by 1.
-	 * Note that even though MINING_INTERVAL is the same for all blocks,
-	 * blocks take different amounts of time to completely mine because they have different amounts of HP.
-	 */
-	MINING_INTERVAL: 100,
 
 	/**
 	 * The number of rows that this {@link Block} takes up.
@@ -441,5 +435,14 @@ Block.WIDTH = 26;
  * @memberof Block
  */
 Block.HEIGHT = 26;
+
+/**
+ * How long (in milliseconds) it takes for a ship with a single mining laser to decrease a block's HP by 1.
+ * Note that even though MINING_INTERVAL is the same for all blocks,
+ * blocks take different amounts of time to completely mine because they have different amounts of HP.
+ * @constant {number}
+ * @memberof Block
+ */
+Block.MINING_INTERVAL = 100;
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Block; }
