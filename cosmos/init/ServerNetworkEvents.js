@@ -43,6 +43,11 @@ var ServerNetworkEvents = {
 		player.cargo.unsubscribeFromUpdates(clientId);
 
 		var self = this;
+		/**
+		 * @callback updatePlayerCallback
+		 * @param err {Error | null}
+		 * @param result {*}
+		 */
 		DbPlayer.update(player.dbId(), player, function(err, result) {
 			if (err) {
 				self.log('Cannot save player in database!', 'error')
@@ -68,6 +73,11 @@ var ServerNetworkEvents = {
 	 */
 	_onPlayerEntity: function(data, clientId) {
 		var self = this;
+		/**
+		 * @callback onPlayerEntitySessionCallback
+		 * @param err {Error | null}
+		 * @param playerId {String} A unique player identifier.
+		 */
 		DbSession.playerIdForSession(data.sid, function(err, playerId) {
 			if (err) {
 				self.log('Cannot load session from database!', 'error');
@@ -77,6 +87,12 @@ var ServerNetworkEvents = {
 
 			}
 
+			/**
+			 * @callback onPlayerEntityLoadCallback
+			 * @param err {Error | null}
+			 * @param ship {Array} Player's ship, represented as a 2D array
+			 * @param cargo {Array} Player's cargo
+			 */
 			DbPlayer.load(playerId, function(err, ship, cargo) {
 				if (err) {
 					self.log('Cannot load player from database!', 'error')
@@ -96,22 +112,23 @@ var ServerNetworkEvents = {
 	 * @private
 	 */
 	_createPlayer: function(clientId, playerId, ship, cargo) {
-		var player = new Player();
+		var player = new Player()
+			// Call BlockGrid#debugFixtures before calling BlockGrid#fromBlockMatrix, since debugging entities are
+			// added when fixtures are added.
+			.debugFixtures(false);
 
 		if (ship === undefined) {
-			player.grid(ExampleShips.starterShipSingleMisplacedEngine());
+			player.fromBlockMatrix(ExampleShips.starterShip(), false);
 		}
 		else {
-			player.grid(BlockGrid.prototype.rehydrateGrid(ship));
+			player.fromBlockTypeMatrix(ship, false);
 		}
 
 		if (playerId !== undefined) {
 			player.dbId(playerId);
 		}
 
-		player.debugFixtures(false)//call this before calling setGrid()
-			.padding(10)
-			.addSensor(300)
+		player.addSensor(300)
 			.attractionStrength(1)
 			.streamMode(1)
 			.mount(ige.server.spaceGameScene)
@@ -184,8 +201,8 @@ var ServerNetworkEvents = {
 			return;
 		}
 
-		// Do not start mining if we are already mining
-		if (player.laserBeam !== undefined) {
+		// Do not start mining if we are already mining or if the player does not have any mining lasers.
+		if (player.mining || player.numBlocksOfType(MiningLaserBlock.prototype.classId()) === 0) {
 			return;
 		}
 
@@ -197,9 +214,11 @@ var ServerNetworkEvents = {
 
 		data.action = 'mine';
 		if(blockGrid.processBlockActionServer(data, player)) {
-			// Activate mining laser
-			player.addLaser(data.blockGridId, data.row, data.col);
-			blockGrid.addMiningParticles(data.blockGridId, data.row, data.col);
+			player.mining = true;
+
+			var targetBlock = blockGrid.get(data.row, data.col);
+			// Activate mining lasers
+			player.fireMiningLasers(targetBlock);
 		}
 	},
 
@@ -216,11 +235,12 @@ var ServerNetworkEvents = {
 			//console.log("Placing item: " + blockToPlace.classId(), 'info');
 			new BlockGrid()
 				.category('smallAsteroid')
+				// TODO: Math.random() isn't safe here! Also, there's no good reason to set an id on this BlockGrid.
 				.id('littleAsteroid' + Math.random())
 				.streamMode(1)
 				.mount(ige.$("spaceGameScene"))
 				.depth(100)
-				.grid([[blockToPlace]])
+				.fromBlockMatrix([[blockToPlace]])
 				.translateTo(data.x, data.y, 0);
 
 			var confirmData = { category: 'construct', action: 'new', label: data.selectedType };

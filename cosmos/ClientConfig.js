@@ -34,9 +34,8 @@ var igeClientConfig = {
 
 		/* Effects */
 		'./entities/effects/mining/LaserBeam.js',
-		'./entities/effects/mining/EffectsMount.js',
 		'./entities/effects/mining/LaserParticle.js',
-		'./entities/effects/mining/EngineParticle.js',
+		'./entities/effects/EngineParticle.js',
 		'./entities/effects/mining/BlockParticleEmitter.js',
 
 		/* Structures (prefabs) */
@@ -88,11 +87,12 @@ var igeClientConfig = {
 		'./debug/FixtureDebuggingEntity.js',
 
 		/* Helper utilities */
-		'./utils/DeploymentUtils.js',
-		'./utils/RandomInterval.js',
-		'./utils/MetricsHandler.js',
-		'./utils/PrototypeMixins.js',
 		'./utils/BlockGridPadding.js',
+		'./utils/DeploymentUtils.js',
+		'./utils/MetricsHandler.js',
+		'./utils/NetworkUtils.js',
+		'./utils/RandomInterval.js',
+		'./utils/PrototypeMixins.js',
 
 		/* === GAME SETUP === */
 		/* Configuration */

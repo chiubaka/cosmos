@@ -1,4 +1,18 @@
 /**
+ * Remove an item or group of items from an array
+ * @example
+ *      // Remove the second item from the array
+ *       array.remove(1);
+ *      // Remove the second-to-last item from the array
+ *      array.remove(-2);
+ *      // Remove the second and third items from the array
+ *      array.remove(1,2);
+ *      // Remove the last and second-to-last items from the array
+ *      array.remove(-2,-1);
+ * @param from {Integer} From index, inclusive
+ * @param to {Integer} To index, inclusive
+ * @returns {Integer} The new array length
+ * @memberof Array
  * Referenced from http://ejohn.org/blog/javascript-array-remove/
  */
 Array.prototype.remove = function(from, to) {
@@ -9,7 +23,13 @@ Array.prototype.remove = function(from, to) {
 
 /* Our custom array functions */
 
-// Gets an item from a 2d array. Returns undefined if out of bounds.
+/**
+ * Gets an item from a 2d array. Returns undefined if out of bounds.
+ * @param row {Integer}
+ * @param col {Integer}
+ * @returns {*} Item at row, col
+ * @memberof Array
+ */
 Array.prototype.get2D = function(row, col) {
 	if (row < 0 || col < 0) {
 		return undefined;
@@ -24,7 +44,13 @@ Array.prototype.get2D = function(row, col) {
 	return this[row][col];
 };
 
-// Returns true if the (row, col) is in bounds
+/**
+ * Safely checks to see if a (row, col) is in bounds.
+ * @param row {Integer}
+ * @param col {Integer}
+ * @returns {Boolean} True if (row, col) is in bounds
+ * @memberof Array
+ */
 Array.prototype.is2DInBounds = function (row, col) {
 	if ((row < 0) || (col < 0)) {
 		return false;
@@ -43,8 +69,16 @@ Array.prototype.is2DInBounds = function (row, col) {
 	return false;
 };
 
-// Creates a new 2D array with specified dimensions and fills it
-// with data. If data is undefined, fill with undefined.
+/**
+ * Creates a new 2D array with specified dimensions and fills it
+ *  with data. If data is undefined, fill with undefined.
+ * @param numRows {Integer} Number of rows in new 2D array
+ * @param numCols {Integer} Number of cols in new 2D array
+ * @param data {=*} Optional array fill parameter
+ * @returns {Array} Newly created 2D array
+ * @memberof Array
+ */
+
 Array.prototype.new2DArray = function(numRows, numCols, data) {
 	var grid = [];
 
@@ -59,7 +93,11 @@ Array.prototype.new2DArray = function(numRows, numCols, data) {
 	return grid;
 };
 
-// Gets the maximum row length because javascript 2D arrays are jagged
+/**
+ * Gets the maximum row length because javascript 2D arrays are jagged
+ * @returns {Integer} Maximum row length of a 2D array
+ * @memberof Array
+ */
 Array.prototype.get2DMaxRowLength = function() {
 	var maxRowLength = 0;
 	for (var row = 0; row < this.length; row++) {

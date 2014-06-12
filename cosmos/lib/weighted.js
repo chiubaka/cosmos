@@ -1,5 +1,10 @@
-// Weighted random selection
-// From https://github.com/Schoonology/weighted
+/**
+ * weighted.js
+ * Weighted random selection.
+ * A dead-simple module for picking a random item from a set, with weights.
+ * Extremely useful for bot scripting.
+ * From https://github.com/Schoonology/weighted
+ */
 
 function getTotal(weights) {
 	var total = weights.__weighted_total
@@ -52,6 +57,7 @@ function _selectArr(set, weights, options) {
 	throw new Error('All weights do not add up to >= 1 as expected.')
 }
 
+
 function _selectObj(obj, options) {
 	var keys = Object.keys(obj),
 		values = keys.map(function(key) {
@@ -61,6 +67,23 @@ function _selectObj(obj, options) {
 	return _selectArr(keys, values, options);
 }
 
+/**
+ * Given a weighted set, returns a selected item in the set.
+ * @example #Array example
+ *     var options = ['Wake Up', 'Snooze Alarm'],
+ *                   weights = [0.25, 0.75]
+ *     console.log('Decision:', weighted.select(options, weights)
+ * @example #Object example
+ *     var options = {
+ *       'Wake Up': 0.25,
+ *       'Snooze Alarm': 0.75
+ *     }
+ *     console.log('Decision:', weighted.select(options))
+ * @param set {(Array | Object)} The set of items to select from
+ * @param weights {Array=} The set of weights (if using array version)
+ * @param options {function=} Optional user supplied random function
+ * @returns {*} Selected item in the set
+ */
 function select(set, weights, options) {
 	if (typeof options === 'function') {
 		options = {

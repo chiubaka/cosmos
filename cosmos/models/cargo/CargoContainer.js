@@ -113,7 +113,7 @@ var CargoContainer = IgeClass.extend({
 		}
 
 		for (var i = 0; i < numToExtract; i++) {
-			extracted.push(Block.prototype.blockFromClassId(itemType));
+			extracted.push(Block.blockFromClassId(itemType));
 		}
 
 		return extracted;

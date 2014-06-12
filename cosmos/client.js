@@ -107,6 +107,10 @@ var Client = IgeClass.extend({
 						ige.network.define('playerEntity', self._onPlayerEntity);
 						// Called when the server needs to broadcast updates about a block
 						ige.network.define('blockAction', self._onBlockAction);
+						// Called when the server wants to add an effect to a block
+						ige.network.define('addEffect', self._onAddEffect);
+						// Called when the server wants to remove an effect from a block
+						ige.network.define('removeEffect', self._onRemoveEffect);
 
 						ige.network.define('cargoResponse', self._onCargoResponse);
 						ige.network.define('cargoUpdate', self._onCargoUpdate);

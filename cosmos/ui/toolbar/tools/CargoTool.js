@@ -21,7 +21,7 @@
 
 	mountBlock: function() {
 		// Get the appropriate block from the block type
-		this._mountedBlock = Block.prototype.blockFromClassId(this.TOOL_NAME);
+		this._mountedBlock = Block.blockFromClassId(this.TOOL_NAME);
 		this._mountedBlock.mount(this);
 
 		if (this._quantity !== undefined) {

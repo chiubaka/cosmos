@@ -158,37 +158,34 @@ var GameInit = {
 
 		var NUM_NORMAL_ASTEROIDS = 20;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
-			var asteroid = new BlockGrid()
+			var asteroid = BlockGridGenerator.genProceduralAsteroid(200, BlockGridGenerator.elementDistributions.randomDistribution())
 				.id('genRandomAsteroid' + asteroidNumber)
 				.streamMode(1)
 				.mount(server.spaceGameScene)
-				.padding(10)
-				.grid(BlockGridGenerator.genProceduralAsteroid(20, undefined, BlockGridGenerator.blockDistributions.randomDistribution()))
 			this.moveRandomly(asteroid);
 		}
 
 		// Instead of creating a bunch of these up front, we might want to create them just ahead of a user as he's flying, and delete them right behind. This will be more efficient.
+
 		var NUM_SMALL_ASTEROIDS = 80;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_SMALL_ASTEROIDS; asteroidNumber++) {
-			var asteroid = new BlockGrid()
+			var asteroid = BlockGridGenerator.singleBlock()
 				.category('smallAsteroid')
 				.id('littleAsteroid' + asteroidNumber)
 				.streamMode(1)
 				.mount(server.spaceGameScene)
-				.padding(1)
-				.grid(BlockGridGenerator.singleBlock());
 			this.moveRandomly(asteroid);
 		}
 
+		// TODO: The procedural generation algorithm is causing strange problems with the new BlockGrid system. Leave
+		// this stuff commented out until it is figured out.
 		var NUM_DERELICT_SPACESHIPS = 10;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_DERELICT_SPACESHIPS; asteroidNumber++) {
-			var asteroid = new BlockGrid()
+			//note that the signature of gen.. is genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution)
+			var asteroid = BlockGridGenerator.genProceduralAsteroid(20, BlockGridGenerator.partDistributions.randomDistribution(), true)
 				.id('spaceShip' + asteroidNumber)
 				.streamMode(1)
 				.mount(server.spaceGameScene)
-				.padding(10)
-				//note that the signature of gen.. is genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution)
-				.grid(BlockGridGenerator.genProceduralAsteroid(20, 20, BlockGridGenerator.blockDistributions.SHIP_PARTS, true));
 			this.moveRandomly(asteroid);
 		}
 	},
@@ -240,8 +237,9 @@ var GameInit = {
 						if (asteroid === undefined || !asteroid.alive()) {
 							return;
 						}
+						var block = asteroid.iterator().next();
 						ige.emit('block collected',
-							[player, BlockGridPadding.extract1x1(asteroid.grid()).classId()]);
+							[player, block.classId()]);
 						asteroid.destroy();
 					}
 				}

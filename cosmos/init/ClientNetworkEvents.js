@@ -52,6 +52,16 @@ var ClientNetworkEvents = {
 		blockGrid.processBlockActionClient(data);
 	},
 
+	_onAddEffect: function(effect) {
+		var blockGrid = ige.$(effect.sourceBlock.blockGridId);
+		blockGrid.addEffect(effect);
+	},
+
+	_onRemoveEffect: function(effect) {
+		var blockGrid = ige.$(effect.sourceBlock.blockGridId);
+		blockGrid.removeEffect(effect);
+	},
+
 	_onCargoResponse: function(cargoList) {
 		//console.log("Received cargo response", 'info');
 		ige.emit('cargo response', [cargoList]);

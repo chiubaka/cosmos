@@ -1,3 +1,7 @@
+/**
+ * Contains information needed for connecting to our MongoDB server
+ * Keep this secret!
+ */
 var DbConfig = {
 	db: undefined,
 

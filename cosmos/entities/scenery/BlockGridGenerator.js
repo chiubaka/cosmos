@@ -1,69 +1,39 @@
+/**
+ * A utility class that generates {@link BlockGrid}s of different types, sizes, shapes, and distributions. Used to
+ * procedurally generate the asteroids in the world as well as the derelict ship parts.
+ * @class
+ * @typedef {BlockGridGenerator}
+ * @namespace
+ */
 var BlockGridGenerator = {
 	/**
-	 * Asteroid constants
-	 */
-	DEFAULT_MAX_SIZE: 40,
-
-	/**
-	 * A random asteroid which may have holes in it
-	 */
-	genRandomAsteroid: function(maxSize, probabilityOfHole) {
-		asteroid = []
-
-		var maxSize = maxSize || DEFAULT_MAX_SIZE;
-		var probabilityOfHole = probabilityOfHole || .2;
-
-		for (var x = 0; x < Math.random() * maxSize; x++) {
-			rowList = [];
-			for (var y = 0; y < Math.random() * maxSize; y++) {
-				if (Math.random() < probabilityOfHole) {
-					rowList.push(undefined);
-				} else {
-					if (Math.random() < .3) {
-						rowList.push(new IronBlock());
-					} else if (Math.random() < .3) {
-						rowList.push(new CarbonBlock());
-					} else {
-						rowList.push(new IceBlock());
-					}
-				}
-			}
-			asteroid.push(rowList);
-
-		}
-
-		return asteroid;
-	},
-
-	/**
 	 * Procedurally generates an asteroid recursively
+	 * @param maxNumBlocks {number} The maximum number of {@link Block}s to place in this procedurally generated
+	 * asteroid. If no value is provided, the default is 100.
+	 * @param blockDistribution {Object} The block distribution object to use when picking {@link Block}s to place in
+	 * this asteroid. The default distribution is a standard element distribution.
+	 * @param symmetric {boolean} Whether or not this asteroid should be symmetric. The default value is false.
+	 * @memberof BlockGridGenerator
 	 */
-	genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution, symmetric) {
+	genProceduralAsteroid: function(maxNumBlocks, blockDistribution, symmetric) {
+		var blockGrid = new BlockGrid();
+
 		// Whether or not to generate a symmetric asteroid
 		symmetric = symmetric || false;
 
-		// The maximum size of a single asteroid dimension
-		maxSize = maxSize || this.DEFAULT_MAX_SIZE;
-
 		// The block distribution to seed the procedural block type generator with
-		blockDistribution = blockDistribution || this.blockDistributions.STANDARD;
+		blockDistribution = blockDistribution || this.elementDistributions.STANDARD;
 
-		// Dimensions of this generated asteroid. Guaranteed to be at least 0.25 of the upper bound.
-		// Weighted so that we don't get super small asteroids
-		var asteroidDim = Math.floor(this.weightedRandom(maxSize, maxSize, 0.75));
-		maxNumBlocks = (maxNumBlocks || asteroidDim * asteroidDim);
+		maxNumBlocks = maxNumBlocks || 100;
 
 		// Number of blocks that can be contained in this asteroid.
 		var numBlocks = Math.floor(this.weightedRandom(maxNumBlocks, maxNumBlocks * 0.75, 0.25));
 		var blocksRemaining = numBlocks;
 
-		// The asteroid itself: a 2D array of blocks.
-		var asteroidConstr = [[]];
-
 		// Start the generation algorithm at a specific cell in the asteroid.
 		var startingCell = {
-			x: Math.floor(asteroidDim / 2),
-			y: Math.floor(asteroidDim / 2)
+			row: 0,
+			col: 0
 		};
 
 		// Initialize the block bag.
@@ -75,88 +45,86 @@ var BlockGridGenerator = {
 			// Randomly select a block to place.
 			var blockIndex = Math.floor(Math.random() * blocksToPlace.length);
 			var block = blocksToPlace[blockIndex];
-
-			if (asteroidConstr[block.x] !== undefined && asteroidConstr[block.x][block.y] !== undefined) {
+			/*
+			if (asteroidConstr[block.row] !== undefined && asteroidConstr[block.row][block.col] !== undefined) {
 				blocksToPlace.remove(blockIndex);
 				continue;
 			}
-
-			if (block.x > asteroidDim || block.x < 0 ||
-				block.y > asteroidDim || block.y < 0) {
+			*/
+			if (blockGrid.get(block.row, block.col) !== undefined) {
 				blocksToPlace.remove(blockIndex);
 				continue;
-			}
-
-			// Allocate a new column if it doesn't exist.
-			if (asteroidConstr[block.x] === undefined) {
-				asteroidConstr[block.x] = [];
 			}
 
 			if (first) {
 				var newBlock = new IceBlock();
 				first = false;
 			} else {
-				var newBlock = this.getBlockType(asteroidConstr, block.x, block.y, blockDistribution);
+				var newBlock = this._getBlockType(blockGrid, block.row, block.col, blockDistribution);
 			}
 
-			asteroidConstr[block.x][block.y] = newBlock;
-
-			if (symmetric) {
-				asteroidConstr[block.x][(asteroidDim - 1) - block.y] = Block.prototype.blockFromClassId(newBlock.classId());
+			{
+				blockGrid.add(block.row, block.col, newBlock, false);
 				blocksRemaining--;
+
+				if (symmetric) {
+					blockGrid.add(block.row, -block.col, Block.blockFromClassId(newBlock.classId()), false);
+					blocksRemaining--;
+				}
+
+				// Push cardinal neighbors into block bag.
+				blocksToPlace.push({ row: block.row - 1, col: block.col });
+				blocksToPlace.push({ row: block.row + 1, col: block.col });
+				blocksToPlace.push({ row: block.row, col: block.col - 1 });
+				blocksToPlace.push({ row: block.row, col: block.col + 1 });
 			}
-
-			blocksRemaining--;
-
-			// Push cardinal neighbors into block bag.
-			blocksToPlace.push({ x: block.x - 1, y: block.y });
-			blocksToPlace.push({ x: block.x + 1, y: block.y });
-			blocksToPlace.push({ x: block.x, y: block.y - 1 });
-			blocksToPlace.push({ x: block.x, y: block.y + 1 });
 
 			// Remove the block
 			blocksToPlace.remove(blockIndex);
 		}
 
-		// Now, prune all unused columns in the asteroid to result in the final asteroid
-		var asteroid = [];
-		for (var col in asteroidConstr) {
-			if (asteroidConstr[col]) {
-				asteroid.push(asteroidConstr[col]);
-			}
-		}
-
-		return asteroid;
+		return blockGrid;
 	},
 
 	/**
 	 * Returns a block type computed from neighbors in the asteroid and the block rarities provided.
 	 * Can be changed later to change the blocks that appear in asteroid generation.
-	 *
-	 * TODO: consider using a Perlin noise generator to generate a noise map as large as the block grid,
+	 * @param blockGrid {BlockGrid} The {@link BlockGrid} that we are constructing.
+	 * @param row {number} The row number of the {@link Block} we are trying to figure out the type for in the
+	 * generated {@link BlockGrid}.
+	 * @param col {number} The col number of the {@link Block} we are trying to figure out the type for in the
+	 * generated {@link BlockGrid}.
+	 * @memberof BlockGridGenerator
+	 * @private
+	 * @todo consider using a Perlin noise generator to generate a noise map as large as the block grid,
 	 * and sampling at the x and y to get the block type?
 	 */
-	getBlockType: function(blockArray, x, y, blockDistribution) {
+	_getBlockType: function(blockGrid, row, col, blockDistribution) {
 		// Count up the neighbors
+		var valid = false;
 		var neighborCounts = [];
-		for (var row = y - 1; row <= y + 1; row++) {
-			for (var col = x - 1; col <= x + 1; col++) {
-				if (row == y && col == x) {
+		for (var curRow = row - 1; curRow <= row + 1; curRow++) {
+			for (var curCol = col - 1; curCol <= col + 1; curCol++) {
+				if (curRow == row && curCol == col) {
 					continue;
 				}
 
-				if (blockArray[col] === undefined || blockArray[col][row] === undefined) {
+				if (blockGrid.get(curRow, curCol) == undefined) {
 					continue;
 				}
-
-				var blockType = blockArray[col][row].classId();
+				var blockType = blockGrid.get(curRow, curCol).classId()
 
 				if (neighborCounts[blockType] === undefined) {
 					neighborCounts[blockType] = 0;
 				}
 
 				neighborCounts[blockType] += 1;
+				valid = true;
 			}
+		}
+
+		if (!valid) {
+			return this._getDefaultBlock();
 		}
 
 		// Weight the block rarities so clusters of similar blocks are more likely.
@@ -183,43 +151,100 @@ var BlockGridGenerator = {
 
 		// Now, with a weighted probability, randomly select an element from the weights to be the type.
 		var selection = WeightedSelection.select(weights);
-		return Block.prototype.blockFromClassId(selection);
+		return Block.blockFromClassId(selection);
 	},
 
+	/**
+	 * Utility function that returns a random number within a certain range
+	 * @param value
+	 * @param upperBound
+	 * @param weight
+	 * @returns {number}
+	 * @memberof BlockGridGenerator
+	 * @todo Derrick: document this function because it doesn't make any sense to me.
+	 */
 	weightedRandom: function(value, upperBound, weight) {
 		return (Math.random() * (value)) * weight + (upperBound * (1 - weight));
 	},
 
+	/**
+	 * Creates and returns a {@link BlockGrid} with a single {@link Block}.
+	 * @param distribution {Object} The distribution object to draw the {@link Block} from. The default is a standard
+	 * elemental distribution.
+	 * @returns {BlockGrid} The newly created 1x1 {@link BlockGrid}.
+	 * @memberof BlockGridGenerator
+	 */
 	singleBlock: function(distribution) {
-		distribution = distribution || this.blockDistributions.STANDARD;
-		return [
-			[this.drawFromDistribution(distribution)]
-		];
+		distribution = distribution || this.elementDistributions.STANDARD;
+		var blockGrid = new BlockGrid();
+		blockGrid.add(0, 0, this._drawFromDistribution(distribution));
+
+		return blockGrid;
 	},
 
+	/**
+	 * Creates and returns a 2x2 asteroid as a {@link BlockGrid}.
+	 * @param distribution {Object} The distribution object to draw the {@link Block}s from. The default is a standard
+	 * elemental distribution.
+	 * @returns {BlockGrid} The newly created 2x2 {@link BlockGrid}.
+	 * @memberof BlockGridGenerator
+	 * @todo Edit this function so that it creates and returns an actual {@link BlockGrid} object. As it is written now,
+	 * this won't work.
+	 */
 	littleAsteroid: function(distribution) {
-		distribution = distribution || this.blockDistributions.STANDARD;
+		distribution = distribution || this.elementDistributions.STANDARD;
 		return [
-			[this.drawFromDistribution(distribution), this.drawFromDistribution(distribution)],
-			[this.drawFromDistribution(distribution), this.drawFromDistribution(distribution)]
+			[this._drawFromDistribution(distribution), this._drawFromDistribution(distribution)],
+			[this._drawFromDistribution(distribution), this._drawFromDistribution(distribution)]
 		];
 	},
 
+	/**
+	 * Creates and returns a 3x3 asteroid with a missing center {@link Block} as a {@link BlockGrid.}
+	 * @param distribution {Object} The distribution object to draw the {@link Block}s from. The default is a standard
+	 * elemental distribution.
+	 * @returns {BlockGrid} The newly created hollow, 3x3 asteroid with a missing center.
+	 * @memberof BlockGridGenerator
+	 * @todo Edit this function so that it creates and returns an actual {@link BlockGrid} object. As it is written now,
+	 * this won't work.
+	 */
 	hollowAsteroid: function(distribution) {
-		distribution = distribution || this.blockDistributions.STANDARD;
+		distribution = distribution || this.elementDistributions.STANDARD;
 		return [
-			[this.drawFromDistribution(distribution), this.drawFromDistribution(distribution), this.drawFromDistribution(distribution)],
-			[this.drawFromDistribution(distribution), undefined, this.drawFromDistribution(distribution)],
-			[this.drawFromDistribution(distribution), this.drawFromDistribution(distribution), this.drawFromDistribution(distribution)],
+			[this._drawFromDistribution(distribution), this._drawFromDistribution(distribution), this._drawFromDistribution(distribution)],
+			[this._drawFromDistribution(distribution), undefined, this._drawFromDistribution(distribution)],
+			[this._drawFromDistribution(distribution), this._drawFromDistribution(distribution), this._drawFromDistribution(distribution)],
 		];
 	},
 
-	drawFromDistribution: function(distribution) {
+	/**
+	 * Selects a random {@link Block} from the given distribution.
+	 * @param distribution {Object} A distribution object which defines relative weights of different {@link Block}
+	 * types.
+	 * @returns {Block} A {@link Block} randomly drawn from the provided distribution.
+	 * @memberof BlockGridGenerator
+	 * @private
+	 */
+	_drawFromDistribution: function(distribution) {
 		var selection = WeightedSelection.select(distribution);
-		return Block.prototype.blockFromClassId(selection);
+		return Block.blockFromClassId(selection);
 	},
 
-	blockDistributions: {
+	/**
+	 * Returns a new {@link Block} of the default type.
+	 * @returns {IceBlock} A new default block.
+	 * @memberof BlockGridGenerator
+	 * @private
+	 */
+	_getDefaultBlock: function() {
+		return new IceBlock();
+	},
+
+	/**
+	 * {@link Element} {@link Block} distributions.
+	 * @memberof BlockGridGenerator
+	 */
+	elementDistributions: {
 		STANDARD: {
 			"IceBlock": 0.47,
 			"IronBlock": 0.3,
@@ -250,23 +275,58 @@ var BlockGridGenerator = {
 			"CarbonBlock": 0.5
 		},
 
-		SHIP_PARTS: {
-			"EngineBlock": .1,
-			"FuelBlock": .2,
-			"PowerBlock": .2,
-			"ThrusterBlock": .1,
-			"Block": .4
-		},
-
+		/**
+		 * Randomly choose a distribution.
+		 * @returns {*}
+		 */
 		randomDistribution: function() {
 			var rand = Math.random();
 
 			if (rand < .5) {
-				return BlockGridGenerator.blockDistributions.STANDARD;
+				return BlockGridGenerator.elementDistributions.STANDARD;
 			} else if (rand < .75) {
-				return BlockGridGenerator.blockDistributions.ICY;
+				return BlockGridGenerator.elementDistributions.ICY;
 			} else /*if (rand < 1)*/ {
-				return BlockGridGenerator.blockDistributions.ROCKY;
+				return BlockGridGenerator.elementDistributions.ROCKY;
+			}
+		}
+	},
+
+	/**
+	 * {@link Part} {@link Block} distributions.
+	 * @memberof BlockGridGenerator
+	 */
+	partDistributions: {
+		STANDARD: {
+			"EngineBlock": .1,
+			"FuelBlock": .2,
+			"PowerBlock": .1,
+			"ThrusterBlock": .1,
+			"CargoBlock": .1,
+			"Block": .3,
+			"MiningLaserBlock": .1
+		},
+
+		HIGH_CARGO: {
+			"EngineBlock": .05,
+			"FuelBlock": .05,
+			"PowerBlock": .05,
+			"ThrusterBlock": .05,
+			"CargoBlock": .5,
+			"Block": .3
+		},
+
+		/**
+		 * Randomly choose a distribution.
+		 * @returns {*}
+		 */
+		randomDistribution: function() {
+			var rand = Math.random();
+
+			if (rand < .75) {
+				return BlockGridGenerator.partDistributions.STANDARD;
+			} else /*if (rand < 1)*/ {
+				return BlockGridGenerator.partDistributions.HIGH_CARGO;
 			}
 		}
 	}

@@ -1,6 +1,22 @@
+/**
+ * Subclass of the {@link Part} class. PowerBlocks provide power to electrically powered components like the mining
+ * laser.
+ * @class
+ * @typedef {PowerBlock}
+ * @namespace
+ * @todo Right now power blocks don't do anything. They should be necessary for powering mining lasers.
+ */
 var PowerBlock = Part.extend({
 	classId: 'PowerBlock',
 
+
+	/**
+	 * The maximum HP for a {@link PowerBlock}. Overrides the superclass MAX_HP value. See {@link Block#MAX_HP}.
+	 * @constant {number}
+	 * @default
+	 * @memberof PowerBlock
+	 * @instance
+	 */
 	MAX_HP: 40,
 
 	init: function () {
