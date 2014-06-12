@@ -1,8 +1,32 @@
-﻿var HUDManager = IgeClass.extend({
+﻿/**
+ * Manages the elements and UI elements displayed to the user during gameplay
+ * on a persistent heads-up display.
+ *
+ * Currently provides an entry point for initializing the {@link CapBar}, as
+ * well as other HUD and related UI elements, in a single location.
+ *
+ * @class
+ * @typedef {Object} HUDManager
+ * @namespace
+ */
+var HUDManager = IgeClass.extend({
 	classId: 'HUDManager',
 
+	/**
+	 * Holds a reference to the client capbar. At this point in the gameplay specs,
+	 * there should only be one capbar per client.
+	 * @type {Object}
+	 * @memberof HUDManager
+	 * @private
+	 * @instance
+	 */
 	_capbar: undefined,
 
+	/**
+	 * Initializes all UI elements displayed on the HUD.
+	 * @memberof HUDManager
+	 * @instance
+	 */
 	init: function() {
 		this.log("Initializing Player HUD...", 'info');
 

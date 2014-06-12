@@ -6,6 +6,10 @@
  * 
  * The base CargoContainer is intended to provide a common interface for other CargoInterfaces
  * to build upon in a way that extends the player's cargo inventory functionality.
+ *
+ * @class
+ * @typedef {Object} CargoContainer
+ * @namespace  
  */
 var CargoContainer = IgeClass.extend({
 	classId: 'CargoContainer',
@@ -13,30 +17,52 @@ var CargoContainer = IgeClass.extend({
 	/**
 	 * The number of "slots" that a single cargo container contains. A slot is a space
 	 * in the cargo container that can hold a stack of items of a single type.
+	 *
+	 * @constant {number}
+	 * @default
+	 * @memberof CargoContainer
+	 * @instance
 	 */
 	DEFAULT_CONTAINER_SLOTS: 64,
 
 	/**
 	 * The maximum size of a stack of items of the same type that will fit in a slot. 
 	 * Adding more items of the same type will require a new stack or a new container.
+	 *
+	 * @constant {number}
+	 * @default
+	 * @memberof CargoContainer
+	 * @instance
 	 */
 	STACK_SIZE: 60,
 
 	/**
 	 * The store used for this item container.
+	 *
+	 * @type {Object}
+	 * @memberof CargoContainer
+	 * @instance
+	 * @private
 	 */
 	_itemStore: undefined,
 
 	/**
 	 * The number of available slots in this container.
+	 *
+	 * @constant {number}
+	 * @default
+	 * @memberof CargoContainer
+	 * @instance
 	 */
 	_numSlots: 0,
 
 	/**
 	 * Initialize a cargo container.
 	 * 
-	 * @param numSlots the number of slots this container should have
-	 * @param itemStore the intial itemStore (optional)
+	 * @param numSlots {number} the number of slots this container should have
+	 * @param itemStore {Object} the intial itemStore (optional)
+	 * @memberof CargoContainer
+	 * @instance
 	 */
 	init: function(numSlots, itemStore) {
 		if (itemStore !== undefined) {
@@ -54,8 +80,10 @@ var CargoContainer = IgeClass.extend({
 	/**
 	 * Add a particular CargoItem to this container.
 	 * 
-	 * @param the CargoItem to add
-	 * @returns whether or not the add was successful
+	 * @param item {Object} the CargoItem to add
+	 * @returns {boolean} whether or not the add was successful
+	 * @memberof CargoContainer
+	 * @instance
 	 */
 	addItem: function(item) {
 		if (!this.hasSpace(item)) {
@@ -73,9 +101,11 @@ var CargoContainer = IgeClass.extend({
 	/**
 	 * Remove a number of items with a specific type from the container.
 	 * 
-	 * @param itemType the types of items to remove (given by classId)
-	 * @param quantity the number of items to remove (upper bound)
-	 * @returns the number of items removed
+	 * @param itemType {string} the type of items to remove (given by classId)
+	 * @param quantity {number} the number of items to remove (upper bound)
+	 * @returns {number} the number of items removed
+	 * @memberof CargoContainer
+	 * @instance
 	 */
 	removeType: function(itemType, quantity) {
 		if (!this._itemStore.hasOwnProperty(itemType)) {
@@ -96,8 +126,10 @@ var CargoContainer = IgeClass.extend({
 	 * This is similar to a withdrawal: the items will be removed from the container
 	 * and returned to the caller.
 	 * 
-	 * @param itemType the item's type
-	 * @returns a list of the items extracted
+	 * @param itemType {string} the item's type
+	 * @returns {Array} a list of the items extracted
+	 * @memberof CargoContainer
+	 * @instance
 	 */
 	extractType: function(itemType, quantity) {
 		var extracted = [];
@@ -122,8 +154,11 @@ var CargoContainer = IgeClass.extend({
 	/**
 	 * Extracts a specific number of items from the container in a round robin fashion.
 	 * 
-	 * @param quantity the number of items to extract
-	 * @returns a list of the items extracted
+	 * @param quantity {number} the number of items to extract
+	 * @returns {Array} a list of the items extracted
+	 * @memberof CargoContainer
+	 * @instance
+	 * @deprecated
 	 */
 	rrExtractItems: function(quantity) {
 		var extracted = [];
@@ -146,7 +181,10 @@ var CargoContainer = IgeClass.extend({
 	 * Gets the list of item types, and the number of items of each type.
 	 * 
 	 * TODO: Will change in the future when we implement being able to store more than one stack of each item in a cargo container.
-	 * @returns a dictionary of item types and the number of items of each type.
+	 *
+	 * @returns {Object} a dictionary of item types and the number of items of each type.
+	 * @memberof CargoContainer
+	 * @instance
 	 */
 	getItemList: function() {
 		return this._itemStore;
@@ -155,8 +193,10 @@ var CargoContainer = IgeClass.extend({
 	/**
 	 * Checks if more elements can be added to the cargo container
 	 * 
-	 * @param item the CargoItem we want to add
-	 * @returns whether or not more elements can be added to the cargo container
+	 * @param item {Object} the CargoItem we want to add
+	 * @returns {boolean} whether or not more elements can be added to the cargo container
+	 * @memberof CargoContainer
+	 * @instance
 	 */
 	hasSpace: function(item) {
 		var itemType = item.type();
@@ -173,7 +213,9 @@ var CargoContainer = IgeClass.extend({
 	/**
 	 * Gets the number of slots in the cargo container.
 	 * 
-	 * @returns the number of slots in the cargo container
+	 * @returns {number} the number of slots in the cargo container
+	 * @memberof CargoContainer
+	 * @instance
 	 */
 	numSlots: function() {
 		return this._numSlots;
@@ -182,7 +224,9 @@ var CargoContainer = IgeClass.extend({
 	/**
 	 * Gets the full capacity of the cargo container
 	 * 
-	 * @returns the capacity of the cargo container (num slots * num items per slot)
+	 * @returns {number} the capacity of the cargo container (num slots * num items per slot)
+	 * @memberof CargoContainer
+	 * @instance
 	 */
 	capacity: function() {
 		return this._numSlots * this.STACK_SIZE;
@@ -191,7 +235,9 @@ var CargoContainer = IgeClass.extend({
 	/**
 	 * Gets the number of CargoItems contained in this cargo container
 	 * 
-	 * @returns the number of items in this container
+	 * @returns {number} the number of items in this container
+	 * @memberof CargoContainer
+	 * @instance
 	 */
 	numItems: function() {
 		var sum = 0;
@@ -206,8 +252,10 @@ var CargoContainer = IgeClass.extend({
 	/**
 	 * Gets the number of items in this container of a specific type.
 	 * 
-	 * @param the item type to count
-	 * @returns the number of items of a specific type
+	 * @param itemType {string} the item type to count
+	 * @returns {number} the number of items of a specific type
+	 * @memberof CargoContainer
+	 * @instance
 	 */
 	numOfType: function(itemType) {
 		if (this._itemStore.hasOwnProperty(itemType)) {
@@ -219,6 +267,8 @@ var CargoContainer = IgeClass.extend({
 
 	/**
 	 * Dumps info about this container to the console.
+	 * @memberof CargoContainer
+	 * @instance
 	 */
 	debugDump: function() {
 		console.log(":: numSlots " + this.numSlots());

@@ -9,8 +9,8 @@
  * After a certain number of mined chunks are collected, these chunk containers
  * could be coalesced into whole blocks of a particular element.
  */
-var ChunkedCargoItem = CargoItem.extend({
-	classId: 'ChunkedCargoItem',
+// var ChunkedCargoItem = CargoItem.extend({
+// 	classId: 'ChunkedCargoItem',
 
 	/**
 	 * Whether or not this CargoItem is a chunk placeholder in the player's cargo inventory that contains
@@ -18,21 +18,21 @@ var ChunkedCargoItem = CargoItem.extend({
 	 * 
 	 * The limit of the number of chunks is set by the Cargo model.
 	 */
-	_isChunkBlock: false,
+//	_isChunkBlock: false,
 
 	/**
 	 * If this CargoItem is a chunk block, contains the chunks that are contained in the placeholder.
 	 * 
 	 * All chunks are moved as a single entity.
 	 */
-	_chunks: [],
+//	_chunks: [],
 
-	init: function(item) {
-		this._chunks = [];
-		CargoItem.prototype.init.call(this, item);
-	}
-});
+//	init: function(item) {
+//		this._chunks = [];
+//		CargoItem.prototype.init.call(this, item);
+//	}
+//});
 
-if (typeof (module) !== 'undefined' && typeof (module.exports) !== 'undefined') {
-	module.exports = ChunkedCargoItem;
-}
+//if (typeof (module) !== 'undefined' && typeof (module.exports) !== 'undefined') {
+//	module.exports = ChunkedCargoItem;
+//}
