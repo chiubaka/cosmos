@@ -69,8 +69,9 @@ var MetricsHandler = IgeClass.extend({
 
 	/**
 	 * Fires a Google Analytics pageview event
-	 * @param page {String}
-	 * @param title {String}
+	 * @param page {String} Page are currently used to distinguish between
+	 * different capabilities activated.
+	 * @param title {String} Titles are currently unused.
 	 * @memberof MetricsHandler
 	 * @instance
 	 */
@@ -92,10 +93,10 @@ var MetricsHandler = IgeClass.extend({
 
 	/**
 	 * Fires a Google Analytics event
-	 * @param category {String}
-	 * @param action {String}
-	 * @param label {String}
-	 * @param value {=String}
+	 * @param category {String} Major category of event, e.g. construct
+	 * @param action {String} Action of event, e.g. existing
+	 * @param label {String} Label of event, e.g. CarbonBlock
+	 * @param value {=String} Specific value (optional) used for FPS value
 	 * @memberof MetricsHandler
 	 * @instance
 	 */
