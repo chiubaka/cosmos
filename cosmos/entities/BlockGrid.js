@@ -1543,6 +1543,15 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return {x: drawLocation.x - oldX, y: drawLocation.y - oldY};
 	},
 
+	/**
+	 * Given a {@link Block}, calculates where the {@link Block} should be drawn onto the screen.
+	 * @param block {Block} The {@link Block} to calculate the draw location for
+	 * @returns {{x: *, y: *}} An object that has an x property and a y property, which defines the location where the
+	 * given {@link Block} should be drawn.
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 */
 	_drawLocationForBlock: function(block) {
 		var x = Block.WIDTH * (block.col() - this.startCol()) - this._bounds2d.x2 + block._bounds2d.x2;
 		var y = Block.HEIGHT * (block.row() - this.startRow()) - this._bounds2d.y2 + block._bounds2d.y2;
@@ -1658,9 +1667,30 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 });
 
+/**
+ * The default density value of a fixture created for a {@link Block}.
+ * @constant {number}
+ * @memberof BlockGrid
+ */
 BlockGrid.BLOCK_FIXTURE_DENSITY = 1.0;
+/**
+ * The default friction value of a fixture created for a {@link Block}.
+ * @constant {number}
+ * @memberof BlockGrid
+ */
 BlockGrid.BLOCK_FIXTURE_FRICTION = 0.5;
+/**
+ * The default restitution value of a fixture created for a {@link Block}.
+ * @constant {number}
+ * @memberof BlockGrid
+ */
 BlockGrid.BLOCK_FIXTURE_RESTITUTION = 0.5;
+/**
+ * The default padding value of a fixture create for a {@link Block}. Padding defines the difference in space between
+ * the rendered {@link Block} and the fixture for that {@link Block}.
+ * @constant {number}
+ * @memberof BlockGrid
+ */
 BlockGrid.BLOCK_FIXTURE_PADDING = .1;
 
 /**
@@ -1673,6 +1703,8 @@ BlockGrid.DEPTH = 0;
  * The depth layer to place the block effects on.
  * @constant {number}
  * @memberof BlockGrid
+ * @todo This may not actually be constant, since different effects may need to be mounted either above or below the
+ * {@link BlockGrid} layer.
  */
 BlockGrid.EFFECTS_DEPTH = BlockGrid.DEPTH + 1;
 
