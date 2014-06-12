@@ -1,8 +1,8 @@
 /**
  * The ClickScene is a scene that intercepts all clicks on the background.
  * Think of it like a catch-all for all clicks that aren't intercepted by an actual entity above this scene.
- * @typedef {ClickScene}
  * @class
+ * @typedef {ClickScene}
  * @namespace
  */
 var ClickScene = IgeScene2d.extend({
