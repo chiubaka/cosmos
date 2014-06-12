@@ -11,7 +11,18 @@ var Block = IgeEntity.extend({
 	classId: 'Block',
 
 	/**
+	 * The maximum health value for this {@link Block}. This is a constant to make it clear that the value should not,
+	 * in general, be changed (the one exception being in the init function for a {@link Block}). It is an instance
+	 * variable because we still want to take advantage of inheritance on this property.
+	 * @constant {number}
+	 * @memberof Block
+	 * @instance
+	 */
+	MAX_HP: 30,
+
+	/**
 	 * The number of rows that this {@link Block} takes up.
+	 * @type {number}
 	 * @memberof Block
 	 * @private
 	 * @instance
@@ -20,6 +31,7 @@ var Block = IgeEntity.extend({
 	_numRows: 1,
 	/**
 	 * The number of cols that this {@link Block} takes up.
+	 * @type {number}
 	 * @memberof Block
 	 * @private
 	 * @instance
@@ -37,18 +49,20 @@ var Block = IgeEntity.extend({
 	/**
 	 * The row of the {@link BlockGrid} that this block inhabits if any.
 	 * The value of this instance variable is meaningless unless _blockGrid is defined.
+	 * @type {number}
 	 * @memberof Block
 	 * @private
 	 * @instance
 	 */
 	_row: undefined,
 	/**
-	* The column of the {@link BlockGrid} that this block inhabits if any.
-	* The value of this instance variable is meaningless unless _blockGrid is defined.
-	* @memberof Block
-	* @private
-	* @instance
-	*/
+	 * The column of the {@link BlockGrid} that this block inhabits if any.
+	 * The value of this instance variable is meaningless unless _blockGrid is defined.
+	 * @type {number}
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 */
 	_col: undefined,
 	/**
 	 * An IgeEntity that all of the effects for this {@link Block} get mounted to.
@@ -68,28 +82,66 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	_effects: undefined,
-
+	/**
+	 * The Box2D fixture associated with this {@link Block}. Only valid if this {@link Block}'s
+	 * {@link Block#_blockGrid|_blockGrid} property is set.
+	 * @type {Object}
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 */
 	_fixture: undefined,
+	/**
+	 * The Box2D fixture definition associated with this {@link Block}. Only valid if this {@link Block}'s
+	 * {@link Block#_blockGrid|_blockGrid} property is set.
+	 * @type {Object}
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 */
 	_fixtureDef: undefined,
 	/**
 	 * An entity associated with this {@link Block} which is used to visualize a {@link BlockGrid}'s fixtures. Only
 	 * used if this {@link Block} is in a {@link BlockGrid} that has debugFixtures set to true.
+	 * @type {Object}
 	 * @memberof Block
 	 * @private
 	 * @instance
 	 */
 	_fixtureDebuggingEntity: undefined,
-
-	MAX_HP: 30,
+	/**
+	 * The current HP of this {@link Block}.
+	 * @type {number}
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 */
 	_hp: undefined,
+	/**
+	 * A flag that determines whether or not the health bar for this {@link Block} should be shown. The default value
+	 * is false, and when the value is false the health bar is not shown.
+	 * @type {boolean}
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 */
 	_displayHealth: false,
-
-	_busy: false,
+	/**
+	 * A flag that determines whether or not this {@link Block} is currently being mined or not. The default value is
+	 * false, and when the value is false this {@link Block} is not currently being mined.
+	 * @type {boolean}
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 */
+	_isBeingMined: false,
 
 	/**
 	 * Construct a new block
 	 * Note that subclasses of Block are expected to have their own textures.
-	 * @param data an optional dictionary containing initialization information.
+	 * @param data {Object} an optional dictionary containing initialization information.
+	 * @memberof Block
+	 * @instance
 	 */
 	init: function(data) {
 		IgeEntity.prototype.init.call(this);
@@ -134,6 +186,15 @@ var Block = IgeEntity.extend({
 		return this._numCols;
 	},
 
+	/**
+	 * Processes actions that must occur when a {@link Block} is clicked.
+	 * @param event {Object} Object containing information about the event that was fired. DO NOT TRUST THIS. This is
+	 * currently sent down from the {@link BlockGrid} and the values in the event are not changed so that they are
+	 * with respect to the {@link Block}.
+	 * @param control {Object} The control object associated with the event that was fired.
+	 * @memberof Block
+	 * @instance
+	 */
 	mouseDown: function(event, control) {
 		var self = this;
 		var data = {
@@ -304,6 +365,14 @@ var Block = IgeEntity.extend({
 		return this;
 	},
 
+	/**
+	 * Getter/setter for the {@link Block#_row|_row} property.
+	 * @param val {number} Optional parameter. If set, this is the new row value for this {@link Block}.
+	 * @returns {*} The current row if no parameter is passed or this object if a parameter is passed to make setter
+	 * chaining convenient.
+	 * @memberof Block
+	 * @instance
+	 */
 	row: function(val) {
 		if (val !== undefined) {
 			this._row = val;
@@ -312,6 +381,14 @@ var Block = IgeEntity.extend({
 		return this._row;
 	},
 
+	/**
+	 * Getter/setter for the {@link Block#_col|_col} property.
+	 * @param val {number} Optional parameter. If set, this is the new col value for this {@link Block}.
+	 * @returns {*} The current col if no parameter is passed or this object if a parameter is passed to make setter
+	 * chaining convenient.
+	 * @memberof Block
+	 * @instance
+	 */
 	col: function(val) {
 		if (val !== undefined) {
 			this._col = val;
@@ -320,17 +397,33 @@ var Block = IgeEntity.extend({
 		return this._col;
 	},
 
-	fixture: function(my_fixture) {
-		if (my_fixture !== undefined) {
-			this._fixture = my_fixture;
+	/**
+	 * Getter/setter for the {@link Block#_fixture|_fixture} property.
+	 * @param newFixture {number} Optional parameter. If set, this is the new fixture for this {@link Block}.
+	 * @returns {*} The current fixture if no parameter is passed or this object if a parameter is passed to make setter
+	 * chaining convenient.
+	 * @memberof Block
+	 * @instance
+	 */
+	fixture: function(newFixture) {
+		if (newFixture !== undefined) {
+			this._fixture = newFixture;
 			return this;
 		}
 		return this._fixture;
 	},
 
-	fixtureDef: function(my_fixtureDef) {
-		if (my_fixtureDef !== undefined) {
-			this._fixtureDef = my_fixtureDef;
+	/**
+	 * Getter/setter for the {@link Block#_fixtureDef|_fixtureDef} property.
+	 * @param newFixtureDef {number} Optional parameter. If set, this is the new fixture for this {@link Block}.
+	 * @returns {*} The current fixture definition if no parameter is passed or this object if a parameter is passed to
+	 * make setter chaining convenient.
+	 * @memberof Block
+	 * @instance
+	 */
+	fixtureDef: function(newFixtureDef) {
+		if (newFixtureDef !== undefined) {
+			this._fixtureDef = newFixtureDef;
 			return this;
 		}
 		return this._fixtureDef;
@@ -342,6 +435,8 @@ var Block = IgeEntity.extend({
 	 * {@link FixtureDebuggingEntity} for this {@link Block}.
 	 * @returns {*} The existing {@link FixtureDebuggingEntity} if no argument is provided, or this object if an
 	 * argument is provided in order to make function call chaining convenient.
+	 * @memberof Block
+	 * @instance
 	 */
 	fixtureDebuggingEntity: function(fixtureDebuggingEntity) {
 		if (fixtureDebuggingEntity !== undefined) {
@@ -353,7 +448,9 @@ var Block = IgeEntity.extend({
 
 	/**
 	 * Decreases the block's health by the amount passed.
-	 * After health is decreased, the block may die.
+	 * @param amount {number} The amount of health that this {@link Block} should lose.
+	 * @memberof Block
+	 * @instance
 	 */
 	damage: function(amount) {
 		this._hp -= amount;
@@ -365,20 +462,28 @@ var Block = IgeEntity.extend({
 	},
 
 	/**
-	 * Block is set to busy on the server when mining begins.
-	 * This is so blocks can't be mined by two players and get
-	 * doubly removed from the BlockGrid.
-	 * @param {boolean=}
+	 * Getter/setter for the {@link Block#_isBeingMined|_isBeingMined} property. This flag is set to true on the server
+	 * when mining begins. Currently, this is done so that blocks can't be mined by two players and get doubly removed
+	 * from the {@link BlockGrid}.
+	 * @param bool {boolean}
 	 * @return {*}
+	 * @memberof Block
+	 * @instance
 	 */
-	busy: function(bool) {
+	isBeingMined: function(bool) {
 		if (bool !== undefined) {
-			this._busy = bool;
+			this._isBeingMined = bool;
 			return this;
 		}
-		return this._busy;
+		return this._isBeingMined;
 	},
 
+	/**
+	 * Given a class ID, returns a new instance of the {@link Block} type associated with that class ID.
+	 * @param classId {string} The class ID of the type of {@link Block} we want created.
+	 * @returns {Block} An instance of the {@link Block} type requested through classId.
+	 * @memberof Block
+	 */
 	blockFromClassId: function(classId) {
 		switch (classId) {
 			case Block.prototype.classId():

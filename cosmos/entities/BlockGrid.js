@@ -679,11 +679,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 					return false;
 				}
 				// Blocks should only be mined by one player, for now. Note that there is a race condition here.
-				if((block === undefined) || block.busy()) {
+				if((block === undefined) || block.isBeingMined()) {
 					console.log("Request to mine undefined or busy block. row: " + data.row + ", col: " + data.col);
 					return false;
 				}
-				block.busy(true);
+				block.isBeingMined(true);
 
 				block._decrementHealthIntervalId = setInterval(function() {
 					if (block._hp > 0) {
