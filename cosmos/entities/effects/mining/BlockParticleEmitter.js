@@ -1,3 +1,11 @@
+/**
+ * Subclass of the {@link IgeParticleEmitter}. Customizes the particle emitter to output the particle effects that are
+ * displayed on a {@link Block} when a {@link Player} mines a {@link Block}.
+ * @class
+ * @typedef {BlockParticleEmitter}
+ * @namespace
+ * @todo Should probably rename this to something sensible
+ */
 var BlockParticleEmitter = IgeParticleEmitter.extend({
 	classId: 'BlockParticleEmitter',
 

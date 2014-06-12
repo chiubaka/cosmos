@@ -105,7 +105,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * The rendering container for this BlockGrid, which essentially provides a cacheable location for the
 	 * {@link BlockGrid}'s texture. Without this, the {@link BlockGrid} is re-drawn on each tick, which kills
 	 * performance on most machines.
-	 * @type {IgeEntity}
+	 * @type {RenderContainer}
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
@@ -114,7 +114,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	/**
 	 * Construction zone overlay for showing and hiding locations that players can click on in order to place a block
 	 * on an existing structure.
-	 * @type {IgeEntity}
+	 * @type {ConstructionZoneOverlay}
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
@@ -218,7 +218,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * Returns the block at a given row and column in the BlockGrid.
 	 * @param row {number} The row index to get
 	 * @param col {number} The col index to get
-	 * @returns {*} The Block object at (row, col) or undefined if no Block exists at the specified row and column
+	 * @returns {Block|undefined} The Block object at (row, col) or undefined if no Block exists at the specified row and column
 	 * @memberof BlockGrid
 	 * @instance
 	 */
@@ -237,7 +237,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @param row {number} The row to add at
 	 * @param col {number} The col to add at
 	 * @param block {Block} The Block to add to the grid.
-	 * @param checkForNeighbors {boolean} Whether or not we should validate that the given {@link Block} will be
+	 * @param checkForNeighbors {boolean?} Whether or not we should validate that the given {@link Block} will be
 	 * attached to the existing structure in this {@link BlockGrid}. Default behavior is to check for neighbors.
 	 * @returns {boolean} True if the Block was added successfully to the grid. False otherwise. A Block may not be
 	 * successfully added to the grid if another Block already exists in the grid at the specified location or if the
@@ -568,7 +568,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		for (var row = 0; row < blockTypeMatrix.length; row++) {
 			for (var col = 0; col < blockTypeMatrix[row].length; col++) {
 				// The add() function knows how to deal with receiving undefined
-				this.add(startRow + row, startCol + col, Block.prototype.blockFromClassId(blockTypeMatrix[row][col]), checkForNeighbors);
+				this.add(startRow + row, startCol + col, Block.blockFromClassId(blockTypeMatrix[row][col]), checkForNeighbors);
 			}
 		}
 
@@ -679,11 +679,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 					return false;
 				}
 				// Blocks should only be mined by one player, for now. Note that there is a race condition here.
-				if((block === undefined) || block.busy()) {
+				if((block === undefined) || block.isBeingMined()) {
 					console.log("Request to mine undefined or busy block. row: " + data.row + ", col: " + data.col);
 					return false;
 				}
-				block.busy(true);
+				block.isBeingMined(true);
 
 				block._decrementHealthIntervalId = setInterval(function() {
 					if (block._hp > 0) {
@@ -714,12 +714,12 @@ var BlockGrid = IgeEntityBox2d.extend({
 						data.action = 'remove';
 						ige.network.send('blockAction', data);
 					}
-				}, Block.prototype.MINING_INTERVAL / player.numBlocksOfType(MiningLaserBlock.prototype.classId()));
+				}, Block.MINING_INTERVAL / player.numBlocksOfType(MiningLaserBlock.prototype.classId()));
 				return true;
 
 			case 'add':
 				// Add block server side, then send add msg to client
-				if(!self.add(data.row, data.col, Block.prototype.blockFromClassId(data.selectedType))) {
+				if(!self.add(data.row, data.col, Block.blockFromClassId(data.selectedType))) {
 					return false;
 				}
 				else {
@@ -751,9 +751,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 				ige.client.metrics.fireEvent(
 					'construct',
 					'existing',
-					Block.prototype.blockFromClassId(data.selectedType)
+					Block.blockFromClassId(data.selectedType)
 				);
-				this.add(data.row, data.col, Block.prototype.blockFromClassId(data.selectedType));
+				this.add(data.row, data.col, Block.blockFromClassId(data.selectedType));
 				this._renderContainer.refresh();
 				this._constructionZoneOverlay.refresh();
 				break;
@@ -1543,6 +1543,15 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return {x: drawLocation.x - oldX, y: drawLocation.y - oldY};
 	},
 
+	/**
+	 * Given a {@link Block}, calculates where the {@link Block} should be drawn onto the screen.
+	 * @param block {Block} The {@link Block} to calculate the draw location for
+	 * @returns {{x: *, y: *}} An object that has an x property and a y property, which defines the location where the
+	 * given {@link Block} should be drawn.
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 */
 	_drawLocationForBlock: function(block) {
 		var x = Block.WIDTH * (block.col() - this.startCol()) - this._bounds2d.x2 + block._bounds2d.x2;
 		var y = Block.HEIGHT * (block.row() - this.startRow()) - this._bounds2d.y2 + block._bounds2d.y2;
@@ -1658,9 +1667,30 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 });
 
+/**
+ * The default density value of a fixture created for a {@link Block}.
+ * @constant {number}
+ * @memberof BlockGrid
+ */
 BlockGrid.BLOCK_FIXTURE_DENSITY = 1.0;
+/**
+ * The default friction value of a fixture created for a {@link Block}.
+ * @constant {number}
+ * @memberof BlockGrid
+ */
 BlockGrid.BLOCK_FIXTURE_FRICTION = 0.5;
+/**
+ * The default restitution value of a fixture created for a {@link Block}.
+ * @constant {number}
+ * @memberof BlockGrid
+ */
 BlockGrid.BLOCK_FIXTURE_RESTITUTION = 0.5;
+/**
+ * The default padding value of a fixture create for a {@link Block}. Padding defines the difference in space between
+ * the rendered {@link Block} and the fixture for that {@link Block}.
+ * @constant {number}
+ * @memberof BlockGrid
+ */
 BlockGrid.BLOCK_FIXTURE_PADDING = .1;
 
 /**
@@ -1673,6 +1703,8 @@ BlockGrid.DEPTH = 0;
  * The depth layer to place the block effects on.
  * @constant {number}
  * @memberof BlockGrid
+ * @todo This may not actually be constant, since different effects may need to be mounted either above or below the
+ * {@link BlockGrid} layer.
  */
 BlockGrid.EFFECTS_DEPTH = BlockGrid.DEPTH + 1;
 

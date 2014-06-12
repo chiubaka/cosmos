@@ -1,8 +1,38 @@
+/**
+ * An {@link IgeEntity} which helps to display the construction hints to users when they click on the construct button.
+ * @class
+ * @typedef {ConstructionZoneOverlay}
+ * @namespace
+ */
 var ConstructionZoneOverlay = IgeEntity.extend({
 	classId: 'ConstructionZoneOverlay',
 
+	/**
+	 * A matrix that stores the {@link ConstructionZoneBlock}s in the locations where they should be overlayed on top
+	 * of the associated {@link BlockGrid}.
+	 * @type {Array}
+	 * @memberof ConstructionZoneOverlay
+	 * @private
+	 * @instance
+	 */
 	_overlayGrid: undefined,
+	/**
+	 * A reference to the {@link BlockGrid} object that this {@link ConstructionZoneOverlay} is displaying an overlay
+	 * for.
+	 * @type {BlockGrid}
+	 * @memberof ConstructionZoneOverlay
+	 * @private
+	 * @instance
+	 */
 	_blockGrid: undefined,
+	/**
+	 * A {@link RenderContainer} for this {@link ConstructionZoneOverlay} so we can performantly draw and cache the
+	 * {@link ConstructionZoneBlock}s for this overlay.
+	 * @type {RenderContainer}
+	 * @memberof ConstructionZoneOverlay
+	 * @private
+	 * @instance
+	 */
 	_renderContainer: undefined,
 
 	init: function (blockGrid) {
@@ -11,9 +41,9 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		this._renderContainer = new RenderContainer()
 			.mount(this)
 			.opacity(0.5);
-		this.createConstructionZones();
-		this.mountOverlayGrid();
-		this.mouseDown(this.mouseDownHandler);
+		this._createConstructionZones();
+		this._mountOverlayGrid();
+		this.mouseDown(this._mouseDownHandler);
 
 		var self = this;
 		ige.on('capbar cap selected', function(classId) {
@@ -34,7 +64,14 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		this.hide();
 	},
 
-	createConstructionZones: function() {
+	/**
+	 * Processes the associated {@link BlockGrid} to figure out where to place {@link ConstructionZoneBlock}s to add
+	 * to the {@link ConstructionZoneOverlay#_overlayGrid|_overlayGrid}.
+	 * @memberof ConstructionZoneOverlay
+	 * @private
+	 * @instance
+	 */
+	_createConstructionZones: function() {
 		// We want a buffer of size 1 on the top, bottom, right, and left. Hence the +2s everywhere.
 		var overlayNumRows = this._blockGrid.numRows() + 2;
 		var overlayNumCols = this._blockGrid.numCols() + 2;
@@ -50,8 +87,14 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		}
 	},
 
-	// TODO: Consolidate this function with the BlockGrid one
-	mountOverlayGrid: function() {
+	/**
+	 * Mounts the overlay grid and {@link ConstructionZoneBlock}s.
+	 * @memberof ConstructionZoneOverlay
+	 * @private
+	 * @instance
+	 * @todo Consolidate this function with its {@link BlockGrid} counterpart.
+	 */
+	_mountOverlayGrid: function() {
 		var maxRowLength = this._overlayGrid.get2DMaxRowLength();
 
 		this.height(Block.HEIGHT * this._overlayGrid.length);
@@ -77,8 +120,15 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		this._renderContainer.refresh();
 	},
 
-	// TODO: Consolidate this function with the BlockGrid one
-	mouseDownHandler: function(event, control) {
+	/**
+	 * Handles clicks on this object.
+	 * @param event {Object} The event object associated with the click.
+	 * @param control {Object} The control object associated with the click.
+	 * @memberof ConstructionZoneOverlay
+	 * @private
+	 * @todo Consolidate this function with its {@link BlockGrid} counterpart.
+	 */
+	_mouseDownHandler: function(event, control) {
 		// event.igeBaseX and event.igeBaseY give coordinates relative to the clicked entity's origin (center)
 
 		// The position of the click in world coordinates
@@ -156,15 +206,18 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		}
 	},
 
-	// Recalculate construction zones. Called upon removal or addition of blocks
-	// to the BlockGrid.
+	/**
+	 * Recalculate construction zones. Called upon removal or addition of {@link Block}s to the {@link BlockGrid}.
+	 * @memberof ConstructionZoneOverlay
+	 * @instance
+	 */
 	refresh: function () {
 		this._renderContainer.destroy();
 		this._renderContainer = new RenderContainer()
 			.mount(this)
 			.opacity(0.5);
-		this.createConstructionZones();
-		this.mountOverlayGrid();
+		this._createConstructionZones();
+		this._mountOverlayGrid();
 	}
 
 });
