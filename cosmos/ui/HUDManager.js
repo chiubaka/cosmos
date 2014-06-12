@@ -22,11 +22,11 @@ var HUDManager = IgeClass.extend({
 	 */
 	_capbar: undefined,
 
-  /**
-   * Initializes all UI elements displayed on the HUD.
-   * @memberof HUDManager
-   * @instance
-   */
+	/**
+	 * Initializes all UI elements displayed on the HUD.
+	 * @memberof HUDManager
+	 * @instance
+	 */
 	init: function() {
 		this.log("Initializing Player HUD...", 'info');
 
