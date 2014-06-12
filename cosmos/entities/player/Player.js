@@ -1,23 +1,38 @@
 /**
- * The {@link Player} class represents a player in the game.
- * The player class contains all of the additional data and functionality (beyond a mere block grid) that is needed to represent a player in Cosmos.
- * TODO this design should be replaced by something more natural (like there should be a ship class) and/or something component-based.
+ * An {@link IgeEntity} that represents a player in the game.
+ * The player class contains all of the additional data and functionality (beyond a mere block grid) that is needed to
+ * represent a player in Cosmos.
  * @typedef {Player}
  * @class
  * @namespace
+ * @todo This design should be replaced by something more natural (like there should be a ship class) and/or
+ * something component-based.
  */
 var Player = BlockGrid.extend({
 	classId: 'Player',
 
-	PLAYER_START_DISTANCE: 4000,
-
-	/** The session ID associated with this player's client. */
+	/**
+	 * The session ID associated with this player's client and current session.
+	 * @type {string}
+	 * @memberof Player
+	 * @private
+	 * @instance
+	 */
 	_sid: undefined,
+	/**
+	 * The ID for this {@link Player} object in the database. Used for loading and storing data associated with a
+	 * particular {@link Player}.
+	 * @type {string}
+	 * @memberof Player
+	 * @private
+	 * @instance
+	 */
 	_dbId: undefined,
 
 	/**
 	 * Whether or not this {@link Player} is mining. Used to restrict players from mining more than one {@link Block}
 	 * at a time.
+	 * @type {boolean}
 	 * @memberof Player
 	 * @instance
 	 */
@@ -41,9 +56,9 @@ var Player = BlockGrid.extend({
 		};
 
 		if (ige.isClient) {
-			this.initClient();
+			this._initClient();
 		} else {
-			this.initServer();
+			this._initServer();
 		}
 
 		// Define the data sections that will be included in the stream
@@ -54,6 +69,8 @@ var Player = BlockGrid.extend({
 	 * Getter/setter for the _sid parameter, which stores the session ID of this player.
 	 * @param val The new value to use or undefined if we are invoking this function as the getter.
 	 * @returns {*} Either the current _sid or this object so that we can chain setter calls.
+	 * @memberof Player
+	 * @instance
 	 */
 	sid: function(val) {
 		if (val === undefined) {
@@ -63,6 +80,13 @@ var Player = BlockGrid.extend({
 		return this;
 	},
 
+	/**
+	 * Getter/setter for the dbId parameter, which stores the database ID of this player.
+	 * @param val The new value to use or undefined if we are invoking this function as the getter.
+	 * @returns {*} Either the current database ID or this object so that we can chain setter calls.
+	 * @memberof Player
+	 * @instance
+	 */
 	dbId: function(val) {
 		if (val === undefined) {
 			return this._dbId;
@@ -73,53 +97,31 @@ var Player = BlockGrid.extend({
 
 	/**
 	 * Perform client-specific initialization here. Called by init()
+	 * @memberof Player
+	 * @private
+	 * @instance
 	 */
-	initClient: function() {
+	_initClient: function() {
 		this.depth(1);
 	},
 
 	/**
 	 * Perform server-specific initialization here. Called by init()
+	 * @memberof Player
+	 * @private
+	 * @instance
 	 */
-	initServer: function() {
+	_initServer: function() {
 		this.cargo = new Cargo();
-	},
-
-	/**
-	 * Override the default IgeEntity class streamSectionData() method
-	 * so that we can check for the custom1 section and handle how we deal
-	 * with it.
-	 * @param {String} sectionId A string identifying the section to
-	 * handle data get / set for.
-	 * @param {*=} data If present, this is the data that has been sent
-	 * from the server to the client for this entity.
-	 * @return {*}
-	 */
-	streamSectionData: function(sectionId, data) {
-		// Check if the section is one that we are handling
-		if (sectionId === 'score') {
-			// Check if the server sent us data, if not we are supposed
-			// to return the data instead of set it
-			if (data) {
-				// We have been given new data!
-				this._score = data;
-			} else {
-				// Return current data
-				return this._score;
-			}
-		} else {
-			// The section was not one that we handle here, so pass this
-			// to the super-class streamSectionData() method - it handles
-			// the "transform" section by itself
-			return IgeEntity.prototype.streamSectionData.call(this, sectionId, data);
-		}
 	},
 
 	/**
 	 * Add the sensor fixture. Called in ServerNetworkEvents after the box2Dbody
 	 * is created.
-	 * @param {number} radius sets the radius of the attraction field
-	 * @return {Player}
+	 * @param radius {number} The radius of the attraction field
+	 * @return {Player} This object is returned to facilitate setter chaining.
+	 * @memberof Player
+	 * @instance
 	 */
 	addSensor: function(radius) {
 		// Create the fixture
@@ -154,8 +156,11 @@ var Player = BlockGrid.extend({
 
 	/**
 	 * Get/set the strength of attraction
-	 * @param {?number} Strength is a multiplier for attraction force
-	 * @return {(number|Player)}
+	 * @param strength {?number} A multiplier for attraction force
+	 * @return {(number|Player)} The current attraction strength if no argument is passed or this object if an argument
+	 * is passed in order to support setter chaining.
+	 * @memberof Player
+	 * @instance
 	 */
 	attractionStrength: function(strength) {
 		if (strength === undefined) {
@@ -169,21 +174,25 @@ var Player = BlockGrid.extend({
 
 	/**
 	 * Changes the player's location to a random new location.
+	 * @memberof Player
+	 * @instance
 	 */
 	relocate: function() {
 		this.translateTo(
-			(Math.random() - .5) * Player.prototype.PLAYER_START_DISTANCE,
-			(Math.random() - .5) * Player.prototype.PLAYER_START_DISTANCE,
+			(Math.random() - .5) * Player.PLAYER_START_RADIUS,
+			(Math.random() - .5) * Player.PLAYER_START_RADIUS,
 			0
 		);
 	},
 
 	/**
-	 * Called every time a ship collects a block
+	 * Called every time a ship collects a block.
+	 * @memberof Player
+	 * @instance
+	 * @todo Make this a static function because it doesn't use instance data
+	 * @todo Adda cool animation or sound here, or on another listener
 	 */
 	blockCollectListener: function (player, blockClassId) {
-		//TODO: Add a cool animation or sound here, or on another listener
-		//console.log("Block collected!");
 		player.cargo.addBlock(blockClassId);
 	},
 
@@ -192,7 +201,7 @@ var Player = BlockGrid.extend({
 	 * @param targetBlock {Block} The {@link Block} that the mining lasers will be focused on.
 	 * @memberof Player
 	 * @instance
-	 * @todo : The fireMiningLasers should be in the Ship class, but it doesn't exist yet.
+	 * @todo The fireMiningLasers should be in the Ship class, but it doesn't exist yet.
 	 */
 	fireMiningLasers: function(targetBlock) {
 		var miningLasers = this.blocksOfType(MiningLaserBlock.prototype.classId());
@@ -207,7 +216,7 @@ var Player = BlockGrid.extend({
 	 * @param targetBlock {Block} The {@link Block} that the mining lasers were focused on.
 	 * @memberof Player
 	 * @instance
-	 * @todo : The turnOffMiningLasers should be in the Ship class, but it doesn't exist yet.
+	 * @todo The turnOffMiningLasers should be in the Ship class, but it doesn't exist yet.
 	 */
 	turnOffMiningLasers: function(targetBlock) {
 		var miningLasers = this.blocksOfType('MiningLaserBlock');
@@ -217,6 +226,13 @@ var Player = BlockGrid.extend({
 		}
 	},
 
+	/**
+	 * Override the {@link IgeEntity#update} function to provide support for player controls and {@link Block} functions
+	 * like applying force where {@link EngineBlock}s are or turning faster when there are more {@link ThrusterBlock}s.
+	 * @param ctx {Object} The render context.
+	 * @memberof Player
+	 * @instance
+	 */
 	update: function(ctx) {
 		if (!ige.isServer) {
 			/* Save the old control state for comparison later */
@@ -286,5 +302,14 @@ var Player = BlockGrid.extend({
 		BlockGrid.prototype.update.call(this, ctx);
 	}
 });
+
+/**
+ * The radius from the center of the world within which players will spawn.
+ * @constant {number}
+ * @default
+ * @memberof Player
+ */
+Player.PLAYER_START_RADIUS = 4000;
+
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Player; }
