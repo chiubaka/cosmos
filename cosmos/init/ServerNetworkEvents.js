@@ -43,6 +43,11 @@ var ServerNetworkEvents = {
 		player.cargo.unsubscribeFromUpdates(clientId);
 
 		var self = this;
+		/**
+		 * @callback updatePlayerCallback
+		 * @param err {Error | null}
+		 * @param result {*}
+		 */
 		DbPlayer.update(player.dbId(), player, function(err, result) {
 			if (err) {
 				self.log('Cannot save player in database!', 'error')
@@ -68,6 +73,11 @@ var ServerNetworkEvents = {
 	 */
 	_onPlayerEntity: function(data, clientId) {
 		var self = this;
+		/**
+		 * @callback onPlayerEntitySessionCallback
+		 * @param err {Error | null}
+		 * @param playerId {String} A unique player identifier.
+		 */
 		DbSession.playerIdForSession(data.sid, function(err, playerId) {
 			if (err) {
 				self.log('Cannot load session from database!', 'error');
@@ -77,6 +87,12 @@ var ServerNetworkEvents = {
 
 			}
 
+			/**
+			 * @callback onPlayerEntityLoadCallback
+			 * @param err {Error | null}
+			 * @param ship {Array} Player's ship, represented as a 2D array
+			 * @param cargo {Array} Player's cargo
+			 */
 			DbPlayer.load(playerId, function(err, ship, cargo) {
 				if (err) {
 					self.log('Cannot load player from database!', 'error')
