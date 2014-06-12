@@ -1,6 +1,20 @@
+/**
+ * Subclass of the {@link Element} class.
+ * @class
+ * @typedef {FluorineBlock}
+ * @namespace
+ * @todo Use this to craft things.
+ */
 var FluorineBlock = Element.extend({
 	classId: 'FluorineBlock',
 
+	/**
+	 * The maximum HP for a {@link FluorineBlock}. Overrides the superclass MAX_HP value. See {@link Block#MAX_HP}.
+	 * @constant {number}
+	 * @default
+	 * @memberof FluorineBlock
+	 * @instance
+	 */
 	MAX_HP: 50,
 
 	init: function () {
