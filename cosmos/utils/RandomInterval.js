@@ -8,6 +8,7 @@ var RandomInterval = {
 	 * @param min {Integer}
 	 * @param max {Integer}
 	 * @returns {Integer}
+	 * @memberof RandomInterval
 	 * http://stackoverflow.com/questions/4959975/generate-random-value-between-two-numbers-in-javascript
 	 */
 	randomIntFromInterval: function(min, max) {

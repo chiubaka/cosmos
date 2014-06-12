@@ -9,7 +9,7 @@ var DbSession = {
 	/**
 	 * Given a session id, finds the corresponding player id in the
 	 * "sessions" collection.
-	 * @param sid {string}
+	 * @param sid {string} Session id of the client
 	 * @param callback {onPlayerEntitySessionCallback}
 	 */
 	playerIdForSession: function(sid, callback) {
