@@ -188,6 +188,8 @@ var BlockGridGenerator = {
 	 * elemental distribution.
 	 * @returns {BlockGrid} The newly created 2x2 {@link BlockGrid}.
 	 * @memberof BlockGridGenerator
+	 * @todo Edit this function so that it creates and returns an actual {@link BlockGrid} object. As it is written now,
+	 * this won't work.
 	 */
 	littleAsteroid: function(distribution) {
 		distribution = distribution || this.elementDistributions.STANDARD;
@@ -203,6 +205,8 @@ var BlockGridGenerator = {
 	 * elemental distribution.
 	 * @returns {BlockGrid} The newly created hollow, 3x3 asteroid with a missing center.
 	 * @memberof BlockGridGenerator
+	 * @todo Edit this function so that it creates and returns an actual {@link BlockGrid} object. As it is written now,
+	 * this won't work.
 	 */
 	hollowAsteroid: function(distribution) {
 		distribution = distribution || this.elementDistributions.STANDARD;
