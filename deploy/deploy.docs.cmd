@@ -114,7 +114,7 @@ IF EXIST "%DEPLOYMENT_SOURCE%\package.json" (
 :: Compile documentation to deployment target
 echo Compiling and compressing IGE
 pushd "%DEPLOYMENT_SOURCE%"
-call :ExecuteCmd "node_modules\.bin\jsdoc" . -r -d %DEPLOYMENT_TARGET%
+call :ExecuteCmd "node_modules\.bin\jsdoc" cosmos -r -d %DEPLOYMENT_TARGET%
 IF !ERRORLEVEL! NEQ 0 goto error
 popd
 
