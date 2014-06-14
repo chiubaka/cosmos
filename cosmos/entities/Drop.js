@@ -174,10 +174,31 @@ var Drop = BlockGrid.extend({
  */
 Drop.BOX2D_CATEGORY = 'drop';
 
+/**
+ * Maximum value of shadow blur to use when rendering this {@link Drop}'s texture. Shadow blur is used to make the
+ * oscillating glow effect around a {@link Drop}.
+ * @constant {number}
+ * @default
+ * @memberof Drop
+ */
 Drop.MAX_SHADOW_BLUR = 75;
 
+/**
+ * Minimum value of shadow blur to use when rendering this {@link Drop}'s texture. Shadow blur is used to make the
+ * oscillating glow effect around a {@link Drop}.
+ * @constant {number}
+ * @default
+ * @memberof Drop
+ */
 Drop.MIN_SHADOW_BLUR = 25;
 
+/**
+ * How quickly the shadow blur increments/decrements on each draw. This value defines how fast the glow effect around
+ * a {@link Drop} oscillates.
+ * @constant {number}
+ * @default
+ * @memberof Drop
+ */
 Drop.SHADOW_BLUR_STEP = 2;
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Drop; }
