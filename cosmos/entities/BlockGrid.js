@@ -315,6 +315,16 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return true;
 	},
 
+	/**
+	 * Removes the {@link Block} at the specified row and column from the grid and creates a {@link Drop} for the
+	 * removed {@link Block}.
+	 * @param row {number} The row of the {@link Block} to drop.
+	 * @param col {number} The col of the {@link Block} to drop.
+	 * @param player {IgeEntityBox2d} The {@link Player} that caused this {@link Block} to be dropped. Used to constrain
+	 * who can pick up the {@link Drop}. If undefined, all players will be able to pick up the {@link Drop}.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
 	drop: function(row, col, player) {
 		if (row === undefined || col === undefined) {
 			return;
@@ -347,6 +357,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	/**
 	 * Removes the block at the specified row and column from the grid.
+	 * NOTE: Destroys this {@link BlockGrid} if the number of {@link Block}s in the {@link BlockGrid} reaches 0 after
+	 * removal. If there is state that you need about the {@link BlockGrid} (e.g. the location), you must save it before
+	 * calling {@link BlockGrid#remove|remove}.
 	 * @param row {number} The row of the block to remove.
 	 * @param col {number} The col of the block to remove.
 	 * @memberof BlockGrid
