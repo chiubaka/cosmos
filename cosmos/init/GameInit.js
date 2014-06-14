@@ -209,8 +209,8 @@ var GameInit = {
 					contact.SetEnabled(false);
 
 					// TODO: Make it so blocks are attracted to multiple players
-					if (drop.attractedTo === undefined) {
-						drop.attractedTo = player;
+					if (drop.attractedTo() === undefined && drop.isOwner(player)) {
+						drop.attractedTo(player);
 					}
 				}
 			},
@@ -218,8 +218,11 @@ var GameInit = {
 			function(contact) {
 				if (contact.igeEitherCategory('player') &&
 					contact.igeEitherCategory(Drop.BOX2D_CATEGORY)) {
+					var player = contact.igeEntityByCategory('player');
 					var drop = contact.igeEntityByCategory(Drop.BOX2D_CATEGORY);
-					drop.attractedTo = undefined;
+					if (drop.isOwner(player)) {
+						drop.attractedTo(undefined);
+					}
 				}
 			},
 			// Presolve events. This is called after collision is detected, but
@@ -227,12 +230,14 @@ var GameInit = {
 			function(contact) {
 				if (contact.igeEitherCategory('player') &&
 					contact.igeEitherCategory(Drop.BOX2D_CATEGORY)) {
+					contact.SetEnabled(false);
+
 					var drop = contact.igeEntityByCategory(Drop.BOX2D_CATEGORY);
 					var player = contact.igeEntityByCategory('player');
 					var shipFixture = contact.fixtureByCategory('player');
 
 					// Asteroid has hit ship blocks, destroy the asteroid
-					if (!shipFixture.m_isSensor) {
+					if (!shipFixture.m_isSensor && drop.isOwner(player)) {
 						// Disable contact so player doesn't move due to collision
 						contact.SetEnabled(false);
 						// Ignore multiple collision points

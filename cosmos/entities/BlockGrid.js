@@ -796,43 +796,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	/**
-	 * Is update called once per time-step per viewport, or just once per time-step?
-	 */
-	update: function(ctx) {
-		if (ige.isServer) {
-
-			// Attract the block grid to another body. For example, small asteroids
-			// are attracted to player ships.
-			if (this.attractedTo !== undefined) {
-				var attractedToBody = this.attractedTo._box2dBody;
-				var thisBody = this._box2dBody;
-				var impulse = new ige.box2d.b2Vec2(0, 0);
-				impulse.Add(attractedToBody.GetWorldCenter());
-				impulse.Subtract(thisBody.GetWorldCenter());
-				impulse.Multiply(this.attractedTo.attractionStrength());
-				thisBody.ApplyImpulse(impulse, thisBody.GetWorldCenter());
-			}
-
-
-			//This is just a little bit larger than the background image. That's why I chose this size.
-			var MAX_X = 7000;
-			var MAX_Y = 7000;
-			var x = this.translate().x();
-			var y = this.translate().y();
-
-			if (x > MAX_X || x < -MAX_X) {
-				this.translateTo(-x, y, 0);
-			}
-			if (y > MAX_Y || y < -MAX_Y) {
-				this.translateTo(x, -y, 0);
-			}
-		}
-
-		IgeEntityBox2d.prototype.update.call(this, ctx);
-	},
-
-
-	/**
 	 * Given a {@link Block}, returns the neighboring locations to the {@link Block} that do not have other blocks.
 	 * @param block {Block} The {@link Block} to get the emptying neighboring locations for.
 	 * @returns {Array} A list of location objects, which are of the format {row: number, col: number}. Each location
