@@ -201,10 +201,10 @@ var GameInit = {
 			// Listen for when contact's begin
 			function(contact) {
 				// If player ship is near small asteroids, attract them
-				if (contact.igeEitherCategory('player') &&
+				if (contact.igeEitherCategory(Player.BOX2D_CATEGORY) &&
 					contact.igeEitherCategory(Drop.BOX2D_CATEGORY)) {
 					var drop = contact.igeEntityByCategory(Drop.BOX2D_CATEGORY);
-					var player = contact.igeEntityByCategory('player');
+					var player = contact.igeEntityByCategory(Player.BOX2D_CATEGORY);
 
 					contact.SetEnabled(false);
 
@@ -216,9 +216,9 @@ var GameInit = {
 			},
 			// Listen for when contacts end
 			function(contact) {
-				if (contact.igeEitherCategory('player') &&
+				if (contact.igeEitherCategory(Player.BOX2D_CATEGORY) &&
 					contact.igeEitherCategory(Drop.BOX2D_CATEGORY)) {
-					var player = contact.igeEntityByCategory('player');
+					var player = contact.igeEntityByCategory(Player.BOX2D_CATEGORY);
 					var drop = contact.igeEntityByCategory(Drop.BOX2D_CATEGORY);
 					if (drop.isOwner(player)) {
 						drop.attractedTo(undefined);
@@ -228,13 +228,13 @@ var GameInit = {
 			// Presolve events. This is called after collision is detected, but
 			// before collision repsonse is calculated.
 			function(contact) {
-				if (contact.igeEitherCategory('player') &&
+				if (contact.igeEitherCategory(Player.BOX2D_CATEGORY) &&
 					contact.igeEitherCategory(Drop.BOX2D_CATEGORY)) {
 					contact.SetEnabled(false);
 
 					var drop = contact.igeEntityByCategory(Drop.BOX2D_CATEGORY);
-					var player = contact.igeEntityByCategory('player');
-					var shipFixture = contact.fixtureByCategory('player');
+					var player = contact.igeEntityByCategory(Player.BOX2D_CATEGORY);
+					var shipFixture = contact.fixtureByCategory(Player.BOX2D_CATEGORY);
 
 					// Asteroid has hit ship blocks, destroy the asteroid
 					if (!shipFixture.m_isSensor && drop.isOwner(player)) {

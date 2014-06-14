@@ -43,7 +43,7 @@ var Player = BlockGrid.extend({
 
 		var self = this;
 
-		this.category('player');
+		this.category(Player.BOX2D_CATEGORY);
 		this._attractionStrength = 1;
 
 		this.controls = {
@@ -310,5 +310,13 @@ var Player = BlockGrid.extend({
  * @memberof Player
  */
 Player.PLAYER_START_RADIUS = 4000;
+
+/**
+ * The Box2D category of all player entities. Used by Box2D to determine what to do in certain collision scenarios.
+ * @constant {string}
+ * @default
+ * @memberof Player
+ */
+Player.BOX2D_CATEGORY = 'player';
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Player; }
