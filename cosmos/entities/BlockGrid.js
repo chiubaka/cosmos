@@ -315,6 +315,36 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return true;
 	},
 
+	drop: function(row, col, player) {
+		if (row === undefined || col === undefined) {
+			return;
+		}
+
+		var block = this.get(row, col);
+		if (block === undefined) {
+			return;
+		}
+
+		// Calculate position of new Drop, taking into account rotation
+		var gridX = this.translate().x();
+		var gridY = this.translate().y();
+		var fixtureX = block.fixtureDef().shape.data.x;
+		var fixtureY = block.fixtureDef().shape.data.y;
+		var theta = this.rotate().z();
+
+		var finalX = Math.cos(theta) * fixtureX - Math.sin(theta) * fixtureY + gridX;
+		var finalY = Math.sin(theta) * fixtureX + Math.cos(theta) * fixtureY + gridY;
+
+		this.remove(row, col);
+
+		new Drop().mount(ige.server.spaceGameScene)
+			.block(block)
+			.owner(player)
+			.translateTo(finalX, finalY, 0)
+			.rotate().z(theta)
+			.streamMode(1);
+	},
+
 	/**
 	 * Removes the block at the specified row and column from the grid.
 	 * @param row {number} The row of the block to remove.
@@ -344,33 +374,13 @@ var BlockGrid = IgeEntityBox2d.extend({
 				block.fixtureDebuggingEntity().destroy();
 			}
 
-			// Calculate position of new BlockGrid, taking into account rotation
-			var gridX = this.translate().x();
-			var gridY = this.translate().y();
-			var fixtureX = block.fixtureDef().shape.data.x;
-			var fixtureY = block.fixtureDef().shape.data.y;
-			var theta = this.rotate().z();
-
-			var finalX = 	Math.cos(theta) * fixtureX -
-				Math.sin(theta) * fixtureY + gridX;
-			var finalY =	Math.sin(theta) * fixtureX +
-				Math.cos(theta) * fixtureY + gridY;
-
-			// Create new IgeEntityBox2d separate from parent
-			var newGrid = new BlockGrid()
-				.category('smallAsteroid')
-				.mount(ige.server.spaceGameScene)
-				.fromBlockTypeMatrix([[block.classId()]])
-				.translateTo(finalX, finalY, 0)
-				.rotate().z(theta)
-				.streamMode(1);
-
 			// TODO: Compute correct velocities for new bodies, if needed
 
 			// TODO: Split BlockGrids and make 1x1 asteroids smallAsteroids so
 			// they get attracted
 
 			// TODO: Implement flood fill algorithm to disconnect disjoint bodies from each other.
+			// FLOOD FILL MUST NOT DESTROY THIS BlockGrid!
 		}
 
 		this._numBlocks--;
@@ -385,7 +395,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		block.onRemoved();
 
-		block.destroy();
+		block.unMount();
+		//block.destroy();
 
 		// Destroy this BlockGrid to clean up memory.
 		if (this._numBlocks === 0) {
@@ -709,8 +720,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 						player.mining = false;
 						player.turnOffMiningLasers(block);
 
-						// Remove block server side, then send remove msg to client
-						self.remove(data.row, data.col);
+						// Drop block server side, then send drop msg to client
+						self.drop(data.row, data.col, player);
 						data.action = 'remove';
 						ige.network.send('blockAction', data);
 					}

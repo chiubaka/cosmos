@@ -202,30 +202,32 @@ var GameInit = {
 			function(contact) {
 				// If player ship is near small asteroids, attract them
 				if (contact.igeEitherCategory('player') &&
-					contact.igeEitherCategory('smallAsteroid')) {
-					var asteroid = contact.igeEntityByCategory('smallAsteroid');
+					contact.igeEitherCategory(Drop.BOX2D_CATEGORY)) {
+					var drop = contact.igeEntityByCategory(Drop.BOX2D_CATEGORY);
 					var player = contact.igeEntityByCategory('player');
 
+					contact.SetEnabled(false);
+
 					// TODO: Make it so blocks are attracted to multiple players
-					if (asteroid.attractedTo === undefined) {
-						asteroid.attractedTo = player;
+					if (drop.attractedTo === undefined) {
+						drop.attractedTo = player;
 					}
 				}
 			},
 			// Listen for when contacts end
 			function(contact) {
 				if (contact.igeEitherCategory('player') &&
-					contact.igeEitherCategory('smallAsteroid')) {
-					var asteroid = contact.igeEntityByCategory('smallAsteroid');
-					asteroid.attractedTo = undefined;
+					contact.igeEitherCategory(Drop.BOX2D_CATEGORY)) {
+					var drop = contact.igeEntityByCategory(Drop.BOX2D_CATEGORY);
+					drop.attractedTo = undefined;
 				}
 			},
 			// Presolve events. This is called after collision is detected, but
 			// before collision repsonse is calculated.
 			function(contact) {
 				if (contact.igeEitherCategory('player') &&
-					contact.igeEitherCategory('smallAsteroid')) {
-					var asteroid = contact.igeEntityByCategory('smallAsteroid');
+					contact.igeEitherCategory(Drop.BOX2D_CATEGORY)) {
+					var drop = contact.igeEntityByCategory(Drop.BOX2D_CATEGORY);
 					var player = contact.igeEntityByCategory('player');
 					var shipFixture = contact.fixtureByCategory('player');
 
@@ -234,13 +236,13 @@ var GameInit = {
 						// Disable contact so player doesn't move due to collision
 						contact.SetEnabled(false);
 						// Ignore multiple collision points
-						if (asteroid === undefined || !asteroid.alive()) {
+						if (drop === undefined || !drop.alive()) {
 							return;
 						}
-						var block = asteroid.iterator().next();
+						var block = drop.block();
 						ige.emit('block collected',
 							[player, block.classId()]);
-						asteroid.destroy();
+						drop.destroy();
 					}
 				}
 			});
