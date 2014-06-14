@@ -38,9 +38,21 @@ var Drop = BlockGrid.extend({
 	 */
 	_attractedTo: undefined,
 
+	shadowBlur: undefined,
+	decrementingShadowBlur: undefined,
+
 	init: function(data) {
 		BlockGrid.prototype.init.call(this, data);
 		this.category(Drop.BOX2D_CATEGORY);
+
+		this.height(Block.HEIGHT);
+		this.width(Block.WIDTH);
+
+		if (!ige.isServer) {
+			this.shadowBlur = Drop.MAX_SHADOW_BLUR;
+			this.decrementingShadowBlur = true;
+			this.texture(ige.client.textures.drop);
+		}
 	},
 
 	/**
@@ -161,5 +173,11 @@ var Drop = BlockGrid.extend({
  * @memberof Drop
  */
 Drop.BOX2D_CATEGORY = 'drop';
+
+Drop.MAX_SHADOW_BLUR = 75;
+
+Drop.MIN_SHADOW_BLUR = 25;
+
+Drop.SHADOW_BLUR_STEP = 2;
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Drop; }
