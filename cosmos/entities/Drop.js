@@ -79,11 +79,17 @@ var Drop = BlockGrid.extend({
 	 * @instance
 	 */
 	owner: function(newOwner) {
+		var self = this;
 		if (newOwner === undefined) {
 			return this._owner;
 		}
 
 		this._owner = newOwner;
+		if (ige.isServer) {
+			setTimeout(function() {
+				self._owner = undefined;
+			}, Drop.OWNERSHIP_PERIOD)
+		}
 		return this;
 	},
 
@@ -95,6 +101,9 @@ var Drop = BlockGrid.extend({
 	 * @instance
 	 */
 	isOwner: function(entity) {
+		if (this._owner === undefined) {
+			return true;
+		}
 		return this._owner === entity;
 	},
 
@@ -165,11 +174,12 @@ var Drop = BlockGrid.extend({
 Drop.BOX2D_CATEGORY = 'drop';
 
 /**
- * The depth that a Drop should be rendered on. Should be above {@link Player}s and other {@link BlockGrid}s.
+ * The amount of time in milliseconds that a drop can only be picked up by its owner. After this amount of time, any
+ * player may pick up the drop.
  * @constant {number}
  * @default
  * @memberof Drop
  */
-Drop.DEPTH = 3;
+Drop.OWNERSHIP_PERIOD = 10000;
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Drop; }
