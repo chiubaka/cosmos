@@ -638,7 +638,7 @@ body {
 #tutorial-host > .content {
   border-radius: none;
   background: rgba(0, 0, 0, 0.9);
-  margin: 0px;
+  margin: 0px 20px;
 }
 
 #tutorial-host .tutorial-contents em.orange {
