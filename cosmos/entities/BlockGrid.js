@@ -409,7 +409,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 		block.onRemoved();
 
 		block.unMount();
-		//block.destroy();
 
 		// Destroy this BlockGrid to clean up memory.
 		if (this._numBlocks === 0) {
