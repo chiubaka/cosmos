@@ -10,7 +10,7 @@ goto deploy_end
 :endpoint_client
   echo Deploying client endpoint.
   copy /Y "deploy\deploy.client.cmd" "deploy.client.cmd"
-	deploy.client.cmd
+	call deploy.client.cmd
   goto end
 :endpoint_server
   echo Deploying server endpoint.
