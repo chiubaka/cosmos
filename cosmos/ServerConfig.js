@@ -12,6 +12,7 @@ var config = {
 		{ name: 'Block', path: './entities/Block' },
 		{ name: 'BlockGrid', path: './entities/BlockGrid' },
 		{ name: 'ConstructionZoneBlock', path: 'entities/blocks/ConstructionZoneBlock' },
+		{ name: 'Drop', path: 'entities/Drop' },
 
 		/* Ship part blocks */
 		{ name: 'Part', path: './entities/blocks/Part' },
@@ -31,13 +32,6 @@ var config = {
 		{ name: 'GoldBlock', path: './entities/blocks/elements/GoldBlock' },
 		{ name: 'CobaltBlock', path: './entities/blocks/elements/CobaltBlock' },
 		{ name: 'IceBlock', path: './entities/blocks/elements/IceBlock' },//not really an element
-
-		/* Effects */
-		{ name: 'LaserBeam', path: './entities/effects/mining/LaserBeam' },
-		{ name: 'EffectsMount', path: './entities/effects/mining/EffectsMount'},
-		{ name: 'LaserParticle', path: './entities/effects/mining/LaserParticle'},
-		{ name: 'EngineParticle', path: './entities/effects/mining/EngineParticle'},
-		{ name: 'BlockParticleEmitter', path: './entities/effects/mining/BlockParticleEmitter'},
 
 		/* Structures (Prefabs) */
 		{ name: 'ExampleShips', path: './entities/prefabs/ExampleShips' },

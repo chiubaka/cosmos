@@ -105,7 +105,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * The rendering container for this BlockGrid, which essentially provides a cacheable location for the
 	 * {@link BlockGrid}'s texture. Without this, the {@link BlockGrid} is re-drawn on each tick, which kills
 	 * performance on most machines.
-	 * @type {IgeEntity}
+	 * @type {RenderContainer}
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
@@ -114,7 +114,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	/**
 	 * Construction zone overlay for showing and hiding locations that players can click on in order to place a block
 	 * on an existing structure.
-	 * @type {IgeEntity}
+	 * @type {ConstructionZoneOverlay}
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
@@ -218,7 +218,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * Returns the block at a given row and column in the BlockGrid.
 	 * @param row {number} The row index to get
 	 * @param col {number} The col index to get
-	 * @returns {*} The Block object at (row, col) or undefined if no Block exists at the specified row and column
+	 * @returns {Block|undefined} The Block object at (row, col) or undefined if no Block exists at the specified row and column
 	 * @memberof BlockGrid
 	 * @instance
 	 */
@@ -237,7 +237,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @param row {number} The row to add at
 	 * @param col {number} The col to add at
 	 * @param block {Block} The Block to add to the grid.
-	 * @param checkForNeighbors {boolean} Whether or not we should validate that the given {@link Block} will be
+	 * @param checkForNeighbors {boolean?} Whether or not we should validate that the given {@link Block} will be
 	 * attached to the existing structure in this {@link BlockGrid}. Default behavior is to check for neighbors.
 	 * @returns {boolean} True if the Block was added successfully to the grid. False otherwise. A Block may not be
 	 * successfully added to the grid if another Block already exists in the grid at the specified location or if the
@@ -316,7 +316,50 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	/**
+	 * Removes the {@link Block} at the specified row and column from the grid and creates a {@link Drop} for the
+	 * removed {@link Block}.
+	 * @param row {number} The row of the {@link Block} to drop.
+	 * @param col {number} The col of the {@link Block} to drop.
+	 * @param player {IgeEntityBox2d} The {@link Player} that caused this {@link Block} to be dropped. Used to constrain
+	 * who can pick up the {@link Drop}. If undefined, all players will be able to pick up the {@link Drop}.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	drop: function(row, col, player) {
+		if (row === undefined || col === undefined) {
+			return;
+		}
+
+		var block = this.get(row, col);
+		if (block === undefined) {
+			return;
+		}
+
+		// Calculate position of new Drop, taking into account rotation
+		var gridX = this.translate().x();
+		var gridY = this.translate().y();
+		var fixtureX = block.fixtureDef().shape.data.x;
+		var fixtureY = block.fixtureDef().shape.data.y;
+		var theta = this.rotate().z();
+
+		var finalX = Math.cos(theta) * fixtureX - Math.sin(theta) * fixtureY + gridX;
+		var finalY = Math.sin(theta) * fixtureX + Math.cos(theta) * fixtureY + gridY;
+
+		this.remove(row, col);
+
+		new Drop().mount(ige.server.spaceGameScene)
+			.block(block)
+			.owner(player)
+			.translateTo(finalX, finalY, 0)
+			.rotate().z(theta)
+			.streamMode(1);
+	},
+
+	/**
 	 * Removes the block at the specified row and column from the grid.
+	 * NOTE: Destroys this {@link BlockGrid} if the number of {@link Block}s in the {@link BlockGrid} reaches 0 after
+	 * removal. If there is state that you need about the {@link BlockGrid} (e.g. the location), you must save it before
+	 * calling {@link BlockGrid#remove|remove}.
 	 * @param row {number} The row of the block to remove.
 	 * @param col {number} The col of the block to remove.
 	 * @memberof BlockGrid
@@ -344,33 +387,13 @@ var BlockGrid = IgeEntityBox2d.extend({
 				block.fixtureDebuggingEntity().destroy();
 			}
 
-			// Calculate position of new BlockGrid, taking into account rotation
-			var gridX = this.translate().x();
-			var gridY = this.translate().y();
-			var fixtureX = block.fixtureDef().shape.data.x;
-			var fixtureY = block.fixtureDef().shape.data.y;
-			var theta = this.rotate().z();
-
-			var finalX = 	Math.cos(theta) * fixtureX -
-				Math.sin(theta) * fixtureY + gridX;
-			var finalY =	Math.sin(theta) * fixtureX +
-				Math.cos(theta) * fixtureY + gridY;
-
-			// Create new IgeEntityBox2d separate from parent
-			var newGrid = new BlockGrid()
-				.category('smallAsteroid')
-				.mount(ige.server.spaceGameScene)
-				.fromBlockTypeMatrix([[block.classId()]])
-				.translateTo(finalX, finalY, 0)
-				.rotate().z(theta)
-				.streamMode(1);
-
 			// TODO: Compute correct velocities for new bodies, if needed
 
 			// TODO: Split BlockGrids and make 1x1 asteroids smallAsteroids so
 			// they get attracted
 
 			// TODO: Implement flood fill algorithm to disconnect disjoint bodies from each other.
+			// FLOOD FILL MUST NOT DESTROY THIS BlockGrid!
 		}
 
 		this._numBlocks--;
@@ -385,7 +408,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		block.onRemoved();
 
-		block.destroy();
+		block.unMount();
 
 		// Destroy this BlockGrid to clean up memory.
 		if (this._numBlocks === 0) {
@@ -568,7 +591,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		for (var row = 0; row < blockTypeMatrix.length; row++) {
 			for (var col = 0; col < blockTypeMatrix[row].length; col++) {
 				// The add() function knows how to deal with receiving undefined
-				this.add(startRow + row, startCol + col, Block.prototype.blockFromClassId(blockTypeMatrix[row][col]), checkForNeighbors);
+				this.add(startRow + row, startCol + col, Block.blockFromClassId(blockTypeMatrix[row][col]), checkForNeighbors);
 			}
 		}
 
@@ -679,11 +702,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 					return false;
 				}
 				// Blocks should only be mined by one player, for now. Note that there is a race condition here.
-				if((block === undefined) || block.busy()) {
+				if((block === undefined) || block.isBeingMined()) {
 					console.log("Request to mine undefined or busy block. row: " + data.row + ", col: " + data.col);
 					return false;
 				}
-				block.busy(true);
+				block.isBeingMined(true);
 
 				block._decrementHealthIntervalId = setInterval(function() {
 					if (block._hp > 0) {
@@ -709,17 +732,17 @@ var BlockGrid = IgeEntityBox2d.extend({
 						player.mining = false;
 						player.turnOffMiningLasers(block);
 
-						// Remove block server side, then send remove msg to client
-						self.remove(data.row, data.col);
+						// Drop block server side, then send drop msg to client
+						self.drop(data.row, data.col, player);
 						data.action = 'remove';
 						ige.network.send('blockAction', data);
 					}
-				}, Block.prototype.MINING_INTERVAL / player.numBlocksOfType(MiningLaserBlock.prototype.classId()));
+				}, Block.MINING_INTERVAL / player.numBlocksOfType(MiningLaserBlock.prototype.classId()));
 				return true;
 
 			case 'add':
 				// Add block server side, then send add msg to client
-				if(!self.add(data.row, data.col, Block.prototype.blockFromClassId(data.selectedType))) {
+				if(!self.add(data.row, data.col, Block.blockFromClassId(data.selectedType))) {
 					return false;
 				}
 				else {
@@ -751,9 +774,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 				ige.client.metrics.fireEvent(
 					'construct',
 					'existing',
-					Block.prototype.blockFromClassId(data.selectedType)
+					Block.blockFromClassId(data.selectedType)
 				);
-				this.add(data.row, data.col, Block.prototype.blockFromClassId(data.selectedType));
+				this.add(data.row, data.col, Block.blockFromClassId(data.selectedType));
 				this._renderContainer.refresh();
 				this._constructionZoneOverlay.refresh();
 				break;
@@ -783,43 +806,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this._debugFixtures = flag;
 		return this;
 	},
-
-	/**
-	 * Is update called once per time-step per viewport, or just once per time-step?
-	 */
-	update: function(ctx) {
-		if (ige.isServer) {
-
-			// Attract the block grid to another body. For example, small asteroids
-			// are attracted to player ships.
-			if (this.attractedTo !== undefined) {
-				var attractedToBody = this.attractedTo._box2dBody;
-				var thisBody = this._box2dBody;
-				var impulse = new ige.box2d.b2Vec2(0, 0);
-				impulse.Add(attractedToBody.GetWorldCenter());
-				impulse.Subtract(thisBody.GetWorldCenter());
-				impulse.Multiply(this.attractedTo.attractionStrength());
-				thisBody.ApplyImpulse(impulse, thisBody.GetWorldCenter());
-			}
-
-
-			//This is just a little bit larger than the background image. That's why I chose this size.
-			var MAX_X = 7000;
-			var MAX_Y = 7000;
-			var x = this.translate().x();
-			var y = this.translate().y();
-
-			if (x > MAX_X || x < -MAX_X) {
-				this.translateTo(-x, y, 0);
-			}
-			if (y > MAX_Y || y < -MAX_Y) {
-				this.translateTo(x, -y, 0);
-			}
-		}
-
-		IgeEntityBox2d.prototype.update.call(this, ctx);
-	},
-
 
 	/**
 	 * Given a {@link Block}, returns the neighboring locations to the {@link Block} that do not have other blocks.
@@ -1543,6 +1529,15 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return {x: drawLocation.x - oldX, y: drawLocation.y - oldY};
 	},
 
+	/**
+	 * Given a {@link Block}, calculates where the {@link Block} should be drawn onto the screen.
+	 * @param block {Block} The {@link Block} to calculate the draw location for
+	 * @returns {{x: *, y: *}} An object that has an x property and a y property, which defines the location where the
+	 * given {@link Block} should be drawn.
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 */
 	_drawLocationForBlock: function(block) {
 		var x = Block.WIDTH * (block.col() - this.startCol()) - this._bounds2d.x2 + block._bounds2d.x2;
 		var y = Block.HEIGHT * (block.row() - this.startRow()) - this._bounds2d.y2 + block._bounds2d.y2;
@@ -1655,12 +1650,33 @@ var BlockGrid = IgeEntityBox2d.extend({
 			this.get(row, col - 1) == undefined) {
 			block.mouseDown(event, control);
 		}
-	},
+	}
 });
 
+/**
+ * The default density value of a fixture created for a {@link Block}.
+ * @constant {number}
+ * @memberof BlockGrid
+ */
 BlockGrid.BLOCK_FIXTURE_DENSITY = 1.0;
+/**
+ * The default friction value of a fixture created for a {@link Block}.
+ * @constant {number}
+ * @memberof BlockGrid
+ */
 BlockGrid.BLOCK_FIXTURE_FRICTION = 0.5;
+/**
+ * The default restitution value of a fixture created for a {@link Block}.
+ * @constant {number}
+ * @memberof BlockGrid
+ */
 BlockGrid.BLOCK_FIXTURE_RESTITUTION = 0.5;
+/**
+ * The default padding value of a fixture create for a {@link Block}. Padding defines the difference in space between
+ * the rendered {@link Block} and the fixture for that {@link Block}.
+ * @constant {number}
+ * @memberof BlockGrid
+ */
 BlockGrid.BLOCK_FIXTURE_PADDING = .1;
 
 /**
@@ -1669,11 +1685,5 @@ BlockGrid.BLOCK_FIXTURE_PADDING = .1;
  * @memberof BlockGrid
  */
 BlockGrid.DEPTH = 0;
-/**
- * The depth layer to place the block effects on.
- * @constant {number}
- * @memberof BlockGrid
- */
-BlockGrid.EFFECTS_DEPTH = BlockGrid.DEPTH + 1;
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = BlockGrid; }

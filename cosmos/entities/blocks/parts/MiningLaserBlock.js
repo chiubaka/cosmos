@@ -1,15 +1,19 @@
 /**
- * The {@link MiningLaserBlock} class represents a block that can mine blocks.
- * @typedef {MiningLaserBlock}
+ * Subclass of the {@link Part} class.
+ * The {@link MiningLaserBlock} class represents a block that can mine blocks. Better mining lasers will allow you to
+ * (1) mine better blocks and (2) mine faster. If you don't have a mining laser you can't mine.
+ * Also, note that mining lasers are currently the only weapon for combat.
  * @class
+ * @typedef {MiningLaserBlock}
  * @namespace
  */
 var MiningLaserBlock = Part.extend({
 	classId: 'MiningLaserBlock',
 
 	/**
-	 * The maximum HP for a {@link MiningLaserBlock}. See {@link Block#MAX_HP}.
+	 * The maximum HP for a {@link MiningLaserBlock}. Overrides the superclass MAX_HP value. See {@link Block#MAX_HP}.
 	 * @constant {number}
+	 * @default
 	 * @memberof MiningLaserBlock
 	 * @instance
 	 */

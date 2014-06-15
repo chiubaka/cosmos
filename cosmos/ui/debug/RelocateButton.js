@@ -1,12 +1,38 @@
-var RelocateButton = IgeUiButton.extend({
+/**
+ * The RelocateButton provides players with a quick way to teleport their ship
+ * in a new location.
+ *
+ * @class
+ * @typedef {Object} RelocateButton
+ * @namespace  
+ */
+ var RelocateButton = IgeUiButton.extend({
 	classId: "RelocateButton",
 
 	/**
-	 * Defines the dimensions of a capability on the Capbar
+	 * The width of the button.
+	 * @constant {number}
+	 * @default
+	 * @memberof RelocateButton
+	 * @instance
 	 */
 	WIDTH: 128,
+
+	/**
+	 * The height of the button.
+	 * @constant {number}
+	 * @default
+	 * @memberof RelocateButton
+	 * @instance
+	 */
 	HEIGHT: 64,
 
+	/**
+	 * Initializes the Button's styles, label, and attaches event emitters to relay
+	 * player interaction events.
+	 * @memberof RelocateButton
+	 * @instance
+	 */
 	init: function() {
 		IgeUiButton.prototype.init.call(this);
 
@@ -28,6 +54,11 @@ var RelocateButton = IgeUiButton.extend({
 		this.allowActive(false);
 	},
 
+	/**
+	 * Initializes the Button's styles.
+	 * @memberof RelocateButton
+	 * @instance
+	 */
 	initStyles: function() {
 		this.width(this.WIDTH);
 		this.height(this.HEIGHT);
@@ -46,6 +77,11 @@ var RelocateButton = IgeUiButton.extend({
 		});
 	},
 
+	/**
+	 * Initializes the Button's label (text on the button).
+	 * @memberof RelocateButton
+	 * @instance
+	 */
 	initLabel: function() {
 		this.data('ui', {
 			'text': {
@@ -55,6 +91,12 @@ var RelocateButton = IgeUiButton.extend({
 		});
 	},
 
+	/**
+	 * Initializes the Button's event emitter, which emits a client event when the
+	 * player clicks the button.
+	 * @memberof RelocateButton
+	 * @instance
+	 */
 	initEvents: function() {
 		var self = this;
 

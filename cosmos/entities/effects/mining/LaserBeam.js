@@ -1,3 +1,10 @@
+/**
+ * Subclass of the {@link IgeEntity} class. Defines the entity for the laser beam that is displayed when a
+ * {@link Player} mines a {@link Block}.
+ * @class
+ * @typedef {LaserBeam}
+ * @namespace
+ */
 var LaserBeam = IgeEntity.extend({
 	classId: 'LaserBeam',
 
@@ -9,13 +16,18 @@ var LaserBeam = IgeEntity.extend({
 
 			// Fade in the laser beam
 			this.opacity(0);
-			this.fadeInTween();
+			this._fadeInTween();
 		}
 	},
 
-	// Note: Old sweeping laser tween is in commit
-	// c4192b5d5a7ee840a688744c8e6ad92fb2a97e51
-	fadeInTween: function () {
+	/**
+	 * Sets the tween on this entity so that it appears to fade in.
+	 * Note: Old sweeping laser tween is in commit c4192b5d5a7ee840a688744c8e6ad92fb2a97e51
+	 * @returns {LaserBeam} Returns this object to make setter call chaining convenient.
+	 * @memberof LaserBeam
+	 * @private
+	 */
+	_fadeInTween: function () {
 		this.tween()
 			.stepTo({_opacity: 1}, 1000, 'inOutCubic')
 			.start();
@@ -23,8 +35,14 @@ var LaserBeam = IgeEntity.extend({
 		return this;
 	},
 
-	// Server sets the location of the targeted block. This gets streamed
-	// with our custom streamCreateData() function.
+	/**
+	 * Sets the location of the targeted block.
+	 * @param blockGridId {string} The IGE ID of the {@link BlockGrid} we are targeting
+	 * @param row {number} The row of the {@link Block} we are targeting in its {@link BlockGrid}.
+	 * @param col {number} The col of the {@link Block} we are targeting in its {@link BlockGrid}.
+	 * @memberof LaserBeam
+	 * @instance
+ 	 */
 	setTarget: function(blockGridId, row, col) {
 		this._targetId = blockGridId;
 		this._targetRow = row;
@@ -32,12 +50,13 @@ var LaserBeam = IgeEntity.extend({
 		return this;
 	},
 
-
-	// Send custom data to client upon creation through network stream
-	streamCreateData: function () {
-		return [this._targetId, this._targetRow, this._targetCol];
-	},
-
+	/**
+	 * Override the {@link IgeEntity#update} function to move the laser beam appropriately when either the target block
+	 * or the source block is moved.
+	 * @param ctx {Object} The rendering context.
+	 * @memberof LaserBeam
+	 * @instance
+	 */
 	update: function(ctx) {
 		if (!ige.isServer) {
 			var laserMount = this.parent();

@@ -1,15 +1,17 @@
 /**
- * The {@link EngineBlock} class represents a {@link Block} that propels a ship.
- * @typedef {EngineBlock}
+ * Subclass of the {@link Part} class. The {@link EngineBlock} class represents a {@link Block} that propels a ship.
+ * Having more engine blocks allows you to (1) accelerate more rapidly and (2) travel at a greater maximum speed.
  * @class
+ * @typedef {EngineBlock}
  * @namespace
  */
 var EngineBlock = Part.extend({
 	classId: 'EngineBlock',
 
 	/**
-	 * The maximum HP for an {@link EngineBlock}. See {@link Block#MAX_HP}.
+	 * The maximum HP for a {@link EngineBlock}. Overrides the superclass MAX_HP value. See {@link Block#MAX_HP}.
 	 * @constant {number}
+	 * @default
 	 * @memberof EngineBlock
 	 * @instance
 	 */

@@ -1,18 +1,26 @@
 ﻿/**
  * Cargo.js
- * @author Derrick Liu
  * 
  * The Cargo class represents a player's entire cargo inventory. 
  * This class provides a high-level interface for managing cargo items.
  * 
  * In the future, other classes can extend the base CargoContainer and CargoItem classes
  * to provide additional functionality reasonably easily.
+ *
+ * @author Derrick Liu
+ * @class
+ * @typedef {Object} Cargo
+ * @namespace  
  */
 var Cargo = IgeClass.extend({
 	classId: 'Cargo',
 	
 	/**
 	 * The number of cargo containers that a single physical Cargo block represents.
+	 * @constant {number}
+	 * @default
+	 * @memberof Cargo
+	 * @instance
 	 */
 	CONTAINERS_PER_BLOCK: 1,
 	
@@ -20,6 +28,11 @@ var Cargo = IgeClass.extend({
 	 * Whether or not we want to respect cargo capacities right now.
 	 * Can initialize this to true to allow all players to have
 	 * an unlimited number of cargo containers.
+	 * @type {boolean}
+	 * @default
+	 * @memberof Cargo
+	 * @instance
+	 * @private
 	 */
 	_isUnlimited: true,
 	
@@ -27,11 +40,17 @@ var Cargo = IgeClass.extend({
 	 * The cargo containers that make up the player's cargo inventory.
 	 * CargoContainers contain a reference to a block in the world and a list
 	 * of references to CargoItems that are contained within them.
+	 * @type {Array}
+	 * @memberof Cargo
+	 * @instance
+	 * @private
 	 */
 	_containers: undefined,
 
 	/**
 	 * Initialize the cargo model for a player.
+	 * @memberof Cargo
+	 * @instance
 	 */
 	init: function() {
 		this._containers = [];
@@ -42,7 +61,10 @@ var Cargo = IgeClass.extend({
 	/**
 	 * Gets or sets whether or not the cargo inventory has an unlimited capacity.
 	 * 
-	 * @param the value to set the flag to
+	 * @param flag {boolean} the value to set the flag to
+	 * @returns {boolean} whether or not the cargo inventory has an unlimited capacity
+	 * @memberof Cargo
+	 * @instance
 	 */
 	unlimitedSpace: function(flag) {
 		if (flag !== undefined) {
@@ -57,8 +79,10 @@ var Cargo = IgeClass.extend({
 	 * Adds a block of a specific block type to the player's cargo inventory.
 	 * Automatically encapsulates blockTypes into CargoItems
 	 * 
-	 * @param blockType the type of block to add to the inventory
-	 * @returns whether or not the add was successful
+	 * @param blockType {string} the type of block to add to the inventory
+	 * @returns {boolean} whether or not the add was successful
+	 * @memberof Cargo
+	 * @instance
 	 */
 	addBlock: function(blockType) {
 		if (blockType === undefined || blockType === "") {
@@ -74,8 +98,10 @@ var Cargo = IgeClass.extend({
 	/**
 	 * Adds a list of block types to the player's cargo inventory using addBlockFromType().
 	 * 
-	 * @param blockTypes an array of all of the blockTypes to add
-	 * @returns a list of booleans representing the success of adding the list of blocks
+	 * @param blockTypes {Array} an array of all of the blockTypes to add
+	 * @returns {Array} a list of booleans representing the success of adding the list of blocks
+	 * @memberof Cargo
+	 * @instance
 	 */
 	addBlocks: function(blockTypes) {
 		var addedList = [];
@@ -92,8 +118,10 @@ var Cargo = IgeClass.extend({
 	 * Adds a single existing CargoItem to the player's cargo inventory.
 	 * Does NOT automatically encapsulate objects into CargoItems.
 	 * 
-	 * @param item the CargoItem to add
-	 * @returns whether or not the add was successful
+	 * @param item {Object} the CargoItem to add
+	 * @returns {boolean} whether or not the add was successful
+	 * @memberof Cargo
+	 * @instance
 	 */
 	addCargoItem: function(item) {
 		if (item === undefined) {
@@ -139,8 +167,10 @@ var Cargo = IgeClass.extend({
 	/**
 	 * Adds a list of CargoItems to the player's cargo inventory.
 	 * 
-	 * @param items an array of CargoItems to add
-	 * @returns a list of booleans representing the success of adding the list of blocks
+	 * @param items {Array} an array of CargoItems to add
+	 * @returns {Array} a list of booleans representing the success of adding the list of blocks
+	 * @memberof Cargo
+	 * @instance
 	 */
 	addCargoItems: function(items) {
 		var addedList = [];
@@ -155,9 +185,11 @@ var Cargo = IgeClass.extend({
 	/**
 	 * Removes (destroys) up to quantity items of a specific type from the cargo inventory
 	 * 
-	 * @param itemType the item type to remove (as returned by addItem)
-	 * @param quantity the number of items to try to remove (upper bound). Defaults to 1
-	 * @returns the number of items actually removed (up to quantity items)
+	 * @param itemType {string} the item type to remove
+	 * @param quantity {number} the number of items to try to remove (upper bound). Defaults to 1
+	 * @returns {number} the number of items actually removed (up to quantity items)
+	 * @memberof Cargo
+	 * @instance
 	 */
 	removeType: function(itemType, quantity) {
 		if (quantity === undefined) {
@@ -187,8 +219,10 @@ var Cargo = IgeClass.extend({
 	/**
 	 * Removes all items of a specific type from the player's cargo inventory.
 	 * 
-	 * @param itemType the type of items to remove (given by classId)
-	 * @returns the total number of items removed
+	 * @param itemType {string} the type of items to remove (given by classId)
+	 * @returns {number} the total number of items removed
+	 * @memberof Cargo
+	 * @instance
 	 */
 	removeAllOfType: function(itemType) {
 		var totalItemsRemoved = 0;
@@ -202,6 +236,8 @@ var Cargo = IgeClass.extend({
 
 	/**
 	 * Remove ALL items from the player's cargo inventory.
+	 * @memberof Cargo
+	 * @instance
 	 */
 	removeAll: function() {
 		console.error('abort - not implemented');
@@ -212,9 +248,11 @@ var Cargo = IgeClass.extend({
 	 * This is similar to a withdrawal: the items will be removed from the inventory
 	 * and returned to the caller.
 	 * 
-	 * @param itemType the item's type
-	 * @param quantity the number of items to extract
-	 * @returns a list of items that were extracted
+	 * @param itemType {string} the item's type
+	 * @param quantity {number} the number of items to extract
+	 * @returns {Array} a list of items that were extracted
+	 * @memberof Cargo
+	 * @instance
 	 */
 	extractType: function(itemType, quantity) {
 		var extracted = [];
@@ -252,8 +290,11 @@ var Cargo = IgeClass.extend({
 	 * Extracts a specific number of items from the player's cargo inventory, 
 	 * with types chosen by round-robin selection.
 	 * 
-	 * @param quantity the number of items to extract
-	 * @returns a list of items that were extracted 
+	 * @param quantity {number} the number of items to extract
+	 * @returns {Array} a list of items that were extracted 
+	 * @memberof Cargo
+	 * @instance
+	 * @deprecated
 	 */
 	rrExtractItems: function(quantity) {
 		var extracted = [];
@@ -286,8 +327,10 @@ var Cargo = IgeClass.extend({
 	/**
 	 * Check if the player's cargo inventory contains a particular type of item.
 	 * 
-	 * @param the item type to look for
-	 * @returns whether or not the cargo inventory the type of item
+	 * @param itemType {string} the item type to look for
+	 * @returns {boolean} whether or not the cargo inventory the type of item
+	 * @memberof Cargo
+	 * @instance
 	 */
 	hasItemType: function(itemType) {
 		for (var i = 0; i < this.getNumContainers() ; i++) {
@@ -303,7 +346,9 @@ var Cargo = IgeClass.extend({
 	/**
 	 * Gets the total number of items in the cargo inventory
 	 * 
-	 * @returns the total number of items in the cargo inventory
+	 * @returns {number} the total number of items in the cargo inventory
+	 * @memberof Cargo
+	 * @instance
 	 */
 	numItems: function() {
 		var total = 0;
@@ -315,6 +360,14 @@ var Cargo = IgeClass.extend({
 		return total;
 	},
 
+	/**
+	 * Gets the number of items in the cargo inventory of a specific item type
+	 *
+	 * @param itemType {string} the blockId of the item
+	 * @returns {number} the number of items of this type in the cargo inventory
+	 * @memberof Cargo
+	 * @instance
+	 */
 	numOfType: function(itemType) {
 		var total = 0;
 		for (var i = 0; i < this.getNumContainers() ; i++) {
@@ -328,8 +381,10 @@ var Cargo = IgeClass.extend({
 	/** 
 	 * Retrieve a specific cargo container from a player's cargo inventory.
 	 * 
-	 * @param index the index of the specific cargo container
-	 * @returns the cargo container (or undefined)
+	 * @param index {number} the index of the specific cargo container
+	 * @returns {Object} the cargo container (or undefined)
+	 * @memberof Cargo
+	 * @instance
 	 */
 	getContainer: function(index) {
 		return this._containers[index];
@@ -338,7 +393,9 @@ var Cargo = IgeClass.extend({
 	/**
 	 * Retrieves the number of cargo containers that this player has.
 	 * 
-	 * @returns the number of cargo containers
+	 * @returns {number} the number of cargo containers
+	 * @memberof Cargo
+	 * @instance
 	 */
 	getNumContainers: function() {
 		return this._containers.length;
@@ -347,9 +404,11 @@ var Cargo = IgeClass.extend({
 	/**
 	 * Retrieves a list of all of the items in this cargo inventory.
 	 * 
-	 * @param coalesce Whether or not to coalesce items of the same type 
+	 * @param coalesce {boolean} Whether or not to coalesce items of the same type 
 	 * in separate containers into a single entry in the list.
-	 * @returns a dictionary of types, and the number of elements of each type
+	 * @returns {Object} a dictionary of types, and the number of elements of each type
+	 * @memberof Cargo
+	 * @instance
 	 */
 	getItemList: function(coalesce) {
 		var returnDict = {};
@@ -381,6 +440,8 @@ var Cargo = IgeClass.extend({
 	 * Prints a debug log of a container to the console.
 	 * 
 	 * @params the container number
+	 * @memberof Cargo
+	 * @instance
 	 */
 	debugDump: function(i) {
 		console.log(":: cargo container #" + i);
@@ -391,7 +452,9 @@ var Cargo = IgeClass.extend({
 	 * Subscribes a client (according to the clientId) to receiving cargo updates whenever
 	 * the cargo is modified (add or extract block).
 	 * 
-	 * @param clientId the client to subscribe
+	 * @param clientId {string} the client to subscribe
+	 * @memberof Cargo
+	 * @instance
 	 */
 	subscribeToUpdates: function(clientId) {
 		this.log("Registering clientId " + clientId + " to cargo updates", 'info');
@@ -401,7 +464,9 @@ var Cargo = IgeClass.extend({
 	/**
 	 * Unsubscribes a client from receiving cargo updates.
 	 * 
-	 * @param clientId the client to unsubscribe
+	 * @param clientId {string} the client to unsubscribe
+	 * @memberof Cargo
+	 * @instance
 	 */
 	unsubscribeFromUpdates: function(clientId) {
 		var clientIndex = this.updateList.indexOf(clientId);
@@ -413,6 +478,8 @@ var Cargo = IgeClass.extend({
 
 	/**
 	 * Iterate through the list of subscribed clients and send a cargo update to each one.
+	 * @memberof Cargo
+	 * @instance
 	 */
 	sendUpdates: function() {
 		if (this.updateList.length === 0) {
@@ -431,6 +498,8 @@ var Cargo = IgeClass.extend({
 	/**
 	 * Serializes the cargo containers and its contents for insertion
 	 * into a database.
+	 * @memberof Cargo
+	 * @instance
 	 */
 	serializeCargo: function() {
 		var data = [];
@@ -447,6 +516,9 @@ var Cargo = IgeClass.extend({
 
 	/**
 	 * Rehydrates cargo information from a database
+	 * @param data {Array} an array of containers and container data from which to rehydrate the cargo
+	 * @memberof Cargo
+	 * @instance
 	 */
 	rehydrateCargo: function(data) {
 		// TODO: Sentinal value for empty cargo
