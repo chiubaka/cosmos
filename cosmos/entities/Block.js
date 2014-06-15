@@ -316,6 +316,13 @@ var Block = IgeEntity.extend({
 		return Object.keys(this._effects).length === 0;
 	},
 
+	/**
+	 * Adds a glow effect to this {@link Block}.
+	 * @param effect {Object} An effect object that has all of the information about a {@link GlowEffect} object.
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 */
 	_addGlowEffect: function(effect) {
 		if (this._effects['glow'] !== undefined) {
 			this._effects['glow'].destroy();
@@ -326,6 +333,12 @@ var Block = IgeEntity.extend({
 			.mount(this._effectsMount);
 	},
 
+	/**
+	 * Removes the glow effect from this {@link Block}.
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 */
 	_removeGlowEffect: function() {
 		if (this._effects['glow'] !== undefined) {
 			this._effects['glow'].destroy();
