@@ -201,46 +201,53 @@ var GameInit = {
 			// Listen for when contact's begin
 			function(contact) {
 				// If player ship is near small asteroids, attract them
-				if (contact.igeEitherCategory('player') &&
-					contact.igeEitherCategory('smallAsteroid')) {
-					var asteroid = contact.igeEntityByCategory('smallAsteroid');
-					var player = contact.igeEntityByCategory('player');
+				if (contact.igeEitherCategory(Player.BOX2D_CATEGORY) &&
+					contact.igeEitherCategory(Drop.BOX2D_CATEGORY)) {
+					var drop = contact.igeEntityByCategory(Drop.BOX2D_CATEGORY);
+					var player = contact.igeEntityByCategory(Player.BOX2D_CATEGORY);
+
+					contact.SetEnabled(false);
 
 					// TODO: Make it so blocks are attracted to multiple players
-					if (asteroid.attractedTo === undefined) {
-						asteroid.attractedTo = player;
+					if (drop.attractedTo() === undefined && drop.isOwner(player)) {
+						drop.attractedTo(player);
 					}
 				}
 			},
 			// Listen for when contacts end
 			function(contact) {
-				if (contact.igeEitherCategory('player') &&
-					contact.igeEitherCategory('smallAsteroid')) {
-					var asteroid = contact.igeEntityByCategory('smallAsteroid');
-					asteroid.attractedTo = undefined;
+				if (contact.igeEitherCategory(Player.BOX2D_CATEGORY) &&
+					contact.igeEitherCategory(Drop.BOX2D_CATEGORY)) {
+					var player = contact.igeEntityByCategory(Player.BOX2D_CATEGORY);
+					var drop = contact.igeEntityByCategory(Drop.BOX2D_CATEGORY);
+					if (drop.isOwner(player)) {
+						drop.attractedTo(undefined);
+					}
 				}
 			},
 			// Presolve events. This is called after collision is detected, but
 			// before collision repsonse is calculated.
 			function(contact) {
-				if (contact.igeEitherCategory('player') &&
-					contact.igeEitherCategory('smallAsteroid')) {
-					var asteroid = contact.igeEntityByCategory('smallAsteroid');
-					var player = contact.igeEntityByCategory('player');
-					var shipFixture = contact.fixtureByCategory('player');
+				if (contact.igeEitherCategory(Player.BOX2D_CATEGORY) &&
+					contact.igeEitherCategory(Drop.BOX2D_CATEGORY)) {
+					contact.SetEnabled(false);
+
+					var drop = contact.igeEntityByCategory(Drop.BOX2D_CATEGORY);
+					var player = contact.igeEntityByCategory(Player.BOX2D_CATEGORY);
+					var shipFixture = contact.fixtureByCategory(Player.BOX2D_CATEGORY);
 
 					// Asteroid has hit ship blocks, destroy the asteroid
-					if (!shipFixture.m_isSensor) {
+					if (!shipFixture.m_isSensor && drop.isOwner(player)) {
 						// Disable contact so player doesn't move due to collision
 						contact.SetEnabled(false);
 						// Ignore multiple collision points
-						if (asteroid === undefined || !asteroid.alive()) {
+						if (drop === undefined || !drop.alive()) {
 							return;
 						}
-						var block = asteroid.iterator().next();
+						var block = drop.block();
 						ige.emit('block collected',
 							[player, block.classId()]);
-						asteroid.destroy();
+						drop.destroy();
 					}
 				}
 			});
