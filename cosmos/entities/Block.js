@@ -242,7 +242,7 @@ var Block = IgeEntity.extend({
 			return;
 		}
 
-		this._effectsMount = new IgeEntity().depth(BlockGrid.EFFECTS_DEPTH);
+		this._effectsMount = new IgeEntity().depth(this.depth());
 	},
 
 	/**
@@ -270,6 +270,9 @@ var Block = IgeEntity.extend({
 		}
 
 		switch (effect.type) {
+			case 'glow':
+				this._addGlowEffect(effect);
+				break;
 			case 'miningParticles':
 				this._addMiningParticles();
 				break;
@@ -287,6 +290,9 @@ var Block = IgeEntity.extend({
 	 */
 	removeEffect: function(effect) {
 		switch (effect.type) {
+			case 'glow':
+				this._removeGlowEffect();
+				break;
 			case 'miningParticles':
 				this._removeMiningParticles();
 				break;
@@ -308,6 +314,36 @@ var Block = IgeEntity.extend({
 	 */
 	_hasEffects: function() {
 		return Object.keys(this._effects).length === 0;
+	},
+
+	/**
+	 * Adds a glow effect to this {@link Block}.
+	 * @param effect {Object} An effect object that has all of the information about a {@link GlowEffect} object.
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 */
+	_addGlowEffect: function(effect) {
+		if (this._effects['glow'] !== undefined) {
+			this._effects['glow'].destroy();
+		}
+
+		this._effects['glow'] = new GlowEffect(effect)
+			.depth(this.depth() - 1)
+			.mount(this._effectsMount);
+	},
+
+	/**
+	 * Removes the glow effect from this {@link Block}.
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 */
+	_removeGlowEffect: function() {
+		if (this._effects['glow'] !== undefined) {
+			this._effects['glow'].destroy();
+			delete this._effects['glow'];
+		}
 	},
 
 	/**

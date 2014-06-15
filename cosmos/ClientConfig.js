@@ -12,6 +12,7 @@ var igeClientConfig = {
 		'./entities/Block.js',
 		'./entities/BlockGrid.js',
 		'./entities/blocks/ConstructionZoneBlock.js',
+		'./entities/Drop.js',
 
 		/* Ship part blocks */
 		'./entities/blocks/Part.js',
@@ -37,6 +38,7 @@ var igeClientConfig = {
 		'./entities/effects/mining/LaserParticle.js',
 		'./entities/effects/EngineParticle.js',
 		'./entities/effects/mining/BlockParticleEmitter.js',
+		'./entities/effects/GlowEffect.js',
 
 		/* Structures (prefabs) */
 		'./entities/prefabs/ExampleShips.js',
