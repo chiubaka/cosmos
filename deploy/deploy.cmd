@@ -24,7 +24,7 @@ goto deploy_end
   goto end
 :default 
   echo You have to set the ENDPOINT_TYPE setting to 'client', 'server', or 'docs'
-  goto end
+  exit /b 1
 :end
   VER > NUL 
   echo Deployment complete!
