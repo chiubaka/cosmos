@@ -38,6 +38,7 @@ var igeClientConfig = {
 		'./entities/effects/mining/LaserParticle.js',
 		'./entities/effects/EngineParticle.js',
 		'./entities/effects/mining/BlockParticleEmitter.js',
+		'./entities/effects/GlowEffect.js',
 
 		/* Structures (prefabs) */
 		'./entities/prefabs/ExampleShips.js',

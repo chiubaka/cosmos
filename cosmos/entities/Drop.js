@@ -10,15 +10,6 @@ var Drop = BlockGrid.extend({
 	classId: 'Drop',
 
 	/**
-	 * The {@link Block} in this {@link Drop}. For now, {@link Drop}s should only ever contain a single {@link Block}
-	 * even though {@link Drop}s are backed by a {@link BlockGrid}.
-	 * @type {Block}
-	 * @memberof Drop
-	 * @private
-	 * @instance
-	 */
-	_block: undefined,
-	/**
 	 * The owner of this {@link Drop}, i.e. the ship that caused the drop to occur. While the owner property is set,
 	 * nobody but the owner of the {@link Drop} may pick it up. When the owner property is not set, anybody can pick it
 	 * up.
@@ -41,6 +32,17 @@ var Drop = BlockGrid.extend({
 	init: function(data) {
 		BlockGrid.prototype.init.call(this, data);
 		this.category(Drop.BOX2D_CATEGORY);
+
+		this.height(Block.HEIGHT);
+		this.width(Block.WIDTH);
+
+		if (!ige.isServer) {
+			this.texture(ige.client.textures.drop);
+			var effect = NetworkUtils.effect('glow', this.block());
+			effect.height = this.block().height();
+			effect.width = this.block().width();
+			this.block().addEffect(effect);
+		}
 	},
 
 	/**
@@ -54,15 +56,14 @@ var Drop = BlockGrid.extend({
 	 */
 	block: function(newBlock) {
 		if (newBlock === undefined) {
-			return this._block;
+			return this.get(0, 0);
 		}
 
-		if (this._block !== undefined) {
+		if (this.get(0, 0) !== undefined) {
 			console.error("Tried to replace the existing block in a Drop.");
 			return;
 		}
 
-		this._block = newBlock;
 		this.add(0, 0, newBlock);
 		return this;
 	},

@@ -1685,13 +1685,5 @@ BlockGrid.BLOCK_FIXTURE_PADDING = .1;
  * @memberof BlockGrid
  */
 BlockGrid.DEPTH = 0;
-/**
- * The depth layer to place the block effects on.
- * @constant {number}
- * @memberof BlockGrid
- * @todo This may not actually be constant, since different effects may need to be mounted either above or below the
- * {@link BlockGrid} layer.
- */
-BlockGrid.EFFECTS_DEPTH = BlockGrid.DEPTH + 1;
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = BlockGrid; }
