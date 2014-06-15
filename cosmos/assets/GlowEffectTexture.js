@@ -14,24 +14,24 @@ var image = {
 		ctx.globalCompositeOperation = "source-over";
 
 		if (entity.decrementingShadowBlur) {
-			entity.shadowBlur -= Drop.SHADOW_BLUR_STEP;
+			entity.shadowBlur -= entity.shadowBlurStep;
 		}
 		else {
-			entity.shadowBlur += Drop.SHADOW_BLUR_STEP;
+			entity.shadowBlur += entity.shadowBlurStep;
 		}
 
-		if (entity.shadowBlur >= Drop.MAX_SHADOW_BLUR) {
+		if (entity.shadowBlur >= entity.maxShadowBlur) {
 			entity.decrementingShadowBlur = true;
 		}
-		else if (entity.shadowBlur <= Drop.MIN_SHADOW_BLUR) {
+		else if (entity.shadowBlur <= entity.minShadowBlur) {
 			entity.decrementingShadowBlur = false;
 		}
 
 		ctx.shadowBlur = entity.shadowBlur;
-		ctx.shadowColor = 'white';
+		ctx.shadowColor = entity.shadowColor;
 
 		// Draw block outline
-		ctx.strokeStyle = entity.textureOutline || 'rgba(255, 255, 255, 0)';
+		ctx.fillStyle = entity.textureBackground;
 		ctx.beginPath();
 		ctx.moveTo(-entity._bounds2d.x2, -entity._bounds2d.y2);
 		ctx.lineTo(entity._bounds2d.x2, -entity._bounds2d.y2);
