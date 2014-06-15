@@ -228,26 +228,26 @@ var GameInit = {
 			// Presolve events. This is called after collision is detected, but
 			// before collision repsonse is calculated.
 			function(contact) {
-				if (contact.igeEitherCategory(Player.BOX2D_CATEGORY) &&
-					contact.igeEitherCategory(Drop.BOX2D_CATEGORY)) {
+				if (contact.igeEitherCategory(Drop.BOX2D_CATEGORY)) {
 					contact.SetEnabled(false);
+					if (contact.igeEitherCategory(Player.BOX2D_CATEGORY)) {
+						var drop = contact.igeEntityByCategory(Drop.BOX2D_CATEGORY);
+						var player = contact.igeEntityByCategory(Player.BOX2D_CATEGORY);
+						var shipFixture = contact.fixtureByCategory(Player.BOX2D_CATEGORY);
 
-					var drop = contact.igeEntityByCategory(Drop.BOX2D_CATEGORY);
-					var player = contact.igeEntityByCategory(Player.BOX2D_CATEGORY);
-					var shipFixture = contact.fixtureByCategory(Player.BOX2D_CATEGORY);
-
-					// Asteroid has hit ship blocks, destroy the asteroid
-					if (!shipFixture.m_isSensor && drop.isOwner(player)) {
-						// Disable contact so player doesn't move due to collision
-						contact.SetEnabled(false);
-						// Ignore multiple collision points
-						if (drop === undefined || !drop.alive()) {
-							return;
+						// Asteroid has hit ship blocks, destroy the asteroid
+						if (!shipFixture.m_isSensor && drop.isOwner(player)) {
+							// Disable contact so player doesn't move due to collision
+							contact.SetEnabled(false);
+							// Ignore multiple collision points
+							if (drop === undefined || !drop.alive()) {
+								return;
+							}
+							var block = drop.block();
+							ige.emit('block collected',
+								[player, block.classId()]);
+							drop.destroy();
 						}
-						var block = drop.block();
-						ige.emit('block collected',
-							[player, block.classId()]);
-						drop.destroy();
 					}
 				}
 			});

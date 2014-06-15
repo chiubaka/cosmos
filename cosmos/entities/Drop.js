@@ -32,6 +32,7 @@ var Drop = BlockGrid.extend({
 	init: function(data) {
 		BlockGrid.prototype.init.call(this, data);
 		this.category(Drop.BOX2D_CATEGORY);
+		this.depth(Drop.DEPTH);
 
 		this.height(Block.HEIGHT);
 		this.width(Block.WIDTH);
@@ -162,5 +163,13 @@ var Drop = BlockGrid.extend({
  * @memberof Drop
  */
 Drop.BOX2D_CATEGORY = 'drop';
+
+/**
+ * The depth that a Drop should be rendered on. Should be above {@link Player}s and other {@link BlockGrid}s.
+ * @constant {number}
+ * @default
+ * @memberof Drop
+ */
+Drop.DEPTH = 3;
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Drop; }

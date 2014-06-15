@@ -102,7 +102,7 @@ var Player = BlockGrid.extend({
 	 * @instance
 	 */
 	_initClient: function() {
-		this.depth(1);
+		this.depth(Player.DEPTH);
 	},
 
 	/**
@@ -318,5 +318,14 @@ Player.PLAYER_START_RADIUS = 4000;
  * @memberof Player
  */
 Player.BOX2D_CATEGORY = 'player';
+
+/**
+ * The default depth layer for {@link Player}s when rendered to the screen. Should be rendered above other
+ * {@link BlockGrid}s.
+ * @constant {number}
+ * @default
+ * @memberof Player
+ */
+Player.DEPTH = 2;
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Player; }

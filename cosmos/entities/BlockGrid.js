@@ -1650,7 +1650,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			this.get(row, col - 1) == undefined) {
 			block.mouseDown(event, control);
 		}
-	},
+	}
 });
 
 /**
