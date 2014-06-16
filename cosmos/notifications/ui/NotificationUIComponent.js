@@ -16,10 +16,11 @@ var NotificationUIComponent = IgeEventingClass.extend({
 					// Add the html
 					$('body').append($(html));
 
-					// Load the editor stylesheet
+					// Load the notification stylesheet
 					ige.requireStylesheet(self.notificationUIRoot + 'notification.css');
 
-					ige.notification.registerInfoHandler(ige.notification.notificationUI.infoHandler)
+					ige.notification.registerInfoHandler(ige.notification.notificationUI.infoHandler);
+					ige.notification.registerErrorHandler(ige.notification.notificationUI.errorHandler);
 				});
 			}, null, true);
 

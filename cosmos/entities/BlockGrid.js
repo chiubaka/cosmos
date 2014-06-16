@@ -1664,6 +1664,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 			this.get(row, col - 1) == undefined) {
 			block.mouseDown(event, control);
 		}
+		else {
+			ige.notification.emit('notificationError',
+				NotificationDefinitions.errorKeys.not_minable)
+		}
 	},
 });
 
