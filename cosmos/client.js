@@ -121,7 +121,8 @@ var Client = IgeClass.extend({
 
 						// Enable notifications
 						ige.addComponent(CosmosNotificationComponent)
-						ige.notification.start();
+						ige.notification.registerInfoHandler(new NotificationUI().infoHandler)
+							.start();
 
 						// Ask the server to create an entity for us
 						ige.network.send('playerEntity', {sid: self.getSessionId()});

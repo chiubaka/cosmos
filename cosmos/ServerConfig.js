@@ -52,9 +52,8 @@ var config = {
 		{ name: 'DbPlayer', path: './db/DbPlayer' },
 		{ name: 'DbSession', path: './db/DbSession' },
 
-		/* Messages */
-		{ name: 'Message', path: './entities/Message' },
-		{ name: 'MessageDefinitions', path: './messages/MessageDefinitions'},
+		/* Notifications */
+		{ name: 'NotificationDefinitions', path: './notifications/NotificationDefinitions'},
 
 		/* === SUPPLEMENTAL FUNCTIONALITY=== */
 		/* Debugging */
