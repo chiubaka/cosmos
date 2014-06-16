@@ -52,6 +52,10 @@ var config = {
 		{ name: 'DbPlayer', path: './db/DbPlayer' },
 		{ name: 'DbSession', path: './db/DbSession' },
 
+		/* Messages */
+		{ name: 'Message', path: './entities/Message' },
+		{ name: 'MessageDefinitions', path: './messages/MessageDefinitions'},
+
 		/* === SUPPLEMENTAL FUNCTIONALITY=== */
 		/* Debugging */
 		{ name: 'FixtureDebuggingEntity', path: './debug/FixtureDebuggingEntity' },

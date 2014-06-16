@@ -220,6 +220,7 @@ var ServerNetworkEvents = {
 			// Activate mining lasers
 			player.fireMiningLasers(targetBlock);
 		}
+		ige.network.stream.queueMessage('cosmosDisplayNotification', 'Test Message!', clientId);
 	},
 
 	_onConstructNew: function(data, clientId) {

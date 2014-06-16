@@ -119,6 +119,10 @@ var Client = IgeClass.extend({
 						ige.network.addComponent(IgeStreamComponent)
 							.stream.renderLatency(80); // Render the simulation 160 milliseconds in the past
 
+						// Enable notifications
+						ige.addComponent(CosmosNotificationComponent)
+						ige.notification.start();
+
 						// Ask the server to create an entity for us
 						ige.network.send('playerEntity', {sid: self.getSessionId()});
 

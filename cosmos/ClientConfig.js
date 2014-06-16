@@ -56,6 +56,10 @@ var igeClientConfig = {
 		'./models/capabilities/ConstructCapability.js',
 		'./models/capabilities/MineCapability.js',
 
+		/* Messages */
+		'./entities/Message.js',
+		'./messages/MessageDefinitions.js',
+
 		/* === USER INTERFACE === */
 		/* HUD */
 		'./ui/HUDManager.js',

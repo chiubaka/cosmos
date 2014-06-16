@@ -10,9 +10,6 @@ var Server = IgeClass.extend({
 		self.LAYER_HUD = 90;
 		self.DEPTH_PLAYER = 90;
 
-		// Load our blocks
-		self.obj = [];
-
 		// set the framerate
 		ige.setFps(60);
 
@@ -30,6 +27,9 @@ var Server = IgeClass.extend({
 
 		// Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);
+
+		// Add server side notification component
+		ige.addComponent(CosmosNotificationComponent)
 
 		// Define an object to hold references to our player entities
 		this.players = {};
