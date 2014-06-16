@@ -8,8 +8,8 @@
 /* TODO: Make notifications horizontally centered */
 #notification {
   position: absolute;
-  left: 50%;
-  bottom: 10%;
+  width: 100%;
+	bottom: 10%;
   color: #ffffff;
   padding: 1px;
 	font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;

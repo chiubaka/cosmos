@@ -28,7 +28,8 @@ var NotificationUIComponent = IgeEventingClass.extend({
 		this.log('Notification UI component initiated!');
 	},
 
-	// TODO: Handle multiple messages in queue better
+	// TODO: Handle multiple messages in queue better, perhaps make a new div for
+	// each message
 	infoHandler: function (queue) {
 		for (var i = 0; i < queue.length; i++) {
 			var notification = queue.pop();
