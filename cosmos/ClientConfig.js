@@ -58,7 +58,8 @@ var igeClientConfig = {
 
 		/* Notifications */
 		'./notifications/NotificationDefinitions.js',
-		'./notifications/NotificationUI.js',
+		'./notifications/NotificationComponent.js',
+		'./notifications/ui/NotificationUIComponent.js',
 
 		/* === USER INTERFACE === */
 		/* HUD */

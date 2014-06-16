@@ -53,6 +53,7 @@ var config = {
 		{ name: 'DbSession', path: './db/DbSession' },
 
 		/* Notifications */
+		{ name: 'NotificationComponent', path: './notifications/NotificationComponent'},
 		{ name: 'NotificationDefinitions', path: './notifications/NotificationDefinitions'},
 
 		/* === SUPPLEMENTAL FUNCTIONALITY=== */

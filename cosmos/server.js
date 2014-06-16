@@ -29,7 +29,7 @@ var Server = IgeClass.extend({
 		this.implement(ServerNetworkEvents);
 
 		// Add server side notification component
-		ige.addComponent(CosmosNotificationComponent)
+		ige.addComponent(NotificationComponent)
 
 		// Define an object to hold references to our player entities
 		this.players = {};

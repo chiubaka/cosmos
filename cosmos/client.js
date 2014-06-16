@@ -120,8 +120,10 @@ var Client = IgeClass.extend({
 							.stream.renderLatency(80); // Render the simulation 160 milliseconds in the past
 
 						// Enable notifications
-						ige.addComponent(CosmosNotificationComponent)
-						ige.notification.registerInfoHandler(new NotificationUI().infoHandler)
+						ige.addComponent(NotificationComponent);
+						ige.notification.addComponent(NotificationUIComponent);
+
+						ige.notification.registerInfoHandler(ige.notification.notificationUI.infoHandler)
 							.start();
 
 						// Ask the server to create an entity for us
