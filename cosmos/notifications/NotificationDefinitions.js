@@ -4,7 +4,7 @@ var NotificationDefinitions = {
 	},
 
 	infos: {
-		1: 'Test!',
+		1: 'Test Message!',
 	},
 
 	errorKeys: {

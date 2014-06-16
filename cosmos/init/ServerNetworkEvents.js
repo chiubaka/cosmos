@@ -220,7 +220,8 @@ var ServerNetworkEvents = {
 			// Activate mining lasers
 			player.fireMiningLasers(targetBlock);
 		}
-		ige.network.stream.queueMessage('notificationInfo', 'Test Message!', clientId);
+		ige.network.stream.queueMessage('notificationInfo',
+			NotificationDefinitions.infoKeys.test, clientId);
 	},
 
 	_onConstructNew: function(data, clientId) {

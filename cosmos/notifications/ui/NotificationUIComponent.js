@@ -32,15 +32,20 @@ var NotificationUIComponent = IgeEventingClass.extend({
 	// each message
 	infoHandler: function (queue) {
 		for (var i = 0; i < queue.length; i++) {
-			var notification = queue.pop();
-			$('#notification').html(notification);
-			$('#notification').fadeIn(150).delay(3000).fadeOut("slow")
+			var infosIndex = queue.pop();
+			$('#notificationInfo').html(NotificationDefinitions.infos[infosIndex]);
+			$('#notificationInfo').fadeIn(150).delay(3000).fadeOut("slow")
 		}
 
 	},
 
 	errorHandler: function (queue) {
-	
+		for (var i = 0; i < queue.length; i++) {
+			var errorsIndex = queue.pop();
+			$('#notificationError').html(NotificationDefinitions.errors[errorsIndex]);
+			$('#notificationError').fadeIn(150).delay(3000).fadeOut("slow")
+		}
+
 	},
 
 	loadHtml: function (url, callback) {
