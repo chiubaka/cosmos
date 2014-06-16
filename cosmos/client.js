@@ -121,9 +121,7 @@ var Client = IgeClass.extend({
 
 						// Enable notifications
 						ige.addComponent(NotificationComponent);
-						ige.notification.addComponent(NotificationUIComponent);
-
-						ige.notification.registerInfoHandler(ige.notification.notificationUI.infoHandler)
+						ige.notification.addComponent(NotificationUIComponent)
 							.start();
 
 						// Ask the server to create an entity for us
