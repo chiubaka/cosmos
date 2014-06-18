@@ -4,26 +4,31 @@ var NotificationComponent = IgeEventingClass.extend({
 	self: undefined,
 	_infoHandler: undefined,
 	_errorHandler: undefined,
+	_successHandler: undefined,
 
 	init: function (entity, options) {
 
 		if (ige.isServer) {
 			ige.network.define('notificationInfo');
 			ige.network.define('notificationError');
+			ige.network.define('notificationSuccess');
 		}
 
 
 		if (ige.isClient) {
 			this._queuedInfos = [];
 			this._queuedErrors = [];
+			this._queuedSuccesses = [];
 
 			// Register client notifications
 			this.on('notificationInfo', this._onNotificationInfo);
 			this.on('notificationError', this._onNotificationError);
+			this.on('notificationSuccess', this._onNotificationSuccess);
 
 			// Register server notifications
 			ige.network.define('notificationInfo', this._onNotificationInfo);
 			ige.network.define('notificationError', this._onNotificationError);
+			ige.network.define('notificationSuccess', this._onNotificationSuccess);
 			self = this;
 		}
 
@@ -54,6 +59,12 @@ var NotificationComponent = IgeEventingClass.extend({
 		return this;
 	},
 
+	registerSuccessHandler: function (handler) {
+		this._successHandler = handler;
+		return this;
+	},
+
+
 	unRegisterInfoHandler: function () {
 		this._infoHandler = undefined;
 		return this;
@@ -64,6 +75,10 @@ var NotificationComponent = IgeEventingClass.extend({
 		return this;
 	},
 
+	unRegisterSuccessHandler: function () {
+		this._successHandler = undefined;
+		return this;
+	},
 
 	/**
 	 * Updates notifications on the screen.
@@ -76,10 +91,13 @@ var NotificationComponent = IgeEventingClass.extend({
 			if (self._infoHandler !== undefined) {
 				self._infoHandler(self._queuedInfos);
 			}
-
 			// Handle error notifications
 			if (self._errorHandler !== undefined) {
 				self._errorHandler(self._queuedErrors);
+			}
+			// Handle success notifications
+			if (self._successHandler !== undefined) {
+				self._successHandler(self._queuedSuccesses);
 			}
 		}
 	},
@@ -93,6 +111,12 @@ var NotificationComponent = IgeEventingClass.extend({
 	_onNotificationError: function (notification) {
 		if (self._active && (self._errorHandler !== undefined)) {
 			self._queuedErrors.push(notification);
+		}
+	},
+
+	_onNotificationSuccess: function (notification) {
+		if (self._active && (self._successHandler !== undefined)) {
+			self._queuedSuccesses.push(notification);
 		}
 	}
 });

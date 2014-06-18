@@ -663,7 +663,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return constructionZoneLocations;
 	},
 
-	processBlockActionServer: function(data, player) {
+	processBlockActionServer: function(data, player, clientId) {
 		var self = this;
 
 		switch (data.action) {
@@ -713,6 +713,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 						self.remove(data.row, data.col);
 						data.action = 'remove';
 						ige.network.send('blockAction', data);
+
+						ige.network.stream.queueMessage('notificationSuccess',
+							NotificationDefinitions.successKeys.minedBlock, clientId);
 					}
 				}, Block.MINING_INTERVAL / player.numBlocksOfType(MiningLaserBlock.prototype.classId()));
 				return true;
@@ -1665,8 +1668,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 			block.mouseDown(event, control);
 		}
 		else {
+			// Notify player that block is not minable
 			ige.notification.emit('notificationError',
-				NotificationDefinitions.errorKeys.not_minable)
+				NotificationDefinitions.errorKeys.notMinable);
 		}
 	},
 });

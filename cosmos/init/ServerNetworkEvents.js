@@ -213,15 +213,13 @@ var ServerNetworkEvents = {
 		}
 
 		data.action = 'mine';
-		if(blockGrid.processBlockActionServer(data, player)) {
+		if(blockGrid.processBlockActionServer(data, player, clientId)) {
 			player.mining = true;
 
 			var targetBlock = blockGrid.get(data.row, data.col);
 			// Activate mining lasers
 			player.fireMiningLasers(targetBlock);
 		}
-		ige.network.stream.queueMessage('notificationInfo',
-			NotificationDefinitions.infoKeys.test, clientId);
 	},
 
 	_onConstructNew: function(data, clientId) {
@@ -247,6 +245,8 @@ var ServerNetworkEvents = {
 
 			var confirmData = { category: 'construct', action: 'new', label: data.selectedType };
 			ige.network.send('confirm', confirmData, clientId);
+			ige.network.stream.queueMessage('notificationSuccess', 
+				NotificationDefinitions.successKeys.constructNewBlock, clientId);
 		}
 	},
 
