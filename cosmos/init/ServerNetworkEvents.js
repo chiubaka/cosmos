@@ -217,7 +217,7 @@ var ServerNetworkEvents = {
 		}
 
 		data.action = 'mine';
-		if(blockGrid.processBlockActionServer(data, player, clientId)) {
+		if(blockGrid.processBlockActionServer(data, player)) {
 			player.mining = true;
 
 			var targetBlock = blockGrid.get(data.row, data.col);

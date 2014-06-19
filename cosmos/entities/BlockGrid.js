@@ -686,7 +686,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return constructionZoneLocations;
 	},
 
-	processBlockActionServer: function(data, player, clientId) {
+	processBlockActionServer: function(data, player) {
 		var self = this;
 
 		switch (data.action) {
@@ -738,7 +738,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 						ige.network.send('blockAction', data);
 
 						ige.network.stream.queueCommand('notificationSuccess',
-							NotificationDefinitions.successKeys.minedBlock, clientId);
+							NotificationDefinitions.successKeys.minedBlock, player.clientId());
 					}
 				}, Block.MINING_INTERVAL / player.numBlocksOfType(MiningLaserBlock.prototype.classId()));
 				return true;
