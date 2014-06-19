@@ -737,7 +737,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 						data.action = 'remove';
 						ige.network.send('blockAction', data);
 
-						ige.network.stream.queueMessage('notificationSuccess',
+						ige.network.stream.queueCommand('notificationSuccess',
 							NotificationDefinitions.successKeys.minedBlock, clientId);
 					}
 				}, Block.MINING_INTERVAL / player.numBlocksOfType(MiningLaserBlock.prototype.classId()));

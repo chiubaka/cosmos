@@ -238,7 +238,7 @@ var Player = BlockGrid.extend({
 
 		// Do not start mining if player has no mining lasers
 		if (this.numBlocksOfType(MiningLaserBlock.prototype.classId()) === 0) {
-			ige.network.stream.queueMessage('notificationError',
+			ige.network.stream.queueCommand('notificationError',
 				NotificationDefinitions.errorKeys.noMiningLaser, clientId);
 			return false;
 		}
@@ -313,7 +313,7 @@ var Player = BlockGrid.extend({
 
 			if (this.controls.key.left || this.controls.key.right) {
 				if (numRotationalThrusters < 1) {
-					ige.network.stream.queueMessage('notificationError',
+					ige.network.stream.queueCommand('notificationError',
 						NotificationDefinitions.errorKeys.noRotationalThruster, this._clientId);
 				}
 
@@ -347,7 +347,7 @@ var Player = BlockGrid.extend({
 
 				// Notify player that they cannot fly without an engine
 				if (engines.length < 1) {
-					ige.network.stream.queueMessage('notificationError',
+					ige.network.stream.queueCommand('notificationError',
 						NotificationDefinitions.errorKeys.noEngine, this._clientId);
 				}
 

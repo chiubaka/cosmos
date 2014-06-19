@@ -161,7 +161,7 @@ var ServerNetworkEvents = {
 		}
 
 		player.relocate();
-		ige.network.stream.queueMessage('notificationSuccess',
+		ige.network.stream.queueCommand('notificationSuccess',
 			NotificationDefinitions.successKeys.relocateShip, clientId);
 	},
 
@@ -181,7 +181,7 @@ var ServerNetworkEvents = {
 		ige.server._destroyPlayer(clientId, player);
 		// We pass no third or fourth argument to _createPlayer() here, which requests a completely new ship
 		ige.server._createPlayer(clientId, playerId);
-		ige.network.stream.queueMessage('notificationSuccess',
+		ige.network.stream.queueCommand('notificationSuccess',
 			NotificationDefinitions.successKeys.newShip, clientId);
 	},
 
@@ -249,7 +249,7 @@ var ServerNetworkEvents = {
 
 			var confirmData = { category: 'construct', action: 'new', label: data.selectedType };
 			ige.network.send('confirm', confirmData, clientId);
-			ige.network.stream.queueMessage('notificationSuccess', 
+			ige.network.stream.queueCommand('notificationSuccess', 
 				NotificationDefinitions.successKeys.constructNewBlock, clientId);
 		}
 	},
