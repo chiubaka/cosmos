@@ -131,6 +131,7 @@ var ServerNetworkEvents = {
 		player.addSensor(300)
 			.attractionStrength(1)
 			.streamMode(1)
+			.clientId(clientId)
 			.mount(ige.server.spaceGameScene)
 			.relocate();
 
@@ -160,6 +161,8 @@ var ServerNetworkEvents = {
 		}
 
 		player.relocate();
+		ige.network.stream.queueMessage('notificationSuccess',
+			NotificationDefinitions.successKeys.relocateShip, clientId);
 	},
 
 	/**
@@ -178,6 +181,8 @@ var ServerNetworkEvents = {
 		ige.server._destroyPlayer(clientId, player);
 		// We pass no third or fourth argument to _createPlayer() here, which requests a completely new ship
 		ige.server._createPlayer(clientId, playerId);
+		ige.network.stream.queueMessage('notificationSuccess',
+			NotificationDefinitions.successKeys.newShip, clientId);
 	},
 
 	/**
@@ -201,14 +206,13 @@ var ServerNetworkEvents = {
 			return;
 		}
 
-		// Do not start mining if we are already mining or if the player does not have any mining lasers.
-		if (player.mining || player.numBlocksOfType(MiningLaserBlock.prototype.classId()) === 0) {
-			return;
-		}
-
 		// TODO: Guard against bogus blockGridId from client
 		var blockGrid = ige.$(data.blockGridId);
 		if (blockGrid === undefined) {
+			return;
+		}
+
+		if (!player.canMine()) {
 			return;
 		}
 

@@ -103,6 +103,7 @@
 		this.mouseDown(function(event, control) {
 			ige.network.send('relocate');
 			ige.emit('relocate button clicked');
+			control.stopPropagation();
 		});
 	}
 });
