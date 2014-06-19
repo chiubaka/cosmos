@@ -31,6 +31,7 @@ var Client = IgeClass.extend({
 		// Load the textures we want to use
 		this.textures = {
 			block: new IgeTexture(gameRoot + 'assets/BlockTexture.js'),
+			glow: new IgeTexture(gameRoot + 'assets/GlowEffectTexture.js'),
 			background_helix_nebula: new IgeTexture(gameRoot +
 				'assets/backgrounds/helix_nebula.jpg'),
 			fixtureDebuggingTexture: new IgeTexture(gameRoot +

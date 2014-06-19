@@ -316,7 +316,50 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	/**
+	 * Removes the {@link Block} at the specified row and column from the grid and creates a {@link Drop} for the
+	 * removed {@link Block}.
+	 * @param row {number} The row of the {@link Block} to drop.
+	 * @param col {number} The col of the {@link Block} to drop.
+	 * @param player {IgeEntityBox2d} The {@link Player} that caused this {@link Block} to be dropped. Used to constrain
+	 * who can pick up the {@link Drop}. If undefined, all players will be able to pick up the {@link Drop}.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	drop: function(row, col, player) {
+		if (row === undefined || col === undefined) {
+			return;
+		}
+
+		var block = this.get(row, col);
+		if (block === undefined) {
+			return;
+		}
+
+		// Calculate position of new Drop, taking into account rotation
+		var gridX = this.translate().x();
+		var gridY = this.translate().y();
+		var fixtureX = block.fixtureDef().shape.data.x;
+		var fixtureY = block.fixtureDef().shape.data.y;
+		var theta = this.rotate().z();
+
+		var finalX = Math.cos(theta) * fixtureX - Math.sin(theta) * fixtureY + gridX;
+		var finalY = Math.sin(theta) * fixtureX + Math.cos(theta) * fixtureY + gridY;
+
+		this.remove(row, col);
+
+		new Drop().mount(ige.server.spaceGameScene)
+			.block(block)
+			.owner(player)
+			.translateTo(finalX, finalY, 0)
+			.rotate().z(theta)
+			.streamMode(1);
+	},
+
+	/**
 	 * Removes the block at the specified row and column from the grid.
+	 * NOTE: Destroys this {@link BlockGrid} if the number of {@link Block}s in the {@link BlockGrid} reaches 0 after
+	 * removal. If there is state that you need about the {@link BlockGrid} (e.g. the location), you must save it before
+	 * calling {@link BlockGrid#remove|remove}.
 	 * @param row {number} The row of the block to remove.
 	 * @param col {number} The col of the block to remove.
 	 * @memberof BlockGrid
@@ -344,33 +387,13 @@ var BlockGrid = IgeEntityBox2d.extend({
 				block.fixtureDebuggingEntity().destroy();
 			}
 
-			// Calculate position of new BlockGrid, taking into account rotation
-			var gridX = this.translate().x();
-			var gridY = this.translate().y();
-			var fixtureX = block.fixtureDef().shape.data.x;
-			var fixtureY = block.fixtureDef().shape.data.y;
-			var theta = this.rotate().z();
-
-			var finalX = 	Math.cos(theta) * fixtureX -
-				Math.sin(theta) * fixtureY + gridX;
-			var finalY =	Math.sin(theta) * fixtureX +
-				Math.cos(theta) * fixtureY + gridY;
-
-			// Create new IgeEntityBox2d separate from parent
-			var newGrid = new BlockGrid()
-				.category('smallAsteroid')
-				.mount(ige.server.spaceGameScene)
-				.fromBlockTypeMatrix([[block.classId()]])
-				.translateTo(finalX, finalY, 0)
-				.rotate().z(theta)
-				.streamMode(1);
-
 			// TODO: Compute correct velocities for new bodies, if needed
 
 			// TODO: Split BlockGrids and make 1x1 asteroids smallAsteroids so
 			// they get attracted
 
 			// TODO: Implement flood fill algorithm to disconnect disjoint bodies from each other.
+			// FLOOD FILL MUST NOT DESTROY THIS BlockGrid!
 		}
 
 		this._numBlocks--;
@@ -385,7 +408,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		block.onRemoved();
 
-		block.destroy();
+		block.unMount();
 
 		// Destroy this BlockGrid to clean up memory.
 		if (this._numBlocks === 0) {
@@ -709,8 +732,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 						player.mining = false;
 						player.turnOffMiningLasers(block);
 
-						// Remove block server side, then send remove msg to client
-						self.remove(data.row, data.col);
+						// Drop block server side, then send drop msg to client
+						self.drop(data.row, data.col, player);
 						data.action = 'remove';
 						ige.network.send('blockAction', data);
 
@@ -786,43 +809,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this._debugFixtures = flag;
 		return this;
 	},
-
-	/**
-	 * Is update called once per time-step per viewport, or just once per time-step?
-	 */
-	update: function(ctx) {
-		if (ige.isServer) {
-
-			// Attract the block grid to another body. For example, small asteroids
-			// are attracted to player ships.
-			if (this.attractedTo !== undefined) {
-				var attractedToBody = this.attractedTo._box2dBody;
-				var thisBody = this._box2dBody;
-				var impulse = new ige.box2d.b2Vec2(0, 0);
-				impulse.Add(attractedToBody.GetWorldCenter());
-				impulse.Subtract(thisBody.GetWorldCenter());
-				impulse.Multiply(this.attractedTo.attractionStrength());
-				thisBody.ApplyImpulse(impulse, thisBody.GetWorldCenter());
-			}
-
-
-			//This is just a little bit larger than the background image. That's why I chose this size.
-			var MAX_X = 7000;
-			var MAX_Y = 7000;
-			var x = this.translate().x();
-			var y = this.translate().y();
-
-			if (x > MAX_X || x < -MAX_X) {
-				this.translateTo(-x, y, 0);
-			}
-			if (y > MAX_Y || y < -MAX_Y) {
-				this.translateTo(x, -y, 0);
-			}
-		}
-
-		IgeEntityBox2d.prototype.update.call(this, ctx);
-	},
-
 
 	/**
 	 * Given a {@link Block}, returns the neighboring locations to the {@link Block} that do not have other blocks.
@@ -1672,7 +1658,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			ige.notification.emit('notificationError',
 				NotificationDefinitions.errorKeys.notMinable);
 		}
-	},
+	}
 });
 
 /**
@@ -1707,13 +1693,5 @@ BlockGrid.BLOCK_FIXTURE_PADDING = .1;
  * @memberof BlockGrid
  */
 BlockGrid.DEPTH = 0;
-/**
- * The depth layer to place the block effects on.
- * @constant {number}
- * @memberof BlockGrid
- * @todo This may not actually be constant, since different effects may need to be mounted either above or below the
- * {@link BlockGrid} layer.
- */
-BlockGrid.EFFECTS_DEPTH = BlockGrid.DEPTH + 1;
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = BlockGrid; }

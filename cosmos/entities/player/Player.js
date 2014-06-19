@@ -53,7 +53,7 @@ var Player = BlockGrid.extend({
 
 		var self = this;
 
-		this.category('player');
+		this.category(Player.BOX2D_CATEGORY);
 		this._attractionStrength = 1;
 
 		this.controls = {
@@ -130,7 +130,7 @@ var Player = BlockGrid.extend({
 	 * @instance
 	 */
 	_initClient: function() {
-		this.depth(1);
+		this.depth(Player.DEPTH);
 	},
 
 	/**
@@ -385,5 +385,22 @@ var Player = BlockGrid.extend({
  * @memberof Player
  */
 Player.PLAYER_START_RADIUS = 4000;
+
+/**
+ * The Box2D category of all player entities. Used by Box2D to determine what to do in certain collision scenarios.
+ * @constant {string}
+ * @default
+ * @memberof Player
+ */
+Player.BOX2D_CATEGORY = 'player';
+
+/**
+ * The default depth layer for {@link Player}s when rendered to the screen. Should be rendered above other
+ * {@link BlockGrid}s.
+ * @constant {number}
+ * @default
+ * @memberof Player
+ */
+Player.DEPTH = 2;
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Player; }

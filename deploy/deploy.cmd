@@ -10,7 +10,7 @@ goto deploy_end
 :endpoint_client
   echo Deploying client endpoint.
   copy /Y "deploy\deploy.client.cmd" "deploy.client.cmd"
-	deploy.client.cmd
+	call deploy.client.cmd
   goto end
 :endpoint_server
   echo Deploying server endpoint.
@@ -24,7 +24,7 @@ goto deploy_end
   goto end
 :default 
   echo You have to set the ENDPOINT_TYPE setting to 'client', 'server', or 'docs'
-  goto end
+  exit /b 1
 :end
   VER > NUL 
   echo Deployment complete!
