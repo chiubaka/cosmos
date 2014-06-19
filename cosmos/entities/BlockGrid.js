@@ -1532,6 +1532,18 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return {x: drawLocation.x - oldX, y: drawLocation.y - oldY};
 	},
 
+	/**
+	 * Given a click event, locates the {@link Block} in this {@link BlockGrid} that was clicked by:
+	 * 1. Unrotating the click coordinate
+	 * 2. Comparing the unrotated click coordinate to where the blocks would be if the BlockGrid were not rotated
+	 * @param event {Object} The event data for the click event.
+	 * @param control {Object} The control data for the click event.
+	 * @returns {Block|undefined} The {@link Block} that was clicked or undefined if no {@link Block} exists at the
+	 * clicked location.
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
 	_blockForClick: function(event, control) {
 		// event.igeBaseX and event.igeBaseY give coordinates relative to the clicked entity's origin (center)
 
@@ -1589,10 +1601,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	/**
-	 * The general strategy for handling clicks is to:
-	 * 1. Unrotate the click coordinate
-	 * 2. Compare the unrotated click coordinate to where the blocks would be if the BlockGrid were not rotated
-	 * 3. Fire the mouseDown() event on the appropriate block
+	 * Determines which {@link Block} in the {@link BlockGrid} was clicked and then passes the clicked {@link Block} to
+	 * the {@link BlockGrid#_blockClickHandler}, which can be overriden by subclasses.
 	 * @param event {Object} Information about the event that was fired.
 	 * @param control {Object} Information about the control that was used when the event was fired. (Not really sure
 	 * what this is.)
