@@ -10,7 +10,14 @@
 var NotificationComponent = IgeEventingClass.extend({
 	classId: 'NotificationComponent',
 	componentId: 'notification',
-	self: undefined,
+	/** 
+	 * True if component's behavior is running every engineStep
+	 * @type {Boolean}
+	 * @memberof NotificationComponent
+	 * @private
+	 * @instance
+	 */
+	_active: undefined,
 	/** 
 	 * Displays queued info notifications
 	 * @type {function}
@@ -60,7 +67,6 @@ var NotificationComponent = IgeEventingClass.extend({
 			ige.network.define('notificationInfo', this._onNotificationInfo);
 			ige.network.define('notificationError', this._onNotificationError);
 			ige.network.define('notificationSuccess', this._onNotificationSuccess);
-			self = this;
 		}
 
 		this.log('Notification component initiated!');
@@ -173,12 +179,13 @@ var NotificationComponent = IgeEventingClass.extend({
 
 	/**
 	 * Call notification handlers, which will display notifications on the screen.
-	 * @param ctx {CanvasContext?} Optional canvas context
+	 * @param ctx {CanvasContext} Canvas context
 	 * @private
 	 * @memberof NotificationComponent
 	 * @instance
 	 */
 	_behaviour: function (ctx) {
+		var self = ige.notification;
 		if (self._active) {
 			// Handle info notifications
 			if (self._infoHandler !== undefined) {
@@ -203,6 +210,7 @@ var NotificationComponent = IgeEventingClass.extend({
 	 * @instance
 	 */
 	_onNotificationInfo: function (notification) {
+		var self = ige.notification;
 		if (self._active && (self._infoHandler !== undefined)) {
 			self._queuedInfos.push(notification);
 		}
@@ -216,6 +224,7 @@ var NotificationComponent = IgeEventingClass.extend({
 	 * @instance
 	 */
 	_onNotificationError: function (notification) {
+		var self = ige.notification;
 		if (self._active && (self._errorHandler !== undefined)) {
 			self._queuedErrors.push(notification);
 		}
@@ -229,6 +238,7 @@ var NotificationComponent = IgeEventingClass.extend({
 	 * @instance
 	 */
 	_onNotificationSuccess: function (notification) {
+		var self = ige.notification;
 		if (self._active && (self._successHandler !== undefined)) {
 			self._queuedSuccesses.push(notification);
 		}
