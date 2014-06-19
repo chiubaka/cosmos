@@ -1,6 +1,6 @@
 /**
  * The NotificationComponent handles both server and client notifications.
- * The NotificationComponent three queues: Info, Error, and Success. 
+ * The NotificationComponent has three queues: Info, Error, and Success. 
  * Each engineStep, the behavior for the notificationComponent is called.
  * The behavior calls the registered notification UI functions.
  * This way, the UI is decoupled from the backend.
