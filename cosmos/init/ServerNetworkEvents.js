@@ -233,10 +233,7 @@ var ServerNetworkEvents = {
 
 		if (blockToPlace !== undefined) {
 			//console.log("Placing item: " + blockToPlace.classId(), 'info');
-			new BlockGrid()
-				.category('smallAsteroid')
-				// TODO: Math.random() isn't safe here! Also, there's no good reason to set an id on this BlockGrid.
-				.id('littleAsteroid' + Math.random())
+			new BlockStructure()
 				.streamMode(1)
 				.mount(ige.$("spaceGameScene"))
 				.depth(100)

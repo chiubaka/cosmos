@@ -8,7 +8,7 @@
  * @todo This design should be replaced by something more natural (like there should be a ship class) and/or
  * something component-based.
  */
-var Player = BlockGrid.extend({
+var Player = BlockStructure.extend({
 	classId: 'Player',
 
 	/**
@@ -39,7 +39,7 @@ var Player = BlockGrid.extend({
 	mining: false,
 
 	init: function(data) {
-		BlockGrid.prototype.init.call(this, data);
+		BlockStructure.prototype.init.call(this, data);
 
 		var self = this;
 
