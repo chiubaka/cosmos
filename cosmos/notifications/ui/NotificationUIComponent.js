@@ -1,3 +1,10 @@
+/**
+ * The NotificationUIComponent displays info, error, and success notifications.
+ * It registers notification handlers in the NotificationComponent
+ * backend.
+ * @class
+ * @namespace
+ */
 var NotificationUIComponent = IgeEventingClass.extend({
 	classId: 'NotificationUIComponent',
 	componentId: 'notificationUI',
@@ -7,7 +14,6 @@ var NotificationUIComponent = IgeEventingClass.extend({
 		var self = this;
 
 		if (ige.isClient) {
-
 			// Load Alertify, a notification library
 			ige.requireScript(self.notificationUIRoot + 'vendor/alertify.js');
 
@@ -28,6 +34,13 @@ var NotificationUIComponent = IgeEventingClass.extend({
 		this.log('Notification UI component initiated!');
 	},
 
+	/**
+	 * Displays queued info notifications using alertify.js
+	 * @callback infoNotificationCallback
+	 * @param queue {Array} Queued notifications
+	 * @memberof NotificationUIComponent
+	 * @instance
+	 */
 	infoHandler: function (queue) {
 		for (var i = 0; i < queue.length; i++) {
 			var infosIndex = queue.pop();
@@ -36,6 +49,13 @@ var NotificationUIComponent = IgeEventingClass.extend({
 		}
 	},
 
+	/**
+	 * Displays queued error notifications using alertify.js
+	 * @callback errorNotificationCallback
+	 * @param queue {Array} Queued notifications
+	 * @memberof NotificationUIComponent
+	 * @instance
+	 */
 	errorHandler: function (queue) {
 		for (var i = 0; i < queue.length; i++) {
 			var errorsIndex = queue.pop();
@@ -44,21 +64,19 @@ var NotificationUIComponent = IgeEventingClass.extend({
 		}
 	},
 
+	/**
+	 * Displays queued success notifications using alertify.js
+	 * @callback successNotificationCallback
+	 * @param queue {Array} Queued notifications
+	 * @memberof NotificationUIComponent
+	 * @instance
+	 */
 	successHandler: function (queue) {
 		for (var i = 0; i < queue.length; i++) {
 			var successesIndex = queue.pop();
 			var notification = NotificationDefinitions.successes[successesIndex];
 			alertify.log(notification, "success");
 		}
-	},
-
-
-	loadHtml: function (url, callback) {
-		$.ajax({
-			url: url,
-			success: callback,
-			dataType: 'html'
-		});
 	}
 });
 
