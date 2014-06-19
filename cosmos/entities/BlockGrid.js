@@ -658,51 +658,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 				return true;
 
 			// TODO: Vary mining speed based on block material
-			case 'mine':
-				var block = self.get(data.row, data.col);
-				if (block === undefined) {
-					console.log("Request to mine undefined block. row: " + data.row + ", col: " + data.col);
-					return false;
-				}
-				// Blocks should only be mined by one player, for now. Note that there is a race condition here.
-				if((block === undefined) || block.isBeingMined()) {
-					console.log("Request to mine undefined or busy block. row: " + data.row + ", col: " + data.col);
-					return false;
-				}
-				block.isBeingMined(true);
-
-				block._decrementHealthIntervalId = setInterval(function() {
-					if (block._hp > 0) {
-						var damageData = {
-							blockGridId: data.blockGridId,
-							action: 'damage',
-							row: data.row,
-							col: data.col,
-							amount: 1
-						};
-						block.damage(1);
-						ige.network.send('blockAction', damageData);
-					}
-
-					if (block._hp == 0) {
-						clearInterval(block._decrementHealthIntervalId);
-
-						// Emit a message saying that a block has been mined, but not
-						// necessarily collected. This is used for removing the laser.
-						var blockClassId = block.classId();
-						ige.emit('block mined', [player, blockClassId, block]);
-
-						player.mining = false;
-						player.turnOffMiningLasers(block);
-
-						// Drop block server side, then send drop msg to client
-						self.drop(data.row, data.col, player);
-						data.action = 'remove';
-						ige.network.send('blockAction', data);
-					}
-				}, Block.MINING_INTERVAL / player.numBlocksOfType(MiningLaserBlock.prototype.classId()));
-				return true;
-
 			case 'add':
 				// Add block server side, then send add msg to client
 				if(!self.add(data.row, data.col, Block.blockFromClassId(data.selectedType))) {
@@ -713,7 +668,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 					ige.network.send('blockAction', data);
 					return true;
 				}
-
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
 				return false;
@@ -721,13 +675,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	processBlockActionClient: function(data) {
-		var self = this;
-
 		switch (data.action) {
 			case 'remove':
 				this.remove(data.row, data.col);
 				this._renderContainer.refresh();
-				this._constructionZoneOverlay.refresh();
 				break;
 			case 'damage':
 				var block = this.get(data.row, data.col);
@@ -741,7 +692,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 				);
 				this.add(data.row, data.col, Block.blockFromClassId(data.selectedType));
 				this._renderContainer.refresh();
-				this._constructionZoneOverlay.refresh();
 				break;
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');

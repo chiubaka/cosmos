@@ -52,6 +52,73 @@ var BlockStructure = BlockGrid.extend({
 		if (this._hasNeighboringOpenLocations(block.row(), block.col(), block)) {
 			block.mouseDown(event, control);
 		}
+	},
+
+	processBlockActionServer: function(data, player) {
+		BlockGrid.prototype.processBlockActionServer.call(this, data, player);
+		var self = this;
+
+		switch (data.action) {
+			case 'mine':
+				var block = self.get(data.row, data.col);
+				if (block === undefined) {
+					console.log("Request to mine undefined block. row: " + data.row + ", col: " + data.col);
+					return false;
+				}
+				// Blocks should only be mined by one player, for now. Note that there is a race condition here.
+				if((block === undefined) || block.isBeingMined()) {
+					console.log("Request to mine undefined or busy block. row: " + data.row + ", col: " + data.col);
+					return false;
+				}
+				block.isBeingMined(true);
+
+				block._decrementHealthIntervalId = setInterval(function() {
+					if (block._hp > 0) {
+						var damageData = {
+							blockGridId: data.blockGridId,
+							action: 'damage',
+							row: data.row,
+							col: data.col,
+							amount: 1
+						};
+						block.damage(1);
+						ige.network.send('blockAction', damageData);
+					}
+
+					if (block._hp == 0) {
+						clearInterval(block._decrementHealthIntervalId);
+
+						// Emit a message saying that a block has been mined, but not
+						// necessarily collected. This is used for removing the laser.
+						var blockClassId = block.classId();
+						ige.emit('block mined', [player, blockClassId, block]);
+
+						player.mining = false;
+						player.turnOffMiningLasers(block);
+
+						// Drop block server side, then send drop msg to client
+						self.drop(data.row, data.col, player);
+						data.action = 'remove';
+						ige.network.send('blockAction', data);
+					}
+				}, Block.MINING_INTERVAL / player.numBlocksOfType(MiningLaserBlock.prototype.classId()));
+				return true;
+			default:
+				return false;
+		}
+	},
+
+	processBlockActionClient: function(data) {
+		BlockGrid.prototype.processBlockActionClient.call(this, data);
+
+		switch (data.action) {
+			case 'remove':
+				this._constructionZoneOverlay.refresh();
+				break;
+			case 'add':
+				this._constructionZoneOverlay.refresh();
+				break;
+		}
 	}
 });
 
