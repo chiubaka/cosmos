@@ -649,6 +649,15 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return this.toBlockTypeMatrix();
 	},
 
+
+	/**
+	 * Process actions on {@link Block}s server-side.
+	 * @param data {Object} An object representing the action sent from the client.
+	 * @param player {Player} The player that triggered the block action.
+	 * @returns {boolean} True if the action was successfully processed. False otherwise.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
 	processBlockActionServer: function(data, player) {
 		var self = this;
 
@@ -674,6 +683,12 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 	},
 
+	/**
+	 * Process actions on {@link Block}s client-side.
+	 * @param data {Object} An object representing the action sent from the server.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
 	processBlockActionClient: function(data) {
 		switch (data.action) {
 			case 'remove':

@@ -1,3 +1,12 @@
+/**
+ * The BlockStructure extends the {@link BlockGrid} to provide functionality (like mining and constructing) for
+ * structures made out of blocks in the game (e.g. ships, asteroids, etc.).
+ * It is necessary that this functionality be separated out from the {@link BlockGrid} because the {@link BlockGrid}
+ * is meant to act as just a data structure and nothing else.
+ * @class
+ * @typedef {BlockGrid} BlockStructure
+ * @namespace
+ */
 var BlockStructure = BlockGrid.extend({
 	classId: 'BlockStructure',
 
@@ -28,7 +37,7 @@ var BlockStructure = BlockGrid.extend({
 	 * Creates a list of all locations around this {@link BlockGrid} where a new {@link Block} could be placed.
 	 * @returns {Array} A list of all locations around this {@link BlockGrid} where a new {@link Block} can be placed.
 	 * Location objects are in the format {row: number, col: number}.
-	 * @memberof BlockGrid
+	 * @memberof BlockStructure
 	 * @instance
 	 * @todo Modify this to support taking a block size and returning only the locations that can support a block of
 	 * that size
@@ -45,6 +54,18 @@ var BlockStructure = BlockGrid.extend({
 		return constructionZoneLocations;
 	},
 
+	/**
+	 * Overrides {@link BlockGrid#_blockClickHandler}. Does logical checks to make sure that a {@link Block} can be
+	 * clicked before passing the click event down to the {@link Block} itself.
+	 * @param block {Block} The {@link Block} that has been clicked.
+	 * @param event {Object} The event data about the click. SHOULD NOT BE TRUSTED FOR POSITIONAL DATA because the
+	 * {@link BlockGrid} does not update these before passing them down.
+	 * @param control {Object} The control object associated with the click.
+	 * @memberof BlockStructure
+	 * @private
+	 * @instance
+	 * @todo Don't make the assumption that mouseDown on a {@link BlockStructure} means mining a {@link Block}.
+	 */
 	_blockClickHandler: function(block, event, control) {
 		// TODO: This might be dangerous, since some of the event properties should be changed so that they are
 		// relative to the child's bounding box, but since we don't use any of those properties for the moment,
@@ -54,6 +75,15 @@ var BlockStructure = BlockGrid.extend({
 		}
 	},
 
+	/**
+	 * Extends the {@link BlockGrid#processBlockActionServer} function to provide additional functionality for
+	 * structure-specific actions. Process actions server-side.
+	 * @param data {Object} An object representing the action sent from the client.
+	 * @param player {Player} The player that triggered the block action.
+	 * @returns {boolean} True if the action was successfully processed. False otherwise.
+	 * @memberof BlockStructure
+	 * @instance
+	 */
 	processBlockActionServer: function(data, player) {
 		BlockGrid.prototype.processBlockActionServer.call(this, data, player);
 		var self = this;
@@ -108,6 +138,13 @@ var BlockStructure = BlockGrid.extend({
 		}
 	},
 
+	/**
+	 * Extends the {@link BlockGrid#processBlockActionClient} function to provide additional functionality for
+	 * structure-specific actions. Process actions client-side.
+	 * @param data {Object} An object representing the action sent from the server.
+	 * @memberof BlockStructure
+	 * @instance
+	 */
 	processBlockActionClient: function(data) {
 		BlockGrid.prototype.processBlockActionClient.call(this, data);
 
