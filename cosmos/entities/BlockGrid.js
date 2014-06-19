@@ -881,11 +881,31 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 	},
 
+	/**
+	 * Given a location for a {@link Block}, determines whether or not there are open locations neighboring that
+	 * {@link Block}.
+	 * @param row {number} The row of the {@link Block} to check.
+	 * @param col {number} The col of the {@link Block} to check.
+	 * @param block {Block} The {@link Block} to check.
+	 * @returns {boolean} True if there is an open location neighboring the given {@link Block}. False otherwise.
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
 	_hasNeighboringOpenLocations: function(row, col, block) {
 		var neighboringOpenLocations = this._neighboringOpenLocations(row, col, block);
 		return neighboringOpenLocations.length > 0;
 	},
 
+	/**
+	 * Returns a list of non-occupied locations neighboring the given {@link Block}
+	 * @param row {number} The row of the {@link Block} to find open neighboring locations for.
+	 * @param col {number} The col of the {@link Block} to find open neighboring locations for.
+	 * @param block {Block} The {@link Block} to find open neighboring locations for.
+	 * @returns {Array} A list of locations neighboring the given {@link Block} that are not occupied by other
+	 * {@link Block}s.
+	 * @private
+	 */
 	_neighboringOpenLocations: function(row, col, block) {
 		var neighboringLocations = this._neighboringLocations(row, col, block);
 		var neighboringOpenLocations = [];
@@ -1595,6 +1615,18 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this._blockClickHandler(block, event, control);
 	},
 
+	/**
+	 * Abstract function. Stub implementation that does nothing, but should be overriden by subclasses. This function is
+	 * called when the {@link BlockGrid} is clicked. It passes the {@link Block} that was clicked after figuring out
+	 * which {@link Block} that was.
+	 * @param block {Block} The {@link Block} in the {@link BlockGrid} that was clicked.
+	 * @param event {Object} The data about the click event. SHOULD NOT BE TRUSTED FOR POSITIONAL DATA because the
+	 * {@link BlockGrid} does not update these things before passing them down.
+	 * @param control {Object} The control data associated with the click event.
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
 	_blockClickHandler: function(block, event, control) {
 
 	}
