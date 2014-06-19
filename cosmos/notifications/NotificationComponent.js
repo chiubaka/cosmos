@@ -1,19 +1,50 @@
+/**
+ * The NotificationComponent handles both server and client notifications.
+ * The NotificationComponent three queues: Info, Error, and Success. 
+ * Each engineStep, the behavior for the notificationComponent is called.
+ * The behavior calls the registered notification UI functions.
+ * This way, the UI is decoupled from the backend.
+ * @class
+ * @namespace
+ */
 var NotificationComponent = IgeEventingClass.extend({
 	classId: 'NotificationComponent',
 	componentId: 'notification',
 	self: undefined,
+	/** 
+	 * Displays queued info notifications
+	 * @type {function}
+	 * @memberof NotificationComponent
+	 * @private
+	 * @instance
+	 */
 	_infoHandler: undefined,
+
+	/** 
+	 * Displays queued error notifications
+	 * @type {function}
+	 * @memberof NotificationComponent
+	 * @private
+	 * @instance
+	 */
 	_errorHandler: undefined,
+
+	/** 
+	 * Displays queued success notifications
+	 * @type {function}
+	 * @memberof NotificationComponent
+	 * @private
+	 * @instance
+	 */
 	_successHandler: undefined,
 
 	init: function (entity, options) {
-
 		if (ige.isServer) {
+			// Define network commands server side
 			ige.network.define('notificationInfo');
 			ige.network.define('notificationError');
 			ige.network.define('notificationSuccess');
 		}
-
 
 		if (ige.isClient) {
 			this._queuedInfos = [];
@@ -35,6 +66,13 @@ var NotificationComponent = IgeEventingClass.extend({
 		this.log('Notification component initiated!');
 	},
 
+	/**
+	 * Starts the NotificationComponent so that notifications are pushed onto
+	 * the notification queue and notification handlers are called every
+	 * engineStep.
+	 * @memberof NotificationComponent
+	 * @instance
+	 */
 	start: function () {
 		if (!this._active) {
 			this._active = true;
@@ -42,6 +80,12 @@ var NotificationComponent = IgeEventingClass.extend({
 		}
 	},
 
+	/**
+	 * Stops pushing notifications onto the notification queue and stops
+	 * notification handlers from being called.
+	 * @memberof NotificationComponent
+	 * @instance
+	 */
 	stop: function () {
 		if (this._active) {
 			this._active = false;
@@ -49,41 +93,90 @@ var NotificationComponent = IgeEventingClass.extend({
 		}
 	},
 
+	/**
+	 * Register info notification handler with the NotificationComponent
+	 * This handler takes an array of notifications and should display them.
+	 * @param handler {infoNotificationCallback} UI callback
+	 * @returns {NotificationComponent}
+	 * @memberof NotificationComponent
+	 * @instance
+	 */
 	registerInfoHandler: function (handler) {
 		this._infoHandler = handler;
 		return this;
 	},
 
+	/**
+	 * Register error notification handler with the NotificationComponent
+	 * This handler takes an array of notifications and should display them.
+	 * @param handler {errorNotificationCallback} UI callback
+	 * @returns {NotificationComponent}
+	 * @memberof NotificationComponent
+	 * @instance
+	 */
 	registerErrorHandler: function (handler) {
 		this._errorHandler = handler;
 		return this;
 	},
 
+	/**
+	 * Register success notification handler with the NotificationComponent
+	 * This handler takes an array of notifications and should display them.
+	 * @param handler {successNotificationCallback} UI callback
+	 * @returns {NotificationComponent}
+	 * @memberof NotificationComponent
+	 * @instance
+	 */
 	registerSuccessHandler: function (handler) {
 		this._successHandler = handler;
 		return this;
 	},
 
-
+	/**
+	 * Unregister info notification handler with the NotificationComponent.
+	 * This will stop info notifications from being added to the info queue.
+	 * Additionally, the info handler will not be called every engineStep.
+	 * @returns {NotificationComponent}
+	 * @memberof NotificationComponent
+	 * @instance
+	 */
 	unRegisterInfoHandler: function () {
 		this._infoHandler = undefined;
 		return this;
 	},
 
+	/**
+	 * Unregister error notification handler with the NotificationComponent.
+	 * This will stop error notifications from being added to the error queue.
+	 * Additionally, the error handler will not be called every engineStep.
+	 * @returns {NotificationComponent}
+	 * @memberof NotificationComponent
+	 * @instance
+	 */
 	unRegisterErrorHandler: function () {
 		this._errorHandler = undefined;
 		return this;
 	},
 
+	/**
+	 * Unregister success notification handler with the NotificationComponent.
+	 * This will stop success notifications from being added to the success queue.
+	 * Additionally, the success handler will not be called every engineStep.
+	 * @returns {NotificationComponent}
+	 * @memberof NotificationComponent
+	 * @instance
+	 */
 	unRegisterSuccessHandler: function () {
 		this._successHandler = undefined;
 		return this;
 	},
 
 	/**
-	 * Updates notifications on the screen.
-	 * @param ctx
+	 * Call notification handlers, which will display notifications on the screen.
+	 * @param ctx {CanvasContext?} Optional canvas context
 	 * @private
+	 * @memberof NotificationComponent
+	 * @instance
 	 */
 	_behaviour: function (ctx) {
 		if (self._active) {
@@ -102,18 +195,39 @@ var NotificationComponent = IgeEventingClass.extend({
 		}
 	},
 
+	/**
+	 * Push an info notification onto queuedInfos
+	 * @param notification {String} A NotificationDefinition index
+	 * @memberof NotificationComponent
+	 * @private
+	 * @instance
+	 */
 	_onNotificationInfo: function (notification) {
 		if (self._active && (self._infoHandler !== undefined)) {
 			self._queuedInfos.push(notification);
 		}
 	},
 
+	/**
+	 * Push an error notification onto queuedErrors
+	 * @param notification {String} A NotificationDefinition index
+	 * @memberof NotificationComponent
+	 * @private
+	 * @instance
+	 */
 	_onNotificationError: function (notification) {
 		if (self._active && (self._errorHandler !== undefined)) {
 			self._queuedErrors.push(notification);
 		}
 	},
 
+	/**
+	 * Push a success notification onto queuedSuccesses
+	 * @param notification {String} A NotificationDefinition index
+	 * @memberof NotificationComponent
+	 * @private
+	 * @instance
+	 */
 	_onNotificationSuccess: function (notification) {
 		if (self._active && (self._successHandler !== undefined)) {
 			self._queuedSuccesses.push(notification);

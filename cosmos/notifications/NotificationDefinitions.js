@@ -1,6 +1,10 @@
-// TODO: Add msg for empty cargo + construct
-// TODO: Add msg for missing engines/lasers
-
+/**
+ * Contains all notification definitions.
+ * The text of notifications are centralized so they are easy to view
+ * and change. In addition, the use of definitions saves bandwidth
+ * because the server sends a number instead of the full string.
+ * @namespace
+ */
 var NotificationDefinitions = {
 	infoKeys: {
 		test: 1,
@@ -45,8 +49,6 @@ var NotificationDefinitions = {
 		3: 'Relocated ship!',
 		4: 'New ship created and relocated!',
 	}
-
-
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
