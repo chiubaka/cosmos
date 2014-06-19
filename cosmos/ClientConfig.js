@@ -11,6 +11,7 @@ var igeClientConfig = {
 		/* Blocks */
 		'./entities/Block.js',
 		'./entities/BlockGrid.js',
+		'./entities/BlockStructure.js',
 		'./entities/blocks/ConstructionZoneBlock.js',
 		'./entities/Drop.js',
 

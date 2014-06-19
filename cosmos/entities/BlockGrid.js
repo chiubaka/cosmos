@@ -112,15 +112,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 */
 	_renderContainer: undefined,
 	/**
-	 * Construction zone overlay for showing and hiding locations that players can click on in order to place a block
-	 * on an existing structure.
-	 * @type {ConstructionZoneOverlay}
-	 * @memberof BlockGrid
-	 * @private
-	 * @instance
-	 */
-	_constructionZoneOverlay: undefined,
-	/**
 	 * Flag for determining whether or not debug shadow entities should be added to track the location of this
 	 * {@link BlockGrid}'s Box2D fixtures.
 	 * @type {boolean}
@@ -161,13 +152,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 			this._renderContainer = new RenderContainer()
 				.mount(this);
 			this.fromBlockTypeMatrix(data.blockTypeMatrix, false, data.startRow, data.startCol);
-
-			// TODO: Lazily create when needed to speed up load time.
-			// TODO: Examine ConstructionZoneOverlay to make sure it is compatible with new BlockGrid backing.
-			// TODO: Uncomment this. Commented out so I can test the new BlockGrid class without getting errors from
-			// the ConstructionZoneOverlay class.
-			this._constructionZoneOverlay = new ConstructionZoneOverlay(this)
-				.mount(this);
 
 			this.mouseDown(this._mouseDownHandler);
 		}
@@ -665,27 +649,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return this.toBlockTypeMatrix();
 	},
 
-	/**
-	 * Creates a list of all locations around this {@link BlockGrid} where a new {@link Block} could be placed.
-	 * @returns {Array} A list of all locations around this {@link BlockGrid} where a new {@link Block} can be placed.
-	 * Location objects are in the format {row: number, col: number}.
-	 * @memberof BlockGrid
-	 * @instance
-	 * @todo Modify this to support taking a block size and returning only the locations that can support a block of
-	 * that size
-	 */
-	constructionZoneLocations: function() {
-		var constructionZoneLocations = [];
-		var iterator = this.iterator();
-		while (iterator.hasNext()) {
-			var block = iterator.next();
-			// Fancy way of concatenating two arrays. Referenced from here:
-			// http://stackoverflow.com/questions/4156101/javascript-push-array-values-into-another-array
-			constructionZoneLocations.push.apply(constructionZoneLocations, this._emptyNeighboringLocations(block));
-		}
-		return constructionZoneLocations;
-	},
-
 	processBlockActionServer: function(data, player) {
 		var self = this;
 
@@ -951,6 +914,25 @@ var BlockGrid = IgeEntityBox2d.extend({
 				return true;
 			}
 		}
+	},
+
+	_hasNeighboringOpenLocations: function(row, col, block) {
+		var neighboringOpenLocations = this._neighboringOpenLocations(row, col, block);
+		return neighboringOpenLocations.length > 0;
+	},
+
+	_neighboringOpenLocations: function(row, col, block) {
+		var neighboringLocations = this._neighboringLocations(row, col, block);
+		var neighboringOpenLocations = [];
+
+		for (var i = 0; i < neighboringLocations.length; i++) {
+			var location = neighboringLocations[i];
+			if (!this._isOccupied(location.row, location.col)) {
+				neighboringOpenLocations.push(location);
+			}
+		}
+
+		return neighboringOpenLocations;
 	},
 
 	/**
@@ -1565,19 +1547,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return {x: drawLocation.x - oldX, y: drawLocation.y - oldY};
 	},
 
-	/**
-	 * The general strategy for handling clicks is to:
-	 * 1. Unrotate the click coordinate
-	 * 2. Compare the unrotated click coordinate to where the blocks would be if the BlockGrid were not rotated
-	 * 3. Fire the mouseDown() event on the appropriate block
-	 * @param event {Object} Information about the event that was fired.
-	 * @param control {Object} Information about the control that was used when the event was fired. (Not really sure
-	 * what this is.)
-	 * @memberof BlockGrid
-	 * @private
-	 * @instance
-	 */
-	_mouseDownHandler: function(event, control) {
+	_blockForClick: function(event, control) {
 		// event.igeBaseX and event.igeBaseY give coordinates relative to the clicked entity's origin (center)
 
 		// The position of the click in world coordinates
@@ -1614,7 +1584,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// Check if the click was out of the grid area (happens because axis-aligned bounding boxes are larger
 		// than the non-axis-aligned grid area)
 		if (Math.abs(unrotatedX) > width / 2
-		 || Math.abs(unrotatedY) > height / 2) {
+			|| Math.abs(unrotatedY) > height / 2) {
 			return;
 		}
 
@@ -1630,7 +1600,23 @@ var BlockGrid = IgeEntityBox2d.extend({
 		var row = Math.floor(gridY / Block.HEIGHT) + this.startRow();
 		var col = Math.floor(gridX / Block.WIDTH) + this.startCol();
 
-		var block = this.get(row, col);
+		return this.get(row, col);
+	},
+
+	/**
+	 * The general strategy for handling clicks is to:
+	 * 1. Unrotate the click coordinate
+	 * 2. Compare the unrotated click coordinate to where the blocks would be if the BlockGrid were not rotated
+	 * 3. Fire the mouseDown() event on the appropriate block
+	 * @param event {Object} Information about the event that was fired.
+	 * @param control {Object} Information about the control that was used when the event was fired. (Not really sure
+	 * what this is.)
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
+	_mouseDownHandler: function(event, control) {
+		var block = this._blockForClick(event, control);
 
 		// Check if we have clicked on a valid block, if so we want to stop the
 		// click propagation so we don't construct a block at this location
@@ -1641,15 +1627,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 			control.stopPropagation();
 		}
 
-		// TODO: This might be dangerous, since some of the event properties should be changed so that they are
-		// relative to the child's bounding box, but since we don't use any of those properties for the moment,
-		// ignore that.
-		if (this.get(row + 1, col) == undefined ||
-			this.get(row - 1, col) == undefined ||
-			this.get(row, col + 1) == undefined ||
-			this.get(row, col - 1) == undefined) {
-			block.mouseDown(event, control);
-		}
+		this._blockClickHandler(block, event, control);
+	},
+
+	_blockClickHandler: function(block, event, control) {
+
 	}
 });
 
