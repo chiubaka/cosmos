@@ -166,6 +166,16 @@ var Block = IgeEntity.extend({
 		}
 	},
 
+	displayName: function() {
+		var tokens = this.classId().match(/([A-Z]?[^A-Z]*)/g).slice(0, -1);
+		var displayName = "";
+		for (var i = 0; i < tokens.length - 1; i++) {
+			var token = tokens[i];
+			displayName += token + " ";
+		}
+		return displayName;
+	},
+
 	/**
 	 * Getter for {@link Block#_numRows|_numRows}.
 	 * @returns {number}
@@ -207,6 +217,8 @@ var Block = IgeEntity.extend({
 		if (ige.isClient && ige.client !== undefined && ige.client.state !== undefined) {
 			ige.client.state.currentCapability().tryPerformAction(self, event, data);
 		}
+
+		ige.blockInspector.inspect(this);
 
 		var blockInspectorCanvas = document.getElementById("block-explanation-hud");
 		blockInspectorCanvas.width = 200;
