@@ -87,7 +87,11 @@ html
         accent_color: '#448dd6',
         trigger_color: 'white',
         trigger_background_color: '#448dd6',
-        trigger_style: 'tab'
+        trigger_style: 'tab',
+        contact_enabled: true,
+        post_idea_enabled: true,
+        permalinks_enabled: true,
+        smartvote_enabled: true
       }]);
 
       // Identify the user and pass traits
@@ -112,7 +116,7 @@ html
       //UserVoice.push(['addTrigger', { mode: 'smartvote', trigger_position: 'bottom-left' }]);
 
       // Or, use your own custom trigger:
-      UserVoice.push(['addTrigger', '#button-uservoice', { mode: 'smartvote' }]);
+      UserVoice.push(['addTrigger', '#button-uservoice', { mode: 'satisfaction' }]);
 
       // Autoprompt for Satisfaction and SmartVote (only displayed under certain conditions)
       UserVoice.push(['autoprompt', {}]);
