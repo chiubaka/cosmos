@@ -246,13 +246,22 @@ var BlockStructureGenerator = {
 	 */
 	elementDistributions: {
 		STANDARD: {
-			"IceBlock": 0.47,
-			"IronBlock": 0.3,
-			"CarbonBlock": 0.2,
+			"IceBlock": 50,
+			"IronBlock": 30,
+			"CarbonBlock": 20,
 			//here are some rare things. These guys should look really cool.
-			"GoldBlock": 0.01,
-			"CobaltBlock": 0.01,
-			"FluorineBlock": 0.01
+			"GoldBlock": 1,
+			"CobaltBlock": 1,
+			"FluorineBlock": 1,
+			"DragonBlock": 1,
+			"KryptoniteBlock": 1,
+			"TitaniumBlock": 1,
+			"CloakBlock": 1,
+			"CloakVioletBlock": 1,
+			"MithrilBlock": 1,
+			"AdamantiumBlock": 1,
+			"VioletBlock": 1,
+			"OrangeBlock": 1,
 			//here are some easter-egg type things, which will add up to 0.002
 			/* //I've commented this out per LEO-522
 			// The idea is to make mining more exciting by having really unusual things buried inside of asteroids.
@@ -304,7 +313,9 @@ var BlockStructureGenerator = {
 			"ThrusterBlock": .1,
 			"CargoBlock": .1,
 			"Block": .3,
-			"MiningLaserBlock": .1
+			"MiningLaserBlock": .1,
+			"TitaniumBlock": .1,
+			"CloakBlock": .1
 		},
 
 		HIGH_CARGO: {
