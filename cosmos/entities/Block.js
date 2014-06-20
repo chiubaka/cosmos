@@ -365,10 +365,6 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	_addGlowEffect: function(effect) {
-		if (this._effectsMountBelow === undefined) {
-			this.blockGrid().createBelowEffectsMount(this);
-		}
-
 		if (this._effects['glow'] !== undefined) {
 			this._effects['glow'].destroy();
 		}
@@ -400,10 +396,6 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	_addMiningParticles: function() {
-		if (this._effectsMountAbove === undefined) {
-			this.blockGrid().createAboveEffectsMount(this);
-		}
-
 		if (this._effects['miningParticles'] === undefined) {
 			this._effects['miningParticles'] = {
 				counter: 0,
