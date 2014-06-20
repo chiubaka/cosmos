@@ -334,8 +334,13 @@ var Block = IgeEntity.extend({
 				break;
 		}
 
-		if (!this._hasEffects() && this._effectsMountAbove !== undefined) {
-			this._effectsMountAbove.destroy();
+		if (!this._hasEffects()) {
+			if (this._effectsMountAbove !== undefined) {
+				this._effectsMountAbove.destroy();
+			}
+			if (this._effectsMountBelow !== undefined) {
+				this._effectsMountBelow.destroy();
+			}
 		}
 	},
 
