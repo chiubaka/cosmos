@@ -361,8 +361,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this._unsetBlock(block);
 		this._removeFromBlocksByType(block);
 
-		if (block.effectsMount() !== undefined) {
-			block.effectsMount().unMount();
+		if (block.effectsMountAbove() !== undefined) {
+			block.effectsMountAbove().unMount();
+		}
+		if (block.effectsMountBelow() !== undefined) {
+			block.effectsMountBelow().unMount();
 		}
 
 		if (ige.isServer) {
@@ -427,7 +430,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	/**
-	 * Creates the effects mount for the given {@link Block} and moves the mount to the correct location based on where
+	 * Creates the above effects mount for the given {@link Block} and moves the mount to the correct location based on where
 	 * the {@link Block} is in the grid. An effects mount is a blank IGE Entity that is used to correctly position
 	 * effects for blocks (e.g. mining particles or engine particles). Effects mounts are associated with {@link Block}s
 	 * and their location is updated anytime the {@link Block}s in this {@link BlockGrid} move.
@@ -435,31 +438,52 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @memberof BlockGrid
 	 * @instance
 	 */
-	createEffectsMount: function(block) {
-		block.createEffectsMount();
+	createAboveEffectsMount: function(block) {
+		block.createAboveEffectsMount();
 		this.updateEffect(block);
 	},
 
 	/**
-	 * Moves the effects mount of the given {@link Block} to the correct position based on the {@link Block}'s position
-	 * in the grid. Also handles mounting the effect mount of the {@link Block} to this {@link BlockGrid} if it has not
+	 * Creates the below effects mount for the given {@link Block} and moves the mount to the correct location based on where
+	 * the {@link Block} is in the grid. An effects mount is a blank IGE Entity that is used to correctly position
+	 * effects for blocks (e.g. mining particles or engine particles). Effects mounts are associated with {@link Block}s
+	 * and their location is updated anytime the {@link Block}s in this {@link BlockGrid} move.
+	 * @param block {Block} The {@link Block} to create an effects mount for.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	createBelowEffectsMount: function(block) {
+		block.createBelowEffectsMount();
+		this.updateEffect(block);
+	},
+
+
+	/**
+	 * Moves the effects mount(s) of the given {@link Block} to the correct position based on the {@link Block}'s position
+	 * in the grid. Also handles mounting the effect mount(s) of the {@link Block} to this {@link BlockGrid} if it has not
 	 * already been mounted.
-	 * @param block {Block} The {@link Block} to update the effects mount for.
+	 * @param block {Block} The {@link Block} to update the effects mount(s) for.
 	 * @memberof BlockGrid
 	 * @instance
 	 */
 	updateEffect: function(block) {
-		var effectsMount = block.effectsMount();
-		if (effectsMount === undefined) {
-			return;
-		}
-
-		if (effectsMount.parent() !== this) {
-			effectsMount.mount(this);
-		}
-
+		var effectsMountAbove = block.effectsMountAbove();
+		var effectsMountBelow = block.effectsMountBelow();
 		var drawLocation = this._drawLocationForBlock(block);
-		effectsMount.translateTo(drawLocation.x, drawLocation.y, 0);
+
+		if (effectsMountAbove !== undefined) {
+			if (effectsMountAbove.parent() !== this) {
+				effectsMountAbove.mount(this);
+			}
+			effectsMountAbove.translateTo(drawLocation.x, drawLocation.y, 0);
+		}
+
+		if (effectsMountBelow !== undefined) {
+			if (effectsMountBelow.parent() !== this) {
+				effectsMountBelow.mount(this);
+			}
+			effectsMountBelow.translateTo(drawLocation.x, drawLocation.y, 0);
+		}
 	},
 
 	/**

@@ -65,13 +65,21 @@ var Block = IgeEntity.extend({
 	 */
 	_col: undefined,
 	/**
-	 * An IgeEntity that all of the effects for this {@link Block} get mounted to.
+	 * An IgeEntity that all of the foreground effects for this {@link Block} get mounted to.
 	 * @type {IgeEntity}
 	 * @memberof Block
 	 * @private
 	 * @instance
 	 */
-	_effectsMount: undefined,
+	_effectsMountAbove: undefined,
+	/**
+	 * An IgeEntity that all of the background effects for this {@link Block} get mounted to.
+	 * @type {IgeEntity}
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 */
+	_effectsMountBelow: undefined,
 	/**
 	 * An object used as a map to store data about the various effects on a {@link Block}. The map keys are the effect
 	 * types, and the values are typically objects. Each value can be specific to the effect, since different effects
@@ -232,27 +240,51 @@ var Block = IgeEntity.extend({
 	},
 
 	/**
-	 * Creates the effects mount entity for this {@link Block} and stores it in an instance variable. If the
+	 * Creates the above effects mount entity for this {@link Block} and stores it in an instance variable. If the
 	 * effects mount has already been created for this {@link Block}, this function does nothing.
 	 * @memberof BlockGrid
 	 * @instance
 	 */
-	createEffectsMount: function() {
-		if (this._effectsMount !== undefined) {
+	createAboveEffectsMount: function() {
+		if (this._effectsMountAbove !== undefined) {
 			return;
 		}
 
-		this._effectsMount = new IgeEntity().depth(this.depth());
+		this._effectsMountAbove = new IgeEntity().depth(this.depth() + 1);
 	},
 
 	/**
-	 * Getter for the {@link Block#_effectsMount|_effectsMount} property.
-	 * @returns {IgeEntity} the effects mount
+	 * Creates the above effects mount entity for this {@link Block} and stores it in an instance variable. If the
+	 * effects mount has already been created for this {@link Block}, this function does nothing.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	createBelowEffectsMount: function() {
+		if (this._effectsMountBelow !== undefined) {
+			return;
+		}
+
+		this._effectsMountBelow = new IgeEntity().depth(this.depth() - 1);
+	},
+
+	/**
+	 * Getter for the {@link Block#_effectsMountAbove|_effectsMountAbove} property.
+	 * @returns {IgeEntity} the above effects mount
 	 * @memberof Block
 	 * @instance
 	 */
-	effectsMount: function() {
-		return this._effectsMount;
+	effectsMountAbove: function() {
+		return this._effectsMountAbove;
+	},
+
+	/**
+	 * Getter for the {@link Block#_effectsMountBelow|_effectsMountBelow} property.
+	 * @returns {IgeEntity} the below effects mount
+	 * @memberof Block
+	 * @instance
+	 */
+	effectsMountBelow: function() {
+		return this._effectsMountBelow;
 	},
 
 	/**
@@ -265,8 +297,11 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	addEffect: function(effect) {
-		if (this._effectsMount === undefined) {
-			this.blockGrid().createEffectsMount(this);
+		if (this._effectsMountAbove === undefined) {
+			this.blockGrid().createAboveEffectsMount(this);
+		}
+		if (this._effectsMountBelow === undefined) {
+			this.blockGrid().createBelowEffectsMount(this);
 		}
 
 		switch (effect.type) {
@@ -276,6 +311,7 @@ var Block = IgeEntity.extend({
 			case 'miningParticles':
 				this._addMiningParticles();
 				break;
+
 		}
 	},
 
@@ -298,8 +334,8 @@ var Block = IgeEntity.extend({
 				break;
 		}
 
-		if (!this._hasEffects() && this._effectsMount !== undefined) {
-			this._effectsMount.destroy();
+		if (!this._hasEffects() && this._effectsMountAbove !== undefined) {
+			this._effectsMountAbove.destroy();
 		}
 	},
 
@@ -324,13 +360,17 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	_addGlowEffect: function(effect) {
+		if (this._effectsMountBelow === undefined) {
+			this.blockGrid().createBelowEffectsMount(this);
+		}
+
 		if (this._effects['glow'] !== undefined) {
 			this._effects['glow'].destroy();
 		}
 
 		this._effects['glow'] = new GlowEffect(effect)
 			.depth(this.depth() - 1)
-			.mount(this._effectsMount);
+			.mount(this._effectsMountBelow);
 	},
 
 	/**
@@ -355,6 +395,10 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	_addMiningParticles: function() {
+		if (this._effectsMountAbove === undefined) {
+			this.blockGrid().createAboveEffectsMount(this);
+		}
+
 		if (this._effects['miningParticles'] === undefined) {
 			this._effects['miningParticles'] = {
 				counter: 0,
@@ -363,7 +407,7 @@ var Block = IgeEntity.extend({
 		}
 
 		this._effects['miningParticles'].counter++;
-		this._effects['miningParticles'].particleEmitter = new BlockParticleEmitter().mount(this._effectsMount);
+		this._effects['miningParticles'].particleEmitter = new BlockParticleEmitter().mount(this._effectsMountAbove);
 	},
 
 	/**

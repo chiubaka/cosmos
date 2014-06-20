@@ -95,7 +95,7 @@ var MiningLaserBlock = Part.extend({
 
 		this.laserBeam = new LaserBeam()
 			.setTarget(effect.targetBlock.blockGridId, effect.targetBlock.row, effect.targetBlock.col)
-			.mount(this.effectsMount());
+			.mount(this.effectsMountAbove());
 
 		var targetEffect = NetworkUtils.effect('miningParticles');
 		targetEffect.sourceBlock = effect.targetBlock;
