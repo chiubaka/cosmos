@@ -67,6 +67,7 @@ var igeClientConfig = {
 		/* === USER INTERFACE === */
 		/* HUD */
 		'./ui/HUDManager.js',
+		'./ui/blockInspector/BlockInspector.js',
 		
 		/* Stats */
 		'./ui/info/GPSLabel.js',

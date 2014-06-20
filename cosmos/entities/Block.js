@@ -207,6 +207,16 @@ var Block = IgeEntity.extend({
 		if (ige.isClient && ige.client !== undefined && ige.client.state !== undefined) {
 			ige.client.state.currentCapability().tryPerformAction(self, event, data);
 		}
+
+		var blockInspectorCanvas = document.getElementById("block-explanation-hud");
+		blockInspectorCanvas.width = 200;
+		blockInspectorCanvas.height = 200;
+		var ctx = blockInspectorCanvas.getContext("2d");
+		ctx.save();
+		ctx.translate(this.height(), this.width());
+		this.texture().render(ctx, this);
+		ctx.restore();
+		//this.update(blockInspectorCanvas.getContext("2d"));
 	},
 
 	/**
