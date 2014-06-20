@@ -104,6 +104,7 @@ var NewShipButton = IgeUiButton.extend({
 		this.mouseDown(function(event, control) {
 			ige.network.send('new ship');
 			ige.emit('new ship button clicked');
+			control.stopPropagation();
 		});
 	}
 });

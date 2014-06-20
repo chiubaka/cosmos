@@ -27,6 +27,13 @@ var MineCapability = Capability.extend({
 					actionFunc: this.Block_mouseDown
 				}
 			},
+			'ClickScene': {
+				'mousedown': {
+					capability: this,
+					conditionFunc: this.ClickScene_canMouseDown,
+					actionFunc: undefined
+				}
+			},
 		};
 
 		Capability.prototype.init.call(this);
@@ -61,4 +68,19 @@ var MineCapability = Capability.extend({
 
 		ige.network.send('mineBlock', data);
 	},
+
+	/**
+	 * Notifies the player that they cannot mine empty space
+	 * @param sender {Object} an entity upon which an event was triggered
+	 * @param event {Object} the triggering event
+	 * @param data {Object} provided data that can be used in conditionFunc
+	 * @memberof MineCapability
+	 * @instance
+	 */
+	ClickScene_canMouseDown: function(sender, event, data) {
+		ige.notification.emit('notificationError', 
+			NotificationDefinitions.errorKeys.noMineEmptySpace);
+		return false;
+	},
+
 });

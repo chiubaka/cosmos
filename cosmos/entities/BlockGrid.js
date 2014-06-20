@@ -112,15 +112,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 */
 	_renderContainer: undefined,
 	/**
-	 * Construction zone overlay for showing and hiding locations that players can click on in order to place a block
-	 * on an existing structure.
-	 * @type {ConstructionZoneOverlay}
-	 * @memberof BlockGrid
-	 * @private
-	 * @instance
-	 */
-	_constructionZoneOverlay: undefined,
-	/**
 	 * Flag for determining whether or not debug shadow entities should be added to track the location of this
 	 * {@link BlockGrid}'s Box2D fixtures.
 	 * @type {boolean}
@@ -161,13 +152,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 			this._renderContainer = new RenderContainer()
 				.mount(this);
 			this.fromBlockTypeMatrix(data.blockTypeMatrix, false, data.startRow, data.startCol);
-
-			// TODO: Lazily create when needed to speed up load time.
-			// TODO: Examine ConstructionZoneOverlay to make sure it is compatible with new BlockGrid backing.
-			// TODO: Uncomment this. Commented out so I can test the new BlockGrid class without getting errors from
-			// the ConstructionZoneOverlay class.
-			this._constructionZoneOverlay = new ConstructionZoneOverlay(this)
-				.mount(this);
 
 			this.mouseDown(this._mouseDownHandler);
 		}
@@ -377,8 +361,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this._unsetBlock(block);
 		this._removeFromBlocksByType(block);
 
-		if (block.effectsMount() !== undefined) {
-			block.effectsMount().unMount();
+		if (block.effectsMountAbove() !== undefined) {
+			block.effectsMountAbove().unMount();
+		}
+		if (block.effectsMountBelow() !== undefined) {
+			block.effectsMountBelow().unMount();
 		}
 
 		if (ige.isServer) {
@@ -443,7 +430,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	/**
-	 * Creates the effects mount for the given {@link Block} and moves the mount to the correct location based on where
+	 * Creates the above effects mount for the given {@link Block} and moves the mount to the correct location based on where
 	 * the {@link Block} is in the grid. An effects mount is a blank IGE Entity that is used to correctly position
 	 * effects for blocks (e.g. mining particles or engine particles). Effects mounts are associated with {@link Block}s
 	 * and their location is updated anytime the {@link Block}s in this {@link BlockGrid} move.
@@ -451,31 +438,52 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @memberof BlockGrid
 	 * @instance
 	 */
-	createEffectsMount: function(block) {
-		block.createEffectsMount();
+	createAboveEffectsMount: function(block) {
+		block.createAboveEffectsMount();
 		this.updateEffect(block);
 	},
 
 	/**
-	 * Moves the effects mount of the given {@link Block} to the correct position based on the {@link Block}'s position
-	 * in the grid. Also handles mounting the effect mount of the {@link Block} to this {@link BlockGrid} if it has not
+	 * Creates the below effects mount for the given {@link Block} and moves the mount to the correct location based on where
+	 * the {@link Block} is in the grid. An effects mount is a blank IGE Entity that is used to correctly position
+	 * effects for blocks (e.g. mining particles or engine particles). Effects mounts are associated with {@link Block}s
+	 * and their location is updated anytime the {@link Block}s in this {@link BlockGrid} move.
+	 * @param block {Block} The {@link Block} to create an effects mount for.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	createBelowEffectsMount: function(block) {
+		block.createBelowEffectsMount();
+		this.updateEffect(block);
+	},
+
+
+	/**
+	 * Moves the effects mount(s) of the given {@link Block} to the correct position based on the {@link Block}'s position
+	 * in the grid. Also handles mounting the effect mount(s) of the {@link Block} to this {@link BlockGrid} if it has not
 	 * already been mounted.
-	 * @param block {Block} The {@link Block} to update the effects mount for.
+	 * @param block {Block} The {@link Block} to update the effects mount(s) for.
 	 * @memberof BlockGrid
 	 * @instance
 	 */
 	updateEffect: function(block) {
-		var effectsMount = block.effectsMount();
-		if (effectsMount === undefined) {
-			return;
-		}
-
-		if (effectsMount.parent() !== this) {
-			effectsMount.mount(this);
-		}
-
+		var effectsMountAbove = block.effectsMountAbove();
+		var effectsMountBelow = block.effectsMountBelow();
 		var drawLocation = this._drawLocationForBlock(block);
-		effectsMount.translateTo(drawLocation.x, drawLocation.y, 0);
+
+		if (effectsMountAbove !== undefined) {
+			if (effectsMountAbove.parent() !== this) {
+				effectsMountAbove.mount(this);
+			}
+			effectsMountAbove.translateTo(drawLocation.x, drawLocation.y, 0);
+		}
+
+		if (effectsMountBelow !== undefined) {
+			if (effectsMountBelow.parent() !== this) {
+				effectsMountBelow.mount(this);
+			}
+			effectsMountBelow.translateTo(drawLocation.x, drawLocation.y, 0);
+		}
 	},
 
 	/**
@@ -666,26 +674,13 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	/**
-	 * Creates a list of all locations around this {@link BlockGrid} where a new {@link Block} could be placed.
-	 * @returns {Array} A list of all locations around this {@link BlockGrid} where a new {@link Block} can be placed.
-	 * Location objects are in the format {row: number, col: number}.
+	 * Process actions on {@link Block}s server-side.
+	 * @param data {Object} An object representing the action sent from the client.
+	 * @param player {Player} The player that triggered the block action.
+	 * @returns {boolean} True if the action was successfully processed. False otherwise.
 	 * @memberof BlockGrid
 	 * @instance
-	 * @todo Modify this to support taking a block size and returning only the locations that can support a block of
-	 * that size
 	 */
-	constructionZoneLocations: function() {
-		var constructionZoneLocations = [];
-		var iterator = this.iterator();
-		while (iterator.hasNext()) {
-			var block = iterator.next();
-			// Fancy way of concatenating two arrays. Referenced from here:
-			// http://stackoverflow.com/questions/4156101/javascript-push-array-values-into-another-array
-			constructionZoneLocations.push.apply(constructionZoneLocations, this._emptyNeighboringLocations(block));
-		}
-		return constructionZoneLocations;
-	},
-
 	processBlockActionServer: function(data, player) {
 		var self = this;
 
@@ -695,51 +690,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 				return true;
 
 			// TODO: Vary mining speed based on block material
-			case 'mine':
-				var block = self.get(data.row, data.col);
-				if (block === undefined) {
-					console.log("Request to mine undefined block. row: " + data.row + ", col: " + data.col);
-					return false;
-				}
-				// Blocks should only be mined by one player, for now. Note that there is a race condition here.
-				if((block === undefined) || block.isBeingMined()) {
-					console.log("Request to mine undefined or busy block. row: " + data.row + ", col: " + data.col);
-					return false;
-				}
-				block.isBeingMined(true);
-
-				block._decrementHealthIntervalId = setInterval(function() {
-					if (block._hp > 0) {
-						var damageData = {
-							blockGridId: data.blockGridId,
-							action: 'damage',
-							row: data.row,
-							col: data.col,
-							amount: 1
-						};
-						block.damage(1);
-						ige.network.send('blockAction', damageData);
-					}
-
-					if (block._hp == 0) {
-						clearInterval(block._decrementHealthIntervalId);
-
-						// Emit a message saying that a block has been mined, but not
-						// necessarily collected. This is used for removing the laser.
-						var blockClassId = block.classId();
-						ige.emit('block mined', [player, blockClassId, block]);
-
-						player.mining = false;
-						player.turnOffMiningLasers(block);
-
-						// Drop block server side, then send drop msg to client
-						self.drop(data.row, data.col, player);
-						data.action = 'remove';
-						ige.network.send('blockAction', data);
-					}
-				}, Block.MINING_INTERVAL / player.numBlocksOfType(MiningLaserBlock.prototype.classId()));
-				return true;
-
 			case 'add':
 				// Add block server side, then send add msg to client
 				if(!self.add(data.row, data.col, Block.blockFromClassId(data.selectedType))) {
@@ -750,21 +700,23 @@ var BlockGrid = IgeEntityBox2d.extend({
 					ige.network.send('blockAction', data);
 					return true;
 				}
-
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
 				return false;
 		}
 	},
 
+	/**
+	 * Process actions on {@link Block}s client-side.
+	 * @param data {Object} An object representing the action sent from the server.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
 	processBlockActionClient: function(data) {
-		var self = this;
-
 		switch (data.action) {
 			case 'remove':
 				this.remove(data.row, data.col);
 				this._renderContainer.refresh();
-				this._constructionZoneOverlay.refresh();
 				break;
 			case 'damage':
 				var block = this.get(data.row, data.col);
@@ -778,7 +730,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 				);
 				this.add(data.row, data.col, Block.blockFromClassId(data.selectedType));
 				this._renderContainer.refresh();
-				this._constructionZoneOverlay.refresh();
 				break;
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
@@ -951,6 +902,45 @@ var BlockGrid = IgeEntityBox2d.extend({
 				return true;
 			}
 		}
+	},
+
+	/**
+	 * Given a location for a {@link Block}, determines whether or not there are open locations neighboring that
+	 * {@link Block}.
+	 * @param row {number} The row of the {@link Block} to check.
+	 * @param col {number} The col of the {@link Block} to check.
+	 * @param block {Block} The {@link Block} to check.
+	 * @returns {boolean} True if there is an open location neighboring the given {@link Block}. False otherwise.
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
+	_hasNeighboringOpenLocations: function(row, col, block) {
+		var neighboringOpenLocations = this._neighboringOpenLocations(row, col, block);
+		return neighboringOpenLocations.length > 0;
+	},
+
+	/**
+	 * Returns a list of non-occupied locations neighboring the given {@link Block}
+	 * @param row {number} The row of the {@link Block} to find open neighboring locations for.
+	 * @param col {number} The col of the {@link Block} to find open neighboring locations for.
+	 * @param block {Block} The {@link Block} to find open neighboring locations for.
+	 * @returns {Array} A list of locations neighboring the given {@link Block} that are not occupied by other
+	 * {@link Block}s.
+	 * @private
+	 */
+	_neighboringOpenLocations: function(row, col, block) {
+		var neighboringLocations = this._neighboringLocations(row, col, block);
+		var neighboringOpenLocations = [];
+
+		for (var i = 0; i < neighboringLocations.length; i++) {
+			var location = neighboringLocations[i];
+			if (!this._isOccupied(location.row, location.col)) {
+				neighboringOpenLocations.push(location);
+			}
+		}
+
+		return neighboringOpenLocations;
 	},
 
 	/**
@@ -1566,18 +1556,18 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	/**
-	 * The general strategy for handling clicks is to:
-	 * 1. Unrotate the click coordinate
-	 * 2. Compare the unrotated click coordinate to where the blocks would be if the BlockGrid were not rotated
-	 * 3. Fire the mouseDown() event on the appropriate block
-	 * @param event {Object} Information about the event that was fired.
-	 * @param control {Object} Information about the control that was used when the event was fired. (Not really sure
-	 * what this is.)
+	 * Given a click event, locates the {@link Block} in this {@link BlockGrid} that was clicked by:
+	 * 1. Unrotating the click coordinate
+	 * 2. Comparing the unrotated click coordinate to where the blocks would be if the BlockGrid were not rotated
+	 * @param event {Object} The event data for the click event.
+	 * @param control {Object} The control data for the click event.
+	 * @returns {Block|undefined} The {@link Block} that was clicked or undefined if no {@link Block} exists at the
+	 * clicked location.
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
 	 */
-	_mouseDownHandler: function(event, control) {
+	_blockForClick: function(event, control) {
 		// event.igeBaseX and event.igeBaseY give coordinates relative to the clicked entity's origin (center)
 
 		// The position of the click in world coordinates
@@ -1614,7 +1604,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// Check if the click was out of the grid area (happens because axis-aligned bounding boxes are larger
 		// than the non-axis-aligned grid area)
 		if (Math.abs(unrotatedX) > width / 2
-		 || Math.abs(unrotatedY) > height / 2) {
+			|| Math.abs(unrotatedY) > height / 2) {
 			return;
 		}
 
@@ -1630,7 +1620,21 @@ var BlockGrid = IgeEntityBox2d.extend({
 		var row = Math.floor(gridY / Block.HEIGHT) + this.startRow();
 		var col = Math.floor(gridX / Block.WIDTH) + this.startCol();
 
-		var block = this.get(row, col);
+		return this.get(row, col);
+	},
+
+	/**
+	 * Determines which {@link Block} in the {@link BlockGrid} was clicked and then passes the clicked {@link Block} to
+	 * the {@link BlockGrid#_blockClickHandler}, which can be overriden by subclasses.
+	 * @param event {Object} Information about the event that was fired.
+	 * @param control {Object} Information about the control that was used when the event was fired. (Not really sure
+	 * what this is.)
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
+	_mouseDownHandler: function(event, control) {
+		var block = this._blockForClick(event, control);
 
 		// Check if we have clicked on a valid block, if so we want to stop the
 		// click propagation so we don't construct a block at this location
@@ -1641,15 +1645,23 @@ var BlockGrid = IgeEntityBox2d.extend({
 			control.stopPropagation();
 		}
 
-		// TODO: This might be dangerous, since some of the event properties should be changed so that they are
-		// relative to the child's bounding box, but since we don't use any of those properties for the moment,
-		// ignore that.
-		if (this.get(row + 1, col) == undefined ||
-			this.get(row - 1, col) == undefined ||
-			this.get(row, col + 1) == undefined ||
-			this.get(row, col - 1) == undefined) {
-			block.mouseDown(event, control);
-		}
+		this._blockClickHandler(block, event, control);
+	},
+
+	/**
+	 * Abstract function. Stub implementation that does nothing, but should be overriden by subclasses. This function is
+	 * called when the {@link BlockGrid} is clicked. It passes the {@link Block} that was clicked after figuring out
+	 * which {@link Block} that was.
+	 * @param block {Block} The {@link Block} in the {@link BlockGrid} that was clicked.
+	 * @param event {Object} The data about the click event. SHOULD NOT BE TRUSTED FOR POSITIONAL DATA because the
+	 * {@link BlockGrid} does not update these things before passing them down.
+	 * @param control {Object} The control data associated with the click event.
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
+	_blockClickHandler: function(block, event, control) {
+
 	}
 });
 

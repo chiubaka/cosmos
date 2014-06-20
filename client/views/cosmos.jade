@@ -8,7 +8,7 @@ html
     meta(name='game-engine-origin', content='http://www.isogenicengine.com')
     meta(http-equiv='X-UA-Compatible', content='IE=Edge')
     title Cosmos Private Preview
-    // STYLES 
+    // STYLES
     link(href='/stylesheets/ui-dark.css', rel='stylesheet', type='text/css')
     link(href='/stylesheets/cosmos-preview.css', rel='stylesheet', type='text/css')
     link(href='/stylesheets/cosmos-fonts.css', rel='stylesheet', type='text/css')
@@ -25,7 +25,7 @@ html
       appInsights.logPageView();
 
     //
-       Isogenic Loader 
+       Isogenic Loader
     if process.env.NODE_ENV === 'production'
       script(type='text/javascript').
         var igeRoot = './';
@@ -43,6 +43,7 @@ html
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
         ga('create', 'UA-50808232-2', 'teamleonine.com');
+        ga('require', 'displayfeatures');
         ga('send', 'pageview');
     else
       script.
@@ -51,6 +52,7 @@ html
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
         ga('create', 'UA-50808232-1', {'cookieDomain': 'none'});
+        ga('require', 'displayfeatures');
         ga('send', 'pageview');
   body
     .cosmos-tutorial-veil#cosmos-tutorial-veil
@@ -62,7 +64,7 @@ html
     .igeLoading.loadingFloat.preview
       include includes/progress-ring.jade
       #loadingText.loadingText
-        | Loading... 
+        | Loading...
       #loadingProgress
         #loadingProgressBar
     script(type='text/javascript').
@@ -87,7 +89,11 @@ html
         accent_color: '#448dd6',
         trigger_color: 'white',
         trigger_background_color: '#448dd6',
-        trigger_style: 'tab'
+        trigger_style: 'tab',
+        contact_enabled: true,
+        post_idea_enabled: true,
+        permalinks_enabled: true,
+        smartvote_enabled: true
       }]);
 
       // Identify the user and pass traits
@@ -112,7 +118,7 @@ html
       //UserVoice.push(['addTrigger', { mode: 'smartvote', trigger_position: 'bottom-left' }]);
 
       // Or, use your own custom trigger:
-      UserVoice.push(['addTrigger', '#button-uservoice', { mode: 'smartvote' }]);
+      UserVoice.push(['addTrigger', '#button-uservoice', { mode: 'satisfaction' }]);
 
       // Autoprompt for Satisfaction and SmartVote (only displayed under certain conditions)
       UserVoice.push(['autoprompt', {}]);
