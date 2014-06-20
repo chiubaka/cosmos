@@ -1,0 +1,108 @@
+script.
+	$(window).ready(function() {
+		$("#tutorial-host").steps({ 
+			enableAllSteps: true, 
+			titleTemplate: '#title#', 
+			onFinished: function(event, currentIndex) {
+				$('#cosmos-tutorial-veil').fadeOut(250);
+			} 
+		});
+
+		$('#choice-continue').click(function() {
+			$('#tutorial-host').fadeIn(250, function() {
+				$('#tutorial-welcome').fadeOut(250);
+			});
+		});
+
+		$('#choice-skip').click(function() {
+			$('#tutorial-welcome').fadeOut(250);
+			$('#cosmos-tutorial-veil').fadeOut(250);
+		});
+
+		$('#cosmos-tutorial-veil').fadeIn(250);
+	});
+
+#tutorial-welcome
+	img(src='/images/preview-intro.png')
+	h2
+		em Thanks for being a part of the Cosmos private preview!
+	p.tutorial-prompt We'd like to show you how to play Cosmos. This should only take a few moments.
+	ul#welcome-choices
+		li.welcome-choice#choice-continue
+			a.choice-link(href='#continue') Show me
+		li.welcome-choice#choice-skip 
+			a.choice-link(href='#skip') Later
+	.feedback-notice.clearfix
+		section.left 
+			img(src='/images/icons/icon_feedback.png').feedback-icon
+		section.right 
+			h4 Want to leave feedback?
+			p Use this button to let us know about bugs, ideas, and suggestions.
+	
+#tutorial-host
+	h1 Movement
+	.movement-contents.tutorial-contents
+		h2 Getting around
+		section.clearfix.movement-basics
+			
+			div.left-image.basics-image
+				img(src='/images/tutorial/tutorial-movement.png')
+			div.right-caption.basics-caption
+				p Flying your ship in Cosmos is very simple.
+				p
+					| Use the 
+					em.orange W 
+					| and 
+					em.orange S 
+					| keys to fly forwards and backwards.
+				p
+					| Use the 
+					em.blue A 
+					| and 
+					em.blue D 
+					| keys to rotate your ship to the left and right.
+		h2 Physics
+		section.clearfix.movement-physics
+			
+			div.fullsize.physics-caption
+				p Movement in Cosmos is entirely physics-based. Inertia and momentum play key roles in how your ship reacts to your input.
+				p If your ship is lopsided, or if its engines or thrusters are not balanced, you may experience unexpected behavior.
+
+	h1 Mining
+	.mining-contents.tutorial-contents
+		section.clearfix.mining-basics
+			h2 The basics
+			div.left-image.basics-image
+				img(src='/images/tutorial/tutorial-mining-cap.png')
+			div.right-caption.basics-caption
+				p Click on the Mine button on the bottom bar to enter mining mode.
+				p In mining mode, you can mine blocks off of asteroids, other players, and space junk.
+				p When in mining mode, click on blocks to mine them. You can only mine blocks on the outsides of objects.
+		section.clearfix.mining-laser
+			h2 Mining lasers
+			div.left-image.laser-image
+				img(src='/images/tutorial/tutorial-mining-laser.png')
+			div.right-caption.laser-caption
+				p Every new ship is equipped with a single mining laser. This laser enables your ship to mine blocks.
+				p If your laser gets destroyed, you will be unable to mine anything until you replace it.
+				p If you put more lasers on your ship, you will mine faster.
+
+	h1 Construction
+	.mining-contents.tutorial-contents
+		section.clearfix.construction-basics
+			h2 The basics
+			div.left-image.basics-image
+				img(src='/images/tutorial/tutorial-construct-cap.png')
+			div.right-caption.basics-caption
+				p Click on the Construct button on the bottom bar to enter Construct mode.
+				p Two things will happen:
+				ul
+					li A bar will appear with all of the blocks in your ship's cargo inventory. When your ship attracts blocks, they'll automatically show up there.
+					li A construction zone will appear around all visible structures.
+				p When in Construct mode, you can build new structures or add on to existing structures.
+				p
+					em To build new structures, 
+					| click on a patch of empty space. A block will be placed where you clicked.
+				p
+					em To add on to existing structures, 
+					| click on a block in a construction zone. A block will be placed there, and the construction zones will update.

@@ -1,6 +1,21 @@
+/**
+ * Subclass of the {@link Element} class. The ice block is special in that it provides little to no nutritional
+ * value but it can be mined very easily.
+ * @class
+ * @typedef {IceBlock}
+ * @namespace
+ * @todo Use this to craft things.
+ */
 var IceBlock = Element.extend({
 	classId: 'IceBlock',
 
+	/**
+	 * The maximum HP for a {@link IceBlock}. Overrides the superclass MAX_HP value. See {@link Block#MAX_HP}.
+	 * @constant {number}
+	 * @default
+	 * @memberof IceBlock
+	 * @instance
+	 */
 	MAX_HP: 8,
 
 	init: function () {

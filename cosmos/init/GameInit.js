@@ -18,7 +18,7 @@ var GameInit = {
 		this.initScenes(game);
 
 		if (ige.isServer) {
-			//this.initEnvironment();
+			this.initEnvironment();
 			this.initPhysics();
 			this.initServerEvents();
 		} else {
@@ -44,6 +44,7 @@ var GameInit = {
 		game.mainViewport = new IgeViewport()
 			.id('mainViewport')
 			.autoSize(true)
+			.minimumVisibleArea(1920, 1200)
 			.scene(game.mainScene)
 			//Note: drawBounds runs on the server for and will slow performance
 			.drawBounds(false) //draws the axis aligned bounding boxes. Set to true for debugging.
@@ -158,37 +159,37 @@ var GameInit = {
 
 		var NUM_NORMAL_ASTEROIDS = 20;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
-			var asteroid = new BlockGrid()
+			var asteroid = BlockStructureGenerator
+				.genProceduralAsteroid(200, BlockStructureGenerator.elementDistributions.randomDistribution())
 				.id('genRandomAsteroid' + asteroidNumber)
 				.streamMode(1)
 				.mount(server.spaceGameScene)
-				.padding(10)
-				.grid(BlockGridGenerator.genProceduralAsteroid(20, undefined, BlockGridGenerator.blockDistributions.randomDistribution()))
 			this.moveRandomly(asteroid);
 		}
 
-		// Instead of creating a bunch of these up front, we might want to create them just ahead of a user as he's flying, and delete them right behind. This will be more efficient.
+		// Instead of creating a bunch of these up front, we might want to create them just ahead of a user as he's
+		// flying, and delete them right behind. This will be more efficient.
 		var NUM_SMALL_ASTEROIDS = 80;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_SMALL_ASTEROIDS; asteroidNumber++) {
-			var asteroid = new BlockGrid()
+			var asteroid = BlockStructureGenerator.singleBlock()
 				.category('smallAsteroid')
 				.id('littleAsteroid' + asteroidNumber)
 				.streamMode(1)
 				.mount(server.spaceGameScene)
-				.padding(1)
-				.grid(BlockGridGenerator.singleBlock());
 			this.moveRandomly(asteroid);
 		}
 
+		// TODO: The procedural generation algorithm is causing strange problems with the new BlockGrid system. Leave
+		// this stuff commented out until it is figured out.
 		var NUM_DERELICT_SPACESHIPS = 10;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_DERELICT_SPACESHIPS; asteroidNumber++) {
-			var asteroid = new BlockGrid()
+			//note that the signature of gen.. is
+			// genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution)
+			var asteroid = BlockStructureGenerator
+				.genProceduralAsteroid(20, BlockStructureGenerator.partDistributions.randomDistribution(), true)
 				.id('spaceShip' + asteroidNumber)
 				.streamMode(1)
 				.mount(server.spaceGameScene)
-				.padding(10)
-				//note that the signature of gen.. is genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution)
-				.grid(BlockGridGenerator.genProceduralAsteroid(20, 20, BlockGridGenerator.blockDistributions.SHIP_PARTS, true));
 			this.moveRandomly(asteroid);
 		}
 	},
@@ -204,45 +205,53 @@ var GameInit = {
 			// Listen for when contact's begin
 			function(contact) {
 				// If player ship is near small asteroids, attract them
-				if (contact.igeEitherCategory('player') &&
-					contact.igeEitherCategory('smallAsteroid')) {
-					var asteroid = contact.igeEntityByCategory('smallAsteroid');
-					var player = contact.igeEntityByCategory('player');
+				if (contact.igeEitherCategory(Player.BOX2D_CATEGORY) &&
+					contact.igeEitherCategory(Drop.BOX2D_CATEGORY)) {
+					var drop = contact.igeEntityByCategory(Drop.BOX2D_CATEGORY);
+					var player = contact.igeEntityByCategory(Player.BOX2D_CATEGORY);
+
+					contact.SetEnabled(false);
 
 					// TODO: Make it so blocks are attracted to multiple players
-					if (asteroid.attractedTo === undefined) {
-						asteroid.attractedTo = player;
+					if (drop.attractedTo() === undefined && drop.isOwner(player)) {
+						drop.attractedTo(player);
 					}
 				}
 			},
 			// Listen for when contacts end
 			function(contact) {
-				if (contact.igeEitherCategory('player') &&
-					contact.igeEitherCategory('smallAsteroid')) {
-					var asteroid = contact.igeEntityByCategory('smallAsteroid');
-					asteroid.attractedTo = undefined;
+				if (contact.igeEitherCategory(Player.BOX2D_CATEGORY) &&
+					contact.igeEitherCategory(Drop.BOX2D_CATEGORY)) {
+					var player = contact.igeEntityByCategory(Player.BOX2D_CATEGORY);
+					var drop = contact.igeEntityByCategory(Drop.BOX2D_CATEGORY);
+					if (drop.isOwner(player)) {
+						drop.attractedTo(undefined);
+					}
 				}
 			},
 			// Presolve events. This is called after collision is detected, but
 			// before collision repsonse is calculated.
 			function(contact) {
-				if (contact.igeEitherCategory('player') &&
-					contact.igeEitherCategory('smallAsteroid')) {
-					var asteroid = contact.igeEntityByCategory('smallAsteroid');
-					var player = contact.igeEntityByCategory('player');
-					var shipFixture = contact.fixtureByCategory('player');
+				if (contact.igeEitherCategory(Drop.BOX2D_CATEGORY)) {
+					contact.SetEnabled(false);
+					if (contact.igeEitherCategory(Player.BOX2D_CATEGORY)) {
+						var drop = contact.igeEntityByCategory(Drop.BOX2D_CATEGORY);
+						var player = contact.igeEntityByCategory(Player.BOX2D_CATEGORY);
+						var shipFixture = contact.fixtureByCategory(Player.BOX2D_CATEGORY);
 
-					// Asteroid has hit ship blocks, destroy the asteroid
-					if (!shipFixture.m_isSensor) {
-						// Disable contact so player doesn't move due to collision
-						contact.SetEnabled(false);
-						// Ignore multiple collision points
-						if (asteroid === undefined || !asteroid.alive()) {
-							return;
+						// Asteroid has hit ship blocks, destroy the asteroid
+						if (!shipFixture.m_isSensor && drop.isOwner(player)) {
+							// Disable contact so player doesn't move due to collision
+							contact.SetEnabled(false);
+							// Ignore multiple collision points
+							if (drop === undefined || !drop.alive()) {
+								return;
+							}
+							var block = drop.block();
+							ige.emit('block collected',
+								[player, block.classId()]);
+							drop.destroy();
 						}
-						ige.emit('block collected',
-							[player, BlockGridPadding.extract1x1(asteroid.grid()).classId()]);
-						asteroid.destroy();
 					}
 				}
 			});

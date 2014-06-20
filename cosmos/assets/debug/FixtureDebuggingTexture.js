@@ -5,20 +5,20 @@ var image = {
 		// Draw block background
 		ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
 		ctx.beginPath();
-		ctx.moveTo(-entity._geometry.x2, -entity._geometry.y2);
-		ctx.lineTo(entity._geometry.x2, -entity._geometry.y2);
-		ctx.lineTo(entity._geometry.x2, entity._geometry.y2);
-		ctx.lineTo(-entity._geometry.x2, entity._geometry.y2);
-		ctx.lineTo(-entity._geometry.x2, -entity._geometry.y2);
+		ctx.moveTo(-entity._bounds2d.x2, -entity._bounds2d.y2);
+		ctx.lineTo(entity._bounds2d.x2, -entity._bounds2d.y2);
+		ctx.lineTo(entity._bounds2d.x2, entity._bounds2d.y2);
+		ctx.lineTo(-entity._bounds2d.x2, entity._bounds2d.y2);
+		ctx.lineTo(-entity._bounds2d.x2, -entity._bounds2d.y2);
 		ctx.fill();
 
 		ctx.strokeStyle = "rgb(100, 0, 0)";
 		ctx.beginPath();
-		ctx.moveTo(-entity._geometry.x2, -entity._geometry.y2);
-		ctx.lineTo(entity._geometry.x2, -entity._geometry.y2);
-		ctx.lineTo(entity._geometry.x2, entity._geometry.y2);
-		ctx.lineTo(-entity._geometry.x2, entity._geometry.y2);
-		ctx.lineTo(-entity._geometry.x2, -entity._geometry.y2);
+		ctx.moveTo(-entity._bounds2d.x2, -entity._bounds2d.y2);
+		ctx.lineTo(entity._bounds2d.x2, -entity._bounds2d.y2);
+		ctx.lineTo(entity._bounds2d.x2, entity._bounds2d.y2);
+		ctx.lineTo(-entity._bounds2d.x2, entity._bounds2d.y2);
+		ctx.lineTo(-entity._bounds2d.x2, -entity._bounds2d.y2);
 		ctx.stroke();
 	}
 };

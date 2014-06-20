@@ -11,7 +11,9 @@ var igeClientConfig = {
 		/* Blocks */
 		'./entities/Block.js',
 		'./entities/BlockGrid.js',
+		'./entities/BlockStructure.js',
 		'./entities/blocks/ConstructionZoneBlock.js',
+		'./entities/Drop.js',
 
 		/* Ship part blocks */
 		'./entities/blocks/Part.js',
@@ -48,10 +50,10 @@ var igeClientConfig = {
 
 		/* Effects */
 		'./entities/effects/mining/LaserBeam.js',
-		'./entities/effects/mining/EffectsMount.js',
 		'./entities/effects/mining/LaserParticle.js',
-		'./entities/effects/mining/EngineParticle.js',
+		'./entities/effects/EngineParticle.js',
 		'./entities/effects/mining/BlockParticleEmitter.js',
+		'./entities/effects/GlowEffect.js',
 
 		/* Structures (prefabs) */
 		'./entities/prefabs/ExampleShips.js',
@@ -70,6 +72,11 @@ var igeClientConfig = {
 		'./models/capabilities/Capability.js',
 		'./models/capabilities/ConstructCapability.js',
 		'./models/capabilities/MineCapability.js',
+
+		/* Notifications */
+		'./notifications/NotificationDefinitions.js',
+		'./notifications/NotificationComponent.js',
+		'./notifications/ui/NotificationUIComponent.js',
 
 		/* === USER INTERFACE === */
 		/* HUD */
@@ -102,11 +109,12 @@ var igeClientConfig = {
 		'./debug/FixtureDebuggingEntity.js',
 
 		/* Helper utilities */
-		'./utils/DeploymentUtils.js',
-		'./utils/RandomInterval.js',
-		'./utils/MetricsHandler.js',
-		'./utils/PrototypeMixins.js',
 		'./utils/BlockGridPadding.js',
+		'./utils/DeploymentUtils.js',
+		'./utils/MetricsHandler.js',
+		'./utils/NetworkUtils.js',
+		'./utils/RandomInterval.js',
+		'./utils/PrototypeMixins.js',
 
 		/* === GAME SETUP === */
 		/* Configuration */

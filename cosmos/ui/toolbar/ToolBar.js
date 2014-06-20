@@ -1,22 +1,117 @@
-﻿var Toolbar = IgeUiElement.extend({
+﻿/**
+ * A Toolbar represents a subpalette of options for a player to choose from when
+ * using a capability. For example, choosing different tools on a Toolbar can affect
+ * the capability's behavior, use the capability with different input, or 
+ * switch between different "flavors" of capability that achieve the same end goal.
+ *
+ * A Toolbar is mounted to a {@link Cap}, and is hidden and shown by {@link Cap#select} and
+ * {@link Cap#deselect}.
+ *
+ * @class
+ * @typedef {Object} Toolbar
+ * @namespace 
+ */
+var Toolbar = IgeUiElement.extend({
 	classId: 'Toolbar',
 
 	/**
-	 * The height of the toolbar.
+	 * The height of the Toolbar.
+	 * @constant {number}
+	 * @default
+	 * @memberof Toolbar
+	 * @instance
 	 */
 	HEIGHT: 64,
+
+	/**
+	 * The spacing between Tools in the Toolbar.
+	 * @constant {number}
+	 * @default
+	 * @memberof Toolbar
+	 * @instance
+	 */
 	TOOL_SPACING: 0,
+
+	/**
+	 * The Toolbar's default RGB color value.
+	 * @constant {string}
+	 * @default
+	 * @memberof Toolbar
+	 * @instance
+	 */
 	BG_COLOR: 'rgb(30, 30, 30)',
+
+	/**
+	 * The Toolbar's default border color
+	 * @constant {string}
+	 * @default
+	 * @memberof Toolbar
+	 * @instance
+	 */
 	BORDER_COLOR: 'rgb(0, 0, 0)',
 
+	/**
+	 * The message to display when the toolbar is loading after a cap selection event.
+	 * @constant {string}
+	 * @default
+	 * @memberof Toolbar
+	 * @instance
+	 */
 	PLACEHOLDER_LOADING: "Just a moment...",
+
+	/**
+	 * The message to display when the toolbar doesn't have any Tools in it.
+	 * @constant {string}
+	 * @default
+	 * @memberof Toolbar
+	 * @instance
+	 */
 	PLACEHOLDER_EMPTY: "Couldn't show anything here.",
 
+	/**
+	 * An array that contains the tools that should be hosted by this Toolbar.
+	 * @memberof Toolbar
+	 * @type {Array}
+	 * @instance
+	 * @private
+	 */
 	_tools: undefined,
+
+	/**
+	 * The placeholder message label for this toolbar.
+	 * @memberof Toolbar
+	 * @type {Object}
+	 * @instance
+	 * @private
+	 */
 	_placeholderMsg: undefined,
+
+	/**
+	 * This Toolbar's parent Cap.
+	 * @memberof Toolbar
+	 * @type {Object}
+	 * @instance
+	 * @private
+	 */
 	_capParent: undefined,
+
+	/**
+	 * An event that is called when a refresh occurs.
+	 * This is bound and unbound depending on whether the toolbar is visible or not (we don't want to 
+	 * waste time refreshing stuff that won't be seen by the player).
+	 *
+	 * @memberof Toolbar
+	 * @type {Object}
+	 * @instance
+	 * @private
+	 */
 	_refreshEvent: undefined,
 
+	/**
+	 * Initializes the Toolbar's styles and placeholder label.
+	 * @memberof Toolbar
+	 * @instance
+	 */
 	init: function() {
 		this.log("Initializing...", 'info');
 		IgeUiElement.prototype.init.call(this);
@@ -40,6 +135,13 @@
 		this._tools = [];
 	},
 
+	/**
+	 * Overrides the IgeUiElement mount call to register this toolbar for toolbar
+	 * refresh events and mount the hosted tools.
+	 * @param elem {Object} the object to mount this Toolbar to
+	 * @memberof Toolbar
+	 * @instance
+	 */
 	mount: function(elem) {
 		IgeUiElement.prototype.mount.call(this, elem);
 
@@ -53,6 +155,12 @@
 		this.mountTools();
 	},
 
+	/**
+	 * Overrides the IgeUiElement unmount call to unregister this toolbar from toolbar
+	 * refresh events and unmount the hosted tools.
+	 * @memberof Toolbar
+	 * @instance
+	 */
 	unMount: function() {
 		for (var i = 0; i < this._tools.length; i++) {
 			var tool = this._tools[i];
@@ -64,6 +172,13 @@
 		IgeUiElement.prototype.unMount.call(this);
 	},
 
+	/**
+	 * Mounts the tools received from the server and positions them appopriately
+	 * on the toolbar. If no tools were received, then put up the placeholder empty message.
+	 * @param needToReselect {boolean} whether a new tool needs to be automatically selected (e.g. if a previously selected tool is no longer available)
+	 * @memberof Toolbar
+	 * @instance
+	 */
 	mountTools: function(needToReselect) {
 		if (needToReselect === undefined) {
 			needToReselect = false;

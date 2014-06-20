@@ -12,6 +12,11 @@ html
     link(href='/stylesheets/ui-dark.css', rel='stylesheet', type='text/css')
     link(href='/stylesheets/cosmos-preview.css', rel='stylesheet', type='text/css')
     link(href='/stylesheets/cosmos-fonts.css', rel='stylesheet', type='text/css')
+    link(href='/stylesheets/steps.css', rel='stylesheet', type='text/css')
+
+    // js
+    script(src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js')
+    script(src='/js/jquery.steps.min.js')
 
     // Application Insights
     script(type='text/javascript').
@@ -37,7 +42,7 @@ html
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-        ga('create', 'UA-50808232-1', 'teamleonine.com');
+        ga('create', 'UA-50808232-2', 'teamleonine.com');
         ga('send', 'pageview');
     else
       script.
@@ -48,17 +53,74 @@ html
         ga('create', 'UA-50808232-1', {'cookieDomain': 'none'});
         ga('send', 'pageview');
   body
+    .cosmos-tutorial-veil#cosmos-tutorial-veil
+      .cosmos-tutorial#cosmos-tutorial-container
+        include includes/cosmosTutorial.jade
     .igeLoading.greeting
       .cosmos-logo
-        img(src='/images/cosmos-preview.jpg')
-      .tutorial
-        img(src='/images/tutorial.png')
+        img(src='/images/preview-intro.png')
     .igeLoading.loadingFloat.preview
       include includes/progress-ring.jade
       #loadingText.loadingText
         | Loading... 
       #loadingProgress
         #loadingProgressBar
+    script(type='text/javascript').
+      // Include the UserVoice JavaScript SDK (only needed once on a page)
+      UserVoice=window.UserVoice||[];
+      (function() {
+        var uv=document.createElement('script');
+        uv.type='text/javascript';
+        uv.async=true;
+        uv.src='//widget.uservoice.com/skoKBVYu64FiUKHwnPS0kg.js';
+        var s=document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(uv,s)
+      })();
+
+      //
+      // UserVoice Javascript SDK developer documentation:
+      // https://www.uservoice.com/o/javascript-sdk
+      //
+
+      // Set colors
+      UserVoice.push(['set', {
+        accent_color: '#448dd6',
+        trigger_color: 'white',
+        trigger_background_color: '#448dd6',
+        trigger_style: 'tab',
+        contact_enabled: true,
+        post_idea_enabled: true,
+        permalinks_enabled: true,
+        smartvote_enabled: true
+      }]);
+
+      // Identify the user and pass traits
+      // To enable, replace sample data with actual user traits and uncomment the line
+      UserVoice.push(['identify', {
+        //email:      'john.doe@example.com', // User’s email address
+        //name:       'John Doe', // User’s real name
+        //created_at: 1364406966, // Unix timestamp for the date the user signed up
+        //id:         123, // Optional: Unique id of the user (if set, this should not change)
+        //type:       'Owner', // Optional: segment your users by type
+        //account: {
+        //  id:           123, // Optional: associate multiple users with a single account
+        //  name:         'Acme, Co.', // Account name
+        //  created_at:   1364406966, // Unix timestamp for the date the account was created
+        //  monthly_rate: 9.99, // Decimal; monthly rate of the account
+        //  ltv:          1495.00, // Decimal; lifetime value of the account
+        //  plan:         'Enhanced' // Plan name for the account
+        //}
+      }]);
+
+      // Add default trigger to the bottom-right corner of the window:
+      //UserVoice.push(['addTrigger', { mode: 'smartvote', trigger_position: 'bottom-left' }]);
+
+      // Or, use your own custom trigger:
+      UserVoice.push(['addTrigger', '#button-uservoice', { mode: 'satisfaction' }]);
+
+      // Autoprompt for Satisfaction and SmartVote (only displayed under certain conditions)
+      UserVoice.push(['autoprompt', {}]);
+    #button-uservoice
     div(style='position: absolute; right: 0; bottom: 0;')
       #cboxbutton.chat-closed(onclick='togglecbox()')
       #cboxdiv
@@ -76,14 +138,14 @@ html
         }
         cbdiv.style.display = "block";
         cbbut.className = "chat-open";
-        if(ige !== undefined && ige.client !== undefined) {
+        if(window['ige'] && ige !== undefined && ige.client !== undefined) {
         ige.client.metrics.fireEvent('chat', 'open');
         }
         }
         else {
         cbdiv.style.display = "none";
         cbbut.className = "chat-closed";
-        if(ige !== undefined && ige.client !== undefined) {
+        if(window['ige'] && ige !== undefined && ige.client !== undefined) {
         ige.client.metrics.fireEvent('chat', 'close');
         }
         }

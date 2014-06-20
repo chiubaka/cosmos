@@ -10,9 +10,6 @@ var Server = IgeClass.extend({
 		self.LAYER_HUD = 90;
 		self.DEPTH_PLAYER = 90;
 
-		// Load our blocks
-		self.obj = [];
-
 		// set the framerate
 		ige.setFps(60);
 
@@ -30,6 +27,9 @@ var Server = IgeClass.extend({
 
 		// Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);
+
+		// Add server side notification component
+		ige.addComponent(NotificationComponent)
 
 		// Define an object to hold references to our player entities
 		this.players = {};
@@ -60,6 +60,8 @@ var Server = IgeClass.extend({
 						ige.network.define('constructionZoneClicked', self._onConstructionZoneClicked);
 						/* Define this command so that we can use it on the client */
 						ige.network.define('blockAction');
+						ige.network.define('addEffect');
+						ige.network.define('removeEffect');
 
 						ige.network.define('cargoRequest', self._onCargoRequest);
 						ige.network.define('cargoUpdate');

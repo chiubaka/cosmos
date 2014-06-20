@@ -1,21 +1,60 @@
-var Player = BlockGrid.extend({
+/**
+ * An {@link IgeEntity} that represents a player in the game.
+ * The player class contains all of the additional data and functionality (beyond a mere block grid) that is needed to
+ * represent a player in Cosmos.
+ * @typedef {Player}
+ * @class
+ * @namespace
+ * @todo This design should be replaced by something more natural (like there should be a ship class) and/or
+ * something component-based.
+ */
+var Player = BlockStructure.extend({
 	classId: 'Player',
 
-	PLAYER_START_DISTANCE: 4000,
-
-	/** The session ID associated with this player's client. */
+	/**
+	 * The session ID associated with this player's client and current session.
+	 * @type {string}
+	 * @memberof Player
+	 * @private
+	 * @instance
+	 */
 	_sid: undefined,
+	/**
+	 * The ID for this {@link Player} object in the database. Used for loading and storing data associated with a
+	 * particular {@link Player}.
+	 * @type {string}
+	 * @memberof Player
+	 * @private
+	 * @instance
+	 */
 	_dbId: undefined,
 
+	/**
+	 * Whether or not this {@link Player} is mining. Used to restrict players from mining more than one {@link Block}
+	 * at a time.
+	 * @type {boolean}
+	 * @memberof Player
+	 * @instance
+	 */
+	mining: false,
+
+	/**
+	 * The clientId associated with the player. Used to send notifications to
+	 * a specific player.
+	 * @type {string}
+	 * @memberof Player
+	 * @private
+	 * @instance
+	 */
+	 _clientId: undefined,
+
 	init: function(data) {
-		BlockGrid.prototype.init.call(this, data);
+		BlockStructure.prototype.init.call(this, data);
 
 		var self = this;
 
-		this.category('player');
+		this.category(Player.BOX2D_CATEGORY);
 		this._attractionStrength = 1;
-
-		this.drawBounds(false);
 
 		this.controls = {
 			key: {
@@ -27,9 +66,9 @@ var Player = BlockGrid.extend({
 		};
 
 		if (ige.isClient) {
-			this.initClient();
+			this._initClient();
 		} else {
-			this.initServer();
+			this._initServer();
 		}
 
 		// Define the data sections that will be included in the stream
@@ -38,8 +77,10 @@ var Player = BlockGrid.extend({
 
 	/**
 	 * Getter/setter for the _sid parameter, which stores the session ID of this player.
-	 * @param val The new value to use or undefined if we are invoking this function as the getter.
-	 * @returns {*} Either the current _sid or this object so that we can chain setter calls.
+	 * @param val {string?} The new value to use or undefined if we are invoking this function as the getter.
+	 * @returns {string|Player} Either the current _sid or this object so that we can chain setter calls.
+	 * @memberof Player
+	 * @instance
 	 */
 	sid: function(val) {
 		if (val === undefined) {
@@ -49,6 +90,13 @@ var Player = BlockGrid.extend({
 		return this;
 	},
 
+	/**
+	 * Getter/setter for the dbId parameter, which stores the database ID of this player.
+	 * @param val {string?} The new value to use or undefined if we are invoking this function as the getter.
+	 * @returns {string|Player} Either the current database ID or this object so that we can chain setter calls.
+	 * @memberof Player
+	 * @instance
+	 */
 	dbId: function(val) {
 		if (val === undefined) {
 			return this._dbId;
@@ -58,104 +106,50 @@ var Player = BlockGrid.extend({
 	},
 
 	/**
-	 * Perform client-specific initialization here. Called by init()
+	 * Getter/setter for the _clientId parameter. This is set when the player
+	 * is created and read when a notification is sent to a specific
+	 * player.
+	 * @param val {string?} The new value to use or undefined if we are invoking this function as the getter.
+	 * @returns {string|Player} Either the clientId or this object so that we can chain setter calls.
+	 * @memberof Player
+	 * @instance
 	 */
-	initClient: function() {
-		this.depth(1);
-		// TODO: Add engine particles dynamically as engine blocks are added
-		//this.addEngineParticles();
+	clientId: function(val) {
+		if (val === undefined) {
+			return this._clientId;
+		}
+		this._clientId = val;
+		return this;
+	},
+
+
+	/**
+	 * Perform client-specific initialization here. Called by init()
+	 * @memberof Player
+	 * @private
+	 * @instance
+	 */
+	_initClient: function() {
+		this.depth(Player.DEPTH);
 	},
 
 	/**
 	 * Perform server-specific initialization here. Called by init()
+	 * @memberof Player
+	 * @private
+	 * @instance
 	 */
-	initServer: function() {
+	_initServer: function() {
 		this.cargo = new Cargo();
-	},
-
-	// Created on server, streamed to all clients
-	addLaser: function(blockGridId, row, col) {
-		// Hack because we can't mount on mining laser block
-		// (Server has no blocks mounted)
-		if(this.laserMount === undefined) {
-			this.laserMount = new EffectsMount()
-				.mount(this)
-				.streamMode(1)
-				// TODO: Vary the position depending on where mining laser is,
-				// or implement server streaming of blocks.
-				// Right now, we translate the laser mount to the location of the mining
-				// laser block.
-				.translateBy(0, -115, 0)
-		}
-
-		this.laserBeam = new LaserBeam()
-			.setTarget(blockGridId, row, col)
-			.streamMode(1)
-			.mount(this.laserMount);
-
-		return this;
-	},
-
-	addEngineParticles: function() {
-		var player = this;
-		this.laserParticleEmitter = new IgeParticleEmitter()
-			// Set the particle entity to generate for each particle
-			.particle(EngineParticle)
-			// Set particle life to 300ms
-			.lifeBase(300)
-			// Set output to 60 particles a second (1000ms)
-			.quantityBase(60)
-			.quantityTimespan(1000)
-			// Set the particle's death opacity to zero so it fades out as it's lifespan runs out
-			.deathOpacityBase(0)
-			// Set velocity vector to y = 0.05, with variance values
-			//.velocityVector(new IgePoint3d(0, 0.05, 0), new IgePoint3d(-0.04, 0.05, 0), new IgePoint3d(0.04, 0.15, 0))
-			.translateVarianceY(-10, 10)
-			.translateVarianceX(-10, 10)
-			// Mount new particles to the object scene
-			.particleMountTarget(ige.client.spaceGameScene)
-			// Move the particle emitter to the bottom of the ship
-			.translateTo(0, 100, 0)
-			.mount(player)
-			// Mount the emitter to the ship
-			.start();
-	},
-
-	/**
-	 * Override the default IgeEntity class streamSectionData() method
-	 * so that we can check for the custom1 section and handle how we deal
-	 * with it.
-	 * @param {String} sectionId A string identifying the section to
-	 * handle data get / set for.
-	 * @param {*=} data If present, this is the data that has been sent
-	 * from the server to the client for this entity.
-	 * @return {*}
-	 */
-	streamSectionData: function(sectionId, data) {
-		// Check if the section is one that we are handling
-		if (sectionId === 'score') {
-			// Check if the server sent us data, if not we are supposed
-			// to return the data instead of set it
-			if (data) {
-				// We have been given new data!
-				this._score = data;
-			} else {
-				// Return current data
-				return this._score;
-			}
-		} else {
-			// The section was not one that we handle here, so pass this
-			// to the super-class streamSectionData() method - it handles
-			// the "transform" section by itself
-			return IgeEntity.prototype.streamSectionData.call(this, sectionId, data);
-		}
 	},
 
 	/**
 	 * Add the sensor fixture. Called in ServerNetworkEvents after the box2Dbody
 	 * is created.
-	 * @param {number} radius sets the radius of the attraction field
-	 * @return {Player}
+	 * @param radius {number} The radius of the attraction field
+	 * @return {Player} This object is returned to facilitate setter chaining.
+	 * @memberof Player
+	 * @instance
 	 */
 	addSensor: function(radius) {
 		// Create the fixture
@@ -172,7 +166,8 @@ var Player = BlockGrid.extend({
 					y: 0
 				}
 			}
-		}
+		};
+
 		var tempFixture = ige.box2d.createFixture(fixtureDef);
 		var tempShape = new ige.box2d.b2CircleShape();
 
@@ -189,8 +184,11 @@ var Player = BlockGrid.extend({
 
 	/**
 	 * Get/set the strength of attraction
-	 * @param {?number} Strength is a multiplier for attraction force
-	 * @return {(number|Player)}
+	 * @param strength {number?} A multiplier for attraction force
+	 * @return {(number|Player)} The current attraction strength if no argument is passed or this object if an argument
+	 * is passed in order to support setter chaining.
+	 * @memberof Player
+	 * @instance
 	 */
 	attractionStrength: function(strength) {
 		if (strength === undefined) {
@@ -204,32 +202,86 @@ var Player = BlockGrid.extend({
 
 	/**
 	 * Changes the player's location to a random new location.
+	 * @memberof Player
+	 * @instance
 	 */
 	relocate: function() {
 		this.translateTo(
-			(Math.random() - .5) * Player.prototype.PLAYER_START_DISTANCE,
-			(Math.random() - .5) * Player.prototype.PLAYER_START_DISTANCE,
+			(Math.random() - .5) * Player.PLAYER_START_RADIUS,
+			(Math.random() - .5) * Player.PLAYER_START_RADIUS,
 			0
 		);
 	},
 
 	/**
-	 * Called every time a ship mines a block
-	 */
-	blockMinedListener: function (player, blockClassId) {
-		player.laserBeam.destroy();
-		player.laserBeam = undefined;
-	},
-
-	/**
-	 * Called every time a ship collects a block
+	 * Called every time a ship collects a block.
+	 * @memberof Player
+	 * @instance
+	 * @todo Make this a static function because it doesn't use instance data
+	 * @todo Add a cool animation or sound here, or on another listener
 	 */
 	blockCollectListener: function (player, blockClassId) {
-		//TODO: Add a cool animation or sound here, or on another listener
-		//console.log("Block collected!");
 		player.cargo.addBlock(blockClassId);
 	},
 
+	/**
+	 * Checks if the player is able to mine
+	 * @memberof Player
+	 * @instance
+	 * @return {Boolean} True if player can mine
+	 */
+	 canMine: function () {
+		// Do not start mining if we are already mining
+		if (this.mining) {
+			return false;
+		}
+
+		// Do not start mining if player has no mining lasers
+		if (this.numBlocksOfType(MiningLaserBlock.prototype.classId()) === 0) {
+			ige.network.stream.queueCommand('notificationError',
+				NotificationDefinitions.errorKeys.noMiningLaser, clientId);
+			return false;
+		}
+		return true;
+	 },
+
+	/**
+	 * Sends messages to clients to tell them to turn on all of the mining lasers for this player.
+	 * @param targetBlock {Block} The {@link Block} that the mining lasers will be focused on.
+	 * @memberof Player
+	 * @instance
+	 * @todo The fireMiningLasers should be in the Ship class, but it doesn't exist yet.
+	 */
+	fireMiningLasers: function(targetBlock) {
+		var miningLasers = this.blocksOfType(MiningLaserBlock.prototype.classId());
+		for (var i = 0; i < miningLasers.length; i++) {
+			var miningLaser = miningLasers[i];
+			ige.network.send('addEffect', NetworkUtils.effect('miningLaser', miningLaser, targetBlock));
+		}
+	},
+
+	/**
+	 * Sends messages to clients to tell them to turn off all of the mining lasers for this player.
+	 * @param targetBlock {Block} The {@link Block} that the mining lasers were focused on.
+	 * @memberof Player
+	 * @instance
+	 * @todo The turnOffMiningLasers should be in the Ship class, but it doesn't exist yet.
+	 */
+	turnOffMiningLasers: function(targetBlock) {
+		var miningLasers = this.blocksOfType('MiningLaserBlock');
+		for (var i = 0; i < miningLasers.length; i++) {
+			var miningLaser = miningLasers[i];
+			ige.network.send('removeEffect', NetworkUtils.effect('miningLaser', miningLaser, targetBlock));
+		}
+	},
+
+	/**
+	 * Override the {@link IgeEntity#update} function to provide support for player controls and {@link Block} functions
+	 * like applying force where {@link EngineBlock}s are or turning faster when there are more {@link ThrusterBlock}s.
+	 * @param ctx {Object} The render context.
+	 * @memberof Player
+	 * @instance
+	 */
 	update: function(ctx) {
 		if (!ige.isServer) {
 			/* Save the old control state for comparison later */
@@ -251,16 +303,26 @@ var Player = BlockGrid.extend({
 			}
 		}
 
+		// TODO: Do not spam the player with notifications if engines/thruster
+		// are removed
 		if (ige.isServer) {
-			// This determines how fast you can rotate your spaceship
-			// It's some constant times the number of thrusters you have
-			var angularImpulse = -3000 * this.numBlocksOfType('ThrusterBlock');
+			/* Angular motion */
+			// Angular rotation speed depends on number of thrusters
+			var numRotationalThrusters = this.numBlocksOfType('ThrusterBlock');
+			var angularImpulse = -3000 * numRotationalThrusters;
 
-			if (this.controls.key.left) {
-				this._box2dBody.ApplyTorque(angularImpulse);
-			}
-			if (this.controls.key.right) {
-				this._box2dBody.ApplyTorque(-angularImpulse);
+			if (this.controls.key.left || this.controls.key.right) {
+				if (numRotationalThrusters < 1) {
+					ige.network.stream.queueCommand('notificationError',
+						NotificationDefinitions.errorKeys.noRotationalThruster, this._clientId);
+				}
+
+				if (this.controls.key.left) {
+					this._box2dBody.ApplyTorque(angularImpulse);
+				}
+				if (this.controls.key.right) {
+					this._box2dBody.ApplyTorque(-angularImpulse);
+				}
 			}
 
 			/* Linear motion */
@@ -280,25 +342,34 @@ var Player = BlockGrid.extend({
 				var y_comp = Math.sin(angle) * linearImpulse;
 
 				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
-				var location = this._box2dBody.GetWorldCenter(); //center of gravity
 
-				var grid = this.grid();
-				for (row = 0; row < grid.length; row++) {
-					var blockRow = grid[row];
-					for (col = 0; col < blockRow.length; col++) {
-						var block = blockRow[col];
+				var engines = this.blocksOfType(EngineBlock.prototype.classId());
 
-						if(block && block.classId() === "EngineBlock") {
-							//TODO: Fixtures should have their own position in box2d units. Something like block.fixture().m_shape.m_centroid should work. But this is a little tricky because box2D fixtures don't seem to compute their own world coordinates or rotated offsets. They only store the unrotated offset. Talk with @rafaelCosman if you want help doing this TODO.
-						
-							// I'm deviding by 10 because that's the scale factor between IGE and Box2D
-							var pointToApplyTo = {x: (this.translate().x() + block.translate().x()) / 10.0, y: (this.translate().y() - block.translate().y()) / 10.0};
-							pointToApplyTo.x = 2 * this._box2dBody.GetWorldCenter().x - pointToApplyTo.x
-							pointToApplyTo.y = 2 * this._box2dBody.GetWorldCenter().y - pointToApplyTo.y
-							this._box2dBody.ApplyImpulse(impulse, pointToApplyTo);
+				// Notify player that they cannot fly without an engine
+				if (engines.length < 1) {
+					ige.network.stream.queueCommand('notificationError',
+						NotificationDefinitions.errorKeys.noEngine, this._clientId);
+				}
 
-						}
-					}
+				for (var i = 0; i < engines.length; i++) {
+					var engine = engines[i];
+					// TODO: Fixtures should have their own position in box2d units.
+					// Something like block.fixture().m_shape.m_centroid should work.
+					// But this is a little tricky because box2D fixtures don't seem to
+					// compute their own world coordinates or rotated offsets. They only
+					// store the unrotated offset.
+					// Talk with @rafaelCosman if you want help doing this TODO.
+
+					var scaleRatio = ige.box2d.scaleRatio();
+					var thisX = this.translate().x();
+					var thisY = this.translate().y();
+					var engineX = engine.translate().x();
+					var engineY = engine.translate().y();
+
+					var pointToApplyTo = {x: (thisX + engineX) / scaleRatio, y: (thisY - engineY) / scaleRatio};
+					pointToApplyTo.x = 2 * this._box2dBody.GetWorldCenter().x - pointToApplyTo.x;
+					pointToApplyTo.y = 2 * this._box2dBody.GetWorldCenter().y - pointToApplyTo.y;
+					this._box2dBody.ApplyImpulse(impulse, pointToApplyTo);
 				}
 			}
 		}
@@ -306,5 +377,30 @@ var Player = BlockGrid.extend({
 		BlockGrid.prototype.update.call(this, ctx);
 	}
 });
+
+/**
+ * The radius from the center of the world within which players will spawn.
+ * @constant {number}
+ * @default
+ * @memberof Player
+ */
+Player.PLAYER_START_RADIUS = 4000;
+
+/**
+ * The Box2D category of all player entities. Used by Box2D to determine what to do in certain collision scenarios.
+ * @constant {string}
+ * @default
+ * @memberof Player
+ */
+Player.BOX2D_CATEGORY = 'player';
+
+/**
+ * The default depth layer for {@link Player}s when rendered to the screen. Should be rendered above other
+ * {@link BlockGrid}s.
+ * @constant {number}
+ * @default
+ * @memberof Player
+ */
+Player.DEPTH = 2;
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Player; }

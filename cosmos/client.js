@@ -31,6 +31,7 @@ var Client = IgeClass.extend({
 		// Load the textures we want to use
 		this.textures = {
 			block: new IgeTexture(gameRoot + 'assets/BlockTexture.js'),
+			glow: new IgeTexture(gameRoot + 'assets/GlowEffectTexture.js'),
 			background_helix_nebula: new IgeTexture(gameRoot +
 				'assets/backgrounds/helix_nebula.jpg'),
 			fixtureDebuggingTexture: new IgeTexture(gameRoot +
@@ -107,6 +108,10 @@ var Client = IgeClass.extend({
 						ige.network.define('playerEntity', self._onPlayerEntity);
 						// Called when the server needs to broadcast updates about a block
 						ige.network.define('blockAction', self._onBlockAction);
+						// Called when the server wants to add an effect to a block
+						ige.network.define('addEffect', self._onAddEffect);
+						// Called when the server wants to remove an effect from a block
+						ige.network.define('removeEffect', self._onRemoveEffect);
 
 						ige.network.define('cargoResponse', self._onCargoResponse);
 						ige.network.define('cargoUpdate', self._onCargoUpdate);
@@ -114,6 +119,11 @@ var Client = IgeClass.extend({
 						// Setup the network stream handler
 						ige.network.addComponent(IgeStreamComponent)
 							.stream.renderLatency(80); // Render the simulation 160 milliseconds in the past
+
+						// Enable notifications
+						ige.addComponent(NotificationComponent);
+						ige.notification.addComponent(NotificationUIComponent)
+							.start();
 
 						// Ask the server to create an entity for us
 						ige.network.send('playerEntity', {sid: self.getSessionId()});

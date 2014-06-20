@@ -1,0 +1,35 @@
+{
+	"name": "cosmos",
+	"version": "0.0.1",
+	"author":"Team Leonine <ops@teamleonine.com>",
+	"description":"The Cosmos video game - running 'npm start' will start the Cosmos server.",
+	"contributors": [
+		{ 
+			"name": "Daniel Chiu",
+			"email": "daniel@teamleonine.com"
+		},
+		{
+	  		"name": "Rafael Cosman",
+	  		"email": "rafael@teamleonine.com"
+		},
+		{
+	  		"name": "Derrick Liu",
+	  		"email": "derrick@teamleonine.com"
+		},
+		{
+	  		"name": "Eric Thong",
+	  		"email": "eric@teamleonine.com"
+		},
+		{
+			"name": "Rob Evans",
+			"email": "rob@irrelon.com"
+		}
+	],
+	"dependencies": {
+    "jsdoc": "git+https://github.com/jsdoc3/jsdoc.git"
+  },
+	"private": true,
+	"engines": {
+		"node": ">=0.8.3"
+	}
+}

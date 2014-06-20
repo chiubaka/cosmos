@@ -11,7 +11,9 @@ var config = {
 		/* Blocks */
 		{ name: 'Block', path: './entities/Block' },
 		{ name: 'BlockGrid', path: './entities/BlockGrid' },
+		{ name: 'BlockStructure', path: './entities/BlockStructure' },
 		{ name: 'ConstructionZoneBlock', path: 'entities/blocks/ConstructionZoneBlock' },
+		{ name: 'Drop', path: 'entities/Drop' },
 
 		/* Ship part blocks */
 		{ name: 'Part', path: './entities/blocks/Part' },
@@ -45,19 +47,12 @@ var config = {
 		{ name: 'CobaltBlock', path: './entities/blocks/elements/CobaltBlock' },
 		{ name: 'IceBlock', path: './entities/blocks/elements/IceBlock' },//not really an element
 
-		/* Effects */
-		{ name: 'LaserBeam', path: './entities/effects/mining/LaserBeam' },
-		{ name: 'EffectsMount', path: './entities/effects/mining/EffectsMount'},
-		{ name: 'LaserParticle', path: './entities/effects/mining/LaserParticle'},
-		{ name: 'EngineParticle', path: './entities/effects/mining/EngineParticle'},
-		{ name: 'BlockParticleEmitter', path: './entities/effects/mining/BlockParticleEmitter'},
-
 		/* Structures (Prefabs) */
 		{ name: 'ExampleShips', path: './entities/prefabs/ExampleShips' },
 
 		/* Scenery */
 		{ name: 'Background', path: './entities/scenery/Background' },
-		{ name: 'BlockGridGenerator', path: './entities/scenery/BlockGridGenerator' },
+		{ name: 'BlockStructureGenerator', path: './entities/scenery/BlockStructureGenerator' },
 
 		/* === PLAYER STATE === */
 		{ name: 'Player', path: './entities/player/Player' },
@@ -72,15 +67,19 @@ var config = {
 		{ name: 'DbPlayer', path: './db/DbPlayer' },
 		{ name: 'DbSession', path: './db/DbSession' },
 
+		/* Notifications */
+		{ name: 'NotificationComponent', path: './notifications/NotificationComponent'},
+		{ name: 'NotificationDefinitions', path: './notifications/NotificationDefinitions'},
+
 		/* === SUPPLEMENTAL FUNCTIONALITY=== */
 		/* Debugging */
 		{ name: 'FixtureDebuggingEntity', path: './debug/FixtureDebuggingEntity' },
 
 		/* Helper Utilities */
+		{ name: 'BlockGridPadding', path: './utils/BlockGridPadding' },
+		{ name: 'NetworkUtils', path: './utils/NetworkUtils' },
 		{ name: 'PrototypeMixins', path: './utils/PrototypeMixins' },
 		{ name: 'RandomInterval', path: './utils/RandomInterval' },
-		{ name: 'BlockGridPadding', path: './utils/BlockGridPadding' },
-		{ name: 'Enlarge', path: './utils/Enlarge'},
 
 		/* === EXTERNAL LIBRARIES === */
 		{ name: 'WeightedSelection', path: './lib/weighted' },

@@ -43,6 +43,11 @@ var ServerNetworkEvents = {
 		player.cargo.unsubscribeFromUpdates(clientId);
 
 		var self = this;
+		/**
+		 * @callback updatePlayerCallback
+		 * @param err {Error | null}
+		 * @param result {*}
+		 */
 		DbPlayer.update(player.dbId(), player, function(err, result) {
 			if (err) {
 				self.log('Cannot save player in database!', 'error')
@@ -68,6 +73,11 @@ var ServerNetworkEvents = {
 	 */
 	_onPlayerEntity: function(data, clientId) {
 		var self = this;
+		/**
+		 * @callback onPlayerEntitySessionCallback
+		 * @param err {Error | null}
+		 * @param playerId {String} A unique player identifier.
+		 */
 		DbSession.playerIdForSession(data.sid, function(err, playerId) {
 			if (err) {
 				self.log('Cannot load session from database!', 'error');
@@ -77,6 +87,12 @@ var ServerNetworkEvents = {
 
 			}
 
+			/**
+			 * @callback onPlayerEntityLoadCallback
+			 * @param err {Error | null}
+			 * @param ship {Array} Player's ship, represented as a 2D array
+			 * @param cargo {Array} Player's cargo
+			 */
 			DbPlayer.load(playerId, function(err, ship, cargo) {
 				if (err) {
 					self.log('Cannot load player from database!', 'error')
@@ -96,24 +112,26 @@ var ServerNetworkEvents = {
 	 * @private
 	 */
 	_createPlayer: function(clientId, playerId, ship, cargo) {
-		var player = new Player();
+		var player = new Player()
+			// Call BlockGrid#debugFixtures before calling BlockGrid#fromBlockMatrix, since debugging entities are
+			// added when fixtures are added.
+			.debugFixtures(false);
 
 		if (ship === undefined) {
-			player.grid(ExampleShips.starterShipSingleMisplacedEngine());
+			player.fromBlockMatrix(ExampleShips.starterShip(), false);
 		}
 		else {
-			player.grid(BlockGrid.prototype.rehydrateGrid(ship));
+			player.fromBlockTypeMatrix(ship, false);
 		}
 
 		if (playerId !== undefined) {
 			player.dbId(playerId);
 		}
 
-		player.debugFixtures(false)//call this before calling setGrid()
-			.padding(10)
-			.addSensor(300)
+		player.addSensor(300)
 			.attractionStrength(1)
 			.streamMode(1)
+			.clientId(clientId)
 			.mount(ige.server.spaceGameScene)
 			.relocate();
 
@@ -143,6 +161,8 @@ var ServerNetworkEvents = {
 		}
 
 		player.relocate();
+		ige.network.stream.queueCommand('notificationSuccess',
+			NotificationDefinitions.successKeys.relocateShip, clientId);
 	},
 
 	/**
@@ -161,6 +181,8 @@ var ServerNetworkEvents = {
 		ige.server._destroyPlayer(clientId, player);
 		// We pass no third or fourth argument to _createPlayer() here, which requests a completely new ship
 		ige.server._createPlayer(clientId, playerId);
+		ige.network.stream.queueCommand('notificationSuccess',
+			NotificationDefinitions.successKeys.newShip, clientId);
 	},
 
 	/**
@@ -184,22 +206,23 @@ var ServerNetworkEvents = {
 			return;
 		}
 
-		// Do not start mining if we are already mining
-		if (player.laserBeam !== undefined) {
-			return;
-		}
-
 		// TODO: Guard against bogus blockGridId from client
 		var blockGrid = ige.$(data.blockGridId);
 		if (blockGrid === undefined) {
 			return;
 		}
 
+		if (!player.canMine()) {
+			return;
+		}
+
 		data.action = 'mine';
 		if(blockGrid.processBlockActionServer(data, player)) {
-			// Activate mining laser
-			player.addLaser(data.blockGridId, data.row, data.col);
-			blockGrid.addMiningParticles(data.blockGridId, data.row, data.col);
+			player.mining = true;
+
+			var targetBlock = blockGrid.get(data.row, data.col);
+			// Activate mining lasers
+			player.fireMiningLasers(targetBlock);
 		}
 	},
 
@@ -214,17 +237,17 @@ var ServerNetworkEvents = {
 
 		if (blockToPlace !== undefined) {
 			//console.log("Placing item: " + blockToPlace.classId(), 'info');
-			new BlockGrid()
-				.category('smallAsteroid')
-				.id('littleAsteroid' + Math.random())
+			new BlockStructure()
 				.streamMode(1)
 				.mount(ige.$("spaceGameScene"))
 				.depth(100)
-				.grid([[blockToPlace]])
+				.fromBlockMatrix([[blockToPlace]])
 				.translateTo(data.x, data.y, 0);
 
 			var confirmData = { category: 'construct', action: 'new', label: data.selectedType };
 			ige.network.send('confirm', confirmData, clientId);
+			ige.network.stream.queueCommand('notificationSuccess', 
+				NotificationDefinitions.successKeys.constructNewBlock, clientId);
 		}
 	},
 

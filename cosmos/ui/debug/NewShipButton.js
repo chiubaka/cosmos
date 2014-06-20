@@ -1,12 +1,38 @@
+/**
+ * The NewShipButton provides players with a quick way to replace their current
+ * ship with the default starting ship and place them in a new location.
+ *
+ * @class
+ * @typedef {Object} NewShipButton
+ * @namespace  
+ */
 var NewShipButton = IgeUiButton.extend({
 	classId: "NewShipButton",
 
 	/**
-	 * Defines the dimensions of a capability on the Capbar
+	 * The width of the button.
+	 * @constant {number}
+	 * @default
+	 * @memberof NewShipButton
+	 * @instance
 	 */
 	WIDTH: 128,
+
+	/**
+	 * The height of the button.
+	 * @constant {number}
+	 * @default
+	 * @memberof NewShipButton
+	 * @instance
+	 */
 	HEIGHT: 64,
 
+	/**
+	 * Initializes the Button's styles, label, and attaches event emitters to relay
+	 * player interaction events.
+	 * @memberof NewShipButton
+	 * @instance
+	 */
 	init: function() {
 		IgeUiButton.prototype.init.call(this);
 
@@ -28,6 +54,11 @@ var NewShipButton = IgeUiButton.extend({
 		this.allowActive(false);
 	},
 
+	/**
+	 * Initializes the Button's styles.
+	 * @memberof NewShipButton
+	 * @instance
+	 */
 	initStyles: function() {
 		this.width(this.WIDTH);
 		this.height(this.HEIGHT);
@@ -41,12 +72,17 @@ var NewShipButton = IgeUiButton.extend({
 			'backgroundColor': 'rgb(200,0,0)',
 			'borderColor': 'rgb(0,0,0)',
 			// The button should show up on the right, underneath the respawn button
-			'top': RelocateButton.prototype.HEIGHT,
+			'top': NewShipButton.prototype.HEIGHT,
 			'right': 0,
 			'height': this.HEIGHT
 		});
 	},
 
+	/**
+	 * Initializes the Button's label (text on the button).
+	 * @memberof NewShipButton
+	 * @instance
+	 */
 	initLabel: function() {
 		this.data('ui', {
 			'text': {
@@ -56,12 +92,19 @@ var NewShipButton = IgeUiButton.extend({
 		});
 	},
 
+	/**
+	 * Initializes the Button's event emitter, which emits a client event when the
+	 * player clicks the button.
+	 * @memberof NewShipButton
+	 * @instance
+	 */
 	initEvents: function() {
 		var self = this;
 
 		this.mouseDown(function(event, control) {
 			ige.network.send('new ship');
 			ige.emit('new ship button clicked');
+			control.stopPropagation();
 		});
 	}
 });
