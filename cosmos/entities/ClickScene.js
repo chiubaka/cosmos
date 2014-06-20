@@ -12,7 +12,6 @@ var ClickScene = IgeScene2d.extend({
 		IgeScene2d.prototype.init.call(this);
 		this.ignoreCamera(true);
 		this.mouseDown(this._mouseDownHandler);
-
 	},
 
 	/**
