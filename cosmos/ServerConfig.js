@@ -54,6 +54,10 @@ var config = {
 		{ name: 'DbPlayer', path: './db/DbPlayer' },
 		{ name: 'DbSession', path: './db/DbSession' },
 
+		/* Notifications */
+		{ name: 'NotificationComponent', path: './notifications/NotificationComponent'},
+		{ name: 'NotificationDefinitions', path: './notifications/NotificationDefinitions'},
+
 		/* === SUPPLEMENTAL FUNCTIONALITY=== */
 		/* Debugging */
 		{ name: 'FixtureDebuggingEntity', path: './debug/FixtureDebuggingEntity' },

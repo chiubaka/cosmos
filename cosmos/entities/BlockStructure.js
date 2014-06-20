@@ -130,6 +130,8 @@ var BlockStructure = BlockGrid.extend({
 						self.drop(data.row, data.col, player);
 						data.action = 'remove';
 						ige.network.send('blockAction', data);
+						ige.network.stream.queueCommand('notificationSuccess',
+							NotificationDefinitions.successKeys.minedBlock, player.clientId());
 					}
 				}, Block.MINING_INTERVAL / player.numBlocksOfType(MiningLaserBlock.prototype.classId()));
 				return true;

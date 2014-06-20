@@ -38,6 +38,16 @@ var Player = BlockStructure.extend({
 	 */
 	mining: false,
 
+	/**
+	 * The clientId associated with the player. Used to send notifications to
+	 * a specific player.
+	 * @type {string}
+	 * @memberof Player
+	 * @private
+	 * @instance
+	 */
+	 _clientId: undefined,
+
 	init: function(data) {
 		BlockStructure.prototype.init.call(this, data);
 
@@ -94,6 +104,24 @@ var Player = BlockStructure.extend({
 		this._dbId = val;
 		return this;
 	},
+
+	/**
+	 * Getter/setter for the _clientId parameter. This is set when the player
+	 * is created and read when a notification is sent to a specific
+	 * player.
+	 * @param val {string?} The new value to use or undefined if we are invoking this function as the getter.
+	 * @returns {string|Player} Either the clientId or this object so that we can chain setter calls.
+	 * @memberof Player
+	 * @instance
+	 */
+	clientId: function(val) {
+		if (val === undefined) {
+			return this._clientId;
+		}
+		this._clientId = val;
+		return this;
+	},
+
 
 	/**
 	 * Perform client-specific initialization here. Called by init()
@@ -197,6 +225,27 @@ var Player = BlockStructure.extend({
 	},
 
 	/**
+	 * Checks if the player is able to mine
+	 * @memberof Player
+	 * @instance
+	 * @return {Boolean} True if player can mine
+	 */
+	 canMine: function () {
+		// Do not start mining if we are already mining
+		if (this.mining) {
+			return false;
+		}
+
+		// Do not start mining if player has no mining lasers
+		if (this.numBlocksOfType(MiningLaserBlock.prototype.classId()) === 0) {
+			ige.network.stream.queueCommand('notificationError',
+				NotificationDefinitions.errorKeys.noMiningLaser, clientId);
+			return false;
+		}
+		return true;
+	 },
+
+	/**
 	 * Sends messages to clients to tell them to turn on all of the mining lasers for this player.
 	 * @param targetBlock {Block} The {@link Block} that the mining lasers will be focused on.
 	 * @memberof Player
@@ -254,16 +303,26 @@ var Player = BlockStructure.extend({
 			}
 		}
 
+		// TODO: Do not spam the player with notifications if engines/thruster
+		// are removed
 		if (ige.isServer) {
-			// This determines how fast you can rotate your spaceship
-			// It's some constant times the number of thrusters you have
-			var angularImpulse = -3000 * this.numBlocksOfType('ThrusterBlock');
+			/* Angular motion */
+			// Angular rotation speed depends on number of thrusters
+			var numRotationalThrusters = this.numBlocksOfType('ThrusterBlock');
+			var angularImpulse = -3000 * numRotationalThrusters;
 
-			if (this.controls.key.left) {
-				this._box2dBody.ApplyTorque(angularImpulse);
-			}
-			if (this.controls.key.right) {
-				this._box2dBody.ApplyTorque(-angularImpulse);
+			if (this.controls.key.left || this.controls.key.right) {
+				if (numRotationalThrusters < 1) {
+					ige.network.stream.queueCommand('notificationError',
+						NotificationDefinitions.errorKeys.noRotationalThruster, this._clientId);
+				}
+
+				if (this.controls.key.left) {
+					this._box2dBody.ApplyTorque(angularImpulse);
+				}
+				if (this.controls.key.right) {
+					this._box2dBody.ApplyTorque(-angularImpulse);
+				}
 			}
 
 			/* Linear motion */
@@ -286,12 +345,28 @@ var Player = BlockStructure.extend({
 
 				var engines = this.blocksOfType(EngineBlock.prototype.classId());
 
+				// Notify player that they cannot fly without an engine
+				if (engines.length < 1) {
+					ige.network.stream.queueCommand('notificationError',
+						NotificationDefinitions.errorKeys.noEngine, this._clientId);
+				}
+
 				for (var i = 0; i < engines.length; i++) {
 					var engine = engines[i];
-					//TODO: Fixtures should have their own position in box2d units. Something like block.fixture().m_shape.m_centroid should work. But this is a little tricky because box2D fixtures don't seem to compute their own world coordinates or rotated offsets. They only store the unrotated offset. Talk with @rafaelCosman if you want help doing this TODO.
+					// TODO: Fixtures should have their own position in box2d units.
+					// Something like block.fixture().m_shape.m_centroid should work.
+					// But this is a little tricky because box2D fixtures don't seem to
+					// compute their own world coordinates or rotated offsets. They only
+					// store the unrotated offset.
+					// Talk with @rafaelCosman if you want help doing this TODO.
 
-					// I'm dividing by 10 because that's the scale factor between IGE and Box2D
-					var pointToApplyTo = {x: (this.translate().x() + engine.translate().x()) / 10.0, y: (this.translate().y() - engine.translate().y()) / 10.0};
+					var scaleRatio = ige.box2d.scaleRatio();
+					var thisX = this.translate().x();
+					var thisY = this.translate().y();
+					var engineX = engine.translate().x();
+					var engineY = engine.translate().y();
+
+					var pointToApplyTo = {x: (thisX + engineX) / scaleRatio, y: (thisY - engineY) / scaleRatio};
 					pointToApplyTo.x = 2 * this._box2dBody.GetWorldCenter().x - pointToApplyTo.x;
 					pointToApplyTo.y = 2 * this._box2dBody.GetWorldCenter().y - pointToApplyTo.y;
 					this._box2dBody.ApplyImpulse(impulse, pointToApplyTo);

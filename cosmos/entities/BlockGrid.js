@@ -649,7 +649,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return this.toBlockTypeMatrix();
 	},
 
-
 	/**
 	 * Process actions on {@link Block}s server-side.
 	 * @param data {Object} An object representing the action sent from the client.
