@@ -81,6 +81,11 @@ var ConstructCapability = Capability.extend({
 	 * @instance
 	 */
 	ClickScene_canMouseDown: function(sender, event, data) {
+		// Notify player that no block type is selected
+		if (this.capability.selectedType === undefined) {
+			ige.notification.emit('notificationError', 
+				NotificationDefinitions.errorKeys.noItemTypeSelected);
+		}
 		return (ige.client.state.selectedCap() === 'construct' && this.capability.selectedType !== undefined);
 	},
 
@@ -107,6 +112,11 @@ var ConstructCapability = Capability.extend({
 	 * @instance
 	 */
 	ConstructionZoneOverlay_canMouseDown: function(sender, event, data) {
+		// Notify player that no block type is selected
+		if (this.capability.selectedType === undefined) {
+			ige.notification.emit('notificationError', 
+				NotificationDefinitions.errorKeys.noItemTypeSelected);
+		}
 		return (ige.client.state.selectedCap() === 'construct' && this.capability.selectedType !== undefined);
 	},
 

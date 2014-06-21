@@ -131,6 +131,7 @@ var ServerNetworkEvents = {
 		player.addSensor(300)
 			.attractionStrength(1)
 			.streamMode(1)
+			.clientId(clientId)
 			.mount(ige.server.spaceGameScene)
 			.relocate();
 
@@ -160,6 +161,8 @@ var ServerNetworkEvents = {
 		}
 
 		player.relocate();
+		ige.network.stream.queueCommand('notificationSuccess',
+			NotificationDefinitions.successKeys.relocateShip, clientId);
 	},
 
 	/**
@@ -178,6 +181,8 @@ var ServerNetworkEvents = {
 		ige.server._destroyPlayer(clientId, player);
 		// We pass no third or fourth argument to _createPlayer() here, which requests a completely new ship
 		ige.server._createPlayer(clientId, playerId);
+		ige.network.stream.queueCommand('notificationSuccess',
+			NotificationDefinitions.successKeys.newShip, clientId);
 	},
 
 	/**
@@ -201,14 +206,13 @@ var ServerNetworkEvents = {
 			return;
 		}
 
-		// Do not start mining if we are already mining or if the player does not have any mining lasers.
-		if (player.mining || player.numBlocksOfType(MiningLaserBlock.prototype.classId()) === 0) {
-			return;
-		}
-
 		// TODO: Guard against bogus blockGridId from client
 		var blockGrid = ige.$(data.blockGridId);
 		if (blockGrid === undefined) {
+			return;
+		}
+
+		if (!player.canMine()) {
 			return;
 		}
 
@@ -233,10 +237,7 @@ var ServerNetworkEvents = {
 
 		if (blockToPlace !== undefined) {
 			//console.log("Placing item: " + blockToPlace.classId(), 'info');
-			new BlockGrid()
-				.category('smallAsteroid')
-				// TODO: Math.random() isn't safe here! Also, there's no good reason to set an id on this BlockGrid.
-				.id('littleAsteroid' + Math.random())
+			new BlockStructure()
 				.streamMode(1)
 				.mount(ige.$("spaceGameScene"))
 				.depth(100)
@@ -245,6 +246,8 @@ var ServerNetworkEvents = {
 
 			var confirmData = { category: 'construct', action: 'new', label: data.selectedType };
 			ige.network.send('confirm', confirmData, clientId);
+			ige.network.stream.queueCommand('notificationSuccess', 
+				NotificationDefinitions.successKeys.constructNewBlock, clientId);
 		}
 	},
 

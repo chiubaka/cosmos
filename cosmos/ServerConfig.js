@@ -11,6 +11,7 @@ var config = {
 		/* Blocks */
 		{ name: 'Block', path: './entities/Block' },
 		{ name: 'BlockGrid', path: './entities/BlockGrid' },
+		{ name: 'BlockStructure', path: './entities/BlockStructure' },
 		{ name: 'ConstructionZoneBlock', path: 'entities/blocks/ConstructionZoneBlock' },
 		{ name: 'Drop', path: 'entities/Drop' },
 
@@ -23,6 +24,19 @@ var config = {
 		{ name: 'ControlBlock', path: './entities/blocks/parts/ControlBlock' },
 		{ name: 'MiningLaserBlock', path: './entities/blocks/parts/MiningLaserBlock' },
 		{ name: 'ThrusterBlock', path: './entities/blocks/parts/ThrusterBlock' },
+		/* Ship armor blocks */
+		{ name: 'Armor', path: './entities/blocks/Armor' },
+		{ name: 'CloakBlock', path: './entities/blocks/armor/CloakBlock' },
+		{ name: 'CloakBlockLight', path: './entities/blocks/armor/CloakBlockLight' },
+		{ name: 'CloakBlockViolet', path: './entities/blocks/armor/CloakBlockViolet' },
+		{ name: 'CloakBlockVioletLight', path: './entities/blocks/armor/CloakBlockVioletLight' },
+		{ name: 'KryptoniteBlock', path: './entities/blocks/armor/KryptoniteBlock' },
+		{ name: 'MithrilBlock', path: './entities/blocks/armor/MithrilBlock' },
+		{ name: 'AdamantiumBlock', path: './entities/blocks/armor/AdamantiumBlock' },
+		{ name: 'DragonBlock', path: './entities/blocks/armor/DragonBlock' },
+		{ name: 'TitaniumBlock', path: './entities/blocks/armor/TitaniumBlock' },
+		{ name: 'VioletBlock', path: './entities/blocks/armor/VioletBlock' },
+		{ name: 'OrangeBlock', path: './entities/blocks/armor/OrangeBlock' },
 
 		/* Element blocks */
 		{ name: 'Element', path: './entities/blocks/Element' },
@@ -38,7 +52,7 @@ var config = {
 
 		/* Scenery */
 		{ name: 'Background', path: './entities/scenery/Background' },
-		{ name: 'BlockGridGenerator', path: './entities/scenery/BlockGridGenerator' },
+		{ name: 'BlockStructureGenerator', path: './entities/scenery/BlockStructureGenerator' },
 
 		/* === PLAYER STATE === */
 		{ name: 'Player', path: './entities/player/Player' },
@@ -52,6 +66,10 @@ var config = {
 		{ name: 'DbConfig', path: './db/DbConfig' },
 		{ name: 'DbPlayer', path: './db/DbPlayer' },
 		{ name: 'DbSession', path: './db/DbSession' },
+
+		/* Notifications */
+		{ name: 'NotificationComponent', path: './notifications/NotificationComponent'},
+		{ name: 'NotificationDefinitions', path: './notifications/NotificationDefinitions'},
 
 		/* === SUPPLEMENTAL FUNCTIONALITY=== */
 		/* Debugging */
