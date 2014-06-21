@@ -8,21 +8,20 @@
 var NotificationUIComponent = IgeEventingClass.extend({
 	classId: 'NotificationUIComponent',
 	componentId: 'notificationUI',
-	notificationUIRoot: 'cosmos/notifications/ui/',
+	notificationUIRoot: '/vendor/alertify/',
 
 	init: function (entity, options) {
 		var self = this;
 
 		if (ige.isClient) {
 			// Load Alertify, a notification library
-			ige.requireScript(self.notificationUIRoot + 'vendor/alertify.js');
+			ige.requireScript(self.notificationUIRoot + 'alertify.js');
 
 			ige.on('allRequireScriptsLoaded', function () {
 				// Load Alertify stylesheets
+				ige.requireStylesheet(self.notificationUIRoot + 'alertify_themes/alertify.core.css');
 				ige.requireStylesheet(self.notificationUIRoot +
-					'vendor/alertify_themes/alertify.core.css');
-				ige.requireStylesheet(self.notificationUIRoot +
-					'vendor/alertify_themes/alertify.default.css');
+					'alertify_themes/alertify.default.css');
 
 				ige.notification.registerInfoHandler(ige.notification.notificationUI.infoHandler);
 				ige.notification.registerErrorHandler(ige.notification.notificationUI.errorHandler);
