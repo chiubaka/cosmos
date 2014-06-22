@@ -18,7 +18,7 @@ var GameInit = {
 		this.initScenes(game);
 
 		if (ige.isServer) {
-			this.initEnvironment();
+			//this.initEnvironment();
 			this.initPhysics();
 			this.initServerEvents();
 		} else {
@@ -144,6 +144,10 @@ var GameInit = {
 
 		new Background()
 			.id('helix_nebula_background')
+			.mount(client.spaceBackgroundScene);
+
+		new StarfieldBackground()
+			.id('starfield_background')
 			.mount(client.spaceBackgroundScene);
 	},
 

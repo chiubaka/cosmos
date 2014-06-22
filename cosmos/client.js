@@ -34,6 +34,8 @@ var Client = IgeClass.extend({
 			glow: new IgeTexture(gameRoot + 'assets/GlowEffectTexture.js'),
 			background_helix_nebula: new IgeTexture(gameRoot +
 				'assets/backgrounds/helix_nebula.jpg'),
+			background_starfield: new IgeTexture(gameRoot +
+				'assets/backgrounds/starfield.png'),
 			fixtureDebuggingTexture: new IgeTexture(gameRoot +
 				'assets/debug/FixtureDebuggingTexture.js'),
 			laserBeamTexture: new IgeTexture(gameRoot +
