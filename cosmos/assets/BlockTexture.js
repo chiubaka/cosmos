@@ -7,24 +7,28 @@ var image = {
 		ctx.lineWidth = Block.WIDTH / 6;
 
 		// Draw block background
-		ctx.fillStyle = entity.textureBackground || "rgb(217, 217, 217)";
-		ctx.beginPath();
-		ctx.moveTo(-entity._bounds2d.x2, -entity._bounds2d.y2);
-		ctx.lineTo(entity._bounds2d.x2, -entity._bounds2d.y2);
-		ctx.lineTo(entity._bounds2d.x2, entity._bounds2d.y2);
-		ctx.lineTo(-entity._bounds2d.x2, entity._bounds2d.y2);
-		ctx.lineTo(-entity._bounds2d.x2, -entity._bounds2d.y2);
-		ctx.fill();
+		if (entity.textureBackground !== undefined) {
+			ctx.fillStyle = entity.textureBackground;
+			ctx.beginPath();
+			ctx.moveTo(-entity._bounds2d.x2, -entity._bounds2d.y2);
+			ctx.lineTo(entity._bounds2d.x2, -entity._bounds2d.y2);
+			ctx.lineTo(entity._bounds2d.x2, entity._bounds2d.y2);
+			ctx.lineTo(-entity._bounds2d.x2, entity._bounds2d.y2);
+			ctx.lineTo(-entity._bounds2d.x2, -entity._bounds2d.y2);
+			ctx.fill();
+		}
 
 		// Draw block outline
-		ctx.strokeStyle = entity.textureOutline || 'rgb(201, 201, 201)';
-		ctx.beginPath();
-		ctx.moveTo(-entity._bounds2d.x2, -entity._bounds2d.y2);
-		ctx.lineTo(entity._bounds2d.x2, -entity._bounds2d.y2);
-		ctx.lineTo(entity._bounds2d.x2, entity._bounds2d.y2);
-		ctx.lineTo(-entity._bounds2d.x2, entity._bounds2d.y2);
-		ctx.lineTo(-entity._bounds2d.x2, -entity._bounds2d.y2);
-		ctx.stroke();
+		if (entity.textureOutline !== undefined) {
+			ctx.strokeStyle = entity.textureOutline;
+			ctx.beginPath();
+			ctx.moveTo(-entity._bounds2d.x2, -entity._bounds2d.y2);
+			ctx.lineTo(entity._bounds2d.x2, -entity._bounds2d.y2);
+			ctx.lineTo(entity._bounds2d.x2, entity._bounds2d.y2);
+			ctx.lineTo(-entity._bounds2d.x2, entity._bounds2d.y2);
+			ctx.lineTo(-entity._bounds2d.x2, -entity._bounds2d.y2);
+			ctx.stroke();
+		}
 
 		// Draw block health
 		if (entity._displayHealth) {
@@ -64,7 +68,7 @@ var image = {
 				}
 			}
 			else {
-				var iconScaleFactor = 0.85;
+				var iconScaleFactor = entity.iconScaleFactor || 0.85;
 				ctx.drawImage(entity.textureImage, -entity._bounds2d.x2 * iconScaleFactor, -entity._bounds2d.y2 * iconScaleFactor, entity.width() * iconScaleFactor, entity.height() * iconScaleFactor);
 			}
 		}
