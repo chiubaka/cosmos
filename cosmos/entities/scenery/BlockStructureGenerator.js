@@ -312,7 +312,7 @@ var BlockStructureGenerator = {
 			"PowerBlock": .1,
 			"ThrusterBlock": .1,
 			"CargoBlock": .1,
-			"Block": .3,
+			"HullBlock": .3,
 			"MiningLaserBlock": .1,
 			"TitaniumBlock": .1,
 			"CloakBlock": .1
@@ -324,7 +324,7 @@ var BlockStructureGenerator = {
 			"PowerBlock": .05,
 			"ThrusterBlock": .05,
 			"CargoBlock": .5,
-			"Block": .3
+			"HullBlock": .3
 		},
 
 		/**

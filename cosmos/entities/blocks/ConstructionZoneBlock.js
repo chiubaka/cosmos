@@ -13,8 +13,8 @@ var ConstructionZoneBlock = Block.extend({
 		Block.prototype.init.call(this);
 
 		if (!ige.isServer) {
-			this.textureBackground = "rgb(3,131,255)";
-			this.textureOutline = "rgb(204,255,255)";
+			this.iconScaleFactor = 1;
+			this.textureSvg = ige.client.svgs.constructionZone;
 		}
 	}
 });
