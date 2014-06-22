@@ -2,7 +2,7 @@
  * Subclass of the {@link Element} class. An HullBlock is the most basic armor
  * block.
  * @class
- * @typedef {HullBlock}
+ * @typedef {Armor} HullBlock
  * @namespace
  */
 var HullBlock = Armor.extend({
@@ -12,7 +12,7 @@ var HullBlock = Armor.extend({
 	 * The maximum HP for a {@link HullBlock}. Overrides the superclass MAX_HP value. See {@link Block#MAX_HP}.
 	 * @constant {number}
 	 * @default
-	 * @memberof ArmorBlock
+	 * @memberof HullBlock
 	 * @instance
 	 */
 	MAX_HP: 30,
