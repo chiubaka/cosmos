@@ -26,6 +26,7 @@ var config = {
 		{ name: 'ThrusterBlock', path: './entities/blocks/parts/ThrusterBlock' },
 		/* Ship armor blocks */
 		{ name: 'Armor', path: './entities/blocks/Armor' },
+		{ name: 'HullBlock', path: './entities/blocks/armor/HullBlock' },
 		{ name: 'CloakBlock', path: './entities/blocks/armor/CloakBlock' },
 		{ name: 'CloakBlockLight', path: './entities/blocks/armor/CloakBlockLight' },
 		{ name: 'CloakBlockViolet', path: './entities/blocks/armor/CloakBlockViolet' },

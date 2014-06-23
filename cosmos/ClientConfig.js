@@ -27,6 +27,7 @@ var igeClientConfig = {
 
 		/* Ship armor blocks */
 		'./entities/blocks/Armor.js',
+		'./entities/blocks/armor/HullBlock.js',
 		'./entities/blocks/armor/CloakBlock.js',
 		'./entities/blocks/armor/CloakBlockLight.js',
 		'./entities/blocks/armor/CloakBlockViolet.js',
