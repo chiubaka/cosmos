@@ -618,6 +618,8 @@ Block.blockFromClassId = function(classId) {
 			return new ThrusterBlock();
 
 		// Armor
+		case HullBlock.prototype.classId():
+			return new HullBlock();
 		case CloakBlock.prototype.classId():
 			return new CloakBlock();
 		case CloakBlockLight.prototype.classId():

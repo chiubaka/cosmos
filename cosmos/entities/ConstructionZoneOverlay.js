@@ -40,7 +40,6 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		this._blockGrid = blockGrid;
 		this._renderContainer = new RenderContainer()
 			.mount(this)
-			.opacity(0.5);
 		this._createConstructionZones();
 		this._mountOverlayGrid();
 		this.mouseDown(this._mouseDownHandler);
@@ -215,7 +214,6 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		this._renderContainer.destroy();
 		this._renderContainer = new RenderContainer()
 			.mount(this)
-			.opacity(0.5);
 		this._createConstructionZones();
 		this._mountOverlayGrid();
 	}
