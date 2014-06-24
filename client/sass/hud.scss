@@ -1,9 +1,10 @@
 $hud-layer-z-index: 1;
 $hud-button-height: 50px;
 $hud-button-width: $hud-button-height;
-$hud-margin-top: $hud-button-height * 4;
+$hud-margin-top: $hud-button-height * 2;
 
-.hud-icon-button {
+@mixin hud-icon-button($icon) {
+  background-image: url($icon);
   background-repeat: no-repeat;
   background-size: 70%;
   background-position: center;
@@ -15,5 +16,4 @@ $hud-margin-top: $hud-button-height * 4;
 
 @import 'bottom-toolbar';
 @import 'minimap';
-@import 'inspector';
-@import 'cargo';
+@import 'side-buttons';

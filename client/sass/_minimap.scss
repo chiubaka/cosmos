@@ -17,10 +17,9 @@ $minimap-toolbar-item-width: $hud-button-width;
   background-color: $background-color;
 }
 
-@mixin minimap-toolbar-item-with-icon($background-image, $background-color: $bottom-toolbar-item-background-color) {
-  @include bottom-toolbar-item($background-color);
-  background-image: url($background-image);
-  @extend .hud-icon-button;
+@mixin minimap-toolbar-item-with-icon($icon, $background-color: $bottom-toolbar-item-background-color) {
+  @include minimap-toolbar-item($background-color);
+  @include hud-icon-button($icon);
 }
 
 #minimap {
