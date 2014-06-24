@@ -1,3 +1,10 @@
+/**
+ * Creates a backup collection of the specified collection in the database.
+ * @param db {Object} The MongoDB object for this database connection.
+ * @param collectionName {string} The name of the collection to backup.
+ * @param suffix {string} The string suffix to append to the name of the collection when creating the backup collection.
+ * @param callback {function} Callback to call when the backup is done. Passes in the backup collection object.
+ */
 function backupCollection(db, collectionName, suffix, callback) {
 	console.log("Backing up collection " + collectionName + ".");
 	db.collection(collectionName, function(err, collection) {
@@ -11,8 +18,6 @@ function backupCollection(db, collectionName, suffix, callback) {
 				console.error("Could not convert documents into array. " + err);
 				process.exit(1);
 			}
-
-			console.log(docs.length);
 
 			db.createCollection(collectionName + suffix, function(err, backup) {
 				if (err) {
