@@ -1,4 +1,4 @@
 [submodule "ige"]
 	path = ige
-	url = ssh://github.com/teamleonine/ige.git
+	url = https://chiubaka:6e584b2ca4e3b71cc5412d6a65b2223efbaecff7@github.com/teamleonine/ige.git
 	branch = master
