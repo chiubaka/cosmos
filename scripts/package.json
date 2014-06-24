@@ -1,0 +1,14 @@
+{
+  "name": "Scripts",
+  "version": "0.0.0",
+  "description": "Team Leonine JavaScript scripts for performing various tasks.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Daniel Chiu",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "~1.4.7"
+  }
+}

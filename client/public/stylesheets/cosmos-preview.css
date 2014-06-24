@@ -29,7 +29,6 @@ body {
     padding: 10px;
     text-align: center;
     cursor: pointer;
-    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
     background-image: url('../images/icons/icon_chat.png');
     background-repeat: no-repeat;
     background-size: 100%;
@@ -138,7 +137,7 @@ body {
     top: 15px;
     left: 60px;
     color: white;
-    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-family: 'Open Sans', Helvetica Neue, Helvetica, Arial, sans-serif;
     font-size: 14px;
     text-align: left;
     width: 100%;
@@ -488,8 +487,10 @@ body {
   left: 50%;
   margin-left: -500px;
   background: #000;
+}
 
-  font-size: 14pt;
+.cosmos-tutorial, .cosmos-tutorial p, .cosmos-tutorial ul {
+    font-size: 14pt;
 }
 
 .cosmos-tutorial-veil {
@@ -608,7 +609,6 @@ body {
     padding: 10px;
     text-align: center;
     cursor: pointer;
-    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
     background-image: url('../images/icons/icon_feedback.png');
     background-repeat: no-repeat;
     background-size: 100%;

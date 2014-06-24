@@ -1,11 +1,15 @@
 body {
-	background-color: #000;
+    background-color: #000;
 	color: #fff;
-  padding: 50px;
+    padding: 50px;
+}
+
+body, body div, span, div, p {
+    font-size: 11pt;
 }
 
 a {
-  color: #00B7FF;
+    color: #00B7FF;
 }
 
 div#container {
@@ -27,11 +31,11 @@ header#cosmos-header {
 #cosmos-greeting {
 	display: none;
 	position: absolute;
-  top: 50px;
-  left: 50%;
-  width: 1000px;
-  margin-left: -500px;
-  margin-top: -50px;
+    top: 50px;
+    left: 50%;
+    width: 1000px;
+    margin-left: -500px;
+    margin-top: -50px;
 }
 
 #cosmos-login {
@@ -39,8 +43,8 @@ header#cosmos-header {
 }
 
 .tutorial {
-  position: relative;
-  top: -50px;
+    position: relative;
+    top: -50px;
 }
 
 .login-screen {
