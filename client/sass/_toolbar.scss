@@ -4,7 +4,6 @@ $toolbar-height: 50px;
 #toolbar {
   position: absolute;
   bottom: 0;
-  z-index: $hud-layer-z-index;
   height: $toolbar-height;
   width: 100%;
   background-color: $toolbar-color;
