@@ -166,8 +166,12 @@ html
     //    }
     #hud
       #toolbar
-        #usertile
+        #user-tile
           img.profile-pic(src='/images/profile-pic-placeholder.png')
+          .user-info
+            span.ship-name Ship name
+            br
+            span.username Username
 
     if process.env.NODE_ENV === 'production'
       script(type="text/javascript", src="/js/cosmos/game.js")

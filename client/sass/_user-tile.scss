@@ -1,0 +1,27 @@
+$user-info-padding: $toolbar-height / 7;
+
+#user-tile {
+  float: left;
+  .profile-pic {
+    height: $toolbar-height;
+    width: $toolbar-height;
+    float: left;
+  }
+
+  .user-info {
+    float: left;
+    padding: $user-info-padding;
+
+    .ship-name {
+
+    }
+
+    .username {
+      font-size: 75%;
+      font-weight: 600;
+      line-height: 50%;
+      position: relative;
+      top: -$user-info-padding;
+    }
+  }
+}
