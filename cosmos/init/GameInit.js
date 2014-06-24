@@ -81,7 +81,6 @@ var GameInit = {
 			.mount(game.spaceScene);
 
 		if (!ige.isServer) {
-
 			game.effectsScene = new IgeScene2d()
 				.id('effectsScene')
 				.layer(game.LAYER_WORLD_OVERLAY)

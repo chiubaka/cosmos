@@ -60,7 +60,7 @@ var igeClientConfig = {
 		'./entities/prefabs/ExampleShips.js',
 
 		/* Scenery */
-		'./entities/scenery/ParallaxEntity.js',
+		'./entities/scenery/ParallaxBackground.js',
 		'./entities/scenery/Background.js',
 		'./entities/scenery/StarfieldBackground.js',
 

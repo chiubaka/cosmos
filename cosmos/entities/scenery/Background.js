@@ -1,14 +1,14 @@
 /**
- * A {@link ParallaxEntity} which represents the background of the game.
+ * A {@link ParallaxBackground} which represents the background of the game.
  * @class
  * @typedef {Background}
  * @namespace
  */
-var Background = ParallaxEntity.extend({
+var Background = ParallaxBackground.extend({
 	classId: 'Background',
 
 	init: function () {
-		ParallaxEntity.prototype.init.call(this);
+		ParallaxBackground.prototype.init.call(this);
 
 		if (!ige.isServer) {
 

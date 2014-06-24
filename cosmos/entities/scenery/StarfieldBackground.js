@@ -1,19 +1,28 @@
 /**
- * A {@link ParallaxEntity} which represents the background of the game.
+ * A {@link ParallaxBackground} which represents the starfield background of the
+ * game. This is in front of the nebula background.
  * @class
  * @typedef {StarfieldBackground}
  * @namespace
  */
-var StarfieldBackground = ParallaxEntity.extend({
+var StarfieldBackground = ParallaxBackground.extend({
 	classId: 'StarfieldBackground',
+	/**
+	 * TiledMap of starfield entities.
+	 * @type {IgeTileMap2d}
+	 * @memberof StarfieldBackground
+	 * @private
+	 * @instance
+	 */
+	starTiles: undefined,
 
 	init: function () {
-		ParallaxEntity.prototype.init.call(this);
+		ParallaxBackground.prototype.init.call(this);
 
 		if (!ige.isServer) {
 
-			// Create a 3x3 tiled grid, translated so the grid's (1,1) is at
-			// IGE location (0,0)
+			// Create a 3x3 tiled grid to make it easier to tile the background
+			// The grid is translated so the grid's (1,1) is at IGE location (0,0).
 			this.starTiles = new IgeTileMap2d()
 				.id('star_tiles')
 				.gridSize(3,3)

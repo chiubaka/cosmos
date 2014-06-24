@@ -1,5 +1,5 @@
-var ParallaxEntity = IgeEntity.extend({
-	classId: "ParallaxEntity",
+var ParallaxBackground = IgeEntity.extend({
+	classId: "ParallaxBackground",
 	init: function() {
 		IgeEntity.prototype.init.call(this),
 		this._parallaxLag = 1
@@ -21,4 +21,4 @@ var ParallaxEntity = IgeEntity.extend({
 		IgeEntity.prototype.tick.call(this, ctx);
 	}
 });
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = ParallaxEntity; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = ParallaxBackground; }
