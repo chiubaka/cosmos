@@ -16,6 +16,11 @@ $toolbar-item-background-color: #363636;
   margin-left: $toolbar-spacing-between-items;
 }
 
+.toolbar-float-right {
+  float: right;
+  margin-right: $toolbar-spacing-between-items;
+}
+
 .toolbar-item {
   height: $toolbar-height;
   width: $toolbar-height;
@@ -29,3 +34,7 @@ $toolbar-item-background-color: #363636;
 @import 'user-tile';
 @import 'chat';
 @import 'capbar';
+@import 'menu-button';
+@import 'feedback-button';
+@import 'relocate-button';
+@import 'new-ship-button';

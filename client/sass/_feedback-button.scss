@@ -1,0 +1,5 @@
+#feedback-button {
+  @extend .toolbar-float-right;
+  @extend .toolbar-item;
+  background-image: url('../images/icons/icon_feedback.png');
+}
