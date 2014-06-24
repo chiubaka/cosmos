@@ -21,10 +21,10 @@
 	SERVERURL_STAGING: "http://stg.srv.cosmos.teamleonine.com",
 	SERVERURL_RELEASE: "http://srv.cosmos.teamleonine.com",
 	SERVERURL_PREVIEW: "http://preview.srv.cosmos.teamleonine.com",
-	SERVERURL_DANIEL: "tl-cosmos-server-daniel.azurewebsites.net",
-	SERVERURL_DERRICK: "tl-cosmos-server-derrick.azurewebsites.net",
-	SERVERURL_ERIC: "tl-cosmos-server-eric.azurewebsites.net",
-	SERVERURL_RAFAEL: "tl-cosmos-server-rafael.azurewebsites.net"
+	SERVERURL_DANIEL: "http://tl-cosmos-server-daniel.azurewebsites.net",
+	SERVERURL_DERRICK: "http://tl-cosmos-server-derrick.azurewebsites.net",
+	SERVERURL_ERIC: "http://tl-cosmos-server-eric.azurewebsites.net",
+	SERVERURL_RAFAEL: "http://tl-cosmos-server-rafael.azurewebsites.net"
 };
 
 if (typeof (module) !== 'undefined' && typeof (module.exports) !== 'undefined') {
