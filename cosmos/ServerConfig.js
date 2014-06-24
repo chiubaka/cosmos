@@ -52,6 +52,7 @@ var config = {
 		{ name: 'ExampleShips', path: './entities/prefabs/ExampleShips' },
 
 		/* Scenery */
+		{ name: 'ParallaxBackground', path: './entities/scenery/ParallaxBackground' },
 		{ name: 'Background', path: './entities/scenery/Background' },
 		{ name: 'BlockStructureGenerator', path: './entities/scenery/BlockStructureGenerator' },
 

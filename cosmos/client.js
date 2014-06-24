@@ -9,7 +9,6 @@ var Client = IgeClass.extend({
 		var self = this;
 
 		self.LAYER_BACKGROUND = 10;
-		self.LAYER_PARALLAX = 11;
 		self.LAYER_CLICK_SCENE = 15;
 		self.LAYER_WORLD = 50;
 		self.LAYER_WORLD_OVERLAY = 51;
@@ -34,6 +33,8 @@ var Client = IgeClass.extend({
 			glow: new IgeTexture(gameRoot + 'assets/GlowEffectTexture.js'),
 			background_helix_nebula: new IgeTexture(gameRoot +
 				'assets/backgrounds/helix_nebula.jpg'),
+			background_starfield: new IgeTexture(gameRoot +
+				'assets/backgrounds/starfield.png'),
 			fixtureDebuggingTexture: new IgeTexture(gameRoot +
 				'assets/debug/FixtureDebuggingTexture.js'),
 			laserBeamTexture: new IgeTexture(gameRoot +
