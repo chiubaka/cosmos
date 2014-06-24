@@ -1,12 +1,14 @@
-$toolbar-color: #222222;
+$toolbar-background-color: #222222;
 $toolbar-height: 50px;
+
+$toolbar-item-background-color: #363636;
 
 #toolbar {
   position: absolute;
   bottom: 0;
   height: $toolbar-height;
   width: 100%;
-  background-color: $toolbar-color;
+  background-color: $toolbar-background-color;
 }
 
 @import 'user-tile';

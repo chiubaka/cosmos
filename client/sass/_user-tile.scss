@@ -1,7 +1,10 @@
-$user-info-padding: $toolbar-height / 7;
+$user-info-padding: $toolbar-height / 6;
+
 
 #user-tile {
   float: left;
+  background-color: $toolbar-item-background-color;
+
   .profile-pic {
     height: $toolbar-height;
     width: $toolbar-height;
@@ -11,9 +14,11 @@ $user-info-padding: $toolbar-height / 7;
   .user-info {
     float: left;
     padding: $user-info-padding;
+    width: $toolbar-height * 4;
+    margin-right: 1px;
+    cursor: pointer;
 
     .ship-name {
-
     }
 
     .username {
@@ -22,6 +27,11 @@ $user-info-padding: $toolbar-height / 7;
       line-height: 50%;
       position: relative;
       top: -$user-info-padding;
+    }
+
+    .more-triangle {
+      float: right;
+      line-height: $toolbar-height - 2 * $user-info-padding;
     }
   }
 }

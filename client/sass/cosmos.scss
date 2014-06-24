@@ -1,7 +1,14 @@
+@import 'compass/css3';
 @import 'fonts';
 
 html, body {
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;
   font-size: 100%;
   color: #e8e8e8;
+}
+
+.more-triangle {
+  cursor: pointer;
+  display: inline-block;
+  @include rotate(180deg);
 }
