@@ -5,7 +5,9 @@ module.exports = function(grunt) {
 			dist: {
 				options: {
 					sassDir: 'sass',
-					cssDir: 'public/stylesheets'
+					cssDir: 'public/stylesheets',
+					specify: 'sass/cosmos.scss',
+					specify: 'sass/hud.scss'
 				}
 			}
 		},
