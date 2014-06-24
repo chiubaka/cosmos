@@ -1,5 +1,8 @@
+/**
+ * Changes the name of a block in the database. Usage: node changeBlockName.js <old_name> <new_name>.
+ * @author Daniel Chiu
+ */
 main(process.argv[2], process.argv[3]);
-
 function main(blockName, newBlockName) {
 	var MongoClient = require('mongodb').MongoClient;
 	var backupCollection = require('./backupCollection.js');
@@ -14,15 +17,21 @@ function main(blockName, newBlockName) {
 
 		backupCollection(db, 'players', '_backup', function(backup) {
 			changeBlockName(db, 'players_backup', blockName, newBlockName, function() {
-				//db.close();
+				db.close();
 			});
 		});
 	});
 }
 
+/**
+ * Changes the name of a block in the database.
+ * @param db {Object} The MongoDB object for this connection.
+ * @param collectionName {string} The name of the collection to change the block name in.
+ * @param blockName {string} The current name of the block.
+ * @param newBlockName {string} The new name of the block.
+ * @param callback {function} Callback that is called when the name change is complete.
+ */
 function changeBlockName(db, collectionName, blockName, newBlockName, callback) {
-	console.log(collectionName);
-
 	db.collection(collectionName, function(err, collection) {
 		if (err) {
 			console.log("Could not retrieve collection " + collectionName + ". " + err);
@@ -35,6 +44,7 @@ function changeBlockName(db, collectionName, blockName, newBlockName, callback) 
 				process.exit(1);
 			}
 
+			var updatesInProgress = 0;
 			for (var i = 0; i < players.length; i++) {
 				var player = players[i];
 				var ship = player.ship;
@@ -48,13 +58,19 @@ function changeBlockName(db, collectionName, blockName, newBlockName, callback) 
 					}
 				}
 				player.ship = ship;
+
+				updatesInProgress++;
 				collection.update({_id: player._id}, player, function(err, result) {
 					if (err) {
-						console.log("Error updating modified data.");
+						console.log("Error updating modified data. " + err);
 						process.exit(1);
 					}
 
-					callback();
+					updatesInProgress--;
+					if (updatesInProgress === 0) {
+						console.log("Block name changed from " + blockName + " to " + newBlockName);
+						callback();
+					}
 				});
 			}
 		});
