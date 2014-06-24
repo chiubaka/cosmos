@@ -81,15 +81,17 @@ var GameInit = {
 			.mount(game.spaceScene);
 
 		if (!ige.isServer) {
+			// Use entity manager to prevent off-screen entities from being rendered
+			game.spaceGameScene.addComponent(IgeEntityManager);
+			// Non UI elements don't need to respond to the screen resize event. This
+			// provides a performance boost because every time something is mounted
+			// to an entity, (eg particles mounted to the spaceGameScene) a resize
+			// event happens.
+			game.spaceGameScene.resizeSceneChildren(false);
+
 			game.effectsScene = new IgeScene2d()
 				.id('effectsScene')
 				.layer(game.LAYER_WORLD_OVERLAY)
-				.mount(game.spaceScene);
-
-			game.spaceUiScene = new IgeScene2d()
-				.id('spaceUiScene')
-				.layer(game.LAYER_HUD)
-				.ignoreCamera(true)
 				.mount(game.spaceScene);
 
 			// This scene's purpose is to catch all clicks on the background
@@ -144,6 +146,14 @@ var GameInit = {
 
 		new Background()
 			.id('helix_nebula_background')
+			.depth(0)
+			.parallaxLag(2)
+			.mount(client.spaceBackgroundScene);
+
+		new StarfieldBackground()
+			.id('starfield_background')
+			.depth(1)
+			.parallaxLag(4)
 			.mount(client.spaceBackgroundScene);
 	},
 
