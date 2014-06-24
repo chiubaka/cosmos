@@ -81,6 +81,14 @@ var GameInit = {
 			.mount(game.spaceScene);
 
 		if (!ige.isServer) {
+			// Use entity manager to prevent off-screen entities from being rendered
+			game.spaceGameScene.addComponent(IgeEntityManager);
+			// Non UI elements don't need to respond to the screen resize event. This
+			// provides a performance boost because every time something is mounted
+			// to an entity, (eg particles mounted to the spaceGameScene) a resize
+			// event happens.
+			game.spaceGameScene._noResizeChildren = true;
+
 			game.effectsScene = new IgeScene2d()
 				.id('effectsScene')
 				.layer(game.LAYER_WORLD_OVERLAY)
