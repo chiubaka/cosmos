@@ -166,6 +166,9 @@ html
     //    }
     #hud
       #toolbar
+        #usertile
+          img.profile-pic(src='/images/profile-pic-placeholder.png')
+
     if process.env.NODE_ENV === 'production'
       script(type="text/javascript", src="/js/cosmos/game.js")
     else
