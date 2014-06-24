@@ -14,7 +14,7 @@ var StarfieldBackground = ParallaxBackground.extend({
 	 * @private
 	 * @instance
 	 */
-	starTiles: undefined,
+	_starTiles: undefined,
 
 	init: function () {
 		ParallaxBackground.prototype.init.call(this);
@@ -23,7 +23,7 @@ var StarfieldBackground = ParallaxBackground.extend({
 
 			// Create a 3x3 tiled grid to make it easier to tile the background
 			// The grid is translated so the grid's (1,1) is at IGE location (0,0).
-			this.starTiles = new IgeTileMap2d()
+			this._starTiles = new IgeTileMap2d()
 				.id('star_tiles')
 				.gridSize(3,3)
 				.tileWidth(6000)
@@ -35,7 +35,7 @@ var StarfieldBackground = ParallaxBackground.extend({
 			for (var x = 0; x < 3; x++) {
 				for (var y = 0; y < 3; y++) {
 					new IgeEntity()
-						.mount(this.starTiles)
+						.mount(this._starTiles)
 						.widthByTile(1)
 						.heightByTile(1)
 						.texture(ige.client.textures.background_starfield)
