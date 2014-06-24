@@ -1,0 +1,9 @@
+$capbar-divider-color: #515151;
+
+#capbar {
+  float: left;
+  height: $toolbar-height;
+  width: $toolbar-height;
+  margin-left: 1px;
+  border-left: 1px solid $capbar-divider-color;
+}
