@@ -1,17 +1,32 @@
-$minimap-map-height: $toolbar-height * 5;
-$minimap-map-width: $toolbar-height * 6;
-$minimap-toolbar-height: $minimap-map-height;
-$minimap-toolbar-width: $toolbar-height;
+$minimap-map-height: $hud-button-height * 5;
+$minimap-map-width: $hud-button-width * 6;
 $minimap-background-color: #173129;
 $minimap-toolbar-background-color: #131e1b;
 $minimap-toolbar-item-icon-color: #19ffb7;
 $minimap-font-color: $minimap-toolbar-item-icon-color;
 $minimap-toolbar-item-selected-background-color: #1d634d;
+$minimap-toolbar-height: $minimap-map-height;
+$minimap-toolbar-width: $hud-button-width;
+$minimap-toolbar-item-height: $hud-button-height;
+$minimap-toolbar-item-width: $hud-button-width;
+
+@mixin minimap-toolbar-item($background-color: $bottom-toolbar-item-background-color) {
+  height: $minimap-toolbar-item-height;
+  width: $minimap-toolbar-item-width;
+  cursor: pointer;
+  background-color: $background-color;
+}
+
+@mixin minimap-toolbar-item-with-icon($background-image, $background-color: $bottom-toolbar-item-background-color) {
+  @include bottom-toolbar-item($background-color);
+  background-image: url($background-image);
+  @extend .hud-icon-button;
+}
 
 #minimap {
   position: absolute;
   right: 0;
-  bottom: $toolbar-height;
+  bottom: $bottom-toolbar-height;
   z-index: $hud-layer-z-index + 1;
   height: $minimap-map-height;
   width: $minimap-map-width + $minimap-toolbar-width;
@@ -22,29 +37,23 @@ $minimap-toolbar-item-selected-background-color: #1d634d;
     background-color: $minimap-toolbar-background-color;
     height: $minimap-toolbar-height;
     width: $minimap-toolbar-width;
-    font-size: $toolbar-height * .75;
+    font-size: $hud-button-height * .75;
     text-align: center;
 
     #map-button {
-      @include toolbar-item-with-icon('../images/icons/icon_minimap.png', $minimap-toolbar-item-selected-background-color);
+      @include minimap-toolbar-item-with-icon('../images/icons/icon_minimap.png', $minimap-toolbar-item-selected-background-color);
     }
 
     .zoom-in-button, .zoom-out-button {
-      @include toolbar-item($minimap-toolbar-background-color);
-      line-height: $toolbar-height;
+      @include minimap-toolbar-item($minimap-toolbar-background-color);
+      line-height: $hud-button-height;
       vertical-align: middle;
     }
   }
-
-  #map {
-    float: right;
-    background-color: $minimap-background-color;
-    height: $minimap-map-height;
-    width: $minimap-map-width;
-
-    canvas {
+  canvas {
+      float: right;
+      background-color: $minimap-background-color;
       height: $minimap-map-height;
       width: $minimap-map-width;
-    }
   }
 }

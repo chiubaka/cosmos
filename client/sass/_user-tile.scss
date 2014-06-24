@@ -1,20 +1,19 @@
-$user-info-padding: $toolbar-height / 6;
-
+$user-info-padding: $bottom-toolbar-height / 6;
 
 #user-tile {
   float: left;
-  background-color: $toolbar-item-background-color;
+  background-color: $bottom-toolbar-item-background-color;
 
   .profile-pic {
-    height: $toolbar-height;
-    width: $toolbar-height;
+    height: $hud-button-height;
+    width: $hud-button-width;
     float: left;
   }
 
   .user-info {
     float: left;
     padding: $user-info-padding;
-    width: $toolbar-height * 4;
+    width: $hud-button-width * 4;
     cursor: pointer;
 
     .ship-name {
@@ -30,7 +29,7 @@ $user-info-padding: $toolbar-height / 6;
 
     .more-triangle {
       float: right;
-      line-height: $toolbar-height - 2 * $user-info-padding;
+      line-height: $hud-button-height - 2 * $user-info-padding;
     }
   }
 }

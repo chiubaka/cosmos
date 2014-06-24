@@ -1,8 +1,9 @@
 $capbar-divider-color: #515151;
 
 #capbar {
-  @extend .toolbar-float-left;
-  height: $toolbar-height;
+  //@extend .bottom-toolbar-float-left;
+  float: left;
+  height: $bottom-toolbar-height;
   border-left: 1px solid $capbar-divider-color;
 }
 

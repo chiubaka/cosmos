@@ -1,0 +1,11 @@
+$inspector-button-background-color: #0c3e00;
+$inspector-button-position-top: $hud-margin-top;
+
+#inspector {
+  .button {
+    position: absolute;
+    top: $inspector-button-position-top;
+    height: $hud-button-height;
+    background-color: $inspector-button-background-color;
+  }
+}

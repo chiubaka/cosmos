@@ -1,7 +1,7 @@
 #chat {
-  @extend .toolbar-float-left;
+  @extend .bottom-toolbar-float-left;
   #cboxbutton {
-    @include toolbar-item-with-icon('../images/icons/icon_chat_norm.png');
+    @include bottom-toolbar-item-with-icon('../images/icons/icon_chat_norm.png');
     font-size: 14px;
     z-index: 50;
   }
