@@ -87,7 +87,7 @@ var GameInit = {
 			// provides a performance boost because every time something is mounted
 			// to an entity, (eg particles mounted to the spaceGameScene) a resize
 			// event happens.
-			game.spaceGameScene._noResizeChildren = true;
+			game.spaceGameScene.resizeSceneChildren(false);
 
 			game.effectsScene = new IgeScene2d()
 				.id('effectsScene')
