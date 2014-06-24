@@ -18,7 +18,7 @@ var GameInit = {
 		this.initScenes(game);
 
 		if (ige.isServer) {
-			//this.initEnvironment();
+			this.initEnvironment();
 			this.initPhysics();
 			this.initServerEvents();
 		} else {
@@ -81,15 +81,10 @@ var GameInit = {
 			.mount(game.spaceScene);
 
 		if (!ige.isServer) {
+
 			game.effectsScene = new IgeScene2d()
 				.id('effectsScene')
 				.layer(game.LAYER_WORLD_OVERLAY)
-				.mount(game.spaceScene);
-
-			game.spaceUiScene = new IgeScene2d()
-				.id('spaceUiScene')
-				.layer(game.LAYER_HUD)
-				.ignoreCamera(true)
 				.mount(game.spaceScene);
 
 			// This scene's purpose is to catch all clicks on the background
@@ -144,10 +139,14 @@ var GameInit = {
 
 		new Background()
 			.id('helix_nebula_background')
+			.depth(0)
+			.parallaxLag(2)
 			.mount(client.spaceBackgroundScene);
 
 		new StarfieldBackground()
 			.id('starfield_background')
+			.depth(1)
+			.parallaxLag(4)
 			.mount(client.spaceBackgroundScene);
 	},
 

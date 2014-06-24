@@ -16,8 +16,8 @@ var Background = ParallaxEntity.extend({
 			//this.backgroundPattern(ige.client.textures.background_helix_nebula, 'repeat', true, false);
 
 			this.texture(ige.client.textures.background_helix_nebula)
-				.width(6145 * 2)
-				.height(6623 * 2);
+				.width(6145)
+				.height(6623);
 		}
 	}
 });
