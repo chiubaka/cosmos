@@ -1,15 +1,7 @@
 #chat {
   @extend .toolbar-float-left;
   #cboxbutton {
-    //position: fixed;
-    //bottom: 0px;
-    //right: 10px;
-    //width: 40px;
-    height: $toolbar-height;
-    width: $toolbar-height;
-    cursor: pointer;
-    @extend .toolbar-item;
-    background-image: url('../images/icons/icon_chat_norm.png');
+    @include toolbar-item-with-icon('../images/icons/icon_chat_norm.png');
     font-size: 14px;
     z-index: 50;
   }

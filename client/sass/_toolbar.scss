@@ -3,7 +3,7 @@ $toolbar-height: 50px;
 $toolbar-spacing-between-items: 1px;
 $toolbar-item-background-color: #363636;
 
-#toolbar {
+#hud>.toolbar {
   position: absolute;
   bottom: 0;
   height: $toolbar-height;
@@ -21,14 +21,19 @@ $toolbar-item-background-color: #363636;
   margin-right: $toolbar-spacing-between-items;
 }
 
-.toolbar-item {
+@mixin toolbar-item($background-color: $toolbar-item-background-color) {
   height: $toolbar-height;
   width: $toolbar-height;
   cursor: pointer;
+  background-color: $background-color;
+}
+
+@mixin toolbar-item-with-icon($background-image, $background-color: $toolbar-item-background-color) {
+  @include toolbar-item($background-color);
+  background-image: url($background-image);
   background-repeat: no-repeat;
   background-size: 70%;
   background-position: center;
-  background-color: $toolbar-item-background-color;
 }
 
 @import 'user-tile';

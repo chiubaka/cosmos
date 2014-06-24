@@ -1,5 +1,4 @@
 #new-ship-button {
   @extend .toolbar-float-right;
-  @extend .toolbar-item;
-  background-image: url('../images/icons/icon_new_ship.png');
+  @include toolbar-item-with-icon('../images/icons/icon_new_ship.png');
 }

@@ -165,7 +165,7 @@ html
         }
         }
     #hud
-      #toolbar
+      .toolbar
         #user-tile
           img.profile-pic(src='/images/profile-pic-placeholder.png')
           .user-info
@@ -218,8 +218,13 @@ html
         #feedback-button
         #relocate-button
         #new-ship-button
-
-
+      #minimap
+        #map
+          canvas
+        .toolbar
+          #map-button
+          .zoom-in-button +
+          .zoom-out-button &#8211;
     if process.env.NODE_ENV === 'production'
       script(type="text/javascript", src="/js/cosmos/game.js")
     else

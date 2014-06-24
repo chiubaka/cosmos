@@ -1,9 +1,6 @@
-
-
 #menu-button {
   @extend .toolbar-float-right;
   @extend .toolbar-item;
   margin-right: 0px;
-  background-image: url('../images/icons/icon_menu.png');
-  background-color: $toolbar-background-color;
+  @include toolbar-item-with-icon('../images/icons/icon_menu.png', $toolbar-background-color);
 }
