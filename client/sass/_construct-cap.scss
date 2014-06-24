@@ -1,0 +1,8 @@
+$construct-cap-background-color: #0383ff;
+
+#construct-cap {
+  @extend .toolbar-float-left;
+  @extend .toolbar-item;
+  background-image: url('../images/icons/icon_construct.png');
+  background-color: $construct-cap-background-color;
+}

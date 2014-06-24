@@ -1,0 +1,8 @@
+$mine-cap-background-color: #c82020;
+
+#mine-cap {
+  @extend .toolbar-float-left;
+  @extend .toolbar-item;
+  background-image: url('../images/icons/icon_mine.png');
+  background-color: $mine-cap-background-color;
+}

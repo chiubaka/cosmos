@@ -1,6 +1,5 @@
 #chat {
-  float: left;
-  margin-right: 1px;
+  @extend .toolbar-float-left;
   #cboxbutton {
     //position: fixed;
     //bottom: 0px;
@@ -9,11 +8,8 @@
     height: $toolbar-height;
     width: $toolbar-height;
     cursor: pointer;
+    @extend .toolbar-item;
     background-image: url('../images/icons/icon_chat_norm.png');
-    background-repeat: no-repeat;
-    background-size: 75%;
-    background-position: center;
-    background-color: $toolbar-item-background-color;
     font-size: 14px;
     z-index: 50;
   }

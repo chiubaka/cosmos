@@ -1,6 +1,6 @@
 $toolbar-background-color: #222222;
 $toolbar-height: 50px;
-
+$toolbar-spacing-between-items: 1px;
 $toolbar-item-background-color: #363636;
 
 #toolbar {
@@ -9,6 +9,21 @@ $toolbar-item-background-color: #363636;
   height: $toolbar-height;
   width: 100%;
   background-color: $toolbar-background-color;
+}
+
+.toolbar-float-left {
+  float: left;
+  margin-left: $toolbar-spacing-between-items;
+}
+
+.toolbar-item {
+  height: $toolbar-height;
+  width: $toolbar-height;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-size: 70%;
+  background-position: center;
+  background-color: $toolbar-item-background-color;
 }
 
 @import 'user-tile';
