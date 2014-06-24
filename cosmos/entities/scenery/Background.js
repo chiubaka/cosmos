@@ -1,5 +1,5 @@
 /**
- * A {@link ParallaxBackground} which represents the background of the game.
+ * A {@link ParallaxBackground} which represents the nebula background of the game.
  * @class
  * @typedef {Background}
  * @namespace
