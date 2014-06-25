@@ -22,7 +22,7 @@ var BottomToolbarComponent = IgeEventingClass.extend({
 		this.addComponent(UserTileComponent);
 		this.addComponent(ChatComponent);
 
-		this.addComponent(CapBarComponent);
+		this.addComponent(CapBar);
 
 		this.addComponent(MenuComponent);
 		this.addComponent(FeedbackComponent);

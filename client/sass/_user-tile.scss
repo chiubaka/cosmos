@@ -4,6 +4,10 @@ $user-info-padding: $bottom-toolbar-height / 6;
   float: left;
   background-color: $bottom-toolbar-item-background-color;
 
+  &:hover {
+    background-color: $bottom-toolbar-item-hover-background-color;
+  }
+
   .profile-pic {
     height: $hud-button-height;
     width: $hud-button-width;

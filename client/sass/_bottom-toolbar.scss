@@ -1,7 +1,9 @@
 $bottom-toolbar-background-color: #222222;
 $bottom-toolbar-height: $hud-button-height;
 $bottom-toolbar-spacing-between-items: 1px;
+$bottom-toolbar-item-clicked-background-color: #101010;
 $bottom-toolbar-item-background-color: #363636;
+$bottom-toolbar-item-hover-background-color: #5c5c5c;
 $bottom-toolbar-item-height: $hud-button-height;
 $bottom-toolbar-item-width: $hud-button-width;
 
@@ -28,6 +30,10 @@ $bottom-toolbar-item-width: $hud-button-width;
   width: $bottom-toolbar-item-width;
   cursor: pointer;
   background-color: $background-color;
+
+  &:hover {
+    background-color: $bottom-toolbar-item-hover-background-color;
+  }
 }
 
 @mixin bottom-toolbar-item-with-icon($icon, $background-color: $bottom-toolbar-item-background-color) {

@@ -1,6 +1,14 @@
-$mine-cap-background-color: #c82020;
+$mine-cap-active-background-color: #c82020;
+$mine-cap-active-hover-background-color: #ff4040;
 
 #mine-cap {
   @extend .bottom-toolbar-float-left;
-  @include bottom-toolbar-item-with-icon('../images/icons/icon_mine.png', $mine-cap-background-color);
+  @include bottom-toolbar-item-with-icon('../images/icons/icon_mine.png');
+
+  &.active {
+    background-color: $mine-cap-active-background-color;
+    &:hover {
+      background-color: $mine-cap-active-hover-background-color;
+    }
+  }
 }

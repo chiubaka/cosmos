@@ -30,10 +30,6 @@ var HUDManager = IgeClass.extend({
 	init: function() {
 		this.log("Initializing Player HUD...", 'info');
 
-		this._capbar = new CapBar()
-			.id("capbar")
-			.mount(ige.client.hudScene);
-
 		this._gpsLabel = new GPSLabel()
 			.id("gpsLabel")
 			.mount(ige.client.hudScene);

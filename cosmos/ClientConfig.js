@@ -89,9 +89,6 @@ var igeClientConfig = {
 		'./ui/ButtonComponent.js',
 		'./ui/UserTileComponent.js',
 		'./ui/ChatComponent.js',
-		'./ui/CapBarComponent.js',
-		'./ui/MineCapComponent.js',
-		'./ui/ConstructCapComponent.js',
 		'./ui/MenuComponent.js',
 		'./ui/FeedbackComponent.js',
 		'./ui/NewShipComponent.js',
@@ -102,7 +99,6 @@ var igeClientConfig = {
 
 		/* Capbar */
 		'./ui/capbar/CapBar.js',
-		'./ui/capbar/CapLabel.js',
 
 		/* Caps */
 		'./ui/capbar/caps/Cap.js',
