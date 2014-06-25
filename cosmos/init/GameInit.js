@@ -44,7 +44,9 @@ var GameInit = {
 		game.mainViewport = new IgeViewport()
 			.id('mainViewport')
 			.autoSize(true)
-			.minimumVisibleArea(1920, 1200)
+			.minimumVisibleArea(
+				Constants.visibleArea.MAXIMUM_WIDTH,
+				Constants.visibleArea.MAXIMUM_HEIGHT)
 			.scene(game.mainScene)
 			//Note: drawBounds runs on the server for and will slow performance
 			.drawBounds(false) //draws the axis aligned bounding boxes. Set to true for debugging.

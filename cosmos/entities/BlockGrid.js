@@ -146,6 +146,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 				gravitic: false,
 				fixedRotation: false,
 			});
+
+			this.streamControl(this.streamControlFunc)
 		}
 		else {
 			this.depth(BlockGrid.DEPTH);
@@ -171,6 +173,41 @@ var BlockGrid = IgeEntityBox2d.extend({
 			startCol: this.startCol(),
 			blockTypeMatrix: this.toBlockTypeMatrix()
 		}
+	},
+
+	/**
+	 * Controls whether or not this entity is streamed to a particular client.
+	 * @param clientId {String} The client in question.
+	 * @return {Boolean} True if the entity should be streamed to the client
+	 * associated with the clientId.
+	 * {@link BlockGrid}.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	streamControlFunc: function(clientId) {
+		var player = ige.server.players[clientId];
+		// Don't stream BlockGrids to players if their ship hasn't spawned yet.
+		// We need to know the player's position in order to limit entity
+		// streaming.
+		if (player === undefined) {
+			return false;
+		}
+
+		// Checks if the entity is visible to the player. This means that the
+		// player's visible rectangle intersects with this entity's aabb rectangle.
+		var playerWorldPosition = player.worldPosition();
+		var width = Constants.visibleArea.MAXIMUM_WIDTH;
+		var height = Constants.visibleArea.MAXIMUM_HEIGHT;
+		var viewableRect = new IgeRect(
+			playerWorldPosition.x - width / 2,
+			playerWorldPosition.y - height / 2,
+			width,
+			height);
+		if (viewableRect.intersects(this.aabb())) {
+			return true;
+		}
+
+		return false;
 	},
 
 	/**
@@ -1489,8 +1526,13 @@ var BlockGrid = IgeEntityBox2d.extend({
 				block.cacheDirty(true);
 				this.updateEffect(block);
 			}
-
 		}
+		else {
+			// Recalculate aabb on server. This aabb is used to prevent offscreen
+			// entities from being streamed to clients.
+			this.aabb(true);
+		}
+
 
 		return true;
 	},

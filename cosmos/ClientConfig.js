@@ -1,5 +1,8 @@
 var igeClientConfig = {
 	include: [
+		/* === CONSTANTS === */
+		'./constants.js',
+
 		/* === ENVIRONMENT STATE === */
 
 		/* Render container for block grids and overlays */
