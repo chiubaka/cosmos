@@ -4,6 +4,13 @@ var RelocateComponent = ButtonComponent.extend({
 
 	init: function() {
 		ButtonComponent.prototype.init.call(this, $('#bottom-toolbar'), 'relocate-button');
+
+		this.element.click(this.mouseDown);
+	},
+
+	mouseDown: function() {
+		ige.network.send('relocate');
+		ige.emit('relocate button clicked');
 	}
 });
 

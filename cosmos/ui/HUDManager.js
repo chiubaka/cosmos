@@ -34,14 +34,6 @@ var HUDManager = IgeClass.extend({
 			.id("capbar")
 			.mount(ige.client.hudScene);
 
-		this._relocateButton = new RelocateButton()
-			.id("relocateButton")
-			.mount(ige.client.hudScene);
-
-		this._newShipButton = new NewShipButton()
-			.id("newShipButton")
-			.mount(ige.client.hudScene);
-
 		this._gpsLabel = new GPSLabel()
 			.id("gpsLabel")
 			.mount(ige.client.hudScene);

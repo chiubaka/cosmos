@@ -100,10 +100,6 @@ var igeClientConfig = {
 		/* Stats */
 		'./ui/info/GPSLabel.js',
 
-		/* Debugging actions*/
-		'./ui/debug/RelocateButton.js',
-		'./ui/debug/NewShipButton.js',
-
 		/* Capbar */
 		'./ui/capbar/CapBar.js',
 		'./ui/capbar/CapLabel.js',
