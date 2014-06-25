@@ -49,10 +49,22 @@ $minimap-toolbar-item-width: $hud-button-width;
       vertical-align: middle;
     }
   }
-  canvas {
+
+  .map {
+    position: relative;
+    float: right;
+
+    .coordinates {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      font-size: 75%;
+    }
+    canvas {
       float: right;
       background-color: $minimap-background-color;
       height: $minimap-map-height;
       width: $minimap-map-width;
+    }
   }
 }

@@ -83,7 +83,6 @@ var igeClientConfig = {
 
 		/* === USER INTERFACE === */
 		/* HUD */
-		'./ui/HUDManager.js',
 		'./ui/HUDComponent.js',
 		'./ui/BottomToolbarComponent.js',
 		'./ui/ButtonComponent.js',
@@ -93,23 +92,17 @@ var igeClientConfig = {
 		'./ui/FeedbackComponent.js',
 		'./ui/NewShipComponent.js',
 		'./ui/RelocateComponent.js',
-		
-		/* Stats */
-		'./ui/info/GPSLabel.js',
 
-		/* Capbar */
+		/* Minimap */
+		'./ui/MinimapComponent.js',
+
+		/* CapBar */
 		'./ui/capbar/CapBar.js',
 
 		/* Caps */
 		'./ui/capbar/caps/Cap.js',
 		'./ui/capbar/caps/MineCap.js',
 		'./ui/capbar/caps/ConstructCap.js',
-
-		/* Toolbars */
-		'./ui/toolbar/ToolBar.js',
-		'./ui/toolbar/CargoToolbar.js',
-		'./ui/toolbar/tools/Tool.js',
-		'./ui/toolbar/tools/CargoTool.js',
 
 		/* === SUPPLEMENTAL FUNCTIONALITY === */
 		/* Debugging */

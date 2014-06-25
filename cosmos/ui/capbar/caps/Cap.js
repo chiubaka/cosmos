@@ -20,8 +20,6 @@ var Cap = ButtonComponent.extend({
 	init: function(parent, id, className) {
 		ButtonComponent.prototype.init.call(this, parent, id, className);
 
-		console.log(this.element);
-
 		this.active = false;
 
 		// Set up events

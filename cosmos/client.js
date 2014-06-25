@@ -24,8 +24,6 @@ var Client = IgeClass.extend({
 		// Implement our game methods
 		this.implement(ClientNetworkEvents);
 
-		ige.addComponent(HUDComponent);
-
 		// Create the HTML canvas
 		ige.createFrontBuffer(true);
 
@@ -134,6 +132,8 @@ var Client = IgeClass.extend({
 						ige.network.send('playerEntity', {sid: self.getSessionId()});
 
 						GameInit.init(self);
+
+						ige.addComponent(HUDComponent);
 						//ige.editor.showStats();
 					});
 				}
