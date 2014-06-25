@@ -84,6 +84,18 @@ var igeClientConfig = {
 		/* === USER INTERFACE === */
 		/* HUD */
 		'./ui/HUDManager.js',
+		'./ui/HUDComponent.js',
+		'./ui/BottomToolbarComponent.js',
+		'./ui/ButtonComponent.js',
+		'./ui/UserTileComponent.js',
+		'./ui/ChatComponent.js',
+		'./ui/CapBarComponent.js',
+		'./ui/MineCapComponent.js',
+		'./ui/ConstructCapComponent.js',
+		'./ui/MenuComponent.js',
+		'./ui/FeedbackComponent.js',
+		'./ui/NewShipComponent.js',
+		'./ui/RelocateComponent.js',
 		
 		/* Stats */
 		'./ui/info/GPSLabel.js',

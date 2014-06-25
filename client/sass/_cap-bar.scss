@@ -1,10 +1,10 @@
-$capbar-divider-color: #515151;
+$cap-bar-divider-color: #515151;
 
-#capbar {
+#cap-bar {
   //@extend .bottom-toolbar-float-left;
   float: left;
   height: $bottom-toolbar-height;
-  border-left: 1px solid $capbar-divider-color;
+  border-left: 1px solid $cap-bar-divider-color;
 }
 
 @import 'mine-cap';

@@ -24,6 +24,8 @@ var Client = IgeClass.extend({
 		// Implement our game methods
 		this.implement(ClientNetworkEvents);
 
+		ige.addComponent(HUDComponent);
+
 		// Create the HTML canvas
 		ige.createFrontBuffer(true);
 
