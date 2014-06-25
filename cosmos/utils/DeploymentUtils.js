@@ -21,7 +21,19 @@
 			case DeploymentConfig.CLIENTURL_PREVIEW:
 			case DeploymentConfig.CLIENTURL_PREVIEW_AZURE:
 				selectedServer = DeploymentConfig.SERVERURL_PREVIEW;
-				 break;
+				break;
+			case DeploymentConfig.CLIENTURL_DANIEL:
+				selectedServer = DeploymentConfig.SERVERURL_DANIEL;
+				break;
+			case DeploymentConfig.CLIENTURL_DERRICK:
+				selectedServer = DeploymentConfig.SERVERURL_DERRICK;
+				break;
+			case DeploymentConfig.CLIENTURL_ERIC:
+				selectedServer = DeploymentConfig.SERVERURL_ERIC;
+				break;
+			case DeploymentConfig.CLIENTURL_RAFAEL:
+				selectedServer = DeploymentConfig.SERVERURL_RAFAEL;
+				break;
 			case undefined:
 			default:
 				selectedServer = DeploymentConfig.SERVERURL_LOCAL;
