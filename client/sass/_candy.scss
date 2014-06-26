@@ -29,8 +29,6 @@ $chat-box-input-height: 31px;
   #chat-tabs {
     width: $chat-box-message-pane-width;
     li {
-      min-width: 100px;
-
       &.roomtype-groupchat {
         a.close {
           display: none;

@@ -1,6 +1,27 @@
+$chat-button-unread-color: #f57a03;
+
 #chat-button {
   @extend .bottom-toolbar-float-left;
-  @include bottom-toolbar-item-with-icon('../images/icons/icon_chat_norm.png');
+  @include bottom-toolbar-item-with-icon('../images/icons/icon_chat.png');
+  text-align: right;
+  font-size: 85%;
+  background-position: 50% 65%;
+
+  #chat-unread-label {
+    display: none;
+  }
+
+  &.unread {
+    color: $chat-button-unread-color;
+    background-image: url('../images/icons/icon_chat_unread.png');
+    background-position: 0% 65%;
+
+    #chat-unread-label {
+      padding-right: $bottom-toolbar-item-padding;
+      display: inline;
+      line-height: $bottom-toolbar-item-height;
+    }
+  }
 }
 
 @import 'candy';
