@@ -2,6 +2,7 @@ $user-info-padding: $bottom-toolbar-item-padding;
 
 #user-tile {
   float: left;
+  height: $hud-button-height;
   background-color: $bottom-toolbar-item-background-color;
 
   &:hover {

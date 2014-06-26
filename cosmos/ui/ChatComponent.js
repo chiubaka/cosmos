@@ -28,13 +28,16 @@ var ChatComponent = IgeEventingClass.extend({
 				$.getScript(ChatComponent.CANDY_ROOT + 'candy.min.js', function() {
 					Candy.init('http://tl-xmpp.cloudapp.net:5280/http-bind/', {
 						core: {
-							debug: false,
+							debug: true,
 							autojoin: ['test@conference.tl-xmpp.cloudapp.net']
 						},
 						view: { resources: ChatComponent.CANDY_ROOT + 'res/' }
 					});
 
-					Candy.Core.connect('dchiu@tl-xmpp.cloudapp.net', 'CS210-l3on1ne!');
+					var guestNumber = Math.floor((Math.random() * 999999999) + 100000000)
+
+					Candy.Core.connect('tl-xmpp.cloudapp.net', null, 'guest' + guestNumber);
+					//Candy.Core.connect('dchiu@tl-xmpp.cloudapp.net', 'CS210-l3on1ne!');
 
 					self.chatClient = $('#candy');
 
