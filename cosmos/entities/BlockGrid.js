@@ -121,6 +121,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 */
 	_debugFixtures: false,
 
+	_previouslyStreamed: undefined,
+
 	init: function(data) {
 		var self = this;
 
@@ -135,6 +137,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this._startRow = 0;
 		this._endCol = 0;
 		this._endRow = 0;
+		this._previouslyStreamed = {};
 
 		if (ige.isServer) {
 			this.box2dBody({
@@ -147,7 +150,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 				fixedRotation: false,
 			});
 
-			this.streamControl(this.streamControlFunc)
+			this.streamControl(this.streamControlFunc.bind(this))
 		}
 		else {
 			this.depth(BlockGrid.DEPTH);
@@ -186,11 +189,16 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 */
 	streamControlFunc: function(clientId) {
 		var player = ige.server.players[clientId];
-		// Don't stream BlockGrids to players if their ship hasn't spawned yet.
-		// We need to know the player's position in order to limit entity
+		// TODO: Don't stream BlockGrids to players if their ship hasn't spawned
+		// yet. We need to know the player's position in order to limit entity
 		// streaming.
+
+		// Scratch that. Start streaming asap in order to cache entities on the
+		// client.
+		// TODO: Make createConstructionZone and fromBlockTypeMatrix faster.
+		// TODO: Make a proper entity preloader.
 		if (player === undefined) {
-			return false;
+			return true;
 		}
 
 		// Checks if the entity is visible to the player. This means that the
@@ -204,10 +212,17 @@ var BlockGrid = IgeEntityBox2d.extend({
 			width,
 			height);
 		if (viewableRect.intersects(this.aabb())) {
+			this._previouslyStreamed[clientId] = true;
 			return true;
 		}
-
-		return false;
+		else {
+			if (this._previouslyStreamed[clientId] === true) {
+				this._previouslyStreamed[clientId] = false;
+				ige.network.stream._streamClientData[this.id()][clientId] = 'INVALID';
+				ige.network.stream.queueCommand('_entityInvalid', this.id(), clientId);
+			}
+			return false;
+		}
 	},
 
 	/**
