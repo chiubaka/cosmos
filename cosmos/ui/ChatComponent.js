@@ -6,6 +6,7 @@ var ChatComponent = IgeEventingClass.extend({
 	chatClient: undefined,
 	numUnread: undefined,
 	unreadLabel: undefined,
+	messageInputs: undefined,
 
 	init: function() {
 		var self = this;
@@ -47,7 +48,16 @@ var ChatComponent = IgeEventingClass.extend({
 						}
 					});
 
-					self.chatClient.hide();
+					// When a new room is added, find the message input field and tell it not to propagate keydown
+					// events. Otherwise, the player will move in IGE while typing characters that are controls in the
+					// game.
+					$(Candy).on('candy:view.room.after-add', function() {
+						self.messageInputs = self.chatClient.find('input.field');
+						console.log(self.messageInputs);
+						self.messageInputs.keydown(function(e) {
+							e.stopPropagation();
+						});
+					});
 
 					self.button.click(function(event) {
 						if (self.chatClient.is(':visible')) {
