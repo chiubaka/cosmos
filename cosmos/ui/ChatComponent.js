@@ -30,7 +30,7 @@ var ChatComponent = IgeEventingClass.extend({
 					Candy.init('http://tl-xmpp.cloudapp.net:5280/http-bind/', {
 						core: {
 							debug: false,
-							autojoin: ['test@conference.tl-xmpp.cloudapp.net']
+							autojoin: ['cosmos@conference.tl-xmpp.cloudapp.net']
 						},
 						view: { resources: ChatComponent.CANDY_ROOT + 'res/' }
 					});
@@ -48,12 +48,17 @@ var ChatComponent = IgeEventingClass.extend({
 						}
 					});
 
+					$(Candy).on('candy:view.roster.after-update', function(evt, args) {
+						if (args.action === 'join' && self.chatClient.is(':hidden')) {
+							self.incrementUnread();
+						}
+					});
+
 					// When a new room is added, find the message input field and tell it not to propagate keydown
 					// events. Otherwise, the player will move in IGE while typing characters that are controls in the
 					// game.
 					$(Candy).on('candy:view.room.after-add', function() {
 						self.messageInputs = self.chatClient.find('input.field');
-						console.log(self.messageInputs);
 						self.messageInputs.keydown(function(e) {
 							e.stopPropagation();
 						});
