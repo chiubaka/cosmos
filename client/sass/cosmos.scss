@@ -12,3 +12,7 @@ html, body {
   display: inline-block;
   @include rotate(180deg);
 }
+
+#igeFrontBuffer {
+  @include user-select(none);
+}

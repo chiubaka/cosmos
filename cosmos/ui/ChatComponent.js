@@ -28,7 +28,7 @@ var ChatComponent = IgeEventingClass.extend({
 				$.getScript(ChatComponent.CANDY_ROOT + 'candy.min.js', function() {
 					Candy.init('http://tl-xmpp.cloudapp.net:5280/http-bind/', {
 						core: {
-							debug: true,
+							debug: false,
 							autojoin: ['test@conference.tl-xmpp.cloudapp.net']
 						},
 						view: { resources: ChatComponent.CANDY_ROOT + 'res/' }

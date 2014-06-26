@@ -1,3 +1,5 @@
+@import "compass/css3/user-interface";
+
 $hud-layer-z-index: 1;
 $hud-button-height: 50px;
 $hud-button-width: $hud-button-height;
@@ -11,6 +13,7 @@ $hud-margin-top: $hud-button-height * 2;
 }
 
 #hud {
+  @include user-select(none);
   z-index: $hud-layer-z-index;
 }
 

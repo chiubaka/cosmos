@@ -46,6 +46,10 @@ $chat-box-input-height: 31px;
     right: 0;
   }
 
+  .message-pane li, .roster-pane .user {
+    @include user-select(text);
+  }
+
   .message-form-wrapper {
     position: absolute;
     bottom: 0;
