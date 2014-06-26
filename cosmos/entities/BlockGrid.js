@@ -121,6 +121,17 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 */
 	_debugFixtures: false,
 
+	/**
+	 * A hash whose keys are clientIds and values are Booleans.
+	 * This is used in _streamControlFunc to determine if this entity has been
+	 * streamed to a particular client. If an entity is not visible and has
+	 * previously been streamed, then we know to send an _entityInvalid command
+	 * to the client.
+	 * @type {Object}
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
 	_previouslyStreamed: undefined,
 
 	init: function(data) {
@@ -150,7 +161,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 				fixedRotation: false,
 			});
 
-			this.streamControl(this.streamControlFunc.bind(this))
+			this.streamControl(this._streamControlFunc.bind(this))
 		}
 		else {
 			this.depth(BlockGrid.DEPTH);
@@ -185,16 +196,16 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * associated with the clientId.
 	 * {@link BlockGrid}.
 	 * @memberof BlockGrid
+	 * @private
 	 * @instance
 	 */
-	streamControlFunc: function(clientId) {
+	_streamControlFunc: function(clientId) {
 		var player = ige.server.players[clientId];
+
+		// Start streaming asap in order to cache entities on the client.
 		// TODO: Don't stream BlockGrids to players if their ship hasn't spawned
 		// yet. We need to know the player's position in order to limit entity
 		// streaming.
-
-		// Scratch that. Start streaming asap in order to cache entities on the
-		// client.
 		// TODO: Make createConstructionZone and fromBlockTypeMatrix faster.
 		// TODO: Make a proper entity preloader.
 		if (player === undefined) {
@@ -218,6 +229,13 @@ var BlockGrid = IgeEntityBox2d.extend({
 		else {
 			if (this._previouslyStreamed[clientId] === true) {
 				this._previouslyStreamed[clientId] = false;
+				// Invalidate the stream data for this entity. The server has an
+				// optimization where it doesn't send a streamData update to the client
+				// if the previous streamData is the same. This is problematic because
+				// when this entity is in view again, we want the server to send an
+				// streamData update to the client.
+				// We can force the server to update by invalidating the cached
+				// streamData.
 				ige.network.stream._streamClientData[this.id()][clientId] = 'INVALID';
 				ige.network.stream.queueCommand('_entityInvalid', this.id(), clientId);
 			}
