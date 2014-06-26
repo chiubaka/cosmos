@@ -5,6 +5,9 @@ $hud-button-height: 50px;
 $hud-button-width: $hud-button-height;
 $hud-margin-top: $hud-button-height * 2;
 
+$block-height: 26px;
+$block-width: $block-height;
+
 @mixin hud-icon-button($icon) {
   background-image: url($icon);
   background-repeat: no-repeat;
