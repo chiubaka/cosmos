@@ -1,0 +1,12 @@
+$cargo-button-background-color: #383838;
+$cargo-button-border-color: #cdcdcd;
+$cargo-button-position-top: $hud-margin-top;
+
+#cargo {
+  .button {
+    position: absolute;
+    top: $cargo-button-position-top;
+    left: 0px;
+    @include side-button-with-icon('../images/icons/icon_cargo.png', $cargo-button-background-color, $cargo-button-border-color, false);
+  }
+}

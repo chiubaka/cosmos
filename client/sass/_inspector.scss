@@ -1,0 +1,12 @@
+$inspector-button-background-color: #0c3e00;
+$inspector-button-border-color: #51e534;
+$inspector-button-position-top: $hud-margin-top;
+
+#inspector {
+  .button {
+    position: absolute;
+    top: $inspector-button-position-top;
+    right: 0px;
+    @include side-button-with-icon('../images/icons/icon_inspector.png', $inspector-button-background-color, $inspector-button-border-color, true);
+  }
+}

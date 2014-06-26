@@ -1,0 +1,50 @@
+$bottom-toolbar-background-color: #222222;
+$bottom-toolbar-height: $hud-button-height;
+$bottom-toolbar-spacing-between-items: 1px;
+$bottom-toolbar-item-clicked-background-color: #101010;
+$bottom-toolbar-item-background-color: #363636;
+$bottom-toolbar-item-hover-background-color: #5c5c5c;
+$bottom-toolbar-item-height: $hud-button-height;
+$bottom-toolbar-item-width: $hud-button-width;
+
+#hud>.toolbar {
+  position: absolute;
+  bottom: 0;
+  height: $bottom-toolbar-height;
+  width: 100%;
+  background-color: $bottom-toolbar-background-color;
+}
+
+.bottom-toolbar-float-left {
+  float: left;
+  margin-left: $bottom-toolbar-spacing-between-items;
+}
+
+.bottom-toolbar-float-right {
+  float: right;
+  margin-right: $bottom-toolbar-spacing-between-items;
+}
+
+@mixin bottom-toolbar-item($background-color: $bottom-toolbar-item-background-color) {
+  height: $bottom-toolbar-item-height;
+  width: $bottom-toolbar-item-width;
+  cursor: pointer;
+  background-color: $background-color;
+
+  &:hover {
+    background-color: $bottom-toolbar-item-hover-background-color;
+  }
+}
+
+@mixin bottom-toolbar-item-with-icon($icon, $background-color: $bottom-toolbar-item-background-color) {
+  @include bottom-toolbar-item($background-color);
+  @include hud-icon-button($icon);
+}
+
+@import 'user-tile';
+@import 'chat';
+@import 'cap-bar';
+@import 'menu-button';
+@import 'feedback-button';
+@import 'relocate-button';
+@import 'new-ship-button';

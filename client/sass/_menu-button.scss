@@ -1,0 +1,5 @@
+#menu-button {
+  @extend .bottom-toolbar-float-right;
+  margin-right: 0px;
+  @include bottom-toolbar-item-with-icon('../images/icons/icon_menu.png', $bottom-toolbar-background-color);
+}

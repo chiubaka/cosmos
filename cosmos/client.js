@@ -132,6 +132,8 @@ var Client = IgeClass.extend({
 						ige.network.send('playerEntity', {sid: self.getSessionId()});
 
 						GameInit.init(self);
+
+						ige.addComponent(HUDComponent);
 						//ige.editor.showStats();
 					});
 				}
