@@ -457,7 +457,7 @@
 #minimap .map {
   position: relative;
   float: right;
-  background-color: #173129;
+  background-color: rgba(23, 49, 41, 0.9);
   height: 100%;
 }
 /* line 59, ../../sass/_minimap.scss */
