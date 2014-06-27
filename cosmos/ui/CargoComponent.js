@@ -35,19 +35,19 @@ var CargoComponent = IgeEventingClass.extend({
 				}
 			});
 
-			ige.on('cosmos:Player.addBlock.cargoBlock', function(cargoBlock) {
+			ige.on('cosmos:Player.addBlock.cargoBlock', function(cargoBlockId) {
 				var containerDiv = document.createElement('div');
 				containerDiv.className = 'container';
 
-				self.cargoBlocks[cargoBlock.id()] = containerDiv;
+				self.cargoBlocks[cargoBlockId] = containerDiv;
 
 				self.containers.append(containerDiv);
 			});
 
-			ige.on('cosmos:Player.removeBlock.cargoBlock', function(cargoBlock) {
-				var containerDiv = self.cargoBlocks[cargoBlock.id()];
+			ige.on('cosmos:Player.removeBlock.cargoBlock', function(cargoBlockId) {
+				var containerDiv = self.cargoBlocks[cargoBlockId];
 				containerDiv.remove();
-				delete self.cargoBlocks[cargoBlock.id()];
+				delete self.cargoBlocks[cargoBlockId];
 			});
 		});
 	}

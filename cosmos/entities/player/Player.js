@@ -146,7 +146,7 @@ var Player = BlockStructure.extend({
 	add: function(row, col, block, checkForNeighbors) {
 		if (BlockStructure.prototype.add.call(this, row, col, block, checkForNeighbors)) {
 			if (block.classId() === CargoBlock.prototype.classId()) {
-				ige.emit('cosmos:Player.addBlock.cargoBlock', block);
+				ige.emit('cosmos:Player.addBlock.cargoBlock', block.id());
 			}
 
 			return true;
@@ -156,11 +156,11 @@ var Player = BlockStructure.extend({
 	},
 
 	remove: function(row, col) {
-		var block = BlockStructure.prototype.remove.call(this, row, col);
+		var block = this.get(row, col);
 		if (block.classId() === CargoBlock.prototype.classId()) {
-			ige.emit('cosmos:Player.removeBlock.cargoBlock', block);
+			ige.emit('cosmos:Player.removeBlock.cargoBlock', block.id())
 		}
-		return block;
+		BlockStructure.prototype.remove.call(this, row, col);
 	},
 
 	/**

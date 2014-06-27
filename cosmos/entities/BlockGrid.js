@@ -401,8 +401,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 		if (this._numBlocks === 0) {
 			this.destroy();
 		}
-
-		return block;
 	},
 
 	/**
