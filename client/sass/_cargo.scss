@@ -11,6 +11,7 @@ $cargo-background-color: #a5a5a5;
 $cargo-button-position-top: $hud-margin-top;
 $cargo-block-height: $block-height * 2;
 $cargo-block-width: $block-width * 2;
+$cargo-block-padding: $cargo-block-height / 10;
 
 $cargo-container-border-color: #696969;
 
@@ -43,12 +44,26 @@ $cargo-container-border-color: #696969;
       text-align: center;
 
       .container {
-        width: $cargo-block-width;
-        height: $cargo-block-height;
+        height: $cargo-block-height - $cargo-block-padding * 2;
+        width: $cargo-block-width - $cargo-block-padding * 2;
+        padding: $cargo-block-padding;
+        position: relative;
         margin-left: auto;
         margin-right: auto;
         background-color: $cargo-button-background-color;
         border: 1px solid $cargo-container-border-color;
+
+        canvas {
+          height: $cargo-block-height - $cargo-block-padding * 2;
+          width: $cargo-block-width - $cargo-block-padding * 2;
+        }
+
+        .quantityLabel {
+          position: absolute;
+          right: $cargo-block-padding;
+          bottom: $cargo-block-padding;
+          text-shadow: -1px 0 $cargo-button-border-color, 0 1px $cargo-button-border-color, 1px 0 $cargo-button-border-color, 0 -1px $cargo-button-border-color;
+        }
       }
     }
   }

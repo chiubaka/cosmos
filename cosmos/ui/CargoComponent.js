@@ -84,9 +84,22 @@ var CargoComponent = IgeEventingClass.extend({
 		quantityLabelSpan.className = 'quantityLabel';
 		quantityLabelSpan.innerHTML = quantity;
 
-		containerDiv.appendChild(quantityLabelSpan);
+		var containerCanvas = document.createElement('canvas');
 
+		containerDiv.appendChild(quantityLabelSpan);
+		containerDiv.appendChild(containerCanvas);
 		this.containers.append(containerDiv);
+
+		var block = Block.blockFromClassId(type);
+		containerCanvas.height = block._bounds2d.y;
+		containerCanvas.width = block._bounds2d.x;
+
+		var ctx = containerCanvas.getContext("2d");
+		ctx.translate(block._bounds2d.x2, block._bounds2d.y2);
+		block.texture().render(ctx, block);
+		setTimeout(function() {
+			block.texture().render(ctx, block);
+		}, 100);
 	}
 });
 
