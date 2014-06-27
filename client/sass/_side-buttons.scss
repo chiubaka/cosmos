@@ -13,6 +13,7 @@ $side-button-arrow-size: $side-button-border-width * 3 / 4;
 
 @mixin arrow-left($arrow-color){
   @extend .side-button-arrow;
+  border-left: 0;
   border-right: $side-button-arrow-size solid $arrow-color;
   left: -$side-button-arrow-size + 1;
 }
@@ -21,6 +22,7 @@ $side-button-arrow-size: $side-button-border-width * 3 / 4;
   @extend .side-button-arrow;
   float: right;
   border-left: $side-button-arrow-size solid $arrow-color;
+  border-right: 0;
   right: -$side-button-arrow-size + 1;
 }
 
@@ -30,10 +32,14 @@ $side-button-arrow-size: $side-button-border-width * 3 / 4;
   background-color: $background-color;
 }
 
-@mixin side-button-with-icon($icon, $background-color, $border-color, $right-side) {
+@mixin side-button-with-icon($icon, $background-color, $hover-background-color, $border-color, $right-side) {
   @include side-button($background-color);
   @include hud-icon-button($icon);
   cursor: pointer;
+
+  &:hover {
+    background-color: $hover-background-color;
+  }
 
   @if $right-side {
     border-left: $side-button-border-width solid $border-color;
@@ -45,6 +51,17 @@ $side-button-arrow-size: $side-button-border-width * 3 / 4;
     border-right: $side-button-border-width solid $border-color;
     .arrow {
       @include arrow-right($background-color);
+    }
+    &:hover {
+      .arrow {
+        border-left: $side-button-arrow-size solid $hover-background-color;
+      }
+    }
+    &.active {
+      .arrow {
+        @include arrow-left($border-color);
+        left: 0;
+      }
     }
   }
 }

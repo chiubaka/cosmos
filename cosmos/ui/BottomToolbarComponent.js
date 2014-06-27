@@ -31,6 +31,6 @@ var BottomToolbarComponent = IgeEventingClass.extend({
 	}
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.expoerts) !== 'undefined') {
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
 	module.exports = BottomToolbarComponent;
 }

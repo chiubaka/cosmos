@@ -53,6 +53,6 @@ var MinimapComponent = IgeEventingClass.extend({
 
 MinimapComponent.UI_ROOT = '/components/minimap/';
 
-if (typeof(module) !== 'undefined' && typeof(module.expoerts) !== 'undefined') {
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
 	module.exports = MinimapComponent;
 }

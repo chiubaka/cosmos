@@ -28,6 +28,6 @@ var UserTileComponent = IgeEventingClass.extend({
 
 UserTileComponent.UI_ROOT = '/components/user-tile/';
 
-if (typeof(module) !== 'undefined' && typeof(module.expoerts) !== 'undefined') {
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
 	module.exports = UserTileComponent;
 }
