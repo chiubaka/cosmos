@@ -1,0 +1,21 @@
+@import 'compass/css3/user-interface';
+@import 'compass/css3';
+@import 'fonts';
+
+html, body {
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;
+  font-size: 100%;
+  color: #e8e8e8;
+  height: 100%;
+  overflow: hidden;
+}
+
+.more-triangle {
+  cursor: pointer;
+  display: inline-block;
+  @include rotate(180deg);
+}
+
+#igeFrontBuffer {
+  @include user-select(none);
+}

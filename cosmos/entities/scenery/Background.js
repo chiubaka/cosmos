@@ -1,14 +1,14 @@
 /**
- * An {@link IgeEntity} which represents the background of the game.
+ * A {@link ParallaxBackground} which represents the nebula background of the game.
  * @class
  * @typedef {Background}
  * @namespace
  */
-var Background = IgeEntity.extend({
+var Background = ParallaxBackground.extend({
 	classId: 'Background',
 
 	init: function () {
-		IgeEntity.prototype.init.call(this);
+		ParallaxBackground.prototype.init.call(this);
 
 		if (!ige.isServer) {
 
@@ -16,8 +16,8 @@ var Background = IgeEntity.extend({
 			//this.backgroundPattern(ige.client.textures.background_helix_nebula, 'repeat', true, false);
 
 			this.texture(ige.client.textures.background_helix_nebula)
-				.width(6145 * 2)
-				.height(6623 * 2);
+				.width(6145)
+				.height(6623);
 		}
 	}
 });

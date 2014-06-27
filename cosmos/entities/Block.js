@@ -590,6 +590,19 @@ Block.HEALTH_BAR_MARGIN = 3;
  */
 Block.HEALTH_BAR_HEIGHT = 4;
 
+Block.displayNameFromClassId = function(classId) {
+	var tokens = classId.match(/([A-Z]?[^A-Z]*)/g).slice(0, -1);
+	var displayName = "";
+	for (var i = 0; i < tokens.length - 1; i++) {
+		var token = tokens[i];
+		if (i != 0) {
+			displayName += " ";
+		}
+		displayName += token;
+	}
+	return displayName;
+};
+
 /**
  * Given a class ID, returns a new instance of the {@link Block} type associated with that class ID.
  * @param classId {string} The class ID of the type of {@link Block} we want created.
@@ -618,6 +631,8 @@ Block.blockFromClassId = function(classId) {
 			return new ThrusterBlock();
 
 		// Armor
+		case HullBlock.prototype.classId():
+			return new HullBlock();
 		case CloakBlock.prototype.classId():
 			return new CloakBlock();
 		case CloakBlockLight.prototype.classId():

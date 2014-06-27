@@ -44,7 +44,9 @@ var GameInit = {
 		game.mainViewport = new IgeViewport()
 			.id('mainViewport')
 			.autoSize(true)
-			.minimumVisibleArea(1920, 1200)
+			.minimumVisibleArea(
+				Constants.visibleArea.MAXIMUM_WIDTH,
+				Constants.visibleArea.MAXIMUM_HEIGHT)
 			.scene(game.mainScene)
 			//Note: drawBounds runs on the server for and will slow performance
 			.drawBounds(false) //draws the axis aligned bounding boxes. Set to true for debugging.
@@ -81,15 +83,17 @@ var GameInit = {
 			.mount(game.spaceScene);
 
 		if (!ige.isServer) {
+			// Use entity manager to prevent off-screen entities from being rendered
+			game.spaceGameScene.addComponent(IgeEntityManager);
+			// Non UI elements don't need to respond to the screen resize event. This
+			// provides a performance boost because every time something is mounted
+			// to an entity, (eg particles mounted to the spaceGameScene) a resize
+			// event happens.
+			game.spaceGameScene.resizeSceneChildren(false);
+
 			game.effectsScene = new IgeScene2d()
 				.id('effectsScene')
 				.layer(game.LAYER_WORLD_OVERLAY)
-				.mount(game.spaceScene);
-
-			game.spaceUiScene = new IgeScene2d()
-				.id('spaceUiScene')
-				.layer(game.LAYER_HUD)
-				.ignoreCamera(true)
 				.mount(game.spaceScene);
 
 			// This scene's purpose is to catch all clicks on the background
@@ -100,9 +104,6 @@ var GameInit = {
 			// For now, the server does not need to know about the background scene.
 			// The server does not need to load the UI.
 			this.initBackgroundScene();
-
-			// Pre-initialize player HUD
-			this.initPlayerHUD();
 		}
 	},
 
@@ -119,20 +120,6 @@ var GameInit = {
 	},
 
 	/**
-	 * Initializes the HUD scene layer on the client.
-	 */
-	initPlayerHUD: function() {
-		var client = ige.client;
-		client.hudScene = new IgeScene2d()
-			.id('hudScene')
-			.layer(client.LAYER_HUD)
-			.ignoreCamera(true)
-			.mount(client.spaceScene);
-
-		client.hud = new HUDManager();
-	},
-
-	/**
 	 * Initializes the environmental background layers on the client.
 	 */
 	initBackgroundScene: function() {
@@ -144,6 +131,14 @@ var GameInit = {
 
 		new Background()
 			.id('helix_nebula_background')
+			.depth(0)
+			.parallaxLag(2)
+			.mount(client.spaceBackgroundScene);
+
+		new StarfieldBackground()
+			.id('starfield_background')
+			.depth(1)
+			.parallaxLag(4)
 			.mount(client.spaceBackgroundScene);
 	},
 
@@ -169,7 +164,7 @@ var GameInit = {
 
 		// Instead of creating a bunch of these up front, we might want to create them just ahead of a user as he's
 		// flying, and delete them right behind. This will be more efficient.
-		var NUM_SMALL_ASTEROIDS = 80;
+		var NUM_SMALL_ASTEROIDS = 0;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_SMALL_ASTEROIDS; asteroidNumber++) {
 			var asteroid = BlockStructureGenerator.singleBlock()
 				.category('smallAsteroid')
@@ -181,12 +176,12 @@ var GameInit = {
 
 		// TODO: The procedural generation algorithm is causing strange problems with the new BlockGrid system. Leave
 		// this stuff commented out until it is figured out.
-		var NUM_DERELICT_SPACESHIPS = 10;
+		var NUM_DERELICT_SPACESHIPS = 40;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_DERELICT_SPACESHIPS; asteroidNumber++) {
 			//note that the signature of gen.. is
 			// genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution)
 			var asteroid = BlockStructureGenerator
-				.genProceduralAsteroid(20, BlockStructureGenerator.partDistributions.randomDistribution(), true)
+				.genProceduralAsteroid(60, BlockStructureGenerator.partDistributions.randomDistribution(), true)
 				.id('spaceShip' + asteroidNumber)
 				.streamMode(1)
 				.mount(server.spaceGameScene)

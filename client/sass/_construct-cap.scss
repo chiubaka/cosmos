@@ -1,0 +1,14 @@
+$construct-cap-active-background-color: #026cd2;
+$construct-cap-active-hover-background-color: #0383ff;
+
+#construct-cap {
+  @extend .bottom-toolbar-float-left;
+  @include bottom-toolbar-item-with-icon('../images/icons/icon_construct.png');
+
+  &.active {
+    background-color: $construct-cap-active-background-color;
+    &:hover {
+      background-color: $construct-cap-active-hover-background-color;
+    }
+  }
+}

@@ -1,5 +1,8 @@
 var igeClientConfig = {
 	include: [
+		/* === CONSTANTS === */
+		'./constants.js',
+
 		/* === ENVIRONMENT STATE === */
 
 		/* Render container for block grids and overlays */
@@ -27,6 +30,7 @@ var igeClientConfig = {
 
 		/* Ship armor blocks */
 		'./entities/blocks/Armor.js',
+		'./entities/blocks/armor/HullBlock.js',
 		'./entities/blocks/armor/CloakBlock.js',
 		'./entities/blocks/armor/CloakBlockLight.js',
 		'./entities/blocks/armor/CloakBlockViolet.js',
@@ -59,7 +63,9 @@ var igeClientConfig = {
 		'./entities/prefabs/ExampleShips.js',
 
 		/* Scenery */
+		'./entities/scenery/ParallaxBackground.js',
 		'./entities/scenery/Background.js',
+		'./entities/scenery/StarfieldBackground.js',
 
 		/* Click scene (captures background client's background clicks) */
 		'./entities/ClickScene.js',
@@ -80,29 +86,27 @@ var igeClientConfig = {
 
 		/* === USER INTERFACE === */
 		/* HUD */
-		'./ui/HUDManager.js',
-		
-		/* Stats */
-		'./ui/info/GPSLabel.js',
+		'./ui/HUDComponent.js',
+		'./ui/BottomToolbarComponent.js',
+		'./ui/ButtonComponent.js',
+		'./ui/UserTileComponent.js',
+		'./ui/ChatComponent.js',
+		'./ui/MenuComponent.js',
+		'./ui/FeedbackComponent.js',
+		'./ui/NewShipComponent.js',
+		'./ui/RelocateComponent.js',
+		'./ui/CargoComponent.js',
 
-		/* Debugging actions*/
-		'./ui/debug/RelocateButton.js',
-		'./ui/debug/NewShipButton.js',
+		/* Minimap */
+		'./ui/MinimapComponent.js',
 
-		/* Capbar */
+		/* CapBar */
 		'./ui/capbar/CapBar.js',
-		'./ui/capbar/CapLabel.js',
 
 		/* Caps */
 		'./ui/capbar/caps/Cap.js',
 		'./ui/capbar/caps/MineCap.js',
 		'./ui/capbar/caps/ConstructCap.js',
-
-		/* Toolbars */
-		'./ui/toolbar/ToolBar.js',
-		'./ui/toolbar/CargoToolbar.js',
-		'./ui/toolbar/tools/Tool.js',
-		'./ui/toolbar/tools/CargoTool.js',
 
 		/* === SUPPLEMENTAL FUNCTIONALITY === */
 		/* Debugging */
@@ -120,9 +124,11 @@ var igeClientConfig = {
 		/* Configuration */
 		'./config/DeploymentConfig.js',
 
+		/* Network */
+		'./ClientNetworkEvents.js',
+
 		/* Initialization */
 		'./init/GameInit.js',
-		'./init/ClientNetworkEvents.js',
 		'./client.js',
 		'./index.js'
 	]

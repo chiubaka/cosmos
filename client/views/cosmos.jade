@@ -9,10 +9,10 @@ html
     meta(http-equiv='X-UA-Compatible', content='IE=Edge')
     title Cosmos Private Preview
     // STYLES
-    link(href='/stylesheets/ui-dark.css', rel='stylesheet', type='text/css')
-    link(href='/stylesheets/cosmos-preview.css', rel='stylesheet', type='text/css')
-    link(href='/stylesheets/cosmos-fonts.css', rel='stylesheet', type='text/css')
-    link(href='/stylesheets/steps.css', rel='stylesheet', type='text/css')
+    link(href='/vendor/candy/res/default.css', rel='stylesheet', type='text/css')
+    link(href='/stylesheets/cosmos.css', rel='stylesheet', type='text/css')
+    link(href='/stylesheets/hud.css', rel='stylesheet', type='text/css')
+    link(href='/stylesheets_backup/cosmos-preview.css', rel='stylesheet', type='text/css')
 
     // js
     script(src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js')
@@ -55,9 +55,9 @@ html
         ga('require', 'displayfeatures');
         ga('send', 'pageview');
   body
-    .cosmos-tutorial-veil#cosmos-tutorial-veil
-      .cosmos-tutorial#cosmos-tutorial-container
-        include includes/cosmosTutorial.jade
+    //.cosmos-tutorial-veil#cosmos-tutorial-veil
+    //  .cosmos-tutorial#cosmos-tutorial-container
+    //    include includes/cosmosTutorial.jade
     .igeLoading.greeting
       .cosmos-logo
         img(src='/images/preview-intro.png')
@@ -67,100 +67,6 @@ html
         | Loading...
       #loadingProgress
         #loadingProgressBar
-    script(type='text/javascript').
-      // Include the UserVoice JavaScript SDK (only needed once on a page)
-      UserVoice=window.UserVoice||[];
-      (function() {
-        var uv=document.createElement('script');
-        uv.type='text/javascript';
-        uv.async=true;
-        uv.src='//widget.uservoice.com/skoKBVYu64FiUKHwnPS0kg.js';
-        var s=document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(uv,s)
-      })();
-
-      //
-      // UserVoice Javascript SDK developer documentation:
-      // https://www.uservoice.com/o/javascript-sdk
-      //
-
-      // Set colors
-      UserVoice.push(['set', {
-        accent_color: '#448dd6',
-        trigger_color: 'white',
-        trigger_background_color: '#448dd6',
-        trigger_style: 'tab',
-        contact_enabled: true,
-        post_idea_enabled: true,
-        permalinks_enabled: true,
-        smartvote_enabled: true
-      }]);
-
-      // Identify the user and pass traits
-      // To enable, replace sample data with actual user traits and uncomment the line
-      UserVoice.push(['identify', {
-        //email:      'john.doe@example.com', // User’s email address
-        //name:       'John Doe', // User’s real name
-        //created_at: 1364406966, // Unix timestamp for the date the user signed up
-        //id:         123, // Optional: Unique id of the user (if set, this should not change)
-        //type:       'Owner', // Optional: segment your users by type
-        //account: {
-        //  id:           123, // Optional: associate multiple users with a single account
-        //  name:         'Acme, Co.', // Account name
-        //  created_at:   1364406966, // Unix timestamp for the date the account was created
-        //  monthly_rate: 9.99, // Decimal; monthly rate of the account
-        //  ltv:          1495.00, // Decimal; lifetime value of the account
-        //  plan:         'Enhanced' // Plan name for the account
-        //}
-      }]);
-
-      // Add default trigger to the bottom-right corner of the window:
-      //UserVoice.push(['addTrigger', { mode: 'smartvote', trigger_position: 'bottom-left' }]);
-
-      // Or, use your own custom trigger:
-      UserVoice.push(['addTrigger', '#button-uservoice', { mode: 'satisfaction' }]);
-
-      // Autoprompt for Satisfaction and SmartVote (only displayed under certain conditions)
-      UserVoice.push(['autoprompt', {}]);
-    #button-uservoice
-    div(style='position: absolute; right: 0; bottom: 0;')
-      #cboxbutton.chat-closed(onclick='togglecbox()')
-      #cboxdiv
-      script(type='text/javascript').
-        var cbvis = false;
-        var cbload = false;
-        var cbcookie = "cboxvis=";
-        function togglecbox () {
-        var cbdiv = document.getElementById("cboxdiv");
-        var cbbut = document.getElementById("cboxbutton");
-        if (!cbvis) {
-        if (!cbload) {
-        cbdiv.innerHTML = '<iframe frameborder="0" width="200" height="305" src="http://www6.cbox.ws/box/?boxid=811359&boxtag=9369gh&sec=main" marginheight="2" marginwidth="2" scrolling="auto" allowtransparency="yes" name="cboxmain6-811359" style="border:#ababab 1px solid;border-bottom:0px" id="cboxmain6-811359"></iframe><iframe frameborder="0" width="200" height="75" src="http://www6.cbox.ws/box/?boxid=811359&boxtag=9369gh&sec=form" marginheight="2" marginwidth="2" scrolling="no" allowtransparency="yes" name="cboxform6-811359" style="border:#ababab 1px solid;border-top:0px" id="cboxform6-811359"></iframe>';
-        cbload = true;
-        }
-        cbdiv.style.display = "block";
-        cbbut.className = "chat-open";
-        if(window['ige'] && ige !== undefined && ige.client !== undefined) {
-        ige.client.metrics.fireEvent('chat', 'open');
-        }
-        }
-        else {
-        cbdiv.style.display = "none";
-        cbbut.className = "chat-closed";
-        if(window['ige'] && ige !== undefined && ige.client !== undefined) {
-        ige.client.metrics.fireEvent('chat', 'close');
-        }
-        }
-        cbvis = !cbvis;
-        document.cookie = cbcookie+((cbvis)?1:0);
-        }
-        // Toggle Cbox open if it was previously
-        var cbcookiei = document.cookie.indexOf(cbcookie);
-        if (cbcookiei >= 0) {
-        if (document.cookie.substring(cbcookiei+cbcookie.length, cbcookiei+cbcookie.length+1) === "1") {
-        togglecbox();
-        }
-        }
     if process.env.NODE_ENV === 'production'
       script(type="text/javascript", src="/js/cosmos/game.js")
     else

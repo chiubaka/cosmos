@@ -1,9 +1,14 @@
 var config = {
 	include: [
+		/* === CONSTANTS === */
+		{ name: 'Constants', path: './constants' },
+
 		/* === GAME SETUP === */
 		/* Initialization */
-		{ name: 'ServerNetworkEvents', path: './init/ServerNetworkEvents' },
 		{ name: 'GameInit', path: './init/GameInit' },
+
+		/* Network */
+		{ name: 'ServerNetworkEvents', path: './ServerNetworkEvents' },
 
 		/* Configuration */
 
@@ -26,6 +31,7 @@ var config = {
 		{ name: 'ThrusterBlock', path: './entities/blocks/parts/ThrusterBlock' },
 		/* Ship armor blocks */
 		{ name: 'Armor', path: './entities/blocks/Armor' },
+		{ name: 'HullBlock', path: './entities/blocks/armor/HullBlock' },
 		{ name: 'CloakBlock', path: './entities/blocks/armor/CloakBlock' },
 		{ name: 'CloakBlockLight', path: './entities/blocks/armor/CloakBlockLight' },
 		{ name: 'CloakBlockViolet', path: './entities/blocks/armor/CloakBlockViolet' },
@@ -51,6 +57,7 @@ var config = {
 		{ name: 'ExampleShips', path: './entities/prefabs/ExampleShips' },
 
 		/* Scenery */
+		{ name: 'ParallaxBackground', path: './entities/scenery/ParallaxBackground' },
 		{ name: 'Background', path: './entities/scenery/Background' },
 		{ name: 'BlockStructureGenerator', path: './entities/scenery/BlockStructureGenerator' },
 

@@ -1,0 +1,40 @@
+$user-info-padding: $bottom-toolbar-item-padding;
+
+#user-tile {
+  float: left;
+  height: $hud-button-height;
+  background-color: $bottom-toolbar-item-background-color;
+
+  &:hover {
+    background-color: $bottom-toolbar-item-hover-background-color;
+  }
+
+  .profile-pic {
+    height: $hud-button-height;
+    width: $hud-button-width;
+    float: left;
+  }
+
+  .user-info {
+    float: left;
+    padding: $user-info-padding;
+    width: $hud-button-width * 4;
+    cursor: pointer;
+
+    .ship-name {
+    }
+
+    .username {
+      font-size: 75%;
+      font-weight: 600;
+      line-height: 50%;
+      position: relative;
+      top: -$user-info-padding;
+    }
+
+    .more-triangle {
+      float: right;
+      line-height: $hud-button-height - 2 * $user-info-padding;
+    }
+  }
+}

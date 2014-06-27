@@ -2,6 +2,13 @@ var Client = IgeClass.extend({
 	classId: 'Client',
 
 	init: function () {
+		window.addEventListener("keydown", function(e) {
+			// space and arrow keys
+			if([37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+				e.preventDefault();
+			}
+		}, false);
+		
 		//ige.timeScale(0.1);
 		ige.setFps(30);
 
@@ -9,7 +16,6 @@ var Client = IgeClass.extend({
 		var self = this;
 
 		self.LAYER_BACKGROUND = 10;
-		self.LAYER_PARALLAX = 11;
 		self.LAYER_CLICK_SCENE = 15;
 		self.LAYER_WORLD = 50;
 		self.LAYER_WORLD_OVERLAY = 51;
@@ -34,6 +40,8 @@ var Client = IgeClass.extend({
 			glow: new IgeTexture(gameRoot + 'assets/GlowEffectTexture.js'),
 			background_helix_nebula: new IgeTexture(gameRoot +
 				'assets/backgrounds/helix_nebula.jpg'),
+			background_starfield: new IgeTexture(gameRoot +
+				'assets/backgrounds/starfield.png'),
 			fixtureDebuggingTexture: new IgeTexture(gameRoot +
 				'assets/debug/FixtureDebuggingTexture.js'),
 			laserBeamTexture: new IgeTexture(gameRoot +
@@ -59,7 +67,9 @@ var Client = IgeClass.extend({
 				fuel: gameRoot + 'assets/blocks/fuel/fuel.svg',
 				cargo: gameRoot + 'assets/blocks/cargo/cargo.svg',
 				control: gameRoot + 'assets/blocks/playerctrl/playerctrl.svg',
-				miningLaser: gameRoot + 'assets/blocks/laser/laser.svg'
+				miningLaser: gameRoot + 'assets/blocks/laser/laser.svg',
+				constructionZone: gameRoot +
+					'assets/blocks/construction/construction_zone.svg'
 			}
 
 			// Loop through the svgs object and request each SVG
@@ -125,11 +135,13 @@ var Client = IgeClass.extend({
 						ige.notification.addComponent(NotificationUIComponent)
 							.start();
 
+						GameInit.init(self);
+
+						ige.addComponent(HUDComponent);
+						//ige.editor.showStats();
+
 						// Ask the server to create an entity for us
 						ige.network.send('playerEntity', {sid: self.getSessionId()});
-
-						GameInit.init(self);
-						//ige.editor.showStats();
 					});
 				}
 			});
