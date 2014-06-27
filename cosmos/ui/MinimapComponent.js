@@ -47,10 +47,7 @@ var MinimapComponent = IgeEventingClass.extend({
 			ige.addBehaviour('updateCoordinates', self.updateCoordinates);
 			ige.addBehaviour('updateMinimap', self.updateMinimap);
 
-			// Make canvas visually fill the positioned parent
-			//self.canvas.style.width = '100%';
-			//self.canvas.style.height = '100%';
-			// Then set the internal size to match
+			// Set the internal size to match CSS values
 			self.canvas.width(self.canvas.css('width'));
 			self.canvas.height(self.canvas.css('height'));
 
