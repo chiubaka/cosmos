@@ -4,6 +4,8 @@ var CargoComponent = IgeEventingClass.extend({
 
 	button: undefined,
 	pullout: undefined,
+	containers: undefined,
+	cargoBlocks: undefined,
 
 	init: function() {
 		var self = this;
@@ -13,13 +15,14 @@ var CargoComponent = IgeEventingClass.extend({
 			return;
 		}
 
+		self.cargoBlocks = {};
+
 		HUDComponent.loadHtml(CargoComponent.UI_ROOT + 'cargo.html', function(html) {
 			hud.append(html);
 			self.element = $('#cargo');
 			self.button = self.element.find('.button').first();
 			self.pullout = self.element.find('.pullout').first();
-			console.log(self.button);
-			console.log(self.pullout);
+			self.containers = self.element.find('#cargo-containers');
 
 			self.button.click(function() {
 				if (self.pullout.is(':visible')) {
@@ -30,6 +33,21 @@ var CargoComponent = IgeEventingClass.extend({
 					self.pullout.show();
 					self.button.addClass('active');
 				}
+			});
+
+			ige.on('cosmos:Player.addBlock.cargoBlock', function(cargoBlock) {
+				var containerDiv = document.createElement('div');
+				containerDiv.className = 'container';
+
+				self.cargoBlocks[cargoBlock.id()] = containerDiv;
+
+				self.containers.append(containerDiv);
+			});
+
+			ige.on('cosmos:Player.removeBlock.cargoBlock', function(cargoBlock) {
+				var containerDiv = self.cargoBlocks[cargoBlock.id()];
+				containerDiv.remove();
+				delete self.cargoBlocks[cargoBlock.id()];
 			});
 		});
 	}

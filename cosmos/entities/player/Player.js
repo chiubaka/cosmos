@@ -143,6 +143,26 @@ var Player = BlockStructure.extend({
 		this.cargo = new Cargo();
 	},
 
+	add: function(row, col, block, checkForNeighbors) {
+		if (BlockStructure.prototype.add.call(this, row, col, block, checkForNeighbors)) {
+			if (block.classId() === CargoBlock.prototype.classId()) {
+				ige.emit('cosmos:Player.addBlock.cargoBlock', block);
+			}
+
+			return true;
+		}
+
+		return false;
+	},
+
+	remove: function(row, col) {
+		var block = BlockStructure.prototype.remove.call(this, row, col);
+		if (block.classId() === CargoBlock.prototype.classId()) {
+			ige.emit('cosmos:Player.removeBlock.cargoBlock', block);
+		}
+		return block;
+	},
+
 	/**
 	 * Add the sensor fixture. Called in ServerNetworkEvents after the box2Dbody
 	 * is created.
