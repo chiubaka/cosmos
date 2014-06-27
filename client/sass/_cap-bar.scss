@@ -1,0 +1,11 @@
+$cap-bar-divider-color: #515151;
+
+#cap-bar {
+  //@extend .bottom-toolbar-float-left;
+  float: left;
+  height: $bottom-toolbar-height;
+  border-left: 1px solid $cap-bar-divider-color;
+}
+
+@import 'mine-cap';
+@import 'construct-cap';

@@ -1,0 +1,70 @@
+$side-button-border-width: $hud-button-width / 8;
+$side-button-arrow-size: $side-button-border-width * 3 / 4;
+
+
+.side-button-arrow {
+  position: relative;
+  top: $hud-button-height / 2 - $side-button-arrow-size / 2 - 2.2;
+  height: 0;
+  width: 0;
+  border-top: $side-button-arrow-size solid transparent;
+  border-bottom: $side-button-arrow-size solid transparent;
+}
+
+@mixin arrow-left($arrow-color){
+  @extend .side-button-arrow;
+  border-left: 0;
+  border-right: $side-button-arrow-size solid $arrow-color;
+  left: -$side-button-arrow-size + 1;
+}
+
+@mixin arrow-right($arrow-color) {
+  @extend .side-button-arrow;
+  float: right;
+  border-left: $side-button-arrow-size solid $arrow-color;
+  border-right: 0;
+  right: -$side-button-arrow-size + 1;
+}
+
+@mixin side-button($background-color) {
+  height: $hud-button-height;
+  width: $hud-button-width;
+  background-color: $background-color;
+}
+
+@mixin side-button-with-icon($icon, $background-color, $hover-background-color, $border-color, $right-side) {
+  @include side-button($background-color);
+  @include hud-icon-button($icon);
+  cursor: pointer;
+
+  &:hover {
+    background-color: $hover-background-color;
+  }
+
+  @if $right-side {
+    border-left: $side-button-border-width solid $border-color;
+    .arrow {
+      @include arrow-left($background-color);
+    }
+  }
+  @else {
+    border-right: $side-button-border-width solid $border-color;
+    .arrow {
+      @include arrow-right($background-color);
+    }
+    &:hover {
+      .arrow {
+        border-left: $side-button-arrow-size solid $hover-background-color;
+      }
+    }
+    &.active {
+      .arrow {
+        @include arrow-left($border-color);
+        left: 0;
+      }
+    }
+  }
+}
+
+@import 'inspector';
+@import 'cargo';

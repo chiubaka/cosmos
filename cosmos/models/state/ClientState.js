@@ -74,7 +74,10 @@ var ClientState = IgeClass.extend({
 		});
 
 		ige.on('capbar cap cleared', function(classId) {
-			self.selectedCap('');
+			// Only reset to idle if we just deselected the current capability
+			if (self.selectedCap() === self.capStates[classId]) {
+				self.selectedCap('');
+			}
 		});
 	},
 

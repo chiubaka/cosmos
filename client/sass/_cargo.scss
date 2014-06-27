@@ -1,0 +1,90 @@
+$cargo-button-background-color: #cdcdcd;
+$cargo-button-hover-background-color: #e4e4e4;
+$cargo-button-border-color: #383838;
+
+$cargo-title-right-border-color: #bcbcbc;
+$cargo-padding: 10px;
+$cargo-title-height: $hud-button-height - 2 * $cargo-padding;
+
+$cargo-background-color: #a5a5a5;
+
+$cargo-button-position-top: $hud-margin-top;
+$cargo-block-height: $block-height * 2;
+$cargo-block-width: $block-width * 2;
+$cargo-block-padding: $cargo-block-height / 10;
+$cargo-block-hover-border-color: #008aff;
+
+$cargo-container-border-color: #696969;
+
+#cargo {
+  position: absolute;
+  top: $cargo-button-position-top;
+  left: 0px;
+
+  .pullout, .button {
+    float: left;
+  }
+
+  .pullout {
+    display: none;
+
+    .title {
+      background-color: $cargo-button-background-color;
+      color: $cargo-button-border-color;
+      height: $cargo-title-height;
+      line-height: $cargo-title-height;
+      font-size: 125%;
+      font-weight: bold;
+      border-right: 1px solid $cargo-title-right-border-color;
+      padding: $cargo-padding;
+    }
+
+    #cargo-containers {
+      background-color: $cargo-background-color;
+      padding: $cargo-padding;
+      text-align: center;
+
+      .container {
+        height: $cargo-block-height - $cargo-block-padding * 2;
+        width: $cargo-block-width - $cargo-block-padding * 2;
+        padding: $cargo-block-padding;
+        position: relative;
+        margin-left: auto;
+        margin-right: auto;
+        background-color: $cargo-button-background-color;
+        border: 1px solid $cargo-container-border-color;
+
+        &.active {
+          background-color: $cargo-button-hover-background-color;
+          border: 2px solid $cargo-block-hover-border-color;
+        }
+
+        canvas {
+          height: $cargo-block-height - $cargo-block-padding * 2;
+          width: $cargo-block-width - $cargo-block-padding * 2;
+        }
+
+        .quantity-label {
+          position: absolute;
+          right: $cargo-block-padding;
+          bottom: $cargo-block-padding;
+          text-shadow: -1px 0 $cargo-button-border-color, 0 1px $cargo-button-border-color, 1px 0 $cargo-button-border-color, 0 -1px $cargo-button-border-color;
+        }
+
+        .type-label {
+          @extend .tooltip;
+          left: $cargo-block-width + $cargo-block-padding * 4;
+          top: $cargo-block-height / 2 - $tooltip-line-height / 2 - $tooltip-padding;
+        }
+
+        &:hover .type-label{
+          display: block;
+        }
+      }
+    }
+  }
+
+  .button {
+    @include side-button-with-icon('../images/icons/icon_cargo.png', $cargo-button-background-color, $cargo-button-hover-background-color, $cargo-button-border-color, false);
+  }
+}
