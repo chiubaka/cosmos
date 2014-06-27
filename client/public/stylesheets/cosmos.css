@@ -31,9 +31,11 @@ html, body {
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;
   font-size: 100%;
   color: #e8e8e8;
+  height: 100%;
+  overflow: hidden;
 }
 
-/* line 11, ../../sass/cosmos.scss */
+/* line 13, ../../sass/cosmos.scss */
 .more-triangle {
   cursor: pointer;
   display: inline-block;
@@ -44,7 +46,7 @@ html, body {
   transform: rotate(180deg);
 }
 
-/* line 17, ../../sass/cosmos.scss */
+/* line 19, ../../sass/cosmos.scss */
 #igeFrontBuffer {
   -webkit-user-select: none;
   -moz-user-select: none;
