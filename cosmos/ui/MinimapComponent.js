@@ -91,6 +91,8 @@ var MinimapComponent = IgeEventingClass.extend({
 
 		var sceneChildren = ige.hud.minimap._scene.children();
 		for (var i = 0; i < sceneChildren.length; i++) {
+			ctx.save();
+
 			var entity = sceneChildren[i];
 			if (entity.streamEntityValid()) {
 				// The player (show in green)
@@ -110,8 +112,17 @@ var MinimapComponent = IgeEventingClass.extend({
 				var x = (entity.worldPosition().x - camTrans.x) / scaleX + offsetX;
 				var y = (entity.worldPosition().y - camTrans.y) / scaleY + offsetY;
 
-				// Draw a 4x4 rectangle, representing an entity
-				ctx.fillRect(x, y, 4, 4);
+				// Calculate rectangle size, with a minimum rectangle size of 4x4
+				// TODO: Draw actual shape, not just a box
+				var w = Math.max(4, entity.width() / (scaleX * 1.5));
+				var h = Math.max(4, entity.height() / (scaleY * 1.5));
+
+				// Rotate entity around its center
+				ctx.translate(x,y)
+				ctx.rotate(entity.rotate().z());
+				ctx.translate(-x,-y);
+				ctx.fillRect(x, y, w, h);
+				ctx.restore();
 			}
 		}
 	},
