@@ -124,9 +124,10 @@ var MinimapComponent = IgeEventingClass.extend({
 	 */
 	getCoordinatesString: function() {
 		var camTrans = ige.hud.minimap._camera._translate;
-		// Round coordinates to nearest 100. Too much granularity is confusing.
-		var x = Math.ceil(camTrans.x / 100) * 100;
-		var y = Math.ceil(camTrans.y / 100) * 100;
+		// Round coordinates to nearest 100, then drop a digit.
+		// Too much granularity is confusing.
+		var x = Math.ceil(camTrans.x / 100) * 10;
+		var y = Math.ceil(camTrans.y / 100) * 10;
 		return "x: " + x + ", y: " + y;
 	}
 });
