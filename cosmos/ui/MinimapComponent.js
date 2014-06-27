@@ -108,20 +108,21 @@ var MinimapComponent = IgeEventingClass.extend({
 					ctx.fillStyle = '#808080';
 				}
 
-				// Calculate where to place the entity on the minimap
-				var x = (entity.worldPosition().x - camTrans.x) / scaleX + offsetX;
-				var y = (entity.worldPosition().y - camTrans.y) / scaleY + offsetY;
 
 				// Calculate rectangle size, with a minimum rectangle size of 4x4
 				// TODO: Draw actual shape, not just a box
 				var w = Math.max(4, entity.width() / (scaleX * 1.5));
 				var h = Math.max(4, entity.height() / (scaleY * 1.5));
 
+				// Calculate center of entity on minimap
+				var x = (entity.worldPosition().x - camTrans.x) / scaleX + offsetX;
+				var y = (entity.worldPosition().y - camTrans.y) / scaleY + offsetY;
+
 				// Rotate entity around its center
 				ctx.translate(x,y)
 				ctx.rotate(entity.rotate().z());
 				ctx.translate(-x,-y);
-				ctx.fillRect(x, y, w, h);
+				ctx.fillRect(x - w/2, y - w/2, w, h);
 				ctx.restore();
 			}
 		}
