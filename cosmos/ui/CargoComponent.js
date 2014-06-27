@@ -6,6 +6,7 @@ var CargoComponent = IgeEventingClass.extend({
 	pullout: undefined,
 	containers: undefined,
 	cargoBlocks: undefined,
+	emptyLabel: undefined,
 
 	init: function() {
 		var self = this;
@@ -23,6 +24,7 @@ var CargoComponent = IgeEventingClass.extend({
 			self.button = self.element.find('.button').first();
 			self.pullout = self.element.find('.pullout').first();
 			self.containers = self.element.find('#cargo-containers');
+			self.emptyLabel = self.element.find('#cargo-empty-label');
 
 			self.button.click(function() {
 				if (self.pullout.is(':visible')) {
@@ -59,8 +61,6 @@ var CargoComponent = IgeEventingClass.extend({
 				console.log('Received cargo update', 'info');
 				self.populateFromInventory(cargoItems);
 			});
-
-
 		});
 	},
 
@@ -77,9 +77,16 @@ var CargoComponent = IgeEventingClass.extend({
 
 	populateFromInventory: function(cargoItems) {
 		var selectedType = ige.client.state.currentCapability().selectedType;
-		console.log('Populating toolbar from server response: " + Object.keys(cargoItems).length + " item(s) in inventory');
+		console.log('Populating toolbar from server response: ' + Object.keys(cargoItems).length + ' item(s) in inventory');
 
-		this.containers.empty();
+		this.containers.find('.container').remove();
+
+		if (Object.keys(cargoItems).length > 0) {
+			this.emptyLabel.hide();
+		}
+		else {
+			this.emptyLabel.show();
+		}
 
 		for (var type in cargoItems) {
 			var quantity = cargoItems[type];
