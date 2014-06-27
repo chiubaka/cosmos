@@ -330,7 +330,3 @@ FakesAssemblies/
 
 #Rafael's TODO.md file
 TODO.md
-
-# Compiled stylesheets
-client/public/stylesheets/cosmos.css
-client/public/stylesheets/hud.css
