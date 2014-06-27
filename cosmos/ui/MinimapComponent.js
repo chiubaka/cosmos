@@ -43,8 +43,9 @@ var MinimapComponent = IgeEventingClass.extend({
 	updateMinimap: function() {
 		var canvas = ige.hud.minimap.canvas[0];
 		var ctx = canvas.getContext('2d');
-		var height = canvas.height;
 		var width = canvas.width;
+		var height = canvas.height;
+		ctx.clearRect(0, 0, width, height);
 
 		// TODO: Scene should be passed into component or set outside of component
 		var scene = ige.$('spaceGameScene');
@@ -61,9 +62,9 @@ var MinimapComponent = IgeEventingClass.extend({
 
 
 	/**
-	 * Gets the center of the current viewport and treats that as the coordinates
+	 * Gets the camera translation and treats that as the coordinates
 	 * to display.
-	 * @memberof GPSLabel
+	 * @memberof MinimapComponent
 	 * @instance
 	 */
 	getCoordinatesString: function() {
