@@ -121,9 +121,11 @@ var igeClientConfig = {
 		/* Configuration */
 		'./config/DeploymentConfig.js',
 
+		/* Network */
+		'./ClientNetworkEvents.js',
+
 		/* Initialization */
 		'./init/GameInit.js',
-		'./init/ClientNetworkEvents.js',
 		'./client.js',
 		'./index.js'
 	]

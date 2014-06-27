@@ -24,6 +24,8 @@ $cargo-container-border-color: #696969;
   }
 
   .pullout {
+    display: none;
+
     .title {
       background-color: $cargo-button-background-color;
       color: $cargo-button-border-color;

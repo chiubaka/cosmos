@@ -31,6 +31,8 @@ var ClientNetworkEvents = {
 
 					ige.client.metrics.fireEvent('player', 'connect', data.playerId);
 
+					ige.network.send('cargoRequest', { requestUpdates: true });
+
 					// Set the time stream UI entity to monitor our player entity
 					// time stream data
 					//ige.client.tsVis.monitor(ige.$(data));

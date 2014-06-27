@@ -49,7 +49,44 @@ var CargoComponent = IgeEventingClass.extend({
 				containerDiv.remove();
 				delete self.cargoBlocks[cargoBlockId];
 			});
+
+			ige.on('cargo response', function(cargoItems) {
+				console.log('Received cargo response');
+				self.populateFromInventory(cargoItems);
+			});
+
+			ige.on('cargo update', function(cargoItems) {
+				console.log('Received cargo update', 'info');
+				self.populateFromInventory(cargoItems);
+			});
 		});
+	},
+
+	populateFromInventory: function(cargoItems) {
+		var selectedType = ige.client.state.currentCapability().selectedType;
+		console.log('Populating toolbar from server response: " + Object.keys(cargoItems).length + " item(s) in inventory');
+
+		this.containers.empty();
+
+		for (var type in cargoItems) {
+			var quantity = cargoItems[type];
+			this.createContainer(type, quantity);
+		}
+
+		var needToReselect = (selectedType !== undefined && !cargoItems.hasOwnProperty(selectedType));
+	},
+
+	createContainer: function(type, quantity) {
+		var containerDiv = document.createElement('div');
+		containerDiv.className = 'container ' + type;
+
+		var quantityLabelSpan = document.createElement('span');
+		quantityLabelSpan.className = 'quantityLabel';
+		quantityLabelSpan.innerHTML = quantity;
+
+		containerDiv.appendChild(quantityLabelSpan);
+
+		this.containers.append(containerDiv);
 	}
 });
 

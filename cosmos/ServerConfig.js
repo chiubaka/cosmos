@@ -2,8 +2,10 @@ var config = {
 	include: [
 		/* === GAME SETUP === */
 		/* Initialization */
-		{ name: 'ServerNetworkEvents', path: './init/ServerNetworkEvents' },
 		{ name: 'GameInit', path: './init/GameInit' },
+
+		/* Network */
+		{ name: 'ServerNetworkEvents', path: './ServerNetworkEvents' },
 
 		/* Configuration */
 
