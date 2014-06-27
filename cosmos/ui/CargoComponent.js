@@ -66,13 +66,13 @@ var CargoComponent = IgeEventingClass.extend({
 
 	deselect: function(container) {
 		container.removeClass('active');
-		ige.emit('toolbar tool cleared', [this.classId(), container.data('data-block-type')]);
+		ige.emit('toolbar tool cleared', [this.classId(), container.attr('data-block-type')]);
 	},
 
 	select: function(container) {
 		$('.container').removeClass('active');
 		container.addClass('active');
-		ige.emit('toolbar tool selected', [this.classId(), container.data('data-block-type')]);
+		ige.emit('toolbar tool selected', [this.classId(), container.attr('data-block-type')]);
 	},
 
 	populateFromInventory: function(cargoItems) {

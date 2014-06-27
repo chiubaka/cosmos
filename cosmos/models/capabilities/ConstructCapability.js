@@ -51,6 +51,7 @@ var ConstructCapability = Capability.extend({
 
 		var self = this;
 		this._toolbarListener = ige.on('toolbar tool selected', function(classId, toolName) {
+			console.log('toolbar tool selected: ' + classId + ', ' + toolName);
 			if (classId === CargoComponent.prototype.classId()) {
 				self.log("Selected item type " + toolName, 'info');
 				self.selectedType = toolName;
