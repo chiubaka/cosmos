@@ -55,7 +55,7 @@ var FeedbackComponent = ButtonComponent.extend({
 		//UserVoice.push(['addTrigger', { mode: 'smartvote', trigger_position: 'bottom-left' }]);
 
 		// Or, use your own custom trigger:
-		UserVoice.push(['addTrigger', '#feedback-button', { mode: 'smartvote' }]);
+		UserVoice.push(['addTrigger', '#feedback-button', { mode: 'satisfaction' }]);
 
 		// Autoprompt for Satisfaction and SmartVote (only displayed under certain conditions)
 		UserVoice.push(['autoprompt', {}]);
