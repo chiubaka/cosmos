@@ -198,7 +198,7 @@ var GameInit = {
 			//note that the signature of gen.. is
 			// genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution)
 			var asteroid = BlockStructureGenerator
-				.genProceduralAsteroid(20, BlockStructureGenerator.partDistributions.randomDistribution(), true)
+				.genProceduralAsteroid(60, BlockStructureGenerator.partDistributions.randomDistribution(), true)
 				.id('spaceShip' + asteroidNumber)
 				.streamMode(1)
 				.mount(server.spaceGameScene)
