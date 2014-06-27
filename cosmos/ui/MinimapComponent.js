@@ -4,6 +4,25 @@ var MinimapComponent = IgeEventingClass.extend({
 
 	element: undefined,
 
+	/**
+	 * The scene the minimap is displaying
+	 * @type {IgeScene2d}
+	 * @memberof MinimapComponent
+	 * @private
+	 * @instance
+	 */
+	 _scene: undefined,
+
+	/**
+	 * The camera the minimap is following
+	 * @type {IgeCamera}
+	 * @memberof MinimapComponent
+	 * @private
+	 * @instance
+	 */
+	 _camera: undefined,
+
+
 	init: function() {
 		var self = this;
 		var hud = $('#hud');
@@ -12,6 +31,9 @@ var MinimapComponent = IgeEventingClass.extend({
 			return;
 		}
 
+		this._scene = ige.client.spaceGameScene;
+		this._camera = ige.client.mainViewport.camera;
+
 		HUDComponent.loadHtml(MinimapComponent.UI_ROOT + 'minimap.html', function(html) {
 			hud.append(html);
 			self.element = $('#minimap');
@@ -19,11 +41,25 @@ var MinimapComponent = IgeEventingClass.extend({
 			self.button = self.toolbar.find('#map-button');
 			self.zoomInButton = self.toolbar.find('.zoom-in-button');
 			self.zoomOutButton = self.toolbar.find('.zoom-out-button');
-			self.canvas = self.element.find('.map canvas');
+			self.canvas = self.element.find('.map canvas')[0];
 			self.coordinates = self.element.find('.map .coordinates');
 
 			ige.addBehaviour('updateCoordinates', self.updateCoordinates);
 			ige.addBehaviour('updateMinimap', self.updateMinimap);
+
+			// Make canvas visually fill the positioned parent
+			self.canvas.style.width = '100%';
+			self.canvas.style.height = '100%';
+			// Then set the internal size to match
+			self.canvas.width  = self.canvas.offsetWidth;
+			self.canvas.height = self.canvas.offsetHeight;
+
+			// Offset the canvas draws so a draw to (0,0) is in the middle
+			self.offsetX = self.canvas.width / 2;
+			self.offsetY = self.canvas.height / 2;
+			// Maps the visible minimap area to the canvas via a scale factor
+			self.scaleX = Constants.minimapArea.MAXIMUM_WIDTH / self.canvas.width;
+			self.scaleY = Constants.minimapArea.MAXIMUM_HEIGHT / self.canvas.height;
 		});
 	},
 
@@ -41,31 +77,44 @@ var MinimapComponent = IgeEventingClass.extend({
 	},
 
 	updateMinimap: function() {
-		var canvas = ige.hud.minimap.canvas[0];
-		var ctx = canvas.getContext('2d');
-		var width = canvas.width;
-		var height = canvas.height;
-		var offsetX = width/2;
-		var offsetY = height/2;
+		var ctx = ige.hud.minimap.canvas.getContext('2d');
+		var width = ige.hud.minimap.canvas.width;
+		var height = ige.hud.minimap.canvas.height;
+		var offsetX = ige.hud.minimap.offsetX;
+		var offsetY = ige.hud.minimap.offsetY;
+		var scaleX = ige.hud.minimap.scaleX;
+		var scaleY = ige.hud.minimap.scaleY;
 
+		// Clear the minimap canvas so we can redraw the minimap
 		ctx.clearRect(0, 0, width, height);
-		var camTrans = ige.client.mainViewport.camera._translate;
+		var camTrans = ige.hud.minimap._camera._translate;
 
-		// TODO: Scene should be passed into component or set outside of component
-		var sceneChildren = ige.client.spaceGameScene.children();
+		var sceneChildren = ige.hud.minimap._scene.children();
 		for (var i = 0; i < sceneChildren.length; i++) {
 			var entity = sceneChildren[i];
 			if (entity.streamEntityValid()) {
-				var mx = (entity.worldPosition().x - camTrans.x)/60 + offsetX;
-				var my = (entity.worldPosition().y - camTrans.y)/60 + offsetY;
+				// The player (show in green)
+				if (entity === ige.client.player) {
+					ctx.fillStyle = '#00FF00';
+				}
+				// Other players (show in red)
+				else if (entity.classId() === 'Player') {
+					ctx.fillStyle = '#FF0000';
+				}
+				// Other entities, such as asteroids (show in gray)
+				else {
+					ctx.fillStyle = '#808080';
+				}
 
-				ctx.fillStyle = '#FF0000';
-				ctx.fillRect(mx,my,4,4);
+				// Calculate where to place the entity on the minimap
+				var x = (entity.worldPosition().x - camTrans.x) / scaleX + offsetX;
+				var y = (entity.worldPosition().y - camTrans.y) / scaleY + offsetY;
+
+				// Draw a 4x4 rectangle, representing an entity
+				ctx.fillRect(x, y, 4, 4);
 			}
 		}
-
 	},
-
 
 	/**
 	 * Gets the camera translation and treats that as the coordinates
@@ -74,8 +123,11 @@ var MinimapComponent = IgeEventingClass.extend({
 	 * @instance
 	 */
 	getCoordinatesString: function() {
-		var camTrans = ige.client.mainViewport.camera._translate;
-		return "x: " + Math.floor(camTrans.x) + ", y: " + Math.floor(camTrans.y);
+		var camTrans = ige.hud.minimap._camera._translate;
+		// Round coordinates to nearest 100. Too much granularity is confusing.
+		var x = Math.ceil(camTrans.x / 100) * 100;
+		var y = Math.ceil(camTrans.y / 100) * 100;
+		return "x: " + x + ", y: " + y;
 	}
 });
 

@@ -216,8 +216,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// Checks if the entity is visible to the player. This means that the
 		// player's visible rectangle intersects with this entity's aabb rectangle.
 		var playerWorldPosition = player.worldPosition();
-		var width = Constants.visibleArea.MAXIMUM_WIDTH;
-		var height = Constants.visibleArea.MAXIMUM_HEIGHT;
+		var width = Constants.minimapArea.MAXIMUM_WIDTH;
+		var height = Constants.minimapArea.MAXIMUM_HEIGHT;
 		var viewableRect = new IgeRect(
 			playerWorldPosition.x - width / 2,
 			playerWorldPosition.y - height / 2,
