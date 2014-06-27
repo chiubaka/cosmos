@@ -8,6 +8,8 @@ var CargoComponent = IgeEventingClass.extend({
 	cargoBlocks: undefined,
 	emptyLabel: undefined,
 
+	selectedType: undefined,
+
 	init: function() {
 		var self = this;
 		var hud = $('#hud');
@@ -66,17 +68,18 @@ var CargoComponent = IgeEventingClass.extend({
 
 	deselect: function(container) {
 		container.removeClass('active');
+		this.selectedType = undefined;
 		ige.emit('toolbar tool cleared', [this.classId(), container.attr('data-block-type')]);
 	},
 
 	select: function(container) {
 		$('.container').removeClass('active');
 		container.addClass('active');
+		this.selectedType = container.attr('data-block-type');
 		ige.emit('toolbar tool selected', [this.classId(), container.attr('data-block-type')]);
 	},
 
 	populateFromInventory: function(cargoItems) {
-		var selectedType = ige.client.state.currentCapability().selectedType;
 		console.log('Populating toolbar from server response: ' + Object.keys(cargoItems).length + ' item(s) in inventory');
 
 		this.containers.find('.container').remove();
@@ -93,14 +96,22 @@ var CargoComponent = IgeEventingClass.extend({
 			this.createContainer(type, quantity);
 		}
 
-		var needToReselect = (selectedType !== undefined && !cargoItems.hasOwnProperty(selectedType));
+		if (this.selectedType === undefined || !cargoItems.hasOwnProperty(this.selectedType)) {
+			this.select(this.containers.find('.container').first());
+		}
 	},
 
 	createContainer: function(type, quantity) {
 		var self = this;
 		var containerDiv = document.createElement('div');
-		containerDiv.className = 'container';
-		containerDiv.setAttribute('data-block-type', type);
+		$(containerDiv).addClass('container');
+
+		if (this.selectedType === type) {
+			$(containerDiv).addClass('active');
+		}
+
+		$(containerDiv).attr('data-block-type', type);
+
 
 		$(containerDiv).click(function() {
 			if ($(this).hasClass('active')) {
@@ -112,13 +123,13 @@ var CargoComponent = IgeEventingClass.extend({
 		});
 
 		var quantityLabelSpan = document.createElement('span');
-		quantityLabelSpan.className = 'quantityLabel';
-		quantityLabelSpan.innerHTML = quantity;
+		$(quantityLabelSpan).addClass('quantityLabel');
+		$(quantityLabelSpan).text(quantity);
 
 		var containerCanvas = document.createElement('canvas');
 
-		containerDiv.appendChild(quantityLabelSpan);
-		containerDiv.appendChild(containerCanvas);
+		$(containerDiv).append(quantityLabelSpan);
+		$(containerDiv).append(containerCanvas);
 		this.containers.append(containerDiv);
 
 		var block = Block.blockFromClassId(type);
