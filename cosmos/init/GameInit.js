@@ -181,7 +181,7 @@ var GameInit = {
 
 		// Instead of creating a bunch of these up front, we might want to create them just ahead of a user as he's
 		// flying, and delete them right behind. This will be more efficient.
-		var NUM_SMALL_ASTEROIDS = 80;
+		var NUM_SMALL_ASTEROIDS = 0;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_SMALL_ASTEROIDS; asteroidNumber++) {
 			var asteroid = BlockStructureGenerator.singleBlock()
 				.category('smallAsteroid')
@@ -193,7 +193,7 @@ var GameInit = {
 
 		// TODO: The procedural generation algorithm is causing strange problems with the new BlockGrid system. Leave
 		// this stuff commented out until it is figured out.
-		var NUM_DERELICT_SPACESHIPS = 10;
+		var NUM_DERELICT_SPACESHIPS = 40;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_DERELICT_SPACESHIPS; asteroidNumber++) {
 			//note that the signature of gen.. is
 			// genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution)
