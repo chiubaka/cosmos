@@ -1,5 +1,8 @@
 var config = {
 	include: [
+		/* === CONSTANTS === */
+		{ name: 'Constants', path: './constants' },
+
 		/* === GAME SETUP === */
 		/* Initialization */
 		{ name: 'GameInit', path: './init/GameInit' },
