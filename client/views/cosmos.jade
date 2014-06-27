@@ -9,14 +9,10 @@ html
     meta(http-equiv='X-UA-Compatible', content='IE=Edge')
     title Cosmos Private Preview
     // STYLES
-    link(href='/stylesheets/ui-dark.css', rel='stylesheet', type='text/css')
     link(href='/vendor/candy/res/default.css', rel='stylesheet', type='text/css')
     link(href='/stylesheets/cosmos.css', rel='stylesheet', type='text/css')
     link(href='/stylesheets/hud.css', rel='stylesheet', type='text/css')
-    link(href='/stylesheets/style.css', rel='stylesheet', type='text/css')
-    link(href='/stylesheets/cosmos-preview.css', rel='stylesheet', type='text/css')
-    link(href='/stylesheets/cosmos-fonts.css', rel='stylesheet', type='text/css')
-    link(href='/stylesheets/steps.css', rel='stylesheet', type='text/css')
+    link(href='/stylesheets_backup/cosmos-preview.css', rel='stylesheet', type='text/css')
 
     // js
     script(src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js')
@@ -63,28 +59,14 @@ html
     //  .cosmos-tutorial#cosmos-tutorial-container
     //    include includes/cosmosTutorial.jade
     .igeLoading.greeting
-    //  .cosmos-logo
-    //    img(src='/images/preview-intro.png')
+      .cosmos-logo
+        img(src='/images/preview-intro.png')
     .igeLoading.loadingFloat.preview
       include includes/progress-ring.jade
       #loadingText.loadingText
         | Loading...
       #loadingProgress
         #loadingProgressBar
-    //#hud
-      #minimap
-        canvas
-        .toolbar
-          #map-button
-          .zoom-in-button +
-          .zoom-out-button &#8211;
-      #inspector
-        .button
-          .arrow
-      #cargo
-        .pullout
-        .button
-          .arrow
     if process.env.NODE_ENV === 'production'
       script(type="text/javascript", src="/js/cosmos/game.js")
     else
