@@ -51,11 +51,6 @@ var ConstructCapability = Capability.extend({
 
 		var self = this;
 		this._toolbarListener = ige.on('toolbar tool selected', function(classId, toolName) {
-			console.log('toolbar tool selected: ' + classId + ', ' + toolName);
-			if (classId === CargoComponent.prototype.classId()) {
-				self.log("Selected item type " + toolName, 'info');
-				self.selectedType = toolName;
-			}
 		});
 
 		return this;
@@ -83,11 +78,11 @@ var ConstructCapability = Capability.extend({
 	 */
 	ClickScene_canMouseDown: function(sender, event, data) {
 		// Notify player that no block type is selected
-		if (this.capability.selectedType === undefined) {
+		if (ige.hud.cargo.selectedType === undefined) {
 			ige.notification.emit('notificationError', 
 				NotificationDefinitions.errorKeys.noItemTypeSelected);
 		}
-		return (ige.client.state.selectedCap() === 'construct' && this.capability.selectedType !== undefined);
+		return (ige.client.state.selectedCap() === 'construct' && ige.hud.cargo.selectedType !== undefined);
 	},
 
 	/**
@@ -99,8 +94,8 @@ var ConstructCapability = Capability.extend({
 	 * @instance
 	 */
 	ClickScene_mouseDown: function(sender, event, data) {
-		data.selectedType = this.capability.selectedType;
-		ige.client.metrics.fireEvent('construct', 'attempt new', this.capability.selectedType);
+		data.selectedType = ige.hud.cargo.selectedType;
+		ige.client.metrics.fireEvent('construct', 'attempt new', ige.hud.cargo.selectedType);
 		ige.network.send('constructNew', data);
 	},
 
@@ -114,11 +109,11 @@ var ConstructCapability = Capability.extend({
 	 */
 	ConstructionZoneOverlay_canMouseDown: function(sender, event, data) {
 		// Notify player that no block type is selected
-		if (this.capability.selectedType === undefined) {
+		if (ige.hud.cargo.selectedType === undefined) {
 			ige.notification.emit('notificationError', 
 				NotificationDefinitions.errorKeys.noItemTypeSelected);
 		}
-		return (ige.client.state.selectedCap() === 'construct' && this.capability.selectedType !== undefined);
+		return (ige.client.state.selectedCap() === 'construct' && ige.hud.cargo.selectedType !== undefined);
 	},
 
 	/**
@@ -130,8 +125,8 @@ var ConstructCapability = Capability.extend({
 	 * @instance
 	 */
 	ConstructionZoneOverlay_mouseDown: function(sender, event, data) {
-		data.selectedType = this.capability.selectedType;
-		ige.client.metrics.fireEvent('construct', 'attempt existing', this.capability.selectedType);
+		data.selectedType = ige.hud.cargo.selectedType;
+		ige.client.metrics.fireEvent('construct', 'attempt existing', ige.hud.cargo.selectedType);
 		ige.network.send('constructionZoneClicked', data);
 	},
 });

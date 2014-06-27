@@ -30,12 +30,10 @@ var CargoComponent = IgeEventingClass.extend({
 
 			self.button.click(function() {
 				if (self.pullout.is(':visible')) {
-					self.pullout.hide();
-					self.button.removeClass('active');
+					self.close();
 				}
 				else {
-					self.pullout.show();
-					self.button.addClass('active');
+					self.open();
 				}
 			});
 
@@ -64,6 +62,16 @@ var CargoComponent = IgeEventingClass.extend({
 				self.populateFromInventory(cargoItems);
 			});
 		});
+	},
+
+	open: function() {
+		this.pullout.show();
+		this.button.addClass('active');
+	},
+
+	close: function() {
+		this.pullout.hide();
+		this.button.removeClass('active');
 	},
 
 	deselect: function(container) {

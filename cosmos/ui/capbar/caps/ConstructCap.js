@@ -4,6 +4,12 @@ var ConstructCap = Cap.extend({
 
 	init: function() {
 		Cap.prototype.init.call(this, $('#cap-bar'), 'construct-cap');
+	},
+
+	select: function() {
+		Cap.prototype.select.call(this);
+
+		ige.hud.cargo.open();
 	}
 });
 
