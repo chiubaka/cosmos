@@ -20,7 +20,7 @@ var BottomToolbarComponent = IgeEventingClass.extend({
 		this.element = $('#bottom-toolbar');
 
 		this.addComponent(UserTileComponent);
-		this.addComponent(ChatComponent);
+		//this.addComponent(ChatComponent);
 
 		this.addComponent(CapBar);
 

@@ -209,6 +209,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// TODO: Make createConstructionZone and fromBlockTypeMatrix faster.
 		// TODO: Make a proper entity preloader.
 		if (player === undefined) {
+			this._previouslyStreamed[clientId] = true;
 			return true;
 		}
 

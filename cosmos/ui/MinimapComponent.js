@@ -45,17 +45,23 @@ var MinimapComponent = IgeEventingClass.extend({
 		var ctx = canvas.getContext('2d');
 		var width = canvas.width;
 		var height = canvas.height;
+		var offsetX = width/2;
+		var offsetY = height/2;
+
 		ctx.clearRect(0, 0, width, height);
+		var camTrans = ige.client.mainViewport.camera._translate;
 
 		// TODO: Scene should be passed into component or set outside of component
-		var scene = ige.$('spaceGameScene');
-		for (var i = 0; i < scene.children().length; i++) {
-			var child = scene.children[i];
-			var rx = RandomInterval.randomIntFromInterval(0, width);
-			var ry = RandomInterval.randomIntFromInterval(0, height);
+		var sceneChildren = ige.client.spaceGameScene.children();
+		for (var i = 0; i < sceneChildren.length; i++) {
+			var entity = sceneChildren[i];
+			if (entity.streamEntityValid()) {
+				var mx = (entity.worldPosition().x - camTrans.x)/60 + offsetX;
+				var my = (entity.worldPosition().y - camTrans.y)/60 + offsetY;
 
-			ctx.fillStyle = '#FF0000';
-			ctx.fillRect(rx,ry,4,4);
+				ctx.fillStyle = '#FF0000';
+				ctx.fillRect(mx,my,4,4);
+			}
 		}
 
 	},
