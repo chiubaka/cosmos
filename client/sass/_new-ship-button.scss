@@ -1,0 +1,4 @@
+#new-ship-button {
+  @extend .bottom-toolbar-float-right;
+  @include bottom-toolbar-item-with-icon('../images/icons/icon_new_ship.png');
+}

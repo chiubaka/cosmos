@@ -1,0 +1,4 @@
+#relocate-button {
+  @extend .bottom-toolbar-float-right;
+  @include bottom-toolbar-item-with-icon('../images/icons/icon_relocate.png');
+}

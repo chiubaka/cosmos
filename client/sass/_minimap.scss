@@ -1,0 +1,71 @@
+$minimap-map-height: $hud-button-height * 4;
+$minimap-map-width: $hud-button-width * 6;
+$minimap-background-color: rgba(23, 49, 41, 0.9);
+$minimap-toolbar-background-color: #131e1b;
+$minimap-toolbar-item-icon-color: #19ffb7;
+$minimap-font-color: $minimap-toolbar-item-icon-color;
+$minimap-toolbar-item-selected-background-color: #1d634d;
+$minimap-toolbar-height: $minimap-map-height;
+$minimap-toolbar-width: $hud-button-width;
+$minimap-toolbar-item-height: $hud-button-height;
+$minimap-toolbar-item-width: $hud-button-width;
+
+@mixin minimap-toolbar-item($background-color: $bottom-toolbar-item-background-color) {
+  height: $minimap-toolbar-item-height;
+  width: $minimap-toolbar-item-width;
+  cursor: pointer;
+  background-color: $background-color;
+}
+
+@mixin minimap-toolbar-item-with-icon($icon, $background-color: $bottom-toolbar-item-background-color) {
+  @include minimap-toolbar-item($background-color);
+  @include hud-icon-button($icon);
+}
+
+#minimap {
+  position: absolute;
+  right: 0;
+  bottom: $bottom-toolbar-height;
+  z-index: $hud-layer-z-index + 1;
+  height: $minimap-map-height;
+  width: $minimap-map-width + $minimap-toolbar-width;
+  color: $minimap-font-color;
+
+  .toolbar {
+    float: right;
+    background-color: $minimap-toolbar-background-color;
+    height: $minimap-toolbar-height;
+    width: $minimap-toolbar-width;
+    font-size: $hud-button-height * .75;
+    text-align: center;
+
+    #map-button {
+      @include minimap-toolbar-item-with-icon('../images/icons/icon_minimap.png', $minimap-toolbar-item-selected-background-color);
+    }
+
+    .zoom-in-button, .zoom-out-button {
+      @include minimap-toolbar-item($minimap-toolbar-background-color);
+      line-height: $hud-button-height;
+      vertical-align: middle;
+    }
+  }
+
+  .map {
+    position: relative;
+    float: right;
+    background-color: $minimap-background-color;
+    height: 100%;
+
+    .coordinates {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      font-size: 75%;
+    }
+
+    canvas {
+      height: $minimap-map-height;
+      width: $minimap-map-width;
+    }
+  }
+}

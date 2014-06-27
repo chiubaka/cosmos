@@ -2,6 +2,13 @@ var Client = IgeClass.extend({
 	classId: 'Client',
 
 	init: function () {
+		window.addEventListener("keydown", function(e) {
+			// space and arrow keys
+			if([37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+				e.preventDefault();
+			}
+		}, false);
+		
 		//ige.timeScale(0.1);
 		ige.setFps(30);
 
@@ -128,11 +135,13 @@ var Client = IgeClass.extend({
 						ige.notification.addComponent(NotificationUIComponent)
 							.start();
 
+						GameInit.init(self);
+
+						ige.addComponent(HUDComponent);
+						//ige.editor.showStats();
+
 						// Ask the server to create an entity for us
 						ige.network.send('playerEntity', {sid: self.getSessionId()});
-
-						GameInit.init(self);
-						//ige.editor.showStats();
 					});
 				}
 			});

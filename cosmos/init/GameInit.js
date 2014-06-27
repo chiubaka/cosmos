@@ -104,9 +104,6 @@ var GameInit = {
 			// For now, the server does not need to know about the background scene.
 			// The server does not need to load the UI.
 			this.initBackgroundScene();
-
-			// Pre-initialize player HUD
-			this.initPlayerHUD();
 		}
 	},
 
@@ -120,20 +117,6 @@ var GameInit = {
 			.layer(client.LAYER_MODAL)
 			.ignoreCamera(true)
 			.mount(client.mainScene);
-	},
-
-	/**
-	 * Initializes the HUD scene layer on the client.
-	 */
-	initPlayerHUD: function() {
-		var client = ige.client;
-		client.hudScene = new IgeScene2d()
-			.id('hudScene')
-			.layer(client.LAYER_HUD)
-			.ignoreCamera(true)
-			.mount(client.spaceScene);
-
-		client.hud = new HUDManager();
 	},
 
 	/**
