@@ -254,7 +254,6 @@ var ServerNetworkEvents = {
 	_onCargoRequest: function(data, clientId) {
 		var player = ige.server.players[clientId];
 		if (player === undefined) {
-			console.log('player undefined');
 			return;
 		}
 
