@@ -41,25 +41,25 @@ var MinimapComponent = IgeEventingClass.extend({
 			self.button = self.toolbar.find('#map-button');
 			self.zoomInButton = self.toolbar.find('.zoom-in-button');
 			self.zoomOutButton = self.toolbar.find('.zoom-out-button');
-			self.canvas = self.element.find('.map canvas')[0];
+			self.canvas = self.element.find('.map canvas').first();
 			self.coordinates = self.element.find('.map .coordinates');
 
 			ige.addBehaviour('updateCoordinates', self.updateCoordinates);
 			ige.addBehaviour('updateMinimap', self.updateMinimap);
 
 			// Make canvas visually fill the positioned parent
-			self.canvas.style.width = '100%';
-			self.canvas.style.height = '100%';
+			//self.canvas.style.width = '100%';
+			//self.canvas.style.height = '100%';
 			// Then set the internal size to match
-			self.canvas.width  = self.canvas.offsetWidth;
-			self.canvas.height = self.canvas.offsetHeight;
+			self.canvas.width(self.canvas.css('width'));
+			self.canvas.height(self.canvas.css('height'));
 
 			// Offset the canvas draws so a draw to (0,0) is in the middle
-			self.offsetX = self.canvas.width / 2;
-			self.offsetY = self.canvas.height / 2;
+			self.offsetX = self.canvas.width() / 2;
+			self.offsetY = self.canvas.height() / 2;
 			// Maps the visible minimap area to the canvas via a scale factor
-			self.scaleX = Constants.minimapArea.MAXIMUM_WIDTH / self.canvas.width;
-			self.scaleY = Constants.minimapArea.MAXIMUM_HEIGHT / self.canvas.height;
+			self.scaleX = Constants.minimapArea.MAXIMUM_WIDTH / self.canvas.width();
+			self.scaleY = Constants.minimapArea.MAXIMUM_HEIGHT / self.canvas.height();
 		});
 	},
 
@@ -77,9 +77,9 @@ var MinimapComponent = IgeEventingClass.extend({
 	},
 
 	updateMinimap: function() {
-		var ctx = ige.hud.minimap.canvas.getContext('2d');
-		var width = ige.hud.minimap.canvas.width;
-		var height = ige.hud.minimap.canvas.height;
+		var ctx = ige.hud.minimap.canvas[0].getContext('2d');
+		var width = ige.hud.minimap.canvas.width();
+		var height = ige.hud.minimap.canvas.height();
 		var offsetX = ige.hud.minimap.offsetX;
 		var offsetY = ige.hud.minimap.offsetY;
 		var scaleX = ige.hud.minimap.scaleX;
@@ -146,6 +146,6 @@ var MinimapComponent = IgeEventingClass.extend({
 
 MinimapComponent.UI_ROOT = '/components/minimap/';
 
-if (typeof(module) !== 'undefined' && typeof(module.expoerts) !== 'undefined') {
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
 	module.exports = MinimapComponent;
 }

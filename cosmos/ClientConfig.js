@@ -95,6 +95,7 @@ var igeClientConfig = {
 		'./ui/FeedbackComponent.js',
 		'./ui/NewShipComponent.js',
 		'./ui/RelocateComponent.js',
+		'./ui/CargoComponent.js',
 
 		/* Minimap */
 		'./ui/MinimapComponent.js',
@@ -123,9 +124,11 @@ var igeClientConfig = {
 		/* Configuration */
 		'./config/DeploymentConfig.js',
 
+		/* Network */
+		'./ClientNetworkEvents.js',
+
 		/* Initialization */
 		'./init/GameInit.js',
-		'./init/ClientNetworkEvents.js',
 		'./client.js',
 		'./index.js'
 	]

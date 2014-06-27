@@ -3,7 +3,7 @@ var NewShipComponent = ButtonComponent.extend({
 	componentId: 'newShip',
 
 	init: function() {
-		ButtonComponent.prototype.init.call(this, $('#bottom-toolbar'), 'new-ship-button');
+		ButtonComponent.prototype.init.call(this, $('#bottom-toolbar'), 'new-ship-button', undefined, 'New Ship');
 		this.element.click(this.mouseDown);
 	},
 

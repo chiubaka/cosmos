@@ -3,7 +3,7 @@ var FeedbackComponent = ButtonComponent.extend({
 	componentId: 'feedback',
 
 	init: function() {
-		ButtonComponent.prototype.init.call(this, $('#bottom-toolbar'), 'feedback-button');
+		ButtonComponent.prototype.init.call(this, $('#bottom-toolbar'), 'feedback-button', undefined, 'Feedback');
 
 		// Include the UserVoice JavaScript SDK (only needed once on a page)
 		UserVoice = window.UserVoice || [];
@@ -55,7 +55,7 @@ var FeedbackComponent = ButtonComponent.extend({
 		//UserVoice.push(['addTrigger', { mode: 'smartvote', trigger_position: 'bottom-left' }]);
 
 		// Or, use your own custom trigger:
-		UserVoice.push(['addTrigger', '#feedback-button', { mode: 'smartvote' }]);
+		UserVoice.push(['addTrigger', '#feedback-button', { mode: 'satisfaction' }]);
 
 		// Autoprompt for Satisfaction and SmartVote (only displayed under certain conditions)
 		UserVoice.push(['autoprompt', {}]);

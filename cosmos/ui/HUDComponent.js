@@ -16,8 +16,8 @@ var HUDComponent = IgeEventingClass.extend({
 
 		this.addComponent(BottomToolbarComponent);
 		this.addComponent(MinimapComponent);
+		this.addComponent(CargoComponent);
 		//this.addComponent(InspectorComponent);
-		//this.addComponent(CargoComponent);
 	},
 
 	show: function() {
@@ -38,6 +38,6 @@ HUDComponent.loadHtml = function(url, callback) {
 	});
 };
 
-if (typeof(module) !== 'undefined' && typeof(module.expoerts) !== 'undefined') {
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
 	module.exports = HUDComponent;
 }

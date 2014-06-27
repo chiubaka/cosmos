@@ -128,13 +128,13 @@ var Client = IgeClass.extend({
 						ige.notification.addComponent(NotificationUIComponent)
 							.start();
 
-						// Ask the server to create an entity for us
-						ige.network.send('playerEntity', {sid: self.getSessionId()});
-
 						GameInit.init(self);
 
 						ige.addComponent(HUDComponent);
 						//ige.editor.showStats();
+
+						// Ask the server to create an entity for us
+						ige.network.send('playerEntity', {sid: self.getSessionId()});
 					});
 				}
 			});

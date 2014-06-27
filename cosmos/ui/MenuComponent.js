@@ -3,7 +3,7 @@ var MenuComponent = ButtonComponent.extend({
 	componentId: 'menu',
 
 	init: function() {
-		ButtonComponent.prototype.init.call(this, $('#bottom-toolbar'), 'menu-button');
+		ButtonComponent.prototype.init.call(this, $('#bottom-toolbar'), 'menu-button', undefined, 'Menu');
 	}
 });
 

@@ -62,5 +62,10 @@ $minimap-toolbar-item-width: $hud-button-width;
       left: 5px;
       font-size: 75%;
     }
+
+		canvas {
+			height: $minimap-map-height;
+			width: $minimap-map-width;
+	  }
   }
 }

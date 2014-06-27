@@ -84,6 +84,10 @@ $chat-box-input-height: 31px;
   }
 }
 
+#chat-modal {
+  display: none !important;
+}
+
 .message-form-wrapper, .message-form {
   position: absolute;
   bottom: 0;

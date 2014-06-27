@@ -4,11 +4,11 @@ $chat-button-unread-color: #f57a03;
   @extend .bottom-toolbar-float-left;
   @include bottom-toolbar-item-with-icon('../images/icons/icon_chat.png');
   text-align: right;
-  font-size: 85%;
   background-position: 50% 65%;
 
   #chat-unread-label {
     display: none;
+    font-size: 85%;
   }
 
   &.unread {

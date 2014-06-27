@@ -3,7 +3,13 @@ var ConstructCap = Cap.extend({
 	componentId: 'constructCap',
 
 	init: function() {
-		Cap.prototype.init.call(this, $('#cap-bar'), 'construct-cap');
+		Cap.prototype.init.call(this, $('#cap-bar'), 'construct-cap', undefined, 'Construct');
+	},
+
+	select: function() {
+		Cap.prototype.select.call(this);
+
+		ige.hud.cargo.open();
 	}
 });
 
