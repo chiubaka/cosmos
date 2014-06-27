@@ -131,11 +131,16 @@ var CargoComponent = IgeEventingClass.extend({
 		});
 
 		var quantityLabelSpan = document.createElement('span');
-		$(quantityLabelSpan).addClass('quantityLabel');
+		$(quantityLabelSpan).addClass('quantity-label');
 		$(quantityLabelSpan).text(quantity);
+
+		var typeLabelSpan = document.createElement('span');
+		$(typeLabelSpan).addClass('type-label');
+		$(typeLabelSpan).text(Block.displayNameFromClassId(type));
 
 		var containerCanvas = document.createElement('canvas');
 
+		$(containerDiv).append(typeLabelSpan);
 		$(containerDiv).append(quantityLabelSpan);
 		$(containerDiv).append(containerCanvas);
 		this.containers.append(containerDiv);

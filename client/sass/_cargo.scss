@@ -64,11 +64,25 @@ $cargo-container-border-color: #696969;
           width: $cargo-block-width - $cargo-block-padding * 2;
         }
 
-        .quantityLabel {
+        .quantity-label {
           position: absolute;
           right: $cargo-block-padding;
           bottom: $cargo-block-padding;
           text-shadow: -1px 0 $cargo-button-border-color, 0 1px $cargo-button-border-color, 1px 0 $cargo-button-border-color, 0 -1px $cargo-button-border-color;
+        }
+
+        .type-label {
+          display: none;
+          position: absolute;
+          left: $cargo-block-width + $cargo-block-padding * 4;
+          top: $cargo-block-height / 2 - 11px - $cargo-block-padding;
+          line-height: 22px;
+          padding: $cargo-block-padding;
+          background-color: rgba(34, 34, 34, 0.75);
+        }
+
+        &:hover .type-label{
+          display: block;
         }
       }
     }
