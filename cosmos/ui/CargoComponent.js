@@ -2,6 +2,9 @@ var CargoComponent = IgeEventingClass.extend({
 	classId: 'CargoComponent',
 	componentId: 'cargo',
 
+	button: undefined,
+	pullout: undefined,
+
 	init: function() {
 		var self = this;
 		var hud = $('#hud');
@@ -13,10 +16,21 @@ var CargoComponent = IgeEventingClass.extend({
 		HUDComponent.loadHtml(CargoComponent.UI_ROOT + 'cargo.html', function(html) {
 			hud.append(html);
 			self.element = $('#cargo');
-			self.button = self.element.find('.button');
-			self.popout = self.element.find('.popout');
+			self.button = self.element.find('.button').first();
+			self.pullout = self.element.find('.pullout').first();
+			console.log(self.button);
+			console.log(self.pullout);
 
-
+			self.button.click(function() {
+				if (self.pullout.is(':visible')) {
+					self.pullout.hide();
+					self.button.removeClass('active');
+				}
+				else {
+					self.pullout.show();
+					self.button.addClass('active');
+				}
+			});
 		});
 	}
 });
