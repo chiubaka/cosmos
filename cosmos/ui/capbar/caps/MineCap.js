@@ -5,7 +5,7 @@ var MineCap = Cap.extend({
 	active: undefined,
 
 	init: function() {
-		Cap.prototype.init.call(this, $('#cap-bar'), 'mine-cap');
+		Cap.prototype.init.call(this, $('#cap-bar'), 'mine-cap', undefined, 'Mine');
 	}
 });
 

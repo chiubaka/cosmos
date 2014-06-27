@@ -3,7 +3,7 @@ var FeedbackComponent = ButtonComponent.extend({
 	componentId: 'feedback',
 
 	init: function() {
-		ButtonComponent.prototype.init.call(this, $('#bottom-toolbar'), 'feedback-button');
+		ButtonComponent.prototype.init.call(this, $('#bottom-toolbar'), 'feedback-button', undefined, 'Feedback');
 
 		// Include the UserVoice JavaScript SDK (only needed once on a page)
 		UserVoice = window.UserVoice || [];

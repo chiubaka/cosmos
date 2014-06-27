@@ -72,13 +72,9 @@ $cargo-container-border-color: #696969;
         }
 
         .type-label {
-          display: none;
-          position: absolute;
+          @extend .tooltip;
           left: $cargo-block-width + $cargo-block-padding * 4;
-          top: $cargo-block-height / 2 - 11px - $cargo-block-padding;
-          line-height: 22px;
-          padding: $cargo-block-padding;
-          background-color: rgba(34, 34, 34, 0.75);
+          top: $cargo-block-height / 2 - $tooltip-line-height / 2 - $tooltip-padding;
         }
 
         &:hover .type-label{

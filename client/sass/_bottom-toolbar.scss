@@ -8,6 +8,8 @@ $bottom-toolbar-item-hover-background-color: #5c5c5c;
 $bottom-toolbar-item-height: $hud-button-height;
 $bottom-toolbar-item-width: $hud-button-width;
 
+$bottom-toolbar-tooltip-width: $bottom-toolbar-item-width * 1.5;
+
 #hud>.toolbar {
   position: absolute;
   bottom: 0;
@@ -29,11 +31,23 @@ $bottom-toolbar-item-width: $hud-button-width;
 @mixin bottom-toolbar-item($background-color: $bottom-toolbar-item-background-color) {
   height: $bottom-toolbar-item-height;
   width: $bottom-toolbar-item-width;
+  position: relative;
   cursor: pointer;
   background-color: $background-color;
 
+  .tooltip {
+    bottom: $bottom-toolbar-item-height + $bottom-toolbar-item-padding;
+    width: $bottom-toolbar-tooltip-width;
+    text-align: center;
+    margin-left: -$bottom-toolbar-tooltip-width / 2 - $tooltip-padding;
+    left: 50%;
+  }
+
   &:hover {
     background-color: $bottom-toolbar-item-hover-background-color;
+    .tooltip {
+      display: block;
+    }
   }
 }
 
