@@ -1,6 +1,6 @@
-$minimap-map-height: $hud-button-height * 5;
+$minimap-map-height: $hud-button-height * 4;
 $minimap-map-width: $hud-button-width * 6;
-$minimap-background-color: #173129;
+$minimap-background-color: rgba(23, 49, 41, 0.9);
 $minimap-toolbar-background-color: #131e1b;
 $minimap-toolbar-item-icon-color: #19ffb7;
 $minimap-font-color: $minimap-toolbar-item-icon-color;
@@ -53,6 +53,8 @@ $minimap-toolbar-item-width: $hud-button-width;
   .map {
     position: relative;
     float: right;
+    background-color: $minimap-background-color;
+    height: 100%;
 
     .coordinates {
       position: absolute;
@@ -60,9 +62,8 @@ $minimap-toolbar-item-width: $hud-button-width;
       left: 5px;
       font-size: 75%;
     }
+
     canvas {
-      float: right;
-      background-color: $minimap-background-color;
       height: $minimap-map-height;
       width: $minimap-map-width;
     }
