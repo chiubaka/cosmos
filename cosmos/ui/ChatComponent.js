@@ -33,9 +33,10 @@ var ChatComponent = IgeEventingClass.extend({
 						view: { resources: ChatComponent.CANDY_ROOT + 'res/' }
 					});
 
-					var guestNumber = Math.floor((Math.random() * 999999999) + 100000000)
+					var guestNumber = Math.floor((Math.random() * 999999999) + 100000000);
+					var guestHandle = 'guest' + guestNumber;
 
-					Candy.Core.connect('tl-xmpp.cloudapp.net', null, 'guest' + guestNumber);
+					Candy.Core.connect('tl-xmpp.cloudapp.net', null, guestHandle);
 
 					self.chatClient = $('#candy');
 
@@ -59,6 +60,14 @@ var ChatComponent = IgeEventingClass.extend({
 						self.messageInputs.keydown(function(e) {
 							e.stopPropagation();
 						});
+					});
+
+					// Called when the chat client moves to the disconnected state.
+					$(Candy).on('candy:view.connection.status-6', function() {
+						// Delay a little bit here to allow the client to fully disconnect before trying to reconnect.
+						setTimeout(function() {
+							Candy.Core.connect('tl-xmpp.cloudapp.net', null, guestHandle);
+						}, 200);
 					});
 
 					self.button.click(function(event) {
