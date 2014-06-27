@@ -59,7 +59,20 @@ var CargoComponent = IgeEventingClass.extend({
 				console.log('Received cargo update', 'info');
 				self.populateFromInventory(cargoItems);
 			});
+
+
 		});
+	},
+
+	deselect: function(container) {
+		container.removeClass('active');
+		ige.emit('toolbar tool cleared', [this.classId(), container.data('data-block-type')]);
+	},
+
+	select: function(container) {
+		$('.container').removeClass('active');
+		container.addClass('active');
+		ige.emit('toolbar tool selected', [this.classId(), container.data('data-block-type')]);
 	},
 
 	populateFromInventory: function(cargoItems) {
@@ -77,8 +90,19 @@ var CargoComponent = IgeEventingClass.extend({
 	},
 
 	createContainer: function(type, quantity) {
+		var self = this;
 		var containerDiv = document.createElement('div');
-		containerDiv.className = 'container ' + type;
+		containerDiv.className = 'container';
+		containerDiv.setAttribute('data-block-type', type);
+
+		$(containerDiv).click(function() {
+			if ($(this).hasClass('active')) {
+				self.deselect($(this));
+			}
+			else {
+				self.select($(this));
+			}
+		});
 
 		var quantityLabelSpan = document.createElement('span');
 		quantityLabelSpan.className = 'quantityLabel';

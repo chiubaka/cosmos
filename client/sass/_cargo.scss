@@ -12,6 +12,7 @@ $cargo-button-position-top: $hud-margin-top;
 $cargo-block-height: $block-height * 2;
 $cargo-block-width: $block-width * 2;
 $cargo-block-padding: $cargo-block-height / 10;
+$cargo-block-hover-border-color: #008aff;
 
 $cargo-container-border-color: #696969;
 
@@ -52,6 +53,11 @@ $cargo-container-border-color: #696969;
         margin-right: auto;
         background-color: $cargo-button-background-color;
         border: 1px solid $cargo-container-border-color;
+
+        &.active {
+          background-color: $cargo-button-hover-background-color;
+          border: 2px solid $cargo-block-hover-border-color;
+        }
 
         canvas {
           height: $cargo-block-height - $cargo-block-padding * 2;
