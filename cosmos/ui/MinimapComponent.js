@@ -23,6 +23,7 @@ var MinimapComponent = IgeEventingClass.extend({
 			self.coordinates = self.element.find('.map .coordinates');
 
 			ige.addBehaviour('updateCoordinates', self.updateCoordinates);
+			ige.addBehaviour('updateMinimap', self.updateMinimap);
 		});
 	},
 
@@ -39,6 +40,26 @@ var MinimapComponent = IgeEventingClass.extend({
 		minimap.coordinates.text(minimap.getCoordinatesString());
 	},
 
+	updateMinimap: function() {
+		var canvas = ige.hud.minimap.canvas[0];
+		var ctx = canvas.getContext('2d');
+		var height = canvas.height;
+		var width = canvas.width;
+
+		// TODO: Scene should be passed into component or set outside of component
+		var scene = ige.$('spaceGameScene');
+		for (var i = 0; i < scene.children().length; i++) {
+			var child = scene.children[i];
+			var rx = RandomInterval.randomIntFromInterval(0, width);
+			var ry = RandomInterval.randomIntFromInterval(0, height);
+
+			ctx.fillStyle = '#FF0000';
+			ctx.fillRect(rx,ry,4,4);
+		}
+
+	},
+
+
 	/**
 	 * Gets the center of the current viewport and treats that as the coordinates
 	 * to display.
@@ -46,8 +67,8 @@ var MinimapComponent = IgeEventingClass.extend({
 	 * @instance
 	 */
 	getCoordinatesString: function() {
-		var rect = ige.$('mainViewport').viewArea();
-		return "x: " + Math.floor(rect.x2) + ", y: " + Math.floor(rect.y2);
+		var camTrans = ige.client.mainViewport.camera._translate;
+		return "x: " + Math.floor(camTrans.x) + ", y: " + Math.floor(camTrans.y);
 	}
 });
 
