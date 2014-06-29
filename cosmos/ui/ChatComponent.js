@@ -24,6 +24,10 @@ var ChatComponent = ButtonComponent.extend({
 
 		ButtonComponent.prototype.init.call(this, chatDiv, 'chat-button', undefined, 'Chat');
 		self.button = $('#chat-button');
+		self.button.addClass('unopened');
+		self.button.click(function() {
+			$(this).removeClass('unopened');
+		});
 
 		self.unreadLabel = $('<span></span>').attr('id', 'chat-unread-label');
 		self.button.append(self.unreadLabel);
@@ -55,7 +59,7 @@ var ChatComponent = ButtonComponent.extend({
 				});
 
 				$(Candy).on('candy:view.roster.after-update', function(evt, args) {
-					if (args.action === 'join' && self.chatClient.is(':hidden')) {
+					if (args.action === 'join' && self.chatClient.is(':hidden') && args.user.getNick() !== guestHandle) {
 						self.incrementUnread();
 					}
 				});
@@ -78,6 +82,8 @@ var ChatComponent = ButtonComponent.extend({
 					}, 200);
 				});
 
+				self.chatClient.hide();
+
 				self.button.click(function(event) {
 					if (self.chatClient.is(':visible')) {
 						self.chatClient.hide();
@@ -92,6 +98,7 @@ var ChatComponent = ButtonComponent.extend({
 	},
 
 	incrementUnread: function() {
+		this.button.removeClass('unopened');
 		this.button.addClass('unread');
 		this.numUnread++;
 		this.updateLabel();
