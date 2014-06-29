@@ -9,8 +9,7 @@ var Client = IgeClass.extend({
 			}
 		}, false);
 		
-		//ige.timeScale(0.1);
-		ige.setFps(30);
+		ige.setFps(Constants.fps.CLIENT_FPS);
 
 		// Load our textures
 		var self = this;
@@ -128,7 +127,7 @@ var Client = IgeClass.extend({
 						ige.network.define('confirm', self._onConfirm);
 						// Setup the network stream handler
 						ige.network.addComponent(IgeStreamComponent)
-							.stream.renderLatency(80); // Render the simulation 160 milliseconds in the past
+							.stream.renderLatency(100); // Render the simulation 100 milliseconds in the past
 
 						// Enable notifications
 						ige.addComponent(NotificationComponent);
