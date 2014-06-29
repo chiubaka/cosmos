@@ -4,10 +4,10 @@ var FeedbackComponent = ButtonComponent.extend({
 
 	init: function() {
 		ButtonComponent.prototype.init.call(this, $('#bottom-toolbar'), 'feedback-button', undefined, 'Feedback');
-		this.element.addClass('highlight');
+		this.element.addClass('unopened');
 
 		this.element.click(function() {
-			$(this).removeClass('highlight');
+			$(this).removeClass('unopened');
 			$(this).unbind('click');
 		});
 

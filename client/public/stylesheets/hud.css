@@ -356,8 +356,8 @@
   display: block;
 }
 /* line 6, ../../sass/_feedback-button.scss */
-#feedback-button.highlight {
-  background-image: url("../images/icons/icon_feedback_highlight.png");
+#feedback-button.unopened {
+  background-image: url("../images/icons/icon_feedback_unopened.png");
 }
 
 /* line 1, ../../sass/_relocate-button.scss */
