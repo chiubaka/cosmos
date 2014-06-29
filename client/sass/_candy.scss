@@ -8,10 +8,10 @@ $chat-box-input-height: 31px;
 
 #candy, #chat-toolbar, .message-form-wrapper, .message-form, .message-form input.submit {
   position: absolute;
-  top: initial;
-  bottom: initial;
-  right: initial;
-  left: initial;
+  top: auto;
+  bottom: auto;
+  right: auto;
+  left: auto;
 }
 
 #candy {
