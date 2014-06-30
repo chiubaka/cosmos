@@ -1,0 +1,54 @@
+$name-prompt-height: 200px;
+$name-prompt-width: 350px;
+$name-prompt-padding: 15px;
+
+#name-prompt {
+  .prompt-box, .prompt-box h1, .prompt-box input {
+    font-weight: 300;
+  }
+
+  .prompt-box {
+    height: $name-prompt-height;
+    width: $name-prompt-width;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    opacity: 1;
+    z-index: $prompt-veil-z-index + 1;
+    background: #000000;
+    border: 1px solid $cosmos-blue;
+    padding: $name-prompt-padding;
+
+    h1 {
+      margin: 0;
+      font-size: 200%;
+      color: $cosmos-blue;
+    }
+
+    input {
+      font-family: $cosmos-font-family;
+      font-size: 100%;
+      font-style: italic;
+      color: $cosmos-font-color;
+      width: 100%;
+      background-color: transparent;
+      border: 0;
+      border-bottom: 1px solid $cosmos-font-color;
+      padding: 0;
+      padding-bottom: $name-prompt-padding / 5;
+      margin-bottom: $name-prompt-padding;
+
+      &:focus {
+        @include placeholder-state {
+          color: $cosmos-font-color;
+        }
+
+        outline: 0;
+        border-bottom: 1px solid $cosmos-blue;
+      }
+    }
+  }
+}

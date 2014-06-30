@@ -6,7 +6,7 @@
   z-index: 1;
 }
 
-/* line 26, ../../sass/hud.scss */
+/* line 26, ../../sass/_hud.scss */
 .tooltip, #cargo .pullout #cargo-containers .container .type-label {
   display: none;
   position: absolute;
@@ -419,12 +419,11 @@
   position: absolute;
   right: 0;
   bottom: 50px;
-  z-index: 2;
   height: 200px;
   width: 350px;
   color: #19ffb7;
 }
-/* line 34, ../../sass/_minimap.scss */
+/* line 33, ../../sass/_minimap.scss */
 #minimap .toolbar {
   float: right;
   background-color: #131e1b;
@@ -433,7 +432,7 @@
   font-size: 37.5px;
   text-align: center;
 }
-/* line 42, ../../sass/_minimap.scss */
+/* line 41, ../../sass/_minimap.scss */
 #minimap .toolbar #map-button {
   height: 50px;
   width: 50px;
@@ -444,7 +443,7 @@
   background-size: 70%;
   background-position: center;
 }
-/* line 46, ../../sass/_minimap.scss */
+/* line 45, ../../sass/_minimap.scss */
 #minimap .toolbar .zoom-in-button, #minimap .toolbar .zoom-out-button {
   height: 50px;
   width: 50px;
@@ -453,21 +452,21 @@
   line-height: 50px;
   vertical-align: middle;
 }
-/* line 53, ../../sass/_minimap.scss */
+/* line 52, ../../sass/_minimap.scss */
 #minimap .map {
   position: relative;
   float: right;
   background-color: rgba(23, 49, 41, 0.9);
   height: 100%;
 }
-/* line 59, ../../sass/_minimap.scss */
+/* line 58, ../../sass/_minimap.scss */
 #minimap .map .coordinates {
   position: absolute;
   top: 5px;
   left: 5px;
   font-size: 75%;
 }
-/* line 66, ../../sass/_minimap.scss */
+/* line 65, ../../sass/_minimap.scss */
 #minimap .map canvas {
   height: 200px;
   width: 300px;
