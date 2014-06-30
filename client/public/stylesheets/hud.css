@@ -58,10 +58,11 @@
 #user-tile .user-info {
   float: left;
   padding: 8.33333px;
+  height: 33.33333px;
   width: 200px;
   cursor: pointer;
 }
-/* line 27, ../../sass/_user-tile.scss */
+/* line 28, ../../sass/_user-tile.scss */
 #user-tile .user-info .username {
   font-size: 75%;
   font-weight: 600;
@@ -69,7 +70,7 @@
   position: relative;
   top: -8.33333px;
 }
-/* line 35, ../../sass/_user-tile.scss */
+/* line 36, ../../sass/_user-tile.scss */
 #user-tile .user-info .more-triangle {
   float: right;
   line-height: 33.33333px;
@@ -126,10 +127,10 @@
 /* line 9, ../../sass/_candy.scss */
 #candy, #chat-toolbar, .message-form-wrapper, .message-form, .message-form input.submit {
   position: absolute;
-  top: initial;
-  bottom: initial;
-  right: initial;
-  left: initial;
+  top: auto;
+  bottom: auto;
+  right: auto;
+  left: auto;
 }
 
 /* line 17, ../../sass/_candy.scss */
