@@ -26,7 +26,9 @@ var UserTileComponent = IgeEventingClass.extend({
 
 			ige.on('cosmos:Player.username.set', function(username) {
 				self.username.text(username);
-			})
+			});
+
+			ige.emit('cosmos:hud.bottomToolbar.subcomponent.loaded', self);
 		});
 	}
 });

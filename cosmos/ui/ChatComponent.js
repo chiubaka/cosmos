@@ -91,6 +91,8 @@ var ChatComponent = ButtonComponent.extend({
 						self.clearUnread();
 					}
 				});
+
+				ige.emit('cosmos:hud.bottomToolbar.subcomponent.loaded', self);
 			});
 		});
 	},

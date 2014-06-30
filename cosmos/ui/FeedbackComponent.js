@@ -59,6 +59,8 @@ var FeedbackComponent = ButtonComponent.extend({
 
 		// Autoprompt for Satisfaction and SmartVote (only displayed under certain conditions)
 		UserVoice.push(['autoprompt', {}]);
+
+		ige.emit('cosmos:hud.bottomToolbar.subcomponent.loaded', this);
 	}
 });
 
