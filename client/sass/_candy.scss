@@ -50,6 +50,10 @@ $chat-box-input-height: 31px;
     @include user-select(text);
   }
 
+  .message-pane .infomessage {
+    display: none;
+  }
+
   .message-form-wrapper {
     position: absolute;
     bottom: 0;
