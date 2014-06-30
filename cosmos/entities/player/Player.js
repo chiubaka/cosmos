@@ -144,8 +144,7 @@ var Player = BlockStructure.extend({
 	},
 
 	add: function(row, col, block, checkForNeighbors) {
-		BlockStructure.prototype.add.call(this, row, col, block, checkForNeighbors);
-		if (ige.isServer) {
+		if (BlockStructure.prototype.add.call(this, row, col, block, checkForNeighbors) && ige.isServer) {
 			DbPlayer.update(this.dbId(), this, function() {});
 		}
 	},
