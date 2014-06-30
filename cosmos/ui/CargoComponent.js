@@ -61,6 +61,8 @@ var CargoComponent = IgeEventingClass.extend({
 				console.log('Received cargo update', 'info');
 				self.populateFromInventory(cargoItems);
 			});
+
+			ige.emit('cosmos:hud.subcomponent.loaded', self);
 		});
 	},
 

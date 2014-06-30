@@ -8,6 +8,7 @@ var UserTileComponent = IgeEventingClass.extend({
 	username: undefined,
 
 	init: function() {
+		var self = this;
 		var bottomToolbar = $('#bottom-toolbar');
 		if (bottomToolbar.length === 0) {
 			this.log('Bottom toolbar has not been initialized.', 'error');
@@ -17,11 +18,13 @@ var UserTileComponent = IgeEventingClass.extend({
 		HUDComponent.loadHtml(UserTileComponent.UI_ROOT + 'user-tile.html', function(html) {
 			bottomToolbar.append(html);
 
-			this.element = $('#user-tile');
+			self.element = $('#user-tile');
 
-			this.profilePic = this.element.find('.profile-pic');
-			this.shipName = this.element.find('.ship-name');
-			this.username = this.element.find('.username');
+			self.profilePic = self.element.find('.profile-pic');
+			self.shipName = self.element.find('.ship-name');
+			self.username = self.element.find('.username');
+
+			ige.emit('cosmos:hud.bottomToolbar.subcomponent.loaded', self);
 		});
 	}
 });
