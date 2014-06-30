@@ -93,12 +93,12 @@ var ServerNetworkEvents = {
 			 * @param ship {Array} Player's ship, represented as a 2D array
 			 * @param cargo {Array} Player's cargo
 			 */
-			DbPlayer.load(playerId, function(err, ship, cargo) {
+			DbPlayer.load(playerId, function(err, username, ship, cargo) {
 				if (err) {
 					self.log('Cannot load player from database!', 'error')
 				}
 
-				ige.server._createPlayer(clientId, playerId, ship, cargo);
+				ige.server._createPlayer(clientId, playerId, username, ship, cargo);
 			});
 		});
 	},
@@ -111,11 +111,13 @@ var ServerNetworkEvents = {
 	 * @param cargo The cargo to give the player. If none is specified, the player will be given an empty cargo.
 	 * @private
 	 */
-	_createPlayer: function(clientId, playerId, ship, cargo) {
+	_createPlayer: function(clientId, playerId, username, ship, cargo) {
 		var player = new Player()
 			// Call BlockGrid#debugFixtures before calling BlockGrid#fromBlockMatrix, since debugging entities are
 			// added when fixtures are added.
 			.debugFixtures(false);
+
+		player.username(username);
 
 		if (ship === undefined) {
 			player.fromBlockMatrix(ExampleShips.starterShip(), false);

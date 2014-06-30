@@ -125,6 +125,10 @@ var Client = IgeClass.extend({
 						ige.network.define('cargoResponse', self._onCargoResponse);
 						ige.network.define('cargoUpdate', self._onCargoUpdate);
 						ige.network.define('confirm', self._onConfirm);
+
+						ige.network.define('cosmos:Player.username.set.approve', Player.onUsernameApproved);
+						ige.network.define('cosmos:Player.username.set.error', Player.onUsernameRequestError);
+
 						// Setup the network stream handler
 						ige.network.addComponent(IgeStreamComponent)
 							.stream.renderLatency(100); // Render the simulation 100 milliseconds in the past
@@ -145,6 +149,13 @@ var Client = IgeClass.extend({
 				}
 			});
 		});
+	},
+
+	promptForUsername: function() {
+		var username = window.prompt("Choose a username");
+		if (username != null) {
+			Player.requestUsername(username);
+		}
 	},
 
 	getSessionId: function() {

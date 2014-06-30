@@ -29,6 +29,8 @@ var Player = BlockStructure.extend({
 	 */
 	_dbId: undefined,
 
+	_username: undefined,
+
 	/**
 	 * Whether or not this {@link Player} is mining. Used to restrict players from mining more than one {@link Block}
 	 * at a time.
@@ -66,13 +68,19 @@ var Player = BlockStructure.extend({
 		};
 
 		if (ige.isClient) {
-			this._initClient();
+			this._initClient(data);
 		} else {
 			this._initServer();
 		}
 
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);
+	},
+
+	streamCreateData: function() {
+		var data = BlockStructure.prototype.streamCreateData.call(this);
+		data.username = this.username();
+		return data;
 	},
 
 	/**
@@ -105,6 +113,20 @@ var Player = BlockStructure.extend({
 		return this;
 	},
 
+	username: function(val) {
+		if (val === undefined) {
+			return this._username;
+		}
+
+		// Players can't change their username after they've chosen one!
+		if (this._username) {
+			return this;
+		}
+
+		this._username = val;
+		return this;
+	},
+
 	/**
 	 * Getter/setter for the _clientId parameter. This is set when the player
 	 * is created and read when a notification is sent to a specific
@@ -129,8 +151,11 @@ var Player = BlockStructure.extend({
 	 * @private
 	 * @instance
 	 */
-	_initClient: function() {
+	_initClient: function(data) {
 		this.depth(Player.DEPTH);
+		if (data !== undefined) {
+			this.username(data.username);
+		}
 	},
 
 	/**
@@ -402,5 +427,62 @@ Player.BOX2D_CATEGORY = 'player';
  * @memberof Player
  */
 Player.DEPTH = 2;
+
+Player.requestUsername = function(username) {
+	if (!ige.client.player.username()) {
+		ige.network.send('cosmos:Player.username.set.request', username);
+		console.log('Sent request for username ' + username);
+	}
+};
+
+Player.onUsernameRequested = function(username, clientId) {
+	if (!ige.isServer) {
+		return;
+	}
+	console.log('Username requested ' + username + '. ClientId: ' + clientId);
+	var player = ige.server.players[clientId];
+	if (player === undefined) {
+		return;
+	}
+	if (player.username()) {
+		ige.network.send('cosmos:Player.username.set.error', 'Player already has username ' + this._username, clientId);
+		return;
+	}
+
+	DbPlayer.findByUsername(username, function(err, foundPlayer) {
+		if (err) {
+			console.error('Error finding player with username ' + username + '. Error: ' + err);
+			ige.network.send('cosmos:Player.username.set.error', 'Database error.', clientId);
+			return;
+		}
+
+		if (foundPlayer) {
+			ige.network.send('cosmos:Player.username.set.error', 'Username is taken.');
+		}
+		else {
+			player.username(username);
+			DbPlayer.update(player.dbId(), player, function(err) {
+				if (err) {
+					console.error('Error updating player ' + player.dbId() + '. Error: ' + err);
+					ige.network.send('cosmos:Player.username.set.error', 'Database error.', clientId);
+					return;
+				}
+				console.log('Username ' + username + ' approved.');
+				ige.network.send('cosmos:Player.username.set.approve', username, clientId);
+			});
+		}
+	});
+};
+
+Player.onUsernameApproved = function(username) {
+	ige.client.player.username(username);
+	console.log('Username ' + username + ' approved!')
+	ige.emit('cosmos:Player.username.set', username);
+	// TODO: Set username in chat
+};
+
+Player.onUsernameRequestError = function(error) {
+	console.error(error);
+};
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Player; }

@@ -78,6 +78,10 @@ var ChatComponent = ButtonComponent.extend({
 					}, 200);
 				});
 
+				ige.on('cosmos:Player.username.set', function(username) {
+					Candy.Core.getUser().setNick(username);
+				});
+
 				self.button.click(function(event) {
 					if (self.chatClient.is(':visible')) {
 						self.chatClient.hide();

@@ -44,6 +44,17 @@ var ClientNetworkEvents = {
 							this.log('Could not disable event listener!', 'warning');
 						}
 					});
+
+					var username = ige.client.player.username();
+
+					console.log("Username: " + username);
+
+					if (!username) {
+						ige.client.promptForUsername();
+					}
+					else {
+						ige.emit('cosmos:Player.username.set', username);
+					}
 				}
 			});
 		}
