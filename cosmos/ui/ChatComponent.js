@@ -43,11 +43,6 @@ var ChatComponent = ButtonComponent.extend({
 					view: { resources: ChatComponent.CANDY_ROOT + 'res/' }
 				});
 
-				var guestNumber = Math.floor((Math.random() * 999999999) + 100000000);
-				var guestHandle = 'guest' + guestNumber;
-
-				Candy.Core.connect('tl-xmpp.cloudapp.net', null, guestHandle);
-
 				$(Candy).on('candy:core.message', function(evt, args) {
 					if (args.timestamp === undefined && self.chatClient.is(':hidden')) {
 						self.incrementUnread();
@@ -70,16 +65,16 @@ var ChatComponent = ButtonComponent.extend({
 					});
 				});
 
-				// Called when the chat client moves to the disconnected state.
-				$(Candy).on('candy:view.connection.status-6', function() {
-					// Delay a little bit here to allow the client to fully disconnect before trying to reconnect.
-					setTimeout(function() {
-						Candy.Core.connect('tl-xmpp.cloudapp.net', null, guestHandle);
-					}, 200);
-				});
-
 				ige.on('cosmos:Player.username.set', function(username) {
-					Candy.Core.getUser().setNick(username);
+					Candy.Core.connect('tl-xmpp.cloudapp.net', null, username);
+
+					// Called when the chat client moves to the disconnected state.
+					$(Candy).on('candy:view.connection.status-6', function() {
+						// Delay a little bit here to allow the client to fully disconnect before trying to reconnect.
+						setTimeout(function() {
+							Candy.Core.connect('tl-xmpp.cloudapp.net', null, ige.client.player.username());
+						}, 200);
+					});
 				});
 
 				self.button.click(function(event) {

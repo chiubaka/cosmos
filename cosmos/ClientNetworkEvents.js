@@ -23,11 +23,12 @@ var ClientNetworkEvents = {
 			// should be tracking!
 			self._eventListener = ige.network.stream.on('entityCreated', function (entity) {
 				if (entity.id() === data.entityId) {
+					var player = entity;
 					// Tell the camera to track out player entity
 					ClientNetworkEvents.initCameras(ige.$(data.entityId));
 
 					// Make it easy to find the player's entity
-					ige.client.player = entity;
+					ige.client.player = player;
 
 					ige.client.metrics.fireEvent('player', 'connect', data.playerId);
 
@@ -45,15 +46,19 @@ var ClientNetworkEvents = {
 						}
 					});
 
-					var username = ige.client.player.username();
+					var username = player.username();
 
-					console.log("Username: " + username);
-
-					if (!username) {
+					// If there is already a valid username, then we're good to go!
+					if (username) {
+			
+					}
+					// If there isn't, but the player is logged in, we should ask to set a username.
+					else if (player.isLoggedIn()) {
 						ige.client.promptForUsername();
 					}
+					// If there isn't and the player isn't logged in, we should just assign a guest username.
 					else {
-						ige.emit('cosmos:Player.username.set', username);
+						player.generateGuestUsername();
 					}
 				}
 			});

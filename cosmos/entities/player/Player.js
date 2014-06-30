@@ -80,6 +80,7 @@ var Player = BlockStructure.extend({
 	streamCreateData: function() {
 		var data = BlockStructure.prototype.streamCreateData.call(this);
 		data.username = this.username();
+		data.dbId = this.dbId();
 		return data;
 	},
 
@@ -113,6 +114,10 @@ var Player = BlockStructure.extend({
 		return this;
 	},
 
+	isLoggedIn: function() {
+		return this.dbId() !== undefined;
+	},
+
 	username: function(val) {
 		if (val === undefined) {
 			return this._username;
@@ -124,7 +129,22 @@ var Player = BlockStructure.extend({
 		}
 
 		this._username = val;
+		if (!ige.isServer) {
+			ige.emit('cosmos:Player.username.set', this._username);
+		}
 		return this;
+	},
+
+	requestUsername: function(username) {
+		if (!this.username()) {
+			ige.network.send('cosmos:Player.username.set.request', username);
+		}
+	},
+
+	generateGuestUsername: function() {
+		var guestNumber = Math.floor((Math.random() * 999999) + 100000);
+		var guestUsername = 'guest' + guestNumber;
+		this.username(guestUsername);
 	},
 
 	/**
@@ -155,6 +175,7 @@ var Player = BlockStructure.extend({
 		this.depth(Player.DEPTH);
 		if (data !== undefined) {
 			this.username(data.username);
+			this.dbId(data.dbId);
 		}
 	},
 
@@ -428,13 +449,6 @@ Player.BOX2D_CATEGORY = 'player';
  */
 Player.DEPTH = 2;
 
-Player.requestUsername = function(username) {
-	if (!ige.client.player.username()) {
-		ige.network.send('cosmos:Player.username.set.request', username);
-		console.log('Sent request for username ' + username);
-	}
-};
-
 Player.onUsernameRequested = function(username, clientId) {
 	if (!ige.isServer) {
 		return;
@@ -476,9 +490,6 @@ Player.onUsernameRequested = function(username, clientId) {
 
 Player.onUsernameApproved = function(username) {
 	ige.client.player.username(username);
-	console.log('Username ' + username + ' approved!')
-	ige.emit('cosmos:Player.username.set', username);
-	// TODO: Set username in chat
 };
 
 Player.onUsernameRequestError = function(error) {

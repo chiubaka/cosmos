@@ -157,7 +157,10 @@ var Client = IgeClass.extend({
 	promptForUsername: function() {
 		var username = window.prompt("Choose a username");
 		if (username != null) {
-			Player.requestUsername(username);
+			ige.client.player.requestUsername(username);
+		}
+		else {
+			ige.client.player.generateGuestUsername();
 		}
 	},
 
