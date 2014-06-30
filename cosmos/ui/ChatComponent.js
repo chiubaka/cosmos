@@ -59,6 +59,7 @@ var ChatComponent = ButtonComponent.extend({
 				});
 
 				$(Candy).on('candy:view.roster.after-update', function(evt, args) {
+					// Don't increment unread when the player joins the game
 					if (args.action === 'join' && self.chatClient.is(':hidden') && args.user.getNick() !== guestHandle) {
 						self.incrementUnread();
 					}
