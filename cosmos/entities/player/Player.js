@@ -143,6 +143,20 @@ var Player = BlockStructure.extend({
 		this.cargo = new Cargo();
 	},
 
+	add: function(row, col, block, checkForNeighbors) {
+		BlockStructure.prototype.add.call(this, row, col, block, checkForNeighbors);
+		if (ige.isServer) {
+			DbPlayer.update(this.dbId(), this, function() {});
+		}
+	},
+
+	remove: function(row, col) {
+		BlockStructure.prototype.remove.call(this, row, col);
+		if (ige.isServer) {
+			DbPlayer.update(this.dbId(), this, function() {});
+		}
+	},
+
 	/**
 	 * Add the sensor fixture. Called in ServerNetworkEvents after the box2Dbody
 	 * is created.
@@ -222,6 +236,7 @@ var Player = BlockStructure.extend({
 	 */
 	blockCollectListener: function (player, blockClassId) {
 		player.cargo.addBlock(blockClassId);
+		DbPlayer.update(player.dbId(), player, function() {});
 	},
 
 	/**
