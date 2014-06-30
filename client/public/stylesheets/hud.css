@@ -112,12 +112,15 @@
   font-size: 85%;
 }
 /* line 14, ../../sass/_chat.scss */
-#chat-button.unread {
+#chat-button.unopened, #chat-button.unread {
   color: #f57a03;
   background-image: url("../images/icons/icon_chat_unread.png");
-  background-position: 0% 65%;
 }
 /* line 19, ../../sass/_chat.scss */
+#chat-button.unread {
+  background-position: 0% 65%;
+}
+/* line 22, ../../sass/_chat.scss */
 #chat-button.unread #chat-unread-label {
   padding-right: 8.33333px;
   display: inline;
