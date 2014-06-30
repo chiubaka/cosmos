@@ -1,4 +1,4 @@
-$chat-button-unread-color: #f57a03;
+$chat-button-unread-color: $bottom-toolbar-highlight-color;
 
 #chat-button {
   @extend .bottom-toolbar-float-left;
