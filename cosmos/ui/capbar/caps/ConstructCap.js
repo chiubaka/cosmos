@@ -4,6 +4,8 @@ var ConstructCap = Cap.extend({
 
 	init: function() {
 		Cap.prototype.init.call(this, $('#cap-bar'), 'construct-cap', undefined, 'Construct');
+
+		ige.emit('cosmos:hud.bottomToolbar.capBar.subcomponent.loaded', this);
 	},
 
 	select: function() {

@@ -139,8 +139,11 @@ var Client = IgeClass.extend({
 						ige.addComponent(HUDComponent);
 						//ige.editor.showStats();
 
-						// Ask the server to create an entity for us
-						ige.network.send('playerEntity', {sid: self.getSessionId()});
+						// Wait until the HUD finishes loading to ask for the player.
+						ige.on('cosmos:hud.loaded', function(hud) {
+							// Ask the server to create an entity for us
+							ige.network.send('playerEntity', {sid: self.getSessionId()});
+						});
 					});
 				}
 			});
