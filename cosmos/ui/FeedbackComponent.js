@@ -4,6 +4,12 @@ var FeedbackComponent = ButtonComponent.extend({
 
 	init: function() {
 		ButtonComponent.prototype.init.call(this, $('#bottom-toolbar'), 'feedback-button', undefined, 'Feedback');
+		this.element.addClass('unopened');
+
+		this.element.click(function() {
+			$(this).removeClass('unopened');
+			$(this).unbind('click');
+		});
 
 		// Include the UserVoice JavaScript SDK (only needed once on a page)
 		UserVoice = window.UserVoice || [];

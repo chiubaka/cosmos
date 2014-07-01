@@ -1,4 +1,4 @@
-$chat-button-unread-color: #f57a03;
+$chat-button-unread-color: $bottom-toolbar-highlight-color;
 
 #chat-button {
   @extend .bottom-toolbar-float-left;
@@ -11,9 +11,12 @@ $chat-button-unread-color: #f57a03;
     font-size: 85%;
   }
 
-  &.unread {
+  &.unopened, &.unread {
     color: $chat-button-unread-color;
     background-image: url('../images/icons/icon_chat_unread.png');
+  }
+
+  &.unread {
     background-position: 0% 65%;
 
     #chat-unread-label {
