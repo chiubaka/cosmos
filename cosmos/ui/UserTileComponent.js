@@ -24,7 +24,7 @@ var UserTileComponent = IgeEventingClass.extend({
 			self.shipName = self.element.find('.ship-name');
 			self.username = self.element.find('.username');
 
-			ige.on('cosmos:Player.username.set', function(username) {
+			ige.on('cosmos:client.player.username.set', function(username) {
 				self.username.text(username);
 			});
 

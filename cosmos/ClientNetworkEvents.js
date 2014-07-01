@@ -48,18 +48,15 @@ var ClientNetworkEvents = {
 
 					var username = player.username();
 
-					// If there is already a valid username, then we're good to go!
-					if (username) {
-			
-					}
-					// If there isn't, but the player is logged in, we should ask to set a username.
-					else if (player.isLoggedIn()) {
+					// If this player is logged in but doesn't yet have a username, prompt for one.
+					if (!username && player.isLoggedIn()) {
 						ige.client.promptForUsername();
 					}
-					// If there isn't and the player isn't logged in, we should just assign a guest username.
 					else {
-						player.generateGuestUsername();
+						ige.emit('cosmos:client.player.username.set', username);
 					}
+
+					ige.emit('cosmos:client.player.streamed');
 				}
 			});
 		}

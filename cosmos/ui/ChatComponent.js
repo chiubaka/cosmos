@@ -65,16 +65,17 @@ var ChatComponent = ButtonComponent.extend({
 					});
 				});
 
-				ige.on('cosmos:Player.username.set', function(username) {
-					Candy.Core.connect('tl-xmpp.cloudapp.net', null, username);
+				ige.on('cosmos:client.player.username.set', function(username) {
+					self.start();
+				});
 
-					// Called when the chat client moves to the disconnected state.
-					$(Candy).on('candy:view.connection.status-6', function() {
-						// Delay a little bit here to allow the client to fully disconnect before trying to reconnect.
-						setTimeout(function() {
-							Candy.Core.connect('tl-xmpp.cloudapp.net', null, ige.client.player.username());
-						}, 200);
-					});
+				var playerUsernameSetListener = ige.on('cosmos:Player.username.set', function(playerId) {
+					if (!ige.client.player || playerId !== ige.client.player.id()) {
+						return;
+					}
+
+
+					ige.off('cosmos:Player.username.set', playerUsernameSetListener);
 				});
 
 				self.button.click(function(event) {
@@ -89,6 +90,18 @@ var ChatComponent = ButtonComponent.extend({
 
 				ige.emit('cosmos:hud.bottomToolbar.subcomponent.loaded', self);
 			});
+		});
+	},
+
+	start: function() {
+		Candy.Core.connect('tl-xmpp.cloudapp.net', null, ige.client.player.username());
+
+		// Called when the chat client moves to the disconnected state.
+		$(Candy).on('candy:view.connection.status-6', function() {
+			// Delay a little bit here to allow the client to fully disconnect before trying to reconnect.
+			setTimeout(function() {
+				Candy.Core.connect('tl-xmpp.cloudapp.net', null, ige.client.player.username());
+			}, 200);
 		});
 	},
 

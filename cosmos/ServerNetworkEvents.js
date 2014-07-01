@@ -129,6 +129,9 @@ var ServerNetworkEvents = {
 		if (playerId !== undefined) {
 			player.dbId(playerId);
 		}
+		else {
+			player.generateGuestUsername();
+		}
 
 		player.addSensor(300)
 			.attractionStrength(1)

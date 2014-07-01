@@ -130,7 +130,7 @@ var Player = BlockStructure.extend({
 
 		this._username = val;
 		if (!ige.isServer) {
-			ige.emit('cosmos:Player.username.set', this._username);
+			ige.emit('cosmos:Player.username.set', this.id());
 		}
 		return this;
 	},
@@ -179,21 +179,44 @@ var Player = BlockStructure.extend({
 			this.dbId(data.dbId);
 		}
 
+		// Either the username was already streamed, in which case it is here and we can create a label
 		if (this.username()) {
-			this.createUsernameLabel();
+			if (ige.client.player === undefined) {
+				var playerStreamedListener = ige.on('cosmos:client.player.streamed', function() {
+					self.createUsernameLabel();
+
+					ige.off('cosmos:client.player.streamed', playerStreamedListener);
+				});
+			}
+			else {
+				this.createUsernameLabel();
+			}
 		}
+		// Or it has not been streamed, which means that the player does not have a username on the server, either. In
+		// this case, wait for the server to tell us that this player's username has been approved, then set the
+		// username and draw the label.
 		else {
-			ige.on('cosmos:Player.username.set', function(username) {
-				self.createUsernameLabel();
+			ige.on('cosmos:Player.username.set.approve', function(data) {
+				if (data.playerId === self.id()) {
+					self.username(data.username);
+					self.createUsernameLabel();
+					if (self.id() === ige.client.player.id()) {
+						ige.emit('cosmos:client.player.username.set', self.username());
+					}
+				}
 			});
 		}
 	},
 
 	createUsernameLabel: function() {
+		// Don't create the username label again if it already exists. Also don't create a label for the client's
+		// player.
+		if (this.usernameLabel !== undefined || this.id() === ige.client.player.id()) {
+			return;
+		}
 		var self = this;
 		this.usernameLabel = $('<div>' + this.username() + '</div>').addClass('username-label tooltip');
 		$('body').append(this.usernameLabel);
-		console.log('Added label to screen: ' + this.usernameLabel);
 
 		this.mouseOver(function() {
 			self.usernameLabel.hide();
@@ -202,6 +225,35 @@ var Player = BlockStructure.extend({
 		this.mouseOut(function() {
 			self.usernameLabel.show();
 		});
+	},
+
+	destroyUsernameLabel: function() {
+		// If there is no username label, there isn't anything to destroy
+		if (this.usernameLabel === undefined) {
+			return;
+		}
+
+		console.log('destroyedUsernameLabel: ' + this.username());
+		this.usernameLabel.remove();
+		this.usernameLabel = undefined;
+	},
+
+	streamEntityValid: function(val) {
+		if (val !== undefined) {
+			if (val === false) {
+				this.destroyUsernameLabel();
+			}
+			else {
+				this.createUsernameLabel();
+			}
+		}
+
+		return BlockStructure.prototype.streamEntityValid.call(this, val);
+	},
+
+	destroy: function() {
+		this.destroyUsernameLabel();
+		BlockStructure.prototype.destroy.call(this);
 	},
 
 	/**
@@ -357,7 +409,7 @@ var Player = BlockStructure.extend({
 		if (!ige.isServer) {
 
 			// If this isn't the player playing on this client, draw a label to help identify this player
-			if (ige.client.player !== this) {
+			if (this.usernameLabel !== undefined) {
 				var screenPos = this.screenPosition();
 				this.usernameLabel.css('left', Math.round(screenPos.x - this.usernameLabel.outerWidth() / 2));
 				this.usernameLabel.css('top', Math.round(screenPos.y - this.usernameLabel.outerHeight() / 2));
@@ -520,14 +572,14 @@ Player.onUsernameRequested = function(username, clientId) {
 					ige.network.send('cosmos:Player.username.set.error', 'Database error', clientId);
 					return;
 				}
-				ige.network.send('cosmos:Player.username.set.approve', username, clientId);
+				ige.network.send('cosmos:Player.username.set.approve', {'playerId': player.id(), 'username': username});
 			});
 		}
 	});
 };
 
-Player.onUsernameApproved = function(username) {
-	ige.client.player.username(username);
+Player.onUsernameApproved = function(data) {
+	ige.emit('cosmos:Player.username.set.approve', data);
 };
 
 Player.onUsernameRequestError = function(error) {
