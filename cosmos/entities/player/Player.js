@@ -130,14 +130,14 @@ var Player = BlockStructure.extend({
 
 		this._username = val;
 		if (!ige.isServer) {
-			ige.emit('cosmos:Player.username.set', this.id());
+			ige.emit('cosmos:player.username.set', this.id());
 		}
 		return this;
 	},
 
 	requestUsername: function(username) {
 		if (!this.username()) {
-			ige.network.send('cosmos:Player.username.set.request', username);
+			ige.network.send('cosmos:player.username.set.request', username);
 		}
 	},
 
@@ -196,7 +196,7 @@ var Player = BlockStructure.extend({
 		// this case, wait for the server to tell us that this player's username has been approved, then set the
 		// username and draw the label.
 		else {
-			ige.on('cosmos:Player.username.set.approve', function(data) {
+			ige.on('cosmos:player.username.set.approve', function(data) {
 				if (data.playerId === self.id()) {
 					self.username(data.username);
 					self.createUsernameLabel();
@@ -543,47 +543,47 @@ Player.onUsernameRequested = function(username, clientId) {
 		return;
 	}
 	if (player.username()) {
-		ige.network.send('cosmos:Player.username.set.error', 'Player already has username ' + this._username, clientId);
+		ige.network.send('cosmos:player.username.set.error', 'Player already has username ' + this._username, clientId);
 		return;
 	}
 
 	if (!Player.usernameIsCorrectLength(username)) {
-		ige.network.send('cosmos:Player.username.set.error', 'Username must be between 5 and 12 characters', clientId);
+		ige.network.send('cosmos:player.username.set.error', 'Username must be between 5 and 12 characters', clientId);
 	}
 	else if (!Player.usernameIsAlphanumericUnderscore(username)) {
-		ige.network.send('cosmos:Player.username.set.error', 'Alphanumeric characters and underscores only', clientId);
+		ige.network.send('cosmos:player.username.set.error', 'Alphanumeric characters and underscores only', clientId);
 	}
 
 	DbPlayer.findByUsername(username, function(err, foundPlayer) {
 		if (err) {
 			console.error('Error finding player with username ' + username + '. Error: ' + err);
-			ige.network.send('cosmos:Player.username.set.error', 'Database error', clientId);
+			ige.network.send('cosmos:player.username.set.error', 'Database error', clientId);
 			return;
 		}
 
 		if (foundPlayer) {
-			ige.network.send('cosmos:Player.username.set.error', 'Username ' + username + ' is taken');
+			ige.network.send('cosmos:player.username.set.error', 'Username ' + username + ' is taken');
 		}
 		else {
 			player.username(username);
 			DbPlayer.update(player.dbId(), player, function(err) {
 				if (err) {
 					console.error('Error updating player ' + player.dbId() + '. Error: ' + err);
-					ige.network.send('cosmos:Player.username.set.error', 'Database error', clientId);
+					ige.network.send('cosmos:player.username.set.error', 'Database error', clientId);
 					return;
 				}
-				ige.network.send('cosmos:Player.username.set.approve', {'playerId': player.id(), 'username': username});
+				ige.network.send('cosmos:player.username.set.approve', {'playerId': player.id(), 'username': username});
 			});
 		}
 	});
 };
 
 Player.onUsernameApproved = function(data) {
-	ige.emit('cosmos:Player.username.set.approve', data);
+	ige.emit('cosmos:player.username.set.approve', data);
 };
 
 Player.onUsernameRequestError = function(error) {
-	ige.emit('cosmos:Player.username.set.error', error);
+	ige.emit('cosmos:player.username.set.error', error);
 };
 
 Player.usernameIsAlphanumericUnderscore = function(username) {

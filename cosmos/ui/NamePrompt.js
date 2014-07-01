@@ -27,10 +27,10 @@ var NamePrompt = IgeEventingClass.extend({
 		self.goButton.click(function(e) {
 			var username = self.usernameInput.val();
 			if (!Player.usernameIsCorrectLength(username)) {
-				ige.emit('cosmos:Player.username.set.error', 'Username must be between 5 and 12 characters');
+				ige.emit('cosmos:player.username.set.error', 'Username must be between 5 and 12 characters');
 			}
 			else if (!Player.usernameIsAlphanumericUnderscore(username)) {
-				ige.emit('cosmos:Player.username.set.error', 'Alphanumeric characters and underscores only');
+				ige.emit('cosmos:player.username.set.error', 'Alphanumeric characters and underscores only');
 			}
 			else {
 				ige.client.player.requestUsername(self.usernameInput.val());
@@ -42,7 +42,7 @@ var NamePrompt = IgeEventingClass.extend({
 			self.hide();
 		});
 
-		ige.on('cosmos:Player.username.set.error', function(error) {
+		ige.on('cosmos:player.username.set.error', function(error) {
 			// Clear the input
 			self.usernameInput.val('');
 
@@ -52,7 +52,7 @@ var NamePrompt = IgeEventingClass.extend({
 			self.usernameInput.addClass('error');
 		});
 
-		ige.on('cosmos:Player.username.set', function(username) {
+		ige.on('cosmos:player.username.set', function(username) {
 			self.hide();
 		});
 
