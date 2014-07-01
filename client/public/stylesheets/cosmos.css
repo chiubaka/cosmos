@@ -109,7 +109,7 @@ html, body {
   z-index: 1;
 }
 
-/* line 13, ../../sass/_bottom-toolbar.scss */
+/* line 15, ../../sass/_bottom-toolbar.scss */
 #hud > .toolbar {
   position: absolute;
   bottom: 0;
@@ -118,13 +118,13 @@ html, body {
   background-color: #222222;
 }
 
-/* line 21, ../../sass/_bottom-toolbar.scss */
+/* line 23, ../../sass/_bottom-toolbar.scss */
 .bottom-toolbar-float-left, #chat-button, #mine-cap, #construct-cap {
   float: left;
   margin-left: 1px;
 }
 
-/* line 26, ../../sass/_bottom-toolbar.scss */
+/* line 28, ../../sass/_bottom-toolbar.scss */
 .bottom-toolbar-float-right, #menu-button, #feedback-button, #relocate-button, #new-ship-button {
   float: right;
   margin-right: 1px;
@@ -150,10 +150,11 @@ html, body {
 #user-tile .user-info {
   float: left;
   padding: 8.33333px;
+  height: 33.33333px;
   width: 200px;
   cursor: pointer;
 }
-/* line 27, ../../sass/_user-tile.scss */
+/* line 28, ../../sass/_user-tile.scss */
 #user-tile .user-info .username {
   font-size: 75%;
   font-weight: 600;
@@ -161,7 +162,7 @@ html, body {
   position: relative;
   top: -8.33333px;
 }
-/* line 35, ../../sass/_user-tile.scss */
+/* line 36, ../../sass/_user-tile.scss */
 #user-tile .user-info .more-triangle {
   float: right;
   line-height: 33.33333px;
@@ -181,7 +182,7 @@ html, body {
   text-align: right;
   background-position: 50% 65%;
 }
-/* line 38, ../../sass/_bottom-toolbar.scss */
+/* line 40, ../../sass/_bottom-toolbar.scss */
 #chat-button .tooltip, #chat-button #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #chat-button .type-label {
   bottom: 58.33333px;
   width: 75px;
@@ -189,11 +190,11 @@ html, body {
   margin-left: -43.5px;
   left: 50%;
 }
-/* line 46, ../../sass/_bottom-toolbar.scss */
+/* line 48, ../../sass/_bottom-toolbar.scss */
 #chat-button:hover {
   background-color: #5c5c5c;
 }
-/* line 48, ../../sass/_bottom-toolbar.scss */
+/* line 50, ../../sass/_bottom-toolbar.scss */
 #chat-button:hover .tooltip, #chat-button:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #chat-button:hover .type-label {
   display: block;
 }
@@ -203,12 +204,15 @@ html, body {
   font-size: 85%;
 }
 /* line 14, ../../sass/_chat.scss */
-#chat-button.unread {
+#chat-button.unopened, #chat-button.unread {
   color: #f57a03;
   background-image: url("../images/icons/icon_chat_unread.png");
-  background-position: 0% 65%;
 }
 /* line 19, ../../sass/_chat.scss */
+#chat-button.unread {
+  background-position: 0% 65%;
+}
+/* line 22, ../../sass/_chat.scss */
 #chat-button.unread #chat-unread-label {
   padding-right: 8.33333px;
   display: inline;
@@ -218,10 +222,10 @@ html, body {
 /* line 9, ../../sass/_candy.scss */
 #candy, #chat-toolbar, .message-form-wrapper, .message-form, .message-form input.submit {
   position: absolute;
-  top: initial;
-  bottom: initial;
-  right: initial;
-  left: initial;
+  top: auto;
+  bottom: auto;
+  right: auto;
+  left: auto;
 }
 
 /* line 17, ../../sass/_candy.scss */
@@ -263,6 +267,10 @@ html, body {
   user-select: text;
 }
 /* line 53, ../../sass/_candy.scss */
+#chat-pane .message-pane .infomessage {
+  display: none;
+}
+/* line 57, ../../sass/_candy.scss */
 #chat-pane .message-form-wrapper {
   position: absolute;
   bottom: 0;
@@ -270,19 +278,19 @@ html, body {
   width: 400px;
   margin-right: 200px;
 }
-/* line 60, ../../sass/_candy.scss */
+/* line 64, ../../sass/_candy.scss */
 #chat-pane .message-form-wrapper .message-form {
   position: relative;
   height: 100%;
   width: 400px;
   margin-right: 0;
 }
-/* line 66, ../../sass/_candy.scss */
+/* line 70, ../../sass/_candy.scss */
 #chat-pane .message-form-wrapper .message-form input {
   width: 330px;
   height: 21px;
 }
-/* line 71, ../../sass/_candy.scss */
+/* line 75, ../../sass/_candy.scss */
 #chat-pane .message-form-wrapper .message-form input.submit {
   position: absolute;
   bottom: 0;
@@ -291,17 +299,17 @@ html, body {
   width: auto;
   margin: 3px;
 }
-/* line 82, ../../sass/_candy.scss */
+/* line 86, ../../sass/_candy.scss */
 #chat-pane #context-menu, #chat-pane #tooltip {
   position: fixed;
 }
 
-/* line 87, ../../sass/_candy.scss */
+/* line 91, ../../sass/_candy.scss */
 #chat-modal {
   display: none !important;
 }
 
-/* line 91, ../../sass/_candy.scss */
+/* line 95, ../../sass/_candy.scss */
 .message-form-wrapper, .message-form {
   position: absolute;
   bottom: 0;
@@ -327,7 +335,7 @@ html, body {
   background-size: 70%;
   background-position: center;
 }
-/* line 38, ../../sass/_bottom-toolbar.scss */
+/* line 40, ../../sass/_bottom-toolbar.scss */
 #mine-cap .tooltip, #mine-cap #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #mine-cap .type-label {
   bottom: 58.33333px;
   width: 75px;
@@ -335,11 +343,11 @@ html, body {
   margin-left: -43.5px;
   left: 50%;
 }
-/* line 46, ../../sass/_bottom-toolbar.scss */
+/* line 48, ../../sass/_bottom-toolbar.scss */
 #mine-cap:hover {
   background-color: #5c5c5c;
 }
-/* line 48, ../../sass/_bottom-toolbar.scss */
+/* line 50, ../../sass/_bottom-toolbar.scss */
 #mine-cap:hover .tooltip, #mine-cap:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #mine-cap:hover .type-label {
   display: block;
 }
@@ -364,7 +372,7 @@ html, body {
   background-size: 70%;
   background-position: center;
 }
-/* line 38, ../../sass/_bottom-toolbar.scss */
+/* line 40, ../../sass/_bottom-toolbar.scss */
 #construct-cap .tooltip, #construct-cap #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #construct-cap .type-label {
   bottom: 58.33333px;
   width: 75px;
@@ -372,11 +380,11 @@ html, body {
   margin-left: -43.5px;
   left: 50%;
 }
-/* line 46, ../../sass/_bottom-toolbar.scss */
+/* line 48, ../../sass/_bottom-toolbar.scss */
 #construct-cap:hover {
   background-color: #5c5c5c;
 }
-/* line 48, ../../sass/_bottom-toolbar.scss */
+/* line 50, ../../sass/_bottom-toolbar.scss */
 #construct-cap:hover .tooltip, #construct-cap:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #construct-cap:hover .type-label {
   display: block;
 }
@@ -402,7 +410,7 @@ html, body {
   background-size: 70%;
   background-position: center;
 }
-/* line 38, ../../sass/_bottom-toolbar.scss */
+/* line 40, ../../sass/_bottom-toolbar.scss */
 #menu-button .tooltip, #menu-button #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #menu-button .type-label {
   bottom: 58.33333px;
   width: 75px;
@@ -410,16 +418,16 @@ html, body {
   margin-left: -43.5px;
   left: 50%;
 }
-/* line 46, ../../sass/_bottom-toolbar.scss */
+/* line 48, ../../sass/_bottom-toolbar.scss */
 #menu-button:hover {
   background-color: #5c5c5c;
 }
-/* line 48, ../../sass/_bottom-toolbar.scss */
+/* line 50, ../../sass/_bottom-toolbar.scss */
 #menu-button:hover .tooltip, #menu-button:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #menu-button:hover .type-label {
   display: block;
 }
 
-/* line 1, ../../sass/_feedback-button.scss */
+/* line 3, ../../sass/_feedback-button.scss */
 #feedback-button {
   height: 50px;
   width: 50px;
@@ -431,7 +439,7 @@ html, body {
   background-size: 70%;
   background-position: center;
 }
-/* line 38, ../../sass/_bottom-toolbar.scss */
+/* line 40, ../../sass/_bottom-toolbar.scss */
 #feedback-button .tooltip, #feedback-button #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #feedback-button .type-label {
   bottom: 58.33333px;
   width: 75px;
@@ -439,13 +447,17 @@ html, body {
   margin-left: -43.5px;
   left: 50%;
 }
-/* line 46, ../../sass/_bottom-toolbar.scss */
+/* line 48, ../../sass/_bottom-toolbar.scss */
 #feedback-button:hover {
   background-color: #5c5c5c;
 }
-/* line 48, ../../sass/_bottom-toolbar.scss */
+/* line 50, ../../sass/_bottom-toolbar.scss */
 #feedback-button:hover .tooltip, #feedback-button:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #feedback-button:hover .type-label {
   display: block;
+}
+/* line 6, ../../sass/_feedback-button.scss */
+#feedback-button.unopened {
+  background-image: url("../images/icons/icon_feedback_unopened.png");
 }
 
 /* line 1, ../../sass/_relocate-button.scss */
@@ -460,7 +472,7 @@ html, body {
   background-size: 70%;
   background-position: center;
 }
-/* line 38, ../../sass/_bottom-toolbar.scss */
+/* line 40, ../../sass/_bottom-toolbar.scss */
 #relocate-button .tooltip, #relocate-button #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #relocate-button .type-label {
   bottom: 58.33333px;
   width: 75px;
@@ -468,11 +480,11 @@ html, body {
   margin-left: -43.5px;
   left: 50%;
 }
-/* line 46, ../../sass/_bottom-toolbar.scss */
+/* line 48, ../../sass/_bottom-toolbar.scss */
 #relocate-button:hover {
   background-color: #5c5c5c;
 }
-/* line 48, ../../sass/_bottom-toolbar.scss */
+/* line 50, ../../sass/_bottom-toolbar.scss */
 #relocate-button:hover .tooltip, #relocate-button:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #relocate-button:hover .type-label {
   display: block;
 }
@@ -489,7 +501,7 @@ html, body {
   background-size: 70%;
   background-position: center;
 }
-/* line 38, ../../sass/_bottom-toolbar.scss */
+/* line 40, ../../sass/_bottom-toolbar.scss */
 #new-ship-button .tooltip, #new-ship-button #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #new-ship-button .type-label {
   bottom: 58.33333px;
   width: 75px;
@@ -497,11 +509,11 @@ html, body {
   margin-left: -43.5px;
   left: 50%;
 }
-/* line 46, ../../sass/_bottom-toolbar.scss */
+/* line 48, ../../sass/_bottom-toolbar.scss */
 #new-ship-button:hover {
   background-color: #5c5c5c;
 }
-/* line 48, ../../sass/_bottom-toolbar.scss */
+/* line 50, ../../sass/_bottom-toolbar.scss */
 #new-ship-button:hover .tooltip, #new-ship-button:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #new-ship-button:hover .type-label {
   display: block;
 }
