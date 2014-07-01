@@ -172,11 +172,36 @@ var Player = BlockStructure.extend({
 	 * @instance
 	 */
 	_initClient: function(data) {
+		var self = this;
 		this.depth(Player.DEPTH);
 		if (data !== undefined) {
 			this.username(data.username);
 			this.dbId(data.dbId);
 		}
+
+		if (this.username()) {
+			this.createUsernameLabel();
+		}
+		else {
+			ige.on('cosmos:Player.username.set', function(username) {
+				self.createUsernameLabel();
+			});
+		}
+	},
+
+	createUsernameLabel: function() {
+		var self = this;
+		this.usernameLabel = $('<div>' + this.username() + '</div>').addClass('username-label tooltip');
+		$('body').append(this.usernameLabel);
+		console.log('Added label to screen: ' + this.usernameLabel);
+
+		this.mouseOver(function() {
+			self.usernameLabel.hide();
+		});
+
+		this.mouseOut(function() {
+			self.usernameLabel.show();
+		});
 	},
 
 	/**
@@ -330,6 +355,14 @@ var Player = BlockStructure.extend({
 	 */
 	update: function(ctx) {
 		if (!ige.isServer) {
+
+			// If this isn't the player playing on this client, draw a label to help identify this player
+			if (ige.client.player !== this) {
+				var screenPos = this.screenPosition();
+				this.usernameLabel.css('left', Math.round(screenPos.x - this.usernameLabel.outerWidth() / 2));
+				this.usernameLabel.css('top', Math.round(screenPos.y - this.usernameLabel.outerHeight() / 2));
+			}
+
 			/* Save the old control state for comparison later */
 			oldControls = JSON.stringify(this.controls);
 

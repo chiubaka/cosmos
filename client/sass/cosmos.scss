@@ -9,6 +9,9 @@ $cosmos-font-family: 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;
 $cosmos-font-color: #e8e8e8;
 $prompt-veil-z-index: $hud-layer-z-index + 1;
 
+$tooltip-line-height: 18px;
+$tooltip-padding: 6px;
+
 html, body {
   font-family: $cosmos-font-family;
   font-size: 100%;
@@ -54,6 +57,20 @@ html, body {
 
 #igeFrontBuffer {
   @include user-select(none);
+}
+
+.tooltip {
+  display: none;
+  position: absolute;
+  font-size: 75%;
+  line-height: $tooltip-line-height;
+  padding: $tooltip-padding;
+  background-color: rgba(34, 34, 34, 0.85);
+  z-index: 100002;
+}
+
+.username-label.tooltip {
+  display: block;
 }
 
 @import 'hud';

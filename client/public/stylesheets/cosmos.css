@@ -26,7 +26,7 @@
   src: local("Open Sans Semibold"), local("OpenSans-Semibold"), url(http://themes.googleusercontent.com/static/fonts/opensans/v8/MTP_ySUJH_bn48VBG8sNSqRDOzjiPcYnFooOUGCOsRk.woff) format("woff");
 }
 
-/* line 12, ../../sass/cosmos.scss */
+/* line 15, ../../sass/cosmos.scss */
 html, body {
   font-family: "Open Sans", "Helvetica Neue", Helvetica, sans-serif;
   font-size: 100%;
@@ -35,7 +35,7 @@ html, body {
   overflow: hidden;
 }
 
-/* line 20, ../../sass/cosmos.scss */
+/* line 23, ../../sass/cosmos.scss */
 .more-triangle {
   cursor: pointer;
   display: inline-block;
@@ -46,7 +46,7 @@ html, body {
   transform: rotate(180deg);
 }
 
-/* line 26, ../../sass/cosmos.scss */
+/* line 29, ../../sass/cosmos.scss */
 .prompt-veil {
   position: absolute;
   top: 0;
@@ -58,42 +58,34 @@ html, body {
   z-index: 2;
 }
 
-/* line 45, ../../sass/cosmos.scss */
+/* line 48, ../../sass/cosmos.scss */
 ::-webkit-input-placeholder {
   color: #5a5a5a;
 }
 
-/* line 46, ../../sass/cosmos.scss */
+/* line 49, ../../sass/cosmos.scss */
 :-moz-placeholder {
   color: #5a5a5a;
 }
 
-/* line 47, ../../sass/cosmos.scss */
+/* line 50, ../../sass/cosmos.scss */
 ::-moz-placeholder {
   color: #5a5a5a;
 }
 
-/* line 48, ../../sass/cosmos.scss */
+/* line 51, ../../sass/cosmos.scss */
 :-ms-input-placeholder {
   color: #5a5a5a;
 }
 
-/* line 55, ../../sass/cosmos.scss */
+/* line 58, ../../sass/cosmos.scss */
 #igeFrontBuffer {
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
 }
 
-/* line 20, ../../sass/_hud.scss */
-#hud {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-  z-index: 1;
-}
-
-/* line 25, ../../sass/_hud.scss */
+/* line 62, ../../sass/cosmos.scss */
 .tooltip, #cargo .pullout #cargo-containers .container .type-label {
   display: none;
   position: absolute;
@@ -102,6 +94,19 @@ html, body {
   padding: 6px;
   background-color: rgba(34, 34, 34, 0.85);
   z-index: 100002;
+}
+
+/* line 72, ../../sass/cosmos.scss */
+.username-label.tooltip, #cargo .pullout #cargo-containers .container .username-label.type-label {
+  display: block;
+}
+
+/* line 17, ../../sass/_hud.scss */
+#hud {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  z-index: 1;
 }
 
 /* line 13, ../../sass/_bottom-toolbar.scss */
@@ -769,19 +774,19 @@ html, body {
   outline: 0;
   border-bottom: 1px solid #0090ff;
 }
-/* line 38, ../../sass/cosmos.scss */
+/* line 41, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input:focus::-webkit-input-placeholder {
   color: #e8e8e8;
 }
-/* line 39, ../../sass/cosmos.scss */
+/* line 42, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input:focus:-moz-placeholder {
   color: #e8e8e8;
 }
-/* line 40, ../../sass/cosmos.scss */
+/* line 43, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input:focus::-moz-placeholder {
   color: #e8e8e8;
 }
-/* line 41, ../../sass/cosmos.scss */
+/* line 44, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input:focus:-ms-input-placeholder {
   color: #e8e8e8;
 }
@@ -789,19 +794,19 @@ html, body {
 #name-prompt .prompt-box input.error {
   border-bottom: 1px solid red;
 }
-/* line 38, ../../sass/cosmos.scss */
+/* line 41, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input.error::-webkit-input-placeholder {
   color: red;
 }
-/* line 39, ../../sass/cosmos.scss */
+/* line 42, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input.error:-moz-placeholder {
   color: red;
 }
-/* line 40, ../../sass/cosmos.scss */
+/* line 43, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input.error::-moz-placeholder {
   color: red;
 }
-/* line 41, ../../sass/cosmos.scss */
+/* line 44, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input.error:-ms-input-placeholder {
   color: red;
 }
