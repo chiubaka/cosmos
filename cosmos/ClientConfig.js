@@ -72,6 +72,7 @@ var igeClientConfig = {
 
 		/* === PLAYER STATE === */
 		'./entities/player/Player.js',
+		'./entities/ship/Ship.js',
 		'./models/state/ClientState.js',
 
 		/* Capabilities */

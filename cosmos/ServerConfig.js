@@ -63,6 +63,7 @@ var config = {
 
 		/* === PLAYER STATE === */
 		{ name: 'Player', path: './entities/player/Player' },
+		{ name: 'Ship', path: './entities/ship/Ship' },
 
 		/* Cargo */
 		{ name: 'Cargo', path: './models/cargo/Cargo' },
