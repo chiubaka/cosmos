@@ -195,7 +195,7 @@ var ServerNetworkEvents = {
 			return;
 		}
 
-		player.controls = data;
+		player.controls(data);
 	},
 
 	// TODO: User access control. Restrict what players can do based on clientId
@@ -246,7 +246,7 @@ var ServerNetworkEvents = {
 
 			var confirmData = { category: 'construct', action: 'new', label: data.selectedType };
 			ige.network.send('confirm', confirmData, clientId);
-			ige.network.stream.queueCommand('notificationSuccess', 
+			ige.network.stream.queueCommand('notificationSuccess',
 				NotificationDefinitions.successKeys.constructNewBlock, clientId);
 		}
 	},
