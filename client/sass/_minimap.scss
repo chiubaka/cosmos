@@ -29,6 +29,7 @@ $minimap-toolbar-item-width: $hud-button-width;
   height: $minimap-map-height;
   width: $minimap-map-width + $minimap-toolbar-width;
   color: $minimap-font-color;
+  z-index: $hud-layer-z-index;
 
   .toolbar {
     float: right;

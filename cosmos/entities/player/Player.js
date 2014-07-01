@@ -211,7 +211,8 @@ var Player = BlockStructure.extend({
 	createUsernameLabel: function() {
 		// Don't create the username label again if it already exists. Also don't create a label for the client's
 		// player.
-		if (this.usernameLabel !== undefined || this.id() === ige.client.player.id()) {
+		if (this.usernameLabel !== undefined ||
+			(ige.client.player !== undefined && this.id() === ige.client.player.id())) {
 			return;
 		}
 		var self = this;
@@ -233,7 +234,6 @@ var Player = BlockStructure.extend({
 			return;
 		}
 
-		console.log('destroyedUsernameLabel: ' + this.username());
 		this.usernameLabel.remove();
 		this.usernameLabel = undefined;
 	},

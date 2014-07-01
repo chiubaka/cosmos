@@ -18,6 +18,7 @@ $bottom-toolbar-tooltip-width: $bottom-toolbar-item-width * 1.5;
   height: $bottom-toolbar-height;
   width: 100%;
   background-color: $bottom-toolbar-background-color;
+  z-index: $hud-layer-z-index;
 }
 
 .bottom-toolbar-float-left {

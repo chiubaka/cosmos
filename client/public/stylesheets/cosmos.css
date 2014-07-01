@@ -55,7 +55,7 @@ html, body {
   left: 0;
   background: #000000;
   opacity: 0.5;
-  z-index: 2;
+  z-index: 101;
 }
 
 /* line 48, ../../sass/cosmos.scss */
@@ -99,6 +99,7 @@ html, body {
 /* line 72, ../../sass/cosmos.scss */
 .username-label.tooltip, #cargo .pullout #cargo-containers .container .username-label.type-label {
   display: block;
+  z-index: 1;
 }
 
 /* line 17, ../../sass/_hud.scss */
@@ -106,7 +107,7 @@ html, body {
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
-  z-index: 1;
+  z-index: 100;
 }
 
 /* line 15, ../../sass/_bottom-toolbar.scss */
@@ -116,15 +117,16 @@ html, body {
   height: 50px;
   width: 100%;
   background-color: #222222;
+  z-index: 100;
 }
 
-/* line 23, ../../sass/_bottom-toolbar.scss */
+/* line 24, ../../sass/_bottom-toolbar.scss */
 .bottom-toolbar-float-left, #chat-button, #mine-cap, #construct-cap {
   float: left;
   margin-left: 1px;
 }
 
-/* line 28, ../../sass/_bottom-toolbar.scss */
+/* line 29, ../../sass/_bottom-toolbar.scss */
 .bottom-toolbar-float-right, #menu-button, #feedback-button, #relocate-button, #new-ship-button {
   float: right;
   margin-right: 1px;
@@ -182,7 +184,7 @@ html, body {
   text-align: right;
   background-position: 50% 65%;
 }
-/* line 40, ../../sass/_bottom-toolbar.scss */
+/* line 41, ../../sass/_bottom-toolbar.scss */
 #chat-button .tooltip, #chat-button #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #chat-button .type-label {
   bottom: 58.33333px;
   width: 75px;
@@ -190,11 +192,11 @@ html, body {
   margin-left: -43.5px;
   left: 50%;
 }
-/* line 48, ../../sass/_bottom-toolbar.scss */
+/* line 49, ../../sass/_bottom-toolbar.scss */
 #chat-button:hover {
   background-color: #5c5c5c;
 }
-/* line 50, ../../sass/_bottom-toolbar.scss */
+/* line 51, ../../sass/_bottom-toolbar.scss */
 #chat-button:hover .tooltip, #chat-button:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #chat-button:hover .type-label {
   display: block;
 }
@@ -335,7 +337,7 @@ html, body {
   background-size: 70%;
   background-position: center;
 }
-/* line 40, ../../sass/_bottom-toolbar.scss */
+/* line 41, ../../sass/_bottom-toolbar.scss */
 #mine-cap .tooltip, #mine-cap #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #mine-cap .type-label {
   bottom: 58.33333px;
   width: 75px;
@@ -343,11 +345,11 @@ html, body {
   margin-left: -43.5px;
   left: 50%;
 }
-/* line 48, ../../sass/_bottom-toolbar.scss */
+/* line 49, ../../sass/_bottom-toolbar.scss */
 #mine-cap:hover {
   background-color: #5c5c5c;
 }
-/* line 50, ../../sass/_bottom-toolbar.scss */
+/* line 51, ../../sass/_bottom-toolbar.scss */
 #mine-cap:hover .tooltip, #mine-cap:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #mine-cap:hover .type-label {
   display: block;
 }
@@ -372,7 +374,7 @@ html, body {
   background-size: 70%;
   background-position: center;
 }
-/* line 40, ../../sass/_bottom-toolbar.scss */
+/* line 41, ../../sass/_bottom-toolbar.scss */
 #construct-cap .tooltip, #construct-cap #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #construct-cap .type-label {
   bottom: 58.33333px;
   width: 75px;
@@ -380,11 +382,11 @@ html, body {
   margin-left: -43.5px;
   left: 50%;
 }
-/* line 48, ../../sass/_bottom-toolbar.scss */
+/* line 49, ../../sass/_bottom-toolbar.scss */
 #construct-cap:hover {
   background-color: #5c5c5c;
 }
-/* line 50, ../../sass/_bottom-toolbar.scss */
+/* line 51, ../../sass/_bottom-toolbar.scss */
 #construct-cap:hover .tooltip, #construct-cap:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #construct-cap:hover .type-label {
   display: block;
 }
@@ -410,7 +412,7 @@ html, body {
   background-size: 70%;
   background-position: center;
 }
-/* line 40, ../../sass/_bottom-toolbar.scss */
+/* line 41, ../../sass/_bottom-toolbar.scss */
 #menu-button .tooltip, #menu-button #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #menu-button .type-label {
   bottom: 58.33333px;
   width: 75px;
@@ -418,11 +420,11 @@ html, body {
   margin-left: -43.5px;
   left: 50%;
 }
-/* line 48, ../../sass/_bottom-toolbar.scss */
+/* line 49, ../../sass/_bottom-toolbar.scss */
 #menu-button:hover {
   background-color: #5c5c5c;
 }
-/* line 50, ../../sass/_bottom-toolbar.scss */
+/* line 51, ../../sass/_bottom-toolbar.scss */
 #menu-button:hover .tooltip, #menu-button:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #menu-button:hover .type-label {
   display: block;
 }
@@ -439,7 +441,7 @@ html, body {
   background-size: 70%;
   background-position: center;
 }
-/* line 40, ../../sass/_bottom-toolbar.scss */
+/* line 41, ../../sass/_bottom-toolbar.scss */
 #feedback-button .tooltip, #feedback-button #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #feedback-button .type-label {
   bottom: 58.33333px;
   width: 75px;
@@ -447,11 +449,11 @@ html, body {
   margin-left: -43.5px;
   left: 50%;
 }
-/* line 48, ../../sass/_bottom-toolbar.scss */
+/* line 49, ../../sass/_bottom-toolbar.scss */
 #feedback-button:hover {
   background-color: #5c5c5c;
 }
-/* line 50, ../../sass/_bottom-toolbar.scss */
+/* line 51, ../../sass/_bottom-toolbar.scss */
 #feedback-button:hover .tooltip, #feedback-button:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #feedback-button:hover .type-label {
   display: block;
 }
@@ -472,7 +474,7 @@ html, body {
   background-size: 70%;
   background-position: center;
 }
-/* line 40, ../../sass/_bottom-toolbar.scss */
+/* line 41, ../../sass/_bottom-toolbar.scss */
 #relocate-button .tooltip, #relocate-button #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #relocate-button .type-label {
   bottom: 58.33333px;
   width: 75px;
@@ -480,11 +482,11 @@ html, body {
   margin-left: -43.5px;
   left: 50%;
 }
-/* line 48, ../../sass/_bottom-toolbar.scss */
+/* line 49, ../../sass/_bottom-toolbar.scss */
 #relocate-button:hover {
   background-color: #5c5c5c;
 }
-/* line 50, ../../sass/_bottom-toolbar.scss */
+/* line 51, ../../sass/_bottom-toolbar.scss */
 #relocate-button:hover .tooltip, #relocate-button:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #relocate-button:hover .type-label {
   display: block;
 }
@@ -501,7 +503,7 @@ html, body {
   background-size: 70%;
   background-position: center;
 }
-/* line 40, ../../sass/_bottom-toolbar.scss */
+/* line 41, ../../sass/_bottom-toolbar.scss */
 #new-ship-button .tooltip, #new-ship-button #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #new-ship-button .type-label {
   bottom: 58.33333px;
   width: 75px;
@@ -509,11 +511,11 @@ html, body {
   margin-left: -43.5px;
   left: 50%;
 }
-/* line 48, ../../sass/_bottom-toolbar.scss */
+/* line 49, ../../sass/_bottom-toolbar.scss */
 #new-ship-button:hover {
   background-color: #5c5c5c;
 }
-/* line 50, ../../sass/_bottom-toolbar.scss */
+/* line 51, ../../sass/_bottom-toolbar.scss */
 #new-ship-button:hover .tooltip, #new-ship-button:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #new-ship-button:hover .type-label {
   display: block;
 }
@@ -526,8 +528,9 @@ html, body {
   height: 200px;
   width: 350px;
   color: #19ffb7;
+  z-index: 100;
 }
-/* line 33, ../../sass/_minimap.scss */
+/* line 34, ../../sass/_minimap.scss */
 #minimap .toolbar {
   float: right;
   background-color: #131e1b;
@@ -536,7 +539,7 @@ html, body {
   font-size: 37.5px;
   text-align: center;
 }
-/* line 41, ../../sass/_minimap.scss */
+/* line 42, ../../sass/_minimap.scss */
 #minimap .toolbar #map-button {
   height: 50px;
   width: 50px;
@@ -547,7 +550,7 @@ html, body {
   background-size: 70%;
   background-position: center;
 }
-/* line 45, ../../sass/_minimap.scss */
+/* line 46, ../../sass/_minimap.scss */
 #minimap .toolbar .zoom-in-button, #minimap .toolbar .zoom-out-button {
   height: 50px;
   width: 50px;
@@ -556,21 +559,21 @@ html, body {
   line-height: 50px;
   vertical-align: middle;
 }
-/* line 52, ../../sass/_minimap.scss */
+/* line 53, ../../sass/_minimap.scss */
 #minimap .map {
   position: relative;
   float: right;
   background-color: rgba(23, 49, 41, 0.9);
   height: 100%;
 }
-/* line 58, ../../sass/_minimap.scss */
+/* line 59, ../../sass/_minimap.scss */
 #minimap .map .coordinates {
   position: absolute;
   top: 5px;
   left: 5px;
   font-size: 75%;
 }
-/* line 65, ../../sass/_minimap.scss */
+/* line 66, ../../sass/_minimap.scss */
 #minimap .map canvas {
   height: 200px;
   width: 300px;
@@ -617,16 +620,17 @@ html, body {
   position: absolute;
   top: 100px;
   left: 0px;
+  z-index: 100;
 }
-/* line 24, ../../sass/_cargo.scss */
+/* line 25, ../../sass/_cargo.scss */
 #cargo .pullout, #cargo .button {
   float: left;
 }
-/* line 28, ../../sass/_cargo.scss */
+/* line 29, ../../sass/_cargo.scss */
 #cargo .pullout {
   display: none;
 }
-/* line 31, ../../sass/_cargo.scss */
+/* line 32, ../../sass/_cargo.scss */
 #cargo .pullout .title {
   background-color: #cdcdcd;
   color: #383838;
@@ -637,13 +641,13 @@ html, body {
   border-right: 1px solid #bcbcbc;
   padding: 10px;
 }
-/* line 42, ../../sass/_cargo.scss */
+/* line 43, ../../sass/_cargo.scss */
 #cargo .pullout #cargo-containers {
   background-color: #a5a5a5;
   padding: 10px;
   text-align: center;
 }
-/* line 47, ../../sass/_cargo.scss */
+/* line 48, ../../sass/_cargo.scss */
 #cargo .pullout #cargo-containers .container {
   height: 41.6px;
   width: 41.6px;
@@ -654,33 +658,33 @@ html, body {
   background-color: #cdcdcd;
   border: 1px solid dimgrey;
 }
-/* line 57, ../../sass/_cargo.scss */
+/* line 58, ../../sass/_cargo.scss */
 #cargo .pullout #cargo-containers .container.active {
   background-color: #e4e4e4;
   border: 2px solid #008aff;
 }
-/* line 62, ../../sass/_cargo.scss */
+/* line 63, ../../sass/_cargo.scss */
 #cargo .pullout #cargo-containers .container canvas {
   height: 41.6px;
   width: 41.6px;
 }
-/* line 67, ../../sass/_cargo.scss */
+/* line 68, ../../sass/_cargo.scss */
 #cargo .pullout #cargo-containers .container .quantity-label {
   position: absolute;
   right: 5.2px;
   bottom: 5.2px;
   text-shadow: -1px 0 #383838, 0 1px #383838, 1px 0 #383838, 0 -1px #383838;
 }
-/* line 74, ../../sass/_cargo.scss */
+/* line 75, ../../sass/_cargo.scss */
 #cargo .pullout #cargo-containers .container .type-label {
   left: 72.8px;
   top: 11px;
 }
-/* line 80, ../../sass/_cargo.scss */
+/* line 81, ../../sass/_cargo.scss */
 #cargo .pullout #cargo-containers .container:hover .type-label {
   display: block;
 }
-/* line 87, ../../sass/_cargo.scss */
+/* line 88, ../../sass/_cargo.scss */
 #cargo .button {
   height: 50px;
   width: 50px;
@@ -756,7 +760,7 @@ html, body {
   right: 0;
   margin: auto;
   opacity: 1;
-  z-index: 3;
+  z-index: 102;
   background: #000000;
   border: 1px solid #0090ff;
   padding: 15px;

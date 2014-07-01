@@ -70,7 +70,6 @@ var ChatComponent = ButtonComponent.extend({
 
 	start: function() {
 		var self = this;
-		console.log('ChatComponent#start: ' + ige.client.player.username());
 		Candy.Core.connect('tl-xmpp.cloudapp.net', null, ige.client.player.username());
 
 		// Called when the chat client moves to the disconnected state.
