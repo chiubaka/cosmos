@@ -1,8 +1,28 @@
-$name-prompt-height: 200px;
+$name-prompt-height: 250px;
 $name-prompt-width: 350px;
 $name-prompt-padding: 15px;
+$name-prompt-border-width: 1px;
+$play-icon-height: $name-prompt-height / 4;
+$play-icon-width: $play-icon-height;
 
 #name-prompt {
+  .play-icon, .prompt-box {
+    box-shadow: 0 0 5px #000000;
+  }
+
+  .play-icon {
+    height: $play-icon-height;
+    width: $play-icon-width;
+    position: absolute;
+    top: -$name-prompt-border-width;
+    left: -$play-icon-width;
+
+    background-color: $cosmos-blue;
+    background-image: url('../images/icons/icon_play.png');
+    background-position: 50% 50%;
+    background-size: $play-icon-height $play-icon-width;
+  }
+
   .prompt-box, .prompt-box h1, .prompt-box input {
     font-weight: 300;
   }
@@ -36,7 +56,7 @@ $name-prompt-padding: 15px;
       width: 100%;
       background-color: transparent;
       border: 0;
-      border-bottom: 1px solid $cosmos-font-color;
+      border-bottom: $name-prompt-border-width solid $cosmos-font-color;
       padding: 0;
       padding-bottom: $name-prompt-padding / 5;
       margin-bottom: $name-prompt-padding;
@@ -48,6 +68,43 @@ $name-prompt-padding: 15px;
 
         outline: 0;
         border-bottom: 1px solid $cosmos-blue;
+      }
+    }
+
+    .buttons {
+      position: absolute;
+      right: $name-prompt-padding;
+      bottom: $name-prompt-padding;
+
+      button {
+        float: right;
+        margin: 0;
+        margin-left: $name-prompt-padding;
+        border: 0;
+        padding: $name-prompt-padding / 2;
+        cursor: pointer;
+
+        &:focus {
+          outline: 0;
+        }
+      }
+
+      button.skip {
+        background-color: transparent;
+        color: $cosmos-blue;
+
+        &:hover {
+          color: $cosmos-blue-lighter;
+        }
+      }
+
+      button[type='submit'] {
+        background-color: #7d7d7d;
+        color: $cosmos-font-color;
+
+        &:hover {
+          background-color: #a1a1a1;
+        }
       }
     }
   }

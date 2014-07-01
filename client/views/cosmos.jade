@@ -61,13 +61,15 @@ html
     #name-prompt
       .prompt-veil
       .prompt-box
+        .play-icon
         h1 Welcome to Cosmos!
         p Before we set off, let's name some things.
         input(type='text', placeholder='Name your ship something awesome')
         br
         input(type='text', placeholder='Give your account a cool username')
-        a Not now
-        button(type='submit') Let's go!
+        div.buttons
+          button(type='submit') Let's go!
+          button.skip Not now
     .igeLoading.greeting
       .cosmos-logo
         img(src='/images/preview-intro.png')
