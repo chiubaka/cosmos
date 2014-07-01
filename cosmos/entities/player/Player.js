@@ -453,7 +453,6 @@ Player.onUsernameRequested = function(username, clientId) {
 	if (!ige.isServer) {
 		return;
 	}
-	console.log('Username requested ' + username + '. ClientId: ' + clientId);
 	var player = ige.server.players[clientId];
 	if (player === undefined) {
 		return;
@@ -466,22 +465,21 @@ Player.onUsernameRequested = function(username, clientId) {
 	DbPlayer.findByUsername(username, function(err, foundPlayer) {
 		if (err) {
 			console.error('Error finding player with username ' + username + '. Error: ' + err);
-			ige.network.send('cosmos:Player.username.set.error', 'Database error.', clientId);
+			ige.network.send('cosmos:Player.username.set.error', 'Database error', clientId);
 			return;
 		}
 
 		if (foundPlayer) {
-			ige.network.send('cosmos:Player.username.set.error', 'Username is taken.');
+			ige.network.send('cosmos:Player.username.set.error', 'Username ' + username + ' is taken');
 		}
 		else {
 			player.username(username);
 			DbPlayer.update(player.dbId(), player, function(err) {
 				if (err) {
 					console.error('Error updating player ' + player.dbId() + '. Error: ' + err);
-					ige.network.send('cosmos:Player.username.set.error', 'Database error.', clientId);
+					ige.network.send('cosmos:Player.username.set.error', 'Database error', clientId);
 					return;
 				}
-				console.log('Username ' + username + ' approved.');
 				ige.network.send('cosmos:Player.username.set.approve', username, clientId);
 			});
 		}
@@ -493,7 +491,7 @@ Player.onUsernameApproved = function(username) {
 };
 
 Player.onUsernameRequestError = function(error) {
-	console.error(error);
+	ige.emit('cosmos:Player.username.set.error', error);
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Player; }

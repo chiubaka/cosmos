@@ -45,7 +45,6 @@ var DbPlayer = {
 
 		ige.mongo.db.collection('players', function(err, players) {
 			var username = player.username();
-			console.log('Database: ' + username);
 			var ship = player.toBlockTypeMatrix();
 			var cargo = player.cargo.serializeCargo();
 			players.update(

@@ -704,11 +704,15 @@ html, body {
   bottom: 260px;
 }
 
-/* line 9, ../../sass/_name-prompt.scss */
+/* line 8, ../../sass/_name-prompt.scss */
+#name-prompt {
+  display: none;
+}
+/* line 11, ../../sass/_name-prompt.scss */
 #name-prompt .play-icon, #name-prompt .prompt-box {
   box-shadow: 0 0 5px #000000;
 }
-/* line 13, ../../sass/_name-prompt.scss */
+/* line 15, ../../sass/_name-prompt.scss */
 #name-prompt .play-icon {
   height: 62.5px;
   width: 62.5px;
@@ -720,11 +724,11 @@ html, body {
   background-position: 50% 50%;
   background-size: 62.5px 62.5px;
 }
-/* line 26, ../../sass/_name-prompt.scss */
+/* line 28, ../../sass/_name-prompt.scss */
 #name-prompt .prompt-box, #name-prompt .prompt-box h1, #name-prompt .prompt-box input {
   font-weight: 300;
 }
-/* line 30, ../../sass/_name-prompt.scss */
+/* line 32, ../../sass/_name-prompt.scss */
 #name-prompt .prompt-box {
   height: 250px;
   width: 350px;
@@ -740,13 +744,13 @@ html, body {
   border: 1px solid #0090ff;
   padding: 15px;
 }
-/* line 45, ../../sass/_name-prompt.scss */
+/* line 47, ../../sass/_name-prompt.scss */
 #name-prompt .prompt-box h1 {
   margin: 0;
   font-size: 200%;
   color: #0090ff;
 }
-/* line 51, ../../sass/_name-prompt.scss */
+/* line 53, ../../sass/_name-prompt.scss */
 #name-prompt .prompt-box input {
   font-family: "Open Sans", "Helvetica Neue", Helvetica, sans-serif;
   font-size: 100%;
@@ -760,7 +764,7 @@ html, body {
   padding-bottom: 3px;
   margin-bottom: 15px;
 }
-/* line 64, ../../sass/_name-prompt.scss */
+/* line 66, ../../sass/_name-prompt.scss */
 #name-prompt .prompt-box input:focus {
   outline: 0;
   border-bottom: 1px solid #0090ff;
@@ -781,13 +785,33 @@ html, body {
 #name-prompt .prompt-box input:focus:-ms-input-placeholder {
   color: #e8e8e8;
 }
-/* line 74, ../../sass/_name-prompt.scss */
+/* line 75, ../../sass/_name-prompt.scss */
+#name-prompt .prompt-box input.error {
+  border-bottom: 1px solid red;
+}
+/* line 38, ../../sass/cosmos.scss */
+#name-prompt .prompt-box input.error::-webkit-input-placeholder {
+  color: red;
+}
+/* line 39, ../../sass/cosmos.scss */
+#name-prompt .prompt-box input.error:-moz-placeholder {
+  color: red;
+}
+/* line 40, ../../sass/cosmos.scss */
+#name-prompt .prompt-box input.error::-moz-placeholder {
+  color: red;
+}
+/* line 41, ../../sass/cosmos.scss */
+#name-prompt .prompt-box input.error:-ms-input-placeholder {
+  color: red;
+}
+/* line 83, ../../sass/_name-prompt.scss */
 #name-prompt .prompt-box .buttons {
   position: absolute;
   right: 15px;
   bottom: 15px;
 }
-/* line 79, ../../sass/_name-prompt.scss */
+/* line 88, ../../sass/_name-prompt.scss */
 #name-prompt .prompt-box .buttons button {
   float: right;
   margin: 0;
@@ -796,25 +820,25 @@ html, body {
   padding: 7.5px;
   cursor: pointer;
 }
-/* line 87, ../../sass/_name-prompt.scss */
+/* line 96, ../../sass/_name-prompt.scss */
 #name-prompt .prompt-box .buttons button:focus {
   outline: 0;
 }
-/* line 92, ../../sass/_name-prompt.scss */
-#name-prompt .prompt-box .buttons button.skip {
+/* line 101, ../../sass/_name-prompt.scss */
+#name-prompt .prompt-box .buttons button#name-prompt-skip {
   background-color: transparent;
   color: #0090ff;
 }
-/* line 96, ../../sass/_name-prompt.scss */
-#name-prompt .prompt-box .buttons button.skip:hover {
+/* line 105, ../../sass/_name-prompt.scss */
+#name-prompt .prompt-box .buttons button#name-prompt-skip:hover {
   color: #00aeff;
 }
-/* line 101, ../../sass/_name-prompt.scss */
+/* line 110, ../../sass/_name-prompt.scss */
 #name-prompt .prompt-box .buttons button[type='submit'] {
   background-color: #7d7d7d;
   color: #e8e8e8;
 }
-/* line 105, ../../sass/_name-prompt.scss */
+/* line 114, ../../sass/_name-prompt.scss */
 #name-prompt .prompt-box .buttons button[type='submit']:hover {
   background-color: #a1a1a1;
 }

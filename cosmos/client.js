@@ -145,6 +145,7 @@ var Client = IgeClass.extend({
 
 						// Wait until the HUD finishes loading to ask for the player.
 						ige.on('cosmos:hud.loaded', function(hud) {
+							ige.hud.show();
 							// Ask the server to create an entity for us
 							ige.network.send('playerEntity', {sid: self.getSessionId()});
 						});
@@ -155,13 +156,7 @@ var Client = IgeClass.extend({
 	},
 
 	promptForUsername: function() {
-		var username = window.prompt("Choose a username");
-		if (username != null) {
-			ige.client.player.requestUsername(username);
-		}
-		else {
-			ige.client.player.generateGuestUsername();
-		}
+		ige.addComponent(NamePrompt);
 	},
 
 	getSessionId: function() {

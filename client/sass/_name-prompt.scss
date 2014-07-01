@@ -6,6 +6,8 @@ $play-icon-height: $name-prompt-height / 4;
 $play-icon-width: $play-icon-height;
 
 #name-prompt {
+  display: none;
+
   .play-icon, .prompt-box {
     box-shadow: 0 0 5px #000000;
   }
@@ -69,6 +71,13 @@ $play-icon-width: $play-icon-height;
         outline: 0;
         border-bottom: 1px solid $cosmos-blue;
       }
+
+      &.error {
+        border-bottom: 1px solid red;
+        @include placeholder-state {
+          color: red;
+        }
+      }
     }
 
     .buttons {
@@ -89,7 +98,7 @@ $play-icon-width: $play-icon-height;
         }
       }
 
-      button.skip {
+      button#name-prompt-skip {
         background-color: transparent;
         color: $cosmos-blue;
 
