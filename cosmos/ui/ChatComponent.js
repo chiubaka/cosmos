@@ -47,40 +47,8 @@ var ChatComponent = ButtonComponent.extend({
 					view: { resources: ChatComponent.CANDY_ROOT + 'res/' }
 				});
 
-				$(Candy).on('candy:core.message', function(evt, args) {
-					if (args.timestamp === undefined && self.chatClient.is(':hidden')) {
-						self.incrementUnread();
-					}
-				});
-
-				$(Candy).on('candy:view.roster.after-update', function(evt, args) {
-					// Don't increment unread when the player joins the game
-					if (args.action === 'join' && self.chatClient.is(':hidden') && args.user.getNick() !== guestHandle) {
-						self.incrementUnread();
-					}
-				});
-
-				// When a new room is added, find the message input field and tell it not to propagate keydown
-				// events. Otherwise, the player will move in IGE while typing characters that are controls in the
-				// game.
-				$(Candy).on('candy:view.room.after-add', function() {
-					self.messageInputs = self.chatClient.find('input.field');
-					self.messageInputs.keydown(function(e) {
-						e.stopPropagation();
-					});
-				});
-
 				ige.on('cosmos:client.player.username.set', function(username) {
 					self.start();
-				});
-
-				var playerUsernameSetListener = ige.on('cosmos:Player.username.set', function(playerId) {
-					if (!ige.client.player || playerId !== ige.client.player.id()) {
-						return;
-					}
-
-
-					ige.off('cosmos:Player.username.set', playerUsernameSetListener);
 				});
 
 				self.chatClient.hide();
@@ -101,6 +69,8 @@ var ChatComponent = ButtonComponent.extend({
 	},
 
 	start: function() {
+		var self = this;
+		console.log('ChatComponent#start: ' + ige.client.player.username());
 		Candy.Core.connect('tl-xmpp.cloudapp.net', null, ige.client.player.username());
 
 		// Called when the chat client moves to the disconnected state.
@@ -109,6 +79,29 @@ var ChatComponent = ButtonComponent.extend({
 			setTimeout(function() {
 				Candy.Core.connect('tl-xmpp.cloudapp.net', null, ige.client.player.username());
 			}, 200);
+		});
+
+		$(Candy).on('candy:core.message', function(evt, args) {
+			if (args.timestamp === undefined && self.chatClient.is(':hidden')) {
+				self.incrementUnread();
+			}
+		});
+
+		$(Candy).on('candy:view.roster.after-update', function(evt, args) {
+			// Don't increment unread when the player joins the game
+			if (args.action === 'join' && self.chatClient.is(':hidden') && args.user.getNick() !== ige.client.player.username()) {
+				self.incrementUnread();
+			}
+		});
+
+		// When a new room is added, find the message input field and tell it not to propagate keydown
+		// events. Otherwise, the player will move in IGE while typing characters that are controls in the
+		// game.
+		$(Candy).on('candy:view.room.after-add', function() {
+			self.messageInputs = self.chatClient.find('input.field');
+			self.messageInputs.keydown(function(e) {
+				e.stopPropagation();
+			});
 		});
 	},
 
