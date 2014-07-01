@@ -27,8 +27,8 @@ var HUDComponent = IgeEventingClass.extend({
 		});
 
 		this.addComponent(BottomToolbarComponent);
+		this.addComponent(LeftToolbarComponent);
 		this.addComponent(MinimapComponent);
-		this.addComponent(CargoComponent);
 		//this.addComponent(InspectorComponent);
 	},
 

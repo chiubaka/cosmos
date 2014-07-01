@@ -88,6 +88,7 @@ var igeClientConfig = {
 		/* HUD */
 		'./ui/HUDComponent.js',
 		'./ui/BottomToolbarComponent.js',
+		'./ui/LeftToolbarComponent.js',
 		'./ui/ButtonComponent.js',
 		'./ui/UserTileComponent.js',
 		'./ui/ChatComponent.js',
@@ -96,6 +97,7 @@ var igeClientConfig = {
 		'./ui/NewShipComponent.js',
 		'./ui/RelocateComponent.js',
 		'./ui/CargoComponent.js',
+		'./ui/CraftingComponent.js',
 
 		/* Minimap */
 		'./ui/MinimapComponent.js',

@@ -1,11 +1,11 @@
-var CargoComponent = IgeEventingClass.extend({
-	classId: 'CargoComponent',
-	componentId: 'cargo',
+var CraftingComponent = IgeEventingClass.extend({
+	classId: 'CraftingComponent',
+	componentId: 'crafting',
 
 	button: undefined,
 	pullout: undefined,
 	containers: undefined,
-	cargoBlocks: undefined,
+	craftingBlocks: undefined,
 	emptyLabel: undefined,
 
 	selectedType: undefined,
@@ -18,15 +18,15 @@ var CargoComponent = IgeEventingClass.extend({
 			return;
 		}
 
-		self.cargoBlocks = {};
+		self.craftingBlocks = {};
 
-		HUDComponent.loadHtml(CargoComponent.UI_ROOT + 'cargo.html', function(html) {
+		HUDComponent.loadHtml(CraftingComponent.UI_ROOT + 'crafting.html', function(html) {
 			leftToolbar.append(html);
-			self.element = $('#cargo');
+			self.element = $('#crafting');
 			self.button = self.element.find('.button').first();
 			self.pullout = self.element.find('.pullout').first();
-			self.containers = self.element.find('#cargo-containers');
-			self.emptyLabel = self.element.find('#cargo-empty-label');
+			self.containers = self.element.find('#crafting-containers');
+			self.emptyLabel = self.element.find('#crafting-empty-label');
 
 			self.button.click(function() {
 				if (self.pullout.is(':visible')) {
@@ -37,29 +37,29 @@ var CargoComponent = IgeEventingClass.extend({
 				}
 			});
 
-			ige.on('cosmos:Player.addBlock.cargoBlock', function(cargoBlockId) {
+			ige.on('cosmos:Player.addBlock.craftingBlock', function(cargoBlockId) {
 				var containerDiv = document.createElement('div');
 				containerDiv.className = 'container';
 
-				self.cargoBlocks[cargoBlockId] = containerDiv;
+				self.craftingBlocks[cargoBlockId] = containerDiv;
 
 				self.containers.append(containerDiv);
 			});
 
-			ige.on('cosmos:Player.removeBlock.cargoBlock', function(cargoBlockId) {
-				var containerDiv = self.cargoBlocks[cargoBlockId];
+			ige.on('cosmos:Player.removeBlock.craftingBlock', function(cargoBlockId) {
+				var containerDiv = self.craftingBlocks[cargoBlockId];
 				containerDiv.remove();
-				delete self.cargoBlocks[cargoBlockId];
+				delete self.craftingBlocks[cargoBlockId];
 			});
 
-			ige.on('cargo response', function(cargoItems) {
-				console.log('Received cargo response');
-				self.populateFromInventory(cargoItems);
+			ige.on('crafting response', function(cargoItems) {
+				console.log('Received crafting response');
+				self.populateFromInventory(craftingItems);
 			});
 
-			ige.on('cargo update', function(cargoItems) {
-				console.log('Received cargo update', 'info');
-				self.populateFromInventory(cargoItems);
+			ige.on('crafting update', function(cargoItems) {
+				console.log('Received crafting update', 'info');
+				self.populateFromInventory(craftingItems);
 			});
 
 			ige.emit('cosmos:hud.leftToolbar.subcomponent.loaded', self);
@@ -89,24 +89,24 @@ var CargoComponent = IgeEventingClass.extend({
 		ige.emit('toolbar tool selected', [this.classId(), container.attr('data-block-type')]);
 	},
 
-	populateFromInventory: function(cargoItems) {
-		console.log('Populating toolbar from server response: ' + Object.keys(cargoItems).length + ' item(s) in inventory');
+	populateFromInventory: function(craftingItems) {
+		console.log('Populating toolbar from server response: ' + Object.keys(craftingItems).length + ' item(s) in inventory');
 
 		this.containers.find('.container').remove();
 
-		if (Object.keys(cargoItems).length > 0) {
+		if (Object.keys(craftingItems).length > 0) {
 			this.emptyLabel.hide();
 		}
 		else {
 			this.emptyLabel.show();
 		}
 
-		for (var type in cargoItems) {
-			var quantity = cargoItems[type];
+		for (var type in craftingItems) {
+			var quantity = craftingItems[type];
 			this.createContainer(type, quantity);
 		}
 
-		if (this.selectedType === undefined || !cargoItems.hasOwnProperty(this.selectedType)) {
+		if (this.selectedType === undefined || !craftingItems.hasOwnProperty(this.selectedType)) {
 			this.select(this.containers.find('.container').first());
 		}
 	},
@@ -160,8 +160,8 @@ var CargoComponent = IgeEventingClass.extend({
 	}
 });
 
-CargoComponent.UI_ROOT = '/components/cargo/';
+CraftingComponent.UI_ROOT = '/components/crafting/';
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
-	module.exports = CargoComponent;
+	module.exports = CraftingComponent;
 }

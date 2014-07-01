@@ -17,9 +17,7 @@ $cargo-block-hover-border-color: #008aff;
 $cargo-container-border-color: #696969;
 
 #cargo {
-  position: absolute;
-  top: $cargo-button-position-top;
-  left: 0px;
+  margin-top: $cargo-button-position-top;
 
   .pullout, .button {
     float: left;
@@ -85,6 +83,6 @@ $cargo-container-border-color: #696969;
   }
 
   .button {
-    @include side-button-with-icon('../images/icons/icon_cargo.png', $cargo-button-background-color, $cargo-button-hover-background-color, $cargo-button-border-color, false);
+    @include left-toolbar-item-with-icon('../images/icons/icon_cargo.png');
   }
 }

@@ -1,0 +1,86 @@
+$crafting-button-background-color: #cdcdcd;
+$crafting-button-hover-background-color: #e4e4e4;
+$crafting-button-border-color: #383838;
+
+$crafting-title-right-border-color: #bcbcbc;
+$crafting-padding: 10px;
+$crafting-title-height: $hud-button-height - 2 * $crafting-padding;
+
+$crafting-background-color: #a5a5a5;
+
+$crafting-button-position-top: $hud-margin-top;
+$crafting-block-height: $block-height * 2;
+$crafting-block-width: $block-width * 2;
+$crafting-block-padding: $crafting-block-height / 10;
+$crafting-block-hover-border-color: #008aff;
+
+$crafting-container-border-color: #696969;
+
+#crafting {
+  .pullout, .button {
+    float: left;
+  }
+
+  .pullout {
+    display: none;
+
+    .title {
+      background-color: $crafting-button-background-color;
+      color: $crafting-button-border-color;
+      height: $crafting-title-height;
+      line-height: $crafting-title-height;
+      font-size: 125%;
+      font-weight: bold;
+      border-right: 1px solid $crafting-title-right-border-color;
+      padding: $crafting-padding;
+    }
+
+    #crafting-containers {
+      background-color: $crafting-background-color;
+      padding: $crafting-padding;
+      text-align: center;
+
+      .container {
+        height: $crafting-block-height - $crafting-block-padding * 2;
+        width: $crafting-block-width - $crafting-block-padding * 2;
+        padding: $crafting-block-padding;
+        position: relative;
+        margin-left: auto;
+        margin-right: auto;
+        background-color: $crafting-button-background-color;
+        border: 1px solid $crafting-container-border-color;
+
+        &.active {
+          background-color: $crafting-button-hover-background-color;
+          border: 2px solid $crafting-block-hover-border-color;
+        }
+
+        canvas {
+          height: $crafting-block-height - $crafting-block-padding * 2;
+          width: $crafting-block-width - $crafting-block-padding * 2;
+        }
+
+        .quantity-label {
+          position: absolute;
+          right: $crafting-block-padding;
+          bottom: $crafting-block-padding;
+          text-shadow: -1px 0 $crafting-button-border-color, 0 1px $crafting-button-border-color, 1px 0 $crafting-button-border-color, 0 -1px $crafting-button-border-color;
+        }
+
+        .type-label {
+          @extend .tooltip;
+          left: $crafting-block-width + $crafting-block-padding * 4;
+          top: $crafting-block-height / 2 - $tooltip-line-height / 2 - $tooltip-padding;
+        }
+
+        &:hover .type-label{
+          display: block;
+        }
+      }
+    }
+  }
+
+  .button {
+    @include left-toolbar-item-with-icon('../images/icons/icon_crafting.png');
+  }
+}
