@@ -462,6 +462,13 @@ Player.onUsernameRequested = function(username, clientId) {
 		return;
 	}
 
+	if (!Player.usernameIsCorrectLength(username)) {
+		ige.network.send('cosmos:Player.username.set.error', 'Username must be between 5 and 12 characters', clientId);
+	}
+	else if (!Player.usernameIsAlphanumericUnderscore(username)) {
+		ige.network.send('cosmos:Player.username.set.error', 'Alphanumeric characters and underscores only', clientId);
+	}
+
 	DbPlayer.findByUsername(username, function(err, foundPlayer) {
 		if (err) {
 			console.error('Error finding player with username ' + username + '. Error: ' + err);
@@ -492,6 +499,15 @@ Player.onUsernameApproved = function(username) {
 
 Player.onUsernameRequestError = function(error) {
 	ige.emit('cosmos:Player.username.set.error', error);
+};
+
+Player.usernameIsAlphanumericUnderscore = function(username) {
+	var regex = /^([a-zA-Z0-9_])+$/;
+	return regex.test(username);
+};
+
+Player.usernameIsCorrectLength = function(username) {
+	return username.length >= 2 && username.length <= 12;
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Player; }
