@@ -9,6 +9,9 @@
 var Element = Block.extend({
 	classId: 'Element',
 
+	DESCRIPTION: 'An element block with no special properties (yet). Use these to decorate your ship with ' +
+		'interesting colors and patterns.',
+
 	init: function (data) {
 		Block.prototype.init.call(this, data);
 	}
