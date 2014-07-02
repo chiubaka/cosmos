@@ -446,7 +446,8 @@
 #windows-container #windows {
   position: absolute;
   background-color: #363636;
-  width: 152px;
+  display: none;
+  width: 158px;
   height: 190px;
 }
 
