@@ -624,7 +624,9 @@ Player.onUsernameRequested = function(username, clientId) {
 		ige.network.send('cosmos:player.username.set.error', 'Alphanumeric characters and underscores only', clientId);
 	}
 
-	DbPlayer.findByUsername(username, function(err, foundPlayer) {
+	// Find users with this name. Change username to lowercase for search to make sure that we don't allow different
+	// capitalizations of the same name.
+	DbPlayer.findByUsername(username.toLowerCase(), function(err, foundPlayer) {
 		if (err) {
 			console.error('Error finding player with username ' + username + '. Error: ' + err);
 			ige.network.send('cosmos:player.username.set.error', 'Database error', clientId);
