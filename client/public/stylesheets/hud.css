@@ -495,11 +495,63 @@
   border-bottom: 4.6875px solid transparent;
 }
 
-/* line 7, ../../sass/_inspector.scss */
-#inspector .button {
+/* line 13, ../../sass/_inspector.scss */
+#inspector {
   position: absolute;
   top: 100px;
-  right: 0px;
+  right: 0;
+  color: #51e534;
+}
+/* line 19, ../../sass/_inspector.scss */
+#inspector .pullout, #inspector .button {
+  float: right;
+}
+/* line 23, ../../sass/_inspector.scss */
+#inspector .pullout {
+  max-height: 300px;
+  width: 250px;
+}
+/* line 28, ../../sass/_inspector.scss */
+#inspector #block-inspector.pullout {
+  background-color: #0c3e00;
+  font-size: 75%;
+  overflow-y: auto;
+}
+/* line 33, ../../sass/_inspector.scss */
+#inspector #block-inspector.pullout .top, #inspector #block-inspector.pullout .middle, #inspector #block-inspector.pullout .bottom {
+  padding: 10px;
+}
+/* line 37, ../../sass/_inspector.scss */
+#inspector #block-inspector.pullout .top {
+  height: 30px;
+}
+/* line 40, ../../sass/_inspector.scss */
+#inspector #block-inspector.pullout .top #block-name {
+  line-height: 30px;
+  font-weight: bold;
+  margin: 0;
+  font-size: 125%;
+}
+/* line 49, ../../sass/_inspector.scss */
+#inspector #block-inspector.pullout .middle #block-stats {
+  float: left;
+}
+/* line 53, ../../sass/_inspector.scss */
+#inspector #block-inspector.pullout .middle #block-texture {
+  height: 30px;
+  width: 30px;
+  margin-right: 10px;
+}
+/* line 59, ../../sass/_inspector.scss */
+#inspector #block-inspector.pullout .middle #block-stats {
+  width: 210px;
+}
+/* line 65, ../../sass/_inspector.scss */
+#inspector #block-inspector.pullout .bottom .description {
+  margin: 0;
+}
+/* line 71, ../../sass/_inspector.scss */
+#inspector .button {
   height: 50px;
   width: 50px;
   background-color: #0c3e00;
@@ -512,7 +564,7 @@
 }
 /* line 40, ../../sass/_side-buttons.scss */
 #inspector .button:hover {
-  background-color: white;
+  background-color: #125c00;
 }
 /* line 46, ../../sass/_side-buttons.scss */
 #inspector .button .arrow {

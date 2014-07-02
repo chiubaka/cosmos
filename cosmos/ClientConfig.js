@@ -97,7 +97,7 @@ var igeClientConfig = {
 		'./ui/NewShipComponent.js',
 		'./ui/RelocateComponent.js',
 		'./ui/CargoComponent.js',
-		'./ui/blockInspector/BlockInspector.js',
+		'./ui/blockInspector/Inspector.js',
 
 		/* Minimap */
 		'./ui/MinimapComponent.js',

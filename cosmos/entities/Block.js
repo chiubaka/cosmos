@@ -20,6 +20,8 @@ var Block = IgeEntity.extend({
 	 */
 	MAX_HP: 30,
 
+	DESCRIPTION: "A basic block with no special properties.",
+
 	/**
 	 * The number of rows that this {@link Block} takes up.
 	 * @type {number}
@@ -195,6 +197,10 @@ var Block = IgeEntity.extend({
 		return this._numCols;
 	},
 
+	description: function() {
+		return this.DESCRIPTION;
+	},
+
 	/**
 	 * Processes actions that must occur when a {@link Block} is clicked.
 	 * @param event {Object} Object containing information about the event that was fired. DO NOT TRUST THIS. This is
@@ -217,17 +223,7 @@ var Block = IgeEntity.extend({
 			ige.client.state.currentCapability().tryPerformAction(self, event, data);
 		}
 
-		ige.blockInspector.inspect(this);
-
-		var blockInspectorCanvas = document.getElementById("block-explanation-hud");
-		blockInspectorCanvas.width = 200;
-		blockInspectorCanvas.height = 200;
-		var ctx = blockInspectorCanvas.getContext("2d");
-		ctx.save();
-		ctx.translate(this.height(), this.width());
-		this.texture().render(ctx, this);
-		ctx.restore();
-		//this.update(blockInspectorCanvas.getContext("2d"));
+		ige.emit('cosmos:block.mousedown', self);
 	},
 
 	/**

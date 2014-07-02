@@ -26,7 +26,6 @@ var Client = IgeClass.extend({
 
 		// Enable networking
 		ige.addComponent(IgeNetIoComponent);
-		ige.addComponent(BlockInspector);
 
 		// Implement our game methods
 		this.implement(ClientNetworkEvents);
