@@ -126,15 +126,6 @@ var Block = IgeEntity.extend({
 	 */
 	_hp: undefined,
 	/**
-	 * A flag that determines whether or not the health bar for this {@link Block} should be shown. The default value
-	 * is false, and when the value is false the health bar is not shown.
-	 * @type {boolean}
-	 * @memberof Block
-	 * @private
-	 * @instance
-	 */
-	_displayHealth: false,
-	/**
 	 * A flag that determines whether or not this {@link Block} is currently being mined or not. The default value is
 	 * false, and when the value is false this {@link Block} is not currently being mined.
 	 * @type {boolean}
@@ -311,6 +302,8 @@ var Block = IgeEntity.extend({
 			case 'miningParticles':
 				this._addMiningParticles();
 				break;
+			case 'healthBar':
+				this._addHealthBar();
 
 		}
 	},
@@ -331,6 +324,9 @@ var Block = IgeEntity.extend({
 				break;
 			case 'miningParticles':
 				this._removeMiningParticles();
+				break;
+			case 'healthBar':
+				this._removeHealthBar();
 				break;
 		}
 
@@ -407,6 +403,14 @@ var Block = IgeEntity.extend({
 		this._effects['miningParticles'].particleEmitter = new BlockParticleEmitter().mount(this._effectsMountAbove);
 	},
 
+	_addHealthBar: function() {
+		if (this._effects['healthBar'] === undefined) {
+			this._effects['healthBar'] = new HealthBar(this)
+				.mount(this._effectsMountAbove);
+		}
+
+	},
+
 	/**
 	 * Removes mining particles effect from this {@link Block}. If there are multiple people mining this {@link Block},
 	 * then the counter in the mining particles effect state may not go down to zero during this call, in which case
@@ -420,8 +424,20 @@ var Block = IgeEntity.extend({
 
 		if (this._effects['miningParticles'].counter === 0) {
 			this._effects['miningParticles'].particleEmitter.destroy();
-			delete this._effects['miningParticls'];
+			delete this._effects['miningParticles'];
 		}
+	},
+
+	/**
+	 * Removes the health bar from block. This is not usually called because when
+	 * the block (and any effects) are destroyed when the hp is 0.
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 */
+	_removeHealthBar: function() {
+		this._effects['healthBar'].destroy();
+		delete this._effects['healthBar'];
 	},
 
 	/**
@@ -533,8 +549,9 @@ var Block = IgeEntity.extend({
 		this._hp -= amount;
 
 		if (!ige.isServer) {
-			this._displayHealth = true;
-			this.cacheDirty(true);
+			if (this._healthBar === undefined) {
+				this.addEffect({type: 'healthBar'});
+			}
 		}
 	},
 
