@@ -248,6 +248,8 @@ var ServerNetworkEvents = {
 			ige.network.send('confirm', confirmData, clientId);
 			ige.network.stream.queueCommand('notificationSuccess', 
 				NotificationDefinitions.successKeys.constructNewBlock, clientId);
+
+			DbPlayer.update(player.dbId(), player, function() {});
 		}
 	},
 
@@ -284,6 +286,8 @@ var ServerNetworkEvents = {
 			var blockGrid = ige.$(data.blockGridId);
 			data.action = 'add';
 			blockGrid.processBlockActionServer(data, player);
+
+			DbPlayer.update(player.dbId(), player, function() {});
 		}
 	}
 
