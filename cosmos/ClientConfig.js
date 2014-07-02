@@ -79,6 +79,10 @@ var igeClientConfig = {
 		'./models/capabilities/ConstructCapability.js',
 		'./models/capabilities/MineCapability.js',
 
+		/* === Crafting === */
+		'./models/crafting/Recipe.js',
+		'./crafting/CraftingComponent.js',
+
 		/* Notifications */
 		'./notifications/NotificationDefinitions.js',
 		'./notifications/NotificationComponent.js',
@@ -98,7 +102,7 @@ var igeClientConfig = {
 		'./ui/NewShipComponent.js',
 		'./ui/RelocateComponent.js',
 		'./ui/CargoComponent.js',
-		'./ui/CraftingComponent.js',
+		'./ui/CraftingUIComponent.js',
 
 		/* Minimap */
 		'./ui/MinimapComponent.js',

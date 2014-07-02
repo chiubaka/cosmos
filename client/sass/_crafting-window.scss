@@ -1,0 +1,16 @@
+$crafting-window-header-color: #D5E9D3;
+$crafting-window-tab-color: #B7D3B4;
+$crafting-window-window-body-color: #8BA988;
+
+#crafting-window {
+	@extend .window;
+	.header {
+		background-color: $crafting-window-header-color;
+	}
+	.tabs {
+		background-color: $crafting-window-tab-color;
+	}
+	.window-body {
+		background-color: $crafting-window-window-body-color;
+	}
+}

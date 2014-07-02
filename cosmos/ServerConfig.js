@@ -69,6 +69,10 @@ var config = {
 		{ name: 'CargoContainer', path: './models/cargo/CargoContainer' },
 		{ name: 'CargoItem', path: './models/cargo/CargoItem' },
 
+		/* === Crafting === */
+		{ name: 'Recipe', path: './models/crafting/Recipe' },
+		{ name: 'Crafting', path: './crafting/CraftingComponent' },
+
 		/* Database */
 		{ name: 'DbConfig', path: './db/DbConfig' },
 		{ name: 'DbPlayer', path: './db/DbPlayer' },

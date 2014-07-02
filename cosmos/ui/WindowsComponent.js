@@ -26,7 +26,7 @@ var WindowsComponent = IgeEventingClass.extend({
 		});
 
 		this.addComponent(CargoComponent);
-		this.addComponent(CraftingComponent);
+		this.addComponent(CraftingUIComponent);
 	},
 
 });

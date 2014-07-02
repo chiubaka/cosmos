@@ -1,6 +1,6 @@
-var CraftingComponent = IgeEventingClass.extend({
-	classId: 'CraftingComponent',
-	componentId: 'crafting',
+var CraftingUIComponent = IgeEventingClass.extend({
+	classId: 'CraftingUIComponent',
+	componentId: 'craftingUI',
 
 	button: undefined,
 	pullout: undefined,
@@ -25,7 +25,7 @@ var CraftingComponent = IgeEventingClass.extend({
 
 		self.craftingBlocks = {};
 
-		HUDComponent.loadHtml(CraftingComponent.UI_ROOT + 'crafting.html', function(html) {
+		HUDComponent.loadHtml(CraftingUIComponent.UI_ROOT + 'crafting.html', function(html) {
 			leftToolbar.append(html);
 			self.element = $('#crafting');
 			self.button = self.element.find('.button').first();
@@ -62,9 +62,9 @@ var CraftingComponent = IgeEventingClass.extend({
 	},
 });
 
-CraftingComponent.UI_ROOT = '/components/crafting/';
+CraftingUIComponent.UI_ROOT = '/components/crafting/';
 WindowsComponent.UI_ROOT = '/components/windows/';
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
-	module.exports = CraftingComponent;
+	module.exports = CraftingUIComponent;
 }
