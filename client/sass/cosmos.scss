@@ -72,6 +72,8 @@ html, body {
 .username-label.tooltip {
   display: block;
   z-index: 1;
+  cursor: default;
+  @include user-select(none);
 }
 
 @import 'hud';

@@ -100,6 +100,10 @@ html, body {
 .username-label.tooltip, #cargo .pullout #cargo-containers .container .username-label.type-label {
   display: block;
   z-index: 1;
+  cursor: default;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
 }
 
 /* line 17, ../../sass/_hud.scss */

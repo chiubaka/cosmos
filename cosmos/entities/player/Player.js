@@ -219,6 +219,42 @@ var Player = BlockStructure.extend({
 		this.usernameLabel = $('<div>' + this.username() + '</div>').addClass('username-label tooltip');
 		$('body').append(this.usernameLabel);
 
+		// Make the username label "disappear" on hover. Cannot just hide the label, because there is no good condition
+		// to make it show again. This makes the mousedown code below necessary so that we can send clicks through this
+		// label to the canvas below.
+		this.usernameLabel.hover(function() {
+			$(this).css({opacity: 0});
+		},
+		function() {
+			$(this).css({opacity: 1});
+		});
+
+		// When the username label is clicked, construct a click event that looks like a regular IGE canvas click event
+		// and pass it down to IGE.
+		this.usernameLabel.mousedown(function(e) {
+			var igeCanvas = document.getElementById('igeFrontBuffer');
+			var clickEvent = document.createEvent('MouseEvent');
+			clickEvent.initMouseEvent(
+				e.type,
+				e.bubbles,
+				e.cancelable,
+				e.view,
+				1,
+				e.screenX,
+				e.screenY,
+				e.clientX,
+				e.clientY,
+				e.ctrlKey,
+				e.altKey,
+				e.shiftKey,
+				e.metaKey,
+				e.button,
+				null
+			);
+			clickEvent.srcElement = clickEvent.currentTarget = clickEvent.target = clickEvent.toElement = igeCanvas;
+			igeCanvas.dispatchEvent(clickEvent);
+		});
+
 		this.mouseOver(function() {
 			self.usernameLabel.hide();
 		});
