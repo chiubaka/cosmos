@@ -113,9 +113,12 @@ var ServerNetworkEvents = {
 	 */
 	_createPlayer: function(clientId, playerId, ship, cargo) {
 		var player = new Player()
+			.clientId(clientId)
+			.mount(ige.server.spaceGameScene)
+			.streamMode(1);
+
 			// Call BlockGrid#debugFixtures before calling BlockGrid#fromBlockMatrix, since debugging entities are
 			// added when fixtures are added.
-			.debugFixtures(false);
 
 		if (ship === undefined) {
 			player.fromBlockMatrix(ExampleShips.starterShip(), false);
@@ -128,14 +131,7 @@ var ServerNetworkEvents = {
 			player.dbId(playerId);
 		}
 
-		player.addSensor(300)
-			.attractionStrength(1)
-			.streamMode(1)
-			.clientId(clientId)
-			.mount(ige.server.spaceGameScene)
-			.relocate();
-
-		player.cargo.rehydrateCargo(cargo);
+		//	player.cargo.rehydrateCargo(cargo);
 
 		ige.server.players[clientId] = player;
 
@@ -143,6 +139,8 @@ var ServerNetworkEvents = {
 			entityId: ige.server.players[clientId].id(),
 			playerId: playerId !== undefined ? playerId : "undefined"
 		};
+
+		console.log("entityId: " + sendData.entityId);
 
 		// Tell the client to track their player entity
 		ige.network.send('playerEntity', sendData, clientId);
@@ -212,17 +210,17 @@ var ServerNetworkEvents = {
 			return;
 		}
 
-		if (!player.canMine()) {
+		if (!player.currentShip().canMine()) {
 			return;
 		}
 
 		data.action = 'mine';
 		if(blockGrid.processBlockActionServer(data, player)) {
-			player.mining = true;
+			player.currentShip().mining = true;
 
 			var targetBlock = blockGrid.get(data.row, data.col);
 			// Activate mining lasers
-			player.fireMiningLasers(targetBlock);
+			player.currentShip().fireMiningLasers(targetBlock);
 		}
 	},
 
@@ -233,7 +231,7 @@ var ServerNetworkEvents = {
 		}
 
 		// TODO: Extract this into a new method and call it with an event emission!
-		var blockToPlace = player.cargo.extractType(data.selectedType)[0];
+		var blockToPlace = player.currentShip().cargo.extractType(data.selectedType)[0];
 
 		if (blockToPlace !== undefined) {
 			//console.log("Placing item: " + blockToPlace.classId(), 'info');
@@ -257,7 +255,7 @@ var ServerNetworkEvents = {
 			return;
 		}
 
-		var playerCargo = player.cargo;
+		var playerCargo = player.currentShip().cargo;
 
 		if (data !== undefined && data !== null) {
 			if (data.requestUpdates) {
@@ -278,7 +276,7 @@ var ServerNetworkEvents = {
 		}
 
 		// TODO: This extracts a block from the cargo and throws it away. Should use the result of this in the future!
-		var extractedBlocks = player.cargo.extractType(data.selectedType);
+		var extractedBlocks = player.currentShip().cargo.extractType(data.selectedType);
 
 		if (extractedBlocks.length > 0) {
 			var blockGrid = ige.$(data.blockGridId);

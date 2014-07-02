@@ -8,7 +8,7 @@
  * @todo This design should be replaced by something more natural (like there should be a ship class) and/or
  * something component-based.
  */
-var Player = IgeEntity.extend({
+var Player = BlockStructure.extend({
 	classId: 'Player',
 
 	/**
@@ -49,10 +49,10 @@ var Player = IgeEntity.extend({
 	 * The Ship object that this player is currently controlling. At some point, players may be able to control more than one ship.
 	 * Right now a player can only control one ship.
 	 */
-	currentShip: undefined,
+	_currentShip: undefined,
 
 	init: function(data) {
-		IgeEntity.prototype.init.call(this, data);
+		BlockStructure.prototype.init.call(this, data);
 
 		var self = this;//TODO remove this line
 
@@ -64,6 +64,15 @@ var Player = IgeEntity.extend({
 				down: false
 			}
 		};
+		/*
+		this._currentShip = new Ship()
+				.addSensor(300)
+				.attractionStrength(1)
+				.streamMode(1)
+				.mount(ige.server.spaceGameScene)
+				.relocate()
+				.debugFixtures(false);//change to true for debugging
+				*/
 	},
 
 	/**
@@ -120,9 +129,9 @@ var Player = IgeEntity.extend({
 	 * @return {Boolean} True if player can mine
 	 */
 	 canMine: function () {
-		if (!currentShip().canMine()) {
+		if (!this.currentShip().canMine()) {
 			ige.network.stream.queueCommand('notificationError',
-				NotificationDefinitions.errorKeys.noMiningLaser, clientId);
+				NotificationDefinitions.errorKeys.noMiningLaser, this.clientId());
 			return false;
 		}
 		return true;
@@ -167,12 +176,19 @@ var Player = IgeEntity.extend({
 			this._controls = newControls;
 
 			//TODO do this for all the different controls
-			currentShip().controls.up = this._controls.key.up;
+			this.currentShip().controls.up = this._controls.key.up;
 
 			return this;
 		}
 
 		return _controls;
+	},
+
+	/**
+	 * Getter for the _currentShip property
+	 */
+	currentShip: function() {
+		return this._currentShip;
 	}
 });
 

@@ -8,26 +8,37 @@ var ClientNetworkEvents = {
 	 * @private
 	 */
 	_onPlayerEntity: function(data) {
+		console.log("entityId: " + data.entityId);
+		console.log("On player entity");
+
 		var self = this;
 
-		if (ige.$(data.entityId)) {
-			ClientNetworkEvents.initCameras(ige.$(data.entityId));
+		var player = ige.$(data.entityId)
+
+		if (player) {
+			console.log("callinfg init camerass");
+			self.initCameras(player.currentShip());
 
 			// Set the time stream UI entity to monitor our player entity
 			// time stream data
-			ige.client.tsVis.monitor(ige.$(data.entityId));
+			ige.client.tsVis.monitor(player);
 		} else {
 			// The client has not yet received the entity via the network
 			// stream so lets ask the stream to tell us when it creates a
 			// new entity and then check if that entity is the one we
 			// should be tracking!
+				console.log("callinfg init camerass later!");
 			self._eventListener = ige.network.stream.on('entityCreated', function (entity) {
+				console.log("Event listener was called");
 				if (entity.id() === data.entityId) {
-					// Tell the camera to track out player entity
-					ClientNetworkEvents.initCameras(ige.$(data.entityId));
+					console.log("The player has been streamed!");
+					var player = ige.$(data.entityId);
+
+					// Tell the camera to track our player entity
+					self.initCameras(player.currentShip());
 
 					// Make it easy to find the player's entity
-					ige.client.player = entity;
+					ige.client.player = player;
 
 					ige.client.metrics.fireEvent('player', 'connect', data.playerId);
 
@@ -78,10 +89,19 @@ var ClientNetworkEvents = {
 		ige.client.metrics.fireEvent(data.category, data.action, data.label);
 	},
 
+	/**
+	 * Initializes all of the cameras that need to track the ship.
+	 * This is currently just one camera: the camera for the main viewport.
+	 * The minimap doesn't actually use IGE, it uses HTML instead, and so it doesn't have a camera.
+	 */
 	initCameras: function(entityToTrack) {
+		console.log("INIT CAMERAS!1");
+
 		var cameraSmoothingAmount = 0;
 
 		ige.$('mainViewport').camera.trackTranslate(entityToTrack, cameraSmoothingAmount);
+
+		console.log("INIT CAMERAS!");
 	}
 };
 

@@ -100,7 +100,7 @@ var BlockStructure = BlockGrid.extend({
 					console.log("Request to mine undefined block. row: " + data.row + ", col: " + data.col);
 					return false;
 				}
-				// Blocks should only be mined by one player, for now. Note that there is a race condition here.
+				// Blocks should only be mined by one ship, for now. Note that there is a race condition here.
 				if((block === undefined) || block.isBeingMined()) {
 					console.log("Request to mine undefined or busy block. row: " + data.row + ", col: " + data.col);
 					return false;
@@ -128,8 +128,8 @@ var BlockStructure = BlockGrid.extend({
 						var blockClassId = block.classId();
 						ige.emit('block mined', [player, blockClassId, block]);
 
-						player.mining = false;
-						player.turnOffMiningLasers(block);
+						player.currentShip().mining = false;
+						player.currentShip().turnOffMiningLasers(block);
 
 						// Drop block server side, then send drop msg to client
 						self.drop(data.row, data.col, player);
@@ -138,7 +138,7 @@ var BlockStructure = BlockGrid.extend({
 						ige.network.stream.queueCommand('notificationSuccess',
 							NotificationDefinitions.successKeys.minedBlock, player.clientId());
 					}
-				}, Block.MINING_INTERVAL / player.numBlocksOfType(MiningLaserBlock.prototype.classId()));
+				}, Block.MINING_INTERVAL / player.currentShip().numBlocksOfType(MiningLaserBlock.prototype.classId()));
 				return true;
 			default:
 				return false;

@@ -1,5 +1,6 @@
 /**
- * TODO class comment
+ * This class represents a ship in Cosmos.
+ * A ships is a BlockStructure that also has a cargo. A ship is controlled by a {@link Player} or an AI (not yet implemented).
  */
 var Ship = BlockStructure.extend({
 	classId: 'Ship',
@@ -15,18 +16,41 @@ var Ship = BlockStructure.extend({
 	mining: false,
 
 	/**
-	 * TODO add comment here
+	 * The control state of this ship. For example,
+	 * {
+	 * 	left: false,
+	 * 	right: false,
+	 * 	up: false,
+	 * 	down: false
+	 * }
+	 * [up and down should potentially be renamed forwards and backwards]
+	 * @type {Object}
+	 * @memberof Ship
+	 * @instance
 	 */
 	controls: undefined,
+
+	/**
+	 * The cargo of the ship.
+	 * @type {Cargo}
+	 * @memberof Ship
+	 * @instance
+	 */
+	cargo: undefined,
 
 	init: function(data) {
 		BlockStructure.prototype.init.call(this, data);
 
 		var self = this;//TODO remove this line
 
-		this.category(Player.BOX2D_CATEGORY);
-		this._attractionStrength = 1;
+		this.category(Ship.BOX2D_CATEGORY);
 
+		this.controls = {
+			left: false,
+			right: false,
+			up: false,
+			down: false
+		};
 
 		if (ige.isClient) {
 			this._initClient();
@@ -121,7 +145,7 @@ var Ship = BlockStructure.extend({
 	 * @instance
 	 */
 	relocate: function() {
-		this.translateTo(
+		return this.translateTo(
 			(Math.random() - .5) * Player.PLAYER_START_RADIUS,
 			(Math.random() - .5) * Player.PLAYER_START_RADIUS,
 			0
@@ -152,7 +176,7 @@ var Ship = BlockStructure.extend({
 		}
 
 		// Do not start mining if player has no mining lasers
-		return this.numBlocksOfType(MiningLaserBlock.prototype.classId()) === 0;
+		return this.numBlocksOfType(MiningLaserBlock.prototype.classId()) !== 0;
 	},
 
 	/**
@@ -259,7 +283,7 @@ var Ship = BlockStructure.extend({
 			}
 		}
 	},
-}
+});
 
 /**
 * The radius from the center of the world within which players will spawn.
@@ -267,7 +291,7 @@ var Ship = BlockStructure.extend({
 * @default
 * @memberof Player
 */
-Player.PLAYER_START_RADIUS = 4000;
+Ship.PLAYER_START_RADIUS = 4000;
 
 /**
 * The Box2D category of all player entities. Used by Box2D to determine what to do in certain collision scenarios.
@@ -275,7 +299,7 @@ Player.PLAYER_START_RADIUS = 4000;
 * @default
 * @memberof Player
 */
-Player.BOX2D_CATEGORY = 'player';
+Ship.BOX2D_CATEGORY = 'player';
 
 /**
 * The default depth layer for {@link Player}s when rendered to the screen. Should be rendered above other
@@ -284,6 +308,6 @@ Player.BOX2D_CATEGORY = 'player';
 * @default
 * @memberof Player
 */
-Player.DEPTH = 2;
+Ship.DEPTH = 2;
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Ship; }
