@@ -25,7 +25,7 @@ var MiningLaserBlock = Part.extend({
 
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(242, 242, 242)";
-			this.textureOutline = "rgb(255, 0, 0)";
+			this.textureOutline = "rgb(208, 63, 44)";
 			this.textureSvg = ige.client.svgs.miningLaser;
 		}
 	},
@@ -95,7 +95,7 @@ var MiningLaserBlock = Part.extend({
 
 		this.laserBeam = new LaserBeam()
 			.setTarget(effect.targetBlock.blockGridId, effect.targetBlock.row, effect.targetBlock.col)
-			.mount(this.effectsMount());
+			.mount(this.effectsMountAbove());
 
 		var targetEffect = NetworkUtils.effect('miningParticles');
 		targetEffect.sourceBlock = effect.targetBlock;

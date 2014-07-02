@@ -1,0 +1,67 @@
+$bottom-toolbar-background-color: #222222;
+$bottom-toolbar-height: $hud-button-height;
+$bottom-toolbar-spacing-between-items: 1px;
+$bottom-toolbar-item-padding: $bottom-toolbar-height / 6;
+$bottom-toolbar-item-clicked-background-color: #101010;
+$bottom-toolbar-item-background-color: #363636;
+$bottom-toolbar-item-hover-background-color: #5c5c5c;
+$bottom-toolbar-item-height: $hud-button-height;
+$bottom-toolbar-item-width: $hud-button-width;
+$bottom-toolbar-highlight-color: #f57a03;
+
+
+$bottom-toolbar-tooltip-width: $bottom-toolbar-item-width * 1.5;
+
+#hud>.toolbar {
+  position: absolute;
+  bottom: 0;
+  height: $bottom-toolbar-height;
+  width: 100%;
+  background-color: $bottom-toolbar-background-color;
+}
+
+.bottom-toolbar-float-left {
+  float: left;
+  margin-left: $bottom-toolbar-spacing-between-items;
+}
+
+.bottom-toolbar-float-right {
+  float: right;
+  margin-right: $bottom-toolbar-spacing-between-items;
+}
+
+@mixin bottom-toolbar-item($background-color: $bottom-toolbar-item-background-color) {
+  height: $bottom-toolbar-item-height;
+  width: $bottom-toolbar-item-width;
+  position: relative;
+  cursor: pointer;
+  background-color: $background-color;
+
+  .tooltip {
+    bottom: $bottom-toolbar-item-height + $bottom-toolbar-item-padding;
+    width: $bottom-toolbar-tooltip-width;
+    text-align: center;
+    margin-left: -$bottom-toolbar-tooltip-width / 2 - $tooltip-padding;
+    left: 50%;
+  }
+
+  &:hover {
+    background-color: $bottom-toolbar-item-hover-background-color;
+    .tooltip {
+      display: block;
+    }
+  }
+}
+
+@mixin bottom-toolbar-item-with-icon($icon, $background-color: $bottom-toolbar-item-background-color) {
+  @include bottom-toolbar-item($background-color);
+  @include hud-icon-button($icon);
+}
+
+@import 'user-tile';
+@import 'chat';
+@import 'cap-bar';
+@import 'menu-button';
+@import 'feedback-button';
+@import 'relocate-button';
+@import 'new-ship-button';

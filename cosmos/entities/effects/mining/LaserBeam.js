@@ -13,6 +13,7 @@ var LaserBeam = IgeEntity.extend({
 
 		if (!ige.isServer) {
 			this.texture(ige.client.textures.laserBeamTexture)
+				.width(10)
 
 			// Fade in the laser beam
 			this.opacity(0);

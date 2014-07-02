@@ -73,6 +73,11 @@ var BlockStructure = BlockGrid.extend({
 		if (this._hasNeighboringOpenLocations(block.row(), block.col(), block)) {
 			block.mouseDown(event, control);
 		}
+		else {
+			// Notify player that block is not minable
+			ige.notification.emit('notificationError',
+				NotificationDefinitions.errorKeys.notMinable);
+		}
 	},
 
 	/**

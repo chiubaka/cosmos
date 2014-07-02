@@ -2,14 +2,19 @@ var Client = IgeClass.extend({
 	classId: 'Client',
 
 	init: function () {
-		//ige.timeScale(0.1);
-		ige.setFps(30);
+		window.addEventListener("keydown", function(e) {
+			// space and arrow keys
+			if([37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+				e.preventDefault();
+			}
+		}, false);
+		
+		ige.setFps(Constants.fps.CLIENT_FPS);
 
 		// Load our textures
 		var self = this;
 
 		self.LAYER_BACKGROUND = 10;
-		self.LAYER_PARALLAX = 11;
 		self.LAYER_CLICK_SCENE = 15;
 		self.LAYER_WORLD = 50;
 		self.LAYER_WORLD_OVERLAY = 51;
@@ -35,12 +40,15 @@ var Client = IgeClass.extend({
 			glow: new IgeTexture(gameRoot + 'assets/GlowEffectTexture.js'),
 			background_helix_nebula: new IgeTexture(gameRoot +
 				'assets/backgrounds/helix_nebula.jpg'),
+			background_starfield: new IgeTexture(gameRoot +
+				'assets/backgrounds/starfield.png'),
 			fixtureDebuggingTexture: new IgeTexture(gameRoot +
 				'assets/debug/FixtureDebuggingTexture.js'),
 			laserBeamTexture: new IgeTexture(gameRoot +
 				'assets/effects/laser/laserbeam.png'),
 			rectangleTexture: new IgeTexture(gameRoot +
 				'assets/effects/particles/Rectangle.js'),
+			healthBar: new IgeTexture(gameRoot + 'assets/HealthBarTexture.js'),
 
 			// Cap textures
 			mineCap_color: new IgeTexture(gameRoot + 'assets/ui/mine/mine-color.png'),
@@ -60,7 +68,9 @@ var Client = IgeClass.extend({
 				fuel: gameRoot + 'assets/blocks/fuel/fuel.svg',
 				cargo: gameRoot + 'assets/blocks/cargo/cargo.svg',
 				control: gameRoot + 'assets/blocks/playerctrl/playerctrl.svg',
-				miningLaser: gameRoot + 'assets/blocks/laser/laser.svg'
+				miningLaser: gameRoot + 'assets/blocks/laser/laser.svg',
+				constructionZone: gameRoot +
+					'assets/blocks/construction/construction_zone.svg'
 			}
 
 			// Loop through the svgs object and request each SVG
@@ -119,18 +129,23 @@ var Client = IgeClass.extend({
 						ige.network.define('confirm', self._onConfirm);
 						// Setup the network stream handler
 						ige.network.addComponent(IgeStreamComponent)
-							.stream.renderLatency(80); // Render the simulation 160 milliseconds in the past
+							.stream.renderLatency(100); // Render the simulation 100 milliseconds in the past
 
 						// Enable notifications
 						ige.addComponent(NotificationComponent);
 						ige.notification.addComponent(NotificationUIComponent)
 							.start();
 
-						// Ask the server to create an entity for us
-						ige.network.send('playerEntity', {sid: self.getSessionId()});
-
 						GameInit.init(self);
+
+						ige.addComponent(HUDComponent);
 						//ige.editor.showStats();
+
+						// Wait until the HUD finishes loading to ask for the player.
+						ige.on('cosmos:hud.loaded', function(hud) {
+							// Ask the server to create an entity for us
+							ige.network.send('playerEntity', {sid: self.getSessionId()});
+						});
 					});
 				}
 			});

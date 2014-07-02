@@ -65,13 +65,21 @@ var Block = IgeEntity.extend({
 	 */
 	_col: undefined,
 	/**
-	 * An IgeEntity that all of the effects for this {@link Block} get mounted to.
+	 * An IgeEntity that all of the foreground effects for this {@link Block} get mounted to.
 	 * @type {IgeEntity}
 	 * @memberof Block
 	 * @private
 	 * @instance
 	 */
-	_effectsMount: undefined,
+	_effectsMountAbove: undefined,
+	/**
+	 * An IgeEntity that all of the background effects for this {@link Block} get mounted to.
+	 * @type {IgeEntity}
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 */
+	_effectsMountBelow: undefined,
 	/**
 	 * An object used as a map to store data about the various effects on a {@link Block}. The map keys are the effect
 	 * types, and the values are typically objects. Each value can be specific to the effect, since different effects
@@ -117,15 +125,6 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	_hp: undefined,
-	/**
-	 * A flag that determines whether or not the health bar for this {@link Block} should be shown. The default value
-	 * is false, and when the value is false the health bar is not shown.
-	 * @type {boolean}
-	 * @memberof Block
-	 * @private
-	 * @instance
-	 */
-	_displayHealth: false,
 	/**
 	 * A flag that determines whether or not this {@link Block} is currently being mined or not. The default value is
 	 * false, and when the value is false this {@link Block} is not currently being mined.
@@ -254,27 +253,51 @@ var Block = IgeEntity.extend({
 	},
 
 	/**
-	 * Creates the effects mount entity for this {@link Block} and stores it in an instance variable. If the
+	 * Creates the above effects mount entity for this {@link Block} and stores it in an instance variable. If the
 	 * effects mount has already been created for this {@link Block}, this function does nothing.
 	 * @memberof BlockGrid
 	 * @instance
 	 */
-	createEffectsMount: function() {
-		if (this._effectsMount !== undefined) {
+	createAboveEffectsMount: function() {
+		if (this._effectsMountAbove !== undefined) {
 			return;
 		}
 
-		this._effectsMount = new IgeEntity().depth(this.depth());
+		this._effectsMountAbove = new IgeEntity().depth(this.depth() + 1);
 	},
 
 	/**
-	 * Getter for the {@link Block#_effectsMount|_effectsMount} property.
-	 * @returns {IgeEntity} the effects mount
+	 * Creates the above effects mount entity for this {@link Block} and stores it in an instance variable. If the
+	 * effects mount has already been created for this {@link Block}, this function does nothing.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	createBelowEffectsMount: function() {
+		if (this._effectsMountBelow !== undefined) {
+			return;
+		}
+
+		this._effectsMountBelow = new IgeEntity().depth(this.depth() - 1);
+	},
+
+	/**
+	 * Getter for the {@link Block#_effectsMountAbove|_effectsMountAbove} property.
+	 * @returns {IgeEntity} the above effects mount
 	 * @memberof Block
 	 * @instance
 	 */
-	effectsMount: function() {
-		return this._effectsMount;
+	effectsMountAbove: function() {
+		return this._effectsMountAbove;
+	},
+
+	/**
+	 * Getter for the {@link Block#_effectsMountBelow|_effectsMountBelow} property.
+	 * @returns {IgeEntity} the below effects mount
+	 * @memberof Block
+	 * @instance
+	 */
+	effectsMountBelow: function() {
+		return this._effectsMountBelow;
 	},
 
 	/**
@@ -287,8 +310,11 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	addEffect: function(effect) {
-		if (this._effectsMount === undefined) {
-			this.blockGrid().createEffectsMount(this);
+		if (this._effectsMountAbove === undefined) {
+			this.blockGrid().createAboveEffectsMount(this);
+		}
+		if (this._effectsMountBelow === undefined) {
+			this.blockGrid().createBelowEffectsMount(this);
 		}
 
 		switch (effect.type) {
@@ -298,6 +324,9 @@ var Block = IgeEntity.extend({
 			case 'miningParticles':
 				this._addMiningParticles();
 				break;
+			case 'healthBar':
+				this._addHealthBar();
+
 		}
 	},
 
@@ -318,10 +347,18 @@ var Block = IgeEntity.extend({
 			case 'miningParticles':
 				this._removeMiningParticles();
 				break;
+			case 'healthBar':
+				this._removeHealthBar();
+				break;
 		}
 
-		if (!this._hasEffects() && this._effectsMount !== undefined) {
-			this._effectsMount.destroy();
+		if (!this._hasEffects()) {
+			if (this._effectsMountAbove !== undefined) {
+				this._effectsMountAbove.destroy();
+			}
+			if (this._effectsMountBelow !== undefined) {
+				this._effectsMountBelow.destroy();
+			}
 		}
 	},
 
@@ -352,7 +389,7 @@ var Block = IgeEntity.extend({
 
 		this._effects['glow'] = new GlowEffect(effect)
 			.depth(this.depth() - 1)
-			.mount(this._effectsMount);
+			.mount(this._effectsMountBelow);
 	},
 
 	/**
@@ -385,7 +422,15 @@ var Block = IgeEntity.extend({
 		}
 
 		this._effects['miningParticles'].counter++;
-		this._effects['miningParticles'].particleEmitter = new BlockParticleEmitter().mount(this._effectsMount);
+		this._effects['miningParticles'].particleEmitter = new BlockParticleEmitter().mount(this._effectsMountAbove);
+	},
+
+	_addHealthBar: function() {
+		if (this._effects['healthBar'] === undefined) {
+			this._effects['healthBar'] = new HealthBar(this)
+				.mount(this._effectsMountAbove);
+		}
+
 	},
 
 	/**
@@ -401,8 +446,20 @@ var Block = IgeEntity.extend({
 
 		if (this._effects['miningParticles'].counter === 0) {
 			this._effects['miningParticles'].particleEmitter.destroy();
-			delete this._effects['miningParticls'];
+			delete this._effects['miningParticles'];
 		}
+	},
+
+	/**
+	 * Removes the health bar from block. This is not usually called because when
+	 * the block (and any effects) are destroyed when the hp is 0.
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 */
+	_removeHealthBar: function() {
+		this._effects['healthBar'].destroy();
+		delete this._effects['healthBar'];
 	},
 
 	/**
@@ -514,8 +571,9 @@ var Block = IgeEntity.extend({
 		this._hp -= amount;
 
 		if (!ige.isServer) {
-			this._displayHealth = true;
-			this.cacheDirty(true);
+			if (this._healthBar === undefined) {
+				this.addEffect({type: 'healthBar'});
+			}
 		}
 	},
 
@@ -571,6 +629,19 @@ Block.HEALTH_BAR_MARGIN = 3;
  */
 Block.HEALTH_BAR_HEIGHT = 4;
 
+Block.displayNameFromClassId = function(classId) {
+	var tokens = classId.match(/([A-Z]?[^A-Z]*)/g).slice(0, -1);
+	var displayName = "";
+	for (var i = 0; i < tokens.length - 1; i++) {
+		var token = tokens[i];
+		if (i != 0) {
+			displayName += " ";
+		}
+		displayName += token;
+	}
+	return displayName;
+};
+
 /**
  * Given a class ID, returns a new instance of the {@link Block} type associated with that class ID.
  * @param classId {string} The class ID of the type of {@link Block} we want created.
@@ -581,7 +652,8 @@ Block.blockFromClassId = function(classId) {
 	switch (classId) {
 		case Block.prototype.classId():
 			return new Block();
-		//ship parts
+
+		//Ship parts
 		case CargoBlock.prototype.classId():
 			return new CargoBlock();
 		case ControlBlock.prototype.classId():
@@ -596,7 +668,34 @@ Block.blockFromClassId = function(classId) {
 			return new PowerBlock();
 		case ThrusterBlock.prototype.classId():
 			return new ThrusterBlock();
-		//now the elements
+
+		// Armor
+		case HullBlock.prototype.classId():
+			return new HullBlock();
+		case CloakBlock.prototype.classId():
+			return new CloakBlock();
+		case CloakBlockLight.prototype.classId():
+			return new CloakBlockLight();
+		case CloakBlockViolet.prototype.classId():
+			return new CloakBlockViolet();
+		case CloakBlockVioletLight.prototype.classId():
+			return new CloakBlockVioletLight();
+		case KryptoniteBlock.prototype.classId():
+			return new KryptoniteBlock();
+		case MithrilBlock.prototype.classId():
+			return new MithrilBlock();
+		case AdamantiumBlock.prototype.classId():
+			return new AdamantiumBlock();
+		case DragonBlock.prototype.classId():
+			return new DragonBlock();
+		case TitaniumBlock.prototype.classId():
+			return new TitaniumBlock();
+		case VioletBlock.prototype.classId():
+			return new VioletBlock();
+		case OrangeBlock.prototype.classId():
+			return new OrangeBlock();
+
+		// Elements
 		case CarbonBlock.prototype.classId():
 			return new CarbonBlock();
 		case IceBlock.prototype.classId():

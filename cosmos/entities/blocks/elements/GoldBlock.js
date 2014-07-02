@@ -24,8 +24,8 @@ var GoldBlock = Element.extend({
 
 
 		if (!ige.isServer) {
-			this.textureBackground = "rgb(200, 200, 100)";
-			this.textureOutline = "rgb(38, 38, 38)";
+			this.textureBackground = "rgb(255,215,0)";
+			this.textureOutline = "rgb(218,165,32)";
 		}
 	}
 });

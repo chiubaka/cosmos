@@ -13,13 +13,13 @@ var ExampleShips = {
 	starterShip: function() {
 		return [
 			[undefined,           undefined,   new MiningLaserBlock(), undefined,   undefined],
-			[undefined,           new Block(), new Block(),            new Block(), undefined],
-			[undefined,           new Block(), new ControlBlock(),     new Block(), undefined],
-			[undefined,           new Block(), new PowerBlock(),       new Block(), undefined],
-			[new ThrusterBlock(), new Block(), new CargoBlock,         new Block(), new ThrusterBlock()],
-			[undefined,           new Block(), new CargoBlock,         new Block(), undefined],
-			[undefined,           new Block(), new FuelBlock,          new Block(), undefined],
-			[undefined,           new Block(), new EngineBlock(),      new Block(), undefined]
+			[undefined,           new HullBlock(), new HullBlock(),            new HullBlock(), undefined],
+			[undefined,           new HullBlock(), new ControlBlock(),     new HullBlock(), undefined],
+			[undefined,           new HullBlock(), new PowerBlock(),       new HullBlock(), undefined],
+			[new ThrusterBlock(), new HullBlock(), new CargoBlock,         new HullBlock(), new ThrusterBlock()],
+			[undefined,           new HullBlock(), new CargoBlock,         new HullBlock(), undefined],
+			[undefined,           new HullBlock(), new FuelBlock,          new HullBlock(), undefined],
+			[undefined,           new HullBlock(), new EngineBlock(),      new HullBlock(), undefined]
 		]
 	},
 
@@ -31,13 +31,13 @@ var ExampleShips = {
 	starterShipSingleMisplacedEngine: function() {
 		return [
 			[undefined,           undefined,         new MiningLaserBlock(), undefined,         undefined],
-			[undefined,           new Block(),       new Block(),            new Block(),       undefined],
-			[undefined,           new Block(),       new ControlBlock(),     new Block(),       undefined],
-			[undefined,           new Block(),       new PowerBlock(),       new Block(),       undefined],
-			[new ThrusterBlock(), new Block(),       new CargoBlock,         new Block(),       new ThrusterBlock()],
-			[undefined,           new Block(),       new CargoBlock,         new Block(),       undefined],
-			[undefined,           new Block(),       new FuelBlock,          new Block(),       undefined],
-			[undefined,           new Block(),       new EngineBlock(),      new Block(),       undefined],
+			[undefined,           new HullBlock(),       new HullBlock(),            new HullBlock(),       undefined],
+			[undefined,           new HullBlock(),       new ControlBlock(),     new HullBlock(),       undefined],
+			[undefined,           new HullBlock(),       new PowerBlock(),       new HullBlock(),       undefined],
+			[new ThrusterBlock(), new HullBlock(),       new CargoBlock,         new HullBlock(),       new ThrusterBlock()],
+			[undefined,           new HullBlock(),       new CargoBlock,         new HullBlock(),       undefined],
+			[undefined,           new HullBlock(),       new FuelBlock,          new HullBlock(),       undefined],
+			[undefined,           new HullBlock(),       new EngineBlock(),      new HullBlock(),       undefined],
 			[undefined,           new EngineBlock(), undefined,              undefined,         undefined]
 		]
 	},
@@ -50,13 +50,13 @@ var ExampleShips = {
 	starterShipDoubleEngines: function() {
 		return [
 			[undefined,           undefined,         new MiningLaserBlock(), undefined,         undefined],
-			[undefined,           new Block(),       new Block(),            new Block(),       undefined],
-			[undefined,           new Block(),       new ControlBlock(),     new Block(),       undefined],
-			[undefined,           new Block(),       new PowerBlock(),       new Block(),       undefined],
-			[new ThrusterBlock(), new Block(),       new CargoBlock,         new Block(),       new ThrusterBlock()],
-			[undefined,           new Block(),       new CargoBlock,         new Block(),       undefined],
-			[undefined,           new Block(),       new FuelBlock,          new Block(),       undefined],
-			[undefined,           new Block(),       undefined,              new Block(),       undefined],
+			[undefined,           new HullBlock(),       new HullBlock(),            new HullBlock(),       undefined],
+			[undefined,           new HullBlock(),       new ControlBlock(),     new HullBlock(),       undefined],
+			[undefined,           new HullBlock(),       new PowerBlock(),       new HullBlock(),       undefined],
+			[new ThrusterBlock(), new HullBlock(),       new CargoBlock,         new HullBlock(),       new ThrusterBlock()],
+			[undefined,           new HullBlock(),       new CargoBlock,         new HullBlock(),       undefined],
+			[undefined,           new HullBlock(),       new FuelBlock,          new HullBlock(),       undefined],
+			[undefined,           new HullBlock(),       undefined,              new HullBlock(),       undefined],
 			[undefined,           new EngineBlock(), undefined,              new EngineBlock(), undefined]
 		]
 	},

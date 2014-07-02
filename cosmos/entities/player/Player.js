@@ -309,7 +309,7 @@ var Player = BlockStructure.extend({
 			/* Angular motion */
 			// Angular rotation speed depends on number of thrusters
 			var numRotationalThrusters = this.numBlocksOfType('ThrusterBlock');
-			var angularImpulse = -3000 * numRotationalThrusters;
+			var angularImpulse = -60 * numRotationalThrusters * ige._tickDelta;
 
 			if (this.controls.key.left || this.controls.key.right) {
 				if (numRotationalThrusters < 1) {
@@ -327,12 +327,12 @@ var Player = BlockStructure.extend({
 
 			/* Linear motion */
 			if (this.controls.key.up || this.controls.key.down) {
-				var linearImpulse;
+				var linearImpulse = 3 * ige._tickDelta;
 				if (this.controls.key.up) {
-					linearImpulse = 100;
+					linearImpulse = linearImpulse;
 				}
 				else if (this.controls.key.down) {
-					linearImpulse = -100;
+					linearImpulse = -linearImpulse;
 				}
 
 				// the "- Math.PI/2" below makes the ship move forward and backwards, instead of side to side.

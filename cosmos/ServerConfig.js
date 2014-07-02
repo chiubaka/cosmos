@@ -1,9 +1,14 @@
 var config = {
 	include: [
+		/* === CONSTANTS === */
+		{ name: 'Constants', path: './constants' },
+
 		/* === GAME SETUP === */
 		/* Initialization */
-		{ name: 'ServerNetworkEvents', path: './init/ServerNetworkEvents' },
 		{ name: 'GameInit', path: './init/GameInit' },
+
+		/* Network */
+		{ name: 'ServerNetworkEvents', path: './ServerNetworkEvents' },
 
 		/* Configuration */
 
@@ -24,6 +29,20 @@ var config = {
 		{ name: 'ControlBlock', path: './entities/blocks/parts/ControlBlock' },
 		{ name: 'MiningLaserBlock', path: './entities/blocks/parts/MiningLaserBlock' },
 		{ name: 'ThrusterBlock', path: './entities/blocks/parts/ThrusterBlock' },
+		/* Ship armor blocks */
+		{ name: 'Armor', path: './entities/blocks/Armor' },
+		{ name: 'HullBlock', path: './entities/blocks/armor/HullBlock' },
+		{ name: 'CloakBlock', path: './entities/blocks/armor/CloakBlock' },
+		{ name: 'CloakBlockLight', path: './entities/blocks/armor/CloakBlockLight' },
+		{ name: 'CloakBlockViolet', path: './entities/blocks/armor/CloakBlockViolet' },
+		{ name: 'CloakBlockVioletLight', path: './entities/blocks/armor/CloakBlockVioletLight' },
+		{ name: 'KryptoniteBlock', path: './entities/blocks/armor/KryptoniteBlock' },
+		{ name: 'MithrilBlock', path: './entities/blocks/armor/MithrilBlock' },
+		{ name: 'AdamantiumBlock', path: './entities/blocks/armor/AdamantiumBlock' },
+		{ name: 'DragonBlock', path: './entities/blocks/armor/DragonBlock' },
+		{ name: 'TitaniumBlock', path: './entities/blocks/armor/TitaniumBlock' },
+		{ name: 'VioletBlock', path: './entities/blocks/armor/VioletBlock' },
+		{ name: 'OrangeBlock', path: './entities/blocks/armor/OrangeBlock' },
 
 		/* Element blocks */
 		{ name: 'Element', path: './entities/blocks/Element' },
@@ -38,6 +57,7 @@ var config = {
 		{ name: 'ExampleShips', path: './entities/prefabs/ExampleShips' },
 
 		/* Scenery */
+		{ name: 'ParallaxBackground', path: './entities/scenery/ParallaxBackground' },
 		{ name: 'Background', path: './entities/scenery/Background' },
 		{ name: 'BlockStructureGenerator', path: './entities/scenery/BlockStructureGenerator' },
 
