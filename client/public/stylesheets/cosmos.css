@@ -106,7 +106,7 @@ html, body {
   user-select: none;
 }
 
-/* line 17, ../../sass/_hud.scss */
+/* line 19, ../../sass/_hud.scss */
 #hud {
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -121,7 +121,7 @@ html, body {
   height: 50px;
   width: 100%;
   background-color: #222222;
-  z-index: 100;
+  z-index: 101;
 }
 
 /* line 24, ../../sass/_bottom-toolbar.scss */
