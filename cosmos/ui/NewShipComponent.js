@@ -5,6 +5,8 @@ var NewShipComponent = ButtonComponent.extend({
 	init: function() {
 		ButtonComponent.prototype.init.call(this, $('#bottom-toolbar'), 'new-ship-button', undefined, 'New Ship');
 		this.element.click(this.mouseDown);
+
+		ige.emit('cosmos:hud.bottomToolbar.subcomponent.loaded', this);
 	},
 
 	mouseDown: function() {

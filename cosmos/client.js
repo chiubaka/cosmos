@@ -47,6 +47,7 @@ var Client = IgeClass.extend({
 				'assets/effects/laser/laserbeam.png'),
 			rectangleTexture: new IgeTexture(gameRoot +
 				'assets/effects/particles/Rectangle.js'),
+			healthBar: new IgeTexture(gameRoot + 'assets/HealthBarTexture.js'),
 
 			// Cap textures
 			mineCap_color: new IgeTexture(gameRoot + 'assets/ui/mine/mine-color.png'),
@@ -139,8 +140,11 @@ var Client = IgeClass.extend({
 						ige.addComponent(HUDComponent);
 						//ige.editor.showStats();
 
-						// Ask the server to create an entity for us
-						ige.network.send('playerEntity', {sid: self.getSessionId()});
+						// Wait until the HUD finishes loading to ask for the player.
+						ige.on('cosmos:hud.loaded', function(hud) {
+							// Ask the server to create an entity for us
+							ige.network.send('playerEntity', {sid: self.getSessionId()});
+						});
 					});
 				}
 			});

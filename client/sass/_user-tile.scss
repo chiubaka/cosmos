@@ -18,6 +18,7 @@ $user-info-padding: $bottom-toolbar-item-padding;
   .user-info {
     float: left;
     padding: $user-info-padding;
+    height: $bottom-toolbar-height - $user-info-padding * 2;
     width: $hud-button-width * 4;
     cursor: pointer;
 

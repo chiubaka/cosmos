@@ -59,8 +59,13 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 			}
 		});
 
-		// Hide the construction zone overlays initially
-		this.hide();
+		// If construct capability enabled, show the construction zones
+		if (ige.client.state.selectedCap() === 'construct') {
+			this.show();
+		}
+		else {
+			this.hide();
+		}
 	},
 
 	/**

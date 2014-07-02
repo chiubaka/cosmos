@@ -6,6 +6,8 @@ var MineCap = Cap.extend({
 
 	init: function() {
 		Cap.prototype.init.call(this, $('#cap-bar'), 'mine-cap', undefined, 'Mine');
+
+		ige.emit('cosmos:hud.bottomToolbar.capBar.subcomponent.loaded', this);
 	}
 });
 
