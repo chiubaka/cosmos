@@ -436,15 +436,16 @@
   background-color: rgba(0, 0, 0, 0.7);
 }
 
-/* line 31, ../../sass/_windows.scss */
-#windows-container {
+/* line 4, ../../sass/_windows.scss */
+#windows {
   position: relative;
   top: 100px;
   left: 60px;
 }
-/* line 35, ../../sass/_windows.scss */
-#windows-container #windows {
+/* line 28, ../../sass/_window.scss */
+#windows .window {
   position: absolute;
+  float: left;
   background-color: #363636;
   display: none;
   width: 158px;

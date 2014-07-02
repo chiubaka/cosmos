@@ -1,42 +1,9 @@
-// Number of blocks displayed in the window
-$windows-num-cols: 3;
-$windows-num-rows: 3;
-$windows-block-width: 40px;
-$windows-block-height: 40px;
-$windows-spacing-between-windows: 10px;
-$windows-outer-border-width: 4px;
-$windows-spacing-between-blocks: 4px;
-$windows-scrollbar-width: 10px;
-$windows-scrollbar-right-padding: 4px;
-$windows-header-height: 25px;
-$windows-tabs-height: 25px;
-$windows-outer-border-color: #363636;
-
-// Calculate the width of the window
-$windows-width: $windows-outer-border-width * 2 +
-	$windows-num-cols * $windows-block-width +
-	($windows-num-cols + 1) * $windows-spacing-between-blocks +
-	$windows-scrollbar-width + $windows-scrollbar-right-padding;
-
-// Calculate the height of the window
-$windows-height: $windows-header-height + $windows-tabs-height +
-	($windows-num-rows * $windows-block-height) +
-	($windows-num-rows + 1) * $windows-spacing-between-blocks +
-	$windows-outer-border-width;
-
-
 $windows-container-margin-top: $hud-button-height * 2;
-$windows-container-margin-left: $hud-button-width + $windows-spacing-between-windows;
+$windows-container-margin-left: $hud-button-width + 10px;
 
-#windows-container {
+#windows {
 	position: relative;
 	top: $windows-container-margin-top;
 	left: $windows-container-margin-left;
-	#windows {
-		position: absolute;
-		background-color: $windows-outer-border-color;
-		display: none;
-		width: $windows-width;
-		height: $windows-height;
-	}
+	@import 'window';
 }

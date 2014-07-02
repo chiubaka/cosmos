@@ -17,6 +17,11 @@ var CraftingComponent = IgeEventingClass.extend({
 			self.log('Left toolbar has not been initialized.', 'error');
 			return;
 		}
+		var windows = $('#windows');
+		if (windows.length === 0) {
+			self.log('Windows has not been initialized.', 'error');
+			return;
+		}
 
 		self.craftingBlocks = {};
 
@@ -27,31 +32,38 @@ var CraftingComponent = IgeEventingClass.extend({
 			self.containers = self.element.find('#crafting-containers');
 			self.emptyLabel = self.element.find('#crafting-empty-label');
 
-			self.button.click(function() {
-				if (self.button.hasClass('active')) {
-					self.close();
-				}
-				else {
-					self.open();
-				}
-			});
+			// Create crafting window
+			HUDComponent.loadHtml(WindowsComponent.UI_ROOT + 'crafting-window.html', function(html) {
+				windows.append(html);
+				self.craftingWindow = $('#crafting-window');
 
-			ige.emit('cosmos:hud.leftToolbar.subcomponent.loaded', self);
+				self.button.click(function() {
+					if (self.button.hasClass('active')) {
+						self.close();
+					}
+					else {
+						self.open();
+					}
+				});
+
+				ige.emit('cosmos:hud.leftToolbar.subcomponent.loaded', self);
+			});
 		});
 	},
 
 	open: function() {
-		ige.hud.leftToolbar.windows.open();
+		this.craftingWindow.show();
 		this.button.addClass('active');
 	},
 
 	close: function() {
-		ige.hud.leftToolbar.windows.close();
+		this.craftingWindow.hide();
 		this.button.removeClass('active');
 	},
 });
 
 CraftingComponent.UI_ROOT = '/components/crafting/';
+WindowsComponent.UI_ROOT = '/components/windows/';
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
 	module.exports = CraftingComponent;

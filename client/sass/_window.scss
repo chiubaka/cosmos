@@ -1,0 +1,35 @@
+// Number of blocks displayed in the window
+$window-num-cols: 3;
+$window-num-rows: 3;
+$window-block-width: 40px;
+$window-block-height: 40px;
+$window-spacing-between-window: 10px;
+$window-outer-border-width: 4px;
+$window-spacing-between-blocks: 4px;
+$window-scrollbar-width: 10px;
+$window-scrollbar-right-padding: 4px;
+$window-header-height: 25px;
+$window-tabs-height: 25px;
+$window-outer-border-color: #363636;
+
+// Calculate the width of the window
+$window-width: $window-outer-border-width * 2 +
+	$window-num-cols * $window-block-width +
+	($window-num-cols + 1) * $window-spacing-between-blocks +
+	$window-scrollbar-width + $window-scrollbar-right-padding;
+
+// Calculate the height of the window
+$window-height: $window-header-height + $window-tabs-height +
+	($window-num-rows * $window-block-height) +
+	($window-num-rows + 1) * $window-spacing-between-blocks +
+	$window-outer-border-width;
+
+
+.window {
+	position: absolute;
+	float: left;
+	background-color: $window-outer-border-color;
+	display: none;
+	width: $window-width;
+	height: $window-height;
+}

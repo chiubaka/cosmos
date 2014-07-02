@@ -29,13 +29,6 @@ var WindowsComponent = IgeEventingClass.extend({
 		this.addComponent(CraftingComponent);
 	},
 
-	open: function() {
-		this.windows.show();
-	},
-
-	close: function() {
-		this.windows.hide();
-	},
 });
 
 WindowsComponent.UI_ROOT = '/components/windows/';
