@@ -50,5 +50,6 @@ $left-toolbar-tooltip-width: $left-toolbar-item-width * 1.5;
   @include hud-icon-button($icon);
 }
 
+@import 'windows';
 @import 'cargo';
 @import 'crafting';

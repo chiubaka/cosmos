@@ -21,7 +21,7 @@ var LeftToolbarComponent = IgeEventingClass.extend({
 
 		this.element = $('#left-toolbar');
 
-		this.numComponentsToLoad = 2;
+		this.numComponentsToLoad = 1;
 
 		ige.on('cosmos:hud.leftToolbar.subcomponent.loaded', function(component) {
 			self.numComponentsToLoad--;
@@ -30,8 +30,8 @@ var LeftToolbarComponent = IgeEventingClass.extend({
 			}
 		});
 
-		this.addComponent(CargoComponent);
-		this.addComponent(CraftingComponent);
+		this.addComponent(WindowsComponent);
+
 	}
 });
 

@@ -436,6 +436,20 @@
   background-color: rgba(0, 0, 0, 0.7);
 }
 
+/* line 31, ../../sass/_windows.scss */
+#windows-container {
+  position: relative;
+  top: 100px;
+  left: 60px;
+}
+/* line 35, ../../sass/_windows.scss */
+#windows-container #windows {
+  position: absolute;
+  background-color: #363636;
+  width: 152px;
+  height: 190px;
+}
+
 /* line 19, ../../sass/_cargo.scss */
 #cargo {
   margin-top: 100px;

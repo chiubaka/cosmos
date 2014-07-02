@@ -89,6 +89,7 @@ var igeClientConfig = {
 		'./ui/HUDComponent.js',
 		'./ui/BottomToolbarComponent.js',
 		'./ui/LeftToolbarComponent.js',
+		'./ui/WindowsComponent.js',
 		'./ui/ButtonComponent.js',
 		'./ui/UserTileComponent.js',
 		'./ui/ChatComponent.js',
