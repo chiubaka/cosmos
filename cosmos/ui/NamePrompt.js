@@ -52,7 +52,7 @@ var NamePrompt = IgeEventingClass.extend({
 			self.usernameInput.addClass('error');
 		});
 
-		ige.on('cosmos:player.username.set', function(username) {
+		ige.on('cosmos:client.player.username.set', function(username) {
 			self.hide();
 		});
 
