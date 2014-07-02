@@ -84,6 +84,7 @@ var Player = BlockStructure.extend({
 		var data = BlockStructure.prototype.streamCreateData.call(this);
 		data.username = this.username();
 		data.dbId = this.dbId();
+		data.hasGuestUsername = this.hasGuestUsername;
 		return data;
 	},
 
@@ -127,7 +128,7 @@ var Player = BlockStructure.extend({
 		}
 
 		// Players can't change their username after they've chosen one!
-		if (this._username) {
+		if (!this.hasGuestUsername && this._username) {
 			return this;
 		}
 
@@ -141,7 +142,7 @@ var Player = BlockStructure.extend({
 	},
 
 	requestUsername: function(username) {
-		if (!this.username()) {
+		if (!this.username() || this.hasGuestUsername) {
 			ige.network.send('cosmos:player.username.set.request', username);
 		}
 	},
@@ -184,6 +185,7 @@ var Player = BlockStructure.extend({
 		if (data !== undefined) {
 			this.username(data.username);
 			this.dbId(data.dbId);
+			this.hasGuestUsername = data.hasGuestUsername;
 		}
 
 		// Either the username was already streamed, in which case it is here and we can create a label
@@ -196,20 +198,6 @@ var Player = BlockStructure.extend({
 			else {
 				this._createUsernameLabel();
 			}
-		}
-		// Or it has not been streamed, which means that the player does not have a username on the server, either. In
-		// this case, wait for the server to tell us that this player's username has been approved, then set the
-		// username and draw the label.
-		else {
-			ige.on('cosmos:player.username.set.approve', function(data) {
-				if (data.playerId === self.id()) {
-					self.username(data.username);
-					self._createUsernameLabel();
-					if (self.id() === ige.client.player.id()) {
-						ige.emit('cosmos:client.player.username.set', self.username());
-					}
-				}
-			});
 		}
 	},
 
@@ -617,8 +605,10 @@ Player.onUsernameRequested = function(username, clientId) {
 	if (player === undefined) {
 		return;
 	}
-	if (player.username()) {
-		ige.network.send('cosmos:player.username.set.error', 'Player already has username ' + this._username, clientId);
+
+	if (!player.hasGuestUsername && player.username()) {
+		ige.network.send('cosmos:player.username.set.error', 'Player already has username ' + player.username(), clientId);
+		console.log("Player already has username: " + player.username());
 		return;
 	}
 
@@ -643,6 +633,7 @@ Player.onUsernameRequested = function(username, clientId) {
 		}
 		else {
 			player.username(username);
+			player.hasGuestUsername = false;
 			DbPlayer.update(player.dbId(), player, function(err) {
 				if (err) {
 					console.error('Error updating player ' + player.dbId() + '. Error: ' + err);
@@ -655,18 +646,15 @@ Player.onUsernameRequested = function(username, clientId) {
 	});
 };
 
-Player.onSetGuestUsername = function(username, clientId) {
-	var player = ige.server.players[clientId];
-	if (player === undefined) {
-		return;
-	}
-	player.username(username);
-	player.hasGuestUsername = true;
-	ige.network.send('cosmos:player.username.set.approve', {'playerId': player.id(), 'username': username});
-};
-
 Player.onUsernameApproved = function(data) {
 	ige.emit('cosmos:player.username.set.approve', data);
+
+	if (ige.client.player !== undefined && data.playerId === ige.client.player.id()) {
+		var player = ige.client.player;
+		player.username(data.username);
+		player.hasGuestUsername = false;
+		ige.emit('cosmos:client.player.username.set', player.username());
+	}
 };
 
 Player.onUsernameRequestError = function(error) {

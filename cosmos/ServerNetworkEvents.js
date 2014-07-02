@@ -129,8 +129,10 @@ var ServerNetworkEvents = {
 		if (playerId !== undefined) {
 			player.dbId(playerId);
 		}
-		else {
+
+		if (!player.username()) {
 			player.generateGuestUsername();
+			player.hasGuestUsername = true;
 		}
 
 		player.addSensor(300)
@@ -146,7 +148,6 @@ var ServerNetworkEvents = {
 
 		var sendData = {
 			entityId: ige.server.players[clientId].id(),
-			playerId: playerId !== undefined ? playerId : "undefined"
 		};
 
 		// Tell the client to track their player entity

@@ -30,7 +30,7 @@ var ClientNetworkEvents = {
 					// Make it easy to find the player's entity
 					ige.client.player = player;
 
-					ige.client.metrics.fireEvent('player', 'connect', data.playerId);
+					ige.client.metrics.fireEvent('player', 'connect', player.dbId());
 
 					ige.network.send('cargoRequest', { requestUpdates: true });
 
@@ -49,7 +49,7 @@ var ClientNetworkEvents = {
 					var username = player.username();
 
 					// If this player is logged in but doesn't yet have a username, prompt for one.
-					if (!username && player.isLoggedIn()) {
+					if (player.hasGuestUsername && player.isLoggedIn()) {
 						ige.client.promptForUsername();
 					}
 					else {
