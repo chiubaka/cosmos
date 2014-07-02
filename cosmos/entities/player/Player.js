@@ -219,49 +219,81 @@ var Player = BlockStructure.extend({
 		this.usernameLabel = $('<div>' + this.username() + '</div>').addClass('username-label tooltip');
 		$('body').append(this.usernameLabel);
 
+		var hoverTimer;
+
 		// Make the username label "disappear" on hover. Cannot just hide the label, because there is no good condition
 		// to make it show again. This makes the mousedown code below necessary so that we can send clicks through this
 		// label to the canvas below.
 		this.usernameLabel.hover(function() {
+			if (hoverTimer !== undefined) {
+				clearTimeout(hoverTimer);
+			}
 			$(this).css({opacity: 0});
 		},
 		function() {
-			$(this).css({opacity: 1});
+			var label = $(this);
+			hoverTimer = setTimeout(function() {
+				// 400ms for duration is the default for fadeIn()
+				label.fadeTo(400, 1);
+			}, Player.USERNAME_LABEL_HYSTERESIS_INTERVAL);
 		});
 
 		// When the username label is clicked, construct a click event that looks like a regular IGE canvas click event
 		// and pass it down to IGE.
 		this.usernameLabel.mousedown(function(e) {
-			var igeCanvas = document.getElementById('igeFrontBuffer');
-			var clickEvent = document.createEvent('MouseEvent');
-			clickEvent.initMouseEvent(
-				e.type,
-				e.bubbles,
-				e.cancelable,
-				e.view,
-				1,
-				e.screenX,
-				e.screenY,
-				e.clientX,
-				e.clientY,
-				e.ctrlKey,
-				e.altKey,
-				e.shiftKey,
-				e.metaKey,
-				e.button,
-				null
-			);
-			clickEvent.srcElement = clickEvent.currentTarget = clickEvent.target = clickEvent.toElement = igeCanvas;
-			igeCanvas.dispatchEvent(clickEvent);
+			self.dispatchClickToIge(e);
 		});
 
+		// Also need to pass mouse up events from the label down or the entity won't change its internal state to think
+		// that the mouse down ended and won't allow additional clicks.
+		this.usernameLabel.mouseup(function(e) {
+			self.dispatchClickToIge(e);
+		});
+
+		var mouseOutTimer;
+
 		this.mouseOver(function() {
+			if (mouseOutTimer !== undefined) {
+				clearTimeout(mouseOutTimer);
+			}
 			self.usernameLabel.hide();
 		});
 
 		this.mouseOut(function() {
-			self.usernameLabel.show();
+			mouseOutTimer = setTimeout(function() {
+				self.usernameLabel.fadeIn();
+			}, Player.USERNAME_LABEL_HYSTERESIS_INTERVAL);
 		});
+	},
+
+	dispatchClickToIge: function(e) {
+		var igeCanvas = document.getElementById('igeFrontBuffer');
+		var clickEvent = this.createIgeClickEvent(e);
+		igeCanvas.dispatchEvent(clickEvent);
+	},
+
+	createIgeClickEvent: function(e) {
+		var igeCanvas = document.getElementById('igeFrontBuffer');
+		var clickEvent = document.createEvent('MouseEvent');
+		clickEvent.initMouseEvent(
+			e.type,
+			e.bubbles,
+			e.cancelable,
+			e.view,
+			1,
+			e.screenX,
+			e.screenY,
+			e.clientX,
+			e.clientY,
+			e.ctrlKey,
+			e.altKey,
+			e.shiftKey,
+			e.metaKey,
+			e.button,
+			null
+		);
+		clickEvent.srcElement = clickEvent.currentTarget = clickEvent.target = clickEvent.toElement = igeCanvas;
+		return clickEvent;
 	},
 
 	destroyUsernameLabel: function() {
@@ -569,6 +601,8 @@ Player.BOX2D_CATEGORY = 'player';
  * @memberof Player
  */
 Player.DEPTH = 2;
+
+Player.USERNAME_LABEL_HYSTERESIS_INTERVAL = 500;
 
 Player.onUsernameRequested = function(username, clientId) {
 	if (!ige.isServer) {
