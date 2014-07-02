@@ -442,14 +442,40 @@
   top: 100px;
   left: 60px;
 }
-/* line 28, ../../sass/_window.scss */
-#windows .window {
+/* line 30, ../../sass/_window.scss */
+#windows .window, #windows #crafting-window {
   position: absolute;
   float: left;
-  background-color: #363636;
   display: none;
   width: 158px;
   height: 190px;
+}
+/* line 38, ../../sass/_window.scss */
+#windows .window .header, #windows #crafting-window .header {
+  height: 25px;
+  width: 100px;
+}
+/* line 42, ../../sass/_window.scss */
+#windows .window .tabs, #windows #crafting-window .tabs {
+  height: 25px;
+  width: 158px;
+}
+/* line 46, ../../sass/_window.scss */
+#windows .window .window-body, #windows #crafting-window .window-body {
+  height: 190px;
+  width: 158px;
+}
+/* line 7, ../../sass/_crafting-window.scss */
+#windows #crafting-window .header {
+  background-color: #d5e9d3;
+}
+/* line 10, ../../sass/_crafting-window.scss */
+#windows #crafting-window .tabs {
+  background-color: #b7d3b4;
+}
+/* line 13, ../../sass/_crafting-window.scss */
+#windows #crafting-window .window-body {
+  background-color: #8ba988;
 }
 
 /* line 19, ../../sass/_cargo.scss */
