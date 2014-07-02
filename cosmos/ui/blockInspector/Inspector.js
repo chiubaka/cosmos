@@ -54,6 +54,8 @@ var Inspector = IgeEventingClass.extend({
 		this.blockInspector.show();
 		this.blockInspectorName.text(block.displayName());
 		this.blockInspectorDescription.text(block.description());
+		this.blockInspectorCurrentHealth.text(block.hp());
+		this.blockInspectorMaxHealth.text(block.MAX_HP);
 
 		var canvas = this.blockInspectorTexture[0];
 		// Clears the canvas

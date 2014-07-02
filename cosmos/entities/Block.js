@@ -197,6 +197,10 @@ var Block = IgeEntity.extend({
 		return this._numCols;
 	},
 
+	hp: function() {
+		return this._hp;
+	},
+
 	description: function() {
 		return this.DESCRIPTION;
 	},
