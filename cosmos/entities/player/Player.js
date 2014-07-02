@@ -30,6 +30,7 @@ var Player = BlockStructure.extend({
 	_dbId: undefined,
 
 	_username: undefined,
+	_usernameLabel: undefined,
 
 	hasGuestUsername: undefined,
 
@@ -131,6 +132,11 @@ var Player = BlockStructure.extend({
 		}
 
 		this._username = val;
+
+		if (!ige.isServer && this._usernameLabel !== undefined) {
+			this._usernameLabel.text(this._username);
+		}
+
 		return this;
 	},
 
@@ -184,11 +190,11 @@ var Player = BlockStructure.extend({
 		if (this.username()) {
 			if (ige.client.player === undefined) {
 				ige.on('cosmos:client.player.streamed', function() {
-					self.createUsernameLabel();
+					self._createUsernameLabel();
 				}, self, true);
 			}
 			else {
-				this.createUsernameLabel();
+				this._createUsernameLabel();
 			}
 		}
 		// Or it has not been streamed, which means that the player does not have a username on the server, either. In
@@ -198,7 +204,7 @@ var Player = BlockStructure.extend({
 			ige.on('cosmos:player.username.set.approve', function(data) {
 				if (data.playerId === self.id()) {
 					self.username(data.username);
-					self.createUsernameLabel();
+					self._createUsernameLabel();
 					if (self.id() === ige.client.player.id()) {
 						ige.emit('cosmos:client.player.username.set', self.username());
 					}
@@ -207,23 +213,23 @@ var Player = BlockStructure.extend({
 		}
 	},
 
-	createUsernameLabel: function() {
+	_createUsernameLabel: function() {
 		// Don't create the username label again if it already exists. Also don't create a label for the client's
 		// player.
-		if (this.usernameLabel !== undefined ||
+		if (this._usernameLabel !== undefined ||
 			(ige.client.player !== undefined && this.id() === ige.client.player.id())) {
 			return;
 		}
 		var self = this;
-		this.usernameLabel = $('<div>' + this.username() + '</div>').addClass('username-label tooltip');
-		$('body').append(this.usernameLabel);
+		this._usernameLabel = $('<div>' + this.username() + '</div>').addClass('username-label tooltip');
+		$('body').append(this._usernameLabel);
 
 		var hoverTimer;
 
 		// Make the username label "disappear" on hover. Cannot just hide the label, because there is no good condition
 		// to make it show again. This makes the mousedown code below necessary so that we can send clicks through this
 		// label to the canvas below.
-		this.usernameLabel.hover(function() {
+		this._usernameLabel.hover(function() {
 			if (hoverTimer !== undefined) {
 				clearTimeout(hoverTimer);
 			}
@@ -239,13 +245,13 @@ var Player = BlockStructure.extend({
 
 		// When the username label is clicked, construct a click event that looks like a regular IGE canvas click event
 		// and pass it down to IGE.
-		this.usernameLabel.mousedown(function(e) {
+		this._usernameLabel.mousedown(function(e) {
 			self.dispatchClickToIge(e);
 		});
 
 		// Also need to pass mouse up events from the label down or the entity won't change its internal state to think
 		// that the mouse down ended and won't allow additional clicks.
-		this.usernameLabel.mouseup(function(e) {
+		this._usernameLabel.mouseup(function(e) {
 			self.dispatchClickToIge(e);
 		});
 
@@ -255,12 +261,12 @@ var Player = BlockStructure.extend({
 			if (mouseOutTimer !== undefined) {
 				clearTimeout(mouseOutTimer);
 			}
-			self.usernameLabel.hide();
+			self._usernameLabel.hide();
 		});
 
 		this.mouseOut(function() {
 			mouseOutTimer = setTimeout(function() {
-				self.usernameLabel.fadeIn();
+				self._usernameLabel.fadeIn();
 			}, Player.USERNAME_LABEL_HYSTERESIS_INTERVAL);
 		});
 	},
@@ -295,23 +301,23 @@ var Player = BlockStructure.extend({
 		return clickEvent;
 	},
 
-	destroyUsernameLabel: function() {
+	_destroyUsernameLabel: function() {
 		// If there is no username label, there isn't anything to destroy
-		if (this.usernameLabel === undefined) {
+		if (this._usernameLabel === undefined) {
 			return;
 		}
 
-		this.usernameLabel.remove();
-		this.usernameLabel = undefined;
+		this._usernameLabel.remove();
+		this._usernameLabel = undefined;
 	},
 
 	streamEntityValid: function(val) {
 		if (val !== undefined) {
 			if (val === false) {
-				this.destroyUsernameLabel();
+				this._destroyUsernameLabel();
 			}
 			else {
-				this.createUsernameLabel();
+				this._createUsernameLabel();
 			}
 		}
 
@@ -319,7 +325,7 @@ var Player = BlockStructure.extend({
 	},
 
 	destroy: function() {
-		this.destroyUsernameLabel();
+		this._destroyUsernameLabel();
 		BlockStructure.prototype.destroy.call(this);
 	},
 
@@ -476,10 +482,10 @@ var Player = BlockStructure.extend({
 		if (!ige.isServer) {
 
 			// If this isn't the player playing on this client, draw a label to help identify this player
-			if (this.usernameLabel !== undefined) {
+			if (this._usernameLabel !== undefined) {
 				var screenPos = this.screenPosition();
-				this.usernameLabel.css('left', Math.round(screenPos.x - this.usernameLabel.outerWidth() / 2));
-				this.usernameLabel.css('top', Math.round(screenPos.y - this.usernameLabel.outerHeight() / 2));
+				this._usernameLabel.css('left', Math.round(screenPos.x - this._usernameLabel.outerWidth() / 2));
+				this._usernameLabel.css('top', Math.round(screenPos.y - this._usernameLabel.outerHeight() / 2));
 			}
 
 			/* Save the old control state for comparison later */
