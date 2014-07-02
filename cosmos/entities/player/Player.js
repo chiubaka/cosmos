@@ -131,9 +131,6 @@ var Player = BlockStructure.extend({
 		}
 
 		this._username = val;
-		if (!ige.isServer) {
-			ige.emit('cosmos:player.username.set', this.id());
-		}
 		return this;
 	},
 
@@ -186,11 +183,9 @@ var Player = BlockStructure.extend({
 		// Either the username was already streamed, in which case it is here and we can create a label
 		if (this.username()) {
 			if (ige.client.player === undefined) {
-				var playerStreamedListener = ige.on('cosmos:client.player.streamed', function() {
+				ige.on('cosmos:client.player.streamed', function() {
 					self.createUsernameLabel();
-
-					ige.off('cosmos:client.player.streamed', playerStreamedListener);
-				});
+				}, self, true);
 			}
 			else {
 				this.createUsernameLabel();
@@ -652,6 +647,16 @@ Player.onUsernameRequested = function(username, clientId) {
 			});
 		}
 	});
+};
+
+Player.onSetGuestUsername = function(username, clientId) {
+	var player = ige.server.players[clientId];
+	if (player === undefined) {
+		return;
+	}
+	player.username(username);
+	player.hasGuestUsername = true;
+	ige.network.send('cosmos:player.username.set.approve', {'playerId': player.id(), 'username': username});
 };
 
 Player.onUsernameApproved = function(data) {

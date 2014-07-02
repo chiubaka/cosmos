@@ -49,7 +49,7 @@ var ChatComponent = ButtonComponent.extend({
 
 				ige.on('cosmos:client.player.username.set', function(username) {
 					self.start();
-				});
+				}, self, true);
 
 				self.chatClient.hide();
 
@@ -71,6 +71,7 @@ var ChatComponent = ButtonComponent.extend({
 	start: function() {
 		var self = this;
 		Candy.Core.connect('tl-xmpp.cloudapp.net', null, ige.client.player.username());
+		console.log('Logging into chat: ' + ige.client.player.username());
 
 		// Called when the chat client moves to the disconnected state.
 		$(Candy).on('candy:view.connection.status-6', function() {

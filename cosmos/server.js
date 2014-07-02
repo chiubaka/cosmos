@@ -69,6 +69,7 @@ var Server = IgeClass.extend({
 						ige.network.define('confirm');
 
 						ige.network.define('cosmos:player.username.set.request', Player.onUsernameRequested);
+						ige.network.define('cosmos:player.username.set.guest', Player.onSetGuestUsername);
 						ige.network.define('cosmos:player.username.set.approve');
 						ige.network.define('cosmos:player.username.set.error');
 

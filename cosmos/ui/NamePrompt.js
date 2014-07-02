@@ -39,6 +39,9 @@ var NamePrompt = IgeEventingClass.extend({
 
 		self.skipButton.click(function(e) {
 			ige.client.player.generateGuestUsername();
+			ige.network.send('cosmos:player.username.set.guest', ige.client.player.username());
+			ige.emit('cosmos:namePrompt.skipped');
+			ige.emit('cosmos:client.player.username.set', ige.client.player.username());
 			self.hide();
 		});
 
@@ -52,12 +55,12 @@ var NamePrompt = IgeEventingClass.extend({
 			self.usernameInput.addClass('error');
 		});
 
-		ige.on('cosmos:client.player.username.set', function(username) {
+		var clientPlayerUsernameSetListener = ige.on('cosmos:client.player.username.set', function(username) {
 			if (!ige.client.player.hasGuestUsername) {
 				ige.emit('cosmos:client.player.login', username);
 			}
 			self.hide();
-		});
+		}, self, true);
 
 		self.show();
 	},

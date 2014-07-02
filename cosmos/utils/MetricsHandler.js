@@ -69,6 +69,10 @@ var MetricsHandler = IgeClass.extend({
 		ige.on('cosmos:client.player.login', function(username) {
 			self.fireEvent('player', 'login', username);
 		});
+
+		ige.on('cosmos:namePrompt.skipped', function() {
+			self.fireEvent('namePrompt', 'skipped');
+		});
 	},
 
 	/**
