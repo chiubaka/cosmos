@@ -31,6 +31,8 @@ var Player = BlockStructure.extend({
 
 	_username: undefined,
 
+	hasGuestUsername: undefined,
+
 	/**
 	 * Whether or not this {@link Player} is mining. Used to restrict players from mining more than one {@link Block}
 	 * at a time.
@@ -144,6 +146,7 @@ var Player = BlockStructure.extend({
 	generateGuestUsername: function() {
 		var guestNumber = Math.floor((Math.random() * 999999) + 100000);
 		var guestUsername = 'guest' + guestNumber;
+		this.hasGuestUsername = true;
 		this.username(guestUsername);
 	},
 
@@ -173,6 +176,7 @@ var Player = BlockStructure.extend({
 	 */
 	_initClient: function(data) {
 		var self = this;
+		this.hasGuestUsername = false;
 		this.depth(Player.DEPTH);
 		if (data !== undefined) {
 			this.username(data.username);

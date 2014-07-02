@@ -53,6 +53,9 @@ var NamePrompt = IgeEventingClass.extend({
 		});
 
 		ige.on('cosmos:client.player.username.set', function(username) {
+			if (!ige.client.player.hasGuestUsername) {
+				ige.emit('cosmos:client.player.login', username);
+			}
 			self.hide();
 		});
 

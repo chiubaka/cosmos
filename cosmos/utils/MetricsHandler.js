@@ -65,6 +65,10 @@ var MetricsHandler = IgeClass.extend({
 		ige.on('respawn button clicked', function() {
 			self.fireEvent('respawn', 'click');
 		});
+
+		ige.on('cosmos:client.player.login', function(username) {
+			self.fireEvent('player', 'login', username);
+		});
 	},
 
 	/**
