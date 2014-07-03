@@ -573,6 +573,8 @@ var Block = IgeEntity.extend({
 				this.addEffect({type: 'healthBar'});
 			}
 		}
+
+		this.emit('cosmos:block.hp.changed', this.hp());
 	},
 
 	/**

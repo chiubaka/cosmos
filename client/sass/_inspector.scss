@@ -25,6 +25,7 @@ $block-inspector-texture-width: $block-inspector-texture-height;
   }
 
   #block-inspector.pullout {
+    display: none;
     background-color: $inspector-button-background-color;
     font-size: 75%;
 
@@ -71,6 +72,7 @@ $block-inspector-texture-width: $block-inspector-texture-height;
   }
 
   .button {
+    display: none;
     @include side-button-with-icon('../images/icons/icon_inspector.png', $inspector-button-background-color, $inspector-button-hover-background-color, $inspector-button-border-color, true);
   }
 }

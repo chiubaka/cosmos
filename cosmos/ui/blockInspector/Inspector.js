@@ -5,6 +5,7 @@ var Inspector = IgeEventingClass.extend({
 	element: undefined,
 	button: undefined,
 
+	block: undefined,
 	blockInspector: undefined,
 	blockInspectorName: undefined,
 	blockInspectorTexture: undefined,
@@ -46,16 +47,30 @@ var Inspector = IgeEventingClass.extend({
 				self.inspect(block);
 			});
 
+			ige.on('cosmos:background.mousedown', function() {
+				self.blockInspector.hide();
+			});
+
 			ige.emit('cosmos:hud.subcomponent.loaded', self);
 		});
 	},
 
 	inspect: function(block) {
+		var self = this;
+		this.block = block;
 		this.blockInspector.show();
 		this.blockInspectorName.text(block.displayName());
 		this.blockInspectorDescription.text(block.description());
 		this.blockInspectorCurrentHealth.text(block.hp());
 		this.blockInspectorMaxHealth.text(block.MAX_HP);
+
+		block.on('cosmos:block.hp.changed', function(hp) {
+			// TODO: Change the color of the health text based on the percentage of health that is left
+			self.blockInspectorCurrentHealth.text(Math.round(hp));
+			if (hp <= 0) {
+				self.blockInspector.hide();
+			}
+		});
 
 		var canvas = this.blockInspectorTexture[0];
 		// Clears the canvas
