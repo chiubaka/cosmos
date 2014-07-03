@@ -134,6 +134,9 @@ var Client = IgeClass.extend({
 						ige.notification.addComponent(NotificationUIComponent)
 							.start();
 
+						// Enable crafting system
+						ige.addComponent(CraftingSystem);
+
 						GameInit.init(self);
 
 						//ige.editor.showStats();

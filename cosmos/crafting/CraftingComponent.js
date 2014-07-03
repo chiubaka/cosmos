@@ -1,5 +1,6 @@
 /* Crafting component
- * This component is meant to be initialized client-side and server-side.
+ * This is a player component
+ * This component is meant to be initialized client-side and server-side
  */
 
 var CraftingComponent = IgeEventingClass.extend({
@@ -20,24 +21,9 @@ var CraftingComponent = IgeEventingClass.extend({
 			}
 			this._cargo = entity.cargo;
 
-			// Define network commands server side
-			ige.network.define('cosmos:crafting.craft', this.craft);
 		}
 		this._recipies = Recipies.starterRecipies;
-
-	},
-
-	craft: function(recipe) {
-		if (ige.isClient) {
-			ige.network.send('cosmos:crafting.craft', recipe);
-		}
-
-		if (ige.isServer) {
-			console.log(recipe);
-		}
-
-	}
-	
+	},	
 
 });
 

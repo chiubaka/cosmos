@@ -77,6 +77,9 @@ var Server = IgeClass.extend({
 							.stream.sendInterval(Constants.fps.SERVER_FPS)
 							.stream.start(); // Start the stream
 
+						// Add crafting system
+						ige.addComponent(CraftingSystem);
+
 						// Accept incoming network connections
 						ige.network.acceptConnections(true);
 

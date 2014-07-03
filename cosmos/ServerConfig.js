@@ -70,6 +70,7 @@ var config = {
 		{ name: 'CargoItem', path: './models/cargo/CargoItem' },
 
 		/* === Crafting === */
+		{ name: 'CraftingSystem', path: './crafting/CraftingSystem' },
 		{ name: 'CraftingComponent', path: './crafting/CraftingComponent' },
 		{ name: 'Recipies', path: './crafting/Recipies' },
 
