@@ -9,7 +9,6 @@ $window-spacing-between-blocks: 4px;
 $window-scrollbar-width: 10px;
 $window-scrollbar-right-padding: 4px;
 $window-header-height: 25px;
-$window-header-width: 100px;
 $window-tabs-height: 25px;
 //$window-tabs-width: px;
 $window-outer-border-color: #363636;
@@ -37,7 +36,7 @@ $window-height: $window-header-height + $window-tabs-height +
 
 	.header {
 		height: $window-header-height;
-		width: $window-header-width;
+		width: $window-width;
 	}
 	.tabs {
 		height: $window-tabs-height;

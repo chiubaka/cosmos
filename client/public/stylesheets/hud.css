@@ -442,7 +442,7 @@
   top: 100px;
   left: 60px;
 }
-/* line 30, ../../sass/_window.scss */
+/* line 29, ../../sass/_window.scss */
 #windows .window, #windows #crafting-window {
   position: absolute;
   float: left;
@@ -450,17 +450,17 @@
   width: 158px;
   height: 190px;
 }
-/* line 38, ../../sass/_window.scss */
+/* line 37, ../../sass/_window.scss */
 #windows .window .header, #windows #crafting-window .header {
   height: 25px;
-  width: 100px;
+  width: 158px;
 }
-/* line 42, ../../sass/_window.scss */
+/* line 41, ../../sass/_window.scss */
 #windows .window .tabs, #windows #crafting-window .tabs {
   height: 25px;
   width: 158px;
 }
-/* line 46, ../../sass/_window.scss */
+/* line 45, ../../sass/_window.scss */
 #windows .window .window-body, #windows #crafting-window .window-body {
   height: 190px;
   width: 158px;
