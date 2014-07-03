@@ -22,8 +22,16 @@ var CraftingComponent = IgeEventingClass.extend({
 			this._cargo = entity.cargo;
 
 		}
-		this._recipies = Recipies.starterRecipies;
-	},	
+		this._recipies = StarterRecipies;
+	},
+
+	addRecipe: function(recipe) {
+		this._recipies[recipe] = true;
+	},
+
+	recipies: function() {
+		return this._recipies;
+	}
 
 });
 

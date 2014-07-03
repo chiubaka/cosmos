@@ -12,7 +12,6 @@ var GameInit = {
 	init: function(game) {
 
 		// Disable debug features for more performance
-		ige.debugEnabled(false);
 		ige.debugTiming(false);
 
 		this.initScenes(game);
@@ -253,9 +252,6 @@ var GameInit = {
 	},
 
 	initServerEvents: function() {
-		// Register game event listeners
-		ige.on('block mined', Player.prototype.blockMinedListener);
-		ige.on('block mined', BlockGrid.prototype.blockMinedListener);
 		ige.on('block collected', Player.prototype.blockCollectListener);
 	},
 

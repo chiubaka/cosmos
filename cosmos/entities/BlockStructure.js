@@ -90,6 +90,7 @@ var BlockStructure = BlockGrid.extend({
 	 * @instance
 	 */
 	processBlockActionServer: function(data, player) {
+		// TODO: Handle parent's return.
 		BlockGrid.prototype.processBlockActionServer.call(this, data, player);
 		var self = this;
 
@@ -122,11 +123,6 @@ var BlockStructure = BlockGrid.extend({
 
 					if (block._hp == 0) {
 						clearInterval(block._decrementHealthIntervalId);
-
-						// Emit a message saying that a block has been mined, but not
-						// necessarily collected. This is used for removing the laser.
-						var blockClassId = block.classId();
-						ige.emit('block mined', [player, blockClassId, block]);
 
 						player.mining = false;
 						player.turnOffMiningLasers(block);
