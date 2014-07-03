@@ -147,9 +147,7 @@ app.configure(function () {
 	app.use(express.methodOverride());
 	app.use(express.session({
 		store: new MongoStore({
-		//	url: 'mongodb://cosmos-admin:CS210-l3on1ne!@ds030827.mongolab.com:30827/cosmos-dev-db'
-		url: 'mongodb://localhost:27017/cosmos-dev-db'
-
+			url: 'mongodb://cosmos-admin:CS210-l3on1ne!@ds030827.mongolab.com:30827/cosmos-dev-db'
 		}),
 		secret: "pleaseworkpleaseworkpleasework",
 		cookie: {

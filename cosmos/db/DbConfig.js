@@ -5,7 +5,7 @@
 var DbConfig = {
 	db: undefined,
 
-	origonfig: {
+	config: {
 		user: 'cosmos-admin',
 		pass: 'CS210-l3on1ne!',
 		host: 'ds030827.mongolab.com',
@@ -13,14 +13,6 @@ var DbConfig = {
 		dbName: 'cosmos-dev-db',
 		collection: 'players'
 	},
-
-	config: {
-		host: 'localhost',
-		port: '27017',
-		dbName: 'cosmos-dev-db',
-		collection: 'players'
-	},
-
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = DbConfig; }
