@@ -21,14 +21,12 @@ $block-inspector-texture-width: $block-inspector-texture-height;
   }
 
   .pullout {
-    max-height: $hud-button-height * 6;
     width: $block-inspector-width;
   }
 
   #block-inspector.pullout {
     background-color: $inspector-button-background-color;
     font-size: 75%;
-    overflow-y: auto;
 
     p {
       margin: 0;
@@ -67,6 +65,8 @@ $block-inspector-texture-width: $block-inspector-texture-height;
     }
 
     .bottom {
+      max-height: $hud-button-height * 4;
+      overflow-y: auto;
     }
   }
 

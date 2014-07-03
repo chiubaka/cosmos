@@ -508,50 +508,53 @@
 }
 /* line 23, ../../sass/_inspector.scss */
 #inspector .pullout {
-  max-height: 300px;
   width: 250px;
 }
-/* line 28, ../../sass/_inspector.scss */
+/* line 27, ../../sass/_inspector.scss */
 #inspector #block-inspector.pullout {
   background-color: #0c3e00;
   font-size: 75%;
-  overflow-y: auto;
 }
-/* line 33, ../../sass/_inspector.scss */
+/* line 31, ../../sass/_inspector.scss */
 #inspector #block-inspector.pullout p {
   margin: 0;
 }
-/* line 37, ../../sass/_inspector.scss */
+/* line 35, ../../sass/_inspector.scss */
 #inspector #block-inspector.pullout .top, #inspector #block-inspector.pullout .middle, #inspector #block-inspector.pullout .bottom {
   padding: 10px;
 }
-/* line 41, ../../sass/_inspector.scss */
+/* line 39, ../../sass/_inspector.scss */
 #inspector #block-inspector.pullout .top {
   height: 30px;
 }
-/* line 44, ../../sass/_inspector.scss */
+/* line 42, ../../sass/_inspector.scss */
 #inspector #block-inspector.pullout .top #block-name {
   line-height: 30px;
   font-weight: bold;
   margin: 0;
   font-size: 125%;
 }
-/* line 52, ../../sass/_inspector.scss */
+/* line 50, ../../sass/_inspector.scss */
 #inspector #block-inspector.pullout .middle {
   overflow: auto;
   background-color: #125c00;
 }
-/* line 56, ../../sass/_inspector.scss */
+/* line 54, ../../sass/_inspector.scss */
 #inspector #block-inspector.pullout .middle #block-texture {
   height: 55px;
   width: 55px;
   margin-right: 10px;
   float: left;
 }
-/* line 63, ../../sass/_inspector.scss */
+/* line 61, ../../sass/_inspector.scss */
 #inspector #block-inspector.pullout .middle #block-stats {
   width: 165px;
   float: left;
+}
+/* line 67, ../../sass/_inspector.scss */
+#inspector #block-inspector.pullout .bottom {
+  max-height: 200px;
+  overflow-y: auto;
 }
 /* line 73, ../../sass/_inspector.scss */
 #inspector .button {
