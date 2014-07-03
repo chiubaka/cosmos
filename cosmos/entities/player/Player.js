@@ -190,6 +190,7 @@ var Player = IgeEntity.extend({
 	 */
 	currentShip: function(newCurrentShip) {
 		if (newCurrentShip !== undefined) {
+			console.log("finally setting current ship!");
 			this._currentShip = newCurrentShip;
 
 			if (!ige.isServer) {

@@ -96,6 +96,7 @@ var ClientNetworkEvents = {
 
 							player.currentShip(ige.client.currentShip);
 							console.log("current ship set!");
+							console.log(ige.client.currentShip.classId());
 						}
 
 						// Set the time stream UI entity to monitor our player entity

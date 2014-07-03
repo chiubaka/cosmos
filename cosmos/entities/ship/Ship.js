@@ -41,7 +41,7 @@ var Ship = BlockStructure.extend({
 	init: function(data) {
 		BlockStructure.prototype.init.call(this, data);
 
-		//var self = this;//TODO remove this line
+		var self = this;//TODO remove this line
 
 		this.category(Ship.BOX2D_CATEGORY);
 
@@ -59,22 +59,22 @@ var Ship = BlockStructure.extend({
 		}
 
 		// Define the data sections that will be included in the stream
-		this.streamSections(['transform']);
+		//this.streamSections(['transform']);
 	},
 
 	/**
 	 * Perform client-specific initialization here. Called by init()
-	 * @memberof Player
+	 * @memberof Ship
 	 * @private
 	 * @instance
 	 */
 	_initClient: function() {
-		this.depth(Player.DEPTH);
+		this.depth(Ship.DEPTH);
 	},
 
 	/**
 	 * Perform server-specific initialization here. Called by init()
-	 * @memberof Player
+	 * @memberof Ship
 	 * @private
 	 * @instance
 	 */
@@ -86,8 +86,8 @@ var Ship = BlockStructure.extend({
 	 * Add the sensor fixture. Called in ServerNetworkEvents after the box2Dbody
 	 * is created.
 	 * @param radius {number} The radius of the attraction field
-	 * @return {Player} This object is returned to facilitate setter chaining.
-	 * @memberof Player
+	 * @return {Ship} This object is returned to facilitate setter chaining.
+	 * @memberof Ship
 	 * @instance
 	 */
 	addSensor: function(radius) {
@@ -124,9 +124,9 @@ var Ship = BlockStructure.extend({
 	/**
 	 * Get/set the strength of attraction
 	 * @param strength {number?} A multiplier for attraction force
-	 * @return {(number|Player)} The current attraction strength if no argument is passed or this object if an argument
+	 * @return {(number|Ship)} The current attraction strength if no argument is passed or this object if an argument
 	 * is passed in order to support setter chaining.
-	 * @memberof Player
+	 * @memberof Ship
 	 * @instance
 	 */
 	attractionStrength: function(strength) {
@@ -140,34 +140,34 @@ var Ship = BlockStructure.extend({
 	},
 
 	/**
-	 * Changes the player's location to a random new location.
-	 * @memberof Player
+	 * Changes the ship's location to a random new location.
+	 * @memberof Ship
 	 * @instance
 	 */
 	relocate: function() {
 		return this.translateTo(
-			(Math.random() - .5) * Player.PLAYER_START_RADIUS,
-			(Math.random() - .5) * Player.PLAYER_START_RADIUS,
+			(Math.random() - .5) * Ship.SHIP_START_RADIUS,
+			(Math.random() - .5) * Ship.SHIP_START_RADIUS,
 			0
 		);
 	},
 
 	/**
 	 * Called every time a ship collects a block.
-	 * @memberof Player
+	 * @memberof Ship
 	 * @instance
 	 * @todo Make this a static function because it doesn't use instance data
 	 * @todo Add a cool animation or sound here, or on another listener
 	 */
-	blockCollectListener: function (player, blockClassId) {
-		player.cargo.addBlock(blockClassId);
+	blockCollectListener: function (ship, blockClassId) {
+		ship.cargo.addBlock(blockClassId);
 	},
 
 	/**
-	 * Checks if the player is able to mine
-	 * @memberof Player
+	 * Checks if the ship is able to mine
+	 * @memberof Ship
 	 * @instance
-	 * @return {Boolean} True if player can mine
+	 * @return {Boolean} True if ship can mine
 	 */
 	canMine: function () {
 		// Do not start mining if we are already mining
@@ -175,14 +175,14 @@ var Ship = BlockStructure.extend({
 			return false;
 		}
 
-		// Do not start mining if player has no mining lasers
+		// Do not start mining if ship has no mining lasers
 		return this.numBlocksOfType(MiningLaserBlock.prototype.classId()) !== 0;
 	},
 
 	/**
-	 * Sends messages to clients to tell them to turn on all of the mining lasers for this player.
+	 * Sends messages to clients to tell them to turn on all of the mining lasers for this ship.
 	 * @param targetBlock {Block} The {@link Block} that the mining lasers will be focused on.
-	 * @memberof Player
+	 * @memberof Ship
 	 * @instance
 	 * @todo The fireMiningLasers should be in the Ship class, but it doesn't exist yet.
 	 */
@@ -195,9 +195,9 @@ var Ship = BlockStructure.extend({
 	},
 
 	/**
-	 * Sends messages to clients to tell them to turn off all of the mining lasers for this player.
+	 * Sends messages to clients to tell them to turn off all of the mining lasers for this ship.
 	 * @param targetBlock {Block} The {@link Block} that the mining lasers were focused on.
-	 * @memberof Player
+	 * @memberof Ship
 	 * @instance
 	 * @todo The turnOffMiningLasers should be in the Ship class, but it doesn't exist yet.
 	 */
@@ -210,7 +210,9 @@ var Ship = BlockStructure.extend({
 	},
 
 	update: function(ctx) {
-		// TODO: Do not spam the player with notifications if engines/thruster
+		BlockStructure.prototype.update.call(this, ctx);
+
+		// TODO: Do not spam the ship with notifications if engines/thruster
 		// are removed
 		if (ige.isServer) {
 			/* Angular motion */
@@ -252,7 +254,7 @@ var Ship = BlockStructure.extend({
 
 				var engines = this.blocksOfType(EngineBlock.prototype.classId());
 
-				// Notify player that they cannot fly without an engine
+				// Notify ship that they cannot fly without an engine
 				if (engines.length < 1) {
 					ige.network.stream.queueCommand('notificationError',
 						NotificationDefinitions.errorKeys.noEngine, this._clientId);
@@ -286,27 +288,27 @@ var Ship = BlockStructure.extend({
 });
 
 /**
-* The radius from the center of the world within which players will spawn.
+* The radius from the center of the world within which ships will spawn.
 * @constant {number}
 * @default
-* @memberof Player
+* @memberof Ship
 */
-Ship.PLAYER_START_RADIUS = 4000;
+Ship.SHIP_START_RADIUS = 4000;
 
 /**
-* The Box2D category of all player entities. Used by Box2D to determine what to do in certain collision scenarios.
+* The Box2D category of all ship entities. Used by Box2D to determine what to do in certain collision scenarios.
 * @constant {string}
 * @default
-* @memberof Player
+* @memberof Ship
 */
-Ship.BOX2D_CATEGORY = 'player';
+Ship.BOX2D_CATEGORY = 'ship';
 
 /**
-* The default depth layer for {@link Player}s when rendered to the screen. Should be rendered above other
+* The default depth layer for {@link Ship}s when rendered to the screen. Should be rendered above other
 * {@link BlockGrid}s.
 * @constant {number}
 * @default
-* @memberof Player
+* @memberof Ship
 */
 Ship.DEPTH = 2;
 
