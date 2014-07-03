@@ -41,7 +41,7 @@ var Ship = BlockStructure.extend({
 	init: function(data) {
 		BlockStructure.prototype.init.call(this, data);
 
-		var self = this;//TODO remove this line
+		//var self = this;//TODO remove this line
 
 		this.category(Ship.BOX2D_CATEGORY);
 

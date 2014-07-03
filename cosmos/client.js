@@ -8,7 +8,7 @@ var Client = IgeClass.extend({
 				e.preventDefault();
 			}
 		}, false);
-		
+
 		ige.setFps(Constants.fps.CLIENT_FPS);
 
 		// Load our textures
@@ -115,6 +115,8 @@ var Client = IgeClass.extend({
 
 						// Setup the network command listeners
 						ige.network.define('playerEntity', self._onPlayerEntity);
+						ige.network.define('shipEntity', self._onShipEntity);
+
 						// Called when the server needs to broadcast updates about a block
 						ige.network.define('blockAction', self._onBlockAction);
 						// Called when the server wants to add an effect to a block

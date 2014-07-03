@@ -58,7 +58,8 @@ var Server = IgeClass.extend({
 						ige.network.define('constructNew', self._onConstructNew);
 						/* Called when player clicks on a construction zone */
 						ige.network.define('constructionZoneClicked', self._onConstructionZoneClicked);
-						/* Define this command so that we can use it on the client */
+
+						/* Define these commands so that we can use them on the client */
 						ige.network.define('blockAction');
 						ige.network.define('addEffect');
 						ige.network.define('removeEffect');
@@ -67,6 +68,8 @@ var Server = IgeClass.extend({
 						ige.network.define('cargoUpdate');
 						ige.network.define('cargoResponse');
 						ige.network.define('confirm');
+
+						ige.network.define('shipEntity');
 
 						/* When a client connects or disconnects */
 						ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js

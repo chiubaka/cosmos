@@ -72,6 +72,8 @@ var ServerNetworkEvents = {
 	 * @private
 	 */
 	_onPlayerEntity: function(data, clientId) {
+		console.log("_onPlayerEntity called");
+
 		var self = this;
 		/**
 		 * @callback onPlayerEntitySessionCallback
@@ -87,6 +89,8 @@ var ServerNetworkEvents = {
 
 			}
 
+			ige.server._createPlayer(clientId, playerId);
+
 			/**
 			 * @callback onPlayerEntityLoadCallback
 			 * @param err {Error | null}
@@ -98,7 +102,8 @@ var ServerNetworkEvents = {
 					self.log('Cannot load player from database!', 'error')
 				}
 
-				ige.server._createPlayer(clientId, playerId, ship, cargo);
+				console.log("Calling create ship...");
+				ige.server._createShip(clientId, playerId, ship, cargo);
 			});
 		});
 	},
@@ -117,21 +122,12 @@ var ServerNetworkEvents = {
 			.mount(ige.server.spaceGameScene)
 			.streamMode(1);
 
-			// Call BlockGrid#debugFixtures before calling BlockGrid#fromBlockMatrix, since debugging entities are
-			// added when fixtures are added.
-
-		if (ship === undefined) {
-			player.fromBlockMatrix(ExampleShips.starterShip(), false);
-		}
-		else {
-			player.fromBlockTypeMatrix(ship, false);
-		}
+		// Call BlockGrid#debugFixtures before calling BlockGrid#fromBlockMatrix, since debugging entities are
+		// added when fixtures are added.
 
 		if (playerId !== undefined) {
 			player.dbId(playerId);
 		}
-
-		//	player.cargo.rehydrateCargo(cargo);
 
 		ige.server.players[clientId] = player;
 
@@ -144,6 +140,50 @@ var ServerNetworkEvents = {
 
 		// Tell the client to track their player entity
 		ige.network.send('playerEntity', sendData, clientId);
+	},
+
+	_createShip: function(clientId, playerId, ship, cargo) {
+		player = ige.server.players[clientId];
+
+		var ship = new Ship()
+			.streamMode(1)
+			.mount(ige.$("spaceGameScene"));
+
+		player.currentShip(
+			ship
+		);
+
+		var blockGrid = new BlockStructure()
+			.streamMode(1)
+			.mount(ige.$("spaceGameScene"));
+		console.log("blockGid has the following id():");
+		console.log(blockGrid.id());
+
+		console.log("ship has the following id():");
+		console.log(player.currentShip().id());
+
+		console.log("ship id");
+		console.log(ship.id());
+
+		if (ship === undefined) {
+			player.currentShip().fromBlockMatrix(ExampleShips.starterShip(), false);
+		}
+		else {
+			player.currentShip().fromBlockTypeMatrix(ship, false);
+		}
+
+		player.currentShip().cargo.rehydrateCargo(cargo);
+
+		var sendData = {
+			entityId: player.currentShip().id()
+		}
+
+		ige.network.send('shipEntity', sendData, clientId);
+
+		console.log("finished create ship");
+		console.log("ship has the following id():");
+		console.log(player.currentShip().id());
+		console.log();
 	},
 
 	/**
@@ -181,6 +221,7 @@ var ServerNetworkEvents = {
 		ige.server._createPlayer(clientId, playerId);
 		ige.network.stream.queueCommand('notificationSuccess',
 			NotificationDefinitions.successKeys.newShip, clientId);
+		console.log("_onNewShipRequest called");
 	},
 
 	/**

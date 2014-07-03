@@ -8,7 +8,7 @@
  * @todo This design should be replaced by something more natural (like there should be a ship class) and/or
  * something component-based.
  */
-var Player = BlockStructure.extend({
+var Player = IgeEntity.extend({
 	classId: 'Player',
 
 	/**
@@ -52,7 +52,7 @@ var Player = BlockStructure.extend({
 	_currentShip: undefined,
 
 	init: function(data) {
-		BlockStructure.prototype.init.call(this, data);
+		IgeEntity.prototype.init.call(this, data);
 
 		var self = this;//TODO remove this line
 
@@ -64,15 +64,16 @@ var Player = BlockStructure.extend({
 				down: false
 			}
 		};
+
+		//TODO I"m going to construct this ship on the server and then send a message to the client telling him that this is his ship. He's then going to set the currentship property of his player.
 		/*
 		this._currentShip = new Ship()
-				.addSensor(300)
-				.attractionStrength(1)
-				.streamMode(1)
-				.mount(ige.server.spaceGameScene)
-				.relocate()
-				.debugFixtures(false);//change to true for debugging
-				*/
+			.addSensor(300)
+			.attractionStrength(1)
+			.streamMode(1)
+			.mount(ige.server.spaceGameScene)
+			.relocate()
+			.debugFixtures(false);//change to true for debugging*/
 	},
 
 	/**
@@ -150,13 +151,13 @@ var Player = BlockStructure.extend({
 			oldControls = JSON.stringify(this.controls());
 
 			/* Modify the KEYBOARD controls to reflect which keys the client currently is pushing */
-			this.controls.key.up =
+			this.controls().key.up =
 				ige.input.actionState('key.up') | ige.input.actionState('key.up_W');
-			this.controls.key.down =
+			this.controls().key.down =
 				ige.input.actionState('key.down') | ige.input.actionState('key.down_S');
-			this.controls.key.left =
+			this.controls().key.left =
 				ige.input.actionState('key.left') | ige.input.actionState('key.left_A');
-			this.controls.key.right =
+			this.controls().key.right =
 				ige.input.actionState('key.right') | ige.input.actionState('key.right_D');
 
 			if (JSON.stringify(this.controls) !== oldControls) { //this.controls !== oldControls) {
@@ -172,7 +173,7 @@ var Player = BlockStructure.extend({
 	 * Getter and setter for the controls property.
 	 */
 	controls: function(newControls) {
-		if (newControls !== undefined) {
+		if (newControls) {
 			this._controls = newControls;
 
 			//TODO do this for all the different controls
@@ -181,13 +182,30 @@ var Player = BlockStructure.extend({
 			return this;
 		}
 
-		return _controls;
+		return this._controls;
 	},
 
 	/**
-	 * Getter for the _currentShip property
+	 * Getter and setter for the _currentShip property
 	 */
-	currentShip: function() {
+	currentShip: function(newCurrentShip) {
+		if (newCurrentShip !== undefined) {
+			this._currentShip = newCurrentShip;
+
+			if (!ige.isServer) {
+					/**
+					* Initializes all of the cameras that need to track the ship.
+					* This is currently just one camera: the camera for the main viewport.
+					* The minimap doesn't actually use IGE, it uses HTML instead, and so it doesn't have a camera.
+					*/
+				var cameraSmoothingAmount = 0;
+
+				ige.$('mainViewport').camera.trackTranslate(this._currentShip, cameraSmoothingAmount);
+			}
+
+			return this;
+		}
+
 		return this._currentShip;
 	}
 });
