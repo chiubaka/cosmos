@@ -21,12 +21,10 @@ var image = {
 
 		// Fill color is red
 		ctx.fillStyle = "rgb(255, 0, 0)";
-		ctx.beginPath();
-		ctx.moveTo(healthBarStartX, block._bounds2d.y2 - Block.HEALTH_BAR_MARGIN - Block.HEALTH_BAR_HEIGHT);
-		ctx.lineTo(healthBarStartX, block._bounds2d.y2 - Block.HEALTH_BAR_MARGIN);
-		ctx.lineTo(healthBarStartX + healthBarWidth, block._bounds2d.y2 - Block.HEALTH_BAR_MARGIN);
-		ctx.lineTo(healthBarStartX + healthBarWidth, block._bounds2d.y2 - Block.HEALTH_BAR_MARGIN - Block.HEALTH_BAR_HEIGHT);
-		ctx.lineTo(healthBarStartX, block._bounds2d.y2 - Block.HEALTH_BAR_MARGIN - Block.HEALTH_BAR_HEIGHT);
-		ctx.fill();
+		ctx.fillRect(healthBarStartX,
+			block._bounds2d.y2 - Block.HEALTH_BAR_MARGIN - Block.HEALTH_BAR_HEIGHT,
+			healthBarWidth,
+			Block.HEALTH_BAR_HEIGHT
+		);
 	}
 };
