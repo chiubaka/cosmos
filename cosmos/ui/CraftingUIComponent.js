@@ -33,7 +33,7 @@ var CraftingUIComponent = IgeEventingClass.extend({
 			self.emptyLabel = self.element.find('#crafting-empty-label');
 
 			// Create crafting window
-			HUDComponent.loadHtml(WindowsComponent.UI_ROOT + 'crafting-window.html', function(html) {
+			HUDComponent.loadHtml(CraftingUIComponent.UI_ROOT + 'crafting-window.html', function(html) {
 				windows.append(html);
 				self.craftingWindow = $('#crafting-window');
 
@@ -46,7 +46,7 @@ var CraftingUIComponent = IgeEventingClass.extend({
 					}
 				});
 
-				ige.emit('cosmos:hud.leftToolbar.subcomponent.loaded', self);
+				ige.emit('cosmos:hud.leftToolbar.windows.subcomponent.loaded', self);
 			});
 		});
 	},
@@ -63,7 +63,6 @@ var CraftingUIComponent = IgeEventingClass.extend({
 });
 
 CraftingUIComponent.UI_ROOT = '/components/crafting/';
-WindowsComponent.UI_ROOT = '/components/windows/';
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
 	module.exports = CraftingUIComponent;

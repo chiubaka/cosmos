@@ -62,7 +62,7 @@ var CargoComponent = IgeEventingClass.extend({
 				self.populateFromInventory(cargoItems);
 			});
 
-			ige.emit('cosmos:hud.leftToolbar.subcomponent.loaded', self);
+			ige.emit('cosmos:hud.leftToolbar.window.subcomponent.loaded', self);
 		});
 	},
 
