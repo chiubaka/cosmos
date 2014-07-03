@@ -120,14 +120,6 @@ var Block = IgeEntity.extend({
 	 */
 	_fixtureDebuggingEntity: undefined,
 	/**
-	 * The current HP of this {@link Block}.
-	 * @type {number}
-	 * @memberof Block
-	 * @private
-	 * @instance
-	 */
-	_hp: undefined,
-	/**
 	 * A flag that determines whether or not this {@link Block} is currently being mined or not. The default value is
 	 * false, and when the value is false this {@link Block} is not currently being mined.
 	 * @type {boolean}
@@ -154,7 +146,7 @@ var Block = IgeEntity.extend({
 			this.MAX_HP = data.MAX_HP;
 		}
 
-		this._hp = this.MAX_HP;
+		this.addComponent(HealthComponent, {max: this.MAX_HP});
 
 		if (!ige.isServer) {
 			this.texture(ige.client.textures.block);
@@ -198,7 +190,7 @@ var Block = IgeEntity.extend({
 	},
 
 	hp: function() {
-		return this._hp;
+		return this.health.value;
 	},
 
 	description: function() {
@@ -324,7 +316,6 @@ var Block = IgeEntity.extend({
 				break;
 			case 'healthBar':
 				this._addHealthBar();
-
 		}
 	},
 
@@ -565,8 +556,8 @@ var Block = IgeEntity.extend({
 	 * @memberof Block
 	 * @instance
 	 */
-	damage: function(amount) {
-		this._hp -= amount;
+	takeDamage: function(amount) {
+		this.health.decrease(amount);
 
 		if (!ige.isServer) {
 			if (this._healthBar === undefined) {

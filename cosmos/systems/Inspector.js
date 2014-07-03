@@ -61,16 +61,26 @@ var Inspector = IgeEventingClass.extend({
 		this.blockInspector.show();
 		this.blockInspectorName.text(block.displayName());
 		this.blockInspectorDescription.text(block.description());
-		this.blockInspectorCurrentHealth.text(block.hp());
-		this.blockInspectorMaxHealth.text(block.MAX_HP);
 
-		block.on('cosmos:block.hp.changed', function(hp) {
-			// TODO: Change the color of the health text based on the percentage of health that is left
-			self.blockInspectorCurrentHealth.text(Math.round(hp));
-			if (hp <= 0) {
-				self.blockInspector.hide();
-			}
-		});
+		this.blockInspector.find('.block-stat').hide();
+		if (block.health !== undefined) {
+			this.blockInspector.find('#block-stat-health').show();
+			this.blockInspectorCurrentHealth.text(block.hp());
+			this.blockInspectorMaxHealth.text(block.MAX_HP);
+
+			block.on('cosmos:block.hp.changed', function(hp) {
+				// TODO: Change the color of the health text based on the percentage of health that is left
+				self.blockInspectorCurrentHealth.text(Math.round(hp));
+				if (hp <= 0) {
+					self.blockInspector.hide();
+				}
+			});
+		}
+
+		if (block.damageSource !== undefined) {
+			this.blockInspector.find('#block-stat-damage').show();
+			this.blockInspectorDamage.text(block.damageSource.dps);
+		}
 
 		var canvas = this.blockInspectorTexture[0];
 		// Clears the canvas

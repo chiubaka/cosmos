@@ -7,7 +7,7 @@
  * @typedef {MiningLaserBlock}
  * @namespace
  */
-var MiningLaserBlock = Part.extend({
+var MiningLaserBlock = Weapon.extend({
 	classId: 'MiningLaserBlock',
 
 	/**
@@ -25,7 +25,7 @@ var MiningLaserBlock = Part.extend({
 
 	init: function () {
 		data = {MAX_HP: this.MAX_HP};
-		Part.prototype.init.call(this, data);
+		Weapon.prototype.init.call(this, data);
 
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(242, 242, 242)";
