@@ -10,21 +10,33 @@ var CraftingSystem = IgeEventingClass.extend({
 
 	init: function(entity, options) {
 		if (ige.isServer) {
-			ige.network.define('cosmos:crafting.craft', this.craft);
+			ige.network.define('cosmos:crafting.craft', this._craftServer);
 		}
 		this.log('Crafting system initiated!');
 	},
 
-	craft: function(recipe) {
-		if (ige.isClient) {
-			ige.network.send('cosmos:crafting.craft', recipe);
+	craftClient: function(recipe) {
+		ige.network.send('cosmos:crafting.craft', recipe);
+	},
+
+	_craftServer: function (data, clientId) {
+		var player, cargo;
+
+		console.log("Player '" + clientId + "' wants to craft: '" + data + "'");
+		player = ige.server.players[clientId];
+		if (player === undefined) {
+			this.log('CraftingSystem._craftServer: Player is undefined', 'error');
+			return;
+		}
+		cargo = player.cargo;
+		if (cargo === undefined) {
+			this.log('CraftingSystem._craftServer: Cargo is undefined', 'error');
+			return;
 		}
 
-		if (ige.isServer) {
-			console.log(recipe);
-		}
 
-	}
+
+	},
 	
 
 });
