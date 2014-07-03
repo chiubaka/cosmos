@@ -14,7 +14,7 @@ var image = {
 		var block = entity._block;
 		// The current width of the health bar computed based on the percentage of health remaining
 		var healthBarWidth = (block.width() - 2 * Block.HEALTH_BAR_MARGIN)
-			* (block._hp / block.MAX_HP);
+			* (block.hp() / block.MAX_HP);
 
 		// The x-coordinate to start drawing the health bar based on the margin constant from the Block class
 		var healthBarStartX = -block._bounds2d.x2 + Block.HEALTH_BAR_MARGIN;
