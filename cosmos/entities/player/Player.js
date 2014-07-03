@@ -66,14 +66,6 @@ var Player = IgeEntity.extend({
 		};
 
 		//TODO I"m going to construct this ship on the server and then send a message to the client telling him that this is his ship. He's then going to set the currentship property of his player.
-		/*
-		this._currentShip = new Ship()
-			.addSensor(300)
-			.attractionStrength(1)
-			.streamMode(1)
-			.mount(ige.server.spaceGameScene)
-			.relocate()
-			.debugFixtures(false);//change to true for debugging*/
 	},
 
 	/**
@@ -146,6 +138,8 @@ var Player = IgeEntity.extend({
 	 * @instance
 	 */
 	update: function(ctx) {
+		IgeEntity.prototype.update.call(this, ctx);
+
 		if (!ige.isServer) {
 			/* Save the old control state for comparison later */
 			oldControls = JSON.stringify(this.controls());
@@ -165,8 +159,6 @@ var Player = IgeEntity.extend({
 				ige.network.send('playerControlUpdate', this.controls);
 			}
 		}
-
-		BlockGrid.prototype.update.call(this, ctx);
 	},
 
 	/**

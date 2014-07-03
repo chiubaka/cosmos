@@ -15,55 +15,24 @@ var ClientNetworkEvents = {
 	 * @private
 	 */
 	_onPlayerEntity: function(data) {
-		console.log("entityId: " + data.entityId);
-		console.log("On player entity");
+		ige.client.player = new Player();
 
-		var self = this;
+		// Set the time stream UI entity to monitor our player entity
+		// time stream data
+		//ige.client.tsVis.monitor(ige.client.player);
 
-		var player = ige.$(data.entityId)
-
-		if (player) {
-			// Set the time stream UI entity to monitor our player entity
-			// time stream data
-			ige.client.tsVis.monitor(player);
+		if (ige.client.currentShip) {
+			console.log("adding ship now that player is here");
+			ige.client.player.currentShip(ige.client.currentShip);
 		} else {
-			// The client has not yet received the entity via the network
-			// stream so lets ask the stream to tell us when it creates a
-			// new entity and then check if that entity is the one we
-			// should be tracking!
-				console.log("calling init cameras later!");
-			self._eventListener = ige.network.stream.on('entityCreated', function (entity) {
-				console.log("Event listener was called");
-				if (entity.id() === data.entityId) {
-					console.log("The player has been streamed!");
-					var player = ige.$(data.entityId);
-
-					// Make it easy to find the player's entity
-					ige.client.player = player;
-
-					if (ige.client.currentShip) {
-						console.log("adding ship now that player is here");
-						ige.client.player.currentShip(ige.client.currentShip);
-					} else {
-						console.log("player is here but ship is not yet here");
-					}
-
-					ige.client.metrics.fireEvent('player', 'connect', data.playerId);
-
-					// Set the time stream UI entity to monitor our player entity
-					// time stream data
-					//ige.client.tsVis.monitor(ige.$(data));
-
-					// Turn off the listener for this event now that we
-					// have found and started tracking our player entity
-					ige.network.stream.off('entityCreated', self._eventListener, function (result) {
-						if (!result) {
-							this.log('Could not disable event listener!', 'warning');
-						}
-					});
-				}
-			});
+			console.log("player is here but ship is not yet here");
 		}
+
+		ige.client.metrics.fireEvent('player', 'connect', data.playerId);
+
+		// Set the time stream UI entity to monitor our player entity
+		// time stream data
+		//ige.client.tsVis.monitor(ige.$(data));
 	},
 
 	_onShipEntity: function(data) {
@@ -90,13 +59,9 @@ var ClientNetworkEvents = {
 					console.log("Event listener was called for the function defined in _onShipEntity");
 					if (entity.id() === data.entityId) {
 
-						// Make it easy to find the player's entity
 						if (ige.client.player) {
-							var player = ige.client.player;
-
-							player.currentShip(ige.client.currentShip);
-							console.log("current ship set!");
-							console.log(ige.client.currentShip.classId());
+							ige.client.player.currentShip(entity);
+							console.log("current ship set to be the passed entity!");
 						}
 
 						// Set the time stream UI entity to monitor our player entity

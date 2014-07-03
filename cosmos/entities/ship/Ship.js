@@ -58,8 +58,14 @@ var Ship = BlockStructure.extend({
 			this._initServer();
 		}
 
+		this
+			//.addSensor(300)
+			.attractionStrength(1)
+			.relocate()
+			//.debugFixtures(false);//change to true for debugging*/
+
 		// Define the data sections that will be included in the stream
-		//this.streamSections(['transform']);
+		this.streamSections(['transform']);
 	},
 
 	/**

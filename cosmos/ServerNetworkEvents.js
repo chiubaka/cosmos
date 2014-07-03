@@ -145,18 +145,12 @@ var ServerNetworkEvents = {
 	_createShip: function(clientId, playerId, ship, cargo) {
 		player = ige.server.players[clientId];
 
-		var ship2 = new Ship()
-			.streamMode(1)
-			.mount(ige.$("spaceGameScene"));
-
 		player.currentShip(
-			ship2
+			new Ship()
+				.streamMode(1)
+				.mount(ige.$("spaceGameScene"))
 		);
 
-		var blockGrid = new BlockStructure()
-			.streamMode(1)
-			.mount(ige.$("spaceGameScene"));
-		/*
 		if (ship === undefined) {
 			player.currentShip().fromBlockMatrix(ExampleShips.starterShip(), false);
 		}
@@ -165,7 +159,7 @@ var ServerNetworkEvents = {
 		}
 
 		player.currentShip().cargo.rehydrateCargo(cargo);
-		*/
+
 		var sendData = {
 			entityId: player.currentShip().id()
 		}
