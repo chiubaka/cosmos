@@ -24,8 +24,7 @@ var WindowsComponent = IgeEventingClass.extend({
 
 		this.addComponent(CargoComponent);
 		this.addComponent(CraftingUIComponent);
-	},
-
+	}
 });
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
