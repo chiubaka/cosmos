@@ -70,6 +70,11 @@ var BlockStructure = BlockGrid.extend({
 		// TODO: This might be dangerous, since some of the event properties should be changed so that they are
 		// relative to the child's bounding box, but since we don't use any of those properties for the moment,
 		// ignore that.
+
+		console.log(ige.client.state.currentCapability().classId());
+		if (ige.client.state.currentCapability().classId() !== MineCapability.prototype.classId()) {
+			return;
+		}
 		if (this._hasNeighboringOpenLocations(block.row(), block.col(), block)) {
 			block.mouseDown(event, control);
 		}
