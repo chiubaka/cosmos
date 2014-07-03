@@ -88,7 +88,6 @@ var CraftingSystem = IgeEventingClass.extend({
 				return false;
 			}
 		}
-
 		return true;
 	},
 
