@@ -83,6 +83,7 @@ var igeClientConfig = {
 		'./crafting/CraftingSystem.js',
 		'./crafting/CraftingComponent.js',
 		'./crafting/Recipies.js',
+		'./crafting/StarterRecipies.js',
 
 		/* Notifications */
 		'./notifications/NotificationDefinitions.js',

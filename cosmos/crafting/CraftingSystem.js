@@ -21,6 +21,7 @@ var CraftingSystem = IgeEventingClass.extend({
 
 	_craftServer: function (data, clientId) {
 		var player, cargo, cargoItems;
+		var recipe = data;
 
 		console.log("Player '" + clientId + "' wants to craft: '" + data + "'");
 
@@ -37,7 +38,6 @@ var CraftingSystem = IgeEventingClass.extend({
 		}
 
 		cargoItems = cargo.getItemList(true);
-		// TODO: Give canCraft a list of ship blocks instead of the whole player
 		if (this.canCraft(cargoItems, player, recipe)) {
 			console.log('Craftable');
 			this.doCraft();
@@ -46,11 +46,16 @@ var CraftingSystem = IgeEventingClass.extend({
 	},
 	
 	/**
+	* @param cargoItems {Object}
+	* @param player {Player}
+	* @param recipe {Object}
 	* @returns {Boolean}
 	*/
-	canCraft: function(cargoItems, playerBlockGrid, recipe) {
-		return fals
+	canCraft: function(cargoItems, player, recipe) {
+		return false;
 	},
+
+
 
 	doCraft: function(cargo, recipe) {
 	}
