@@ -226,8 +226,6 @@ var Block = IgeEntity.extend({
 		if (ige.isClient && ige.client !== undefined && ige.client.state !== undefined) {
 			ige.client.state.currentCapability().tryPerformAction(self, event, data);
 		}
-
-		ige.emit('cosmos:block.mousedown', self);
 	},
 
 	/**
