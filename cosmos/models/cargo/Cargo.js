@@ -410,6 +410,8 @@ var Cargo = IgeClass.extend({
 	 * @memberof Cargo
 	 * @instance
 	 */
+	// TODO: Don't loop through the containers each time getItemList() is called.
+	// Instead, always keep a synchronized list in memory.
 	getItemList: function(coalesce) {
 		var returnDict = {};
 

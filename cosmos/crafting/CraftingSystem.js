@@ -20,9 +20,11 @@ var CraftingSystem = IgeEventingClass.extend({
 	},
 
 	_craftServer: function (data, clientId) {
-		var player, cargo;
+		var player, cargo, cargoItems;
 
 		console.log("Player '" + clientId + "' wants to craft: '" + data + "'");
+
+		// Check if player and player cargo exist
 		player = ige.server.players[clientId];
 		if (player === undefined) {
 			this.log('CraftingSystem._craftServer: Player is undefined', 'error');
@@ -34,10 +36,24 @@ var CraftingSystem = IgeEventingClass.extend({
 			return;
 		}
 
-
+		cargoItems = cargo.getItemList(true);
+		// TODO: Give canCraft a list of ship blocks instead of the whole player
+		if (this.canCraft(cargoItems, player, recipe)) {
+			console.log('Craftable');
+			this.doCraft();
+		};
 
 	},
 	
+	/**
+	* @returns {Boolean}
+	*/
+	canCraft: function(cargoItems, playerBlockGrid, recipe) {
+		return fals
+	},
+
+	doCraft: function(cargo, recipe) {
+	}
 
 });
 
