@@ -24,7 +24,7 @@ var CraftingSystem = IgeEventingClass.extend({
 	// Called by the server in response to a client craft request. This verifies
 	// and does the crafting.
 	_craftServer: function (data, clientId) {
-		var player, cargo, cargoItems, recipe;
+		var player, cargo, recipeName;
 
 		console.log("Player '" + clientId + "' wants to craft: '" + data + "'");
 
@@ -45,12 +45,11 @@ var CraftingSystem = IgeEventingClass.extend({
 			ige.craftingSystem.log('CraftingSystem._craftServer: Recipe does not exist', 'warning');
 			return;
 		}
-		recipe = data;
+		recipeName = data;
 
-		cargoItems = cargo.getItemList(true);
-		if (ige.craftingSystem.canCraft(cargoItems, player, recipe)) {
+		if (ige.craftingSystem._canCraft(cargo, player, recipeName)) {
 			console.log('Craftable');
-			ige.craftingSystem.doCraft();
+			ige.craftingSystem._doCraft(cargo, recipeName);
 		};
 
 	},
@@ -59,14 +58,16 @@ var CraftingSystem = IgeEventingClass.extend({
 	 * Checks if the recipe is craftable by the player.
 	 * A recipe is craftable if the player has:
 	 * 1. The recipe unlocked
-	 * 1. The correct number of reactant blocks in cargo
-	 * 2. The correct number of equipment blocks on the ship
-	 * @param cargoItems {Object}
+	 * 2. The correct number of reactant blocks in cargo
+	 * 3. The correct number of equipment blocks on the ship
+	 * 4. Space in their cargo for the products
+	 * @param cargo {Cargo}
 	 * @param player {Player}
 	 * @param recipeName {String}
 	 * @returns {Boolean} True if the recipe is craftable
 	 */
-	canCraft: function(cargoItems, player, recipeName) {
+	_canCraft: function(cargo, player, recipeName) {
+		var cargoItems = cargo.getItemList(true);
 		// Check if the player has this recipe unlocked
 		if (!player.crafting.recipies().hasOwnProperty(recipeName)) {
 			console.log('canCraft: recipe not unlocked');
@@ -88,13 +89,44 @@ var CraftingSystem = IgeEventingClass.extend({
 				return false;
 			}
 		}
+		// Check if there is enough room in the cargo for the products
+		// Net space needed = products - reactants
+		var spaceNeeded = 0;
+		for (product in recipe.products) {
+			if (recipe.products.hasOwnProperty(product)) {
+				spaceNeeded += recipe.products[product];
+			}
+		}
+		for (reactant in recipe.reactants) {
+			if (recipe.reactants.hasOwnProperty(reactant)) {
+				spaceNeeded -= recipe.reactants[reactant];
+			}
+		}
+		if (!cargo.spaceAvailable(spaceNeeded)) {
+			return false;
+		}
+
+
 		return true;
 	},
 
+	/**
+	 * Removes reactants from cargo and adds products to cargo
+	 * This should be called after _canCraft()
+	 */
+	_doCraft: function(cargo, recipeName) {
+		var recipe = Recipies[recipeName];
+		// Consume reactants. Remove them from cargo
+		for (reactant in recipe.reactants) {
+			var numToRemove = recipe.reactants[reactant];
+			cargo.removeType(reactant, numToRemove);
+		}
+		// Produce products. Add them to cargo
+		for (product in recipe.products) {
+			cargo.addBlock(product);
+		}
 
-
-	doCraft: function(cargo, recipe) {
-		console.log('doCraft: ' + recipe);
+		console.log('doCraft: ' + recipeName);
 	}
 
 });
