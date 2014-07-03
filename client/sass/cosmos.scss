@@ -10,6 +10,14 @@ html, body {
   overflow: hidden;
 }
 
+.align-left {
+  float: left;
+}
+
+.align-right {
+  float: right;
+}
+
 .more-triangle {
   cursor: pointer;
   display: inline-block;

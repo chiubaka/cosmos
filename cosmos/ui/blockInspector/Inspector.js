@@ -61,6 +61,9 @@ var Inspector = IgeEventingClass.extend({
 		// Clears the canvas
 		canvas.width = canvas.width;
 		var ctx = canvas.getContext("2d");
+		var scaleWidth = canvas.width / block._bounds2d.x;
+		var scaleHeight = canvas.height / block._bounds2d.y;
+		ctx.scale(scaleWidth, scaleHeight);
 		ctx.translate(block._bounds2d.x2, block._bounds2d.y2);
 		block.texture().render(ctx, block);
 		setTimeout(function() {

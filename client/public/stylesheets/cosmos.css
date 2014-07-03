@@ -36,6 +36,16 @@ html, body {
 }
 
 /* line 13, ../../sass/cosmos.scss */
+.align-left {
+  float: left;
+}
+
+/* line 17, ../../sass/cosmos.scss */
+.align-right {
+  float: right;
+}
+
+/* line 21, ../../sass/cosmos.scss */
 .more-triangle {
   cursor: pointer;
   display: inline-block;
@@ -46,7 +56,7 @@ html, body {
   transform: rotate(180deg);
 }
 
-/* line 19, ../../sass/cosmos.scss */
+/* line 27, ../../sass/cosmos.scss */
 #igeFrontBuffer {
   -webkit-user-select: none;
   -moz-user-select: none;

@@ -7,8 +7,8 @@ $inspector-position-top: $hud-margin-top;
 $inspector-padding: 10px;
 
 $block-inspector-width: $hud-button-width * 5;
-$block-inspector-texture-height: $hud-button-height - 2 * $inspector-padding;
-$block-inspector-texture-width: $hud-button-width - 2 * $inspector-padding;
+$block-inspector-texture-height: $hud-button-height * 1.5 - 2 * $inspector-padding;
+$block-inspector-texture-width: $block-inspector-texture-height;
 
 #inspector {
   position: absolute;
@@ -30,6 +30,10 @@ $block-inspector-texture-width: $hud-button-width - 2 * $inspector-padding;
     font-size: 75%;
     overflow-y: auto;
 
+    p {
+      margin: 0;
+    }
+
     .top, .middle, .bottom {
       padding: $inspector-padding;
     }
@@ -46,25 +50,23 @@ $block-inspector-texture-width: $hud-button-width - 2 * $inspector-padding;
     }
 
     .middle {
-      #block-stats {
-        float: left;
-      }
+      overflow: auto;
+      background-color: $inspector-button-hover-background-color;
 
       #block-texture {
         height: $block-inspector-texture-height;
         width: $block-inspector-texture-width;
         margin-right: $inspector-padding;
+        float: left;
       }
 
       #block-stats {
-        width: $block-inspector-width - $block-inspector-texture-width - $inspector-padding;
+        width: $block-inspector-width - $block-inspector-texture-width - 3 * $inspector-padding;
+        float: left;
       }
     }
 
     .bottom {
-      .description {
-        margin: 0;
-      }
     }
   }
 
