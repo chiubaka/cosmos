@@ -80,8 +80,8 @@ var igeClientConfig = {
 		'./models/capabilities/MineCapability.js',
 
 		/* === Crafting === */
-		'./models/crafting/Recipe.js',
 		'./crafting/CraftingComponent.js',
+		'./crafting/Recipies.js',
 
 		/* Notifications */
 		'./notifications/NotificationDefinitions.js',
