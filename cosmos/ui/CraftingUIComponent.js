@@ -55,10 +55,51 @@ var CraftingUIComponent = WindowComponent.extend({
 
 	// Refresh crafting UI in response to cargo changes.
 	refresh: function() {
-		// TODO: Actaully refresh the crafting UI
-		// ige.client.player.crafting.craftableRecipies();
+		var recipies = ige.client.player.crafting.recipies();
+		var craftableRecipies = ige.client.player.crafting.craftableRecipies();
+		this.populate(recipies, craftableRecipies);
 		console.log('Refresh crafting UI');
-	}
+	},
+
+	populate: function(recipies, craftableRecipies) {
+		var containers = this.table.find('td');
+		containers.removeClass('active');
+
+		var canvases = this.table.find('canvas')
+		if (canvases.length > 0) {
+			canvases.remove();
+		}
+
+		var index = 0;
+		// TODO: Grey out recipies that are known but not craftable
+		for (var recipeName in craftableRecipies) {
+			if (!craftableRecipies.hasOwnProperty(recipeName)) {
+				continue;
+			}
+			// Determine quantity and type of product
+			// Note: This only works when there is one type of product
+			var recipe = Recipies[recipeName];
+			var quantity = 0;
+			var type;
+			for (product in recipe.products) {
+				if (recipe.products.hasOwnProperty(product)) {
+					quantity += recipe.products[product];
+					type = product;
+					break;
+				}
+			}
+
+			this.fillContainer(index, type, quantity);
+
+			index++;
+		}
+	},
+
+	fillContainer: function(index, type, quantity) {
+		var container = this.table.find('td').get(index);
+		this.drawBlockInContainer(container, type);
+	},
+
 });
 
 CraftingUIComponent.UI_ROOT = '/components/crafting/';
