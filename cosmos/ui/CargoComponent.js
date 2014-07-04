@@ -131,26 +131,6 @@ var CargoComponent = WindowComponent.extend({
 		this.drawBlockInContainer(container, type);
 	},
 
-	drawBlockInContainer: function(container, blockType) {
-		var containerCanvas = $('<canvas/>')[0];
-		$(container).append(containerCanvas);
-
-		var block = Block.blockFromClassId(blockType);
-
-		containerCanvas.width = $(containerCanvas).width();
-		containerCanvas.height = $(containerCanvas).height();
-
-		var scaleWidth = containerCanvas.width / block._bounds2d.x;
-		var scaleHeight = containerCanvas.height / block._bounds2d.y;
-		var ctx = containerCanvas.getContext("2d");
-		ctx.scale(scaleWidth, scaleHeight);
-		ctx.translate(block._bounds2d.x2, block._bounds2d.y2);
-		block.texture().render(ctx, block);
-		setTimeout(function() {
-			block.texture().render(ctx, block);
-		});
-	},
-
 	createContainer: function(type, quantity) {
 		var self = this;
 		var containerDiv = document.createElement('div');
