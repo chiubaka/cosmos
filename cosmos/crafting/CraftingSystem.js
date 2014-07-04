@@ -110,7 +110,6 @@ var CraftingSystem = IgeEventingClass.extend({
 			return false;
 		}
 
-
 		return true;
 	},
 
@@ -144,9 +143,16 @@ var CraftingSystem = IgeEventingClass.extend({
 	_addRecipeClient: function(data) {
 		var recipe = data;
 		ige.client.player.crafting.recipies()[recipe] = true;
+	},
+
+	// TODO:Serialize and persist to DB
+	serializeRecipies: function() {
+
+	},
+
+	rehydrateRecipies: function () {
 	}
 
-	// TODO:Serialize and pPersist to DB
 
 
 });
