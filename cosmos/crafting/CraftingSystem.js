@@ -139,7 +139,7 @@ var CraftingSystem = IgeEventingClass.extend({
 			recipe, clientId);
 	},
 
-	// Keep the client side recipies list in sync
+	// Keep the client side recipe list in sync
 	_addRecipeClient: function(data) {
 		var recipe = data;
 		ige.client.player.crafting.recipies()[recipe] = true;
