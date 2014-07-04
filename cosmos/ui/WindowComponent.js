@@ -46,10 +46,14 @@ var WindowComponent = ButtonComponent.extend({
 	},
 
 	addRow: function() {
+		var self = this;
 		var row = $('<tr></tr>');
 		for (var i = 0; i < WindowComponent.COLS_PER_ROW; i++) {
 			row.append('<td></td>');
 		}
+		row.find('td').click(function() {
+			self.select($(this));
+		});
 		this.table.append(row);
 	},
 
@@ -71,6 +75,11 @@ var WindowComponent = ButtonComponent.extend({
 		setTimeout(function() {
 			block.texture().render(ctx, block);
 		});
+	},
+
+	select: function(container) {
+		this.table.find('td').removeClass('active');
+		container.addClass('active');
 	},
 
 	open: function() {
