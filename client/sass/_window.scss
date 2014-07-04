@@ -11,9 +11,10 @@ $window-scrollbar-right-padding: 4px;
 $window-header-padding: 12px;
 $window-body-padding: $window-header-padding;
 $window-table-border-width: 1px;
+$window-table-cell-padding: $window-body-padding / 2;
 $window-header-height: $hud-button-height * .75;
 $window-tabs-height: $window-header-height * 2 / 3;
-//$window-tabs-width: px;
+$window-table-cell-size: $window-header-height - 2 * $window-table-cell-padding;
 $window-outer-border-color: #363636;
 
 // Calculate the width of the window
@@ -102,13 +103,22 @@ $window-height: $window-header-height + $window-tabs-height +
 		table {
 			width: 100%;
 			border-collapse: collapse;
+			table-layout: fixed;
 		}
 
 		td {
-			height: $window-header-height;
-			width: $window-header-height;
+			height: $window-table-cell-size;
+			width: $window-table-cell-size;
 			border-width: $window-table-border-width;
 			border-style: solid;
+			padding: $window-table-cell-padding;
+
+			canvas {
+				height: $window-table-cell-size;
+				width: $window-table-cell-size;
+				display: block;
+				margin: 0 auto;
+			}
 		}
 	}
 }
