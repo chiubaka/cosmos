@@ -24,8 +24,8 @@ var CraftingSystem = IgeEventingClass.extend({
 
 	// Called by the client to craft an item. This sends a network command to the
 	// server to do the actual crafting verification
-	craftClient: function(recipe) {
-		ige.network.send('cosmos:crafting.craft', recipe);
+	craftClient: function(recipeName) {
+		ige.network.send('cosmos:crafting.craft', recipeName);
 	},
 
 	// Called by the server in response to a client craft request. This verifies
@@ -47,12 +47,12 @@ var CraftingSystem = IgeEventingClass.extend({
 			ige.craftingSystem.log('CraftingSystem._craftServer: Cargo is undefined', 'warning');
 			return;
 		}
+		recipeName = data;
 		// Check if recipe exists in the game
-		if (!Recipies.hasOwnProperty(data)) {
+		if (!Recipies.hasOwnProperty(recipeName)) {
 			ige.craftingSystem.log('CraftingSystem._craftServer: Recipe does not exist', 'warning');
 			return;
 		}
-		recipeName = data;
 
 		if (ige.craftingSystem._canCraft(cargo, player, recipeName)) {
 			console.log('Craftable');
@@ -74,25 +74,32 @@ var CraftingSystem = IgeEventingClass.extend({
 	 * @returns {Boolean} True if the recipe is craftable
 	 */
 	_canCraft: function(cargo, player, recipeName) {
+		var clientId = player.clientId();
 		var cargoItems = cargo.getItemList(true);
 		// Check if the player has this recipe unlocked
 		if (!player.crafting.recipies().hasOwnProperty(recipeName)) {
-			console.log('canCraft: recipe not unlocked');
+			ige.network.stream.queueCommand('notificationError',
+				NotificationDefinitions.errorKeys.crafting_recipeNotUnlocked,
+				clientId);
 			return false;
 		}
 		var recipe = Recipies[recipeName];
 		// Check for correct number of reactant blocks in cargo
 		for (reactant in recipe.reactants) {
-			if (!cargoItems.hasOwnProperty(reactant) ||
+			if (!cargoItems.hasOwnProperty(reactant) || 
 				cargoItems[reactant] < recipe.reactants[reactant]) {
-				console.log('Insufficient reactants in cargo');
+				ige.network.stream.queueCommand('notificationError',
+					NotificationDefinitions.errorKeys.crafting_insufficientReactants,
+					clientId);
 				return false;
 			}
 		}
 		// Check for correct number of equipment blocks on the ship
 		for (equipment in recipe.equipments) {
 			if (player.blocksOfType(equipment).length < recipe.equipments[equipment]) {
-				console.log('Insufficient equipment on ship');
+				ige.network.stream.queueCommand('notificationError',
+					NotificationDefinitions.errorKeys.crafting_insufficientEquipment,
+					clientId);
 				return false;
 			}
 		}
@@ -110,7 +117,9 @@ var CraftingSystem = IgeEventingClass.extend({
 			}
 		}
 		if (!cargo.spaceAvailable(spaceNeeded)) {
-			return false;
+			ige.network.stream.queueCommand('notificationError',
+				NotificationDefinitions.errorKeys.crafting_insufficientCargoSpace,
+				clientId);
 		}
 
 		return true;

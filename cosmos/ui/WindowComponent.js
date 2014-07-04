@@ -55,7 +55,7 @@ var WindowComponent = ButtonComponent.extend({
 
 	drawBlockInContainer: function(container, blockType) {
 		var containerCanvas = $('<canvas/>')[0];
-		$(container).append(containerCanvas);
+		container.append(containerCanvas);
 
 		var block = Block.blockFromClassId(blockType);
 

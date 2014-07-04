@@ -17,7 +17,7 @@ var GameInit = {
 		this.initScenes(game);
 
 		if (ige.isServer) {
-			//this.initEnvironment();
+			this.initEnvironment();
 			this.initPhysics();
 			this.initServerEvents();
 		} else {

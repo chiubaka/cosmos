@@ -23,6 +23,10 @@ var NotificationDefinitions = {
 		noEngine: 6,
 		noRotationalThruster: 7,
 		noMiningLaser: 8,
+		crafting_recipeNotUnlocked : 9,
+		crafting_insufficientReactants: 10,
+		crafting_insufficientEquipment: 11,
+		crafting_insufficientCargoSpace: 12,
 	},
 
 	errors: {
@@ -34,6 +38,10 @@ var NotificationDefinitions = {
 		6: 'Cannot thrust... no engine!',
 		7: 'Cannot rotate... no rotational thruster!',
 		8: 'Cannot mine... no mining laser!',
+		9: 'Recipe not unlocked!',
+		10: 'Insufficient reactants!',
+		11: 'Insufficient ship equipment!',
+		12: 'Insufficient cargo space!',
 	},
 
 	successKeys: {

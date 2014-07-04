@@ -127,7 +127,7 @@ var CargoComponent = WindowComponent.extend({
 	},
 
 	fillContainer: function(index, type, quantity) {
-		var container = this.table.find('td').get(index);
+		var container = this.table.find('td').eq(index);
 		this.drawBlockInContainer(container, type);
 	},
 

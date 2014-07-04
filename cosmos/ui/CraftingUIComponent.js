@@ -89,14 +89,19 @@ var CraftingUIComponent = WindowComponent.extend({
 				}
 			}
 
-			this.fillContainer(index, type, quantity);
+			this.fillContainer(index, type, quantity, recipeName);
 
 			index++;
 		}
 	},
 
-	fillContainer: function(index, type, quantity) {
-		var container = this.table.find('td').get(index);
+	fillContainer: function(index, type, quantity, recipeName) {
+		var container = this.table.find('td').eq(index);
+		container.attr('recipe', recipeName)
+		container.click(function() {
+			console.log('Carfting UI clicked: ' + container.attr('recipe'));
+			ige.craftingSystem.craftClient(recipeName);
+		});
 		this.drawBlockInContainer(container, type);
 	},
 
