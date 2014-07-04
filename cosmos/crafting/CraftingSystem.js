@@ -11,20 +11,27 @@ var CraftingSystem = IgeEventingClass.extend({
 	init: function(entity, options) {
 		if (ige.isServer) {
 			ige.network.define('cosmos:crafting.craft', this._craftServer);
+			ige.network.define('cosmos:crafting.addRecipe');
+		}
+		if (ige.isClient) {
+			ige.network.define('cosmos:crafting.addRecipe', this._addRecipeClient);
+			// Update the crafting state so items are correctly grayed out in the UI
+			ige.on('cargo response', this._refreshCraftingState);
+			ige.on('cargo update', this._refreshCraftingState);
 		}
 		this.log('Crafting system initiated!');
 	},
 
 	// Called by the client to craft an item. This sends a network command to the
 	// server to do the actual crafting verification
-	craftClient: function(recipe) {
-		ige.network.send('cosmos:crafting.craft', recipe);
+	craftClient: function(recipeName) {
+		ige.network.send('cosmos:crafting.craft', recipeName);
 	},
 
 	// Called by the server in response to a client craft request. This verifies
 	// and does the crafting.
 	_craftServer: function (data, clientId) {
-		var player, cargo, cargoItems, recipe;
+		var player, cargo, recipeName;
 
 		console.log("Player '" + clientId + "' wants to craft: '" + data + "'");
 
@@ -40,17 +47,18 @@ var CraftingSystem = IgeEventingClass.extend({
 			ige.craftingSystem.log('CraftingSystem._craftServer: Cargo is undefined', 'warning');
 			return;
 		}
+		recipeName = data;
 		// Check if recipe exists in the game
-		if (!Recipies.hasOwnProperty(data)) {
+		if (!Recipies.hasOwnProperty(recipeName)) {
 			ige.craftingSystem.log('CraftingSystem._craftServer: Recipe does not exist', 'warning');
 			return;
 		}
-		recipe = data;
 
-		cargoItems = cargo.getItemList(true);
-		if (ige.craftingSystem.canCraft(cargoItems, player, recipe)) {
-			console.log('Craftable');
-			ige.craftingSystem.doCraft();
+		if (ige.craftingSystem._canCraft(cargo, player, recipeName)) {
+			ige.craftingSystem._doCraft(cargo, recipeName);
+			ige.network.stream.queueCommand('notificationSuccess',
+				NotificationDefinitions.successKeys.crafting_success,
+				clientId);
 		};
 
 	},
@@ -59,43 +67,115 @@ var CraftingSystem = IgeEventingClass.extend({
 	 * Checks if the recipe is craftable by the player.
 	 * A recipe is craftable if the player has:
 	 * 1. The recipe unlocked
-	 * 1. The correct number of reactant blocks in cargo
-	 * 2. The correct number of equipment blocks on the ship
-	 * @param cargoItems {Object}
+	 * 2. The correct number of reactant blocks in cargo
+	 * 3. The correct number of equipment blocks on the ship
+	 * 4. Space in their cargo for the products
+	 * @param cargo {Cargo}
 	 * @param player {Player}
 	 * @param recipeName {String}
 	 * @returns {Boolean} True if the recipe is craftable
 	 */
-	canCraft: function(cargoItems, player, recipeName) {
+	_canCraft: function(cargo, player, recipeName) {
+		var clientId = player.clientId();
+		var cargoItems = cargo.getItemList(true);
 		// Check if the player has this recipe unlocked
 		if (!player.crafting.recipies().hasOwnProperty(recipeName)) {
-			console.log('canCraft: recipe not unlocked');
+			ige.network.stream.queueCommand('notificationError',
+				NotificationDefinitions.errorKeys.crafting_recipeNotUnlocked,
+				clientId);
 			return false;
 		}
 		var recipe = Recipies[recipeName];
 		// Check for correct number of reactant blocks in cargo
 		for (reactant in recipe.reactants) {
-			if (!cargoItems.hasOwnProperty(reactant) ||
+			if (!cargoItems.hasOwnProperty(reactant) || 
 				cargoItems[reactant] < recipe.reactants[reactant]) {
-				console.log('Insufficient reactants in cargo');
+				ige.network.stream.queueCommand('notificationError',
+					NotificationDefinitions.errorKeys.crafting_insufficientReactants,
+					clientId);
 				return false;
 			}
 		}
 		// Check for correct number of equipment blocks on the ship
 		for (equipment in recipe.equipments) {
 			if (player.blocksOfType(equipment).length < recipe.equipments[equipment]) {
-				console.log('Insufficient equipment on ship');
+				ige.network.stream.queueCommand('notificationError',
+					NotificationDefinitions.errorKeys.crafting_insufficientEquipment,
+					clientId);
 				return false;
 			}
 		}
+		// Check if there is enough room in the cargo for the products
+		// Net space needed = products - reactants
+		var spaceNeeded = 0;
+		for (product in recipe.products) {
+			if (recipe.products.hasOwnProperty(product)) {
+				spaceNeeded += recipe.products[product];
+			}
+		}
+		for (reactant in recipe.reactants) {
+			if (recipe.reactants.hasOwnProperty(reactant)) {
+				spaceNeeded -= recipe.reactants[reactant];
+			}
+		}
+		if (!cargo.spaceAvailable(spaceNeeded)) {
+			ige.network.stream.queueCommand('notificationError',
+				NotificationDefinitions.errorKeys.crafting_insufficientCargoSpace,
+				clientId);
+		}
+
 		return true;
 	},
 
+	/**
+	 * Removes reactants from cargo and adds products to cargo
+	 * This should be called after _canCraft()
+	 */
+	_doCraft: function(cargo, recipeName) {
+		var recipe = Recipies[recipeName];
+		// Consume reactants. Remove them from cargo
+		for (reactant in recipe.reactants) {
+			var numToRemove = recipe.reactants[reactant];
+			cargo.removeType(reactant, numToRemove);
+		}
+		// Produce products. Add them to cargo
+		for (product in recipe.products) {
+			cargo.addBlock(product);
+		}
 
+		console.log('doCraft: ' + recipeName);
+	},
 
-	doCraft: function(cargo, recipe) {
-		console.log('doCraft: ' + recipe);
+	// Add a recipe to a player
+	addRecipeServer: function(recipe, player, clientId) {
+		player.crafting.addRecipe(recipe);
+		ige.network.stream.queueCommand('cosmos:crafting.addRecipe',
+			recipe, clientId);
+	},
+
+	// Keep the client side recipe list in sync
+	_addRecipeClient: function(data) {
+		var recipe = data;
+		ige.client.player.crafting.addRecipe(recipe);
+	},
+
+	// Keep client side crafting state consistent
+	_refreshCraftingState: function(data) {
+		//var cargoItems = data;
+		//ige.client.player.crafting.resetCraftableRecipies();
+		// TODO: Refresh craftable recipies based on cargoItems
+		ige.hud.leftToolbar.windows.craftingUI.refresh();
+	},
+
+	// TODO:Serialize and persist to DB
+	serializeRecipies: function() {
+
+	},
+
+	rehydrateRecipies: function () {
 	}
+
+
 
 });
 

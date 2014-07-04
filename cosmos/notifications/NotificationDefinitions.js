@@ -23,6 +23,10 @@ var NotificationDefinitions = {
 		noEngine: 6,
 		noRotationalThruster: 7,
 		noMiningLaser: 8,
+		crafting_recipeNotUnlocked : 9,
+		crafting_insufficientReactants: 10,
+		crafting_insufficientEquipment: 11,
+		crafting_insufficientCargoSpace: 12,
 	},
 
 	errors: {
@@ -34,6 +38,10 @@ var NotificationDefinitions = {
 		6: 'Cannot thrust... no engine!',
 		7: 'Cannot rotate... no rotational thruster!',
 		8: 'Cannot mine... no mining laser!',
+		9: 'Recipe not unlocked!',
+		10: 'Insufficient reactants!',
+		11: 'Insufficient ship equipment!',
+		12: 'Insufficient cargo space!',
 	},
 
 	successKeys: {
@@ -41,6 +49,7 @@ var NotificationDefinitions = {
 		minedBlock: 2,
 		relocateShip: 3,
 		newShip: 4,
+		crafting_success: 5,
 	},
 
 	successes: {
@@ -48,6 +57,7 @@ var NotificationDefinitions = {
 		2: 'Mined a block!',
 		3: 'Relocated ship!',
 		4: 'New ship created and relocated!',
+		5: 'Crafted a block!',
 	}
 };
 

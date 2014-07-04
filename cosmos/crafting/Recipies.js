@@ -9,7 +9,7 @@ var Recipies = {
 	thruster: {
 		reactants: {IronBlock: 3, CarbonBlock: 1, IceBlock: 3},
 		equipments: {},
-		products: {EngineBlock: 1}
+		products: {ThrusterBlock: 1}
 	},
 
 	miningLaser: {

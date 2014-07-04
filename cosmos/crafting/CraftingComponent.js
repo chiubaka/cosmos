@@ -6,32 +6,40 @@
 var CraftingComponent = IgeEventingClass.extend({
 	classId: 'CraftingComponent',
 	componentId: 'crafting',
-
-	_cargo: undefined,
-	// TODO: Load unlocked recipies from DB. For now, we have a predefined set of
-	// recipies.
+	// All the recipies the player knows
 	_recipies: undefined,
+	// The recipies that are craftable (correct number of reactants in cargo)
+	_craftableRecipies: undefined,
 
 	init: function(entity, options) {
 		// TODO: Client side crafting should have an idea of the cargo. This allows
 		// uncraftable things to be grayed out. Pending cargo refactor
-		if (ige.isServer) {
-			if (entity.cargo === undefined) {
-				this.log('Player cargo has not been initialized.', 'error');
-			}
-			this._cargo = entity.cargo;
 
-		}
+		// TODO: Load unlocked recipies from DB. For now, we have a
+		// predefined set of recipies.
 		this._recipies = StarterRecipies;
+		this._craftableRecipies = StarterRecipies;
+	},
+
+	recipies: function() {
+		return this._recipies;
 	},
 
 	addRecipe: function(recipe) {
 		this._recipies[recipe] = true;
 	},
 
-	recipies: function() {
-		return this._recipies;
-	}
+	craftableRecipies: function() {
+		return this._craftableRecipies;
+	},
+
+	addCraftableRecipe: function(recipe) {
+		this._craftableRecipies[recipe] = true;
+	},
+
+	resetCraftableRecipies: function() {
+		this._craftableRecipies = {};
+	},
 
 });
 
