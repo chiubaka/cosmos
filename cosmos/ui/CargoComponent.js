@@ -79,6 +79,11 @@ var CargoComponent = WindowComponent.extend({
 		});*/
 	},
 
+	_onWindowLoaded: function() {
+
+		ige.emit('cosmos:hud.leftToolbar.windows.subcomponent.loaded', this);
+	},
+
 	deselect: function(container) {
 		container.removeClass('active');
 		this.selectedType = undefined;

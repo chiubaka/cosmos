@@ -21,6 +21,12 @@ $block-width: $block-height;
 #hud {
   @include user-select(none);
   z-index: $hud-layer-z-index;
+
+  h2 {
+    margin: 0;
+    font-size: 100%;
+    font-weight: bold;
+  }
 }
 
 .tooltip {

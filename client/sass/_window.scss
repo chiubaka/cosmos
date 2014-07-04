@@ -8,8 +8,11 @@ $window-outer-border-width: 4px;
 $window-spacing-between-blocks: 4px;
 $window-scrollbar-width: 10px;
 $window-scrollbar-right-padding: 4px;
-$window-header-height: 25px;
-$window-tabs-height: 25px;
+$window-header-padding: 12px;
+$window-body-padding: $window-header-padding;
+$window-table-border-width: 1px;
+$window-header-height: $hud-button-height * .75;
+$window-tabs-height: $window-header-height * 2 / 3;
 //$window-tabs-width: px;
 $window-outer-border-color: #363636;
 
@@ -25,28 +28,89 @@ $window-height: $window-header-height + $window-tabs-height +
 	($window-num-rows + 1) * $window-spacing-between-blocks +
 	$window-outer-border-width;
 
+@mixin window(
+	$font-color,
+	$header-background-color,
+	$header-icon-url,
+	$tabs-background-color,
+	$body-background-color,
+	$table-outer-border-color
+)
+{
+	color: $font-color;
+
+	.header {
+		.icon {
+			@include hud-icon-button($header-icon-url);
+		}
+		background-color: $header-background-color;
+	}
+
+	.tabs {
+		background-color: $tabs-background-color;
+	}
+
+	.body {
+		background-color: $body-background-color;
+
+		table {
+			border-color: $table-outer-border-color;
+		}
+
+		td {
+			background-color: $header-background-color;
+			border-color: $body-background-color;
+		}
+	}
+}
 
 .window {
-	position: absolute;
 	float: left;
-	//background-color: $window-outer-border-color;
+	margin-left: $windows-side-margin;
 	display: none;
-	width: $window-width;
-	height: $window-height;
 
 	.header {
 		height: $window-header-height;
-		width: $window-width;
+		width: 100%;
+		display: table;
+
+		.icon, .title-container {
+			display: table-cell;
+		}
+
+		.icon {
+			height: $window-header-height;
+			width: $window-header-height;
+			border: none;
+		}
+
+		.title-container {
+			padding: $window-header-padding;
+			padding-left: 0;
+			h2.title {
+				line-height: $window-header-height - 2 * $window-header-padding;
+			}
+		}
 	}
 	.tabs {
 		height: $window-tabs-height;
-		width: $window-width;
+		width: 100%;
 	}
-	.window-body {
-		height: $window-height;
-		width: $window-width;
-	}
+	.body {
+		width: $window-header-height * 6 + $window-body-padding * 2 + $window-table-border-width * (6 + 1);
+		padding: $window-body-padding;
+		table {
+			width: 100%;
+			border-collapse: collapse;
+		}
 
+		td {
+			height: $window-header-height;
+			width: $window-header-height;
+			border-width: $window-table-border-width;
+			border-style: solid;
+		}
+	}
 }
 
 @import 'crafting-window';

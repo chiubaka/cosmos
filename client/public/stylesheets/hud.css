@@ -5,8 +5,14 @@
   user-select: none;
   z-index: 1;
 }
+/* line 25, ../../sass/hud.scss */
+#hud h2 {
+  margin: 0;
+  font-size: 100%;
+  font-weight: bold;
+}
 
-/* line 26, ../../sass/hud.scss */
+/* line 32, ../../sass/hud.scss */
 .tooltip, #cargo .pullout #cargo-containers .container .type-label, #crafting .pullout #crafting-containers .container .type-label {
   display: none;
   position: absolute;
@@ -426,88 +432,169 @@
   display: block;
 }
 
-/* line 15, ../../sass/_left-toolbar.scss */
+/* line 14, ../../sass/_left-toolbar.scss */
 #hud > .left-toolbar {
   position: absolute;
   top: 0;
   left: 0;
   bottom: 50px;
   width: 50px;
+  padding-top: 100px;
   background-color: rgba(0, 0, 0, 0.7);
 }
 
-/* line 4, ../../sass/_windows.scss */
+/* line 5, ../../sass/_windows.scss */
 #windows {
-  position: relative;
-  top: 100px;
-  left: 60px;
-}
-/* line 29, ../../sass/_window.scss */
-#windows .window, #windows #crafting-window {
   position: absolute;
+  left: 50px;
+}
+
+/* line 67, ../../sass/_window.scss */
+.window, #crafting-window {
   float: left;
+  margin-left: 10px;
   display: none;
-  width: 158px;
-  height: 190px;
 }
-/* line 37, ../../sass/_window.scss */
-#windows .window .header, #windows #crafting-window .header {
+/* line 72, ../../sass/_window.scss */
+.window .header, #crafting-window .header {
+  height: 37.5px;
+  width: 100%;
+  display: table;
+}
+/* line 77, ../../sass/_window.scss */
+.window .header .icon, #crafting-window .header .icon, .window .header .title-container, #crafting-window .header .title-container {
+  display: table-cell;
+}
+/* line 81, ../../sass/_window.scss */
+.window .header .icon, #crafting-window .header .icon {
+  height: 37.5px;
+  width: 37.5px;
+  border: none;
+}
+/* line 87, ../../sass/_window.scss */
+.window .header .title-container, #crafting-window .header .title-container {
+  padding: 12px;
+  padding-left: 0;
+}
+/* line 90, ../../sass/_window.scss */
+.window .header .title-container h2.title, #crafting-window .header .title-container h2.title {
+  line-height: 13.5px;
+}
+/* line 95, ../../sass/_window.scss */
+.window .tabs, #crafting-window .tabs {
   height: 25px;
-  width: 158px;
+  width: 100%;
 }
-/* line 41, ../../sass/_window.scss */
-#windows .window .tabs, #windows #crafting-window .tabs {
-  height: 25px;
-  width: 158px;
+/* line 99, ../../sass/_window.scss */
+.window .body, #crafting-window .body {
+  width: 256px;
+  padding: 12px;
 }
-/* line 45, ../../sass/_window.scss */
-#windows .window .window-body, #windows #crafting-window .window-body {
-  height: 190px;
-  width: 158px;
+/* line 102, ../../sass/_window.scss */
+.window .body table, #crafting-window .body table {
+  width: 100%;
+  border-collapse: collapse;
 }
+/* line 107, ../../sass/_window.scss */
+.window .body td, #crafting-window .body td {
+  height: 37.5px;
+  width: 37.5px;
+  border-width: 1px;
+  border-style: solid;
+}
+
 /* line 7, ../../sass/_crafting-window.scss */
-#windows #crafting-window .header {
+#crafting-window .header {
   background-color: #d5e9d3;
 }
 /* line 10, ../../sass/_crafting-window.scss */
-#windows #crafting-window .tabs {
+#crafting-window .tabs {
   background-color: #b7d3b4;
 }
 /* line 13, ../../sass/_crafting-window.scss */
-#windows #crafting-window .window-body {
+#crafting-window .body {
   background-color: #8ba988;
 }
 
-/* line 19, ../../sass/_cargo.scss */
-#cargo {
+/* line 20, ../../sass/_cargo.scss */
+#cargo-button {
   margin-top: 100px;
+  height: 50px;
+  width: 50px;
+  position: relative;
+  cursor: pointer;
+  background-color: #363636;
+  margin-top: 1px;
+  background-image: url("../images/icons/icon_cargo.png");
+  background-repeat: no-repeat;
+  background-size: 70%;
+  background-position: center;
 }
-/* line 22, ../../sass/_cargo.scss */
+/* line 32, ../../sass/_left-toolbar.scss */
+#cargo-button .tooltip, #cargo-button #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #cargo-button .type-label, #cargo-button #crafting .pullout #crafting-containers .container .type-label, #crafting .pullout #crafting-containers .container #cargo-button .type-label {
+  bottom: 58.33333px;
+  width: 75px;
+  text-align: center;
+  margin-left: -43.5px;
+  left: 50%;
+}
+/* line 40, ../../sass/_left-toolbar.scss */
+#cargo-button:hover {
+  background-color: #5c5c5c;
+}
+/* line 42, ../../sass/_left-toolbar.scss */
+#cargo-button:hover .tooltip, #cargo-button:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #cargo-button:hover .type-label, #cargo-button:hover #crafting .pullout #crafting-containers .container .type-label, #crafting .pullout #crafting-containers .container #cargo-button:hover .type-label {
+  display: block;
+}
+
+/* line 25, ../../sass/_cargo.scss */
+#cargo-window {
+  color: #383838;
+}
+/* line 42, ../../sass/_window.scss */
+#cargo-window .header {
+  background-color: #cdcdcd;
+}
+/* line 43, ../../sass/_window.scss */
+#cargo-window .header .icon {
+  background-image: url("/images/icons/icon_cargo_window.png");
+  background-repeat: no-repeat;
+  background-size: 70%;
+  background-position: center;
+}
+/* line 49, ../../sass/_window.scss */
+#cargo-window .tabs {
+  background-color: #bebebe;
+}
+/* line 53, ../../sass/_window.scss */
+#cargo-window .body {
+  background-color: #a5a5a5;
+}
+/* line 56, ../../sass/_window.scss */
+#cargo-window .body table {
+  border-color: dimgrey;
+}
+/* line 60, ../../sass/_window.scss */
+#cargo-window .body td {
+  background-color: #cdcdcd;
+  border-color: #a5a5a5;
+}
+
+/* line 38, ../../sass/_cargo.scss */
 #cargo .pullout, #cargo .button {
   float: left;
 }
-/* line 26, ../../sass/_cargo.scss */
+/* line 42, ../../sass/_cargo.scss */
 #cargo .pullout {
   display: none;
 }
-/* line 29, ../../sass/_cargo.scss */
-#cargo .pullout .title {
-  background-color: #cdcdcd;
-  color: #383838;
-  height: 30px;
-  line-height: 30px;
-  font-size: 125%;
-  font-weight: bold;
-  border-right: 1px solid #bcbcbc;
-  padding: 10px;
-}
-/* line 40, ../../sass/_cargo.scss */
+/* line 49, ../../sass/_cargo.scss */
 #cargo .pullout #cargo-containers {
   background-color: #a5a5a5;
   padding: 10px;
   text-align: center;
 }
-/* line 45, ../../sass/_cargo.scss */
+/* line 54, ../../sass/_cargo.scss */
 #cargo .pullout #cargo-containers .container {
   height: 41.6px;
   width: 41.6px;
@@ -518,33 +605,33 @@
   background-color: #cdcdcd;
   border: 1px solid dimgrey;
 }
-/* line 55, ../../sass/_cargo.scss */
+/* line 64, ../../sass/_cargo.scss */
 #cargo .pullout #cargo-containers .container.active {
   background-color: #e4e4e4;
   border: 2px solid #008aff;
 }
-/* line 60, ../../sass/_cargo.scss */
+/* line 69, ../../sass/_cargo.scss */
 #cargo .pullout #cargo-containers .container canvas {
   height: 41.6px;
   width: 41.6px;
 }
-/* line 65, ../../sass/_cargo.scss */
+/* line 74, ../../sass/_cargo.scss */
 #cargo .pullout #cargo-containers .container .quantity-label {
   position: absolute;
   right: 5.2px;
   bottom: 5.2px;
   text-shadow: -1px 0 #383838, 0 1px #383838, 1px 0 #383838, 0 -1px #383838;
 }
-/* line 72, ../../sass/_cargo.scss */
+/* line 81, ../../sass/_cargo.scss */
 #cargo .pullout #cargo-containers .container .type-label {
   left: 72.8px;
   top: 11px;
 }
-/* line 78, ../../sass/_cargo.scss */
+/* line 87, ../../sass/_cargo.scss */
 #cargo .pullout #cargo-containers .container:hover .type-label {
   display: block;
 }
-/* line 85, ../../sass/_cargo.scss */
+/* line 94, ../../sass/_cargo.scss */
 #cargo .button {
   height: 50px;
   width: 50px;
@@ -574,70 +661,8 @@
   display: block;
 }
 
-/* line 20, ../../sass/_crafting.scss */
-#crafting .pullout, #crafting .button {
-  float: left;
-}
-/* line 24, ../../sass/_crafting.scss */
-#crafting .pullout {
-  display: none;
-}
-/* line 27, ../../sass/_crafting.scss */
-#crafting .pullout .title {
-  background-color: #cdcdcd;
-  color: #383838;
-  height: 30px;
-  line-height: 30px;
-  font-size: 125%;
-  font-weight: bold;
-  border-right: 1px solid #bcbcbc;
-  padding: 10px;
-}
-/* line 38, ../../sass/_crafting.scss */
-#crafting .pullout #crafting-containers {
-  background-color: #a5a5a5;
-  padding: 10px;
-  text-align: center;
-}
-/* line 43, ../../sass/_crafting.scss */
-#crafting .pullout #crafting-containers .container {
-  height: 41.6px;
-  width: 41.6px;
-  padding: 5.2px;
-  position: relative;
-  margin-left: auto;
-  margin-right: auto;
-  background-color: #cdcdcd;
-  border: 1px solid dimgrey;
-}
-/* line 53, ../../sass/_crafting.scss */
-#crafting .pullout #crafting-containers .container.active {
-  background-color: #e4e4e4;
-  border: 2px solid #008aff;
-}
-/* line 58, ../../sass/_crafting.scss */
-#crafting .pullout #crafting-containers .container canvas {
-  height: 41.6px;
-  width: 41.6px;
-}
-/* line 63, ../../sass/_crafting.scss */
-#crafting .pullout #crafting-containers .container .quantity-label {
-  position: absolute;
-  right: 5.2px;
-  bottom: 5.2px;
-  text-shadow: -1px 0 #383838, 0 1px #383838, 1px 0 #383838, 0 -1px #383838;
-}
-/* line 70, ../../sass/_crafting.scss */
-#crafting .pullout #crafting-containers .container .type-label {
-  left: 72.8px;
-  top: 11px;
-}
-/* line 76, ../../sass/_crafting.scss */
-#crafting .pullout #crafting-containers .container:hover .type-label {
-  display: block;
-}
-/* line 83, ../../sass/_crafting.scss */
-#crafting .button {
+/* line 19, ../../sass/_crafting.scss */
+#crafting-button {
   height: 50px;
   width: 50px;
   position: relative;
@@ -650,7 +675,7 @@
   background-position: center;
 }
 /* line 32, ../../sass/_left-toolbar.scss */
-#crafting .button .tooltip, #crafting .button #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #crafting .button .type-label, #crafting .button .pullout #crafting-containers .container .type-label, #crafting .pullout #crafting-containers .container .button .type-label {
+#crafting-button .tooltip, #crafting-button #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #crafting-button .type-label, #crafting-button #crafting .pullout #crafting-containers .container .type-label, #crafting .pullout #crafting-containers .container #crafting-button .type-label {
   bottom: 58.33333px;
   width: 75px;
   text-align: center;
@@ -658,11 +683,74 @@
   left: 50%;
 }
 /* line 40, ../../sass/_left-toolbar.scss */
-#crafting .button:hover {
+#crafting-button:hover {
   background-color: #5c5c5c;
 }
 /* line 42, ../../sass/_left-toolbar.scss */
-#crafting .button:hover .tooltip, #crafting .button:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #crafting .button:hover .type-label, #crafting .button:hover .pullout #crafting-containers .container .type-label, #crafting .pullout #crafting-containers .container .button:hover .type-label {
+#crafting-button:hover .tooltip, #crafting-button:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #crafting-button:hover .type-label, #crafting-button:hover #crafting .pullout #crafting-containers .container .type-label, #crafting .pullout #crafting-containers .container #crafting-button:hover .type-label {
+  display: block;
+}
+
+/* line 24, ../../sass/_crafting.scss */
+#crafting .pullout, #crafting .button {
+  float: left;
+}
+/* line 28, ../../sass/_crafting.scss */
+#crafting .pullout {
+  display: none;
+}
+/* line 31, ../../sass/_crafting.scss */
+#crafting .pullout .title {
+  background-color: #cdcdcd;
+  color: #383838;
+  height: 30px;
+  line-height: 30px;
+  font-size: 125%;
+  font-weight: bold;
+  border-right: 1px solid #bcbcbc;
+  padding: 10px;
+}
+/* line 42, ../../sass/_crafting.scss */
+#crafting .pullout #crafting-containers {
+  background-color: #a5a5a5;
+  padding: 10px;
+  text-align: center;
+}
+/* line 47, ../../sass/_crafting.scss */
+#crafting .pullout #crafting-containers .container {
+  height: 41.6px;
+  width: 41.6px;
+  padding: 5.2px;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #cdcdcd;
+  border: 1px solid dimgrey;
+}
+/* line 57, ../../sass/_crafting.scss */
+#crafting .pullout #crafting-containers .container.active {
+  background-color: #e4e4e4;
+  border: 2px solid #008aff;
+}
+/* line 62, ../../sass/_crafting.scss */
+#crafting .pullout #crafting-containers .container canvas {
+  height: 41.6px;
+  width: 41.6px;
+}
+/* line 67, ../../sass/_crafting.scss */
+#crafting .pullout #crafting-containers .container .quantity-label {
+  position: absolute;
+  right: 5.2px;
+  bottom: 5.2px;
+  text-shadow: -1px 0 #383838, 0 1px #383838, 1px 0 #383838, 0 -1px #383838;
+}
+/* line 74, ../../sass/_crafting.scss */
+#crafting .pullout #crafting-containers .container .type-label {
+  left: 72.8px;
+  top: 11px;
+}
+/* line 80, ../../sass/_crafting.scss */
+#crafting .pullout #crafting-containers .container:hover .type-label {
   display: block;
 }
 

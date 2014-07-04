@@ -9,15 +9,15 @@ $left-toolbar-item-height: $hud-button-height;
 $left-toolbar-item-width: $hud-button-width;
 $left-toolbar-highlight-color: #f57a03;
 
-
 $left-toolbar-tooltip-width: $left-toolbar-item-width * 1.5;
 
 #hud>.left-toolbar {
   position: absolute;
-	top: 0;
+  top: 0;
   left: 0;
   bottom: $hud-button-height;
-	width: $left-toolbar-width;
+  width: $left-toolbar-width;
+  padding-top: $hud-margin-top;
   background-color: $left-toolbar-background-color;
 }
 
@@ -27,7 +27,7 @@ $left-toolbar-tooltip-width: $left-toolbar-item-width * 1.5;
   position: relative;
   cursor: pointer;
   background-color: $background-color;
-	margin-top: $left-toolbar-spacing-between-items;
+  margin-top: $left-toolbar-spacing-between-items;
 
   .tooltip {
     bottom: $left-toolbar-item-height + $left-toolbar-item-padding;
