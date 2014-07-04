@@ -6,7 +6,7 @@ var DamageSourceComponent = IgeClass.extend({
 
 	init: function(entity, data) {
 		if (data === undefined || data.dps === undefined) {
-			this.log('Init parameters not provided for health component.', 'error');
+			this.log('Init parameters not provided for DamageSourceComponent.', 'error');
 			return;
 		}
 
