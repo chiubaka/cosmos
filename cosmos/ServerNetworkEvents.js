@@ -40,7 +40,7 @@ var ServerNetworkEvents = {
 	_destroyPlayer: function(clientId, player) {
 		// Handle destroying player state first
 		// Unsubscribe players from updates
-		player.cargo.unsubscribeFromUpdates(clientId);
+		player.currentShip().cargo.unsubscribeFromUpdates(clientId);
 
 		var self = this;
 		/**
@@ -184,7 +184,7 @@ var ServerNetworkEvents = {
 			return;
 		}
 
-		player.relocate();
+		player.currentShip().relocate();
 		ige.network.stream.queueCommand('notificationSuccess',
 			NotificationDefinitions.successKeys.relocateShip, clientId);
 	},

@@ -23,7 +23,7 @@ var DbPlayer = {
 					callback(err, undefined, undefined);
 				}
 				else {
-					callback(err, player.ship, player.cargo);
+					callback(err, player.ship, player.currentShip().cargo);
 				}
 			});
 		});
@@ -45,7 +45,7 @@ var DbPlayer = {
 
 		ige.mongo.db.collection('players', function(err, players) {
 			var ship = player.toBlockTypeMatrix();
-			var cargo = player.cargo.serializeCargo();
+			var cargo = player.currentShip().cargo.serializeCargo();
 			players.update(
 				{_id: playerId},
 				{_id: playerId, ship: ship, cargo: cargo},
