@@ -1,14 +1,9 @@
-$crafting-button-background-color: #d5e9d3;
-$crafting-button-hover-background-color: #e4e4e4;
-$crafting-button-border-color: #134710;
-$crafting-container-border-color: #597e55;
-
+$crafting-font-color: #134710;
+$crafting-header-background-color: #d5e9d3;
 $crafting-tabs-background-color: #b7d3b4;
 $crafting-body-background-color: #8ba988;
-
+$crafting-container-border-color: #597e55;
 $crafting-block-hover-border-color: #008aff;
-
-
 
 #crafting-button {
 	@include left-toolbar-item-with-icon('../images/icons/icon_crafting.png');
@@ -16,8 +11,8 @@ $crafting-block-hover-border-color: #008aff;
 
 #crafting-window {
 	@include window(
-		$crafting-button-border-color,
-		$crafting-button-background-color,
+		$crafting-font-color,
+		$crafting-header-background-color,
 		'/images/icons/icon_crafting_window.png',
 		$crafting-tabs-background-color,
 		$crafting-body-background-color,

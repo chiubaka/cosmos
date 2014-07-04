@@ -13,7 +13,7 @@
 }
 
 /* line 32, ../../sass/hud.scss */
-.tooltip, #cargo .pullout #cargo-containers .container .type-label {
+.tooltip {
   display: none;
   position: absolute;
   font-size: 75%;
@@ -97,7 +97,7 @@
   background-position: 50% 65%;
 }
 /* line 40, ../../sass/_bottom-toolbar.scss */
-#chat-button .tooltip, #chat-button #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #chat-button .type-label {
+#chat-button .tooltip {
   bottom: 58.33333px;
   width: 75px;
   text-align: center;
@@ -109,7 +109,7 @@
   background-color: #5c5c5c;
 }
 /* line 50, ../../sass/_bottom-toolbar.scss */
-#chat-button:hover .tooltip, #chat-button:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #chat-button:hover .type-label {
+#chat-button:hover .tooltip {
   display: block;
 }
 /* line 9, ../../sass/_chat.scss */
@@ -250,7 +250,7 @@
   background-position: center;
 }
 /* line 40, ../../sass/_bottom-toolbar.scss */
-#mine-cap .tooltip, #mine-cap #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #mine-cap .type-label {
+#mine-cap .tooltip {
   bottom: 58.33333px;
   width: 75px;
   text-align: center;
@@ -262,7 +262,7 @@
   background-color: #5c5c5c;
 }
 /* line 50, ../../sass/_bottom-toolbar.scss */
-#mine-cap:hover .tooltip, #mine-cap:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #mine-cap:hover .type-label {
+#mine-cap:hover .tooltip {
   display: block;
 }
 /* line 8, ../../sass/_mine-cap.scss */
@@ -287,7 +287,7 @@
   background-position: center;
 }
 /* line 40, ../../sass/_bottom-toolbar.scss */
-#construct-cap .tooltip, #construct-cap #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #construct-cap .type-label {
+#construct-cap .tooltip {
   bottom: 58.33333px;
   width: 75px;
   text-align: center;
@@ -299,7 +299,7 @@
   background-color: #5c5c5c;
 }
 /* line 50, ../../sass/_bottom-toolbar.scss */
-#construct-cap:hover .tooltip, #construct-cap:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #construct-cap:hover .type-label {
+#construct-cap:hover .tooltip {
   display: block;
 }
 /* line 8, ../../sass/_construct-cap.scss */
@@ -325,7 +325,7 @@
   background-position: center;
 }
 /* line 40, ../../sass/_bottom-toolbar.scss */
-#menu-button .tooltip, #menu-button #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #menu-button .type-label {
+#menu-button .tooltip {
   bottom: 58.33333px;
   width: 75px;
   text-align: center;
@@ -337,7 +337,7 @@
   background-color: #5c5c5c;
 }
 /* line 50, ../../sass/_bottom-toolbar.scss */
-#menu-button:hover .tooltip, #menu-button:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #menu-button:hover .type-label {
+#menu-button:hover .tooltip {
   display: block;
 }
 
@@ -354,7 +354,7 @@
   background-position: center;
 }
 /* line 40, ../../sass/_bottom-toolbar.scss */
-#feedback-button .tooltip, #feedback-button #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #feedback-button .type-label {
+#feedback-button .tooltip {
   bottom: 58.33333px;
   width: 75px;
   text-align: center;
@@ -366,7 +366,7 @@
   background-color: #5c5c5c;
 }
 /* line 50, ../../sass/_bottom-toolbar.scss */
-#feedback-button:hover .tooltip, #feedback-button:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #feedback-button:hover .type-label {
+#feedback-button:hover .tooltip {
   display: block;
 }
 /* line 6, ../../sass/_feedback-button.scss */
@@ -387,7 +387,7 @@
   background-position: center;
 }
 /* line 40, ../../sass/_bottom-toolbar.scss */
-#relocate-button .tooltip, #relocate-button #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #relocate-button .type-label {
+#relocate-button .tooltip {
   bottom: 58.33333px;
   width: 75px;
   text-align: center;
@@ -399,7 +399,7 @@
   background-color: #5c5c5c;
 }
 /* line 50, ../../sass/_bottom-toolbar.scss */
-#relocate-button:hover .tooltip, #relocate-button:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #relocate-button:hover .type-label {
+#relocate-button:hover .tooltip {
   display: block;
 }
 
@@ -416,7 +416,7 @@
   background-position: center;
 }
 /* line 40, ../../sass/_bottom-toolbar.scss */
-#new-ship-button .tooltip, #new-ship-button #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #new-ship-button .type-label {
+#new-ship-button .tooltip {
   bottom: 58.33333px;
   width: 75px;
   text-align: center;
@@ -428,7 +428,7 @@
   background-color: #5c5c5c;
 }
 /* line 50, ../../sass/_bottom-toolbar.scss */
-#new-ship-button:hover .tooltip, #new-ship-button:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #new-ship-button:hover .type-label {
+#new-ship-button:hover .tooltip {
   display: block;
 }
 
@@ -503,7 +503,7 @@
   border-style: solid;
 }
 
-/* line 20, ../../sass/_cargo.scss */
+/* line 9, ../../sass/_cargo.scss */
 #cargo-button {
   margin-top: 100px;
   height: 50px;
@@ -518,7 +518,7 @@
   background-position: center;
 }
 /* line 32, ../../sass/_left-toolbar.scss */
-#cargo-button .tooltip, #cargo-button #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #cargo-button .type-label {
+#cargo-button .tooltip {
   bottom: 58.33333px;
   width: 75px;
   text-align: center;
@@ -530,11 +530,11 @@
   background-color: #5c5c5c;
 }
 /* line 42, ../../sass/_left-toolbar.scss */
-#cargo-button:hover .tooltip, #cargo-button:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #cargo-button:hover .type-label {
+#cargo-button:hover .tooltip {
   display: block;
 }
 
-/* line 25, ../../sass/_cargo.scss */
+/* line 14, ../../sass/_cargo.scss */
 #cargo-window {
   color: #383838;
 }
@@ -567,88 +567,7 @@
   border-color: #a5a5a5;
 }
 
-/* line 38, ../../sass/_cargo.scss */
-#cargo .pullout, #cargo .button {
-  float: left;
-}
-/* line 42, ../../sass/_cargo.scss */
-#cargo .pullout {
-  display: none;
-}
-/* line 49, ../../sass/_cargo.scss */
-#cargo .pullout #cargo-containers {
-  background-color: #a5a5a5;
-  padding: 10px;
-  text-align: center;
-}
-/* line 54, ../../sass/_cargo.scss */
-#cargo .pullout #cargo-containers .container {
-  height: 41.6px;
-  width: 41.6px;
-  padding: 5.2px;
-  position: relative;
-  margin-left: auto;
-  margin-right: auto;
-  background-color: #cdcdcd;
-  border: 1px solid dimgrey;
-}
-/* line 64, ../../sass/_cargo.scss */
-#cargo .pullout #cargo-containers .container.active {
-  background-color: #e4e4e4;
-  border: 2px solid #008aff;
-}
-/* line 69, ../../sass/_cargo.scss */
-#cargo .pullout #cargo-containers .container canvas {
-  height: 41.6px;
-  width: 41.6px;
-}
-/* line 74, ../../sass/_cargo.scss */
-#cargo .pullout #cargo-containers .container .quantity-label {
-  position: absolute;
-  right: 5.2px;
-  bottom: 5.2px;
-  text-shadow: -1px 0 #383838, 0 1px #383838, 1px 0 #383838, 0 -1px #383838;
-}
-/* line 81, ../../sass/_cargo.scss */
-#cargo .pullout #cargo-containers .container .type-label {
-  left: 72.8px;
-  top: 11px;
-}
-/* line 87, ../../sass/_cargo.scss */
-#cargo .pullout #cargo-containers .container:hover .type-label {
-  display: block;
-}
-/* line 94, ../../sass/_cargo.scss */
-#cargo .button {
-  height: 50px;
-  width: 50px;
-  position: relative;
-  cursor: pointer;
-  background-color: #363636;
-  margin-top: 1px;
-  background-image: url("../images/icons/icon_cargo.png");
-  background-repeat: no-repeat;
-  background-size: 70%;
-  background-position: center;
-}
-/* line 32, ../../sass/_left-toolbar.scss */
-#cargo .button .tooltip, #cargo .button .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container .button .type-label {
-  bottom: 58.33333px;
-  width: 75px;
-  text-align: center;
-  margin-left: -43.5px;
-  left: 50%;
-}
-/* line 40, ../../sass/_left-toolbar.scss */
-#cargo .button:hover {
-  background-color: #5c5c5c;
-}
-/* line 42, ../../sass/_left-toolbar.scss */
-#cargo .button:hover .tooltip, #cargo .button:hover .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container .button:hover .type-label {
-  display: block;
-}
-
-/* line 13, ../../sass/_crafting.scss */
+/* line 8, ../../sass/_crafting.scss */
 #crafting-button {
   height: 50px;
   width: 50px;
@@ -662,7 +581,7 @@
   background-position: center;
 }
 /* line 32, ../../sass/_left-toolbar.scss */
-#crafting-button .tooltip, #crafting-button #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #crafting-button .type-label {
+#crafting-button .tooltip {
   bottom: 58.33333px;
   width: 75px;
   text-align: center;
@@ -674,11 +593,11 @@
   background-color: #5c5c5c;
 }
 /* line 42, ../../sass/_left-toolbar.scss */
-#crafting-button:hover .tooltip, #crafting-button:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #crafting-button:hover .type-label {
+#crafting-button:hover .tooltip {
   display: block;
 }
 
-/* line 17, ../../sass/_crafting.scss */
+/* line 12, ../../sass/_crafting.scss */
 #crafting-window {
   color: #134710;
 }
