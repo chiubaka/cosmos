@@ -1,4 +1,4 @@
-var CraftingUIComponent = IgeEventingClass.extend({
+var CraftingUIComponent = WindowComponent.extend({
 	classId: 'CraftingUIComponent',
 	componentId: 'craftingUI',
 
@@ -11,19 +11,17 @@ var CraftingUIComponent = IgeEventingClass.extend({
 	selectedType: undefined,
 
 	init: function() {
-		var self = this;
-		var leftToolbar = $('#left-toolbar');
-		if (leftToolbar.length === 0) {
-			self.log('Left toolbar has not been initialized.', 'error');
-			return;
-		}
-		var windows = $('#windows');
-		if (windows.length === 0) {
-			self.log('Windows has not been initialized.', 'error');
-			return;
-		}
+		WindowComponent.prototype.init.call(
+			this,
+			CraftingUIComponent.UI_ROOT + 'crafting-window.html',
+			'crafting-window',
+			$('#left-toolbar'),
+			'crafting-button',
+			undefined,
+			'Crafting'
+		);
 
-		self.craftingBlocks = {};
+		/*self.craftingBlocks = {};
 
 		HUDComponent.loadHtml(CraftingUIComponent.UI_ROOT + 'crafting.html', function(html) {
 			leftToolbar.append(html);
@@ -33,7 +31,7 @@ var CraftingUIComponent = IgeEventingClass.extend({
 			self.emptyLabel = self.element.find('#crafting-empty-label');
 
 			// Create crafting window
-			HUDComponent.loadHtml(WindowsComponent.UI_ROOT + 'crafting-window.html', function(html) {
+			HUDComponent.loadHtml(CraftingUIComponent.UI_ROOT + 'crafting-window.html', function(html) {
 				windows.append(html);
 				self.craftingWindow = $('#crafting-window');
 
@@ -46,24 +44,17 @@ var CraftingUIComponent = IgeEventingClass.extend({
 					}
 				});
 
-				ige.emit('cosmos:hud.leftToolbar.subcomponent.loaded', self);
+				ige.emit('cosmos:hud.leftToolbar.windows.subcomponent.loaded', self);
 			});
-		});
+		});*/
 	},
 
-	open: function() {
-		this.craftingWindow.show();
-		this.button.addClass('active');
-	},
-
-	close: function() {
-		this.craftingWindow.hide();
-		this.button.removeClass('active');
-	},
+	_onWindowLoaded: function() {
+		ige.emit('cosmos:hud.leftToolbar.windows.subcomponent.loaded', this);
+	}
 });
 
 CraftingUIComponent.UI_ROOT = '/components/crafting/';
-WindowsComponent.UI_ROOT = '/components/windows/';
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
 	module.exports = CraftingUIComponent;

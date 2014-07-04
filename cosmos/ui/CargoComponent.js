@@ -1,4 +1,4 @@
-var CargoComponent = IgeEventingClass.extend({
+var CargoComponent = WindowComponent.extend({
 	classId: 'CargoComponent',
 	componentId: 'cargo',
 
@@ -11,7 +11,20 @@ var CargoComponent = IgeEventingClass.extend({
 	selectedType: undefined,
 
 	init: function() {
-		var self = this;
+		WindowComponent.prototype.init.call(
+			this,
+			CargoComponent.UI_ROOT + 'cargo-window.html',
+			'cargo-window',
+			$('#left-toolbar'),
+			'cargo-button',
+			undefined,
+			'Cargo'
+		);
+		/*var self = this;
+
+		this.element.click(function() {
+
+		});
 		var leftToolbar = $('#left-toolbar');
 		if (leftToolbar.length === 0) {
 			self.log('Left toolbar has not been initialized.', 'error');
@@ -62,18 +75,13 @@ var CargoComponent = IgeEventingClass.extend({
 				self.populateFromInventory(cargoItems);
 			});
 
-			ige.emit('cosmos:hud.leftToolbar.subcomponent.loaded', self);
-		});
+			ige.emit('cosmos:hud.leftToolbar.window.subcomponent.loaded', self);
+		});*/
 	},
 
-	open: function() {
-		this.pullout.show();
-		this.button.addClass('active');
-	},
+	_onWindowLoaded: function() {
 
-	close: function() {
-		this.pullout.hide();
-		this.button.removeClass('active');
+		ige.emit('cosmos:hud.leftToolbar.windows.subcomponent.loaded', this);
 	},
 
 	deselect: function(container) {
