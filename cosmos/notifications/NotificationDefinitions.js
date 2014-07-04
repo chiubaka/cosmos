@@ -49,6 +49,7 @@ var NotificationDefinitions = {
 		minedBlock: 2,
 		relocateShip: 3,
 		newShip: 4,
+		crafting_success: 5,
 	},
 
 	successes: {
@@ -56,6 +57,7 @@ var NotificationDefinitions = {
 		2: 'Mined a block!',
 		3: 'Relocated ship!',
 		4: 'New ship created and relocated!',
+		5: 'Crafted a block!',
 	}
 };
 

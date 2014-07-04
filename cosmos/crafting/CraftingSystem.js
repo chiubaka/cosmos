@@ -55,8 +55,10 @@ var CraftingSystem = IgeEventingClass.extend({
 		}
 
 		if (ige.craftingSystem._canCraft(cargo, player, recipeName)) {
-			console.log('Craftable');
 			ige.craftingSystem._doCraft(cargo, recipeName);
+			ige.network.stream.queueCommand('notificationSuccess',
+				NotificationDefinitions.successKeys.crafting_success,
+				clientId);
 		};
 
 	},

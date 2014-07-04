@@ -97,7 +97,8 @@ var CraftingUIComponent = WindowComponent.extend({
 
 	fillContainer: function(index, type, quantity, recipeName) {
 		var container = this.table.find('td').eq(index);
-		container.attr('recipe', recipeName)
+		container.attr('recipe', recipeName);
+		container.unbind('click');
 		container.click(function() {
 			console.log('Carfting UI clicked: ' + container.attr('recipe'));
 			ige.craftingSystem.craftClient(recipeName);
