@@ -6,7 +6,7 @@ $cargo-title-right-border-color: #bcbcbc;
 $cargo-padding: 10px;
 $cargo-title-height: $hud-button-height - 2 * $cargo-padding;
 
-$cargo-background-color: #a5a5a5;
+$cargo-body-background-color: #a5a5a5;
 $cargo-tabs-background-color: #bebebe;
 
 $cargo-button-position-top: $hud-margin-top;
@@ -28,7 +28,7 @@ $cargo-container-border-color: #696969;
 		$cargo-button-background-color,
 		'/images/icons/icon_cargo_window.png',
 		$cargo-tabs-background-color,
-		$cargo-background-color,
+		$cargo-body-background-color,
 		$cargo-container-border-color
 	);
 }
@@ -47,7 +47,7 @@ $cargo-container-border-color: #696969;
 		}
 
 		#cargo-containers {
-			background-color: $cargo-background-color;
+			background-color: $cargo-body-background-color;
 			padding: $cargo-padding;
 			text-align: center;
 
