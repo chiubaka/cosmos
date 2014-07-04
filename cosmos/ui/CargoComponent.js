@@ -65,21 +65,21 @@ var CargoComponent = WindowComponent.extend({
 				delete self.cargoBlocks[cargoBlockId];
 			});
 
-			ige.on('cargo response', function(cargoItems) {
-				console.log('Received cargo response');
-				self.populateFromInventory(cargoItems);
-			});
-
-			ige.on('cargo update', function(cargoItems) {
-				console.log('Received cargo update', 'info');
-				self.populateFromInventory(cargoItems);
-			});
-
 			ige.emit('cosmos:hud.leftToolbar.window.subcomponent.loaded', self);
 		});*/
 	},
 
 	_onWindowLoaded: function() {
+		var self = this;
+		ige.on('cargo response', function(cargoItems) {
+			console.log('Received cargo response');
+			self.populateFromInventory(cargoItems);
+		});
+
+		ige.on('cargo update', function(cargoItems) {
+			console.log('Received cargo update', 'info');
+			self.populateFromInventory(cargoItems);
+		});
 
 		ige.emit('cosmos:hud.leftToolbar.windows.subcomponent.loaded', this);
 	},
@@ -100,23 +100,35 @@ var CargoComponent = WindowComponent.extend({
 	populateFromInventory: function(cargoItems) {
 		console.log('Populating toolbar from server response: ' + Object.keys(cargoItems).length + ' item(s) in inventory');
 
-		this.containers.find('.container').remove();
+		var containers = this.table.find('td');
+		containers.removeClass('active');
 
-		if (Object.keys(cargoItems).length > 0) {
-			this.emptyLabel.hide();
-		}
-		else {
-			this.emptyLabel.show();
+		var canvases = this.table.find('canvas')
+		if (canvases.length > 0) {
+			canvases.remove();
 		}
 
+		var index = 0;
 		for (var type in cargoItems) {
+			if (!cargoItems.hasOwnProperty(type)) {
+				continue;
+			}
+
 			var quantity = cargoItems[type];
-			this.createContainer(type, quantity);
+			this.fillContainer(index, type, quantity);
+
+			index++;
+			//this.createContainer(type, quantity);
 		}
 
 		if (this.selectedType === undefined || !cargoItems.hasOwnProperty(this.selectedType)) {
-			this.select(this.containers.find('.container').first());
+			//this.select(this.containers.find('.container').first());
 		}
+	},
+
+	fillContainer: function(index, type, quantity) {
+		var container = this.table.find('td').get(index);
+		this.drawBlockInContainer(container, type);
 	},
 
 	createContainer: function(type, quantity) {
