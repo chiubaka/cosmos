@@ -51,6 +51,13 @@ var CraftingUIComponent = WindowComponent.extend({
 
 	_onWindowLoaded: function() {
 		ige.emit('cosmos:hud.leftToolbar.windows.subcomponent.loaded', this);
+	},
+
+	// Refresh crafting UI in response to cargo changes.
+	refresh: function() {
+		// TODO: Actaully refresh the crafting UI
+		// ige.client.player.crafting.craftableRecipies();
+		console.log('Refresh crafting UI');
 	}
 });
 

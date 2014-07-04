@@ -15,6 +15,9 @@ var CraftingSystem = IgeEventingClass.extend({
 		}
 		if (ige.isClient) {
 			ige.network.define('cosmos:crafting.addRecipe', this._addRecipeClient);
+			// Update the crafting state so items are correctly grayed out in the UI
+			ige.on('cargo response', this._refreshCraftingState);
+			ige.on('cargo update', this._refreshCraftingState);
 		}
 		this.log('Crafting system initiated!');
 	},
@@ -143,6 +146,14 @@ var CraftingSystem = IgeEventingClass.extend({
 	_addRecipeClient: function(data) {
 		var recipe = data;
 		ige.client.player.crafting.addRecipe(recipe);
+	},
+
+	// Keep client side crafting state consistent
+	_refreshCraftingState: function(data) {
+		//var cargoItems = data;
+		//ige.client.player.crafting.resetCraftableRecipies();
+		// TODO: Refresh craftable recipies based on cargoItems
+		ige.hud.leftToolbar.windows.craftingUI.refresh();
 	},
 
 	// TODO:Serialize and persist to DB
