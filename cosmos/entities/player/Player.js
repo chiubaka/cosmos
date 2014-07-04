@@ -243,7 +243,7 @@ var Player = BlockStructure.extend({
 			self.dispatchClickToIge(e);
 		});
 
-		var mouseOutTimer;
+		var mouseOutTimer; // this will store the numerical ID of the timeout. As in mouseOutTimer = setTimeout(...)
 
 		this.mouseOver(function() {
 			if (mouseOutTimer !== undefined) {
