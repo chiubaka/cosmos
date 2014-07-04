@@ -11,6 +11,10 @@ var CraftingSystem = IgeEventingClass.extend({
 	init: function(entity, options) {
 		if (ige.isServer) {
 			ige.network.define('cosmos:crafting.craft', this._craftServer);
+			ige.network.define('cosmos:crafting.addRecipe');
+		}
+		if (ige.isClient) {
+			ige.network.define('cosmos:crafting.addRecipe', this._addRecipeClient);
 		}
 		this.log('Crafting system initiated!');
 	},
@@ -127,7 +131,23 @@ var CraftingSystem = IgeEventingClass.extend({
 		}
 
 		console.log('doCraft: ' + recipeName);
+	},
+
+	// Add a recipie to a player
+	addRecipeServer: function(recipe, player, clientId) {
+		player.crafting.recipies()[recipe] = true;
+		ige.network.stream.queueCommand('cosmos:crafting.addRecipe',
+			recipe, clientId);
+	},
+
+	// Keep the client side recipies list in sync
+	_addRecipeClient: function(data) {
+		var recipe = data;
+		ige.client.player.crafting.recipies()[recipe] = true;
 	}
+
+	// TODO:Serialize and pPersist to DB
+
 
 });
 

@@ -206,6 +206,8 @@ var ServerNetworkEvents = {
 			return;
 		}
 
+		ige.craftingSystem.addRecipeServer('test', player, clientId);
+
 		// TODO: Guard against bogus blockGridId from client
 		var blockGrid = ige.$(data.blockGridId);
 		if (blockGrid === undefined) {

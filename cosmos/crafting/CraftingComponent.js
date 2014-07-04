@@ -8,8 +8,6 @@ var CraftingComponent = IgeEventingClass.extend({
 	componentId: 'crafting',
 
 	_cargo: undefined,
-	// TODO: Load unlocked recipies from DB. For now, we have a predefined set of
-	// recipies.
 	_recipies: undefined,
 
 	init: function(entity, options) {
@@ -22,16 +20,15 @@ var CraftingComponent = IgeEventingClass.extend({
 			this._cargo = entity.cargo;
 
 		}
+		// TODO: Load unlocked recipies from DB. For now, we have a
+		// predefined set of recipies.
 		this._recipies = StarterRecipies;
-	},
-
-	addRecipe: function(recipe) {
-		this._recipies[recipe] = true;
 	},
 
 	recipies: function() {
 		return this._recipies;
 	}
+
 
 });
 
