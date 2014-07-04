@@ -3,6 +3,7 @@ var WindowComponent = ButtonComponent.extend({
 
 	button: undefined,
 	window: undefined,
+	numRows: undefined,
 
 	init: function(windowUrl, windowId, buttonParent, buttonId, buttonClass, tooltip) {
 		ButtonComponent.prototype.init.call(this, buttonParent, buttonId, buttonClass, tooltip);
@@ -33,7 +34,9 @@ var WindowComponent = ButtonComponent.extend({
 
 			self.table = self.window.find('table').first();
 
-			for (var i = 0; i < WindowComponent.ROWS; i++) {
+			self.numRows = 0;
+
+			for (var i = 0; i < WindowComponent.MIN_ROWS; i++) {
 				self.addRow();
 			}
 
@@ -55,6 +58,31 @@ var WindowComponent = ButtonComponent.extend({
 			self.select($(this));
 		});
 		this.table.append(row);
+		this.numRows++;
+		console.log('adding row');
+	},
+
+	removeRow: function() {
+		// Don't remove rows past the minimum row setting!
+		if (this.numRows <= WindowComponent.MIN_ROWS) {
+			return;
+		}
+		this.table.find('tr').last().remove();
+		this.numRows--;
+	},
+
+	setNumRows: function(numRows) {
+		var rowDelta = numRows - this.numRows;
+		if (rowDelta > 0) {
+			for (var i = 0; i < rowDelta; i++) {
+				this.addRow();
+			}
+		}
+		else {
+			for (var i = 0; i > rowDelta; i--) {
+				this.removeRow();
+			}
+		}
 	},
 
 	drawBlockInContainer: function(container, blockType) {
@@ -104,7 +132,7 @@ var WindowComponent = ButtonComponent.extend({
 	}
 });
 
-WindowComponent.ROWS = 3;
+WindowComponent.MIN_ROWS = 3;
 WindowComponent.COLS_PER_ROW = 6;
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {

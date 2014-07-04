@@ -44,7 +44,12 @@ var CargoComponent = WindowComponent.extend({
 	},
 
 	populateFromInventory: function(cargoItems) {
-		console.log('Populating toolbar from server response: ' + Object.keys(cargoItems).length + ' item(s) in inventory');
+		var numTypes = Object.keys(cargoItems).length;
+		console.log('Populating toolbar from server response: ' + numTypes + ' item(s) in inventory');
+
+
+		var rowsNeeded = Math.ceil(numTypes / WindowComponent.COLS_PER_ROW);
+		this.setNumRows(rowsNeeded);
 
 		var containers = this.table.find('td');
 		containers.removeClass('active');
@@ -68,7 +73,7 @@ var CargoComponent = WindowComponent.extend({
 			//this.createContainer(type, quantity);
 		}
 
-		if (this.selectedType === undefined || !cargoItems.hasOwnProperty(this.selectedType)) {
+		if ((this.selectedType === undefined || !cargoItems.hasOwnProperty(this.selectedType)) && numTypes > 0) {
 			this.select(this.table.find('td').first());
 		}
 	},
@@ -77,6 +82,10 @@ var CargoComponent = WindowComponent.extend({
 		var container = this.table.find('td').get(index);
 		this.drawBlockInContainer(container, type);
 		$(container).attr('data-block-type', type);
+
+		if (this.selectedType === type) {
+			this.select($(container));
+		}
 	}
 });
 

@@ -493,10 +493,10 @@
 /* line 103, ../../sass/_window.scss */
 .window .body table {
   width: 100%;
-  border-collapse: collapse;
+  border-spacing: 0;
   table-layout: fixed;
 }
-/* line 109, ../../sass/_window.scss */
+/* line 110, ../../sass/_window.scss */
 .window .body td {
   height: 25.5px;
   width: 25.5px;
@@ -504,7 +504,7 @@
   border-style: solid;
   padding: 6px;
 }
-/* line 116, ../../sass/_window.scss */
+/* line 117, ../../sass/_window.scss */
 .window .body td canvas {
   height: 25.5px;
   width: 25.5px;
@@ -574,6 +574,14 @@
 #cargo-window .body td {
   background-color: #cdcdcd;
   border-color: #a5a5a5;
+}
+/* line 25, ../../sass/_cargo.scss */
+#cargo-window .body td.active, #cargo-window .body td:hover {
+  background-color: #e1e1e1;
+}
+/* line 29, ../../sass/_cargo.scss */
+#cargo-window .body td.active {
+  border: 1px solid #008aff;
 }
 
 /* line 8, ../../sass/_crafting.scss */

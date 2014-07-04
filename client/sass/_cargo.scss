@@ -3,8 +3,8 @@ $cargo-header-background-color: #cdcdcd;
 $cargo-tabs-background-color: #bebebe;
 $cargo-body-background-color: #a5a5a5;
 $cargo-container-border-color: #696969;
-$cargo-block-hover-border-color: #008aff;
-
+$cargo-container-active-background-color: #e1e1e1;
+$cargo-container-active-border-color: #008aff;
 
 #cargo-button {
 	margin-top: $hud-margin-top;
@@ -20,4 +20,14 @@ $cargo-block-hover-border-color: #008aff;
 		$cargo-body-background-color,
 		$cargo-container-border-color
 	);
+
+	.body {
+		td.active, td:hover {
+			background-color: $cargo-container-active-background-color;
+		}
+
+		td.active {
+			border: 1px solid $cargo-container-active-border-color;
+		}
+	}
 }
