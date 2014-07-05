@@ -15,7 +15,8 @@ var ClientNetworkEvents = {
 	 * @private
 	 */
 	_onPlayerEntity: function(data) {
-		ige.client.player = new Player();
+		ige.client.player = new Player()
+			.mount(ige.$("spaceGameScene"));
 
 		// Set the time stream UI entity to monitor our player entity
 		// time stream data
@@ -62,6 +63,8 @@ var ClientNetworkEvents = {
 						if (ige.client.player) {
 							ige.client.player.currentShip(entity);
 							console.log("current ship set to be the passed entity!");
+							console.log("here is the entity's id:");
+							console.log(entity.id());
 						}
 
 						// Set the time stream UI entity to monitor our player entity

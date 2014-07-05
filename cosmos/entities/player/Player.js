@@ -131,6 +131,7 @@ var Player = IgeEntity.extend({
 	 },
 
 	/**
+	 * TODO fix this comment
 	 * Override the {@link IgeEntity#update} function to provide support for player controls and {@link Block} functions
 	 * like applying force where {@link EngineBlock}s are or turning faster when there are more {@link ThrusterBlock}s.
 	 * @param ctx {Object} The render context.
@@ -141,6 +142,8 @@ var Player = IgeEntity.extend({
 		IgeEntity.prototype.update.call(this, ctx);
 
 		if (!ige.isServer) {
+			console.log("update is called on client");
+
 			/* Save the old control state for comparison later */
 			oldControls = JSON.stringify(this.controls());
 
@@ -154,9 +157,15 @@ var Player = IgeEntity.extend({
 			this.controls().key.right =
 				ige.input.actionState('key.right') | ige.input.actionState('key.right_D');
 
-			if (JSON.stringify(this.controls) !== oldControls) { //this.controls !== oldControls) {
+			if (JSON.stringify(this.controls()) !== oldControls) {
+				console.log("contols have changed! sending update to server");
+				console.log("from");
+				console.log(oldControls);
+				console.log("to");
+				console.log(this.controls());
+
 				// Tell the server about our control change
-				ige.network.send('playerControlUpdate', this.controls);
+				ige.network.send('playerControlUpdate', this.controls());
 			}
 		}
 	},
@@ -168,8 +177,13 @@ var Player = IgeEntity.extend({
 		if (newControls) {
 			this._controls = newControls;
 
-			//TODO do this for all the different controls
 			this.currentShip().controls.up = this._controls.key.up;
+			this.currentShip().controls.down = this._controls.key.down;
+			this.currentShip().controls.left = this._controls.key.left;
+			this.currentShip().controls.right = this._controls.key.right;
+
+			console.log("controls of the player have been set to the following:");
+			console.log(newControls);
 
 			return this;
 		}
@@ -183,6 +197,11 @@ var Player = IgeEntity.extend({
 	currentShip: function(newCurrentShip) {
 		if (newCurrentShip !== undefined) {
 			console.log("finally setting current ship!");
+			console.log("with the following id:");
+			console.log(newCurrentShip.id());
+			console.log("by the way, this player's id is:");
+			console.log(this.id());
+
 			this._currentShip = newCurrentShip;
 
 			if (!ige.isServer) {

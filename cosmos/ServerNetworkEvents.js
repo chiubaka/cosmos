@@ -118,9 +118,7 @@ var ServerNetworkEvents = {
 	 */
 	_createPlayer: function(clientId, playerId, ship, cargo) {
 		var player = new Player()
-			.clientId(clientId)
-			.mount(ige.server.spaceGameScene)
-			.streamMode(1);
+			.clientId(clientId);
 
 		// Call BlockGrid#debugFixtures before calling BlockGrid#fromBlockMatrix, since debugging entities are
 		// added when fixtures are added.
@@ -221,6 +219,10 @@ var ServerNetworkEvents = {
 		}
 
 		player.controls(data);
+
+		console.log("player just updated his controls!");
+		console.log("here are the new controls:");
+		console.log(player.controls());
 	},
 
 	// TODO: User access control. Restrict what players can do based on clientId
