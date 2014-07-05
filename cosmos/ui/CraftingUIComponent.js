@@ -104,17 +104,46 @@ var CraftingUIComponent = WindowComponent.extend({
 			ige.craftingSystem.craftClient(recipeName);
 		});
 
-		// Add a tooltip
-		container.tooltipster({
-			content: recipeName,
-			delay: 0,
-			position: 'bottom-left',
-			theme: 'tooltipster-cosmos'
-		});
+		// Generate tooltip content
+		var tooltipContent = $(this.fillTooltip(recipeName));
+
+		// If tooltip exists, update content
+		if(container.hasClass('tooltipstered')) {
+			container.tooltipster('content', tooltipContent);
+		}
+		else {
+		// If tooltip doesn't exist, create new tooltip
+			container.tooltipster({
+				content: tooltipContent,
+				delay: 0,
+				position: 'bottom-left',
+				theme: 'tooltipster-cosmos'
+			});
+		}
 
 		// Draw the block
 		this.drawBlockInContainer(container, type);
 	},
+
+	fillTooltip: function(recipeName) {
+		// TODO: Use templating engine to generate tooltip content
+		var recipe = Recipies[recipeName];
+		var content = '<span>';
+
+		// Output recipe title
+		content += recipeName + '<br><br>';
+
+		// Output reactants
+		content += 'Reactants required: <br>';
+		for (reactant in recipe.reactants) {
+			if (recipe.reactants.hasOwnProperty(reactant)) {
+				content += reactant + ': ';
+				content += recipe.reactants[reactant] + '<br>';
+			}
+		}
+		content += '</span>';
+		return content;
+	}
 
 });
 
