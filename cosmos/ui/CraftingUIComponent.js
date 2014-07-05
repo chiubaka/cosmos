@@ -23,10 +23,28 @@ var CraftingUIComponent = WindowComponent.extend({
 	},
 
 	_onWindowLoaded: function() {
-		ige.emit('cosmos:hud.leftToolbar.windows.subcomponent.loaded', this);
+		// Load Tooltipster tooltip library
+		$.getScript(CraftingUIComponent.TOOLTIPSTER_ROOT + 'jquery.tooltipster.min.js', function() {
+			// Load Tooltipster CSS
+			$('<link/>', {
+				 rel: 'stylesheet',
+				 type: 'text/css',
+				 href: CraftingUIComponent.TOOLTIPSTER_ROOT + 'css/tooltipster.css'
+			}).appendTo('head');
+			$('<link/>', {
+				 rel: 'stylesheet',
+				 type: 'text/css',
+				 href: CraftingUIComponent.TOOLTIPSTER_ROOT +
+					 'css/themes/tooltipster-cosmos.css'
+			}).appendTo('head');
+
+
+			ige.emit('cosmos:hud.leftToolbar.windows.subcomponent.loaded', this);
+		});
 	},
 
 	// Refresh crafting UI in response to cargo changes.
+	// TODO: Cache blocks and tooltips. Only redraw things that are necessary.
 	refresh: function() {
 		var recipies = ige.client.player.crafting.recipies();
 		var craftableRecipies = ige.client.player.crafting.craftableRecipies();
@@ -77,18 +95,31 @@ var CraftingUIComponent = WindowComponent.extend({
 
 	fillContainer: function(index, type, quantity, recipeName) {
 		var container = this.table.find('td').eq(index);
+
+		// Add an onclick function
 		container.attr('recipe', recipeName);
 		container.unbind('click');
 		container.click(function() {
 			console.log('Carfting UI clicked: ' + container.attr('recipe'));
 			ige.craftingSystem.craftClient(recipeName);
 		});
+
+		// Add a tooltip
+		container.tooltipster({
+			content: recipeName,
+			delay: 0,
+			position: 'bottom-left',
+			theme: 'tooltipster-cosmos'
+		});
+
+		// Draw the block
 		this.drawBlockInContainer(container, type);
 	},
 
 });
 
 CraftingUIComponent.UI_ROOT = '/components/crafting/';
+CraftingUIComponent.TOOLTIPSTER_ROOT = '/vendor/tooltipster/';
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
 	module.exports = CraftingUIComponent;
