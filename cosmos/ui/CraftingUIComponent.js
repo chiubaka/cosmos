@@ -131,13 +131,19 @@ var CraftingUIComponent = WindowComponent.extend({
 		var content = '<span>';
 
 		// Output recipe title
-		content += recipeName + '<br><br>';
+		var humanReadableRecipeName = recipeName
+			// insert a space before all caps
+			.replace(/([A-Z])/g, ' $1')
+			// uppercase the first character
+			.replace(/^./, function(str){ return str.toUpperCase(); })
+		content += humanReadableRecipeName + '<br><br>';
+
 
 		// Output reactants
 		content += 'Reactants required: <br>';
 		for (reactant in recipe.reactants) {
 			if (recipe.reactants.hasOwnProperty(reactant)) {
-				content += reactant + ': ';
+				content += reactant.replace(/Block$/, '') + ': ';
 				content += recipe.reactants[reactant] + '<br>';
 			}
 		}
