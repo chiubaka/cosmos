@@ -117,9 +117,8 @@ var WindowComponent = ButtonComponent.extend({
 	},
 
 	close: function() {
-		this.window.fadeOut();
+		this.window.fadeOut(this._resizeContainer);
 		this.button.removeClass('active');
-		this._resizeContainer();
 	},
 
 	_resizeContainer: function() {

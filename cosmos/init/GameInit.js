@@ -102,7 +102,7 @@ var GameInit = {
 
 			// For now, the server does not need to know about the background scene.
 			// The server does not need to load the UI.
-			this.initBackgroundScene();
+			//this.initBackgroundScene();
 		}
 	},
 
