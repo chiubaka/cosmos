@@ -30,6 +30,13 @@ var CraftingUIComponent = WindowComponent.extend({
 	refresh: function() {
 		var recipies = ige.client.player.crafting.recipies();
 		var craftableRecipies = ige.client.player.crafting.craftableRecipies();
+
+		// Resize the crafting window, if needed
+		var numTypes = Object.keys(recipies).length;
+		var rowsNeeded = Math.ceil(numTypes / WindowComponent.COLS_PER_ROW);
+		this.setNumRows(rowsNeeded);
+
+		// Populate crafting window with recipies
 		this.populate(recipies, craftableRecipies);
 		console.log('Refresh crafting UI');
 	},
