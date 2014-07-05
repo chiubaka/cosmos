@@ -646,6 +646,10 @@
   background-color: #d5e9d3;
   border-color: #8ba988;
 }
+/* line 23, ../../sass/_crafting.scss */
+#crafting-window .body td:hover {
+  background-color: #e9fde7;
+}
 
 /* line 25, ../../sass/_minimap.scss */
 #minimap {

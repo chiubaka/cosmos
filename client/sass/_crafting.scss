@@ -3,7 +3,7 @@ $crafting-header-background-color: #d5e9d3;
 $crafting-tabs-background-color: #b7d3b4;
 $crafting-body-background-color: #8ba988;
 $crafting-container-border-color: #597e55;
-$crafting-block-hover-border-color: #008aff;
+$crafting-container-active-background-color: #e9fde7;
 
 #crafting-button {
 	@include left-toolbar-item-with-icon('../images/icons/icon_crafting.png');
@@ -18,4 +18,10 @@ $crafting-block-hover-border-color: #008aff;
 		$crafting-body-background-color,
 		$crafting-container-border-color
 	);
+
+	.body {
+		td:hover {
+			background-color: $crafting-container-active-background-color;
+		}
+	}
 }
