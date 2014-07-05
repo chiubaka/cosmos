@@ -20,53 +20,6 @@ var CargoComponent = WindowComponent.extend({
 			undefined,
 			'Cargo'
 		);
-		/*var self = this;
-
-		this.element.click(function() {
-
-		});
-		var leftToolbar = $('#left-toolbar');
-		if (leftToolbar.length === 0) {
-			self.log('Left toolbar has not been initialized.', 'error');
-			return;
-		}
-
-		self.cargoBlocks = {};
-
-		HUDComponent.loadHtml(CargoComponent.UI_ROOT + 'cargo.html', function(html) {
-			leftToolbar.append(html);
-			self.element = $('#cargo');
-			self.button = self.element.find('.button').first();
-			self.pullout = self.element.find('.pullout').first();
-			self.containers = self.element.find('#cargo-containers');
-			self.emptyLabel = self.element.find('#cargo-empty-label');
-
-			self.button.click(function() {
-				if (self.pullout.is(':visible')) {
-					self.close();
-				}
-				else {
-					self.open();
-				}
-			});
-
-			ige.on('cosmos:Player.addBlock.cargoBlock', function(cargoBlockId) {
-				var containerDiv = document.createElement('div');
-				containerDiv.className = 'container';
-
-				self.cargoBlocks[cargoBlockId] = containerDiv;
-
-				self.containers.append(containerDiv);
-			});
-
-			ige.on('cosmos:Player.removeBlock.cargoBlock', function(cargoBlockId) {
-				var containerDiv = self.cargoBlocks[cargoBlockId];
-				containerDiv.remove();
-				delete self.cargoBlocks[cargoBlockId];
-			});
-
-			ige.emit('cosmos:hud.leftToolbar.window.subcomponent.loaded', self);
-		});*/
 	},
 
 	_onWindowLoaded: function() {
@@ -84,24 +37,23 @@ var CargoComponent = WindowComponent.extend({
 		ige.emit('cosmos:hud.leftToolbar.windows.subcomponent.loaded', this);
 	},
 
-	deselect: function(container) {
-		container.removeClass('active');
-		this.selectedType = undefined;
-		ige.emit('toolbar tool cleared', [this.classId(), container.attr('data-block-type')]);
-	},
-
 	select: function(container) {
-		$('.container').removeClass('active');
-		container.addClass('active');
+		WindowComponent.prototype.select.call(this, container);
 		this.selectedType = container.attr('data-block-type');
 		ige.emit('toolbar tool selected', [this.classId(), container.attr('data-block-type')]);
 	},
 
 	populateFromInventory: function(cargoItems) {
-		console.log('Populating toolbar from server response: ' + Object.keys(cargoItems).length + ' item(s) in inventory');
+		var numTypes = Object.keys(cargoItems).length;
+		console.log('Populating toolbar from server response: ' + numTypes + ' item(s) in inventory');
+
+
+		var rowsNeeded = Math.ceil(numTypes / WindowComponent.COLS_PER_ROW);
+		this.setNumRows(rowsNeeded);
 
 		var containers = this.table.find('td');
 		containers.removeClass('active');
+		containers.removeAttr('data-block-type');
 
 		var canvases = this.table.find('canvas')
 		if (canvases.length > 0) {
@@ -121,62 +73,19 @@ var CargoComponent = WindowComponent.extend({
 			//this.createContainer(type, quantity);
 		}
 
-		if (this.selectedType === undefined || !cargoItems.hasOwnProperty(this.selectedType)) {
-			//this.select(this.containers.find('.container').first());
+		if ((this.selectedType === undefined || !cargoItems.hasOwnProperty(this.selectedType)) && numTypes > 0) {
+			this.select(this.table.find('td').first());
 		}
 	},
 
 	fillContainer: function(index, type, quantity) {
 		var container = this.table.find('td').eq(index);
 		this.drawBlockInContainer(container, type);
-	},
-
-	createContainer: function(type, quantity) {
-		var self = this;
-		var containerDiv = document.createElement('div');
-		$(containerDiv).addClass('container');
+		$(container).attr('data-block-type', type);
 
 		if (this.selectedType === type) {
-			$(containerDiv).addClass('active');
+			this.select($(container));
 		}
-
-		$(containerDiv).attr('data-block-type', type);
-
-
-		$(containerDiv).click(function() {
-			if ($(this).hasClass('active')) {
-				self.deselect($(this));
-			}
-			else {
-				self.select($(this));
-			}
-		});
-
-		var quantityLabelSpan = document.createElement('span');
-		$(quantityLabelSpan).addClass('quantity-label');
-		$(quantityLabelSpan).text(quantity);
-
-		var typeLabelSpan = document.createElement('span');
-		$(typeLabelSpan).addClass('type-label');
-		$(typeLabelSpan).text(Block.displayNameFromClassId(type));
-
-		var containerCanvas = document.createElement('canvas');
-
-		$(containerDiv).append(typeLabelSpan);
-		$(containerDiv).append(quantityLabelSpan);
-		$(containerDiv).append(containerCanvas);
-		this.containers.append(containerDiv);
-
-		var block = Block.blockFromClassId(type);
-		containerCanvas.height = block._bounds2d.y;
-		containerCanvas.width = block._bounds2d.x;
-
-		var ctx = containerCanvas.getContext("2d");
-		ctx.translate(block._bounds2d.x2, block._bounds2d.y2);
-		block.texture().render(ctx, block);
-		setTimeout(function() {
-			block.texture().render(ctx, block);
-		}, 100);
 	}
 });
 
