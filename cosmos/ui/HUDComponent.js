@@ -13,8 +13,7 @@ var HUDComponent = IgeEventingClass.extend({
 
 		this.element = $('#hud');
 
-		// TODO: Start HUD in hidden mode.
-		// this.hide();
+		this.hide();
 
 		this.numComponentsToLoad = 4;
 

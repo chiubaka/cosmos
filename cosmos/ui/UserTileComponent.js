@@ -11,7 +11,7 @@ var UserTileComponent = IgeEventingClass.extend({
 		var self = this;
 		var bottomToolbar = $('#bottom-toolbar');
 		if (bottomToolbar.length === 0) {
-			this.log('Bottom toolbar has not been initialized.', 'error');
+			self.log('Bottom toolbar has not been initialized.', 'error');
 			return;
 		}
 
@@ -23,6 +23,11 @@ var UserTileComponent = IgeEventingClass.extend({
 			self.profilePic = self.element.find('.profile-pic');
 			self.shipName = self.element.find('.ship-name');
 			self.username = self.element.find('.username');
+
+			ige.on('cosmos:client.player.username.set', function(username) {
+				self.username.text(username);
+				console.log('Set user tile name: ' + username);
+			}, self, true);
 
 			ige.emit('cosmos:hud.bottomToolbar.subcomponent.loaded', self);
 		});

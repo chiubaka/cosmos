@@ -37,7 +37,7 @@ var CargoComponent = IgeEventingClass.extend({
 				}
 			});
 
-			ige.on('cosmos:Player.addBlock.cargoBlock', function(cargoBlockId) {
+			ige.on('cosmos:player.addBlock.cargoBlock', function(cargoBlockId) {
 				var containerDiv = document.createElement('div');
 				containerDiv.className = 'container';
 
@@ -46,7 +46,7 @@ var CargoComponent = IgeEventingClass.extend({
 				self.containers.append(containerDiv);
 			});
 
-			ige.on('cosmos:Player.removeBlock.cargoBlock', function(cargoBlockId) {
+			ige.on('cosmos:player.removeBlock.cargoBlock', function(cargoBlockId) {
 				var containerDiv = self.cargoBlocks[cargoBlockId];
 				containerDiv.remove();
 				delete self.cargoBlocks[cargoBlockId];

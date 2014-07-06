@@ -68,6 +68,10 @@ var Server = IgeClass.extend({
 						ige.network.define('cargoResponse');
 						ige.network.define('confirm');
 
+						ige.network.define('cosmos:player.username.set.request', Player.onUsernameRequested);
+						ige.network.define('cosmos:player.username.set.approve');
+						ige.network.define('cosmos:player.username.set.error');
+
 						/* When a client connects or disconnects */
 						ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js
 						ige.network.on('disconnect', self._onPlayerDisconnect); // Defined in ./gameClasses/ServerNetworkEvents.js

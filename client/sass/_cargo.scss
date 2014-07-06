@@ -20,6 +20,7 @@ $cargo-container-border-color: #696969;
   position: absolute;
   top: $cargo-button-position-top;
   left: 0px;
+  z-index: $hud-layer-z-index;
 
   .pullout, .button {
     float: left;
