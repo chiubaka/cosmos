@@ -9,15 +9,32 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+		dust: {
+			dist: {
+				files: {
+					'public/js/templates.dust.js': 'views/**/*.dust'
+				},
+
+				options: {
+					wrapper: false,
+					runtime: false,
+					basePath: 'views'
+				}
+			}
+		},
 		watch: {
 			css: {
 				files: '**/*.scss',
-				tasks: ['compass']
+				tasks: ['compass', 'dust']
+			},
+			dust: {
+				files: 'views/**/*.dust',
+				tasks: ['dust']
 			}
 		}
 	});
 	grunt.loadNpmTasks('grunt-contrib-compass');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-dust');
 	grunt.registerTask('default', ['watch']);
-    grunt.registerTask('run-compass', ['compass']);
 }
