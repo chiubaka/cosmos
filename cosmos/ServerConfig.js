@@ -3,6 +3,10 @@ var config = {
 		/* === CONSTANTS === */
 		{ name: 'Constants', path: './constants' },
 
+		/* === COMPONENTS === */
+		{ name: 'HealthComponent', path: './components/HealthComponent' },
+		{ name: 'DamageSourceComponent', path: './components/DamageSourceComponent' },
+
 		/* === GAME SETUP === */
 		/* Initialization */
 		{ name: 'GameInit', path: './init/GameInit' },
@@ -27,8 +31,12 @@ var config = {
 		{ name: 'FuelBlock', path: './entities/blocks/parts/FuelBlock' },
 		{ name: 'CargoBlock', path: './entities/blocks/parts/CargoBlock' },
 		{ name: 'ControlBlock', path: './entities/blocks/parts/ControlBlock' },
-		{ name: 'MiningLaserBlock', path: './entities/blocks/parts/MiningLaserBlock' },
 		{ name: 'ThrusterBlock', path: './entities/blocks/parts/ThrusterBlock' },
+
+		/* Weapons */
+		{ name: 'Weapon', path: './entities/blocks/parts/Weapon' },
+		{ name: 'MiningLaserBlock', path: './entities/blocks/parts/weapons/MiningLaserBlock' },
+
 		/* Ship armor blocks */
 		{ name: 'Armor', path: './entities/blocks/Armor' },
 		{ name: 'HullBlock', path: './entities/blocks/armor/HullBlock' },

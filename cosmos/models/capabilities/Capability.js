@@ -194,8 +194,6 @@ var Capability = IgeClass.extend({
 	 * @instance
 	 */
 	Block_mouseDown: function(sender, event, data) {
-		ige.notification.emit('notificationError',
-			NotificationDefinitions.errorKeys.noCapability);
 		console.log("IdleCapability: received mouseDown (button " + event.button + ") on a block (classId: " + sender.classId() + ", id: " + sender.id() + "!");
 	},
 
@@ -209,8 +207,6 @@ var Capability = IgeClass.extend({
 	 * @instance
 	 */
 	ClickScene_mouseDown: function(sender, event, data) {
-		ige.notification.emit('notificationError',
-			NotificationDefinitions.errorKeys.noCapability);
 		console.log("IdleCapability: received mouseDown (button " + event.button + ") on the background!");
 	},
 

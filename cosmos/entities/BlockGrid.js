@@ -791,7 +791,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 				break;
 			case 'damage':
 				var block = this.get(data.row, data.col);
-				block.damage(data.amount);
+				block.takeDamage(data.amount);
 				break;
 			case 'add':
 				ige.client.metrics.fireEvent(
@@ -1721,6 +1721,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			control.stopPropagation();
 		}
 
+		ige.emit('cosmos:block.mousedown', block);
 		this._blockClickHandler(block, event, control);
 	},
 
