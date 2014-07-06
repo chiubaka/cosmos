@@ -1,10 +1,12 @@
-<span class='crafting recipe name'>{recipeName.test}</span>
+<h3 class='crafting recipe name'>{name}</h3>
 {?recipeDescription}
-	<span class='crafting recipe description'>{recipeDescription}</span>
+	<p class='crafting recipe description'>{description}</p>
 {/recipeDescription}
-Reactants:
+<h4 class='crafting reactants'>Reactants</h4>
 <ul>
 	{#reactants}
-		<li>{quantity}</li>
+		<li>
+			{blockType}: {quantity}
+		</li>
 	{/reactants}
 </ul>

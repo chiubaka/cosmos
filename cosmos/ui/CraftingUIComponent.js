@@ -23,24 +23,7 @@ var CraftingUIComponent = WindowComponent.extend({
 	},
 
 	_onWindowLoaded: function() {
-		// Load Tooltipster tooltip library
-		$.getScript(CraftingUIComponent.TOOLTIPSTER_ROOT + 'jquery.tooltipster.min.js', function() {
-			// Load Tooltipster CSS
-			$('<link/>', {
-				 rel: 'stylesheet',
-				 type: 'text/css',
-				 href: CraftingUIComponent.TOOLTIPSTER_ROOT + 'css/tooltipster.css'
-			}).appendTo('head');
-			$('<link/>', {
-				 rel: 'stylesheet',
-				 type: 'text/css',
-				 href: CraftingUIComponent.TOOLTIPSTER_ROOT +
-					 'css/themes/tooltipster-cosmos.css'
-			}).appendTo('head');
-
-
-			ige.emit('cosmos:hud.leftToolbar.windows.subcomponent.loaded', this);
-		});
+		ige.emit('cosmos:hud.leftToolbar.windows.subcomponent.loaded', this);
 	},
 
 	// Refresh crafting UI in response to cargo changes.
@@ -98,6 +81,7 @@ var CraftingUIComponent = WindowComponent.extend({
 	},
 
 	fillContainer: function(index, block) {
+		var self = this;
 		var container = this.table.find('td').eq(index);
 
 		// Add an onclick function
@@ -109,54 +93,41 @@ var CraftingUIComponent = WindowComponent.extend({
 		});
 
 		// Generate tooltip content
-		var tooltipContent = $(this.fillTooltip(block.recipe));
+		this.fillTooltip(block.recipe.tooltipData(), function(err, out) {
+			if (err) {
+				this.log('Error rendering crafting tooltip template.');
+			}
 
-		// If tooltip exists, update content
-		if(container.hasClass('tooltipstered')) {
-			container.tooltipster('content', tooltipContent);
-		}
-		else {
-		// If tooltip doesn't exist, create new tooltip
-			container.tooltipster({
-				content: tooltipContent,
-				delay: 0,
-				position: 'bottom-left',
-				theme: 'tooltipster-cosmos'
-			});
-		}
+			var tooltipContent = $(out);
 
-		// Draw the block
-		this.drawBlockInContainer(container, block.classId());
+			// If tooltip exists, update content
+			if(container.hasClass('tooltipstered')) {
+				container.tooltipster('content', tooltipContent);
+			}
+			else {
+				// If tooltip doesn't exist, create new tooltip
+				container.tooltipster({
+					content: tooltipContent,
+					delay: 0,
+					position: 'bottom-left',
+					theme: 'tooltipster-cosmos'
+				});
+			}
+
+			// Draw the block
+			self.drawBlockInContainer(container, block.classId());
+		});
 	},
 
-	fillTooltip: function(recipe) {
-		// TODO: Use templating engine to generate tooltip content
-		var content = '<span>';
-
-		dust.render('crafting/tooltip', {recipeName: {test: function() { return recipeName }}}, function(err, out) {
-			console.log(out);
+	fillTooltip: function(recipe, callback) {
+		dust.render('crafting/tooltip', recipe, function(err, out) {
+			callback(err, out);
 		});
-
-		// Output recipe title
-		var humanReadableRecipeName = recipe.name;
-		content += humanReadableRecipeName + '<br><br>';
-
-
-		// Output reactants
-		content += 'Reactants required: <br>';
-		for (var i = 0; i < recipe.reactants.length; i++) {
-			var reactant = recipe.reactants[i];
-			content += Block.displayNameFromClassId(reactant.blockType) + ': ';
-			content += reactant.quantity + '<br>';
-		}
-		content += '</span>';
-		return content;
 	}
 
 });
 
 CraftingUIComponent.UI_ROOT = '/components/crafting/';
-CraftingUIComponent.TOOLTIPSTER_ROOT = '/vendor/tooltipster/';
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
 	module.exports = CraftingUIComponent;

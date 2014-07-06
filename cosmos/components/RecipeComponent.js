@@ -24,6 +24,23 @@ var RecipeComponent = IgeClass.extend({
 		this.name = data.name || Block.displayNameFromClassId(entity.classId());
 		this.craftable = data.craftable || true;
 		this.reactants = data.reactants;
+	},
+
+	tooltipData: function() {
+		var data = {};
+		data.name = this.name;
+		data.reactants = [];
+		for (var i = 0; i < this.reactants.length; i++) {
+			var reactant = this.reactants[i];
+			data.reactants.push(
+				{
+					blockType: Block.displayNameFromClassId(reactant.blockType),
+					quantity: reactant.quantity
+				}
+			);
+		}
+
+		return data;
 	}
 });
 

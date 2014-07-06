@@ -13,75 +13,93 @@ $tooltip-line-height: 18px;
 $tooltip-padding: 6px;
 
 html, body {
-  font-family: $cosmos-font-family;
-  font-size: 100%;
-  color: $cosmos-font-color;
-  height: 100%;
-  overflow: hidden;
+	font-family: $cosmos-font-family;
+	font-size: 100%;
+	color: $cosmos-font-color;
+	height: 100%;
+	overflow: hidden;
 }
 
 .align-left {
-  float: left;
+	float: left;
 }
 
 .align-right {
-  float: right;
+	float: right;
 }
 
 .more-triangle {
-  cursor: pointer;
-  display: inline-block;
-  @include rotate(180deg);
+	cursor: pointer;
+	display: inline-block;
+	@include rotate(180deg);
 }
 
 .prompt-veil {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  background: #000000;
-  opacity: 0.5;
-  z-index: $prompt-veil-z-index;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background: #000000;
+	opacity: 0.5;
+	z-index: $prompt-veil-z-index;
 }
 
 @mixin placeholder-state {
-  &::-webkit-input-placeholder {@content}
-  &:-moz-placeholder           {@content}
-  &::-moz-placeholder          {@content}
-  &:-ms-input-placeholder      {@content}
+	&::-webkit-input-placeholder {@content}
+	&:-moz-placeholder           {@content}
+	&::-moz-placeholder          {@content}
+	&:-ms-input-placeholder      {@content}
 }
 
 @mixin placeholder {
-  ::-webkit-input-placeholder {@content}
-  :-moz-placeholder           {@content}
-  ::-moz-placeholder          {@content}
-  :-ms-input-placeholder      {@content}
+	::-webkit-input-placeholder {@content}
+	:-moz-placeholder           {@content}
+	::-moz-placeholder          {@content}
+	:-ms-input-placeholder      {@content}
 }
 
 @include placeholder {
-  color: #5a5a5a;
+	color: #5a5a5a;
 }
 
 #igeFrontBuffer {
-  @include user-select(none);
+	@include user-select(none);
 }
 
 .tooltip {
-  display: none;
-  position: absolute;
-  font-size: 75%;
-  line-height: $tooltip-line-height;
-  padding: $tooltip-padding;
-  background-color: rgba(34, 34, 34, 0.85);
-  z-index: 100002;
+	display: none;
+	position: absolute;
+}
+
+.tooltip, .tooltipster-cosmos {
+	font-size: 75%;
+	line-height: $tooltip-line-height;
+	padding: $tooltip-padding;
+	background-color: rgba(34, 34, 34, 0.85);
+	border-radius: 0px;
+	z-index: 100002;
+}
+
+.tooltipster-cosmos {
+	border-radius: 0px;
+	/*border: 2px solid #53FF5F;*/
+	background: #363636;
+	color: #e8e8e8;
+}
+
+.tooltipster-cosmos .tooltipster-content {
+	font-family: $cosmos-font-family;
+	font-size: 100%;
+	line-height: 110%;
+	padding: 8px 10px;
 }
 
 .username-label.tooltip {
-  display: block;
-  z-index: 1;
-  cursor: default;
-  @include user-select(none);
+	display: block;
+	z-index: 1;
+	cursor: default;
+	@include user-select(none);
 }
 
 @import 'hud';

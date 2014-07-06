@@ -99,14 +99,35 @@ html, body {
 .tooltip {
   display: none;
   position: absolute;
+}
+
+/* line 75, ../../sass/cosmos.scss */
+.tooltip, .tooltipster-cosmos {
   font-size: 75%;
   line-height: 18px;
   padding: 6px;
   background-color: rgba(34, 34, 34, 0.85);
+  border-radius: 0px;
   z-index: 100002;
 }
 
-/* line 80, ../../sass/cosmos.scss */
+/* line 84, ../../sass/cosmos.scss */
+.tooltipster-cosmos {
+  border-radius: 0px;
+  /*border: 2px solid #53FF5F;*/
+  background: #363636;
+  color: #e8e8e8;
+}
+
+/* line 91, ../../sass/cosmos.scss */
+.tooltipster-cosmos .tooltipster-content {
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 100%;
+  line-height: 110%;
+  padding: 8px 10px;
+}
+
+/* line 98, ../../sass/cosmos.scss */
 .username-label.tooltip {
   display: block;
   z-index: 1;
