@@ -25,7 +25,7 @@ var HealthComponent = IgeClass.extend({
 		this.value -= amount;
 	},
 
-	change: function(newValue) {
+	set: function(newValue) {
 		this.value = newValue;
 	}
 });
