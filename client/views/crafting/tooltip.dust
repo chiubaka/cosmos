@@ -1,3 +1,10 @@
-<span>{recipeName}</span>
+<span class='crafting recipe name'>{recipeName.test}</span>
+{?recipeDescription}
+	<span class='crafting recipe description'>{recipeDescription}</span>
+{/recipeDescription}
+Reactants:
 <ul>
+	{#reactants}
+		<li>{quantity}</li>
+	{/reactants}
 </ul>

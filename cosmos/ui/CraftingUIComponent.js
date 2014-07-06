@@ -130,7 +130,7 @@ var CraftingUIComponent = WindowComponent.extend({
 		var recipe = Recipies[recipeName];
 		var content = '<span>';
 
-		dust.render('crafting/tooltip', {recipeName: 'Test'}, function(err, out) {
+		dust.render('crafting/tooltip', {recipeName: {test: function() { return recipeName }}}, function(err, out) {
 			console.log(out);
 		});
 
