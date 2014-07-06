@@ -27,6 +27,25 @@ var ThrusterBlock = Part.extend({
 		data = {MAX_HP: this.MAX_HP};
 		Part.prototype.init.call(this, data);
 
+		this.addComponent(RecipeComponent,
+			{
+				reactants: [
+					{
+						blockType: IronBlock.prototype.classId(),
+						quantity: 3
+					},
+					{
+						blockType: CarbonBlock.prototype.classId(),
+						quantity: 1
+					},
+					{
+						blockType: IceBlock.prototype.classId(),
+						quantity: 3
+					}
+				]
+			}
+		);
+
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(64, 64, 64)";
 			this.textureOutline = "rgb(255, 78, 0)";

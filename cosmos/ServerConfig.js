@@ -6,6 +6,7 @@ var config = {
 		/* === COMPONENTS === */
 		{ name: 'HealthComponent', path: './components/HealthComponent' },
 		{ name: 'DamageSourceComponent', path: './components/DamageSourceComponent' },
+		{ name: 'RecipeComponent', path: './components/RecipeComponent' },
 
 		/* === GAME SETUP === */
 		/* Initialization */
