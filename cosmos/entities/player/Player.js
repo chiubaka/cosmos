@@ -227,7 +227,7 @@ var Player = BlockStructure.extend({
 			var label = $(this);
 			hoverTimer = setTimeout(function() {
 				// 400ms for duration is the default for fadeIn()
-				label.fadeTo(400, 1);
+				label.fadeTo(Player.USERNAME_LABEL_FADE_IN_DURATION, 1);
 			}, Player.USERNAME_LABEL_HYSTERESIS_INTERVAL);
 		});
 
@@ -595,6 +595,7 @@ Player.BOX2D_CATEGORY = 'player';
  */
 Player.DEPTH = 2;
 
+Player.USERNAME_LABEL_FADE_IN_DURATION = 400;
 Player.USERNAME_LABEL_HYSTERESIS_INTERVAL = 500;
 
 Player.onUsernameRequested = function(username, clientId) {
