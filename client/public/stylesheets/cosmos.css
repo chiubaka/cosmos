@@ -36,6 +36,16 @@ html, body {
 }
 
 /* line 23, ../../sass/cosmos.scss */
+.align-left {
+  float: left;
+}
+
+/* line 27, ../../sass/cosmos.scss */
+.align-right {
+  float: right;
+}
+
+/* line 31, ../../sass/cosmos.scss */
 .more-triangle {
   cursor: pointer;
   display: inline-block;
@@ -46,7 +56,7 @@ html, body {
   transform: rotate(180deg);
 }
 
-/* line 29, ../../sass/cosmos.scss */
+/* line 37, ../../sass/cosmos.scss */
 .prompt-veil {
   position: absolute;
   top: 0;
@@ -58,34 +68,34 @@ html, body {
   z-index: 101;
 }
 
-/* line 48, ../../sass/cosmos.scss */
+/* line 56, ../../sass/cosmos.scss */
 ::-webkit-input-placeholder {
   color: #5a5a5a;
 }
 
-/* line 49, ../../sass/cosmos.scss */
+/* line 57, ../../sass/cosmos.scss */
 :-moz-placeholder {
   color: #5a5a5a;
 }
 
-/* line 50, ../../sass/cosmos.scss */
+/* line 58, ../../sass/cosmos.scss */
 ::-moz-placeholder {
   color: #5a5a5a;
 }
 
-/* line 51, ../../sass/cosmos.scss */
+/* line 59, ../../sass/cosmos.scss */
 :-ms-input-placeholder {
   color: #5a5a5a;
 }
 
-/* line 58, ../../sass/cosmos.scss */
+/* line 66, ../../sass/cosmos.scss */
 #igeFrontBuffer {
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
 }
 
-/* line 62, ../../sass/cosmos.scss */
+/* line 70, ../../sass/cosmos.scss */
 .tooltip, #cargo .pullout #cargo-containers .container .type-label {
   display: none;
   position: absolute;
@@ -96,7 +106,7 @@ html, body {
   z-index: 100002;
 }
 
-/* line 72, ../../sass/cosmos.scss */
+/* line 80, ../../sass/cosmos.scss */
 .username-label.tooltip, #cargo .pullout #cargo-containers .container .username-label.type-label {
   display: block;
   z-index: 1;
@@ -593,11 +603,71 @@ html, body {
   border-bottom: 4.6875px solid transparent;
 }
 
-/* line 7, ../../sass/_inspector.scss */
-#inspector .button {
+/* line 13, ../../sass/_inspector.scss */
+#inspector {
   position: absolute;
   top: 100px;
-  right: 0px;
+  right: 0;
+  color: #51e534;
+}
+/* line 19, ../../sass/_inspector.scss */
+#inspector .pullout, #inspector .button {
+  float: right;
+}
+/* line 23, ../../sass/_inspector.scss */
+#inspector .pullout {
+  width: 250px;
+}
+/* line 27, ../../sass/_inspector.scss */
+#inspector #block-inspector.pullout {
+  display: none;
+  background-color: #0c3e00;
+  font-size: 75%;
+}
+/* line 32, ../../sass/_inspector.scss */
+#inspector #block-inspector.pullout p {
+  margin: 0;
+}
+/* line 36, ../../sass/_inspector.scss */
+#inspector #block-inspector.pullout .top, #inspector #block-inspector.pullout .middle, #inspector #block-inspector.pullout .bottom {
+  padding: 10px;
+}
+/* line 40, ../../sass/_inspector.scss */
+#inspector #block-inspector.pullout .top {
+  height: 30px;
+}
+/* line 43, ../../sass/_inspector.scss */
+#inspector #block-inspector.pullout .top #block-name {
+  line-height: 30px;
+  font-weight: bold;
+  margin: 0;
+  font-size: 125%;
+}
+/* line 51, ../../sass/_inspector.scss */
+#inspector #block-inspector.pullout .middle {
+  overflow: auto;
+  background-color: #125c00;
+}
+/* line 55, ../../sass/_inspector.scss */
+#inspector #block-inspector.pullout .middle #block-texture {
+  height: 55px;
+  width: 55px;
+  margin-right: 10px;
+  float: left;
+}
+/* line 62, ../../sass/_inspector.scss */
+#inspector #block-inspector.pullout .middle #block-stats {
+  width: 165px;
+  float: left;
+}
+/* line 68, ../../sass/_inspector.scss */
+#inspector #block-inspector.pullout .bottom {
+  max-height: 200px;
+  overflow-y: auto;
+}
+/* line 74, ../../sass/_inspector.scss */
+#inspector .button {
+  display: none;
   height: 50px;
   width: 50px;
   background-color: #0c3e00;
@@ -610,7 +680,7 @@ html, body {
 }
 /* line 40, ../../sass/_side-buttons.scss */
 #inspector .button:hover {
-  background-color: white;
+  background-color: #125c00;
 }
 /* line 46, ../../sass/_side-buttons.scss */
 #inspector .button .arrow {
@@ -794,19 +864,19 @@ html, body {
   outline: 0;
   border-bottom: 1px solid #0090ff;
 }
-/* line 41, ../../sass/cosmos.scss */
+/* line 49, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input:focus::-webkit-input-placeholder {
   color: #e8e8e8;
 }
-/* line 42, ../../sass/cosmos.scss */
+/* line 50, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input:focus:-moz-placeholder {
   color: #e8e8e8;
 }
-/* line 43, ../../sass/cosmos.scss */
+/* line 51, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input:focus::-moz-placeholder {
   color: #e8e8e8;
 }
-/* line 44, ../../sass/cosmos.scss */
+/* line 52, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input:focus:-ms-input-placeholder {
   color: #e8e8e8;
 }
@@ -814,19 +884,19 @@ html, body {
 #name-prompt .prompt-box input.error {
   border-bottom: 1px solid red;
 }
-/* line 41, ../../sass/cosmos.scss */
+/* line 49, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input.error::-webkit-input-placeholder {
   color: red;
 }
-/* line 42, ../../sass/cosmos.scss */
+/* line 50, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input.error:-moz-placeholder {
   color: red;
 }
-/* line 43, ../../sass/cosmos.scss */
+/* line 51, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input.error::-moz-placeholder {
   color: red;
 }
-/* line 44, ../../sass/cosmos.scss */
+/* line 52, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input.error:-ms-input-placeholder {
   color: red;
 }
