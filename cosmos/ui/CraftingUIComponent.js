@@ -59,7 +59,7 @@ var CraftingUIComponent = WindowComponent.extend({
 		console.log('Refresh crafting UI');
 	},
 
-	populate: function(recipies, craftableRecipies) {
+	populate: function(recipies, craftableBlocks) {
 		var containers = this.table.find('td');
 		containers.removeClass('active');
 
@@ -68,9 +68,13 @@ var CraftingUIComponent = WindowComponent.extend({
 			canvases.remove();
 		}
 
-		var index = 0;
 		// TODO: Grey out recipies that are known but not craftable
-		for (var recipeName in craftableRecipies) {
+		for (var i = 0; i < craftableBlocks.length; i++) {
+			var blockType = craftableBlocks[i];
+			var block = cosmos.blocks.craftable.instances[blockType];
+			this.fillContainer(i, block);
+		}
+		/*for (var recipeName in craftableRecipies) {
 			if (!craftableRecipies.hasOwnProperty(recipeName)) {
 				continue;
 			}
@@ -90,22 +94,22 @@ var CraftingUIComponent = WindowComponent.extend({
 			this.fillContainer(index, type, quantity, recipeName);
 
 			index++;
-		}
+		}*/
 	},
 
-	fillContainer: function(index, type, quantity, recipeName) {
+	fillContainer: function(index, block) {
 		var container = this.table.find('td').eq(index);
 
 		// Add an onclick function
-		container.attr('recipe', recipeName);
+		container.attr('recipe', block.recipe.name);
 		container.unbind('click');
 		container.click(function() {
-			console.log('Carfting UI clicked: ' + container.attr('recipe'));
+			console.log('Crafting UI clicked: ' + container.attr('recipe'));
 			ige.craftingSystem.craftClient(recipeName);
 		});
 
 		// Generate tooltip content
-		var tooltipContent = $(this.fillTooltip(recipeName));
+		var tooltipContent = $(this.fillTooltip(block.recipe));
 
 		// If tooltip exists, update content
 		if(container.hasClass('tooltipstered')) {
@@ -122,12 +126,11 @@ var CraftingUIComponent = WindowComponent.extend({
 		}
 
 		// Draw the block
-		this.drawBlockInContainer(container, type);
+		this.drawBlockInContainer(container, block.classId());
 	},
 
-	fillTooltip: function(recipeName) {
+	fillTooltip: function(recipe) {
 		// TODO: Use templating engine to generate tooltip content
-		var recipe = Recipies[recipeName];
 		var content = '<span>';
 
 		dust.render('crafting/tooltip', {recipeName: {test: function() { return recipeName }}}, function(err, out) {
@@ -135,21 +138,16 @@ var CraftingUIComponent = WindowComponent.extend({
 		});
 
 		// Output recipe title
-		var humanReadableRecipeName = recipeName
-			// insert a space before all caps
-			.replace(/([A-Z])/g, ' $1')
-			// uppercase the first character
-			.replace(/^./, function(str){ return str.toUpperCase(); })
+		var humanReadableRecipeName = recipe.name;
 		content += humanReadableRecipeName + '<br><br>';
 
 
 		// Output reactants
 		content += 'Reactants required: <br>';
-		for (reactant in recipe.reactants) {
-			if (recipe.reactants.hasOwnProperty(reactant)) {
-				content += reactant.replace(/Block$/, '') + ': ';
-				content += recipe.reactants[reactant] + '<br>';
-			}
+		for (var i = 0; i < recipe.reactants.length; i++) {
+			var reactant = recipe.reactants[i];
+			content += Block.displayNameFromClassId(reactant.blockType) + ': ';
+			content += reactant.quantity + '<br>';
 		}
 		content += '</span>';
 		return content;

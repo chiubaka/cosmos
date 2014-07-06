@@ -104,6 +104,10 @@ var Client = IgeClass.extend({
 					ige.client.metrics = new MetricsHandler();
 					ige.client.startClientPerformanceMetrics();
 
+					// Create global cosmos namespace. Cosmos-specific state should go here, not in the IGE namespace.
+					cosmos = {};
+					self.initBlocks();
+
 					// Start the networking (you can do this elsewhere if it
 					// makes sense to connect to the server later on rather
 					// than before the scene etc are created... maybe you want
@@ -157,6 +161,29 @@ var Client = IgeClass.extend({
 				}
 			});
 		});
+	},
+
+	/**
+	 * Load instances of blocks into the global space so that they are categorized and easily accessible.
+	 */
+	initBlocks: function() {
+		cosmos.blocks = {};
+		cosmos.blocks.instances = {};
+		cosmos.blocks.craftable = {};
+		cosmos.blocks.craftable.instances = {};
+		for (var key in window) {
+			if (window.hasOwnProperty(key)
+				&& window[key]
+				&& window[key].prototype
+				&& window[key].prototype instanceof Block)
+			{
+				var block = new window[key];
+				cosmos.blocks.instances[key] = block;
+				if (block.recipe instanceof RecipeComponent && block.recipe.craftable) {
+					cosmos.blocks.craftable.instances[key] = block;
+				}
+			}
+		}
 	},
 
 	promptForUsername: function() {

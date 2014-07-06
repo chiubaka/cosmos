@@ -17,8 +17,8 @@ var CraftingComponent = IgeEventingClass.extend({
 
 		// TODO: Load unlocked recipies from DB. For now, we have a
 		// predefined set of recipies.
-		this._recipies = StarterRecipies;
-		this._craftableRecipies = StarterRecipies;
+		this._recipies = CraftingComponent.STARTER_RECIPIES;
+		this._craftableRecipies = CraftingComponent.STARTER_RECIPIES;
 	},
 
 	recipies: function() {
@@ -39,9 +39,17 @@ var CraftingComponent = IgeEventingClass.extend({
 
 	resetCraftableRecipies: function() {
 		this._craftableRecipies = {};
-	},
-
+	}
 });
+
+/**
+ * List of block types that can be initially crafted
+ */
+CraftingComponent.STARTER_RECIPIES = [
+	EngineBlock.prototype.classId(),
+	ThrusterBlock.prototype.classId(),
+	MiningLaserBlock.prototype.classId()
+];
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
 	module.exports = CraftingComponent; }
