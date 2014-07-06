@@ -1,15 +1,13 @@
 @import "compass/css3/user-interface";
 
-$hud-layer-z-index: 1;
 $hud-button-height: 50px;
 $hud-button-width: $hud-button-height;
 $hud-margin-top: $hud-button-height * 2;
 
-$tooltip-line-height: 18px;
-$tooltip-padding: 6px;
-
 $block-height: 26px;
 $block-width: $block-height;
+
+$bottom-toolbar-z-index: $hud-layer-z-index + 1;
 
 @mixin hud-icon-button($icon) {
   background-image: url($icon);
@@ -29,17 +27,8 @@ $block-width: $block-height;
   }
 }
 
-.tooltip {
-  display: none;
-  position: absolute;
-  font-size: 75%;
-  line-height: $tooltip-line-height;
-  padding: $tooltip-padding;
-  background-color: rgba(34, 34, 34, 0.85);
-  z-index: 100002;
-}
-
 @import 'bottom-toolbar';
 @import 'left-toolbar';
 @import 'minimap';
 @import 'notifications';
+@import 'side-buttons';

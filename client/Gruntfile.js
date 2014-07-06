@@ -14,7 +14,6 @@ module.exports = function(grunt) {
 				files: {
 					'public/js/templates.dust.js': 'views/**/*.dust'
 				},
-
 				options: {
 					wrapper: false,
 					runtime: false,
@@ -30,6 +29,9 @@ module.exports = function(grunt) {
 			dust: {
 				files: 'views/**/*.dust',
 				tasks: ['dust']
+			},
+			options: {
+				atBegin: true
 			}
 		}
 	});

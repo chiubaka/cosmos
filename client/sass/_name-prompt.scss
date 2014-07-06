@@ -1,0 +1,120 @@
+$name-prompt-height: 250px;
+$name-prompt-width: 350px;
+$name-prompt-padding: 15px;
+$name-prompt-border-width: 1px;
+$play-icon-height: $name-prompt-height / 4;
+$play-icon-width: $play-icon-height;
+
+#name-prompt {
+  display: none;
+
+  .play-icon, .prompt-box {
+    box-shadow: 0 0 5px #000000;
+  }
+
+  .play-icon {
+    height: $play-icon-height;
+    width: $play-icon-width;
+    position: absolute;
+    top: -$name-prompt-border-width;
+    left: -$play-icon-width;
+
+    background-color: $cosmos-blue;
+    background-image: url('../images/icons/icon_play.png');
+    background-position: 50% 50%;
+    background-size: $play-icon-height $play-icon-width;
+  }
+
+  .prompt-box, .prompt-box h1, .prompt-box input {
+    font-weight: 300;
+  }
+
+  .prompt-box {
+    height: $name-prompt-height;
+    width: $name-prompt-width;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    opacity: 1;
+    z-index: $prompt-veil-z-index + 1;
+    background: #000000;
+    border: 1px solid $cosmos-blue;
+    padding: $name-prompt-padding;
+
+    h1 {
+      margin: 0;
+      font-size: 200%;
+      color: $cosmos-blue;
+    }
+
+    input {
+      font-family: $cosmos-font-family;
+      font-size: 100%;
+      font-style: italic;
+      color: $cosmos-font-color;
+      width: 100%;
+      background-color: transparent;
+      border: 0;
+      border-bottom: $name-prompt-border-width solid $cosmos-font-color;
+      padding: 0;
+      padding-bottom: $name-prompt-padding / 5;
+      margin-bottom: $name-prompt-padding;
+
+      &:focus {
+        @include placeholder-state {
+          color: $cosmos-font-color;
+        }
+
+        outline: 0;
+        border-bottom: 1px solid $cosmos-blue;
+      }
+
+      &.error {
+        border-bottom: 1px solid red;
+        @include placeholder-state {
+          color: red;
+        }
+      }
+    }
+
+    .buttons {
+      position: absolute;
+      right: $name-prompt-padding;
+      bottom: $name-prompt-padding;
+
+      button {
+        float: right;
+        margin: 0;
+        margin-left: $name-prompt-padding;
+        border: 0;
+        padding: $name-prompt-padding / 2;
+        cursor: pointer;
+
+        &:focus {
+          outline: 0;
+        }
+      }
+
+      button#name-prompt-skip {
+        background-color: transparent;
+        color: $cosmos-blue;
+
+        &:hover {
+          color: $cosmos-blue-lighter;
+        }
+      }
+
+      button[type='submit'] {
+        background-color: #7d7d7d;
+        color: $cosmos-font-color;
+
+        &:hover {
+          background-color: #a1a1a1;
+        }
+      }
+    }
+  }
+}

@@ -3,6 +3,13 @@ var igeClientConfig = {
 		/* === CONSTANTS === */
 		'./constants.js',
 
+		/* === COMPONENTS === */
+		'./components/HealthComponent.js',
+		'./components/DamageSourceComponent.js',
+
+		/* === Systems === */
+		'./systems/Inspector.js',
+
 		/* === ENVIRONMENT STATE === */
 
 		/* Render container for block grids and overlays */
@@ -25,8 +32,11 @@ var igeClientConfig = {
 		'./entities/blocks/parts/FuelBlock.js',
 		'./entities/blocks/parts/CargoBlock.js',
 		'./entities/blocks/parts/ControlBlock.js',
-		'./entities/blocks/parts/MiningLaserBlock.js',
 		'./entities/blocks/parts/ThrusterBlock.js',
+
+		/* Weapons */
+		'./entities/blocks/parts/Weapon.js',
+		'./entities/blocks/parts/weapons/MiningLaserBlock.js',
 
 		/* Ship armor blocks */
 		'./entities/blocks/Armor.js',
@@ -107,6 +117,7 @@ var igeClientConfig = {
 		'./ui/RelocateComponent.js',
 		'./ui/CargoComponent.js',
 		'./ui/CraftingUIComponent.js',
+		'./ui/NamePrompt.js',
 
 		/* Minimap */
 		'./ui/MinimapComponent.js',

@@ -47,41 +47,9 @@ var ChatComponent = ButtonComponent.extend({
 					view: { resources: ChatComponent.CANDY_ROOT + 'res/' }
 				});
 
-				var guestNumber = Math.floor((Math.random() * 999999999) + 100000000);
-				var guestHandle = 'guest' + guestNumber;
-
-				Candy.Core.connect('tl-xmpp.cloudapp.net', null, guestHandle);
-
-				$(Candy).on('candy:core.message', function(evt, args) {
-					if (args.timestamp === undefined && self.chatClient.is(':hidden')) {
-						self.incrementUnread();
-					}
-				});
-
-				$(Candy).on('candy:view.roster.after-update', function(evt, args) {
-					// Don't increment unread when the player joins the game
-					if (args.action === 'join' && self.chatClient.is(':hidden') && args.user.getNick() !== guestHandle) {
-						self.incrementUnread();
-					}
-				});
-
-				// When a new room is added, find the message input field and tell it not to propagate keydown
-				// events. Otherwise, the player will move in IGE while typing characters that are controls in the
-				// game.
-				$(Candy).on('candy:view.room.after-add', function() {
-					self.messageInputs = self.chatClient.find('input.field');
-					self.messageInputs.keydown(function(e) {
-						e.stopPropagation();
-					});
-				});
-
-				// Called when the chat client moves to the disconnected state.
-				$(Candy).on('candy:view.connection.status-6', function() {
-					// Delay a little bit here to allow the client to fully disconnect before trying to reconnect.
-					setTimeout(function() {
-						Candy.Core.connect('tl-xmpp.cloudapp.net', null, guestHandle);
-					}, 200);
-				});
+				ige.on('cosmos:client.player.username.set', function(username) {
+					self.start();
+				}, self, true);
 
 				self.chatClient.hide();
 
@@ -96,6 +64,43 @@ var ChatComponent = ButtonComponent.extend({
 				});
 
 				ige.emit('cosmos:hud.bottomToolbar.subcomponent.loaded', self);
+			});
+		});
+	},
+
+	start: function() {
+		var self = this;
+		Candy.Core.connect('tl-xmpp.cloudapp.net', null, ige.client.player.username());
+		console.log('Logging into chat: ' + ige.client.player.username());
+
+		// Called when the chat client moves to the disconnected state.
+		$(Candy).on('candy:view.connection.status-6', function() {
+			// Delay a little bit here to allow the client to fully disconnect before trying to reconnect.
+			setTimeout(function() {
+				Candy.Core.connect('tl-xmpp.cloudapp.net', null, ige.client.player.username());
+			}, 200);
+		});
+
+		$(Candy).on('candy:core.message', function(evt, args) {
+			if (args.timestamp === undefined && self.chatClient.is(':hidden')) {
+				self.incrementUnread();
+			}
+		});
+
+		$(Candy).on('candy:view.roster.after-update', function(evt, args) {
+			// Don't increment unread when the player joins the game
+			if (args.action === 'join' && self.chatClient.is(':hidden') && args.user.getNick() !== ige.client.player.username()) {
+				self.incrementUnread();
+			}
+		});
+
+		// When a new room is added, find the message input field and tell it not to propagate keydown
+		// events. Otherwise, the player will move in IGE while typing characters that are controls in the
+		// game.
+		$(Candy).on('candy:view.room.after-add', function() {
+			self.messageInputs = self.chatClient.find('input.field');
+			self.messageInputs.keydown(function(e) {
+				e.stopPropagation();
 			});
 		});
 	},

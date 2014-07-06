@@ -13,10 +13,9 @@ var HUDComponent = IgeEventingClass.extend({
 
 		this.element = $('#hud');
 
-		// TODO: Start HUD in hidden mode.
-		// this.hide();
+		this.hide();
 
-		this.numComponentsToLoad = 3;
+		this.numComponentsToLoad = 4;
 
 		// Track how many of the other HUD components have loaded. Emit an event when everything is done.
 		ige.on('cosmos:hud.subcomponent.loaded', function(component) {
@@ -29,10 +28,8 @@ var HUDComponent = IgeEventingClass.extend({
 		this.addComponent(BottomToolbarComponent);
 		this.addComponent(LeftToolbarComponent);
 		this.addComponent(MinimapComponent);
-		//this.addComponent(InspectorComponent);
+		this.addComponent(Inspector);
 	},
-
-
 
 	show: function() {
 		this.element.show();

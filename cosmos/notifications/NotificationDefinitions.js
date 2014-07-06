@@ -17,7 +17,6 @@ var NotificationDefinitions = {
 	errorKeys: {
 		notMinable: 1,
 		notConstructable: 2,
-		noCapability: 3,
 		noItemTypeSelected: 4,
 		noMineEmptySpace: 5,
 		noEngine: 6,
@@ -32,7 +31,6 @@ var NotificationDefinitions = {
 	errors: {
 		1: 'Cannot mine this block... mining laser cannot reach!',
 		2: 'Cannot construct here!',
-		3: 'No capability selected!',
 		4: 'No block type selected!',
 		5: 'Cannot mine empty space!',
 		6: 'Cannot thrust... no engine!',
