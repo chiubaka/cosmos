@@ -646,7 +646,7 @@ Player.onUsernameRequested = function(username, clientId) {
 	});
 };
 
-Player.onUsernameApproved = function(data) {
+Player.onUsernameRequestApproved = function(data) {
 	ige.emit('cosmos:player.username.set.approve', data);
 
 	if (ige.client.player !== undefined && data.playerId === ige.client.player.id()) {
