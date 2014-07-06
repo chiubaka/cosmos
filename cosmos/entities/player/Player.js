@@ -614,7 +614,7 @@ Player.onUsernameRequested = function(username, clientId) {
 	}
 
 	if (!Player.usernameIsCorrectLength(username)) {
-		ige.network.send('cosmos:player.username.set.error', 'Username must be between 5 and 12 characters', clientId);
+		ige.network.send('cosmos:player.username.set.error', 'Username must be between 2 and 12 characters', clientId);
 	}
 	else if (!Player.usernameIsAlphanumericUnderscore(username)) {
 		ige.network.send('cosmos:player.username.set.error', 'Alphanumeric characters and underscores only', clientId);
