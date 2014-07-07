@@ -30,12 +30,13 @@ $crafting-tooltip-recipe-name-color: #53ff5f;
 $crafting-tooltip-description-color: #aaffb0;
 $crafting-tooltip-reactants-heading-color: #24c9dd;
 $crafting-tooltip-reactant-name-color: #b7f3fa;
+$crafting-tooltip-background-color: #0c0a07;
 
 .tooltip.crafting {
 	display: block;
 	border-radius: 0px;
 	border: 2px solid $crafting-tooltip-recipe-name-color;
-	background: #363636;
+	background-color: $crafting-tooltip-background-color;
 	color: $crafting-tooltip-description-color;
 	padding: 8px;
 

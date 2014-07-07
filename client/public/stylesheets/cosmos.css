@@ -766,47 +766,47 @@ h1, h2, h3, h4 {
   background-color: #e9fde7;
 }
 
-/* line 34, ../../sass/_crafting.scss */
+/* line 35, ../../sass/_crafting.scss */
 .tooltip.crafting {
   display: block;
   border-radius: 0px;
   border: 2px solid #53ff5f;
-  background: #363636;
+  background-color: #0c0a07;
   color: #aaffb0;
   padding: 8px;
 }
-/* line 42, ../../sass/_crafting.scss */
+/* line 43, ../../sass/_crafting.scss */
 .tooltip.crafting h3 {
   font-size: 150%;
   color: #53ff5f;
   margin-bottom: 10px;
 }
-/* line 48, ../../sass/_crafting.scss */
+/* line 49, ../../sass/_crafting.scss */
 .tooltip.crafting h4.reactants {
   color: #24c9dd;
   text-transform: uppercase;
   margin-bottom: 5px;
 }
-/* line 54, ../../sass/_crafting.scss */
+/* line 55, ../../sass/_crafting.scss */
 .tooltip.crafting ul.reactants {
   color: #b7f3fa;
   font-size: 105%;
 }
-/* line 58, ../../sass/_crafting.scss */
+/* line 59, ../../sass/_crafting.scss */
 .tooltip.crafting ul.reactants li.reactant {
   height: 26px;
   margin-bottom: 10px;
 }
-/* line 62, ../../sass/_crafting.scss */
+/* line 63, ../../sass/_crafting.scss */
 .tooltip.crafting ul.reactants li.reactant div.block-canvas-container, .tooltip.crafting ul.reactants li.reactant span.block-type {
   float: left;
 }
-/* line 65, ../../sass/_crafting.scss */
+/* line 66, ../../sass/_crafting.scss */
 .tooltip.crafting ul.reactants li.reactant div.block-canvas-container {
   position: relative;
   margin-right: 10px;
 }
-/* line 69, ../../sass/_crafting.scss */
+/* line 70, ../../sass/_crafting.scss */
 .tooltip.crafting ul.reactants li.reactant div.block-canvas-container span.quantity {
   position: absolute;
   color: white;
@@ -814,14 +814,14 @@ h1, h2, h3, h4 {
   bottom: -2px;
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
-/* line 78, ../../sass/_crafting.scss */
+/* line 79, ../../sass/_crafting.scss */
 .tooltip.crafting ul.reactants li.reactant span.block-type {
   line-height: 26px;
   height: 26px;
   display: block;
 }
 
-/* line 87, ../../sass/_crafting.scss */
+/* line 88, ../../sass/_crafting.scss */
 .tooltipster-cosmos .tooltipster-content {
   font-size: 100%;
   line-height: 110%;
