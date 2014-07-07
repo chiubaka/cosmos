@@ -55,7 +55,7 @@ var CraftingSystem = IgeEventingClass.extend({
 		}
 
 		if (ige.craftingSystem._canCraft(cargo, player, recipeName)) {
-			ige.craftingSystem._doCraft(cargo, recipeName);
+			ige.craftingSystem._doCraft(cargo, player, recipeName);
 			ige.network.stream.queueCommand('notificationSuccess',
 				NotificationDefinitions.successKeys.crafting_success,
 				clientId);
@@ -129,7 +129,7 @@ var CraftingSystem = IgeEventingClass.extend({
 	 * Removes reactants from cargo and adds products to cargo
 	 * This should be called after _canCraft()
 	 */
-	_doCraft: function(cargo, recipeName) {
+	_doCraft: function(cargo, player, recipeName) {
 		var recipe = Recipes[recipeName];
 		// Consume reactants. Remove them from cargo
 		_.forEach(recipe.reactants, function(reactant) {
@@ -137,6 +137,8 @@ var CraftingSystem = IgeEventingClass.extend({
 		});
 
 		cargo.addBlock(recipeName);
+
+		DbPlayer.update(player.dbId(), player, function() {});
 
 		console.log('doCraft: ' + recipeName);
 	},
