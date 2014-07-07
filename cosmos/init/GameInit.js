@@ -33,6 +33,10 @@ var GameInit = {
 
 	/**
 	 * Load instances of blocks into the global space so that they are categorized and easily accessible.
+	 *
+	 * This function loops through the variables in the global context to find the prototypes of the {@link Block}
+	 * classes. It then instantiates one of each {@link Block} and keeps it around in the global cosmos namespace so
+	 * that we don't have to create random blocks every time we need a block to do something for us.
 	 */
 	initBlocks: function() {
 		var globalContext = (ige.isServer) ? global : window;
