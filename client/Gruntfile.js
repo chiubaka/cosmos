@@ -39,4 +39,5 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-dust');
 	grunt.registerTask('default', ['watch']);
+	grunt.registerTask('deploy', ['dust']);
 }
