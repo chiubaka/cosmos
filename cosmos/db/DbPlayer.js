@@ -51,7 +51,7 @@ var DbPlayer = {
 			var cargo = player.cargo.serializeCargo();
 			players.update(
 				{_id: playerId},
-				{_id: playerId, username: username, ship: ship, cargo: cargo},
+				{_id: playerId, username: username, lowerCaseUsername: username.toLowerCase(), ship: ship, cargo: cargo},
 				{upsert: true},
 				callback
 			);
@@ -64,13 +64,16 @@ var DbPlayer = {
 			return;
 		}
 
+		// Usernames are case insensitive for search purposes
+		username = username.toLowerCase();
+
 		ige.mongo.db.collection('players', function(err, players) {
 			if (err) {
 				callback(err, undefined);
 				return;
 			}
 
-			players.findOne({username: username}, function(err, player) {
+			players.findOne({lowerCaseUsername: username}, function(err, player) {
 				callback(err, player);
 			})
 		})
