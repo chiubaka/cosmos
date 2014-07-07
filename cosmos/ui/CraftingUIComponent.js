@@ -88,7 +88,7 @@ var CraftingUIComponent = WindowComponent.extend({
 
 			var tooltipContent = $(out);
 
-			// If tooltip exists, update content
+			// If tooltip exists, destroy it so we can set the right functionReady behavior
 			if (container.hasClass('tooltipstered')) {
 				container.tooltipster('destroy');
 			}
