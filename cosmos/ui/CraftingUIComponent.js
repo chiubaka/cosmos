@@ -18,7 +18,8 @@ var CraftingUIComponent = WindowComponent.extend({
 			$('#left-toolbar'),
 			'crafting-button',
 			undefined,
-			'Crafting'
+			'Crafting',
+			'right'
 		);
 	},
 

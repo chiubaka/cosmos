@@ -5,8 +5,8 @@ var WindowComponent = ButtonComponent.extend({
 	window: undefined,
 	numRows: undefined,
 
-	init: function(windowUrl, windowId, buttonParent, buttonId, buttonClass, tooltip) {
-		ButtonComponent.prototype.init.call(this, buttonParent, buttonId, buttonClass, tooltip);
+	init: function(windowUrl, windowId, buttonParent, buttonId, buttonClass, tooltip, tooltipPosition) {
+		ButtonComponent.prototype.init.call(this, buttonParent, buttonId, buttonClass, tooltip, tooltipPosition);
 		var self = this;
 
 		var windows = $('#windows');

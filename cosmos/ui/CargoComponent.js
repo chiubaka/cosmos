@@ -18,7 +18,8 @@ var CargoComponent = WindowComponent.extend({
 			$('#left-toolbar'),
 			'cargo-button',
 			undefined,
-			'Cargo'
+			'Cargo',
+			'right'
 		);
 	},
 

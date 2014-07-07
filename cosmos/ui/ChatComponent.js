@@ -22,7 +22,7 @@ var ChatComponent = ButtonComponent.extend({
 
 		bottomToolbar.append(chatDiv);
 
-		ButtonComponent.prototype.init.call(this, chatDiv, 'chat-button', undefined, 'Chat');
+		ButtonComponent.prototype.init.call(this, chatDiv, 'chat-button', undefined, 'Chat', 'top');
 		self.button = $('#chat-button');
 		self.button.addClass('unopened');
 		self.button.click(function() {

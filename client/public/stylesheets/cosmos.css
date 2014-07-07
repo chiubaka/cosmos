@@ -102,7 +102,6 @@ h1, h2, h3, h4 {
 
 /* line 75, ../../sass/cosmos.scss */
 .tooltip {
-  display: none;
   position: absolute;
   font-size: 75%;
   font-family: "Open Sans", "Helvetica Neue", Helvetica, sans-serif;
@@ -113,7 +112,7 @@ h1, h2, h3, h4 {
   z-index: 100002;
 }
 
-/* line 87, ../../sass/cosmos.scss */
+/* line 86, ../../sass/cosmos.scss */
 .username-label.tooltip {
   display: block;
   z-index: 1;
@@ -718,11 +717,6 @@ h1, h2, h3, h4 {
   bottom: -6px;
 }
 
-/* line 41, ../../sass/_cargo.scss */
-.tooltip.cargo {
-  display: block;
-}
-
 /* line 8, ../../sass/_crafting.scss */
 #crafting-button {
   height: 50px;
@@ -833,13 +827,6 @@ h1, h2, h3, h4 {
   line-height: 26px;
   height: 26px;
   display: block;
-}
-
-/* line 78, ../../sass/_crafting.scss */
-.tooltipster-cosmos .tooltipster-content {
-  font-size: 100%;
-  line-height: 110%;
-  padding: 8px 10px;
 }
 
 /* line 25, ../../sass/_minimap.scss */
