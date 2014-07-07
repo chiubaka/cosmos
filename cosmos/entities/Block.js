@@ -148,6 +148,12 @@ var Block = IgeEntity.extend({
 
 		this.addComponent(HealthComponent, {max: this.MAX_HP});
 
+		// Check if a recipe has been provided for this block. If so, this block is craftable. Otherwise, it is not.
+		if (Recipes[this.classId()] !== undefined)
+		{
+			this.addComponent(RecipeComponent, Recipes[this.classId()]);
+		}
+
 		if (!ige.isServer) {
 			this.texture(ige.client.textures.block);
 

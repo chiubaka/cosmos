@@ -16,6 +16,10 @@ var GameInit = {
 
 		this.initScenes(game);
 
+		// Create global cosmos namespace. Cosmos-specific state should go here, not in the IGE namespace.
+		cosmos = {};
+		this.initBlocks();
+
 		if (ige.isServer) {
 			this.initEnvironment();
 			this.initPhysics();
@@ -24,6 +28,30 @@ var GameInit = {
 			this.initPlayerState();
 			this.initPlayerControls();
 			//this.initTimeStream(game);
+		}
+	},
+
+	/**
+	 * Load instances of blocks into the global space so that they are categorized and easily accessible.
+	 */
+	initBlocks: function() {
+		var globalContext = (ige.isServer) ? global : window;
+		cosmos.blocks = {};
+		cosmos.blocks.instances = {};
+		cosmos.blocks.craftable = {};
+		cosmos.blocks.craftable.instances = {};
+		for (var key in globalContext) {
+			if (globalContext.hasOwnProperty(key)
+				&& globalContext[key]
+				&& globalContext[key].prototype
+				&& globalContext[key].prototype instanceof Block)
+			{
+				var block = new globalContext[key];
+				cosmos.blocks.instances[key] = block;
+				if (block.recipe instanceof RecipeComponent && block.recipe.craftable) {
+					cosmos.blocks.craftable.instances[key] = block;
+				}
+			}
 		}
 	},
 

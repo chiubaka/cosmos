@@ -78,7 +78,7 @@ var ConstructCapability = Capability.extend({
 	 */
 	ClickScene_canMouseDown: function(sender, event, data) {
 		// Notify player that no block type is selected
-		if (ige.hud.leftToolbar.window.cargo.selectedType === undefined) {
+		if (ige.hud.leftToolbar.windows.cargo.selectedType === undefined) {
 			ige.notification.emit('notificationError', 
 				NotificationDefinitions.errorKeys.noItemTypeSelected);
 		}

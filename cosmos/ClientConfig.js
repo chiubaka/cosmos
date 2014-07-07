@@ -94,8 +94,7 @@ var igeClientConfig = {
 		/* === Crafting === */
 		'./crafting/CraftingSystem.js',
 		'./crafting/CraftingComponent.js',
-		'./crafting/Recipies.js',
-		'./crafting/StarterRecipies.js',
+		'./crafting/Recipes.js',
 
 		/* Notifications */
 		'./notifications/NotificationDefinitions.js',

@@ -6,50 +6,57 @@
 var CraftingComponent = IgeEventingClass.extend({
 	classId: 'CraftingComponent',
 	componentId: 'crafting',
-	// All the recipies the player knows
-	_recipies: undefined,
-	// The recipies that are craftable (correct number of reactants in cargo)
-	_craftableRecipies: undefined,
+	// All the recipes the player knows
+	_recipes: undefined,
+	// The recipes that are craftable (correct number of reactants in cargo)
+	_craftableRecipes: undefined,
 
 	init: function(entity, options) {
 		// TODO: Client side crafting should have an idea of the cargo. This allows
 		// uncraftable things to be grayed out. Pending cargo refactor
 
-		// TODO: Load unlocked recipies from DB. For now, we have a
-		// predefined set of recipies.
-		this._recipies = CraftingComponent.STARTER_RECIPIES;
-		this._craftableRecipies = CraftingComponent.STARTER_RECIPIES;
+		// TODO: Load unlocked recipes from DB. For now, we have a
+		// predefined set of recipes.
+		this._recipes = CraftingComponent.starterRecipes();
+		this._craftableRecipes = CraftingComponent.starterRecipes();
 	},
 
-	recipies: function() {
-		return this._recipies;
+	recipes: function() {
+		return this._recipes;
 	},
 
 	addRecipe: function(recipe) {
-		this._recipies[recipe] = true;
+		this._recipes[recipe] = true;
 	},
 
-	craftableRecipies: function() {
-		return this._craftableRecipies;
+	craftableRecipes: function() {
+		return this._craftableRecipes;
 	},
 
 	addCraftableRecipe: function(recipe) {
-		this._craftableRecipies[recipe] = true;
+		this._craftableRecipes[recipe] = true;
 	},
 
-	resetCraftableRecipies: function() {
-		this._craftableRecipies = {};
+	resetCraftableRecipes: function() {
+		this._craftableRecipes = {};
 	}
 });
 
 /**
  * List of block types that can be initially crafted
  */
-CraftingComponent.STARTER_RECIPIES = [
-	EngineBlock.prototype.classId(),
-	ThrusterBlock.prototype.classId(),
-	MiningLaserBlock.prototype.classId()
-];
+CraftingComponent.starterRecipes = function() {
+	// Create an object that has the same keys as the Recipes object and has the value true
+	// for all keys. In effect, this is a basic starter recipes set that includes all the
+	// recipes in the game.
+	var starterRecipes = _.mapValues(Recipes, function(blockType) {
+		return true;
+	});
+
+	console.log(JSON.stringify(starterRecipes));
+
+	return starterRecipes;
+};
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
 	module.exports = CraftingComponent; }

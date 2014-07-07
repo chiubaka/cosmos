@@ -81,8 +81,7 @@ var config = {
 		/* === Crafting === */
 		{ name: 'CraftingSystem', path: './crafting/CraftingSystem' },
 		{ name: 'CraftingComponent', path: './crafting/CraftingComponent' },
-		{ name: 'Recipies', path: './crafting/Recipies' },
-		{ name: 'StarterRecipies', path: './crafting/StarterRecipies' },
+		{ name: 'Recipes', path: './crafting/Recipes' },
 
 		/* Database */
 		{ name: 'DbConfig', path: './db/DbConfig' },

@@ -5,6 +5,8 @@ var Server = IgeClass.extend({
 	init: function (options) {
 		var self = this;
 
+		_ = require('lodash');
+
 		self.LAYER_BACKGROUND = 10;
 		self.LAYER_WORLD = 50;
 		self.LAYER_HUD = 90;

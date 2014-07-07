@@ -27,25 +27,6 @@ var MiningLaserBlock = Weapon.extend({
 		data = {MAX_HP: this.MAX_HP};
 		Weapon.prototype.init.call(this, data);
 
-		this.addComponent(RecipeComponent,
-			{
-				reactants: [
-					{
-						blockType: IronBlock.prototype.classId(),
-						quantity: 3
-					},
-					{
-						blockType: CarbonBlock.prototype.classId(),
-						quantity: 1
-					},
-					{
-						blockType: GoldBlock.prototype.classId(),
-						quantity: 1
-					}
-				]
-			}
-		);
-
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(242, 242, 242)";
 			this.textureOutline = "rgb(208, 63, 44)";
