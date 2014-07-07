@@ -82,7 +82,7 @@ var ConstructCapability = Capability.extend({
 			ige.notification.emit('notificationError', 
 				NotificationDefinitions.errorKeys.noItemTypeSelected);
 		}
-		return (ige.client.state.selectedCap() === 'construct' && ige.hud.leftToolbar.window.cargo.selectedType !== undefined);
+		return (ige.client.state.selectedCap() === 'construct' && ige.hud.leftToolbar.windows.cargo.selectedType !== undefined);
 	},
 
 	/**
@@ -94,8 +94,8 @@ var ConstructCapability = Capability.extend({
 	 * @instance
 	 */
 	ClickScene_mouseDown: function(sender, event, data) {
-		data.selectedType = ige.hud.leftToolbar.window.cargo.selectedType;
-		ige.client.metrics.fireEvent('construct', 'attempt new', ige.hud.leftToolbar.window.cargo.selectedType);
+		data.selectedType = ige.hud.leftToolbar.windows.cargo.selectedType;
+		ige.client.metrics.fireEvent('construct', 'attempt new', ige.hud.leftToolbar.windows.cargo.selectedType);
 		ige.network.send('constructNew', data);
 	},
 

@@ -39,7 +39,15 @@ var CargoComponent = WindowComponent.extend({
 	},
 
 	select: function(container) {
-		WindowComponent.prototype.select.call(this, container);
+		// If the user selects an empty container, do nothing.
+		var blockType = container.attr('data-block-type');
+		if (blockType === undefined) {
+			return;
+		}
+
+		// Otherwise, select the container, mark it as active
+		this.table.find('td').removeClass('active');
+		container.addClass('active');
 		this.selectedType = container.attr('data-block-type');
 		ige.emit('toolbar tool selected', [this.classId(), container.attr('data-block-type')]);
 	},
@@ -55,7 +63,7 @@ var CargoComponent = WindowComponent.extend({
 		containers.removeClass('active');
 		containers.removeAttr('data-block-type');
 
-		var canvases = this.table.find('canvas')
+		var canvases = this.table.find('canvas');
 		if (canvases.length > 0) {
 			canvases.remove();
 		}

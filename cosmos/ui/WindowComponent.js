@@ -119,8 +119,7 @@ var WindowComponent = ButtonComponent.extend({
 	},
 
 	select: function(container) {
-		this.table.find('td').removeClass('active');
-		container.addClass('active');
+
 	},
 
 	open: function() {
