@@ -1,7 +1,7 @@
 <h3 class='name'>{name}</h3>
-{?recipeDescription}
+{?description}
 	<p class='description'>{description}</p>
-{/recipeDescription}
+{/description}
 <h4 class='reactants'>Reactants</h4>
 <ul class='reactants'>
 	{#reactants}
@@ -10,7 +10,7 @@
 				<canvas class='reactant' width='26' height='26'/>
 				<span class='quantity'>{quantity}</span>
 			</div>
-			{blockType}
+			<span class='block-type'>{blockType}</span>
 		</li>
 	{/reactants}
 </ul>

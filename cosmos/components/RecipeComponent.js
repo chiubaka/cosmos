@@ -3,6 +3,10 @@ var RecipeComponent = IgeClass.extend({
 	componentId: 'recipe',
 
 	/**
+	 * The entity that this component has been added to.
+	 */
+	entity: undefined,
+	/**
 	 * The name of this recipe. Matches the block it is added to.
 	 */
 	name: undefined,
@@ -21,6 +25,7 @@ var RecipeComponent = IgeClass.extend({
 			return;
 		}
 
+		this.entity = entity;
 		this.name = data.name || Block.displayNameFromClassId(entity.classId());
 		this.craftable = data.craftable || true;
 		this.reactants = data.reactants;
@@ -29,6 +34,7 @@ var RecipeComponent = IgeClass.extend({
 	tooltipData: function() {
 		var data = {};
 		data.name = this.name;
+		data.description = this.entity.DESCRIPTION;
 		data.reactants = [];
 		for (var i = 0; i < this.reactants.length; i++) {
 			var reactant = this.reactants[i];

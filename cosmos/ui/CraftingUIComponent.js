@@ -88,12 +88,13 @@ var CraftingUIComponent = WindowComponent.extend({
 				container.tooltipster('destroy');
 			}
 
-				// If tooltip doesn't exist, create new tooltip
+			// If tooltip doesn't exist, create new tooltip
 			container.tooltipster({
 				content: tooltipContent,
 				delay: 0,
 				position: 'bottom-left',
 				theme: 'tooltip crafting',
+				maxWidth: '200',
 				functionReady: function(origin, tooltip) {
 					var canvases = $(tooltip).find('canvas.reactant');
 
@@ -114,9 +115,6 @@ var CraftingUIComponent = WindowComponent.extend({
 							block.texture().render(ctx, block);
 						});
 					});
-
-					console.log(tooltip);
-					console.log('Tooltipster ready!');
 				}
 			});
 

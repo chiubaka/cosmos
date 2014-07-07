@@ -48,14 +48,38 @@ $crafting-tooltip-reactant-name-color: #b7f3fa;
 	h4.reactants {
 		color: $crafting-tooltip-reactants-heading-color;
 		text-transform: uppercase;
+		margin-bottom: 5px;
 	}
 
 	ul.reactants {
 		color: $crafting-tooltip-reactant-name-color;
 		font-size: 105%;
 
-		div.block-canvas-container {
-			display: inline-block;
+		li.reactant {
+			height: $block-height;
+			margin-bottom: 10px;
+
+			div.block-canvas-container, span.block-type {
+				float: left;
+			}
+			div.block-canvas-container {
+				position: relative;
+				margin-right: 10px;
+
+				span.quantity {
+					position: absolute;
+					color: white;
+					right: -2px;
+					bottom: -2px;
+					text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+				}
+			}
+
+			span.block-type {
+				line-height: $block-height;
+				height: $block-height;
+				display: block;
+			}
 		}
 	}
 }
