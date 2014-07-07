@@ -1,4 +1,4 @@
-$bottom-toolbar-background-color: #222222;
+$bottom-toolbar-background-color: rgba(0, 0, 0, 0.7);
 $bottom-toolbar-height: $hud-button-height;
 $bottom-toolbar-spacing-between-items: 1px;
 $bottom-toolbar-item-padding: $bottom-toolbar-height / 6;
@@ -7,15 +7,18 @@ $bottom-toolbar-item-background-color: #363636;
 $bottom-toolbar-item-hover-background-color: #5c5c5c;
 $bottom-toolbar-item-height: $hud-button-height;
 $bottom-toolbar-item-width: $hud-button-width;
+$bottom-toolbar-highlight-color: #f57a03;
+
 
 $bottom-toolbar-tooltip-width: $bottom-toolbar-item-width * 1.5;
 
-#hud>.toolbar {
+#hud>.bottom-toolbar {
   position: absolute;
   bottom: 0;
   height: $bottom-toolbar-height;
   width: 100%;
   background-color: $bottom-toolbar-background-color;
+  z-index: $bottom-toolbar-z-index;
 }
 
 .bottom-toolbar-float-left {

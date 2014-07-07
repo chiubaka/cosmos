@@ -1,95 +1,106 @@
-$chat-box-height: 300px;
-$chat-box-width: $chat-box-height * 2;
-$chat-box-roster-pane-width: $chat-box-width / 3;
+$chat-box-height: 180px;
+$chat-box-width: 500px;
+$chat-box-roster-pane-width: 150px;
 $chat-box-message-pane-width: $chat-box-width - $chat-box-roster-pane-width;
 $chat-box-input-padding-horizontal: 10px;
 $chat-box-input-padding-vertical: 5px;
 $chat-box-input-height: 31px;
 
 #candy, #chat-toolbar, .message-form-wrapper, .message-form, .message-form input.submit {
-  position: absolute;
-  top: initial;
-  bottom: initial;
-  right: initial;
-  left: initial;
+	position: absolute;
+	top: auto;
+	bottom: auto;
+	right: auto;
+	left: auto;
 }
 
 #candy {
-  bottom: $bottom-toolbar-height;
-  left: 0;
-  height: $chat-box-height;
-  width: $chat-box-width;
+	bottom: $bottom-toolbar-height;
+	left: 0;
+	height: $chat-box-height;
+	width: $chat-box-width;
 }
 
 #chat-pane {
-  height: $chat-box-height;
-  width: $chat-box-width;
-  position: relative;
+	height: $chat-box-height;
+	width: $chat-box-width;
+	position: relative;
 
-  #chat-tabs {
-    width: $chat-box-message-pane-width;
-    li {
-      &.roomtype-groupchat {
-        a.label {
-          width: 100%;
-        }
-        a.close {
-          display: none;
-        }
-      }
-    }
-  }
+	#chat-tabs {
+		width: $chat-box-message-pane-width;
+		li {
+			&.roomtype-groupchat {
+				a.label {
+					width: 100%;
+				}
+				a.close {
+					display: none;
+				}
+			}
+		}
+	}
 
-  #chat-toolbar {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-  }
+	#chat-toolbar, .roster-pane {
+		width: $chat-box-roster-pane-width;
+	}
 
-  .message-pane li, .roster-pane .user {
-    @include user-select(text);
-  }
+	#chat-toolbar {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+	}
 
-  .message-form-wrapper {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: $chat-box-message-pane-width;
-    margin-right: $chat-box-roster-pane-width;
+	.message-pane li, .roster-pane .user {
+		@include user-select(text);
+	}
 
-    .message-form {
-      position: relative;
-      height: 100%;
-      width: $chat-box-message-pane-width;
-      margin-right: 0;
+	.message-pane .infomessage {
+		display: none;
+	}
 
-      input {
-        width: $chat-box-message-pane-width - $chat-box-input-padding-horizontal * 2 - 50;
-        height: $chat-box-input-height - $chat-box-input-padding-vertical * 2;
-      }
+	.message-pane-wrapper, .message-form-wrapper {
+		width: auto;
+		margin-right: $chat-box-roster-pane-width;
+	}
 
-      input.submit {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        height: 25px;
-        width: auto;
-        margin: 3px;
-      }
-    }
-  }
+	.message-form-wrapper {
+		position: absolute;
+		bottom: 0;
+		left: 0;
 
-  #context-menu, #tooltip {
-    position: fixed;
-  }
+		.message-form {
+			position: relative;
+			height: 100%;
+			width: $chat-box-message-pane-width;
+			margin-right: 0;
+
+			input {
+				width: $chat-box-message-pane-width - $chat-box-input-padding-horizontal * 2 - 50;
+				height: $chat-box-input-height - $chat-box-input-padding-vertical * 2;
+			}
+
+			input.submit {
+				position: absolute;
+				bottom: 0;
+				right: 0;
+				height: 25px;
+				width: auto;
+				margin: 3px;
+			}
+		}
+	}
+
+	#context-menu, #tooltip {
+		position: fixed;
+	}
 }
 
 #chat-modal {
-  display: none !important;
+	display: none !important;
 }
 
 .message-form-wrapper, .message-form {
-  position: absolute;
-  bottom: 0;
-  left: 0;
+	position: absolute;
+	bottom: 0;
+	left: 0;
 }

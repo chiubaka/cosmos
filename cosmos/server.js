@@ -5,20 +5,22 @@ var Server = IgeClass.extend({
 	init: function (options) {
 		var self = this;
 
+		_ = require('lodash');
+
 		self.LAYER_BACKGROUND = 10;
 		self.LAYER_WORLD = 50;
 		self.LAYER_HUD = 90;
 		self.DEPTH_PLAYER = 90;
 
 		// set the framerate
-		ige.setFps(60);
+		ige.setFps(Constants.fps.SERVER_FPS);
 
 		// Add physics and setup physics world
 		ige.addComponent(IgeBox2dComponent)
 			.box2d.sleep(true)
 			.box2d.createWorld()
 			.box2d.scaleRatio(10)
-			.mode(1)//Sets the world interval mode. In mode 0 (zero) the box2d simulation is synced to the framerate of the engine's renderer. In mode 1 the box2d simulation is stepped at a constant speed regardless of the engine's renderer. This must be set *before* calling the start() method in order for the setting to take effect.
+			.mode(0)//Sets the world interval mode. In mode 0 (zero) the box2d simulation is synced to the framerate of the engine's renderer. In mode 1 the box2d simulation is stepped at a constant speed regardless of the engine's renderer. This must be set *before* calling the start() method in order for the setting to take effect.
 			.box2d.start();// this should be the last thing called
 
 		ige.addComponent(IgeMongoDbComponent, DbConfig.config);
@@ -68,14 +70,21 @@ var Server = IgeClass.extend({
 						ige.network.define('cargoResponse');
 						ige.network.define('confirm');
 
+						ige.network.define('cosmos:player.username.set.request', Player.onUsernameRequested);
+						ige.network.define('cosmos:player.username.set.approve');
+						ige.network.define('cosmos:player.username.set.error');
+
 						/* When a client connects or disconnects */
 						ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js
 						ige.network.on('disconnect', self._onPlayerDisconnect); // Defined in ./gameClasses/ServerNetworkEvents.js
 
 						// Add the network stream component
 						ige.network.addComponent(IgeStreamComponent)
-							.stream.sendInterval(30) // Send a stream update once every 30 milliseconds
+							.stream.sendInterval(Constants.fps.SERVER_FPS)
 							.stream.start(); // Start the stream
+
+						// Add crafting system
+						ige.addComponent(CraftingSystem);
 
 						// Accept incoming network connections
 						ige.network.acceptConnections(true);

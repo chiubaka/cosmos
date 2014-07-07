@@ -15,7 +15,6 @@ var StarfieldBackground = ParallaxBackground.extend({
 			this.texture(ige.client.textures.background_starfield)
 				.width(6000)
 				.height(6000)
-				.mount(this);
 		}
 	}
 });

@@ -9,6 +9,7 @@ var ClientNetworkEvents = {
 	 */
 	_onPlayerEntity: function(data) {
 		var self = this;
+		ige.client.player = undefined;
 
 		if (ige.$(data.entityId)) {
 			ClientNetworkEvents.initCameras(ige.$(data.entityId));
@@ -23,13 +24,14 @@ var ClientNetworkEvents = {
 			// should be tracking!
 			self._eventListener = ige.network.stream.on('entityCreated', function (entity) {
 				if (entity.id() === data.entityId) {
+					var player = entity;
 					// Tell the camera to track out player entity
 					ClientNetworkEvents.initCameras(ige.$(data.entityId));
 
 					// Make it easy to find the player's entity
-					ige.client.player = entity;
+					ige.client.player = player;
 
-					ige.client.metrics.fireEvent('player', 'connect', data.playerId);
+					ige.client.metrics.fireEvent('player', 'connect', player.dbId());
 
 					ige.network.send('cargoRequest', { requestUpdates: true });
 
@@ -44,6 +46,18 @@ var ClientNetworkEvents = {
 							this.log('Could not disable event listener!', 'warning');
 						}
 					});
+
+					var username = player.username();
+
+					// If this player is logged in but doesn't yet have a username, prompt for one.
+					if (player.hasGuestUsername && player.isLoggedIn()) {
+						ige.client.promptForUsername();
+					}
+					else {
+						ige.emit('cosmos:client.player.username.set', username);
+					}
+
+					ige.emit('cosmos:client.player.streamed');
 				}
 			});
 		}

@@ -3,6 +3,14 @@ var igeClientConfig = {
 		/* === CONSTANTS === */
 		'./constants.js',
 
+		/* === COMPONENTS === */
+		'./components/HealthComponent.js',
+		'./components/DamageSourceComponent.js',
+		'./components/RecipeComponent.js',
+
+		/* === Systems === */
+		'./systems/Inspector.js',
+
 		/* === ENVIRONMENT STATE === */
 
 		/* Render container for block grids and overlays */
@@ -25,8 +33,11 @@ var igeClientConfig = {
 		'./entities/blocks/parts/FuelBlock.js',
 		'./entities/blocks/parts/CargoBlock.js',
 		'./entities/blocks/parts/ControlBlock.js',
-		'./entities/blocks/parts/MiningLaserBlock.js',
 		'./entities/blocks/parts/ThrusterBlock.js',
+
+		/* Weapons */
+		'./entities/blocks/parts/Weapon.js',
+		'./entities/blocks/parts/weapons/MiningLaserBlock.js',
 
 		/* Ship armor blocks */
 		'./entities/blocks/Armor.js',
@@ -58,6 +69,7 @@ var igeClientConfig = {
 		'./entities/effects/EngineParticle.js',
 		'./entities/effects/mining/BlockParticleEmitter.js',
 		'./entities/effects/GlowEffect.js',
+		'./entities/effects/HealthBar.js',
 
 		/* Structures (prefabs) */
 		'./entities/prefabs/ExampleShips.js',
@@ -79,6 +91,11 @@ var igeClientConfig = {
 		'./models/capabilities/ConstructCapability.js',
 		'./models/capabilities/MineCapability.js',
 
+		/* === Crafting === */
+		'./crafting/CraftingSystem.js',
+		'./crafting/CraftingComponent.js',
+		'./crafting/Recipes.js',
+
 		/* Notifications */
 		'./notifications/NotificationDefinitions.js',
 		'./notifications/NotificationComponent.js',
@@ -88,7 +105,10 @@ var igeClientConfig = {
 		/* HUD */
 		'./ui/HUDComponent.js',
 		'./ui/BottomToolbarComponent.js',
+		'./ui/LeftToolbarComponent.js',
+		'./ui/WindowsComponent.js',
 		'./ui/ButtonComponent.js',
+		'./ui/WindowComponent.js',
 		'./ui/UserTileComponent.js',
 		'./ui/ChatComponent.js',
 		'./ui/MenuComponent.js',
@@ -96,6 +116,8 @@ var igeClientConfig = {
 		'./ui/NewShipComponent.js',
 		'./ui/RelocateComponent.js',
 		'./ui/CargoComponent.js',
+		'./ui/CraftingUIComponent.js',
+		'./ui/NamePrompt.js',
 
 		/* Minimap */
 		'./ui/MinimapComponent.js',

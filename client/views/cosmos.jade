@@ -10,13 +10,17 @@ html
     title Cosmos Private Preview
     // STYLES
     link(href='/vendor/candy/res/default.css', rel='stylesheet', type='text/css')
+    link(href='/vendor/tooltipster/css/tooltipster.css', rel='stylesheet', type='text/css')
     link(href='/stylesheets/cosmos.css', rel='stylesheet', type='text/css')
-    link(href='/stylesheets/hud.css', rel='stylesheet', type='text/css')
     link(href='/stylesheets_backup/cosmos-preview.css', rel='stylesheet', type='text/css')
 
     // js
     script(src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js')
     script(src='/js/jquery.steps.min.js')
+    script(src='/vendor/lodash/lodash.min.js')
+    script(src='/vendor/tooltipster/jquery.tooltipster.min.js')
+    script(src='/vendor/dustjs-linkedin/dust-core.min.js')
+    script(src='/js/templates.dust.js')
 
     // Application Insights
     script(type='text/javascript').
@@ -58,6 +62,18 @@ html
     //.cosmos-tutorial-veil#cosmos-tutorial-veil
     //  .cosmos-tutorial#cosmos-tutorial-container
     //    include includes/cosmosTutorial.jade
+    #name-prompt
+      .prompt-veil
+      .prompt-box
+        .play-icon
+        h1 Welcome to Cosmos!
+        p Before we set off, let's name some things.
+        //input#ship-name-input(type='text', placeholder='Name your ship something awesome')
+        //br
+        input#username-input(type='text', placeholder='Give your account a cool username')
+        div.buttons
+          button#name-prompt-go(type='submit') Let's go!
+          button#name-prompt-skip Not now
     .igeLoading.greeting
       .cosmos-logo
         img(src='/images/preview-intro.png')

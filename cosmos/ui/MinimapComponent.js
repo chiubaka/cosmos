@@ -57,6 +57,8 @@ var MinimapComponent = IgeEventingClass.extend({
 			// Maps the visible minimap area to the canvas via a scale factor
 			self.scaleX = Constants.minimapArea.MAXIMUM_WIDTH / self.canvas.width();
 			self.scaleY = Constants.minimapArea.MAXIMUM_HEIGHT / self.canvas.height();
+
+			ige.emit('cosmos:hud.subcomponent.loaded', self);
 		});
 	},
 

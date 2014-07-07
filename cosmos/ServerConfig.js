@@ -3,6 +3,11 @@ var config = {
 		/* === CONSTANTS === */
 		{ name: 'Constants', path: './constants' },
 
+		/* === COMPONENTS === */
+		{ name: 'HealthComponent', path: './components/HealthComponent' },
+		{ name: 'DamageSourceComponent', path: './components/DamageSourceComponent' },
+		{ name: 'RecipeComponent', path: './components/RecipeComponent' },
+
 		/* === GAME SETUP === */
 		/* Initialization */
 		{ name: 'GameInit', path: './init/GameInit' },
@@ -27,8 +32,12 @@ var config = {
 		{ name: 'FuelBlock', path: './entities/blocks/parts/FuelBlock' },
 		{ name: 'CargoBlock', path: './entities/blocks/parts/CargoBlock' },
 		{ name: 'ControlBlock', path: './entities/blocks/parts/ControlBlock' },
-		{ name: 'MiningLaserBlock', path: './entities/blocks/parts/MiningLaserBlock' },
 		{ name: 'ThrusterBlock', path: './entities/blocks/parts/ThrusterBlock' },
+
+		/* Weapons */
+		{ name: 'Weapon', path: './entities/blocks/parts/Weapon' },
+		{ name: 'MiningLaserBlock', path: './entities/blocks/parts/weapons/MiningLaserBlock' },
+
 		/* Ship armor blocks */
 		{ name: 'Armor', path: './entities/blocks/Armor' },
 		{ name: 'HullBlock', path: './entities/blocks/armor/HullBlock' },
@@ -68,6 +77,11 @@ var config = {
 		{ name: 'Cargo', path: './models/cargo/Cargo' },
 		{ name: 'CargoContainer', path: './models/cargo/CargoContainer' },
 		{ name: 'CargoItem', path: './models/cargo/CargoItem' },
+
+		/* === Crafting === */
+		{ name: 'CraftingSystem', path: './crafting/CraftingSystem' },
+		{ name: 'CraftingComponent', path: './crafting/CraftingComponent' },
+		{ name: 'Recipes', path: './crafting/Recipes' },
 
 		/* Database */
 		{ name: 'DbConfig', path: './db/DbConfig' },

@@ -18,7 +18,7 @@ var Cap = ButtonComponent.extend({
 	 * @instance
 	 */
 	init: function(parent, id, className, tooltip) {
-		ButtonComponent.prototype.init.call(this, parent, id, className, tooltip);
+		ButtonComponent.prototype.init.call(this, parent, id, className, tooltip, 'top');
 
 		this.active = false;
 

@@ -115,6 +115,20 @@ var Cargo = IgeClass.extend({
 	},
 
 	/**
+	 * Checks if there is space for numItem items
+	 * TODO: Change this when we implement the new cargo system
+	 */
+	spaceAvailable: function (numItems) {
+		if (numItems <= 0) {
+			return true;
+		}
+		if (this.unlimitedSpace()) {
+			return true;
+		}
+		return false;
+	},
+
+	/**
 	 * Adds a single existing CargoItem to the player's cargo inventory.
 	 * Does NOT automatically encapsulate objects into CargoItems.
 	 * 
@@ -410,6 +424,8 @@ var Cargo = IgeClass.extend({
 	 * @memberof Cargo
 	 * @instance
 	 */
+	// TODO: Don't loop through the containers each time getItemList() is called.
+	// Instead, always keep a synchronized list in memory.
 	getItemList: function(coalesce) {
 		var returnDict = {};
 

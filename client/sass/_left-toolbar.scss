@@ -1,0 +1,55 @@
+$left-toolbar-background-color: rgba(0, 0, 0, 0.7);
+$left-toolbar-width: $hud-button-height;
+$left-toolbar-spacing-between-items: 1px;
+$left-toolbar-item-padding: $left-toolbar-width / 6;
+$left-toolbar-item-clicked-background-color: #101010;
+$left-toolbar-item-background-color: #363636;
+$left-toolbar-item-hover-background-color: #5c5c5c;
+$left-toolbar-item-height: $hud-button-height;
+$left-toolbar-item-width: $hud-button-width;
+$left-toolbar-highlight-color: #f57a03;
+
+$left-toolbar-tooltip-width: $left-toolbar-item-width * 1.5;
+
+#hud>.left-toolbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: $hud-button-height;
+  width: $left-toolbar-width;
+  padding-top: $hud-margin-top;
+  background-color: $left-toolbar-background-color;
+}
+
+@mixin left-toolbar-item($background-color: $left-toolbar-item-background-color) {
+  height: $left-toolbar-item-height;
+  width: $left-toolbar-item-width;
+  position: relative;
+  cursor: pointer;
+  background-color: $background-color;
+  margin-top: $left-toolbar-spacing-between-items;
+
+  .tooltip {
+    bottom: $left-toolbar-item-height + $left-toolbar-item-padding;
+    width: $left-toolbar-tooltip-width;
+    text-align: center;
+    margin-left: -$left-toolbar-tooltip-width / 2 - $tooltip-padding;
+    left: 50%;
+  }
+
+  &:hover {
+    background-color: $left-toolbar-item-hover-background-color;
+    .tooltip {
+      display: block;
+    }
+  }
+}
+
+@mixin left-toolbar-item-with-icon($icon, $background-color: $left-toolbar-item-background-color) {
+  @include left-toolbar-item($background-color);
+  @include hud-icon-button($icon);
+}
+
+@import 'windows';
+@import 'cargo';
+@import 'crafting';

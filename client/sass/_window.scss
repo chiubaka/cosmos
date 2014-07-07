@@ -1,0 +1,125 @@
+// Number of blocks displayed in the window
+$window-num-cols: 3;
+$window-num-rows: 3;
+$window-block-width: 40px;
+$window-block-height: 40px;
+$window-spacing-between-window: 10px;
+$window-outer-border-width: 4px;
+$window-spacing-between-blocks: 4px;
+$window-scrollbar-width: 10px;
+$window-scrollbar-right-padding: 4px;
+$window-header-padding: 12px;
+$window-body-padding: $window-header-padding;
+$window-table-border-width: 1px;
+$window-table-cell-padding: $window-body-padding / 2;
+$window-header-height: $hud-button-height * .75;
+$window-tabs-height: $window-header-height * 2 / 3;
+$window-table-cell-size: $window-header-height - 2 * $window-table-cell-padding;
+$window-outer-border-color: #363636;
+
+// Calculate the width of the window
+$window-width: $window-outer-border-width * 2 +
+	$window-num-cols * $window-block-width +
+	($window-num-cols + 1) * $window-spacing-between-blocks +
+	$window-scrollbar-width + $window-scrollbar-right-padding;
+
+// Calculate the height of the window
+$window-height: $window-header-height + $window-tabs-height +
+	($window-num-rows * $window-block-height) +
+	($window-num-rows + 1) * $window-spacing-between-blocks +
+	$window-outer-border-width;
+
+@mixin window(
+	$font-color,
+	$header-background-color,
+	$header-icon-url,
+	$tabs-background-color,
+	$body-background-color,
+	$table-outer-border-color
+)
+{
+	color: $font-color;
+
+	.header {
+		.icon {
+			@include hud-icon-button($header-icon-url);
+		}
+		background-color: $header-background-color;
+	}
+
+	.tabs {
+		background-color: $tabs-background-color;
+	}
+
+	.body {
+		background-color: $body-background-color;
+
+		table {
+			border-color: $table-outer-border-color;
+		}
+
+		td {
+			background-color: $header-background-color;
+			border-color: $body-background-color;
+		}
+	}
+}
+
+.window {
+	float: left;
+	margin-left: $windows-side-margin;
+	display: none;
+
+	.header {
+		height: $window-header-height;
+		width: 100%;
+		display: table;
+
+		.icon, .title-container {
+			display: table-cell;
+		}
+
+		.icon {
+			height: $window-header-height;
+			width: $window-header-height;
+			border: none;
+		}
+
+		.title-container {
+			padding: $window-header-padding;
+			padding-left: 0;
+			h2.title {
+				line-height: $window-header-height - 2 * $window-header-padding;
+			}
+		}
+	}
+	.tabs {
+		height: $window-tabs-height;
+		width: 100%;
+	}
+	.body {
+		width: $window-header-height * 6 + $window-body-padding * 2 + $window-table-border-width * (6 + 1);
+		padding: $window-body-padding;
+		table {
+			width: 100%;
+			border-spacing: 0;
+			//border-collapse: collapse;
+			table-layout: fixed;
+		}
+
+		td {
+			height: $window-table-cell-size;
+			width: $window-table-cell-size;
+			border-width: $window-table-border-width;
+			border-style: solid;
+			padding: $window-table-cell-padding;
+
+			canvas {
+				height: $window-table-cell-size;
+				width: $window-table-cell-size;
+				display: block;
+				margin: 0 auto;
+			}
+		}
+	}
+}

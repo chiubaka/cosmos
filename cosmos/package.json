@@ -1,0 +1,24 @@
+{
+  "name": "cosmos",
+  "version": "0.0.0",
+  "description": "Game code for Cosmos, an MMO browser game set in space.",
+  "main": "server.js",
+  "dependencies": {
+    "lodash": "~2.4.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/teamleonine/cosmos.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/teamleonine/cosmos/issues"
+  },
+  "homepage": "https://github.com/teamleonine/cosmos"
+}

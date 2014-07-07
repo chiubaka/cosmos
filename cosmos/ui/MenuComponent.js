@@ -3,7 +3,9 @@ var MenuComponent = ButtonComponent.extend({
 	componentId: 'menu',
 
 	init: function() {
-		ButtonComponent.prototype.init.call(this, $('#bottom-toolbar'), 'menu-button', undefined, 'Menu');
+		ButtonComponent.prototype.init.call(this, $('#bottom-toolbar'), 'menu-button', undefined, 'Menu', 'top');
+
+		ige.emit('cosmos:hud.bottomToolbar.subcomponent.loaded', this);
 	}
 });
 

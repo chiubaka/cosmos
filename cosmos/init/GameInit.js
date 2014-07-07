@@ -12,10 +12,13 @@ var GameInit = {
 	init: function(game) {
 
 		// Disable debug features for more performance
-		ige.debugEnabled(false);
 		ige.debugTiming(false);
 
 		this.initScenes(game);
+
+		// Create global cosmos namespace. Cosmos-specific state should go here, not in the IGE namespace.
+		cosmos = {};
+		this.initBlocks();
 
 		if (ige.isServer) {
 			this.initEnvironment();
@@ -25,6 +28,29 @@ var GameInit = {
 			this.initPlayerState();
 			this.initPlayerControls();
 			//this.initTimeStream(game);
+		}
+	},
+
+	/**
+	 * Load instances of blocks into the global space so that they are categorized and easily accessible.
+	 *
+	 * This function loops through the variables in the global context to find the prototypes of the {@link Block}
+	 * classes. It then instantiates one of each {@link Block} and keeps it around in the global cosmos namespace so
+	 * that we don't have to create random blocks every time we need a block to do something for us.
+	 */
+	initBlocks: function() {
+		var globalContext = (ige.isServer) ? global : window;
+		cosmos.blocks = {};
+		cosmos.blocks.instances = {};
+		for (var key in globalContext) {
+			if (globalContext.hasOwnProperty(key)
+				&& globalContext[key]
+				&& globalContext[key].prototype
+				&& globalContext[key].prototype instanceof Block)
+			{
+				var block = new globalContext[key];
+				cosmos.blocks.instances[key] = block;
+			}
 		}
 	},
 
@@ -253,9 +279,6 @@ var GameInit = {
 	},
 
 	initServerEvents: function() {
-		// Register game event listeners
-		ige.on('block mined', Player.prototype.blockMinedListener);
-		ige.on('block mined', BlockGrid.prototype.blockMinedListener);
 		ige.on('block collected', Player.prototype.blockCollectListener);
 	},
 

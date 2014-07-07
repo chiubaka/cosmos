@@ -3,9 +3,11 @@ var RelocateComponent = ButtonComponent.extend({
 	componentId: 'relocate',
 
 	init: function() {
-		ButtonComponent.prototype.init.call(this, $('#bottom-toolbar'), 'relocate-button', undefined, 'Relocate');
+		ButtonComponent.prototype.init.call(this, $('#bottom-toolbar'), 'relocate-button', undefined, 'Relocate', 'top');
 
 		this.element.click(this.mouseDown);
+
+		ige.emit('cosmos:hud.bottomToolbar.subcomponent.loaded', this);
 	},
 
 	mouseDown: function() {
