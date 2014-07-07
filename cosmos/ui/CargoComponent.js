@@ -47,7 +47,6 @@ var CargoComponent = WindowComponent.extend({
 		var numTypes = Object.keys(cargoItems).length;
 		console.log('Populating toolbar from server response: ' + numTypes + ' item(s) in inventory');
 
-
 		var rowsNeeded = Math.ceil(numTypes / WindowComponent.COLS_PER_ROW);
 		this.setNumRows(rowsNeeded);
 
@@ -70,7 +69,6 @@ var CargoComponent = WindowComponent.extend({
 			this.fillContainer(index, type, quantity);
 
 			index++;
-			//this.createContainer(type, quantity);
 		}
 
 		if ((this.selectedType === undefined || !cargoItems.hasOwnProperty(this.selectedType)) && numTypes > 0) {
@@ -92,6 +90,24 @@ var CargoComponent = WindowComponent.extend({
 
 		if (this.selectedType === type) {
 			this.select($(container));
+		}
+
+		this.fillTooltip(type, container);
+	},
+
+	fillTooltip: function(type, container) {
+		var content = Block.displayNameFromClassId(type);
+		if (container.hasClass('tooltipstered')) {
+			container.tooltipster('content', content);
+		}
+		else {
+			container.tooltipster({
+				content: content,
+				delay: 0,
+				position: 'bottom',
+				theme: 'tooltip cargo',
+				maxWidth: '200'
+			});
 		}
 	}
 });

@@ -9,9 +9,6 @@ $cosmos-font-family: 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;
 $cosmos-font-color: #e8e8e8;
 $prompt-veil-z-index: $hud-layer-z-index + 1;
 
-$tooltip-line-height: 18px;
-$tooltip-padding: 6px;
-
 html, body {
 	font-family: $cosmos-font-family;
 	font-size: 100%;
@@ -71,6 +68,10 @@ h1, h2, h3, h4 {
 	@include user-select(none);
 }
 
+$tooltip-background-color: rgba(12, 10, 7, 1);
+$tooltip-line-height: 18px;
+$tooltip-padding: 6px;
+
 .tooltip {
 	display: none;
 	position: absolute;
@@ -78,7 +79,7 @@ h1, h2, h3, h4 {
 	font-family: $cosmos-font-family;
 	line-height: $tooltip-line-height;
 	padding: $tooltip-padding;
-	background-color: rgba(34, 34, 34, 0.85);
+	background-color: $tooltip-background-color;
 	border-radius: 0px;
 	z-index: 100002;
 }

@@ -76,7 +76,14 @@ var CraftingUIComponent = WindowComponent.extend({
 		});
 
 		// Generate tooltip content
-		this.fillTooltip(recipe, function(err, out) {
+		this.fillTooltip(recipe, container, function(err, out) {
+			// Draw the block
+			self.drawBlockInContainer(container, block.classId());
+		});
+	},
+
+	fillTooltip: function(recipe, container, callback) {
+		dust.render('crafting/tooltip', recipe.tooltipData(), function(err, out) {
 			if (err) {
 				this.log('Error rendering crafting tooltip template.');
 			}
@@ -84,7 +91,7 @@ var CraftingUIComponent = WindowComponent.extend({
 			var tooltipContent = $(out);
 
 			// If tooltip exists, update content
-			if(container.hasClass('tooltipstered')) {
+			if (container.hasClass('tooltipstered')) {
 				container.tooltipster('destroy');
 			}
 
@@ -118,13 +125,6 @@ var CraftingUIComponent = WindowComponent.extend({
 				}
 			});
 
-			// Draw the block
-			self.drawBlockInContainer(container, block.classId());
-		});
-	},
-
-	fillTooltip: function(recipe, callback) {
-		dust.render('crafting/tooltip', recipe.tooltipData(), function(err, out) {
 			callback(err, out);
 		});
 	}

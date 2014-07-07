@@ -26,7 +26,7 @@
   src: local("Open Sans Semibold"), local("OpenSans-Semibold"), url(http://themes.googleusercontent.com/static/fonts/opensans/v8/MTP_ySUJH_bn48VBG8sNSqRDOzjiPcYnFooOUGCOsRk.woff) format("woff");
 }
 
-/* line 15, ../../sass/cosmos.scss */
+/* line 12, ../../sass/cosmos.scss */
 html, body {
   font-family: "Open Sans", "Helvetica Neue", Helvetica, sans-serif;
   font-size: 100%;
@@ -35,22 +35,22 @@ html, body {
   overflow: hidden;
 }
 
-/* line 23, ../../sass/cosmos.scss */
+/* line 20, ../../sass/cosmos.scss */
 h1, h2, h3, h4 {
   margin: 0;
 }
 
-/* line 27, ../../sass/cosmos.scss */
+/* line 24, ../../sass/cosmos.scss */
 .align-left {
   float: left;
 }
 
-/* line 31, ../../sass/cosmos.scss */
+/* line 28, ../../sass/cosmos.scss */
 .align-right {
   float: right;
 }
 
-/* line 35, ../../sass/cosmos.scss */
+/* line 32, ../../sass/cosmos.scss */
 .more-triangle {
   cursor: pointer;
   display: inline-block;
@@ -61,7 +61,7 @@ h1, h2, h3, h4 {
   transform: rotate(180deg);
 }
 
-/* line 41, ../../sass/cosmos.scss */
+/* line 38, ../../sass/cosmos.scss */
 .prompt-veil {
   position: absolute;
   top: 0;
@@ -73,34 +73,34 @@ h1, h2, h3, h4 {
   z-index: 101;
 }
 
-/* line 60, ../../sass/cosmos.scss */
+/* line 57, ../../sass/cosmos.scss */
 ::-webkit-input-placeholder {
   color: #5a5a5a;
 }
 
-/* line 61, ../../sass/cosmos.scss */
+/* line 58, ../../sass/cosmos.scss */
 :-moz-placeholder {
   color: #5a5a5a;
 }
 
-/* line 62, ../../sass/cosmos.scss */
+/* line 59, ../../sass/cosmos.scss */
 ::-moz-placeholder {
   color: #5a5a5a;
 }
 
-/* line 63, ../../sass/cosmos.scss */
+/* line 60, ../../sass/cosmos.scss */
 :-ms-input-placeholder {
   color: #5a5a5a;
 }
 
-/* line 70, ../../sass/cosmos.scss */
+/* line 67, ../../sass/cosmos.scss */
 #igeFrontBuffer {
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
 }
 
-/* line 74, ../../sass/cosmos.scss */
+/* line 75, ../../sass/cosmos.scss */
 .tooltip {
   display: none;
   position: absolute;
@@ -108,12 +108,12 @@ h1, h2, h3, h4 {
   font-family: "Open Sans", "Helvetica Neue", Helvetica, sans-serif;
   line-height: 18px;
   padding: 6px;
-  background-color: rgba(34, 34, 34, 0.85);
+  background-color: #0c0a07;
   border-radius: 0px;
   z-index: 100002;
 }
 
-/* line 86, ../../sass/cosmos.scss */
+/* line 87, ../../sass/cosmos.scss */
 .username-label.tooltip {
   display: block;
   z-index: 1;
@@ -147,7 +147,7 @@ h1, h2, h3, h4 {
   color: white;
   right: -2px;
   bottom: -2px;
-  text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
 
 /* line 15, ../../sass/_bottom-toolbar.scss */
@@ -718,6 +718,11 @@ h1, h2, h3, h4 {
   bottom: -6px;
 }
 
+/* line 41, ../../sass/_cargo.scss */
+.tooltip.cargo {
+  display: block;
+}
+
 /* line 8, ../../sass/_crafting.scss */
 #crafting-button {
   height: 50px;
@@ -790,48 +795,47 @@ h1, h2, h3, h4 {
   display: block;
   border-radius: 0px;
   border: 2px solid #53ff5f;
-  background-color: #0c0a07;
   color: #aaffb0;
   padding: 8px;
 }
-/* line 43, ../../sass/_crafting.scss */
+/* line 42, ../../sass/_crafting.scss */
 .tooltip.crafting h3 {
   font-size: 150%;
   color: #53ff5f;
   margin-bottom: 10px;
 }
-/* line 49, ../../sass/_crafting.scss */
+/* line 48, ../../sass/_crafting.scss */
 .tooltip.crafting h4.reactants {
   color: #24c9dd;
   text-transform: uppercase;
   margin-bottom: 5px;
 }
-/* line 55, ../../sass/_crafting.scss */
+/* line 54, ../../sass/_crafting.scss */
 .tooltip.crafting ul.reactants {
   color: #b7f3fa;
   font-size: 105%;
 }
-/* line 59, ../../sass/_crafting.scss */
+/* line 58, ../../sass/_crafting.scss */
 .tooltip.crafting ul.reactants li.reactant {
   height: 26px;
   margin-bottom: 10px;
 }
-/* line 63, ../../sass/_crafting.scss */
+/* line 62, ../../sass/_crafting.scss */
 .tooltip.crafting ul.reactants li.reactant div.block-canvas-container, .tooltip.crafting ul.reactants li.reactant span.block-type {
   float: left;
 }
-/* line 66, ../../sass/_crafting.scss */
+/* line 65, ../../sass/_crafting.scss */
 .tooltip.crafting ul.reactants li.reactant div.block-canvas-container {
   margin-right: 10px;
 }
-/* line 70, ../../sass/_crafting.scss */
+/* line 69, ../../sass/_crafting.scss */
 .tooltip.crafting ul.reactants li.reactant span.block-type {
   line-height: 26px;
   height: 26px;
   display: block;
 }
 
-/* line 79, ../../sass/_crafting.scss */
+/* line 78, ../../sass/_crafting.scss */
 .tooltipster-cosmos .tooltipster-content {
   font-size: 100%;
   line-height: 110%;
@@ -1064,19 +1068,19 @@ h1, h2, h3, h4 {
   outline: 0;
   border-bottom: 1px solid #0090ff;
 }
-/* line 53, ../../sass/cosmos.scss */
+/* line 50, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input:focus::-webkit-input-placeholder {
   color: #e8e8e8;
 }
-/* line 54, ../../sass/cosmos.scss */
+/* line 51, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input:focus:-moz-placeholder {
   color: #e8e8e8;
 }
-/* line 55, ../../sass/cosmos.scss */
+/* line 52, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input:focus::-moz-placeholder {
   color: #e8e8e8;
 }
-/* line 56, ../../sass/cosmos.scss */
+/* line 53, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input:focus:-ms-input-placeholder {
   color: #e8e8e8;
 }
@@ -1084,19 +1088,19 @@ h1, h2, h3, h4 {
 #name-prompt .prompt-box input.error {
   border-bottom: 1px solid red;
 }
-/* line 53, ../../sass/cosmos.scss */
+/* line 50, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input.error::-webkit-input-placeholder {
   color: red;
 }
-/* line 54, ../../sass/cosmos.scss */
+/* line 51, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input.error:-moz-placeholder {
   color: red;
 }
-/* line 55, ../../sass/cosmos.scss */
+/* line 52, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input.error::-moz-placeholder {
   color: red;
 }
-/* line 56, ../../sass/cosmos.scss */
+/* line 53, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input.error:-ms-input-placeholder {
   color: red;
 }
