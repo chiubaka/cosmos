@@ -55,7 +55,7 @@ var CraftingUIComponent = WindowComponent.extend({
 		// TODO: Grey out recipes that are known but not craftable
 		var i = 0;
 		_.forOwn(craftableBlocks, function(canCraft, blockType) {
-			var block = cosmos.blocks.craftable.instances[blockType];
+			var block = cosmos.blocks.instances[blockType];
 			self.fillContainer(i, block);
 			i++;
 		});

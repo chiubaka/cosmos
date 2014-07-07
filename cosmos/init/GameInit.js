@@ -38,8 +38,6 @@ var GameInit = {
 		var globalContext = (ige.isServer) ? global : window;
 		cosmos.blocks = {};
 		cosmos.blocks.instances = {};
-		cosmos.blocks.craftable = {};
-		cosmos.blocks.craftable.instances = {};
 		for (var key in globalContext) {
 			if (globalContext.hasOwnProperty(key)
 				&& globalContext[key]
@@ -48,9 +46,6 @@ var GameInit = {
 			{
 				var block = new globalContext[key];
 				cosmos.blocks.instances[key] = block;
-				if (block.recipe instanceof RecipeComponent && block.recipe.craftable) {
-					cosmos.blocks.craftable.instances[key] = block;
-				}
 			}
 		}
 	},
