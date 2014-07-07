@@ -772,7 +772,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 					return true;
 				}
 			default:
-				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
 				return false;
 		}
 	},

@@ -78,6 +78,8 @@ var Player = BlockStructure.extend({
 
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform', 'score']);
+
+		this.addComponent(CraftingComponent);
 	},
 
 	streamCreateData: function() {

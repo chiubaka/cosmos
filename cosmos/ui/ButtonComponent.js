@@ -3,7 +3,7 @@ var ButtonComponent = IgeEventingClass.extend({
 
 	element: undefined,
 
-	init: function(parent, id, className, tooltip) {
+	init: function(parent, id, className, tooltip, tooltipPosition) {
 		if (parent.length === 0) {
 			this.log('Parent has not been initialized when creating button with id: ' + id + '.', 'error');
 			return;
@@ -15,11 +15,13 @@ var ButtonComponent = IgeEventingClass.extend({
 			buttonDiv.className = className;
 		}
 
-		var tooltipSpan = document.createElement('span');
-		$(tooltipSpan).addClass('tooltip');
-		$(tooltipSpan).text(tooltip);
-
-		$(buttonDiv).append(tooltipSpan);
+		$(buttonDiv).tooltipster({
+				content: tooltip,
+				delay: 0,
+				position: tooltipPosition,
+				theme: 'tooltip',
+				maxWidth: '200'
+		});
 
 		parent.append(buttonDiv);
 

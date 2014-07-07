@@ -26,7 +26,6 @@ var UserTileComponent = IgeEventingClass.extend({
 
 			ige.on('cosmos:client.player.username.set', function(username) {
 				self.username.text(username);
-				console.log('Set user tile name: ' + username);
 			}, self, true);
 
 			ige.emit('cosmos:hud.bottomToolbar.subcomponent.loaded', self);

@@ -1,0 +1,16 @@
+<h3 class='name'>{name}</h3>
+{?description}
+	<p class='description'>{description}</p>
+{/description}
+<h4 class='reactants'>Reactants</h4>
+<ul class='reactants'>
+	{#reactants}
+		<li class='reactant'>
+			<div class='block-canvas-container'>
+				<canvas class='reactant' width='26' height='26'/>
+				<span class='quantity'>{quantity}</span>
+			</div>
+			<span class='block-type'>{blockType}</span>
+		</li>
+	{/reactants}
+</ul>

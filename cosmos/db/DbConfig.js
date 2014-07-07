@@ -13,7 +13,6 @@ var DbConfig = {
 		dbName: 'cosmos-dev-db',
 		collection: 'players'
 	},
-
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = DbConfig; }

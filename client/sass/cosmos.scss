@@ -9,79 +9,85 @@ $cosmos-font-family: 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;
 $cosmos-font-color: #e8e8e8;
 $prompt-veil-z-index: $hud-layer-z-index + 1;
 
-$tooltip-line-height: 18px;
-$tooltip-padding: 6px;
-
 html, body {
-  font-family: $cosmos-font-family;
-  font-size: 100%;
-  color: $cosmos-font-color;
-  height: 100%;
-  overflow: hidden;
+	font-family: $cosmos-font-family;
+	font-size: 100%;
+	color: $cosmos-font-color;
+	height: 100%;
+	overflow: hidden;
+}
+
+h1, h2, h3, h4 {
+	margin: 0;
 }
 
 .align-left {
-  float: left;
+	float: left;
 }
 
 .align-right {
-  float: right;
+	float: right;
 }
 
 .more-triangle {
-  cursor: pointer;
-  display: inline-block;
-  @include rotate(180deg);
+	cursor: pointer;
+	display: inline-block;
+	@include rotate(180deg);
 }
 
 .prompt-veil {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  background: #000000;
-  opacity: 0.5;
-  z-index: $prompt-veil-z-index;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background: #000000;
+	opacity: 0.5;
+	z-index: $prompt-veil-z-index;
 }
 
 @mixin placeholder-state {
-  &::-webkit-input-placeholder {@content}
-  &:-moz-placeholder           {@content}
-  &::-moz-placeholder          {@content}
-  &:-ms-input-placeholder      {@content}
+	&::-webkit-input-placeholder {@content}
+	&:-moz-placeholder           {@content}
+	&::-moz-placeholder          {@content}
+	&:-ms-input-placeholder      {@content}
 }
 
 @mixin placeholder {
-  ::-webkit-input-placeholder {@content}
-  :-moz-placeholder           {@content}
-  ::-moz-placeholder          {@content}
-  :-ms-input-placeholder      {@content}
+	::-webkit-input-placeholder {@content}
+	:-moz-placeholder           {@content}
+	::-moz-placeholder          {@content}
+	:-ms-input-placeholder      {@content}
 }
 
 @include placeholder {
-  color: #5a5a5a;
+	color: #5a5a5a;
 }
 
 #igeFrontBuffer {
-  @include user-select(none);
+	@include user-select(none);
 }
 
+$tooltip-background-color: rgba(12, 10, 7, 1);
+$tooltip-line-height: 18px;
+$tooltip-padding: 6px;
+
 .tooltip {
-  display: none;
-  position: absolute;
-  font-size: 75%;
-  line-height: $tooltip-line-height;
-  padding: $tooltip-padding;
-  background-color: rgba(34, 34, 34, 0.85);
-  z-index: 100002;
+	position: absolute;
+	font-size: 75%;
+	font-family: $cosmos-font-family;
+	line-height: $tooltip-line-height;
+	padding: $tooltip-padding;
+	background-color: $tooltip-background-color;
+	border-radius: 0px;
+	z-index: 100002;
 }
 
 .username-label.tooltip {
-  display: block;
-  z-index: 1;
-  cursor: default;
-  @include user-select(none);
+	display: block;
+	z-index: 1;
+	cursor: default;
+	@include user-select(none);
 }
 
 @import 'hud';

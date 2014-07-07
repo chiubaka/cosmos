@@ -6,6 +6,7 @@ var config = {
 		/* === COMPONENTS === */
 		{ name: 'HealthComponent', path: './components/HealthComponent' },
 		{ name: 'DamageSourceComponent', path: './components/DamageSourceComponent' },
+		{ name: 'RecipeComponent', path: './components/RecipeComponent' },
 
 		/* === GAME SETUP === */
 		/* Initialization */
@@ -76,6 +77,11 @@ var config = {
 		{ name: 'Cargo', path: './models/cargo/Cargo' },
 		{ name: 'CargoContainer', path: './models/cargo/CargoContainer' },
 		{ name: 'CargoItem', path: './models/cargo/CargoItem' },
+
+		/* === Crafting === */
+		{ name: 'CraftingSystem', path: './crafting/CraftingSystem' },
+		{ name: 'CraftingComponent', path: './crafting/CraftingComponent' },
+		{ name: 'Recipes', path: './crafting/Recipes' },
 
 		/* Database */
 		{ name: 'DbConfig', path: './db/DbConfig' },

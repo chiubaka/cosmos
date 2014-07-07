@@ -26,7 +26,7 @@
   src: local("Open Sans Semibold"), local("OpenSans-Semibold"), url(http://themes.googleusercontent.com/static/fonts/opensans/v8/MTP_ySUJH_bn48VBG8sNSqRDOzjiPcYnFooOUGCOsRk.woff) format("woff");
 }
 
-/* line 15, ../../sass/cosmos.scss */
+/* line 12, ../../sass/cosmos.scss */
 html, body {
   font-family: "Open Sans", "Helvetica Neue", Helvetica, sans-serif;
   font-size: 100%;
@@ -35,17 +35,22 @@ html, body {
   overflow: hidden;
 }
 
-/* line 23, ../../sass/cosmos.scss */
+/* line 20, ../../sass/cosmos.scss */
+h1, h2, h3, h4 {
+  margin: 0;
+}
+
+/* line 24, ../../sass/cosmos.scss */
 .align-left {
   float: left;
 }
 
-/* line 27, ../../sass/cosmos.scss */
+/* line 28, ../../sass/cosmos.scss */
 .align-right {
   float: right;
 }
 
-/* line 31, ../../sass/cosmos.scss */
+/* line 32, ../../sass/cosmos.scss */
 .more-triangle {
   cursor: pointer;
   display: inline-block;
@@ -56,7 +61,7 @@ html, body {
   transform: rotate(180deg);
 }
 
-/* line 37, ../../sass/cosmos.scss */
+/* line 38, ../../sass/cosmos.scss */
 .prompt-veil {
   position: absolute;
   top: 0;
@@ -68,46 +73,47 @@ html, body {
   z-index: 101;
 }
 
-/* line 56, ../../sass/cosmos.scss */
+/* line 57, ../../sass/cosmos.scss */
 ::-webkit-input-placeholder {
   color: #5a5a5a;
 }
 
-/* line 57, ../../sass/cosmos.scss */
+/* line 58, ../../sass/cosmos.scss */
 :-moz-placeholder {
   color: #5a5a5a;
 }
 
-/* line 58, ../../sass/cosmos.scss */
+/* line 59, ../../sass/cosmos.scss */
 ::-moz-placeholder {
   color: #5a5a5a;
 }
 
-/* line 59, ../../sass/cosmos.scss */
+/* line 60, ../../sass/cosmos.scss */
 :-ms-input-placeholder {
   color: #5a5a5a;
 }
 
-/* line 66, ../../sass/cosmos.scss */
+/* line 67, ../../sass/cosmos.scss */
 #igeFrontBuffer {
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
 }
 
-/* line 70, ../../sass/cosmos.scss */
-.tooltip, #cargo .pullout #cargo-containers .container .type-label {
-  display: none;
+/* line 75, ../../sass/cosmos.scss */
+.tooltip {
   position: absolute;
   font-size: 75%;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, sans-serif;
   line-height: 18px;
   padding: 6px;
-  background-color: rgba(34, 34, 34, 0.85);
+  background-color: #0c0a07;
+  border-radius: 0px;
   z-index: 100002;
 }
 
-/* line 80, ../../sass/cosmos.scss */
-.username-label.tooltip, #cargo .pullout #cargo-containers .container .username-label.type-label {
+/* line 86, ../../sass/cosmos.scss */
+.username-label.tooltip {
   display: block;
   z-index: 1;
   cursor: default;
@@ -123,14 +129,33 @@ html, body {
   user-select: none;
   z-index: 100;
 }
+/* line 23, ../../sass/_hud.scss */
+#hud h2 {
+  margin: 0;
+  font-size: 100%;
+  font-weight: bold;
+}
+
+/* line 30, ../../sass/_hud.scss */
+.block-canvas-container {
+  position: relative;
+}
+/* line 33, ../../sass/_hud.scss */
+.block-canvas-container span.quantity {
+  position: absolute;
+  color: white;
+  right: -2px;
+  bottom: -2px;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
 
 /* line 15, ../../sass/_bottom-toolbar.scss */
-#hud > .toolbar {
+#hud > .bottom-toolbar {
   position: absolute;
   bottom: 0;
   height: 50px;
   width: 100%;
-  background-color: #222222;
+  background-color: rgba(0, 0, 0, 0.7);
   z-index: 101;
 }
 
@@ -199,7 +224,7 @@ html, body {
   background-position: 50% 65%;
 }
 /* line 41, ../../sass/_bottom-toolbar.scss */
-#chat-button .tooltip, #chat-button #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #chat-button .type-label {
+#chat-button .tooltip {
   bottom: 58.33333px;
   width: 75px;
   text-align: center;
@@ -211,7 +236,7 @@ html, body {
   background-color: #5c5c5c;
 }
 /* line 51, ../../sass/_bottom-toolbar.scss */
-#chat-button:hover .tooltip, #chat-button:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #chat-button:hover .type-label {
+#chat-button:hover .tooltip {
   display: block;
 }
 /* line 9, ../../sass/_chat.scss */
@@ -359,7 +384,7 @@ html, body {
   background-position: center;
 }
 /* line 41, ../../sass/_bottom-toolbar.scss */
-#mine-cap .tooltip, #mine-cap #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #mine-cap .type-label {
+#mine-cap .tooltip {
   bottom: 58.33333px;
   width: 75px;
   text-align: center;
@@ -371,7 +396,7 @@ html, body {
   background-color: #5c5c5c;
 }
 /* line 51, ../../sass/_bottom-toolbar.scss */
-#mine-cap:hover .tooltip, #mine-cap:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #mine-cap:hover .type-label {
+#mine-cap:hover .tooltip {
   display: block;
 }
 /* line 8, ../../sass/_mine-cap.scss */
@@ -396,7 +421,7 @@ html, body {
   background-position: center;
 }
 /* line 41, ../../sass/_bottom-toolbar.scss */
-#construct-cap .tooltip, #construct-cap #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #construct-cap .type-label {
+#construct-cap .tooltip {
   bottom: 58.33333px;
   width: 75px;
   text-align: center;
@@ -408,7 +433,7 @@ html, body {
   background-color: #5c5c5c;
 }
 /* line 51, ../../sass/_bottom-toolbar.scss */
-#construct-cap:hover .tooltip, #construct-cap:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #construct-cap:hover .type-label {
+#construct-cap:hover .tooltip {
   display: block;
 }
 /* line 8, ../../sass/_construct-cap.scss */
@@ -427,14 +452,14 @@ html, body {
   width: 50px;
   position: relative;
   cursor: pointer;
-  background-color: #222222;
+  background-color: rgba(0, 0, 0, 0.7);
   background-image: url("../images/icons/icon_menu.png");
   background-repeat: no-repeat;
   background-size: 70%;
   background-position: center;
 }
 /* line 41, ../../sass/_bottom-toolbar.scss */
-#menu-button .tooltip, #menu-button #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #menu-button .type-label {
+#menu-button .tooltip {
   bottom: 58.33333px;
   width: 75px;
   text-align: center;
@@ -446,7 +471,7 @@ html, body {
   background-color: #5c5c5c;
 }
 /* line 51, ../../sass/_bottom-toolbar.scss */
-#menu-button:hover .tooltip, #menu-button:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #menu-button:hover .type-label {
+#menu-button:hover .tooltip {
   display: block;
 }
 
@@ -463,7 +488,7 @@ html, body {
   background-position: center;
 }
 /* line 41, ../../sass/_bottom-toolbar.scss */
-#feedback-button .tooltip, #feedback-button #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #feedback-button .type-label {
+#feedback-button .tooltip {
   bottom: 58.33333px;
   width: 75px;
   text-align: center;
@@ -475,7 +500,7 @@ html, body {
   background-color: #5c5c5c;
 }
 /* line 51, ../../sass/_bottom-toolbar.scss */
-#feedback-button:hover .tooltip, #feedback-button:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #feedback-button:hover .type-label {
+#feedback-button:hover .tooltip {
   display: block;
 }
 /* line 6, ../../sass/_feedback-button.scss */
@@ -496,7 +521,7 @@ html, body {
   background-position: center;
 }
 /* line 41, ../../sass/_bottom-toolbar.scss */
-#relocate-button .tooltip, #relocate-button #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #relocate-button .type-label {
+#relocate-button .tooltip {
   bottom: 58.33333px;
   width: 75px;
   text-align: center;
@@ -508,7 +533,7 @@ html, body {
   background-color: #5c5c5c;
 }
 /* line 51, ../../sass/_bottom-toolbar.scss */
-#relocate-button:hover .tooltip, #relocate-button:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #relocate-button:hover .type-label {
+#relocate-button:hover .tooltip {
   display: block;
 }
 
@@ -525,7 +550,7 @@ html, body {
   background-position: center;
 }
 /* line 41, ../../sass/_bottom-toolbar.scss */
-#new-ship-button .tooltip, #new-ship-button #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #new-ship-button .type-label {
+#new-ship-button .tooltip {
   bottom: 58.33333px;
   width: 75px;
   text-align: center;
@@ -537,7 +562,277 @@ html, body {
   background-color: #5c5c5c;
 }
 /* line 51, ../../sass/_bottom-toolbar.scss */
-#new-ship-button:hover .tooltip, #new-ship-button:hover #cargo .pullout #cargo-containers .container .type-label, #cargo .pullout #cargo-containers .container #new-ship-button:hover .type-label {
+#new-ship-button:hover .tooltip {
+  display: block;
+}
+
+/* line 14, ../../sass/_left-toolbar.scss */
+#hud > .left-toolbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 50px;
+  width: 50px;
+  padding-top: 100px;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* line 5, ../../sass/_windows.scss */
+#windows {
+  position: absolute;
+  left: 50px;
+}
+
+/* line 68, ../../sass/_window.scss */
+.window {
+  float: left;
+  margin-left: 10px;
+  display: none;
+}
+/* line 73, ../../sass/_window.scss */
+.window .header {
+  height: 37.5px;
+  width: 100%;
+  display: table;
+}
+/* line 78, ../../sass/_window.scss */
+.window .header .icon, .window .header .title-container {
+  display: table-cell;
+}
+/* line 82, ../../sass/_window.scss */
+.window .header .icon {
+  height: 37.5px;
+  width: 37.5px;
+  border: none;
+}
+/* line 88, ../../sass/_window.scss */
+.window .header .title-container {
+  padding: 12px;
+  padding-left: 0;
+}
+/* line 91, ../../sass/_window.scss */
+.window .header .title-container h2.title {
+  line-height: 13.5px;
+}
+/* line 96, ../../sass/_window.scss */
+.window .tabs {
+  height: 25px;
+  width: 100%;
+}
+/* line 100, ../../sass/_window.scss */
+.window .body {
+  width: 256px;
+  padding: 12px;
+}
+/* line 103, ../../sass/_window.scss */
+.window .body table {
+  width: 100%;
+  border-spacing: 0;
+  table-layout: fixed;
+}
+/* line 110, ../../sass/_window.scss */
+.window .body td {
+  height: 25.5px;
+  width: 25.5px;
+  border-width: 1px;
+  border-style: solid;
+  padding: 6px;
+}
+/* line 117, ../../sass/_window.scss */
+.window .body td canvas {
+  height: 25.5px;
+  width: 25.5px;
+  display: block;
+  margin: 0 auto;
+}
+
+/* line 9, ../../sass/_cargo.scss */
+#cargo-button {
+  margin-top: 100px;
+  height: 50px;
+  width: 50px;
+  position: relative;
+  cursor: pointer;
+  background-color: #363636;
+  margin-top: 1px;
+  background-image: url("../images/icons/icon_cargo.png");
+  background-repeat: no-repeat;
+  background-size: 70%;
+  background-position: center;
+}
+/* line 32, ../../sass/_left-toolbar.scss */
+#cargo-button .tooltip {
+  bottom: 58.33333px;
+  width: 75px;
+  text-align: center;
+  margin-left: -43.5px;
+  left: 50%;
+}
+/* line 40, ../../sass/_left-toolbar.scss */
+#cargo-button:hover {
+  background-color: #5c5c5c;
+}
+/* line 42, ../../sass/_left-toolbar.scss */
+#cargo-button:hover .tooltip {
+  display: block;
+}
+
+/* line 14, ../../sass/_cargo.scss */
+#cargo-window {
+  color: #383838;
+}
+/* line 43, ../../sass/_window.scss */
+#cargo-window .header {
+  background-color: #cdcdcd;
+}
+/* line 44, ../../sass/_window.scss */
+#cargo-window .header .icon {
+  background-image: url("/images/icons/icon_cargo_window.png");
+  background-repeat: no-repeat;
+  background-size: 70%;
+  background-position: center;
+}
+/* line 50, ../../sass/_window.scss */
+#cargo-window .tabs {
+  background-color: #bebebe;
+}
+/* line 54, ../../sass/_window.scss */
+#cargo-window .body {
+  background-color: #a5a5a5;
+}
+/* line 57, ../../sass/_window.scss */
+#cargo-window .body table {
+  border-color: dimgrey;
+}
+/* line 61, ../../sass/_window.scss */
+#cargo-window .body td {
+  background-color: #cdcdcd;
+  border-color: #a5a5a5;
+}
+/* line 25, ../../sass/_cargo.scss */
+#cargo-window .body td.active, #cargo-window .body td:hover {
+  background-color: #e1e1e1;
+}
+/* line 29, ../../sass/_cargo.scss */
+#cargo-window .body td.active {
+  border: 1px solid #008aff;
+}
+/* line 33, ../../sass/_cargo.scss */
+#cargo-window .body span.quantity {
+  font-size: 75%;
+  right: 0px;
+  bottom: -6px;
+}
+
+/* line 8, ../../sass/_crafting.scss */
+#crafting-button {
+  height: 50px;
+  width: 50px;
+  position: relative;
+  cursor: pointer;
+  background-color: #363636;
+  margin-top: 1px;
+  background-image: url("../images/icons/icon_crafting.png");
+  background-repeat: no-repeat;
+  background-size: 70%;
+  background-position: center;
+}
+/* line 32, ../../sass/_left-toolbar.scss */
+#crafting-button .tooltip {
+  bottom: 58.33333px;
+  width: 75px;
+  text-align: center;
+  margin-left: -43.5px;
+  left: 50%;
+}
+/* line 40, ../../sass/_left-toolbar.scss */
+#crafting-button:hover {
+  background-color: #5c5c5c;
+}
+/* line 42, ../../sass/_left-toolbar.scss */
+#crafting-button:hover .tooltip {
+  display: block;
+}
+
+/* line 12, ../../sass/_crafting.scss */
+#crafting-window {
+  color: #134710;
+}
+/* line 43, ../../sass/_window.scss */
+#crafting-window .header {
+  background-color: #d5e9d3;
+}
+/* line 44, ../../sass/_window.scss */
+#crafting-window .header .icon {
+  background-image: url("/images/icons/icon_crafting_window.png");
+  background-repeat: no-repeat;
+  background-size: 70%;
+  background-position: center;
+}
+/* line 50, ../../sass/_window.scss */
+#crafting-window .tabs {
+  background-color: #b7d3b4;
+}
+/* line 54, ../../sass/_window.scss */
+#crafting-window .body {
+  background-color: #8ba988;
+}
+/* line 57, ../../sass/_window.scss */
+#crafting-window .body table {
+  border-color: #597e55;
+}
+/* line 61, ../../sass/_window.scss */
+#crafting-window .body td {
+  background-color: #d5e9d3;
+  border-color: #8ba988;
+}
+/* line 23, ../../sass/_crafting.scss */
+#crafting-window .body td:hover {
+  background-color: #e9fde7;
+}
+
+/* line 35, ../../sass/_crafting.scss */
+.tooltip.crafting {
+  display: block;
+  border-radius: 0px;
+  border: 2px solid #53ff5f;
+  color: #aaffb0;
+  padding: 8px;
+}
+/* line 42, ../../sass/_crafting.scss */
+.tooltip.crafting h3 {
+  font-size: 150%;
+  color: #53ff5f;
+  margin-bottom: 10px;
+}
+/* line 48, ../../sass/_crafting.scss */
+.tooltip.crafting h4.reactants {
+  color: #24c9dd;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+/* line 54, ../../sass/_crafting.scss */
+.tooltip.crafting ul.reactants {
+  color: #b7f3fa;
+  font-size: 105%;
+}
+/* line 58, ../../sass/_crafting.scss */
+.tooltip.crafting ul.reactants li.reactant {
+  height: 26px;
+  margin-bottom: 10px;
+}
+/* line 62, ../../sass/_crafting.scss */
+.tooltip.crafting ul.reactants li.reactant div.block-canvas-container, .tooltip.crafting ul.reactants li.reactant span.block-type {
+  float: left;
+}
+/* line 65, ../../sass/_crafting.scss */
+.tooltip.crafting ul.reactants li.reactant div.block-canvas-container {
+  margin-right: 10px;
+}
+/* line 69, ../../sass/_crafting.scss */
+.tooltip.crafting ul.reactants li.reactant span.block-type {
+  line-height: 26px;
+  height: 26px;
   display: block;
 }
 
@@ -600,8 +895,14 @@ html, body {
   width: 300px;
 }
 
+/* line 1, ../../sass/_alertify.scss */
+#alertify-logs {
+  position: absolute;
+  bottom: 260px;
+}
+
 /* line 5, ../../sass/_side-buttons.scss */
-.side-button-arrow, #inspector .button .arrow, #cargo .button .arrow, #cargo .button.active .arrow {
+.side-button-arrow, #inspector .button .arrow {
   position: relative;
   top: 20.45625px;
   height: 0;
@@ -696,116 +997,6 @@ html, body {
   left: -3.6875px;
 }
 
-/* line 19, ../../sass/_cargo.scss */
-#cargo {
-  position: absolute;
-  top: 100px;
-  left: 0px;
-  z-index: 100;
-}
-/* line 25, ../../sass/_cargo.scss */
-#cargo .pullout, #cargo .button {
-  float: left;
-}
-/* line 29, ../../sass/_cargo.scss */
-#cargo .pullout {
-  display: none;
-}
-/* line 32, ../../sass/_cargo.scss */
-#cargo .pullout .title {
-  background-color: #cdcdcd;
-  color: #383838;
-  height: 30px;
-  line-height: 30px;
-  font-size: 125%;
-  font-weight: bold;
-  border-right: 1px solid #bcbcbc;
-  padding: 10px;
-}
-/* line 43, ../../sass/_cargo.scss */
-#cargo .pullout #cargo-containers {
-  background-color: #a5a5a5;
-  padding: 10px;
-  text-align: center;
-}
-/* line 48, ../../sass/_cargo.scss */
-#cargo .pullout #cargo-containers .container {
-  height: 41.6px;
-  width: 41.6px;
-  padding: 5.2px;
-  position: relative;
-  margin-left: auto;
-  margin-right: auto;
-  background-color: #cdcdcd;
-  border: 1px solid dimgrey;
-}
-/* line 58, ../../sass/_cargo.scss */
-#cargo .pullout #cargo-containers .container.active {
-  background-color: #e4e4e4;
-  border: 2px solid #008aff;
-}
-/* line 63, ../../sass/_cargo.scss */
-#cargo .pullout #cargo-containers .container canvas {
-  height: 41.6px;
-  width: 41.6px;
-}
-/* line 68, ../../sass/_cargo.scss */
-#cargo .pullout #cargo-containers .container .quantity-label {
-  position: absolute;
-  right: 5.2px;
-  bottom: 5.2px;
-  text-shadow: -1px 0 #383838, 0 1px #383838, 1px 0 #383838, 0 -1px #383838;
-}
-/* line 75, ../../sass/_cargo.scss */
-#cargo .pullout #cargo-containers .container .type-label {
-  left: 72.8px;
-  top: 11px;
-}
-/* line 81, ../../sass/_cargo.scss */
-#cargo .pullout #cargo-containers .container:hover .type-label {
-  display: block;
-}
-/* line 88, ../../sass/_cargo.scss */
-#cargo .button {
-  height: 50px;
-  width: 50px;
-  background-color: #cdcdcd;
-  background-image: url("../images/icons/icon_cargo.png");
-  background-repeat: no-repeat;
-  background-size: 70%;
-  background-position: center;
-  cursor: pointer;
-  border-right: 6.25px solid #383838;
-}
-/* line 40, ../../sass/_side-buttons.scss */
-#cargo .button:hover {
-  background-color: #e4e4e4;
-}
-/* line 52, ../../sass/_side-buttons.scss */
-#cargo .button .arrow {
-  float: right;
-  border-left: 4.6875px solid #cdcdcd;
-  border-right: 0;
-  right: -3.6875px;
-}
-/* line 56, ../../sass/_side-buttons.scss */
-#cargo .button:hover .arrow {
-  border-left: 4.6875px solid #e4e4e4;
-}
-/* line 61, ../../sass/_side-buttons.scss */
-#cargo .button.active .arrow {
-  border-left: 0;
-  border-right: 4.6875px solid #383838;
-  left: -3.6875px;
-  left: 0;
-}
-
-/* line 1, ../../sass/_alertify.scss */
-#alertify-logs {
-  position: absolute;
-  bottom: 260px;
-}
-
 /* line 8, ../../sass/_name-prompt.scss */
 #name-prompt {
   display: none;
@@ -871,19 +1062,19 @@ html, body {
   outline: 0;
   border-bottom: 1px solid #0090ff;
 }
-/* line 49, ../../sass/cosmos.scss */
+/* line 50, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input:focus::-webkit-input-placeholder {
   color: #e8e8e8;
 }
-/* line 50, ../../sass/cosmos.scss */
+/* line 51, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input:focus:-moz-placeholder {
   color: #e8e8e8;
 }
-/* line 51, ../../sass/cosmos.scss */
+/* line 52, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input:focus::-moz-placeholder {
   color: #e8e8e8;
 }
-/* line 52, ../../sass/cosmos.scss */
+/* line 53, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input:focus:-ms-input-placeholder {
   color: #e8e8e8;
 }
@@ -891,19 +1082,19 @@ html, body {
 #name-prompt .prompt-box input.error {
   border-bottom: 1px solid red;
 }
-/* line 49, ../../sass/cosmos.scss */
+/* line 50, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input.error::-webkit-input-placeholder {
   color: red;
 }
-/* line 50, ../../sass/cosmos.scss */
+/* line 51, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input.error:-moz-placeholder {
   color: red;
 }
-/* line 51, ../../sass/cosmos.scss */
+/* line 52, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input.error::-moz-placeholder {
   color: red;
 }
-/* line 52, ../../sass/cosmos.scss */
+/* line 53, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input.error:-ms-input-placeholder {
   color: red;
 }

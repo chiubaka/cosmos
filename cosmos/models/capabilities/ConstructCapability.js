@@ -78,11 +78,11 @@ var ConstructCapability = Capability.extend({
 	 */
 	ClickScene_canMouseDown: function(sender, event, data) {
 		// Notify player that no block type is selected
-		if (ige.hud.cargo.selectedType === undefined) {
+		if (ige.hud.leftToolbar.windows.cargo.selectedType === undefined) {
 			ige.notification.emit('notificationError', 
 				NotificationDefinitions.errorKeys.noItemTypeSelected);
 		}
-		return (ige.client.state.selectedCap() === 'construct' && ige.hud.cargo.selectedType !== undefined);
+		return (ige.client.state.selectedCap() === 'construct' && ige.hud.leftToolbar.windows.cargo.selectedType !== undefined);
 	},
 
 	/**
@@ -94,8 +94,8 @@ var ConstructCapability = Capability.extend({
 	 * @instance
 	 */
 	ClickScene_mouseDown: function(sender, event, data) {
-		data.selectedType = ige.hud.cargo.selectedType;
-		ige.client.metrics.fireEvent('construct', 'attempt new', ige.hud.cargo.selectedType);
+		data.selectedType = ige.hud.leftToolbar.windows.cargo.selectedType;
+		ige.client.metrics.fireEvent('construct', 'attempt new', ige.hud.leftToolbar.windows.cargo.selectedType);
 		ige.network.send('constructNew', data);
 	},
 
@@ -109,11 +109,12 @@ var ConstructCapability = Capability.extend({
 	 */
 	ConstructionZoneOverlay_canMouseDown: function(sender, event, data) {
 		// Notify player that no block type is selected
-		if (ige.hud.cargo.selectedType === undefined) {
+		if (ige.hud.leftToolbar.windows.cargo.selectedType === undefined) {
 			ige.notification.emit('notificationError', 
 				NotificationDefinitions.errorKeys.noItemTypeSelected);
 		}
-		return (ige.client.state.selectedCap() === 'construct' && ige.hud.cargo.selectedType !== undefined);
+		return (ige.client.state.selectedCap() === 'construct' && 
+			ige.hud.leftToolbar.windows.cargo.selectedType !== undefined);
 	},
 
 	/**
@@ -125,8 +126,9 @@ var ConstructCapability = Capability.extend({
 	 * @instance
 	 */
 	ConstructionZoneOverlay_mouseDown: function(sender, event, data) {
-		data.selectedType = ige.hud.cargo.selectedType;
-		ige.client.metrics.fireEvent('construct', 'attempt existing', ige.hud.cargo.selectedType);
+		data.selectedType = ige.hud.leftToolbar.windows.cargo.selectedType;
+		ige.client.metrics.fireEvent('construct', 'attempt existing',
+			ige.hud.leftToolbar.windows.cargo.selectedType);
 		ige.network.send('constructionZoneClicked', data);
 	},
 });

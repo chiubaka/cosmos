@@ -139,9 +139,11 @@ var Client = IgeClass.extend({
 						ige.notification.addComponent(NotificationUIComponent)
 							.start();
 
+						// Enable crafting system
+						ige.addComponent(CraftingSystem);
+
 						GameInit.init(self);
 
-						ige.addComponent(HUDComponent);
 						//ige.editor.showStats();
 
 						// Wait until the HUD finishes loading to ask for the player.
@@ -150,6 +152,7 @@ var Client = IgeClass.extend({
 							// Ask the server to create an entity for us
 							ige.network.send('playerEntity', {sid: self.getSessionId()});
 						});
+						ige.addComponent(HUDComponent);
 					});
 				}
 			});

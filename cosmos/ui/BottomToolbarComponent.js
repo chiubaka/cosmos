@@ -15,7 +15,7 @@ var BottomToolbarComponent = IgeEventingClass.extend({
 
 		var bottomToolbarDiv = document.createElement('div');
 		bottomToolbarDiv.id = 'bottom-toolbar';
-		bottomToolbarDiv.className = 'toolbar';
+		bottomToolbarDiv.className = 'bottom-toolbar';
 
 		hud.append(bottomToolbarDiv);
 

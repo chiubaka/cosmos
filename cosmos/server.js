@@ -5,6 +5,8 @@ var Server = IgeClass.extend({
 	init: function (options) {
 		var self = this;
 
+		_ = require('lodash');
+
 		self.LAYER_BACKGROUND = 10;
 		self.LAYER_WORLD = 50;
 		self.LAYER_HUD = 90;
@@ -80,6 +82,9 @@ var Server = IgeClass.extend({
 						ige.network.addComponent(IgeStreamComponent)
 							.stream.sendInterval(Constants.fps.SERVER_FPS)
 							.stream.start(); // Start the stream
+
+						// Add crafting system
+						ige.addComponent(CraftingSystem);
 
 						// Accept incoming network connections
 						ige.network.acceptConnections(true);

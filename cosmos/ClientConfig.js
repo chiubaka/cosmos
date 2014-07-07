@@ -6,6 +6,7 @@ var igeClientConfig = {
 		/* === COMPONENTS === */
 		'./components/HealthComponent.js',
 		'./components/DamageSourceComponent.js',
+		'./components/RecipeComponent.js',
 
 		/* === Systems === */
 		'./systems/Inspector.js',
@@ -90,6 +91,11 @@ var igeClientConfig = {
 		'./models/capabilities/ConstructCapability.js',
 		'./models/capabilities/MineCapability.js',
 
+		/* === Crafting === */
+		'./crafting/CraftingSystem.js',
+		'./crafting/CraftingComponent.js',
+		'./crafting/Recipes.js',
+
 		/* Notifications */
 		'./notifications/NotificationDefinitions.js',
 		'./notifications/NotificationComponent.js',
@@ -99,7 +105,10 @@ var igeClientConfig = {
 		/* HUD */
 		'./ui/HUDComponent.js',
 		'./ui/BottomToolbarComponent.js',
+		'./ui/LeftToolbarComponent.js',
+		'./ui/WindowsComponent.js',
 		'./ui/ButtonComponent.js',
+		'./ui/WindowComponent.js',
 		'./ui/UserTileComponent.js',
 		'./ui/ChatComponent.js',
 		'./ui/MenuComponent.js',
@@ -107,6 +116,7 @@ var igeClientConfig = {
 		'./ui/NewShipComponent.js',
 		'./ui/RelocateComponent.js',
 		'./ui/CargoComponent.js',
+		'./ui/CraftingUIComponent.js',
 		'./ui/NamePrompt.js',
 
 		/* Minimap */

@@ -22,7 +22,7 @@ var ChatComponent = ButtonComponent.extend({
 
 		bottomToolbar.append(chatDiv);
 
-		ButtonComponent.prototype.init.call(this, chatDiv, 'chat-button', undefined, 'Chat');
+		ButtonComponent.prototype.init.call(this, chatDiv, 'chat-button', undefined, 'Chat', 'top');
 		self.button = $('#chat-button');
 		self.button.addClass('unopened');
 		self.button.click(function() {
@@ -71,7 +71,6 @@ var ChatComponent = ButtonComponent.extend({
 	start: function() {
 		var self = this;
 		Candy.Core.connect('tl-xmpp.cloudapp.net', null, ige.client.player.username());
-		console.log('Logging into chat: ' + ige.client.player.username());
 
 		// Called when the chat client moves to the disconnected state.
 		$(Candy).on('candy:view.connection.status-6', function() {
