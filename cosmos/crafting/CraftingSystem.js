@@ -87,7 +87,8 @@ var CraftingSystem = IgeEventingClass.extend({
 		}
 		var recipe = Recipes[recipeName];
 		// Check for correct number of reactant blocks in cargo
-		_.forEach(recipe.reactants, function(reactant) {
+		for (var i = 0; i < recipe.reactants.length; i++) {
+			var reactant = recipe.reactants[i];
 			if (!cargoItems.hasOwnProperty(reactant.blockType) ||
 				cargoItems[reactant.blockType] < reactant.quantity)
 			{
@@ -96,16 +97,17 @@ var CraftingSystem = IgeEventingClass.extend({
 					clientId);
 				return false;
 			}
-		});
+		}
 
-		_.forEach(recipe.equipment, function(equipment) {
+		for (var i = 0; i < recipe.equipment.length; i++) {
+			var equipment = recipe.equipment[i];
 			if (player.blocksOfType(equipment).length < equipment.quantity) {
 				ige.network.stream.queueCommand('notificationError',
 					NotificationDefinitions.errorKeys.crafting_insufficientEquipment,
 					clientId);
 				return false;
 			}
-		});
+		}
 
 		// Check if there is enough room in the cargo for the products
 		// Net space needed = products - reactants. For now, all recipes have one product so start this variable
