@@ -118,7 +118,7 @@ var CraftingUIComponent = WindowComponent.extend({
 						block.texture().render(ctx, block);
 						setTimeout(function() {
 							block.texture().render(ctx, block);
-						});
+						}, 100);
 					});
 				}
 			});
