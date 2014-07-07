@@ -26,12 +26,10 @@ var CargoComponent = WindowComponent.extend({
 	_onWindowLoaded: function() {
 		var self = this;
 		ige.on('cargo response', function(cargoItems) {
-			console.log('Received cargo response');
 			self.populateFromInventory(cargoItems);
 		});
 
 		ige.on('cargo update', function(cargoItems) {
-			console.log('Received cargo update', 'info');
 			self.populateFromInventory(cargoItems);
 		});
 

@@ -59,7 +59,6 @@ var WindowComponent = ButtonComponent.extend({
 		});
 		this.table.append(row);
 		this.numRows++;
-		console.log('adding row');
 	},
 
 	removeRow: function() {

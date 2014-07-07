@@ -40,7 +40,6 @@ var CraftingUIComponent = WindowComponent.extend({
 
 		// Populate crafting window with recipes
 		this.populate(recipes, craftableRecipes);
-		console.log('Refresh crafting UI');
 	},
 
 	populate: function(recipes, craftableBlocks) {
@@ -56,7 +55,6 @@ var CraftingUIComponent = WindowComponent.extend({
 		// TODO: Grey out recipes that are known but not craftable
 		var i = 0;
 		_.forOwn(craftableBlocks, function(canCraft, blockType) {
-			console.log('Block type: ' + blockType);
 			var block = cosmos.blocks.craftable.instances[blockType];
 			self.fillContainer(i, block);
 			i++;
@@ -72,7 +70,6 @@ var CraftingUIComponent = WindowComponent.extend({
 		container.attr('recipe', recipe.name);
 		container.unbind('click');
 		container.click(function() {
-			console.log('Crafting UI clicked: ' + container.attr('recipe'));
 			ige.craftingSystem.craftClient(block.classId());
 		});
 

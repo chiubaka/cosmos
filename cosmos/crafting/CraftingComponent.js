@@ -53,8 +53,6 @@ CraftingComponent.starterRecipes = function() {
 		return true;
 	});
 
-	console.log(JSON.stringify(starterRecipes));
-
 	return starterRecipes;
 };
 

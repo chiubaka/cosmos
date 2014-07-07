@@ -33,8 +33,6 @@ var CraftingSystem = IgeEventingClass.extend({
 	_craftServer: function (data, clientId) {
 		var player, cargo, recipeName;
 
-		console.log("Player '" + clientId + "' wants to craft: '" + data + "'");
-
 		// Check if player exists
 		player = ige.server.players[clientId];
 		if (player === undefined) {
@@ -139,8 +137,6 @@ var CraftingSystem = IgeEventingClass.extend({
 		cargo.addBlock(recipeName);
 
 		DbPlayer.update(player.dbId(), player, function() {});
-
-		console.log('doCraft: ' + recipeName);
 	},
 
 	// Add a recipe to a player
