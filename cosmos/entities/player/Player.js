@@ -439,7 +439,7 @@ var Player = BlockStructure.extend({
 		// Do not start mining if player has no mining lasers
 		if (this.numBlocksOfType(MiningLaserBlock.prototype.classId()) === 0) {
 			ige.network.stream.queueCommand('notificationError',
-				NotificationDefinitions.errorKeys.noMiningLaser, clientId);
+				NotificationDefinitions.errorKeys.noMiningLaser, this._clientId);
 			return false;
 		}
 		return true;
