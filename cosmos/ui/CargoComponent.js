@@ -59,12 +59,11 @@ var CargoComponent = WindowComponent.extend({
 
 		var containers = this.table.find('td');
 		containers.removeClass('active');
+		containers.find('.tooltipstered').tooltipster('destroy');
 		containers.removeAttr('data-block-type');
 
-		var canvases = this.table.find('canvas');
-		if (canvases.length > 0) {
-			canvases.remove();
-		}
+		var blockCanvasContainerDivs = this.table.find('.block-canvas-container');
+		blockCanvasContainerDivs.remove();
 
 		var index = 0;
 		for (var type in cargoItems) {
