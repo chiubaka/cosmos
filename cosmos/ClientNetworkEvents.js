@@ -9,6 +9,7 @@ var ClientNetworkEvents = {
 	 */
 	_onPlayerEntity: function(data) {
 		var self = this;
+		ige.client.player = undefined;
 
 		if (ige.$(data.entityId)) {
 			ClientNetworkEvents.initCameras(ige.$(data.entityId));
