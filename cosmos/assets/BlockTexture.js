@@ -10,7 +10,7 @@ var image = {
 		}
 
 		// Width of the outline
-		ctx.lineWidth = Block.WIDTH / 12;
+		ctx.lineWidth = Block.WIDTH / 15;
 
 		// Draw block outline
 		if (entity.textureOutline !== undefined) {
