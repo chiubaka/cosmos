@@ -248,19 +248,19 @@ html, body {
 #candy {
   bottom: 50px;
   left: 0;
-  height: 300px;
-  width: 600px;
+  height: 180px;
+  width: 500px;
 }
 
 /* line 24, ../../sass/_candy.scss */
 #chat-pane {
-  height: 300px;
-  width: 600px;
+  height: 180px;
+  width: 500px;
   position: relative;
 }
 /* line 29, ../../sass/_candy.scss */
 #chat-pane #chat-tabs {
-  width: 400px;
+  width: 350px;
 }
 /* line 33, ../../sass/_candy.scss */
 #chat-pane #chat-tabs li.roomtype-groupchat a.label {
@@ -271,42 +271,49 @@ html, body {
   display: none;
 }
 /* line 43, ../../sass/_candy.scss */
+#chat-pane #chat-toolbar, #chat-pane .roster-pane {
+  width: 150px;
+}
+/* line 47, ../../sass/_candy.scss */
 #chat-pane #chat-toolbar {
   position: absolute;
   bottom: 0;
   right: 0;
 }
-/* line 49, ../../sass/_candy.scss */
+/* line 53, ../../sass/_candy.scss */
 #chat-pane .message-pane li, #chat-pane .roster-pane .user {
   -webkit-user-select: text;
   -moz-user-select: text;
   user-select: text;
 }
-/* line 53, ../../sass/_candy.scss */
+/* line 57, ../../sass/_candy.scss */
 #chat-pane .message-pane .infomessage {
   display: none;
 }
-/* line 57, ../../sass/_candy.scss */
+/* line 61, ../../sass/_candy.scss */
+#chat-pane .message-pane-wrapper, #chat-pane .message-form-wrapper {
+  width: auto;
+  margin-right: 150px;
+}
+/* line 66, ../../sass/_candy.scss */
 #chat-pane .message-form-wrapper {
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 400px;
-  margin-right: 200px;
 }
-/* line 64, ../../sass/_candy.scss */
+/* line 71, ../../sass/_candy.scss */
 #chat-pane .message-form-wrapper .message-form {
   position: relative;
   height: 100%;
-  width: 400px;
+  width: 350px;
   margin-right: 0;
 }
-/* line 70, ../../sass/_candy.scss */
+/* line 77, ../../sass/_candy.scss */
 #chat-pane .message-form-wrapper .message-form input {
-  width: 330px;
+  width: 280px;
   height: 21px;
 }
-/* line 75, ../../sass/_candy.scss */
+/* line 82, ../../sass/_candy.scss */
 #chat-pane .message-form-wrapper .message-form input.submit {
   position: absolute;
   bottom: 0;
@@ -315,17 +322,17 @@ html, body {
   width: auto;
   margin: 3px;
 }
-/* line 86, ../../sass/_candy.scss */
+/* line 93, ../../sass/_candy.scss */
 #chat-pane #context-menu, #chat-pane #tooltip {
   position: fixed;
 }
 
-/* line 91, ../../sass/_candy.scss */
+/* line 98, ../../sass/_candy.scss */
 #chat-modal {
   display: none !important;
 }
 
-/* line 95, ../../sass/_candy.scss */
+/* line 102, ../../sass/_candy.scss */
 .message-form-wrapper, .message-form {
   position: absolute;
   bottom: 0;
