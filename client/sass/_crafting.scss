@@ -25,3 +25,43 @@ $crafting-container-active-background-color: #e9fde7;
 		}
 	}
 }
+
+$crafting-tooltip-recipe-name-color: #53ff5f;
+$crafting-tooltip-description-color: #aaffb0;
+$crafting-tooltip-reactants-heading-color: #24c9dd;
+$crafting-tooltip-reactant-name-color: #b7f3fa;
+
+.tooltip.crafting {
+	display: block;
+	border-radius: 0px;
+	border: 2px solid $crafting-tooltip-recipe-name-color;
+	background: #363636;
+	color: $crafting-tooltip-description-color;
+	padding: 8px;
+
+	h3 {
+		font-size: 150%;
+		color: $crafting-tooltip-recipe-name-color;
+		margin-bottom: 10px;
+	}
+
+	h4.reactants {
+		color: $crafting-tooltip-reactants-heading-color;
+		text-transform: uppercase;
+	}
+
+	ul.reactants {
+		color: $crafting-tooltip-reactant-name-color;
+		font-size: 105%;
+
+		div.block-canvas-container {
+			display: inline-block;
+		}
+	}
+}
+
+.tooltipster-cosmos .tooltipster-content {
+	font-size: 100%;
+	line-height: 110%;
+	padding: 8px 10px;
+}

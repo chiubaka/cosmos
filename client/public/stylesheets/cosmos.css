@@ -36,16 +36,21 @@ html, body {
 }
 
 /* line 23, ../../sass/cosmos.scss */
+h1, h2, h3, h4 {
+  margin: 0;
+}
+
+/* line 27, ../../sass/cosmos.scss */
 .align-left {
   float: left;
 }
 
-/* line 27, ../../sass/cosmos.scss */
+/* line 31, ../../sass/cosmos.scss */
 .align-right {
   float: right;
 }
 
-/* line 31, ../../sass/cosmos.scss */
+/* line 35, ../../sass/cosmos.scss */
 .more-triangle {
   cursor: pointer;
   display: inline-block;
@@ -56,7 +61,7 @@ html, body {
   transform: rotate(180deg);
 }
 
-/* line 37, ../../sass/cosmos.scss */
+/* line 41, ../../sass/cosmos.scss */
 .prompt-veil {
   position: absolute;
   top: 0;
@@ -68,42 +73,39 @@ html, body {
   z-index: 101;
 }
 
-/* line 56, ../../sass/cosmos.scss */
+/* line 60, ../../sass/cosmos.scss */
 ::-webkit-input-placeholder {
   color: #5a5a5a;
 }
 
-/* line 57, ../../sass/cosmos.scss */
+/* line 61, ../../sass/cosmos.scss */
 :-moz-placeholder {
   color: #5a5a5a;
 }
 
-/* line 58, ../../sass/cosmos.scss */
+/* line 62, ../../sass/cosmos.scss */
 ::-moz-placeholder {
   color: #5a5a5a;
 }
 
-/* line 59, ../../sass/cosmos.scss */
+/* line 63, ../../sass/cosmos.scss */
 :-ms-input-placeholder {
   color: #5a5a5a;
 }
 
-/* line 66, ../../sass/cosmos.scss */
+/* line 70, ../../sass/cosmos.scss */
 #igeFrontBuffer {
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
 }
 
-/* line 70, ../../sass/cosmos.scss */
+/* line 74, ../../sass/cosmos.scss */
 .tooltip {
   display: none;
   position: absolute;
-}
-
-/* line 75, ../../sass/cosmos.scss */
-.tooltip, .tooltipster-cosmos {
   font-size: 75%;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, sans-serif;
   line-height: 18px;
   padding: 6px;
   background-color: rgba(34, 34, 34, 0.85);
@@ -111,23 +113,7 @@ html, body {
   z-index: 100002;
 }
 
-/* line 84, ../../sass/cosmos.scss */
-.tooltipster-cosmos {
-  border-radius: 0px;
-  /*border: 2px solid #53FF5F;*/
-  background: #363636;
-  color: #e8e8e8;
-}
-
-/* line 91, ../../sass/cosmos.scss */
-.tooltipster-cosmos .tooltipster-content {
-  font-family: "Open Sans", "Helvetica Neue", Helvetica, sans-serif;
-  font-size: 100%;
-  line-height: 110%;
-  padding: 8px 10px;
-}
-
-/* line 98, ../../sass/cosmos.scss */
+/* line 86, ../../sass/cosmos.scss */
 .username-label.tooltip {
   display: block;
   z-index: 1;
@@ -780,6 +766,43 @@ html, body {
   background-color: #e9fde7;
 }
 
+/* line 34, ../../sass/_crafting.scss */
+.tooltip.crafting {
+  display: block;
+  border-radius: 0px;
+  border: 2px solid #53ff5f;
+  background: #363636;
+  color: #aaffb0;
+  padding: 8px;
+}
+/* line 42, ../../sass/_crafting.scss */
+.tooltip.crafting h3 {
+  font-size: 150%;
+  color: #53ff5f;
+  margin-bottom: 10px;
+}
+/* line 48, ../../sass/_crafting.scss */
+.tooltip.crafting h4.reactants {
+  color: #24c9dd;
+  text-transform: uppercase;
+}
+/* line 53, ../../sass/_crafting.scss */
+.tooltip.crafting ul.reactants {
+  color: #b7f3fa;
+  font-size: 105%;
+}
+/* line 57, ../../sass/_crafting.scss */
+.tooltip.crafting ul.reactants div.block-canvas-container {
+  display: inline-block;
+}
+
+/* line 63, ../../sass/_crafting.scss */
+.tooltipster-cosmos .tooltipster-content {
+  font-size: 100%;
+  line-height: 110%;
+  padding: 8px 10px;
+}
+
 /* line 25, ../../sass/_minimap.scss */
 #minimap {
   position: absolute;
@@ -1006,19 +1029,19 @@ html, body {
   outline: 0;
   border-bottom: 1px solid #0090ff;
 }
-/* line 49, ../../sass/cosmos.scss */
+/* line 53, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input:focus::-webkit-input-placeholder {
   color: #e8e8e8;
 }
-/* line 50, ../../sass/cosmos.scss */
+/* line 54, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input:focus:-moz-placeholder {
   color: #e8e8e8;
 }
-/* line 51, ../../sass/cosmos.scss */
+/* line 55, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input:focus::-moz-placeholder {
   color: #e8e8e8;
 }
-/* line 52, ../../sass/cosmos.scss */
+/* line 56, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input:focus:-ms-input-placeholder {
   color: #e8e8e8;
 }
@@ -1026,19 +1049,19 @@ html, body {
 #name-prompt .prompt-box input.error {
   border-bottom: 1px solid red;
 }
-/* line 49, ../../sass/cosmos.scss */
+/* line 53, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input.error::-webkit-input-placeholder {
   color: red;
 }
-/* line 50, ../../sass/cosmos.scss */
+/* line 54, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input.error:-moz-placeholder {
   color: red;
 }
-/* line 51, ../../sass/cosmos.scss */
+/* line 55, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input.error::-moz-placeholder {
   color: red;
 }
-/* line 52, ../../sass/cosmos.scss */
+/* line 56, ../../sass/cosmos.scss */
 #name-prompt .prompt-box input.error:-ms-input-placeholder {
   color: red;
 }

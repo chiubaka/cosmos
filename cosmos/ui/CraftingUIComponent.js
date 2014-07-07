@@ -65,9 +65,10 @@ var CraftingUIComponent = WindowComponent.extend({
 	fillContainer: function(index, block) {
 		var self = this;
 		var container = this.table.find('td').eq(index);
+		var recipe = block.recipe;
 
 		// Add an onclick function
-		container.attr('recipe', block.recipe.name);
+		container.attr('recipe', recipe.name);
 		container.unbind('click');
 		container.click(function() {
 			console.log('Crafting UI clicked: ' + container.attr('recipe'));
@@ -75,7 +76,7 @@ var CraftingUIComponent = WindowComponent.extend({
 		});
 
 		// Generate tooltip content
-		this.fillTooltip(block.recipe.tooltipData(), function(err, out) {
+		this.fillTooltip(recipe, function(err, out) {
 			if (err) {
 				this.log('Error rendering crafting tooltip template.');
 			}
@@ -84,17 +85,40 @@ var CraftingUIComponent = WindowComponent.extend({
 
 			// If tooltip exists, update content
 			if(container.hasClass('tooltipstered')) {
-				container.tooltipster('content', tooltipContent);
+				container.tooltipster('destroy');
 			}
-			else {
+
 				// If tooltip doesn't exist, create new tooltip
-				container.tooltipster({
-					content: tooltipContent,
-					delay: 0,
-					position: 'bottom-left',
-					theme: 'tooltipster-cosmos'
-				});
-			}
+			container.tooltipster({
+				content: tooltipContent,
+				delay: 0,
+				position: 'bottom-left',
+				theme: 'tooltip crafting',
+				functionReady: function(origin, tooltip) {
+					var canvases = $(tooltip).find('canvas.reactant');
+
+					_.forEach(_.zip(canvases, recipe.reactants), function(pair) {
+						var canvas = pair[0];
+						var reactant = pair[1];
+
+						var block = cosmos.blocks.instances[reactant.blockType];
+
+						var scaleWidth = canvas.width / block._bounds2d.x;
+						var scaleHeight = canvas.height / block._bounds2d.y;
+						canvas.width = canvas.width;
+						var ctx = canvas.getContext("2d");
+						ctx.scale(scaleWidth, scaleHeight);
+						ctx.translate(block._bounds2d.x2, block._bounds2d.y2);
+						block.texture().render(ctx, block);
+						setTimeout(function() {
+							block.texture().render(ctx, block);
+						});
+					});
+
+					console.log(tooltip);
+					console.log('Tooltipster ready!');
+				}
+			});
 
 			// Draw the block
 			self.drawBlockInContainer(container, block.classId());
@@ -102,7 +126,7 @@ var CraftingUIComponent = WindowComponent.extend({
 	},
 
 	fillTooltip: function(recipe, callback) {
-		dust.render('crafting/tooltip', recipe, function(err, out) {
+		dust.render('crafting/tooltip', recipe.tooltipData(), function(err, out) {
 			callback(err, out);
 		});
 	}

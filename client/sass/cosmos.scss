@@ -20,6 +20,10 @@ html, body {
 	overflow: hidden;
 }
 
+h1, h2, h3, h4 {
+	margin: 0;
+}
+
 .align-left {
 	float: left;
 }
@@ -70,29 +74,13 @@ html, body {
 .tooltip {
 	display: none;
 	position: absolute;
-}
-
-.tooltip, .tooltipster-cosmos {
 	font-size: 75%;
+	font-family: $cosmos-font-family;
 	line-height: $tooltip-line-height;
 	padding: $tooltip-padding;
 	background-color: rgba(34, 34, 34, 0.85);
 	border-radius: 0px;
 	z-index: 100002;
-}
-
-.tooltipster-cosmos {
-	border-radius: 0px;
-	/*border: 2px solid #53FF5F;*/
-	background: #363636;
-	color: #e8e8e8;
-}
-
-.tooltipster-cosmos .tooltipster-content {
-	font-family: $cosmos-font-family;
-	font-size: 100%;
-	line-height: 110%;
-	padding: 8px 10px;
 }
 
 .username-label.tooltip {
