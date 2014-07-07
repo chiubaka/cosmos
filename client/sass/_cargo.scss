@@ -29,5 +29,11 @@ $cargo-container-active-border-color: #008aff;
 		td.active {
 			border: 1px solid $cargo-container-active-border-color;
 		}
+
+		span.quantity {
+			font-size: 75%;
+			right: 0px;
+			bottom: -6px;
+		}
 	}
 }

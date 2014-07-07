@@ -86,8 +86,19 @@ var WindowComponent = ButtonComponent.extend({
 	},
 
 	drawBlockInContainer: function(container, blockType) {
+		var blockCanvasContainerDiv = container.find('.block-canvas-container');
+		// If a container doesn't exist, create one
+		if (blockCanvasContainerDiv.length === 0) {
+			blockCanvasContainerDiv = $('<div></div>').addClass('block-canvas-container');
+		}
+		// If a container already exists, empty it and recreate the elements inside of it
+		else {
+			blockCanvasContainerDiv.empty();
+		}
+
 		var containerCanvas = $('<canvas/>')[0];
-		container.append(containerCanvas);
+		blockCanvasContainerDiv.append(containerCanvas);
+		container.append(blockCanvasContainerDiv);
 
 		var block = Block.blockFromClassId(blockType);
 
@@ -103,6 +114,8 @@ var WindowComponent = ButtonComponent.extend({
 		setTimeout(function() {
 			block.texture().render(ctx, block);
 		});
+
+		return blockCanvasContainerDiv;
 	},
 
 	select: function(container) {

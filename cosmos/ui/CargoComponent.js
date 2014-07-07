@@ -80,7 +80,14 @@ var CargoComponent = WindowComponent.extend({
 
 	fillContainer: function(index, type, quantity) {
 		var container = this.table.find('td').eq(index);
-		this.drawBlockInContainer(container, type);
+		var blockCanvasContainerDiv = this.drawBlockInContainer(container, type);
+
+		// Don't add a label if there's only one block of this type
+		if (quantity > 1) {
+			var quantitySpan = $('<span></span>').addClass('quantity').text(quantity);
+			blockCanvasContainerDiv.append(quantitySpan);
+		}
+
 		$(container).attr('data-block-type', type);
 
 		if (this.selectedType === type) {

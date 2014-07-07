@@ -27,6 +27,18 @@ $bottom-toolbar-z-index: $hud-layer-z-index + 1;
   }
 }
 
+.block-canvas-container {
+	position: relative;
+
+	span.quantity {
+		position: absolute;
+		color: white;
+		right: -2px;
+		bottom: -2px;
+		text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+	}
+}
+
 @import 'bottom-toolbar';
 @import 'left-toolbar';
 @import 'minimap';

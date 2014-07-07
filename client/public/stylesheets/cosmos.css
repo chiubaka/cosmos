@@ -137,6 +137,19 @@ h1, h2, h3, h4 {
   font-weight: bold;
 }
 
+/* line 30, ../../sass/_hud.scss */
+.block-canvas-container {
+  position: relative;
+}
+/* line 33, ../../sass/_hud.scss */
+.block-canvas-container span.quantity {
+  position: absolute;
+  color: white;
+  right: -2px;
+  bottom: -2px;
+  text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+}
+
 /* line 15, ../../sass/_bottom-toolbar.scss */
 #hud > .bottom-toolbar {
   position: absolute;
@@ -698,6 +711,12 @@ h1, h2, h3, h4 {
 #cargo-window .body td.active {
   border: 1px solid #008aff;
 }
+/* line 33, ../../sass/_cargo.scss */
+#cargo-window .body span.quantity {
+  font-size: 75%;
+  right: 0px;
+  bottom: -6px;
+}
 
 /* line 8, ../../sass/_crafting.scss */
 #crafting-button {
@@ -803,25 +822,16 @@ h1, h2, h3, h4 {
 }
 /* line 66, ../../sass/_crafting.scss */
 .tooltip.crafting ul.reactants li.reactant div.block-canvas-container {
-  position: relative;
   margin-right: 10px;
 }
 /* line 70, ../../sass/_crafting.scss */
-.tooltip.crafting ul.reactants li.reactant div.block-canvas-container span.quantity {
-  position: absolute;
-  color: white;
-  right: -2px;
-  bottom: -2px;
-  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-}
-/* line 79, ../../sass/_crafting.scss */
 .tooltip.crafting ul.reactants li.reactant span.block-type {
   line-height: 26px;
   height: 26px;
   display: block;
 }
 
-/* line 88, ../../sass/_crafting.scss */
+/* line 79, ../../sass/_crafting.scss */
 .tooltipster-cosmos .tooltipster-content {
   font-size: 100%;
   line-height: 110%;
