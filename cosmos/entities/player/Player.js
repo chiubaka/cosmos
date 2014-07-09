@@ -32,7 +32,10 @@ var Player = BlockStructure.extend({
 	_usernameLabel: undefined,
 	hasGuestUsername: undefined,
 	_controls: undefined,
+	// Keep track of previous values so we can send the client notifications only
+	// on a change.
 	_prevControls: undefined,
+	_prevMovementBlocks: undefined,
 
 	/**
 	 * Whether or not this {@link Player} is mining. Used to restrict players from mining more than one {@link Block}
@@ -77,6 +80,11 @@ var Player = BlockStructure.extend({
 				up: false,
 				down: false
 			}
+		};
+
+		this._prevMovementBlocks = {
+			engines: 1,
+			thrusters: 1
 		};
 
 		if (ige.isClient) {
@@ -526,15 +534,18 @@ var Player = BlockStructure.extend({
 		if (ige.isServer) {
 			/* Angular motion */
 			// Angular rotation speed depends on number of thrusters
-			var numRotationalThrusters = this.numBlocksOfType('ThrusterBlock');
-			var angularImpulse = -60 * numRotationalThrusters * ige._tickDelta;
-
 			if (this._controls.key.left || this._controls.key.right) {
-				if (numRotationalThrusters < 1 &&
-					(JSON.stringify(this._controls) !== JSON.stringify(this._prevControls))) {
-					ige.network.stream.queueCommand('notificationError',
-						NotificationDefinitions.errorKeys.noRotationalThruster, this._clientId);
+				var numRotationalThrusters = this.numBlocksOfType('ThrusterBlock');
+				var angularImpulse = -60 * numRotationalThrusters * ige._tickDelta;
+
+				if (numRotationalThrusters < 1) {
+					if (JSON.stringify(this._controls) !== JSON.stringify(this._prevControls) ||
+						this.prevMovementBlocks.thrusters > 0) {
+						ige.network.stream.queueCommand('notificationError',
+							NotificationDefinitions.errorKeys.noRotationalThruster, this._clientId);
+					}
 				}
+				this._prevMovementBlocks.thrusters = numRotationalThrusters;
 
 				if (this._controls.key.left) {
 					this._box2dBody.ApplyTorque(angularImpulse);
@@ -565,11 +576,14 @@ var Player = BlockStructure.extend({
 				var engines = this.blocksOfType(EngineBlock.prototype.classId());
 
 				// Notify player that they cannot fly without an engine
-				if (engines.length < 1 &&
-					(JSON.stringify(this._controls) !== JSON.stringify(this._prevControls))) {
-					ige.network.stream.queueCommand('notificationError',
-						NotificationDefinitions.errorKeys.noEngine, this._clientId);
+				if (engines.length < 1) {
+					if (JSON.stringify(this._controls) !== JSON.stringify(this._prevControls) ||
+						this.prevMovementBlocks.engines > 0) {
+						ige.network.stream.queueCommand('notificationError',
+							NotificationDefinitions.errorKeys.noEngine, this._clientId);
+						}
 				}
+				this._prevMovementBlocks.engines = engines.length;
 
 				for (var i = 0; i < engines.length; i++) {
 					var engine = engines[i];
