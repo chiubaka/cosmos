@@ -28,11 +28,11 @@ var Player = BlockStructure.extend({
 	 * @instance
 	 */
 	_dbId: undefined,
-
 	_username: undefined,
 	_usernameLabel: undefined,
-
 	hasGuestUsername: undefined,
+	controls: undefined,
+	previousControls: undefined,
 
 	/**
 	 * Whether or not this {@link Player} is mining. Used to restrict players from mining more than one {@link Block}
@@ -62,6 +62,15 @@ var Player = BlockStructure.extend({
 		this._attractionStrength = 1;
 
 		this.controls = {
+			key: {
+				left: false,
+				right: false,
+				up: false,
+				down: false
+			}
+		};
+
+		this.previousControls = {
 			key: {
 				left: false,
 				right: false,
@@ -486,7 +495,6 @@ var Player = BlockStructure.extend({
 	 */
 	update: function(ctx) {
 		if (!ige.isServer) {
-
 			// If this isn't the player playing on this client, draw a label to help identify this player
 			if (this._usernameLabel !== undefined) {
 				var screenPos = this.screenPosition();
@@ -522,7 +530,9 @@ var Player = BlockStructure.extend({
 			var angularImpulse = -60 * numRotationalThrusters * ige._tickDelta;
 
 			if (this.controls.key.left || this.controls.key.right) {
-				if (numRotationalThrusters < 1) {
+				if (numRotationalThrusters < 1 &&
+					(JSON.stringify(this.controls) !==
+					JSON.stringify(this.previousControls))) {
 					ige.network.stream.queueCommand('notificationError',
 						NotificationDefinitions.errorKeys.noRotationalThruster, this._clientId);
 				}
@@ -556,7 +566,9 @@ var Player = BlockStructure.extend({
 				var engines = this.blocksOfType(EngineBlock.prototype.classId());
 
 				// Notify player that they cannot fly without an engine
-				if (engines.length < 1) {
+				if (engines.length < 1 &&
+					(JSON.stringify(this.controls) !==
+					JSON.stringify(this.previousControls))) {
 					ige.network.stream.queueCommand('notificationError',
 						NotificationDefinitions.errorKeys.noEngine, this._clientId);
 				}
@@ -582,6 +594,8 @@ var Player = BlockStructure.extend({
 					this._box2dBody.ApplyImpulse(impulse, pointToApplyTo);
 				}
 			}
+			// Update previous controls
+			this.previousControls = JSON.parse(JSON.stringify(this.controls));
 		}
 
 		BlockGrid.prototype.update.call(this, ctx);
