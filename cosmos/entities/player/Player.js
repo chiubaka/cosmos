@@ -540,7 +540,7 @@ var Player = BlockStructure.extend({
 
 				if (numRotationalThrusters < 1) {
 					if (JSON.stringify(this._controls) !== JSON.stringify(this._prevControls) ||
-						this.prevMovementBlocks.thrusters > 0) {
+						this._prevMovementBlocks.thrusters > 0) {
 						ige.network.stream.queueCommand('notificationError',
 							NotificationDefinitions.errorKeys.noRotationalThruster, this._clientId);
 					}
@@ -578,7 +578,7 @@ var Player = BlockStructure.extend({
 				// Notify player that they cannot fly without an engine
 				if (engines.length < 1) {
 					if (JSON.stringify(this._controls) !== JSON.stringify(this._prevControls) ||
-						this.prevMovementBlocks.engines > 0) {
+						this._prevMovementBlocks.engines > 0) {
 						ige.network.stream.queueCommand('notificationError',
 							NotificationDefinitions.errorKeys.noEngine, this._clientId);
 						}
