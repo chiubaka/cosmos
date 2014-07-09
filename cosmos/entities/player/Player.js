@@ -31,8 +31,8 @@ var Player = BlockStructure.extend({
 	_username: undefined,
 	_usernameLabel: undefined,
 	hasGuestUsername: undefined,
-	controls: undefined,
-	prevControls: undefined,
+	_controls: undefined,
+	_prevControls: undefined,
 
 	/**
 	 * Whether or not this {@link Player} is mining. Used to restrict players from mining more than one {@link Block}
@@ -61,7 +61,7 @@ var Player = BlockStructure.extend({
 		this.category(Player.BOX2D_CATEGORY);
 		this._attractionStrength = 1;
 
-		this.controls = {
+		this._controls = {
 			key: {
 				left: false,
 				right: false,
@@ -70,7 +70,7 @@ var Player = BlockStructure.extend({
 			}
 		};
 
-		this.prevControls = {
+		this._prevControls = {
 			key: {
 				left: false,
 				right: false,
@@ -503,21 +503,21 @@ var Player = BlockStructure.extend({
 			}
 
 			/* Save the old control state for comparison later */
-			oldControls = JSON.stringify(this.controls);
+			oldControls = JSON.stringify(this._controls);
 
 			/* Modify the KEYBOARD controls to reflect which keys the client currently is pushing */
-			this.controls.key.up =
+			this._controls.key.up =
 				ige.input.actionState('key.up') | ige.input.actionState('key.up_W');
-			this.controls.key.down =
+			this._controls.key.down =
 				ige.input.actionState('key.down') | ige.input.actionState('key.down_S');
-			this.controls.key.left =
+			this._controls.key.left =
 				ige.input.actionState('key.left') | ige.input.actionState('key.left_A');
-			this.controls.key.right =
+			this._controls.key.right =
 				ige.input.actionState('key.right') | ige.input.actionState('key.right_D');
 
-			if (JSON.stringify(this.controls) !== oldControls) { //this.controls !== oldControls) {
+			if (JSON.stringify(this._controls) !== oldControls) { //this._controls !== oldControls) {
 				// Tell the server about our control change
-				ige.network.send('playerControlUpdate', this.controls);
+				ige.network.send('playerControlUpdate', this._controls);
 			}
 		}
 
@@ -529,28 +529,28 @@ var Player = BlockStructure.extend({
 			var numRotationalThrusters = this.numBlocksOfType('ThrusterBlock');
 			var angularImpulse = -60 * numRotationalThrusters * ige._tickDelta;
 
-			if (this.controls.key.left || this.controls.key.right) {
+			if (this._controls.key.left || this._controls.key.right) {
 				if (numRotationalThrusters < 1 &&
-					(JSON.stringify(this.controls) !== JSON.stringify(this.prevControls))) {
+					(JSON.stringify(this._controls) !== JSON.stringify(this._prevControls))) {
 					ige.network.stream.queueCommand('notificationError',
 						NotificationDefinitions.errorKeys.noRotationalThruster, this._clientId);
 				}
 
-				if (this.controls.key.left) {
+				if (this._controls.key.left) {
 					this._box2dBody.ApplyTorque(angularImpulse);
 				}
-				if (this.controls.key.right) {
+				if (this._controls.key.right) {
 					this._box2dBody.ApplyTorque(-angularImpulse);
 				}
 			}
 
 			/* Linear motion */
-			if (this.controls.key.up || this.controls.key.down) {
+			if (this._controls.key.up || this._controls.key.down) {
 				var linearImpulse = 3 * ige._tickDelta;
-				if (this.controls.key.up) {
+				if (this._controls.key.up) {
 					linearImpulse = linearImpulse;
 				}
-				else if (this.controls.key.down) {
+				else if (this._controls.key.down) {
 					linearImpulse = -linearImpulse;
 				}
 
@@ -566,7 +566,7 @@ var Player = BlockStructure.extend({
 
 				// Notify player that they cannot fly without an engine
 				if (engines.length < 1 &&
-					(JSON.stringify(this.controls) !== JSON.stringify(this.prevControls))) {
+					(JSON.stringify(this._controls) !== JSON.stringify(this._prevControls))) {
 					ige.network.stream.queueCommand('notificationError',
 						NotificationDefinitions.errorKeys.noEngine, this._clientId);
 				}
@@ -595,7 +595,7 @@ var Player = BlockStructure.extend({
 			// Update previous controls so we can tell what has changed each update.
 			// We want to send engine missing notifications on a change, not every
 			// update
-			this.prevControls = JSON.parse(JSON.stringify(this.controls));
+			this._prevControls = JSON.parse(JSON.stringify(this._controls));
 		}
 
 		BlockGrid.prototype.update.call(this, ctx);
