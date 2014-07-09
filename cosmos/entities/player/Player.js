@@ -32,7 +32,7 @@ var Player = BlockStructure.extend({
 	_usernameLabel: undefined,
 	hasGuestUsername: undefined,
 	controls: undefined,
-	previousControls: undefined,
+	prevControls: undefined,
 
 	/**
 	 * Whether or not this {@link Player} is mining. Used to restrict players from mining more than one {@link Block}
@@ -70,7 +70,7 @@ var Player = BlockStructure.extend({
 			}
 		};
 
-		this.previousControls = {
+		this.prevControls = {
 			key: {
 				left: false,
 				right: false,
@@ -531,8 +531,7 @@ var Player = BlockStructure.extend({
 
 			if (this.controls.key.left || this.controls.key.right) {
 				if (numRotationalThrusters < 1 &&
-					(JSON.stringify(this.controls) !==
-					JSON.stringify(this.previousControls))) {
+					(JSON.stringify(this.controls) !== JSON.stringify(this.prevControls))) {
 					ige.network.stream.queueCommand('notificationError',
 						NotificationDefinitions.errorKeys.noRotationalThruster, this._clientId);
 				}
@@ -567,8 +566,7 @@ var Player = BlockStructure.extend({
 
 				// Notify player that they cannot fly without an engine
 				if (engines.length < 1 &&
-					(JSON.stringify(this.controls) !==
-					JSON.stringify(this.previousControls))) {
+					(JSON.stringify(this.controls) !== JSON.stringify(this.prevControls))) {
 					ige.network.stream.queueCommand('notificationError',
 						NotificationDefinitions.errorKeys.noEngine, this._clientId);
 				}
@@ -594,8 +592,10 @@ var Player = BlockStructure.extend({
 					this._box2dBody.ApplyImpulse(impulse, pointToApplyTo);
 				}
 			}
-			// Update previous controls
-			this.previousControls = JSON.parse(JSON.stringify(this.controls));
+			// Update previous controls so we can tell what has changed each update.
+			// We want to send engine missing notifications on a change, not every
+			// update
+			this.prevControls = JSON.parse(JSON.stringify(this.controls));
 		}
 
 		BlockGrid.prototype.update.call(this, ctx);
