@@ -132,15 +132,16 @@ var Block = IgeEntity.extend({
 		// Use an even number so values don't have to become approximate when we divide by two
 		this.width(Block.WIDTH).height(Block.HEIGHT);
 
+		// Check if a health has been provided for this block.
 		if (Healths[this.classId()] !== undefined)
 		{
-			this.addComponent(HealthComponent, Healths[this.classId()]);
+			this.addComponent(Health, Healths[this.classId()]);
 		}
 
 		// Check if a recipe has been provided for this block. If so, this block is craftable. Otherwise, it is not.
 		if (Recipes[this.classId()] !== undefined)
 		{
-			this.addComponent(RecipeComponent, Recipes[this.classId()]);
+			this.addComponent(Recipe, Recipes[this.classId()]);
 		}
 
 		if (!ige.isServer) {

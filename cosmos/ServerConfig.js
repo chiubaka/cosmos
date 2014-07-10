@@ -3,6 +3,11 @@ var config = {
 		/* === CONSTANTS === */
 		{ name: 'Constants', path: './constants' },
 
+		/* === COMPONENTS === */
+		{ name: 'Health', path: './components/Health' },
+		{ name: 'DamageSource', path: './components/DamageSource' },
+		{ name: 'Recipe', path: './components/Recipe' },
+
 		/* === GAME SETUP === */
 		/* Initialization */
 		{ name: 'GameInit', path: './init/GameInit' },
@@ -65,11 +70,8 @@ var config = {
 		{ name: 'Background', path: './entities/scenery/Background' },
 		{ name: 'BlockStructureGenerator', path: './entities/scenery/BlockStructureGenerator' },
 
-		/* === COMPONENTS === */
-		{ name: 'HealthComponent', path: './components/HealthComponent' },
+		/* === COMPONENT CONFIG FILES === */
 		{ name: 'Healths', path: './components/config/Healths' },
-		{ name: 'DamageSourceComponent', path: './components/DamageSourceComponent' },
-		{ name: 'RecipeComponent', path: './components/RecipeComponent' },
 		{ name: 'Recipes', path: './components/config/Recipes' },
 
 		/* === PLAYER STATE === */
