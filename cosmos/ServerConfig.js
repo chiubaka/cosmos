@@ -70,6 +70,7 @@ var config = {
 		{ name: 'Healths', path: './components/config/Healths' },
 		{ name: 'DamageSourceComponent', path: './components/DamageSourceComponent' },
 		{ name: 'RecipeComponent', path: './components/RecipeComponent' },
+		{ name: 'Recipes', path: './components/config/Recipes' },
 
 		/* === PLAYER STATE === */
 		{ name: 'Player', path: './entities/player/Player' },
@@ -82,7 +83,6 @@ var config = {
 		/* === Crafting === */
 		{ name: 'CraftingSystem', path: './crafting/CraftingSystem' },
 		{ name: 'CraftingComponent', path: './crafting/CraftingComponent' },
-		{ name: 'Recipes', path: './crafting/Recipes' },
 
 		/* Database */
 		{ name: 'DbConfig', path: './db/DbConfig' },

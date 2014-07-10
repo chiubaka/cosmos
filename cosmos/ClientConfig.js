@@ -83,6 +83,7 @@ var igeClientConfig = {
 		'./components/config/Healths.js',
 		'./components/DamageSourceComponent.js',
 		'./components/RecipeComponent.js',
+		'./components/config/Recipes.js',
 
 		/* === PLAYER STATE === */
 		'./entities/player/Player.js',
@@ -96,7 +97,6 @@ var igeClientConfig = {
 		/* === Crafting === */
 		'./crafting/CraftingSystem.js',
 		'./crafting/CraftingComponent.js',
-		'./crafting/Recipes.js',
 
 		/* Notifications */
 		'./notifications/NotificationDefinitions.js',
