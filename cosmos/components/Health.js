@@ -1,5 +1,5 @@
-var HealthComponent = IgeClass.extend({
-	classId: 'HealthComponent',
+var Health = IgeClass.extend({
+	classId: 'Health',
 	componentId: 'health',
 
 	value: undefined,
@@ -30,4 +30,4 @@ var HealthComponent = IgeClass.extend({
 	}
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = HealthComponent; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Health; }

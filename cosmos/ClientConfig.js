@@ -4,9 +4,9 @@ var igeClientConfig = {
 		'./constants.js',
 
 		/* === COMPONENTS === */
-		'./components/HealthComponent.js',
-		'./components/DamageSourceComponent.js',
-		'./components/RecipeComponent.js',
+		'./components/Health.js',
+		'./components/DamageSource.js',
+		'./components/Recipe.js',
 
 		/* === Systems === */
 		'./systems/Inspector.js',

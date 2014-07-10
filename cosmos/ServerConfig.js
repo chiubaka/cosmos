@@ -4,9 +4,9 @@ var config = {
 		{ name: 'Constants', path: './constants' },
 
 		/* === COMPONENTS === */
-		{ name: 'HealthComponent', path: './components/HealthComponent' },
-		{ name: 'DamageSourceComponent', path: './components/DamageSourceComponent' },
-		{ name: 'RecipeComponent', path: './components/RecipeComponent' },
+		{ name: 'Health', path: './components/Health' },
+		{ name: 'DamageSource', path: './components/DamageSource' },
+		{ name: 'Recipe', path: './components/Recipe' },
 
 		/* === GAME SETUP === */
 		/* Initialization */
