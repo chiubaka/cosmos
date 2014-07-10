@@ -13,7 +13,7 @@ var Weapon = Part.extend({
 	init: function(data) {
 		Part.prototype.init.call(this, data);
 		// TODO: Determine dps value based on subclass
-		this.addComponent(DamageSourceComponent, {dps: 10});
+		this.addComponent(DamageSource, {dps: 10});
 	}
 });
 

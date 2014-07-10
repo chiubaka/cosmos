@@ -1,5 +1,5 @@
-var DescriptionComponent = IgeClass.extend({
-	classId: 'DescriptionComponent',
+var Description = IgeClass.extend({
+	classId: 'Description',
 	componentId: 'description',
 
 	text: undefined,
@@ -15,4 +15,4 @@ var DescriptionComponent = IgeClass.extend({
 	}
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = DescriptionComponent; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Description; }

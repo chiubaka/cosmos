@@ -28,11 +28,14 @@ var Player = BlockStructure.extend({
 	 * @instance
 	 */
 	_dbId: undefined,
-
 	_username: undefined,
 	_usernameLabel: undefined,
-
 	hasGuestUsername: undefined,
+	_controls: undefined,
+	// Keep track of previous values so we can send the client notifications only
+	// on a change.
+	_prevControls: undefined,
+	_prevMovementBlocks: undefined,
 
 	/**
 	 * Whether or not this {@link Player} is mining. Used to restrict players from mining more than one {@link Block}
@@ -61,13 +64,27 @@ var Player = BlockStructure.extend({
 		this.category(Player.BOX2D_CATEGORY);
 		this._attractionStrength = 1;
 
-		this.controls = {
+		this._controls = {
 			key: {
 				left: false,
 				right: false,
 				up: false,
 				down: false
 			}
+		};
+
+		this._prevControls = {
+			key: {
+				left: false,
+				right: false,
+				up: false,
+				down: false
+			}
+		};
+
+		this._prevMovementBlocks = {
+			engines: 1,
+			thrusters: 1
 		};
 
 		if (ige.isClient) {
@@ -486,7 +503,6 @@ var Player = BlockStructure.extend({
 	 */
 	update: function(ctx) {
 		if (!ige.isServer) {
-
 			// If this isn't the player playing on this client, draw a label to help identify this player
 			if (this._usernameLabel !== undefined) {
 				var screenPos = this.screenPosition();
@@ -495,21 +511,21 @@ var Player = BlockStructure.extend({
 			}
 
 			/* Save the old control state for comparison later */
-			oldControls = JSON.stringify(this.controls);
+			oldControls = JSON.stringify(this._controls);
 
 			/* Modify the KEYBOARD controls to reflect which keys the client currently is pushing */
-			this.controls.key.up =
+			this._controls.key.up =
 				ige.input.actionState('key.up') | ige.input.actionState('key.up_W');
-			this.controls.key.down =
+			this._controls.key.down =
 				ige.input.actionState('key.down') | ige.input.actionState('key.down_S');
-			this.controls.key.left =
+			this._controls.key.left =
 				ige.input.actionState('key.left') | ige.input.actionState('key.left_A');
-			this.controls.key.right =
+			this._controls.key.right =
 				ige.input.actionState('key.right') | ige.input.actionState('key.right_D');
 
-			if (JSON.stringify(this.controls) !== oldControls) { //this.controls !== oldControls) {
+			if (JSON.stringify(this._controls) !== oldControls) { //this._controls !== oldControls) {
 				// Tell the server about our control change
-				ige.network.send('playerControlUpdate', this.controls);
+				ige.network.send('playerControlUpdate', this._controls);
 			}
 		}
 
@@ -518,30 +534,34 @@ var Player = BlockStructure.extend({
 		if (ige.isServer) {
 			/* Angular motion */
 			// Angular rotation speed depends on number of thrusters
-			var numRotationalThrusters = this.numBlocksOfType('ThrusterBlock');
-			var angularImpulse = -60 * numRotationalThrusters * ige._tickDelta;
+			if (this._controls.key.left || this._controls.key.right) {
+				var numRotationalThrusters = this.numBlocksOfType('ThrusterBlock');
+				var angularImpulse = -60 * numRotationalThrusters * ige._tickDelta;
 
-			if (this.controls.key.left || this.controls.key.right) {
 				if (numRotationalThrusters < 1) {
-					ige.network.stream.queueCommand('notificationError',
-						NotificationDefinitions.errorKeys.noRotationalThruster, this._clientId);
+					if (JSON.stringify(this._controls) !== JSON.stringify(this._prevControls) ||
+						this._prevMovementBlocks.thrusters > 0) {
+						ige.network.stream.queueCommand('notificationError',
+							NotificationDefinitions.errorKeys.noRotationalThruster, this._clientId);
+					}
 				}
+				this._prevMovementBlocks.thrusters = numRotationalThrusters;
 
-				if (this.controls.key.left) {
+				if (this._controls.key.left) {
 					this._box2dBody.ApplyTorque(angularImpulse);
 				}
-				if (this.controls.key.right) {
+				if (this._controls.key.right) {
 					this._box2dBody.ApplyTorque(-angularImpulse);
 				}
 			}
 
 			/* Linear motion */
-			if (this.controls.key.up || this.controls.key.down) {
+			if (this._controls.key.up || this._controls.key.down) {
 				var linearImpulse = 3 * ige._tickDelta;
-				if (this.controls.key.up) {
+				if (this._controls.key.up) {
 					linearImpulse = linearImpulse;
 				}
-				else if (this.controls.key.down) {
+				else if (this._controls.key.down) {
 					linearImpulse = -linearImpulse;
 				}
 
@@ -557,9 +577,13 @@ var Player = BlockStructure.extend({
 
 				// Notify player that they cannot fly without an engine
 				if (engines.length < 1) {
-					ige.network.stream.queueCommand('notificationError',
-						NotificationDefinitions.errorKeys.noEngine, this._clientId);
+					if (JSON.stringify(this._controls) !== JSON.stringify(this._prevControls) ||
+						this._prevMovementBlocks.engines > 0) {
+						ige.network.stream.queueCommand('notificationError',
+							NotificationDefinitions.errorKeys.noEngine, this._clientId);
+						}
 				}
+				this._prevMovementBlocks.engines = engines.length;
 
 				for (var i = 0; i < engines.length; i++) {
 					var engine = engines[i];
@@ -582,6 +606,10 @@ var Player = BlockStructure.extend({
 					this._box2dBody.ApplyImpulse(impulse, pointToApplyTo);
 				}
 			}
+			// Update previous controls so we can tell what has changed each update.
+			// We want to send engine missing notifications on a change, not every
+			// update
+			this._prevControls = JSON.parse(JSON.stringify(this._controls));
 		}
 
 		BlockGrid.prototype.update.call(this, ctx);

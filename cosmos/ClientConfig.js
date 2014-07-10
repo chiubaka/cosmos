@@ -4,10 +4,6 @@ var igeClientConfig = {
 		'./constants.js',
 
 		/* === COMPONENTS === */
-		'./components/HealthComponent.js',
-		'./components/DamageSourceComponent.js',
-		'./components/RecipeComponent.js',
-		'./components/DescriptionComponent.js',
 
 		/* === Systems === */
 		'./systems/Inspector.js',
@@ -83,6 +79,13 @@ var igeClientConfig = {
 		/* Click scene (captures background client's background clicks) */
 		'./entities/ClickScene.js',
 
+		/* === COMPONENTS === */
+		'./components/Health.js',
+		'./components/DamageSource.js',
+		'./components/Recipe.js',
+		'./components/Description.js',
+		'./components/config/Descriptions.js',
+
 		/* === PLAYER STATE === */
 		'./entities/player/Player.js',
 		'./models/state/ClientState.js',
@@ -153,10 +156,7 @@ var igeClientConfig = {
 		/* Initialization */
 		'./init/GameInit.js',
 		'./client.js',
-		'./index.js',
-
-		/* === COMPONENT CONFIG FILES === */
-		'./components/config/Descriptions.js'
+		'./index.js'
 	]
 };
 
