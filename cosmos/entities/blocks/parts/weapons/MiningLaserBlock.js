@@ -30,7 +30,7 @@ var MiningLaserBlock = Weapon.extend({
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(242, 242, 242)";
 			this.textureOutline = "rgb(208, 63, 44)";
-			this.textureSvg = ige.client.svgs.miningLaser;
+			this.textureSvg = ige.client.textures.miningLaser;
 		}
 	},
 
