@@ -1,5 +1,5 @@
-var RecipeComponent = IgeClass.extend({
-	classId: 'RecipeComponent',
+var Recipe = IgeClass.extend({
+	classId: 'Recipe',
 	componentId: 'recipe',
 
 	/**
@@ -50,4 +50,4 @@ var RecipeComponent = IgeClass.extend({
 	}
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = RecipeComponent; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Recipe; }
