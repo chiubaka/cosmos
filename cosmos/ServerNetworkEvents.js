@@ -201,7 +201,7 @@ var ServerNetworkEvents = {
 			return;
 		}
 
-		player.controls = data;
+		player._controls = data;
 	},
 
 	// TODO: User access control. Restrict what players can do based on clientId

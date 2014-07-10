@@ -60,7 +60,7 @@ var Inspector = IgeEventingClass.extend({
 		this.block = block;
 		this.blockInspector.show();
 		this.blockInspectorName.text(block.displayName());
-		this.blockInspectorDescription.text(block.description());
+		this.blockInspectorDescription.text(block.description.text);
 
 		this.blockInspector.find('.block-stat').hide();
 		if (block.health !== undefined) {

@@ -20,8 +20,6 @@ var Block = IgeEntity.extend({
 	 */
 	MAX_HP: 30,
 
-	DESCRIPTION: "A basic block with no special properties.",
-
 	/**
 	 * The number of rows that this {@link Block} takes up.
 	 * @type {number}
@@ -146,12 +144,18 @@ var Block = IgeEntity.extend({
 			this.MAX_HP = data.MAX_HP;
 		}
 
-		this.addComponent(HealthComponent, {max: this.MAX_HP});
+		this.addComponent(Health, {max: this.MAX_HP});
 
 		// Check if a recipe has been provided for this block. If so, this block is craftable. Otherwise, it is not.
 		if (Recipes[this.classId()] !== undefined)
 		{
-			this.addComponent(RecipeComponent, Recipes[this.classId()]);
+			this.addComponent(Recipe, Recipes[this.classId()]);
+		}
+
+		// Check if a description has been provided for this block. If so, this block is describable. Otherwise, it is not.
+		if (Descriptions[this.classId()] !== undefined)
+		{
+			this.addComponent(Description, Descriptions[this.classId()]);
 		}
 
 		if (!ige.isServer) {
@@ -197,10 +201,6 @@ var Block = IgeEntity.extend({
 
 	hp: function() {
 		return this.health.value;
-	},
-
-	description: function() {
-		return this.DESCRIPTION;
 	},
 
 	/**

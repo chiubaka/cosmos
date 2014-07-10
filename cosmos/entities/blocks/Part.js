@@ -8,8 +8,6 @@
 var Part = Block.extend({
 	classId: 'Part',
 
-	DESCRIPTION: 'A ship part block with no special properties (yet).',
-
 	init: function(data) {
 		Block.prototype.init.call(this, data);
 	}
