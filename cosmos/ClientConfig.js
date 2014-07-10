@@ -7,6 +7,7 @@ var igeClientConfig = {
 		'./components/HealthComponent.js',
 		'./components/DamageSourceComponent.js',
 		'./components/RecipeComponent.js',
+		'./components/DescriptionComponent.js',
 
 		/* === Systems === */
 		'./systems/Inspector.js',
@@ -152,7 +153,10 @@ var igeClientConfig = {
 		/* Initialization */
 		'./init/GameInit.js',
 		'./client.js',
-		'./index.js'
+		'./index.js',
+
+		/* === COMPONENT CONFIG FILES === */
+		'./components/config/Descriptions.js'
 	]
 };
 

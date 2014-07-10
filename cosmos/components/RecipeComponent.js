@@ -34,7 +34,7 @@ var RecipeComponent = IgeClass.extend({
 	tooltipData: function() {
 		var data = {};
 		data.name = this.name;
-		data.description = this.entity.DESCRIPTION;
+		data.description = this.entity.description.text;
 		data.reactants = [];
 		for (var i = 0; i < this.reactants.length; i++) {
 			var reactant = this.reactants[i];

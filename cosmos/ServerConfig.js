@@ -7,6 +7,7 @@ var config = {
 		{ name: 'HealthComponent', path: './components/HealthComponent' },
 		{ name: 'DamageSourceComponent', path: './components/DamageSourceComponent' },
 		{ name: 'RecipeComponent', path: './components/RecipeComponent' },
+		{ name: 'DescriptionComponent', path: './components/DescriptionComponent'},
 
 		/* === GAME SETUP === */
 		/* Initialization */
@@ -104,7 +105,10 @@ var config = {
 
 		/* === EXTERNAL LIBRARIES === */
 		{ name: 'WeightedSelection', path: './lib/weighted' },
-		{ name: 'UuidGenerator', path: './lib/UuidGenerator' }
+		{ name: 'UuidGenerator', path: './lib/UuidGenerator' },
+
+		/* === COMPONENT CONFIG FILES === */
+		{name: 'Descriptions', path: './components/config/Descriptions'}
 	]
 };
 
