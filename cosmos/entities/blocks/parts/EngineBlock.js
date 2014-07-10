@@ -8,23 +8,13 @@
 var EngineBlock = Part.extend({
 	classId: 'EngineBlock',
 
-	/**
-	 * The maximum HP for a {@link EngineBlock}. Overrides the superclass MAX_HP value. See {@link Block#MAX_HP}.
-	 * @constant {number}
-	 * @default
-	 * @memberof EngineBlock
-	 * @instance
-	 */
-	MAX_HP: 40,
-
 	DESCRIPTION: 'Engines allow your ship to move forward and backwards. The more engines your ship has, the faster ' +
 		'it will move. If you have no engines, your ship cannot move forward or backwards. As you place more blocks '+
 		'on your ship, your ship will become heavier and you will need more Engines in order to fly at the same ' +
 		'speed as before. Additionally, if you place engines on your ship in a lopsided manner, your ship will not ' +
 		'fly straight.',
 
-	init: function () {
-		data = {MAX_HP: this.MAX_HP};
+	init: function(data) {
 		Part.prototype.init.call(this, data);
 
 		if (!ige.isServer) {

@@ -9,22 +9,12 @@
 var ThrusterBlock = Part.extend({
 	classId: 'ThrusterBlock',
 
-	/**
-	 * The maximum HP for a {@link ThrusterBlock}. Overrides the superclass MAX_HP value. See {@link Block#MAX_HP}.
-	 * @constant {number}
-	 * @default
-	 * @memberof ThrusterBlock
-	 * @instance
-	 */
-	MAX_HP: 40,
-
 	DESCRIPTION: 'Thrusters allow your ship to rotate left and right. The more thrusters your ship has, the faster ' +
 		'it can rotate. If you have no thrusters, your ship cannot rotate. As you place more blocks on your ship, ' +
 		'your ship will become heavier and you will need more thrusters in order to rotate at the same speed as ' +
 		'before.',
 
-	init: function () {
-		data = {MAX_HP: this.MAX_HP};
+	init: function(data) {
 		Part.prototype.init.call(this, data);
 
 		if (!ige.isServer) {

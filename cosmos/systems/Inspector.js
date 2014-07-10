@@ -65,8 +65,8 @@ var Inspector = IgeEventingClass.extend({
 		this.blockInspector.find('.block-stat').hide();
 		if (block.health !== undefined) {
 			this.blockInspector.find('#block-stat-health').show();
-			this.blockInspectorCurrentHealth.text(block.hp());
-			this.blockInspectorMaxHealth.text(block.MAX_HP);
+			this.blockInspectorCurrentHealth.text(block.health.value);
+			this.blockInspectorMaxHealth.text(block.health.max);
 
 			block.on('cosmos:block.hp.changed', function(hp) {
 				// TODO: Change the color of the health text based on the percentage of health that is left

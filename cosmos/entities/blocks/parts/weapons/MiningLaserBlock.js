@@ -10,20 +10,11 @@
 var MiningLaserBlock = Weapon.extend({
 	classId: 'MiningLaserBlock',
 
-	/**
-	 * The maximum HP for a {@link MiningLaserBlock}. Overrides the superclass MAX_HP value. See {@link Block#MAX_HP}.
-	 * @constant {number}
-	 * @default
-	 * @memberof MiningLaserBlock
-	 * @instance
-	 */
-	MAX_HP: 50,
-
 	DESCRIPTION: 'The mining laser is the most basic weapon in the game. Use it to break blocks off of structures ' +
 		'and ships. If you lose your mining laser, you will not be able to shoot. Having more mining lasers will ' +
 		'increase your mining speed.',
 
-	init: function () {
+	init: function(data) {
 		data = {MAX_HP: this.MAX_HP};
 		Weapon.prototype.init.call(this, data);
 

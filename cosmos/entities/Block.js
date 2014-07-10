@@ -10,16 +10,6 @@
 var Block = IgeEntity.extend({
 	classId: 'Block',
 
-	/**
-	 * The maximum health value for this {@link Block}. This is a constant to make it clear that the value should not,
-	 * in general, be changed (the one exception being in the init function for a {@link Block}). It is an instance
-	 * variable because we still want to take advantage of inheritance on this property.
-	 * @constant {number}
-	 * @memberof Block
-	 * @instance
-	 */
-	MAX_HP: 30,
-
 	DESCRIPTION: "A basic block with no special properties.",
 
 	/**
@@ -142,11 +132,10 @@ var Block = IgeEntity.extend({
 		// Use an even number so values don't have to become approximate when we divide by two
 		this.width(Block.WIDTH).height(Block.HEIGHT);
 
-		if (data && data.MAX_HP) {
-			this.MAX_HP = data.MAX_HP;
+		if (Healths[this.classId()] !== undefined)
+		{
+			this.addComponent(HealthComponent, Healths[this.classId()]);
 		}
-
-		this.addComponent(HealthComponent, {max: this.MAX_HP});
 
 		// Check if a recipe has been provided for this block. If so, this block is craftable. Otherwise, it is not.
 		if (Recipes[this.classId()] !== undefined)

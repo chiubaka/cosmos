@@ -1,12 +1,8 @@
 var TitaniumBlock = Armor.extend({
 	classId: 'TitaniumBlock',
 
-	MAX_HP: 60,
-
-	init: function () {
-		data = {MAX_HP: this.MAX_HP};
+	init: function(data) {
 		Armor.prototype.init.call(this, data);
-
 
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(250, 250, 250)";

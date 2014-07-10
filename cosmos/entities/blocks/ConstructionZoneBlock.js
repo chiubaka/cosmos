@@ -9,7 +9,7 @@
 var ConstructionZoneBlock = Block.extend({
 	classId: 'ConstructionZoneBlock',
 
-	init: function () {
+	init: function() {
 		Block.prototype.init.call(this);
 
 		if (!ige.isServer) {

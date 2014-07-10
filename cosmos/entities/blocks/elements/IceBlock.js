@@ -9,17 +9,7 @@
 var IceBlock = Element.extend({
 	classId: 'IceBlock',
 
-	/**
-	 * The maximum HP for a {@link IceBlock}. Overrides the superclass MAX_HP value. See {@link Block#MAX_HP}.
-	 * @constant {number}
-	 * @default
-	 * @memberof IceBlock
-	 * @instance
-	 */
-	MAX_HP: 8,
-
-	init: function () {
-		data = {MAX_HP: this.MAX_HP};
+	init: function(data) {
 		Element.prototype.init.call(this, data);
 
 		if (!ige.isServer) {
