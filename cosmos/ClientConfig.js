@@ -4,9 +4,6 @@ var igeClientConfig = {
 		'./constants.js',
 
 		/* === COMPONENTS === */
-		'./components/Health.js',
-		'./components/DamageSource.js',
-		'./components/Recipe.js',
 
 		/* === Systems === */
 		'./systems/Inspector.js',
@@ -81,6 +78,13 @@ var igeClientConfig = {
 
 		/* Click scene (captures background client's background clicks) */
 		'./entities/ClickScene.js',
+
+		/* === COMPONENTS === */
+		'./components/Health.js',
+		'./components/DamageSource.js',
+		'./components/Recipe.js',
+		'./components/Description.js',
+		'./components/config/Descriptions.js',
 
 		/* === PLAYER STATE === */
 		'./entities/player/Player.js',
