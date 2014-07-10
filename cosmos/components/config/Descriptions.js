@@ -83,13 +83,13 @@ Descriptions[CarbonBlock.prototype.classId()] =
 Descriptions[CobaltBlock.prototype.classId()] =
 {
 	text: "Cobalt is natually found in many asteroids. It has been used as a blue pigment since ancient times, and has recently been used to tint metals and glass." +
-		"Use Cobalt to shield your ship or to decorate your ship with interesting colors and patterns."
+		" Use Cobalt to shield your ship or to decorate your ship with interesting colors and patterns."
 }
 
 Descriptions[FluorineBlock.prototype.classId()] =
 {
 	text: "Fluorine occurs natually in many toothpastes and mouth rinses. It's use is still not well understood."+
-		"Use Fluorine to shield your ship or to decorate your ship with interesting colors and patterns."
+		" Use Fluorine to shield your ship or to decorate your ship with interesting colors and patterns."
 }
 
 Descriptions[GoldBlock.prototype.classId()] =
