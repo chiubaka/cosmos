@@ -9,11 +9,6 @@
 var ThrusterBlock = Part.extend({
 	classId: 'ThrusterBlock',
 
-	DESCRIPTION: 'Thrusters allow your ship to rotate left and right. The more thrusters your ship has, the faster ' +
-		'it can rotate. If you have no thrusters, your ship cannot rotate. As you place more blocks on your ship, ' +
-		'your ship will become heavier and you will need more thrusters in order to rotate at the same speed as ' +
-		'before.',
-
 	init: function(data) {
 		Part.prototype.init.call(this, data);
 

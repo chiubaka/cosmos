@@ -3,11 +3,6 @@ var igeClientConfig = {
 		/* === CONSTANTS === */
 		'./constants.js',
 
-		/* === COMPONENTS === */
-		'./components/Health.js',
-		'./components/DamageSource.js',
-		'./components/Recipe.js',
-
 		/* === Systems === */
 		'./systems/Inspector.js',
 
@@ -85,6 +80,13 @@ var igeClientConfig = {
 		/* === COMPONENT CONFIG FILES === */
 		'./components/config/Healths.js',
 		'./components/config/Recipes.js',
+
+		/* === COMPONENTS === */
+		'./components/Health.js',
+		'./components/DamageSource.js',
+		'./components/Recipe.js',
+		'./components/Description.js',
+		'./components/config/Descriptions.js',
 
 		/* === PLAYER STATE === */
 		'./entities/player/Player.js',

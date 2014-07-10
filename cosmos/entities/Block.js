@@ -10,8 +10,6 @@
 var Block = IgeEntity.extend({
 	classId: 'Block',
 
-	DESCRIPTION: "A basic block with no special properties.",
-
 	/**
 	 * The number of rows that this {@link Block} takes up.
 	 * @type {number}
@@ -144,6 +142,12 @@ var Block = IgeEntity.extend({
 			this.addComponent(Recipe, Recipes[this.classId()]);
 		}
 
+		// Check if a description has been provided for this block. If so, this block is describable. Otherwise, it is not.
+		if (Descriptions[this.classId()] !== undefined)
+		{
+			this.addComponent(Description, Descriptions[this.classId()]);
+		}
+
 		if (!ige.isServer) {
 			this.texture(ige.client.textures.block);
 
@@ -187,10 +191,6 @@ var Block = IgeEntity.extend({
 
 	hp: function() {
 		return this.health.value;
-	},
-
-	description: function() {
-		return this.DESCRIPTION;
 	},
 
 	/**

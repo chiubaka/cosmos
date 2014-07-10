@@ -3,19 +3,12 @@ var config = {
 		/* === CONSTANTS === */
 		{ name: 'Constants', path: './constants' },
 
-		/* === COMPONENTS === */
-		{ name: 'Health', path: './components/Health' },
-		{ name: 'DamageSource', path: './components/DamageSource' },
-		{ name: 'Recipe', path: './components/Recipe' },
-
 		/* === GAME SETUP === */
 		/* Initialization */
 		{ name: 'GameInit', path: './init/GameInit' },
 
 		/* Network */
 		{ name: 'ServerNetworkEvents', path: './ServerNetworkEvents' },
-
-		/* Configuration */
 
 		/* === ENVIRONMENT STATE === */
 		/* Blocks */
@@ -74,6 +67,13 @@ var config = {
 		{ name: 'Healths', path: './components/config/Healths' },
 		{ name: 'Recipes', path: './components/config/Recipes' },
 
+		/* === COMPONENTS === */
+		{ name: 'Health', path: './components/Health' },
+		{ name: 'DamageSource', path: './components/DamageSource' },
+		{ name: 'Recipe', path: './components/Recipe' },
+		{ name: 'Description', path: './components/Description'},
+		{name: 'Descriptions', path: './components/config/Descriptions'},
+
 		/* === PLAYER STATE === */
 		{ name: 'Player', path: './entities/player/Player' },
 
@@ -107,7 +107,7 @@ var config = {
 
 		/* === EXTERNAL LIBRARIES === */
 		{ name: 'WeightedSelection', path: './lib/weighted' },
-		{ name: 'UuidGenerator', path: './lib/UuidGenerator' }
+		{ name: 'UuidGenerator', path: './lib/UuidGenerator' },
 	]
 };
 
