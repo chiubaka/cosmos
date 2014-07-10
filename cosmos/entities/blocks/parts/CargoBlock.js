@@ -9,17 +9,7 @@
 var CargoBlock = Part.extend({
 	classId: 'CargoBlock',
 
-	/**
-	 * The maximum HP for a {@link CargoBlock}. Overrides the superclass MAX_HP value. See {@link Block#MAX_HP}.
-	 * @constant {number}
-	 * @default
-	 * @memberof CargoBlock
-	 * @instance
-	 */
-	MAX_HP: 20,
-
-	init: function () {
-		data = {MAX_HP: this.MAX_HP};
+	init: function(data) {
 		Part.prototype.init.call(this, data);
 
 		if (!ige.isServer) {

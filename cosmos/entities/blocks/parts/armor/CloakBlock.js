@@ -1,10 +1,7 @@
 var CloakBlock = Armor.extend({
 	classId: 'CloakBlock',
 
-	MAX_HP: 60,
-
-	init: function () {
-		data = {MAX_HP: this.MAX_HP};
+	init: function(data) {
 		Armor.prototype.init.call(this, data);
 
 

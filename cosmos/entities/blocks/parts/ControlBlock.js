@@ -8,17 +8,7 @@
 var ControlBlock = Part.extend({
 	classId: 'ControlBlock',
 
-	/**
-	 * The maximum HP for a {@link ControlBlock}. Overrides the superclass MAX_HP value. See {@link Block#MAX_HP}.
-	 * @constant {number}
-	 * @default
-	 * @memberof ControlBlock
-	 * @instance
-	 */
-	MAX_HP: 45,
-
-	init: function () {
-		data = {MAX_HP: this.MAX_HP};
+	init: function(data) {
 		Part.prototype.init.call(this, data);
 
 		if (!ige.isServer) {

@@ -3,8 +3,6 @@ var igeClientConfig = {
 		/* === CONSTANTS === */
 		'./constants.js',
 
-		/* === COMPONENTS === */
-
 		/* === Systems === */
 		'./systems/Inspector.js',
 
@@ -37,19 +35,19 @@ var igeClientConfig = {
 		'./entities/blocks/parts/weapons/MiningLaserBlock.js',
 
 		/* Ship armor blocks */
-		'./entities/blocks/Armor.js',
-		'./entities/blocks/armor/HullBlock.js',
-		'./entities/blocks/armor/CloakBlock.js',
-		'./entities/blocks/armor/CloakBlockLight.js',
-		'./entities/blocks/armor/CloakBlockViolet.js',
-		'./entities/blocks/armor/CloakBlockVioletLight.js',
-		'./entities/blocks/armor/KryptoniteBlock.js',
-		'./entities/blocks/armor/MithrilBlock.js',
-		'./entities/blocks/armor/AdamantiumBlock.js',
-		'./entities/blocks/armor/DragonBlock.js',
-		'./entities/blocks/armor/TitaniumBlock.js',
-		'./entities/blocks/armor/VioletBlock.js',
-		'./entities/blocks/armor/OrangeBlock.js',
+		'./entities/blocks/parts/Armor.js',
+		'./entities/blocks/parts/armor/HullBlock.js',
+		'./entities/blocks/parts/armor/CloakBlock.js',
+		'./entities/blocks/parts/armor/CloakBlockLight.js',
+		'./entities/blocks/parts/armor/CloakBlockViolet.js',
+		'./entities/blocks/parts/armor/CloakBlockVioletLight.js',
+		'./entities/blocks/parts/armor/KryptoniteBlock.js',
+		'./entities/blocks/parts/armor/MithrilBlock.js',
+		'./entities/blocks/parts/armor/AdamantiumBlock.js',
+		'./entities/blocks/parts/armor/DragonBlock.js',
+		'./entities/blocks/parts/armor/TitaniumBlock.js',
+		'./entities/blocks/parts/armor/VioletBlock.js',
+		'./entities/blocks/parts/armor/OrangeBlock.js',
 
 		/* Element blocks */
 		'./entities/blocks/Element.js',
@@ -79,6 +77,10 @@ var igeClientConfig = {
 		/* Click scene (captures background client's background clicks) */
 		'./entities/ClickScene.js',
 
+		/* === COMPONENT CONFIG FILES === */
+		'./components/config/Healths.js',
+		'./components/config/Recipes.js',
+
 		/* === COMPONENTS === */
 		'./components/Health.js',
 		'./components/DamageSource.js',
@@ -98,7 +100,6 @@ var igeClientConfig = {
 		/* === Crafting === */
 		'./crafting/CraftingSystem.js',
 		'./crafting/CraftingComponent.js',
-		'./crafting/Recipes.js',
 
 		/* Notifications */
 		'./notifications/NotificationDefinitions.js',

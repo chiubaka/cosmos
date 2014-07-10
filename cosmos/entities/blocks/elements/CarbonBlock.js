@@ -8,17 +8,7 @@
 var CarbonBlock = Element.extend({
 	classId: 'CarbonBlock',
 
-	/**
-	 * The maximum HP for a {@link CarbonBlock}. Overrides the superclass MAX_HP value. See {@link Block#MAX_HP}.
-	 * @constant {number}
-	 * @default
-	 * @memberof CarbonBlock
-	 * @instance
-	 */
-	MAX_HP: 15,
-
-	init: function () {
-		data = {MAX_HP: this.MAX_HP};
+	init: function(data) {
 		Element.prototype.init.call(this, data);
 
 
