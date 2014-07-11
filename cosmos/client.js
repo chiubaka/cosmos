@@ -142,6 +142,9 @@ var Client = IgeClass.extend({
 						// Enable crafting system
 						ige.addComponent(CraftingSystem);
 
+						// Enable quest system
+						ige.addComponent(QuestSystem);
+
 						GameInit.init(self);
 
 						//ige.editor.showStats();

@@ -83,6 +83,13 @@ var config = {
 		{ name: 'CraftingComponent', path: './crafting/CraftingComponent' },
 		{ name: 'Recipes', path: './crafting/Recipes' },
 
+		/* === Quests === */
+		{ name: 'QuestSystem', path: './quest/QuestSystem' },
+		{ name: 'QuestComponent', path: './quest/QuestComponent' },
+		{ name: 'Quests', path: './quest/Quests' },
+		{ name: 'TutorialQuest', path: './quest/TutorialQuest' },
+
+
 		/* Database */
 		{ name: 'DbConfig', path: './db/DbConfig' },
 		{ name: 'DbPlayer', path: './db/DbPlayer' },
