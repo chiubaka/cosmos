@@ -596,13 +596,12 @@ var Player = BlockStructure.extend({
 
 					var impulse = new ige.box2d.b2Vec2(impulseX, impulseY);
 
-					var engineX = engine.translate().x();
-					var engineY = engine.translate().y();
+					var enginePosition = this._drawLocationForBlock(engine);
+					enginePosition.x = enginePosition.x / scaleRatio;
+					enginePosition.y = -enginePosition.y / scaleRatio;
 
-					var pointToApplyTo = {x: (thisX + engineX) / scaleRatio, y: (thisY - engineY) / scaleRatio};
-					pointToApplyTo.x = 2 * this._box2dBody.GetWorldCenter().x - pointToApplyTo.x;
-					pointToApplyTo.y = 2 * this._box2dBody.GetWorldCenter().y - pointToApplyTo.y;
-					this._box2dBody.ApplyImpulse(impulse, pointToApplyTo);
+					var engineWorldPosition = this._box2dBody.GetWorldPoint(enginePosition);
+					this._box2dBody.ApplyImpulse(impulse, engineWorldPosition);
 				}
 			}
 			// Update previous controls so we can tell what has changed each update.
