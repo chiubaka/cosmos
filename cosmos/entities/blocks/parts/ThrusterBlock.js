@@ -11,12 +11,6 @@ var ThrusterBlock = Part.extend({
 
 	init: function(data) {
 		Part.prototype.init.call(this, data);
-
-		if (!ige.isServer) {
-			this.textureBackground = "rgb(64, 64, 64)";
-			this.textureOutline = "rgb(255, 78, 0)";
-			this.textureSvg = ige.client.textures.thruster;
-		}
 	}
 });
 

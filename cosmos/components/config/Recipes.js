@@ -2,25 +2,6 @@ var Recipes = {};
 
 /* === PARTS === */
 
-Recipes[ThrusterBlock.prototype.classId()] =
-{
-	reactants: [
-		{
-			blockType: IronBlock.prototype.classId(),
-			quantity: 3
-		},
-		{
-			blockType: CarbonBlock.prototype.classId(),
-			quantity: 1
-		},
-		{
-			blockType: IceBlock.prototype.classId(),
-			quantity: 3
-		}
-	],
-	equipment: []
-};
-
 /* Engines */
 
 Recipes[IronEngineBlock.prototype.classId()] =
@@ -51,6 +32,42 @@ Recipes[DragonBreathEngineBlock.prototype.classId()] =
 		},
 		{
 			blockType: DragonBlock.prototype.classId(),
+			quantity: 1
+		}
+	],
+	equipment: []
+};
+
+/* Thrusters */
+
+Recipes[IronThrusterBlock.prototype.classId()] =
+{
+	reactants: [
+		{
+			blockType: IronBlock.prototype.classId(),
+			quantity: 3
+		},
+		{
+			blockType: CarbonBlock.prototype.classId(),
+			quantity: 1
+		},
+		{
+			blockType: IceBlock.prototype.classId(),
+			quantity: 3
+		}
+	],
+	equipment: []
+};
+
+Recipes[KryptoniteThrusterBlock.prototype.classId()] =
+{
+	reactants: [
+		{
+			blockType: IronThrusterBlock.prototype.classId(),
+			quantity: 1
+		},
+		{
+			blockType: KryptoniteBlock.prototype.classId(),
 			quantity: 1
 		}
 	],

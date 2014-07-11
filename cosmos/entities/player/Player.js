@@ -38,6 +38,7 @@ var Player = BlockStructure.extend({
 	_prevMovementBlocks: undefined,
 
 	_engines: undefined,
+	_thrusters: undefined,
 
 	/**
 	 * Whether or not this {@link Player} is mining. Used to restrict players from mining more than one {@link Block}
@@ -60,6 +61,7 @@ var Player = BlockStructure.extend({
 
 	init: function(data) {
 		this._engines = [];
+		this._thrusters = [];
 		BlockStructure.prototype.init.call(this, data);
 
 		var self = this;
@@ -357,6 +359,9 @@ var Player = BlockStructure.extend({
 		if (block instanceof EngineBlock) {
 			this._engines.push(block);
 		}
+		else if (block instanceof ThrusterBlock) {
+			this._thrusters.push(block);
+		}
 		return blockAdded;
 	},
 
@@ -364,6 +369,9 @@ var Player = BlockStructure.extend({
 		var block = this.get(row, col);
 		if (block instanceof EngineBlock) {
 			this._engines.splice(this._engines.indexOf(block), 1);
+		}
+		else if (block instanceof ThrusterBlock) {
+			this._thrusters.splice(this._thrusters.indexOf(block), 1);
 		}
 		BlockStructure.prototype.remove.call(this, row, col);
 		if (ige.isServer) {
@@ -539,23 +547,24 @@ var Player = BlockStructure.extend({
 			}
 		}
 
-		// TODO: Do not spam the player with notifications if engines/thruster
-		// are removed
 		if (ige.isServer) {
 			/* Angular motion */
 			// Angular rotation speed depends on number of thrusters
 			if (this._controls.key.left || this._controls.key.right) {
-				var numRotationalThrusters = this.numBlocksOfType('ThrusterBlock');
-				var angularImpulse = -60 * numRotationalThrusters * ige._tickDelta;
+				var angularImpulse = 0;
+				for (var i = 0; i < this._thrusters.length; i++) {
+					angularImpulse += this._thrusters[i].thrust.value;
+				}
+				angularImpulse = -angularImpulse * ige._tickDelta;
 
-				if (numRotationalThrusters < 1) {
+				if (this._thrusters.length < 1) {
 					if (JSON.stringify(this._controls) !== JSON.stringify(this._prevControls) ||
 						this._prevMovementBlocks.thrusters > 0) {
 						ige.network.stream.queueCommand('notificationError',
 							NotificationDefinitions.errorKeys.noRotationalThruster, this._clientId);
 					}
 				}
-				this._prevMovementBlocks.thrusters = numRotationalThrusters;
+				this._prevMovementBlocks.thrusters = this._thrusters.length;
 
 				if (this._controls.key.left) {
 					this._box2dBody.ApplyTorque(angularImpulse);
@@ -569,8 +578,6 @@ var Player = BlockStructure.extend({
 				// the "- Math.PI/2" below makes the ship move forward and backwards, instead of side to side.
 				var angle = this._box2dBody.GetAngle() - Math.PI/2;
 				var scaleRatio = ige.box2d.scaleRatio();
-				var thisX = this.translate().x();
-				var thisY = this.translate().y();
 
 				// Notify player that they cannot fly without an engine
 				if (this._engines.length < 1) {
