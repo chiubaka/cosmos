@@ -12,7 +12,7 @@ var DragonBreathEngineBlock = EngineBlock.extend({
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(139, 0, 0)";
 			this.textureOutline = "rgb(255, 78, 0)";
-			this.textureSvg = ige.client.svgs.engine;
+			this.textureSvg = ige.client.textures.engine;
 		}
 	}
 });
