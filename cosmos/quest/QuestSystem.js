@@ -30,7 +30,7 @@ var QuestSystem = IgeEventingClass.extend({
 	},
 
 	_removeQuestClient: function() {
-	}
+	},
 
 
 });
