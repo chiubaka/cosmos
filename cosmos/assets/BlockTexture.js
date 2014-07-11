@@ -25,23 +25,11 @@ var image = {
 		// Draw block icon
 		if (entity.textureSvg)
 		{
-			if (!entity.textureImage) {
-				// Convert the SVG XML into a data URI
-				var imageSrc = 'data:image/svg+xml;base64,' + btoa(entity.textureSvg);
-
-				var image = new Image();
-				image.src = imageSrc;
-				image.onload = function() {
-					// Cache the image so we don't have to keep drawing it from the SVG
-					entity.textureImage = image;
-					// Tell the entity it should redraw itself
-					entity.cacheDirty(true);
-				}
-			}
-			else {
-				var iconScaleFactor = entity.iconScaleFactor || 0.85;
-				ctx.drawImage(entity.textureImage, -entity._bounds2d.x2 * iconScaleFactor, -entity._bounds2d.y2 * iconScaleFactor, entity.width() * iconScaleFactor, entity.height() * iconScaleFactor);
-			}
+			// In the future, modify the SVG's XML data here
+			//var svgXML = entity.texture.svgXML;
+			var image = entity.textureSvg.image;
+			var iconScaleFactor = entity.iconScaleFactor || 0.85;
+			ctx.drawImage(image, -entity._bounds2d.x2 * iconScaleFactor, -entity._bounds2d.y2 * iconScaleFactor, entity.width() * iconScaleFactor, entity.height() * iconScaleFactor);
 		}
 	}
 };

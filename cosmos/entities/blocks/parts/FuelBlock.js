@@ -14,7 +14,7 @@ var FuelBlock = Part.extend({
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(242, 242, 242)";
 			this.textureOutline = "rgb(0, 211, 10)";
-			this.textureSvg = ige.client.svgs.fuel;
+			this.textureSvg = ige.client.textures.fuel;
 		}
 	}
 });

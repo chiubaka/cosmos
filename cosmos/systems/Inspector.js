@@ -91,9 +91,6 @@ var Inspector = IgeEventingClass.extend({
 		ctx.scale(scaleWidth, scaleHeight);
 		ctx.translate(block._bounds2d.x2, block._bounds2d.y2);
 		block.texture().render(ctx, block);
-		setTimeout(function() {
-			block.texture().render(ctx, block);
-		}, 100);
 	},
 
 	loadHtml: function (url, callback) {
