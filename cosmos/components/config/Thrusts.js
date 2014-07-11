@@ -1,6 +1,6 @@
 var Thrusts = {};
 
-Thrusts[EngineBlock.prototype.classId()] =
+Thrusts[IronEngineBlock.prototype.classId()] =
 {
 	value: 3
 };

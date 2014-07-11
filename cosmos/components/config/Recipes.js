@@ -1,6 +1,6 @@
 var Recipes = {};
 
-Recipes[EngineBlock.prototype.classId()] =
+Recipes[IronEngineBlock.prototype.classId()] =
 {
 	reactants: [
 		{
