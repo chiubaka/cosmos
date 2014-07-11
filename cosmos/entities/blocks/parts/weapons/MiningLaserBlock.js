@@ -10,23 +10,14 @@
 var MiningLaserBlock = Weapon.extend({
 	classId: 'MiningLaserBlock',
 
-	/**
-	 * The maximum HP for a {@link MiningLaserBlock}. Overrides the superclass MAX_HP value. See {@link Block#MAX_HP}.
-	 * @constant {number}
-	 * @default
-	 * @memberof MiningLaserBlock
-	 * @instance
-	 */
-	MAX_HP: 50,
-
-	init: function () {
+	init: function(data) {
 		data = {MAX_HP: this.MAX_HP};
 		Weapon.prototype.init.call(this, data);
 
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(242, 242, 242)";
 			this.textureOutline = "rgb(208, 63, 44)";
-			this.textureSvg = ige.client.svgs.miningLaser;
+			this.textureSvg = ige.client.textures.miningLaser;
 		}
 	},
 

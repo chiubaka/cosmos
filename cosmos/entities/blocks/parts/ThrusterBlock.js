@@ -9,23 +9,13 @@
 var ThrusterBlock = Part.extend({
 	classId: 'ThrusterBlock',
 
-	/**
-	 * The maximum HP for a {@link ThrusterBlock}. Overrides the superclass MAX_HP value. See {@link Block#MAX_HP}.
-	 * @constant {number}
-	 * @default
-	 * @memberof ThrusterBlock
-	 * @instance
-	 */
-	MAX_HP: 40,
-
-	init: function () {
-		data = {MAX_HP: this.MAX_HP};
+	init: function(data) {
 		Part.prototype.init.call(this, data);
 
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(64, 64, 64)";
 			this.textureOutline = "rgb(255, 78, 0)";
-			this.textureSvg = ige.client.svgs.thruster;
+			this.textureSvg = ige.client.textures.thruster;
 		}
 	}
 });

@@ -8,23 +8,13 @@
 var EngineBlock = Part.extend({
 	classId: 'EngineBlock',
 
-	/**
-	 * The maximum HP for a {@link EngineBlock}. Overrides the superclass MAX_HP value. See {@link Block#MAX_HP}.
-	 * @constant {number}
-	 * @default
-	 * @memberof EngineBlock
-	 * @instance
-	 */
-	MAX_HP: 40,
-
-	init: function () {
-		data = {MAX_HP: this.MAX_HP};
+	init: function (data) {
 		Part.prototype.init.call(this, data);
 
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(64, 64, 64)";
 			this.textureOutline = "rgb(255, 78, 0)";
-			this.textureSvg = ige.client.svgs.engine;
+			this.textureSvg = ige.client.textures.engine;
 		}
 	},
 

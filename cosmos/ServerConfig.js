@@ -10,8 +10,6 @@ var config = {
 		/* Network */
 		{ name: 'ServerNetworkEvents', path: './ServerNetworkEvents' },
 
-		/* Configuration */
-
 		/* === ENVIRONMENT STATE === */
 		/* Blocks */
 		{ name: 'Block', path: './entities/Block' },
@@ -65,13 +63,16 @@ var config = {
 		{ name: 'Background', path: './entities/scenery/Background' },
 		{ name: 'BlockStructureGenerator', path: './entities/scenery/BlockStructureGenerator' },
 
+		/* === COMPONENT CONFIG FILES === */
+		{ name: 'Healths', path: './components/config/Healths' },
+		{ name: 'Recipes', path: './components/config/Recipes' },
+
 		/* === COMPONENTS === */
 		{ name: 'Health', path: './components/Health' },
 		{ name: 'DamageSource', path: './components/DamageSource' },
 		{ name: 'Recipe', path: './components/Recipe' },
 		{ name: 'Description', path: './components/Description'},
 		{name: 'Descriptions', path: './components/config/Descriptions'},
-
 
 		/* === PLAYER STATE === */
 		{ name: 'Player', path: './entities/player/Player' },
@@ -84,7 +85,6 @@ var config = {
 		/* === Crafting === */
 		{ name: 'CraftingSystem', path: './crafting/CraftingSystem' },
 		{ name: 'CraftingComponent', path: './crafting/CraftingComponent' },
-		{ name: 'Recipes', path: './crafting/Recipes' },
 
 		/* Database */
 		{ name: 'DbConfig', path: './db/DbConfig' },

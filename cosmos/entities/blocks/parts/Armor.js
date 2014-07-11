@@ -1,7 +1,7 @@
 var Armor = Part.extend({
 	classId: 'Armor',
 
-	init: function (data) {
+	init: function(data) {
 		Part.prototype.init.call(this, data);
 	}
 });
