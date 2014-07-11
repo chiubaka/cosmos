@@ -10,7 +10,7 @@ Thrusts[DragonBreathEngineBlock.prototype.classId()] =
 	value: 6
 };
 
-Thrusts[ThrusterBlock.prototype.classId()] =
+Thrusts[IronThrusterBlock.prototype.classId()] =
 {
 	value: 60
 };

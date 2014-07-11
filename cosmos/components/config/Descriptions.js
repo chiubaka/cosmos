@@ -148,7 +148,7 @@ Descriptions[PowerBlock.prototype.classId()] =
 	text: "Power doesn't currently do anything."
 };
 
-Descriptions[ThrusterBlock.prototype.classId()] =
+Descriptions[IronThrusterBlock.prototype.classId()] =
 {
 	text: 'Thrusters allow your ship to rotate left and right. The more thrusters your ship has, the faster ' +
 		'it can rotate. If you have no thrusters, your ship cannot rotate. As you place more blocks on your ship, ' +

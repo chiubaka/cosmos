@@ -22,7 +22,7 @@ Healths[PowerBlock.prototype.classId()] =
 	max: 40
 };
 
-Healths[ThrusterBlock.prototype.classId()] =
+Healths[IronThrusterBlock.prototype.classId()] =
 {
 	max: 40
 };
