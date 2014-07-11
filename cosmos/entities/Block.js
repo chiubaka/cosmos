@@ -636,69 +636,10 @@ Block.displayNameFromClassId = function(classId) {
  * @memberof Block
  */
 Block.blockFromClassId = function(classId) {
-	switch (classId) {
-		case Block.prototype.classId():
-			return new Block();
-
-		//Ship parts
-		case CargoBlock.prototype.classId():
-			return new CargoBlock();
-		case ControlBlock.prototype.classId():
-			return new ControlBlock();
-		case EngineBlock.prototype.classId():
-			return new EngineBlock();
-		case FuelBlock.prototype.classId():
-			return new FuelBlock();
-		case MiningLaserBlock.prototype.classId():
-			return new MiningLaserBlock();
-		case PowerBlock.prototype.classId():
-			return new PowerBlock();
-		case ThrusterBlock.prototype.classId():
-			return new ThrusterBlock();
-
-		// Armor
-		case HullBlock.prototype.classId():
-			return new HullBlock();
-		case CloakBlock.prototype.classId():
-			return new CloakBlock();
-		case CloakBlockLight.prototype.classId():
-			return new CloakBlockLight();
-		case CloakBlockViolet.prototype.classId():
-			return new CloakBlockViolet();
-		case CloakBlockVioletLight.prototype.classId():
-			return new CloakBlockVioletLight();
-		case KryptoniteBlock.prototype.classId():
-			return new KryptoniteBlock();
-		case MithrilBlock.prototype.classId():
-			return new MithrilBlock();
-		case AdamantiumBlock.prototype.classId():
-			return new AdamantiumBlock();
-		case DragonBlock.prototype.classId():
-			return new DragonBlock();
-		case TitaniumBlock.prototype.classId():
-			return new TitaniumBlock();
-		case VioletBlock.prototype.classId():
-			return new VioletBlock();
-		case OrangeBlock.prototype.classId():
-			return new OrangeBlock();
-
-		// Elements
-		case CarbonBlock.prototype.classId():
-			return new CarbonBlock();
-		case IceBlock.prototype.classId():
-			return new IceBlock();
-		case IronBlock.prototype.classId():
-			return new IronBlock();
-		case GoldBlock.prototype.classId():
-			return new GoldBlock();
-		case FluorineBlock.prototype.classId():
-			return new FluorineBlock();
-		case CobaltBlock.prototype.classId():
-			return new CobaltBlock();
-
-		default:
-			return undefined;
+	if (cosmos.blocks.constructors[classId] === undefined) {
+		return undefined;
 	}
+	return new cosmos.blocks.constructors[classId]();
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Block; }
