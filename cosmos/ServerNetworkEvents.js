@@ -230,7 +230,7 @@ var ServerNetworkEvents = {
 			// Activate mining lasers
 			player.fireMiningLasers(targetBlock);
 		}
-		ige.questSystem.addQuestServer('TutorialQuest', player);
+		ige.questSystem.addQuestServer('TutorialQuest', 1, player);
 	},
 
 	_onConstructNew: function(data, clientId) {

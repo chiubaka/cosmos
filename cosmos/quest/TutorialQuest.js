@@ -1,9 +1,11 @@
 var TutorialQuest = IgeEventingClass.extend({
 	classId: 'TutorialQuest',
+	instance: undefined,
 	questStates: [],
 
-	init: function() {
+	init: function(instance) {
 		this.questStates.push(this.hello);
+		this.instance = instance;
 	},
 
 	hello: {

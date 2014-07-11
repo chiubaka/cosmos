@@ -5,26 +5,32 @@ var QuestSystem = IgeEventingClass.extend({
 	init: function() {
 		if (ige.isServer) {
 			ige.network.define('cosmos:quest.addQuest');
+			ige.network.define('cosmos:quest.removeQuest');
 		}
 		if (ige.isClient) {
 			ige.network.define('cosmos:quest.addQuest', this._addQuestClient);
+			ige.network.define('cosmos:quest.removeQuest', this._removeQuestClient);
 		}
 		this.log('Quest system initiated');
 	},
 
-	_addQuestClient: function(data) {
-		var questName = data;
-		ige.client.player.quest.addQuest(questName);
+	addQuestServer: function(questName, instance, player) {
+		player.quest.addQuest(questName);
+		var data = [questName, instance];
+		ige.network.stream.queueCommand('cosmos:quest.addQuest', data, player.clientId());
 	},
 
-	addQuestServer: function(questName, player) {
-		// TODO: Make this based on quest
-		quest = "TutorialQuest";
-		player.quest.addQuest(questName);
-		ige.network.stream.queueCommand('cosmos:quest.addQuest', questName,
-			player.clientId());
-	}
+	_addQuestClient: function(data) {
+		var questName = data[0];
+		var instance = data[1]
+		ige.client.player.quest.addQuest(questName, instance);
+	},
 
+	removeQuestServer: function() {
+	},
+
+	_removeQuestClient: function() {
+	}
 
 
 });

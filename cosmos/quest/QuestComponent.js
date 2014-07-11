@@ -5,12 +5,32 @@ var QuestComponent = IgeEventingClass.extend({
 	activeQuests: undefined,
 
 	init: function() {
-		this.activeQuests = [];
+		this.activeQuests = {};
 	},
 
-	addQuest: function (questName) {
+	addQuest: function (questName, instance) {
 		var globalContext = (ige.isServer) ? global : window;
-		this.activeQuests.push(new globalContext[questName]);
+		if (this.activeQuests.hasOwnProperty(questName)) {
+			var quests = this.activeQuests[questName];
+			if (quests.hasOwnProperty(instance)) {
+				this.log('QuestComponent#addQuest: Quest already exists!', 'warn');
+				return;
+			}
+		}
+		this.activeQuests[questName] = this.activeQuests[questName] || {};
+		this.activeQuests[questName][instance] = new globalContext[questName](instance);
+	},
+
+	removeQuest: function (questName, instance) {
+		var globalContext = (ige.isServer) ? global : window;
+		if (this.activeQuests.hasOwnProperty(questName)) {
+			var quests = this.activeQuests[questName];
+			if (quests.hasOwnProperty(instance)) {
+				delete quests[instance];
+				return;
+			}
+		}
+		this.log('QuestComponent#removeQuest: Quest does not exist!', 'warn');
 	}
 
 
