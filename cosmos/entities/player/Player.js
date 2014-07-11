@@ -142,7 +142,7 @@ var Player = IgeEntity.extend({
 		IgeEntity.prototype.update.call(this, ctx);
 
 		if (!ige.isServer) {
-			console.log("update is called on client");
+			//console.log("update is called on client");
 
 			/* Save the old control state for comparison later */
 			oldControls = JSON.stringify(this.controls());
@@ -166,7 +166,10 @@ var Player = IgeEntity.extend({
 
 				// Tell the server about our control change
 				ige.network.send('playerControlUpdate', this.controls());
-			}
+			}/*
+			else {
+				console.log("controls have not changed : ()");
+			}*/
 		}
 	},
 

@@ -72,8 +72,6 @@ var ServerNetworkEvents = {
 	 * @private
 	 */
 	_onPlayerEntity: function(data, clientId) {
-		console.log("_onPlayerEntity called");
-
 		var self = this;
 		/**
 		 * @callback onPlayerEntitySessionCallback
@@ -102,7 +100,7 @@ var ServerNetworkEvents = {
 					self.log('Cannot load player from database!', 'error')
 				}
 
-				console.log("Calling create ship...");
+				console.log("Creating a player's ship...");
 				ige.server._createShip(clientId, playerId, ship, cargo);
 			});
 		});
@@ -134,8 +132,6 @@ var ServerNetworkEvents = {
 			playerId: playerId !== undefined ? playerId : "undefined"
 		};
 
-		console.log("entityId: " + sendData.entityId);
-
 		// Tell the client to track their player entity
 		ige.network.send('playerEntity', sendData, clientId);
 	},
@@ -163,11 +159,6 @@ var ServerNetworkEvents = {
 		}
 
 		ige.network.send('shipEntity', sendData, clientId);
-
-		console.log("finished create ship");
-		console.log("ship has the following id():");
-		console.log(player.currentShip().id());
-		console.log();
 	},
 
 	/**
@@ -205,11 +196,10 @@ var ServerNetworkEvents = {
 		ige.server._createPlayer(clientId, playerId);
 		ige.network.stream.queueCommand('notificationSuccess',
 			NotificationDefinitions.successKeys.newShip, clientId);
-		console.log("_onNewShipRequest called");
 	},
 
 	/**
-	Called when the player updates the state of his control object
+	Called when the player updates the state of his control object.
 	data in this case represents the *new* state of the player's controls
 	*/
 	_onPlayerControlUpdate: function(data, clientId) {
@@ -219,10 +209,6 @@ var ServerNetworkEvents = {
 		}
 
 		player.controls(data);
-
-		console.log("player just updated his controls!");
-		console.log("here are the new controls:");
-		console.log(player.controls());
 	},
 
 	// TODO: User access control. Restrict what players can do based on clientId

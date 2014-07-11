@@ -29,6 +29,7 @@ var config = {
 		{ name: 'ControlBlock', path: './entities/blocks/parts/ControlBlock' },
 		{ name: 'MiningLaserBlock', path: './entities/blocks/parts/MiningLaserBlock' },
 		{ name: 'ThrusterBlock', path: './entities/blocks/parts/ThrusterBlock' },
+
 		/* Ship armor blocks */
 		{ name: 'Armor', path: './entities/blocks/Armor' },
 		{ name: 'HullBlock', path: './entities/blocks/armor/HullBlock' },

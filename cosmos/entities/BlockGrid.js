@@ -406,7 +406,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		new Drop().mount(ige.server.spaceGameScene)
 			.block(block)
-			.owner(player)
+			.owner(player.currentShip())
 			.translateTo(finalX, finalY, 0)
 			.rotate().z(theta)
 			.streamMode(1);

@@ -82,7 +82,7 @@ var Ship = BlockStructure.extend({
 		this.cargo = new Cargo();
 
 		this
-			//.addSensor(300)
+			.addSensor(300)
 			.attractionStrength(1)
 			.relocate();
 			//.debugFixtures(false);//change to true for debugging*/
