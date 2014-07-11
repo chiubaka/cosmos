@@ -132,6 +132,12 @@ Descriptions[IronEngineBlock.prototype.classId()] =
 		'fly straight.'
 };
 
+Descriptions[DragonBreathEngineBlock.prototype.classId()] =
+{
+	text: 'Forged from the remains of a space dragon, this engine is a significant improvement over the basic Iron ' +
+		'Engine.'
+};
+
 Descriptions[FuelBlock.prototype.classId()] =
 {
 	text: "Fuel doesn't currently do anything."

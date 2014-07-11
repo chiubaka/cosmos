@@ -1,5 +1,5 @@
-var IronEngineBlock = EngineBlock.extend({
-	classId: 'IronEngineBlock',
+var DragonBreathEngineBlock = EngineBlock.extend({
+	classId: 'DragonBreathEngineBlock',
 
 	init: function (data) {
 		EngineBlock.prototype.init.call(this, data);
@@ -17,4 +17,4 @@ var IronEngineBlock = EngineBlock.extend({
 	}
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = IronEngineBlock; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = DragonBreathEngineBlock; }

@@ -12,11 +12,6 @@ Healths[ControlBlock.prototype.classId()] =
 	max: 45
 };
 
-Healths[IronEngineBlock.prototype.classId()] =
-{
-	max: 40
-};
-
 Healths[FuelBlock.prototype.classId()] =
 {
 	max: 10
@@ -92,6 +87,17 @@ Healths[TitaniumBlock.prototype.classId()] =
 Healths[VioletBlock.prototype.classId()] =
 {
 	max: 60
+};
+
+/* Engines */
+Healths[IronEngineBlock.prototype.classId()] =
+{
+	max: 40
+};
+
+Healths[DragonBreathEngineBlock.prototype.classId()] =
+{
+	max: 40
 };
 
 /* Weapons */
