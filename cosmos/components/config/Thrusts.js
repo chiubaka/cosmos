@@ -15,4 +15,9 @@ Thrusts[IronThrusterBlock.prototype.classId()] =
 	value: 60
 };
 
+Thrusts[KryptoniteThrusterBlock.prototype.classId()] =
+{
+	value: 120
+};
+
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Thrusts }

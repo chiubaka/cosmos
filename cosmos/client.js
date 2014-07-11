@@ -63,7 +63,8 @@ var Client = IgeClass.extend({
 			self.svgs = {
 				power: gameRoot + 'assets/blocks/power/power.svg',
 				engine: gameRoot + 'assets/blocks/engines/engine.svg',
-				thruster: gameRoot + 'assets/blocks/thruster/thruster.svg',
+				thruster: gameRoot + 'assets/blocks/thrusters/thruster.svg',
+				kryptoniteThruster: gameRoot + 'assets/blocks/thrusters/kryptoniteThruster.svg',
 				fuel: gameRoot + 'assets/blocks/fuel/fuel.svg',
 				cargo: gameRoot + 'assets/blocks/cargo/cargo.svg',
 				control: gameRoot + 'assets/blocks/playerctrl/playerctrl.svg',
