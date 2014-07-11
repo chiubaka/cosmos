@@ -22,6 +22,8 @@ var config = {
 		{ name: 'Part', path: './entities/blocks/Part' },
 		{ name: 'PowerBlock', path: './entities/blocks/parts/PowerBlock' },
 		{ name: 'EngineBlock', path: './entities/blocks/parts/EngineBlock' },
+		{ name: 'IronEngineBlock', path: './entities/blocks/parts/engines/IronEngineBlock' },
+		{ name: 'DragonBreathEngineBlock', path: './entities/blocks/parts/engines/DragonBreathEngineBlock' },
 		{ name: 'FuelBlock', path: './entities/blocks/parts/FuelBlock' },
 		{ name: 'CargoBlock', path: './entities/blocks/parts/CargoBlock' },
 		{ name: 'ControlBlock', path: './entities/blocks/parts/ControlBlock' },
@@ -64,15 +66,17 @@ var config = {
 		{ name: 'BlockStructureGenerator', path: './entities/scenery/BlockStructureGenerator' },
 
 		/* === COMPONENT CONFIG FILES === */
+		{ name: 'Descriptions', path: './components/config/Descriptions' },
 		{ name: 'Healths', path: './components/config/Healths' },
 		{ name: 'Recipes', path: './components/config/Recipes' },
+		{ name: 'Thrusts', path: './components/config/Thrusts' },
 
 		/* === COMPONENTS === */
-		{ name: 'Health', path: './components/Health' },
 		{ name: 'DamageSource', path: './components/DamageSource' },
-		{ name: 'Recipe', path: './components/Recipe' },
 		{ name: 'Description', path: './components/Description'},
-		{name: 'Descriptions', path: './components/config/Descriptions'},
+		{ name: 'Health', path: './components/Health' },
+		{ name: 'Recipe', path: './components/Recipe' },
+		{ name: 'Thrust', path: './components/Thrust' },
 
 		/* === PLAYER STATE === */
 		{ name: 'Player', path: './entities/player/Player' },

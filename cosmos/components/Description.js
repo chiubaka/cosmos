@@ -6,7 +6,7 @@ var Description = IgeClass.extend({
 
 	init: function(entity, data) {
 		if (data === undefined || data.text === undefined) {
-			this.log('Init parameters not provided for DescriptionComponent.', 'error');
+			this.log('Init parameters not provided for Description.', 'error');
 			return;
 		}
 

@@ -24,6 +24,8 @@ var igeClientConfig = {
 		/* Ship part blocks */
 		'./entities/blocks/Part.js',
 		'./entities/blocks/parts/EngineBlock.js',
+		'./entities/blocks/parts/engines/IronEngineBlock.js',
+		'./entities/blocks/parts/engines/DragonBreathEngineBlock.js',
 		'./entities/blocks/parts/PowerBlock.js',
 		'./entities/blocks/parts/FuelBlock.js',
 		'./entities/blocks/parts/CargoBlock.js',
@@ -78,15 +80,17 @@ var igeClientConfig = {
 		'./entities/ClickScene.js',
 
 		/* === COMPONENT CONFIG FILES === */
+		'./components/config/Descriptions.js',
 		'./components/config/Healths.js',
 		'./components/config/Recipes.js',
+		'./components/config/Thrusts.js',
 
 		/* === COMPONENTS === */
-		'./components/Health.js',
 		'./components/DamageSource.js',
-		'./components/Recipe.js',
 		'./components/Description.js',
-		'./components/config/Descriptions.js',
+		'./components/Health.js',
+		'./components/Recipe.js',
+		'./components/Thrust.js',
 
 		/* === PLAYER STATE === */
 		'./entities/player/Player.js',

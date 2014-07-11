@@ -21,7 +21,7 @@ var Recipe = IgeClass.extend({
 
 	init: function(entity, data) {
 		if (data === undefined || data.reactants === undefined) {
-			this.log('Init parameters not provided for recipe component.', 'error');
+			this.log('Init parameters not provided for Recipe.', 'error');
 			return;
 		}
 
