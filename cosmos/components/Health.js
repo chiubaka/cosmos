@@ -7,7 +7,7 @@ var Health = IgeClass.extend({
 
 	init: function(entity, data) {
 		if (data === undefined || data.max === undefined) {
-			this.log('Init parameters not provided for health component.', 'error');
+			this.log('Init parameters not provided for Health.', 'error');
 			return;
 		}
 
