@@ -11,7 +11,7 @@ var IronThrusterBlock = ThrusterBlock.extend({
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(64, 64, 64)";
 			this.textureOutline = "rgb(255, 78, 0)";
-			this.textureSvg = ige.client.svgs.thruster;
+			this.textureSvg = ige.client.textures.thruster;
 		}
 	}
 });

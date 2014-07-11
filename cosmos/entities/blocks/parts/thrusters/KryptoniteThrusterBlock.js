@@ -11,7 +11,7 @@ var KryptoniteThrusterBlock = ThrusterBlock.extend({
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(64, 64, 64)";
 			this.textureOutline = "rgb(111, 167, 0)";
-			this.textureSvg = ige.client.svgs.kryptoniteThruster;
+			this.textureSvg = ige.client.textures.kryptoniteThruster;
 		}
 	}
 });

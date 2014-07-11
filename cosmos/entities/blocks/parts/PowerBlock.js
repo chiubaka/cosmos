@@ -15,7 +15,7 @@ var PowerBlock = Part.extend({
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(242, 242, 242)";
 			this.textureOutline = "rgb(255, 190, 13)";
-			this.textureSvg = ige.client.svgs.power;
+			this.textureSvg = ige.client.textures.power;
 		}
 	}
 });
