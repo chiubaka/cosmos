@@ -1,19 +1,11 @@
-var TutorialQuest = IgeEventingClass.extend({
+var TutorialQuest = Quest.extend({
 	classId: 'TutorialQuest',
-	instance: undefined,
-	questState: undefined,
-	isComplete: undefined,
+
 
 	init: function() {
+		Quest.prototype.init.call(this);
 		this.isComplete = false;
 		this.questState = this.states.hello;
-	},
-
-
-	processStep: function() {
-		if (this.questState.condition.call(this)) {
-			this.questState.action.call(this);
-		}
 	},
 
 	states: {

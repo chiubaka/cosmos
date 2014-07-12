@@ -99,7 +99,7 @@ var igeClientConfig = {
 		/* === Quests === */
 		'./quest/QuestSystem.js',
 		'./quest/QuestComponent.js',
-		'./quest/Quests.js',
+		'./quest/Quest.js',
 		'./quest/TutorialQuest.js',
 
 		/* Notifications */

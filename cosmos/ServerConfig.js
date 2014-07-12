@@ -86,7 +86,7 @@ var config = {
 		/* === Quests === */
 		{ name: 'QuestSystem', path: './quest/QuestSystem' },
 		{ name: 'QuestComponent', path: './quest/QuestComponent' },
-		{ name: 'Quests', path: './quest/Quests' },
+		{ name: 'Quest', path: './quest/Quest' },
 		{ name: 'TutorialQuest', path: './quest/TutorialQuest' },
 
 
