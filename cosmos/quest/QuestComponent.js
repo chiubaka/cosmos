@@ -21,7 +21,7 @@ var QuestComponent = IgeEventingClass.extend({
 			}
 		}
 		this._activeQuests[questName] = this._activeQuests[questName] || {};
-		this._activeQuests[questName][instance] = new globalContext[questName](instance);
+		this._activeQuests[questName][instance] = new globalContext[questName];
 	},
 
 	removeQuest: function (questName, instance) {
@@ -48,7 +48,12 @@ var QuestComponent = IgeEventingClass.extend({
 						// Process behavior for that quest
 						var quest = instances[instance];
 						//console.log(quest);
-						quest.processStep();
+						if (quest.isComplete === true) {
+							self.removeQuest(questName, instance);
+						}
+						else {
+							quest.processStep();
+						}
 					}
 				}
 			}
