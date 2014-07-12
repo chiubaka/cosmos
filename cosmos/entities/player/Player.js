@@ -28,11 +28,17 @@ var Player = BlockStructure.extend({
 	 * @instance
 	 */
 	_dbId: undefined,
-
 	_username: undefined,
 	_usernameLabel: undefined,
-
 	hasGuestUsername: undefined,
+	_controls: undefined,
+	// Keep track of previous values so we can send the client notifications only
+	// on a change.
+	_prevControls: undefined,
+	_prevMovementBlocks: undefined,
+
+	_engines: undefined,
+	_thrusters: undefined,
 
 	/**
 	 * Whether or not this {@link Player} is mining. Used to restrict players from mining more than one {@link Block}
@@ -54,6 +60,8 @@ var Player = BlockStructure.extend({
 	 _clientId: undefined,
 
 	init: function(data) {
+		this._engines = [];
+		this._thrusters = [];
 		BlockStructure.prototype.init.call(this, data);
 
 		var self = this;
@@ -61,13 +69,27 @@ var Player = BlockStructure.extend({
 		this.category(Player.BOX2D_CATEGORY);
 		this._attractionStrength = 1;
 
-		this.controls = {
+		this._controls = {
 			key: {
 				left: false,
 				right: false,
 				up: false,
 				down: false
 			}
+		};
+
+		this._prevControls = {
+			key: {
+				left: false,
+				right: false,
+				up: false,
+				down: false
+			}
+		};
+
+		this._prevMovementBlocks = {
+			engines: 1,
+			thrusters: 1
 		};
 
 		if (ige.isClient) {
@@ -334,10 +356,23 @@ var Player = BlockStructure.extend({
 		if (blockAdded && ige.isServer) {
 			DbPlayer.update(this.dbId(), this, function() {});
 		}
+		if (block instanceof EngineBlock) {
+			this._engines.push(block);
+		}
+		else if (block instanceof ThrusterBlock) {
+			this._thrusters.push(block);
+		}
 		return blockAdded;
 	},
 
 	remove: function(row, col) {
+		var block = this.get(row, col);
+		if (block instanceof EngineBlock) {
+			this._engines.splice(this._engines.indexOf(block), 1);
+		}
+		else if (block instanceof ThrusterBlock) {
+			this._thrusters.splice(this._thrusters.indexOf(block), 1);
+		}
 		BlockStructure.prototype.remove.call(this, row, col);
 		if (ige.isServer) {
 			DbPlayer.update(this.dbId(), this, function() {});
@@ -486,7 +521,6 @@ var Player = BlockStructure.extend({
 	 */
 	update: function(ctx) {
 		if (!ige.isServer) {
-
 			// If this isn't the player playing on this client, draw a label to help identify this player
 			if (this._usernameLabel !== undefined) {
 				var screenPos = this.screenPosition();
@@ -495,93 +529,92 @@ var Player = BlockStructure.extend({
 			}
 
 			/* Save the old control state for comparison later */
-			oldControls = JSON.stringify(this.controls);
+			oldControls = JSON.stringify(this._controls);
 
 			/* Modify the KEYBOARD controls to reflect which keys the client currently is pushing */
-			this.controls.key.up =
+			this._controls.key.up =
 				ige.input.actionState('key.up') | ige.input.actionState('key.up_W');
-			this.controls.key.down =
+			this._controls.key.down =
 				ige.input.actionState('key.down') | ige.input.actionState('key.down_S');
-			this.controls.key.left =
+			this._controls.key.left =
 				ige.input.actionState('key.left') | ige.input.actionState('key.left_A');
-			this.controls.key.right =
+			this._controls.key.right =
 				ige.input.actionState('key.right') | ige.input.actionState('key.right_D');
 
-			if (JSON.stringify(this.controls) !== oldControls) { //this.controls !== oldControls) {
+			if (JSON.stringify(this._controls) !== oldControls) { //this._controls !== oldControls) {
 				// Tell the server about our control change
-				ige.network.send('playerControlUpdate', this.controls);
+				ige.network.send('playerControlUpdate', this._controls);
 			}
 		}
 
-		// TODO: Do not spam the player with notifications if engines/thruster
-		// are removed
 		if (ige.isServer) {
 			/* Angular motion */
 			// Angular rotation speed depends on number of thrusters
-			var numRotationalThrusters = this.numBlocksOfType('ThrusterBlock');
-			var angularImpulse = -60 * numRotationalThrusters * ige._tickDelta;
-
-			if (this.controls.key.left || this.controls.key.right) {
-				if (numRotationalThrusters < 1) {
-					ige.network.stream.queueCommand('notificationError',
-						NotificationDefinitions.errorKeys.noRotationalThruster, this._clientId);
+			if (this._controls.key.left || this._controls.key.right) {
+				var angularImpulse = 0;
+				for (var i = 0; i < this._thrusters.length; i++) {
+					angularImpulse += this._thrusters[i].thrust.value;
 				}
+				angularImpulse = -angularImpulse * ige._tickDelta;
 
-				if (this.controls.key.left) {
+				if (this._thrusters.length < 1) {
+					if (JSON.stringify(this._controls) !== JSON.stringify(this._prevControls) ||
+						this._prevMovementBlocks.thrusters > 0) {
+						ige.network.stream.queueCommand('notificationError',
+							NotificationDefinitions.errorKeys.noRotationalThruster, this._clientId);
+					}
+				}
+				this._prevMovementBlocks.thrusters = this._thrusters.length;
+
+				if (this._controls.key.left) {
 					this._box2dBody.ApplyTorque(angularImpulse);
 				}
-				if (this.controls.key.right) {
+				if (this._controls.key.right) {
 					this._box2dBody.ApplyTorque(-angularImpulse);
 				}
 			}
 
-			/* Linear motion */
-			if (this.controls.key.up || this.controls.key.down) {
-				var linearImpulse = 3 * ige._tickDelta;
-				if (this.controls.key.up) {
-					linearImpulse = linearImpulse;
-				}
-				else if (this.controls.key.down) {
-					linearImpulse = -linearImpulse;
-				}
-
+			if (this._controls.key.up || this._controls.key.down) {
 				// the "- Math.PI/2" below makes the ship move forward and backwards, instead of side to side.
 				var angle = this._box2dBody.GetAngle() - Math.PI/2;
-
-				var x_comp = Math.cos(angle) * linearImpulse;
-				var y_comp = Math.sin(angle) * linearImpulse;
-
-				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
-
-				var engines = this.blocksOfType(EngineBlock.prototype.classId());
+				var scaleRatio = ige.box2d.scaleRatio();
 
 				// Notify player that they cannot fly without an engine
-				if (engines.length < 1) {
-					ige.network.stream.queueCommand('notificationError',
-						NotificationDefinitions.errorKeys.noEngine, this._clientId);
+				if (this._engines.length < 1) {
+					if (JSON.stringify(this._controls) !== JSON.stringify(this._prevControls) ||
+						this._prevMovementBlocks.engines > 0) {
+						ige.network.stream.queueCommand('notificationError',
+							NotificationDefinitions.errorKeys.noEngine, this._clientId);
+					}
 				}
 
-				for (var i = 0; i < engines.length; i++) {
-					var engine = engines[i];
-					// TODO: Fixtures should have their own position in box2d units.
-					// Something like block.fixture().m_shape.m_centroid should work.
-					// But this is a little tricky because box2D fixtures don't seem to
-					// compute their own world coordinates or rotated offsets. They only
-					// store the unrotated offset.
-					// Talk with @rafaelCosman if you want help doing this TODO.
+				this._prevMovementBlocks.engines = this._engines.length;
 
-					var scaleRatio = ige.box2d.scaleRatio();
-					var thisX = this.translate().x();
-					var thisY = this.translate().y();
-					var engineX = engine.translate().x();
-					var engineY = engine.translate().y();
+				for (var i = 0; i < this._engines.length; i++) {
+					var engine = this._engines[i];
 
-					var pointToApplyTo = {x: (thisX + engineX) / scaleRatio, y: (thisY - engineY) / scaleRatio};
-					pointToApplyTo.x = 2 * this._box2dBody.GetWorldCenter().x - pointToApplyTo.x;
-					pointToApplyTo.y = 2 * this._box2dBody.GetWorldCenter().y - pointToApplyTo.y;
-					this._box2dBody.ApplyImpulse(impulse, pointToApplyTo);
+					var linearImpulse = engine.thrust.value * ige._tickDelta;
+					if (this._controls.key.down) {
+						linearImpulse = -linearImpulse;
+					}
+
+					var impulseX = Math.cos(angle) * linearImpulse;
+					var impulseY = Math.sin(angle) * linearImpulse;
+
+					var impulse = new ige.box2d.b2Vec2(impulseX, impulseY);
+
+					var enginePosition = this._drawLocationForBlock(engine);
+					enginePosition.x = enginePosition.x / scaleRatio;
+					enginePosition.y = -enginePosition.y / scaleRatio;
+
+					var engineWorldPosition = this._box2dBody.GetWorldPoint(enginePosition);
+					this._box2dBody.ApplyImpulse(impulse, engineWorldPosition);
 				}
 			}
+			// Update previous controls so we can tell what has changed each update.
+			// We want to send engine missing notifications on a change, not every
+			// update
+			this._prevControls = JSON.parse(JSON.stringify(this._controls));
 		}
 
 		BlockGrid.prototype.update.call(this, ctx);

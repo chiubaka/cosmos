@@ -16,10 +16,10 @@ var ExampleShips = {
 			[undefined,           new HullBlock(), new HullBlock(),            new HullBlock(), undefined],
 			[undefined,           new HullBlock(), new ControlBlock(),     new HullBlock(), undefined],
 			[undefined,           new HullBlock(), new PowerBlock(),       new HullBlock(), undefined],
-			[new ThrusterBlock(), new HullBlock(), new CargoBlock,         new HullBlock(), new ThrusterBlock()],
+			[new IronThrusterBlock(), new HullBlock(), new CargoBlock,         new HullBlock(), new IronThrusterBlock()],
 			[undefined,           new HullBlock(), new CargoBlock,         new HullBlock(), undefined],
 			[undefined,           new HullBlock(), new FuelBlock,          new HullBlock(), undefined],
-			[undefined,           new HullBlock(), new EngineBlock(),      new HullBlock(), undefined]
+			[undefined,           new HullBlock(), new IronEngineBlock(),      new HullBlock(), undefined]
 		]
 	},
 
@@ -34,11 +34,11 @@ var ExampleShips = {
 			[undefined,           new HullBlock(),       new HullBlock(),            new HullBlock(),       undefined],
 			[undefined,           new HullBlock(),       new ControlBlock(),     new HullBlock(),       undefined],
 			[undefined,           new HullBlock(),       new PowerBlock(),       new HullBlock(),       undefined],
-			[new ThrusterBlock(), new HullBlock(),       new CargoBlock,         new HullBlock(),       new ThrusterBlock()],
+			[new IronThrusterBlock(), new HullBlock(),       new CargoBlock,         new HullBlock(),       new IronThrusterBlock()],
 			[undefined,           new HullBlock(),       new CargoBlock,         new HullBlock(),       undefined],
 			[undefined,           new HullBlock(),       new FuelBlock,          new HullBlock(),       undefined],
-			[undefined,           new HullBlock(),       new EngineBlock(),      new HullBlock(),       undefined],
-			[undefined,           new EngineBlock(), undefined,              undefined,         undefined]
+			[undefined,           new HullBlock(),       new IronEngineBlock(),      new HullBlock(),       undefined],
+			[undefined,           new IronEngineBlock(), undefined,              undefined,         undefined]
 		]
 	},
 
@@ -53,11 +53,11 @@ var ExampleShips = {
 			[undefined,           new HullBlock(),       new HullBlock(),            new HullBlock(),       undefined],
 			[undefined,           new HullBlock(),       new ControlBlock(),     new HullBlock(),       undefined],
 			[undefined,           new HullBlock(),       new PowerBlock(),       new HullBlock(),       undefined],
-			[new ThrusterBlock(), new HullBlock(),       new CargoBlock,         new HullBlock(),       new ThrusterBlock()],
+			[new IronThrusterBlock(), new HullBlock(),       new CargoBlock,         new HullBlock(),       new IronThrusterBlock()],
 			[undefined,           new HullBlock(),       new CargoBlock,         new HullBlock(),       undefined],
 			[undefined,           new HullBlock(),       new FuelBlock,          new HullBlock(),       undefined],
 			[undefined,           new HullBlock(),       undefined,              new HullBlock(),       undefined],
-			[undefined,           new EngineBlock(), undefined,              new EngineBlock(), undefined]
+			[undefined,           new IronEngineBlock(), undefined,              new IronEngineBlock(), undefined]
 		]
 	},
 
@@ -78,12 +78,12 @@ var ExampleShips = {
 
 	/**
 	 * Returns a ship that consists of just an engine. Useful for testing purposes.
-	 * @returns {Array} A {@link Block} matrix that contains just an {@link EngineBlock}.
+	 * @returns {Array} A {@link Block} matrix that contains just an {@link IronEngineBlock}.
 	 * @memberof ExampleShips
 	 */
 	justAnEngine: function() {
 		return [
-			[new EngineBlock()]
+			[new IronEngineBlock()]
 		];
 	}
 };

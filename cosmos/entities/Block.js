@@ -11,18 +11,6 @@ var Block = IgeEntity.extend({
 	classId: 'Block',
 
 	/**
-	 * The maximum health value for this {@link Block}. This is a constant to make it clear that the value should not,
-	 * in general, be changed (the one exception being in the init function for a {@link Block}). It is an instance
-	 * variable because we still want to take advantage of inheritance on this property.
-	 * @constant {number}
-	 * @memberof Block
-	 * @instance
-	 */
-	MAX_HP: 30,
-
-	DESCRIPTION: "A basic block with no special properties.",
-
-	/**
 	 * The number of rows that this {@link Block} takes up.
 	 * @type {number}
 	 * @memberof Block
@@ -142,16 +130,22 @@ var Block = IgeEntity.extend({
 		// Use an even number so values don't have to become approximate when we divide by two
 		this.width(Block.WIDTH).height(Block.HEIGHT);
 
-		if (data && data.MAX_HP) {
-			this.MAX_HP = data.MAX_HP;
+		// Check if a health has been provided for this block.
+		if (Healths[this.classId()] !== undefined)
+		{
+			this.addComponent(Health, Healths[this.classId()]);
 		}
-
-		this.addComponent(HealthComponent, {max: this.MAX_HP});
 
 		// Check if a recipe has been provided for this block. If so, this block is craftable. Otherwise, it is not.
 		if (Recipes[this.classId()] !== undefined)
 		{
-			this.addComponent(RecipeComponent, Recipes[this.classId()]);
+			this.addComponent(Recipe, Recipes[this.classId()]);
+		}
+
+		// Check if a description has been provided for this block. If so, this block is describable. Otherwise, it is not.
+		if (Descriptions[this.classId()] !== undefined)
+		{
+			this.addComponent(Description, Descriptions[this.classId()]);
 		}
 
 		if (!ige.isServer) {
@@ -197,10 +191,6 @@ var Block = IgeEntity.extend({
 
 	hp: function() {
 		return this.health.value;
-	},
-
-	description: function() {
-		return this.DESCRIPTION;
 	},
 
 	/**
@@ -646,69 +636,10 @@ Block.displayNameFromClassId = function(classId) {
  * @memberof Block
  */
 Block.blockFromClassId = function(classId) {
-	switch (classId) {
-		case Block.prototype.classId():
-			return new Block();
-
-		//Ship parts
-		case CargoBlock.prototype.classId():
-			return new CargoBlock();
-		case ControlBlock.prototype.classId():
-			return new ControlBlock();
-		case EngineBlock.prototype.classId():
-			return new EngineBlock();
-		case FuelBlock.prototype.classId():
-			return new FuelBlock();
-		case MiningLaserBlock.prototype.classId():
-			return new MiningLaserBlock();
-		case PowerBlock.prototype.classId():
-			return new PowerBlock();
-		case ThrusterBlock.prototype.classId():
-			return new ThrusterBlock();
-
-		// Armor
-		case HullBlock.prototype.classId():
-			return new HullBlock();
-		case CloakBlock.prototype.classId():
-			return new CloakBlock();
-		case CloakBlockLight.prototype.classId():
-			return new CloakBlockLight();
-		case CloakBlockViolet.prototype.classId():
-			return new CloakBlockViolet();
-		case CloakBlockVioletLight.prototype.classId():
-			return new CloakBlockVioletLight();
-		case KryptoniteBlock.prototype.classId():
-			return new KryptoniteBlock();
-		case MithrilBlock.prototype.classId():
-			return new MithrilBlock();
-		case AdamantiumBlock.prototype.classId():
-			return new AdamantiumBlock();
-		case DragonBlock.prototype.classId():
-			return new DragonBlock();
-		case TitaniumBlock.prototype.classId():
-			return new TitaniumBlock();
-		case VioletBlock.prototype.classId():
-			return new VioletBlock();
-		case OrangeBlock.prototype.classId():
-			return new OrangeBlock();
-
-		// Elements
-		case CarbonBlock.prototype.classId():
-			return new CarbonBlock();
-		case IceBlock.prototype.classId():
-			return new IceBlock();
-		case IronBlock.prototype.classId():
-			return new IronBlock();
-		case GoldBlock.prototype.classId():
-			return new GoldBlock();
-		case FluorineBlock.prototype.classId():
-			return new FluorineBlock();
-		case CobaltBlock.prototype.classId():
-			return new CobaltBlock();
-
-		default:
-			return undefined;
+	if (cosmos.blocks.constructors[classId] === undefined) {
+		return undefined;
 	}
+	return new cosmos.blocks.constructors[classId]();
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Block; }

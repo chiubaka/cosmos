@@ -1,5 +1,5 @@
-var RecipeComponent = IgeClass.extend({
-	classId: 'RecipeComponent',
+var Recipe = IgeClass.extend({
+	classId: 'Recipe',
 	componentId: 'recipe',
 
 	/**
@@ -21,7 +21,7 @@ var RecipeComponent = IgeClass.extend({
 
 	init: function(entity, data) {
 		if (data === undefined || data.reactants === undefined) {
-			this.log('Init parameters not provided for recipe component.', 'error');
+			this.log('Init parameters not provided for Recipe.', 'error');
 			return;
 		}
 
@@ -34,7 +34,7 @@ var RecipeComponent = IgeClass.extend({
 	tooltipData: function() {
 		var data = {};
 		data.name = this.name;
-		data.description = this.entity.DESCRIPTION;
+		data.description = this.entity.description.text;
 		data.reactants = [];
 		for (var i = 0; i < this.reactants.length; i++) {
 			var reactant = this.reactants[i];
@@ -50,4 +50,4 @@ var RecipeComponent = IgeClass.extend({
 	}
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = RecipeComponent; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Recipe; }

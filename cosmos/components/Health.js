@@ -1,5 +1,5 @@
-var HealthComponent = IgeClass.extend({
-	classId: 'HealthComponent',
+var Health = IgeClass.extend({
+	classId: 'Health',
 	componentId: 'health',
 
 	value: undefined,
@@ -7,7 +7,7 @@ var HealthComponent = IgeClass.extend({
 
 	init: function(entity, data) {
 		if (data === undefined || data.max === undefined) {
-			this.log('Init parameters not provided for health component.', 'error');
+			this.log('Init parameters not provided for Health.', 'error');
 			return;
 		}
 
@@ -30,4 +30,4 @@ var HealthComponent = IgeClass.extend({
 	}
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = HealthComponent; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Health; }
