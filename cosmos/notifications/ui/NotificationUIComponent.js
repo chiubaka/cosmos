@@ -76,6 +76,10 @@ var NotificationUIComponent = IgeEventingClass.extend({
 			var notification = NotificationDefinitions.successes[successesIndex];
 			alertify.log(notification, "success");
 		}
+	},
+
+	popupAlert: function (message, callback) {
+		alertify.alert(message, callback);
 	}
 });
 

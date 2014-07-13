@@ -2,8 +2,10 @@ var Quest = IgeEventingClass.extend({
 	classId: 'Quest',
 	questState: undefined,
 	isComplete: undefined,
+	instance: undefined,
 
-	init: function() {
+	init: function(instance) {
+		this.instance = instance;
 	},
 
 

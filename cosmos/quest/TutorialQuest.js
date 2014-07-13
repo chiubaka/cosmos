@@ -2,32 +2,52 @@ var TutorialQuest = Quest.extend({
 	classId: 'TutorialQuest',
 
 
-	init: function() {
-		Quest.prototype.init.call(this);
+	init: function(instance) {
+		Quest.prototype.init.call(this, instance);
 		this.isComplete = false;
-		this.questState = this.states.hello;
+		this.questState = this.welcome;
+		if (ige.isServer) {
+			this.on(this.keys['welcome.action'], this.welcome.verify);
+		}
 	},
 
-	states: {
-		hello: {
-			condition: function() {
-				return true;
-			},
-			action: function() {
-				console.log('Tutorial quest');
-				this.questState = this.states.complete;
+	keys: {
+		'welcome.action': '1',
+	},
+
+	welcome: {
+		condition: function() {
+			return true;
+		},
+		action: function() {
+			if (ige.isClient) {
+				var self = this;
+				var message = "Welcome to Cosmos!";
+				self.on('cosmos:TutorialQuest.welcome.continue', function () {
+					self.questState = self.complete;
+				});
+
+				ige.notification.notificationUI.popupAlert(message, function () {
+					console.log('Button pressed!');
+					ige.questSystem.eventToServer(self.keys['welcome.action'], self);
+				});
 			}
 		},
-		complete: {
-			condition: function() {
-				return true;
-			},
-			action: function() {
-				this.isComplete = true;
-			}
+		// @server-side
+		verify: function() {
+			console.log('Server verify');
 		}
+	},
 
-	}
+	complete: {
+		condition: function() {
+			return true;
+		},
+		action: function() {
+			this.isComplete = true;
+		}
+	},
+
 
 
 });
