@@ -8,23 +8,13 @@
 var FuelBlock = Part.extend({
 	classId: 'FuelBlock',
 
-	/**
-	 * The maximum HP for a {@link FuelBlock}. Overrides the superclass MAX_HP value. See {@link Block#MAX_HP}.
-	 * @constant {number}
-	 * @default
-	 * @memberof FuelBlock
-	 * @instance
-	 */
-	MAX_HP: 10,
-
-	init: function () {
-		data = {MAX_HP: this.MAX_HP};
+	init: function(data) {
 		Part.prototype.init.call(this, data);
 
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(242, 242, 242)";
 			this.textureOutline = "rgb(0, 211, 10)";
-			this.textureSvg = ige.client.svgs.fuel;
+			this.textureSvg = ige.client.textures.fuel;
 		}
 	}
 });

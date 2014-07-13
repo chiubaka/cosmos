@@ -3,11 +3,6 @@ var igeClientConfig = {
 		/* === CONSTANTS === */
 		'./constants.js',
 
-		/* === COMPONENTS === */
-		'./components/HealthComponent.js',
-		'./components/DamageSourceComponent.js',
-		'./components/RecipeComponent.js',
-
 		/* === Systems === */
 		'./systems/Inspector.js',
 
@@ -29,30 +24,34 @@ var igeClientConfig = {
 		/* Ship part blocks */
 		'./entities/blocks/Part.js',
 		'./entities/blocks/parts/EngineBlock.js',
+		'./entities/blocks/parts/engines/IronEngineBlock.js',
+		'./entities/blocks/parts/engines/DragonBreathEngineBlock.js',
 		'./entities/blocks/parts/PowerBlock.js',
 		'./entities/blocks/parts/FuelBlock.js',
 		'./entities/blocks/parts/CargoBlock.js',
 		'./entities/blocks/parts/ControlBlock.js',
 		'./entities/blocks/parts/ThrusterBlock.js',
+		'./entities/blocks/parts/thrusters/IronThrusterBlock.js',
+		'./entities/blocks/parts/thrusters/KryptoniteThrusterBlock.js',
 
 		/* Weapons */
 		'./entities/blocks/parts/Weapon.js',
 		'./entities/blocks/parts/weapons/MiningLaserBlock.js',
 
 		/* Ship armor blocks */
-		'./entities/blocks/Armor.js',
-		'./entities/blocks/armor/HullBlock.js',
-		'./entities/blocks/armor/CloakBlock.js',
-		'./entities/blocks/armor/CloakBlockLight.js',
-		'./entities/blocks/armor/CloakBlockViolet.js',
-		'./entities/blocks/armor/CloakBlockVioletLight.js',
-		'./entities/blocks/armor/KryptoniteBlock.js',
-		'./entities/blocks/armor/MithrilBlock.js',
-		'./entities/blocks/armor/AdamantiumBlock.js',
-		'./entities/blocks/armor/DragonBlock.js',
-		'./entities/blocks/armor/TitaniumBlock.js',
-		'./entities/blocks/armor/VioletBlock.js',
-		'./entities/blocks/armor/OrangeBlock.js',
+		'./entities/blocks/parts/Armor.js',
+		'./entities/blocks/parts/armor/HullBlock.js',
+		'./entities/blocks/parts/armor/CloakBlock.js',
+		'./entities/blocks/parts/armor/CloakBlockLight.js',
+		'./entities/blocks/parts/armor/CloakBlockViolet.js',
+		'./entities/blocks/parts/armor/CloakBlockVioletLight.js',
+		'./entities/blocks/parts/armor/KryptoniteBlock.js',
+		'./entities/blocks/parts/armor/MithrilBlock.js',
+		'./entities/blocks/parts/armor/AdamantiumBlock.js',
+		'./entities/blocks/parts/armor/DragonBlock.js',
+		'./entities/blocks/parts/armor/TitaniumBlock.js',
+		'./entities/blocks/parts/armor/VioletBlock.js',
+		'./entities/blocks/parts/armor/OrangeBlock.js',
 
 		/* Element blocks */
 		'./entities/blocks/Element.js',
@@ -82,6 +81,19 @@ var igeClientConfig = {
 		/* Click scene (captures background client's background clicks) */
 		'./entities/ClickScene.js',
 
+		/* === COMPONENT CONFIG FILES === */
+		'./components/config/Descriptions.js',
+		'./components/config/Healths.js',
+		'./components/config/Recipes.js',
+		'./components/config/Thrusts.js',
+
+		/* === COMPONENTS === */
+		'./components/DamageSource.js',
+		'./components/Description.js',
+		'./components/Health.js',
+		'./components/Recipe.js',
+		'./components/Thrust.js',
+
 		/* === PLAYER STATE === */
 		'./entities/player/Player.js',
 		'./models/state/ClientState.js',
@@ -94,7 +106,6 @@ var igeClientConfig = {
 		/* === Crafting === */
 		'./crafting/CraftingSystem.js',
 		'./crafting/CraftingComponent.js',
-		'./crafting/Recipes.js',
 
 		/* === Quests === */
 		'./quest/QuestSystem.js',

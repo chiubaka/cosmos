@@ -10,12 +10,10 @@
 var Weapon = Part.extend({
 	classId: 'Weapon',
 
-	DESCRIPTION: 'A weapon block which can deal damage to other blocks.',
-
 	init: function(data) {
 		Part.prototype.init.call(this, data);
 		// TODO: Determine dps value based on subclass
-		this.addComponent(DamageSourceComponent, {dps: 10});
+		this.addComponent(DamageSource, {dps: 10});
 	}
 });
 

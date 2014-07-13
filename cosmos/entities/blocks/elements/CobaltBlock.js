@@ -8,17 +8,7 @@
 var CobaltBlock = Element.extend({
 	classId: 'CobaltBlock',
 
-	/**
-	 * The maximum HP for a {@link CobaltBlock}. Overrides the superclass MAX_HP value. See {@link Block#MAX_HP}.
-	 * @constant {number}
-	 * @default
-	 * @memberof CobaltBlock
-	 * @instance
-	 */
-	MAX_HP: 60,
-
-	init: function () {
-		data = {MAX_HP: this.MAX_HP};
+	init: function(data) {
 		Element.prototype.init.call(this, data);
 
 

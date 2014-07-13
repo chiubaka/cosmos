@@ -13,6 +13,7 @@ var Inspector = IgeEventingClass.extend({
 	blockInspectorMaxHealth: undefined,
 	blockInspectorEnergyUsage: undefined,
 	blockInspectorDamage: undefined,
+	blockInspectorThrust: undefined,
 	blockInspectorDescription: undefined,
 
 	init: function() {
@@ -41,6 +42,7 @@ var Inspector = IgeEventingClass.extend({
 			self.blockInspectorMaxHealth = self.blockInspector.find('#block-max-health');
 			self.blockInspectorEnergyUsage = self.blockInspector.find('#block-energy-usage');
 			self.blockInspectorDamage = self.blockInspector.find('#block-damage');
+			self.blockInspectorThrust = self.blockInspector.find('#block-thrust');
 			self.blockInspectorDescription = self.blockInspector.find('.description').first();
 
 			ige.on('cosmos:block.mousedown', function(block) {
@@ -60,13 +62,13 @@ var Inspector = IgeEventingClass.extend({
 		this.block = block;
 		this.blockInspector.show();
 		this.blockInspectorName.text(block.displayName());
-		this.blockInspectorDescription.text(block.description());
+		this.blockInspectorDescription.text(block.description.text);
 
 		this.blockInspector.find('.block-stat').hide();
-		if (block.health !== undefined) {
+		if (block.health instanceof Health) {
 			this.blockInspector.find('#block-stat-health').show();
-			this.blockInspectorCurrentHealth.text(block.hp());
-			this.blockInspectorMaxHealth.text(block.MAX_HP);
+			this.blockInspectorCurrentHealth.text(block.health.value);
+			this.blockInspectorMaxHealth.text(block.health.max);
 
 			block.on('cosmos:block.hp.changed', function(hp) {
 				// TODO: Change the color of the health text based on the percentage of health that is left
@@ -77,9 +79,14 @@ var Inspector = IgeEventingClass.extend({
 			});
 		}
 
-		if (block.damageSource !== undefined) {
+		if (block.damageSource instanceof DamageSource) {
 			this.blockInspector.find('#block-stat-damage').show();
 			this.blockInspectorDamage.text(block.damageSource.dps);
+		}
+
+		if (block.thrust instanceof Thrust) {
+			this.blockInspector.find('#block-stat-thrust').show();
+			this.blockInspectorThrust.text(block.thrust.value);
 		}
 
 		var canvas = this.blockInspectorTexture[0];
@@ -91,9 +98,6 @@ var Inspector = IgeEventingClass.extend({
 		ctx.scale(scaleWidth, scaleHeight);
 		ctx.translate(block._bounds2d.x2, block._bounds2d.y2);
 		block.texture().render(ctx, block);
-		setTimeout(function() {
-			block.texture().render(ctx, block);
-		}, 100);
 	},
 
 	loadHtml: function (url, callback) {
