@@ -115,13 +115,7 @@ var QuestSystem = IgeEventingClass.extend({
 					if (instances.hasOwnProperty(instance)) {
 						// Process behavior for that quest
 						var quest = instances[instance];
-						//console.log(quest);
-						if (quest.isComplete === true) {
-							questComponent.removeQuest(questName, instance);
-						}
-						else {
-							quest.processStep();
-						}
+						quest.processStep();
 					}
 				}
 			}

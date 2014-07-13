@@ -4,10 +4,13 @@ var TutorialQuest = Quest.extend({
 
 	init: function(instance) {
 		Quest.prototype.init.call(this, instance);
-		this.isComplete = false;
-		this.questState = this.welcome;
+
+		if (ige.isClient) {
+			this.questState = this.welcome;
+		}
+
 		if (ige.isServer) {
-			this.on(this.keys['welcome.action'], this.welcome.verify);
+			this.on(this.keys['welcome.action'], this.welcome.server);
 		}
 	},
 
@@ -16,39 +19,59 @@ var TutorialQuest = Quest.extend({
 	},
 
 	welcome: {
-		condition: function() {
-			return true;
+		once: function() {
+			var self = this;
+			// Show a pop up box welcoming the player
+			var message = "Welcome to Cosmos!";
+			ige.notification.notificationUI.popupAlert(message, function () {
+				ige.questSystem.eventToServer(self.keys['welcome.action'], self);
+				this.questState = this.moveForward;
+			});
 		},
-		action: function() {
-			if (ige.isClient) {
-				var self = this;
-				var message = "Welcome to Cosmos!";
-				self.on('cosmos:TutorialQuest.welcome.continue', function () {
-					self.questState = self.complete;
-				});
 
-				ige.notification.notificationUI.popupAlert(message, function () {
-					console.log('Button pressed!');
-					ige.questSystem.eventToServer(self.keys['welcome.action'], self);
-				});
-			}
+		client: function() {
+			
 		},
 		// @server-side
-		verify: function() {
+		server: function() {
 			console.log('Server verify');
 		}
 	},
 
-	complete: {
-		condition: function() {
-			return true;
+	moveForward: {
+		once: function () {
+			alertify.log('Move forward by pressing the W key', '', 0);
+			var listener = ige.input.on('inputEvent', function () {
+				alertify.success('Good! You\'ve moved forward!');
+				ige.input.off('inputEvent', listener);
+				this.questState = this.mine;
+			});
 		},
-		action: function() {
-			this.isComplete = true;
+
+		client: function() {
 		}
 	},
 
+	mine: {
+		once: function() {
+			alertify.log('Mine a block', '', 0);
+		},
 
+		client: function() {
+		},
+
+		server: function() {
+		}
+
+	},
+
+	complete: {
+		client: function() {
+		},
+		server: function() {
+			//Remove quest
+		}
+	},
 
 });
 

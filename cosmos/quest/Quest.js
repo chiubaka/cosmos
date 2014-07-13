@@ -1,7 +1,6 @@
 var Quest = IgeEventingClass.extend({
 	classId: 'Quest',
 	questState: undefined,
-	isComplete: undefined,
 	instance: undefined,
 
 	init: function(instance) {
@@ -9,10 +8,13 @@ var Quest = IgeEventingClass.extend({
 	},
 
 
+	// @client-side
 	processStep: function() {
-		if (this.questState.condition.call(this)) {
-			this.questState.action.call(this);
+		if (this.questState.once !== undefined) {
+			this.questState.once.call(this);
+			delete this.questState.once;
 		}
+		this.questState.client.call(this);
 	}
 
 });
