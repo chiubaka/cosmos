@@ -32,12 +32,6 @@ var image = {
 
 		// Draw block outline
 		ctx.fillStyle = entity.textureBackground;
-		ctx.beginPath();
-		ctx.moveTo(-entity._bounds2d.x2, -entity._bounds2d.y2);
-		ctx.lineTo(entity._bounds2d.x2, -entity._bounds2d.y2);
-		ctx.lineTo(entity._bounds2d.x2, entity._bounds2d.y2);
-		ctx.lineTo(-entity._bounds2d.x2, entity._bounds2d.y2);
-		ctx.lineTo(-entity._bounds2d.x2, -entity._bounds2d.y2);
-		ctx.fill();
+		ctx.fillRect(-entity._bounds2d.x2, -entity._bounds2d.y2, entity.width(), entity.height());
 	}
 };

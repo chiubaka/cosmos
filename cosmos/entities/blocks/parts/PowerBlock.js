@@ -9,18 +9,7 @@
 var PowerBlock = Part.extend({
 	classId: 'PowerBlock',
 
-
-	/**
-	 * The maximum HP for a {@link PowerBlock}. Overrides the superclass MAX_HP value. See {@link Block#MAX_HP}.
-	 * @constant {number}
-	 * @default
-	 * @memberof PowerBlock
-	 * @instance
-	 */
-	MAX_HP: 40,
-
-	init: function () {
-		data = {MAX_HP: this.MAX_HP};
+	init: function(data) {
 		Part.prototype.init.call(this, data);
 
 		if (!ige.isServer) {

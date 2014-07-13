@@ -5,6 +5,8 @@ var Server = IgeClass.extend({
 	init: function (options) {
 		var self = this;
 
+		_ = require('lodash');
+
 		self.LAYER_BACKGROUND = 10;
 		self.LAYER_WORLD = 50;
 		self.LAYER_HUD = 90;
@@ -71,6 +73,10 @@ var Server = IgeClass.extend({
 
 						ige.network.define('shipEntity');
 
+						ige.network.define('cosmos:player.username.set.request', Player.onUsernameRequested);
+						ige.network.define('cosmos:player.username.set.approve');
+						ige.network.define('cosmos:player.username.set.error');
+
 						/* When a client connects or disconnects */
 						ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js
 						ige.network.on('disconnect', self._onPlayerDisconnect); // Defined in ./gameClasses/ServerNetworkEvents.js
@@ -79,6 +85,9 @@ var Server = IgeClass.extend({
 						ige.network.addComponent(IgeStreamComponent)
 							.stream.sendInterval(Constants.fps.SERVER_FPS)
 							.stream.start(); // Start the stream
+
+						// Add crafting system
+						ige.addComponent(CraftingSystem);
 
 						// Accept incoming network connections
 						ige.network.acceptConnections(true);

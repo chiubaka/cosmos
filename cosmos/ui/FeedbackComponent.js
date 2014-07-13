@@ -3,7 +3,7 @@ var FeedbackComponent = ButtonComponent.extend({
 	componentId: 'feedback',
 
 	init: function() {
-		ButtonComponent.prototype.init.call(this, $('#bottom-toolbar'), 'feedback-button', undefined, 'Feedback');
+		ButtonComponent.prototype.init.call(this, $('#bottom-toolbar'), 'feedback-button', undefined, 'Feedback', 'top');
 		this.element.addClass('unopened');
 
 		this.element.click(function() {

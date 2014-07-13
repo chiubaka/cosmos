@@ -67,10 +67,13 @@ var BlockStructure = BlockGrid.extend({
 	 * @todo Don't make the assumption that mouseDown on a {@link BlockStructure} means mining a {@link Block}.
 	 */
 	_blockClickHandler: function(block, event, control) {
-		// TODO: This might be dangerous, since some of the event properties should be changed so that they are
-		// relative to the child's bounding box, but since we don't use any of those properties for the moment,
-		// ignore that.
+		if (ige.client.state.currentCapability().classId() !== MineCapability.prototype.classId()) {
+			return;
+		}
 		if (this._hasNeighboringOpenLocations(block.row(), block.col(), block)) {
+			// TODO: This might be dangerous, since some of the event properties should be changed so that they are
+			// relative to the child's bounding box, but since we don't use any of those properties for the moment,
+			// ignore that.
 			block.mouseDown(event, control);
 		}
 		else {
@@ -90,6 +93,7 @@ var BlockStructure = BlockGrid.extend({
 	 * @instance
 	 */
 	processBlockActionServer: function(data, player) {
+		// TODO: Handle parent's return.
 		BlockGrid.prototype.processBlockActionServer.call(this, data, player);
 		var self = this;
 
@@ -108,7 +112,7 @@ var BlockStructure = BlockGrid.extend({
 				block.isBeingMined(true);
 
 				block._decrementHealthIntervalId = setInterval(function() {
-					if (block._hp > 0) {
+					if (block.hp() > 0) {
 						var damageData = {
 							blockGridId: data.blockGridId,
 							action: 'damage',
@@ -116,11 +120,11 @@ var BlockStructure = BlockGrid.extend({
 							col: data.col,
 							amount: 1
 						};
-						block.damage(1);
+						block.takeDamage(1);
 						ige.network.send('blockAction', damageData);
 					}
 
-					if (block._hp == 0) {
+					if (block.hp() == 0) {
 						clearInterval(block._decrementHealthIntervalId);
 
 						// Emit a message saying that a block has been mined, but not

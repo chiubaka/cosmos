@@ -124,8 +124,16 @@ IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
 :: Select node version
 call :SelectNodeVersion
 
+echo Installing cosmos game server NPM packages
+IF EXIST "%DEPLOYMENT_TARGET%\cosmos\package.json" (
+  pushd "%DEPLOYMENT_TARGET%\cosmos"
+  call :ExecuteCmd !NPM_CMD! install --production
+  IF !ERRORLEVEL! NEQ 0 goto error
+  popd
+)
+
 :: Install NPM packages for server
-echo Installing server NPM packages.
+echo Installing IGE server NPM packages.
 IF EXIST "%DEPLOYMENT_TARGET%\ige\server\package.json" (
   pushd "%DEPLOYMENT_TARGET%\ige\server"
   call :ExecuteCmd !NPM_CMD! install --production

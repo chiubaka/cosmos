@@ -329,3 +329,6 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+
+# Dust precompiled templates
+public/js/templates.dust.js

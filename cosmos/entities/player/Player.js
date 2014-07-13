@@ -28,6 +28,14 @@ var Player = IgeEntity.extend({
 	 * @instance
 	 */
 	_dbId: undefined,
+	_username: undefined,
+	_usernameLabel: undefined,
+	hasGuestUsername: undefined,
+	_controls: undefined,
+	// Keep track of previous values so we can send the client notifications only
+	// on a change.
+	_prevControls: undefined,
+	_prevMovementBlocks: undefined,
 
 	/**
 	 * The clientId associated with the player. Used to send notifications to
@@ -54,8 +62,6 @@ var Player = IgeEntity.extend({
 	init: function(data) {
 		IgeEntity.prototype.init.call(this, data);
 
-		var self = this;//TODO remove this line
-
 		this._controls = {
 			key: {
 				left: false,
@@ -65,7 +71,28 @@ var Player = IgeEntity.extend({
 			}
 		};
 
-		//TODO I"m going to construct this ship on the server and then send a message to the client telling him that this is his ship. He's then going to set the currentship property of his player.
+		this._prevControls = {
+			key: {
+				left: false,
+				right: false,
+				up: false,
+				down: false
+			}
+		};
+
+		if (ige.isClient) {
+			this._initClient(data);
+		}
+
+		this.addComponent(CraftingComponent);
+	},
+
+	streamCreateData: function() {
+		var data = BlockStructure.prototype.streamCreateData.call(this);
+		data.username = this.username();
+		data.dbId = this.dbId();
+		data.hasGuestUsername = this.hasGuestUsername;
+		return data;
 	},
 
 	/**
@@ -98,6 +125,42 @@ var Player = IgeEntity.extend({
 		return this;
 	},
 
+	isLoggedIn: function() {
+		return this.dbId() !== undefined;
+	},
+
+	username: function(val) {
+		if (val === undefined) {
+			return this._username;
+		}
+
+		// Players can't change their username after they've chosen one!
+		if (!this.hasGuestUsername && this._username) {
+			return this;
+		}
+
+		this._username = val;
+
+		if (!ige.isServer && this._usernameLabel !== undefined) {
+			this._usernameLabel.text(this._username);
+		}
+
+		return this;
+	},
+
+	requestUsername: function(username) {
+		if (!this.username() || this.hasGuestUsername) {
+			ige.network.send('cosmos:player.username.set.request', username);
+		}
+	},
+
+	generateGuestUsername: function() {
+		var guestNumber = Math.floor((Math.random() * 999999) + 100000);
+		var guestUsername = 'guest' + guestNumber;
+		this.hasGuestUsername = true;
+		this.username(guestUsername);
+	},
+
 	/**
 	 * Getter/setter for the _clientId parameter. This is set when the player
 	 * is created and read when a notification is sent to a specific
@@ -116,19 +179,144 @@ var Player = IgeEntity.extend({
 	},
 
 	/**
-	 * Checks if the player is able to mine
+	 * Perform client-specific initialization here. Called by init()
 	 * @memberof Player
+	 * @private
 	 * @instance
-	 * @return {Boolean} True if player can mine
 	 */
-	 canMine: function () {
-		if (!this.currentShip().canMine()) {
-			ige.network.stream.queueCommand('notificationError',
-				NotificationDefinitions.errorKeys.noMiningLaser, this.clientId());
-			return false;
+	_initClient: function(data) {
+		var self = this;
+		this.hasGuestUsername = false;
+		this.depth(Player.DEPTH);
+		if (data !== undefined) {
+			this.username(data.username);
+			this.dbId(data.dbId);
+			this.hasGuestUsername = data.hasGuestUsername;
 		}
-		return true;
-	 },
+
+		// Either the username was already streamed, in which case it is here and we can create a label
+		if (this.username()) {
+			if (ige.client.player === undefined) {
+				ige.on('cosmos:client.player.streamed', function() {
+					self._createUsernameLabel();
+				}, self, true);
+			}
+			else {
+				this._createUsernameLabel();
+			}
+		}
+	},
+
+	_createUsernameLabel: function() {
+		// Don't create the username label again if it already exists. Also don't create a label for the client's
+		// player.
+		if (this._usernameLabel !== undefined ||
+			(ige.client.player !== undefined && this.id() === ige.client.player.id())) {
+			return;
+		}
+		var self = this;
+		this._usernameLabel = $('<div>' + this.username() + '</div>').addClass('username-label tooltip');
+		$('body').append(this._usernameLabel);
+
+		var hoverTimer;
+
+		// Make the username label "disappear" on hover. Cannot just hide the label, because there is no good condition
+		// to make it show again. This makes the mousedown code below necessary so that we can send clicks through this
+		// label to the canvas below.
+		this._usernameLabel.hover(function() {
+			if (hoverTimer !== undefined) {
+				clearTimeout(hoverTimer);
+			}
+			$(this).css({opacity: 0});
+		},
+		function() {
+			var label = $(this);
+			hoverTimer = setTimeout(function() {
+				// 400ms for duration is the default for fadeIn()
+				label.fadeTo(Player.USERNAME_LABEL_FADE_IN_DURATION, 1);
+			}, Player.USERNAME_LABEL_HYSTERESIS_INTERVAL);
+		});
+
+		// When the username label is clicked, construct a click event that looks like a regular IGE canvas click event
+		// and pass it down to IGE.
+		this._usernameLabel.mousedown(function(e) {
+			self.dispatchClickToIge(e);
+		});
+
+		// Also need to pass mouse up events from the label down or the entity won't change its internal state to think
+		// that the mouse down ended and won't allow additional clicks.
+		this._usernameLabel.mouseup(function(e) {
+			self.dispatchClickToIge(e);
+		});
+
+		var mouseOutTimer; // this will store the numerical ID of the timeout. As in mouseOutTimer = setTimeout(...)
+
+		this.mouseOver(function() {
+			if (mouseOutTimer !== undefined) {
+				clearTimeout(mouseOutTimer);
+			}
+			self._usernameLabel.hide();
+		});
+
+		this.mouseOut(function() {
+			mouseOutTimer = setTimeout(function() {
+				self._usernameLabel.fadeIn();
+			}, Player.USERNAME_LABEL_HYSTERESIS_INTERVAL);
+		});
+	},
+
+	dispatchClickToIge: function(e) {
+		var igeCanvas = document.getElementById('igeFrontBuffer');
+		var clickEvent = this.createIgeClickEvent(e);
+		igeCanvas.dispatchEvent(clickEvent);
+	},
+
+	createIgeClickEvent: function(e) {
+		var igeCanvas = document.getElementById('igeFrontBuffer');
+		var clickEvent = document.createEvent('MouseEvent');
+		clickEvent.initMouseEvent(
+			e.type,
+			e.bubbles,
+			e.cancelable,
+			e.view,
+			1,
+			e.screenX,
+			e.screenY,
+			e.clientX,
+			e.clientY,
+			e.ctrlKey,
+			e.altKey,
+			e.shiftKey,
+			e.metaKey,
+			e.button,
+			null
+		);
+		clickEvent.srcElement = clickEvent.currentTarget = clickEvent.target = clickEvent.toElement = igeCanvas;
+		return clickEvent;
+	},
+
+	_destroyUsernameLabel: function() {
+		// If there is no username label, there isn't anything to destroy
+		if (this._usernameLabel === undefined) {
+			return;
+		}
+
+		this._usernameLabel.remove();
+		this._usernameLabel = undefined;
+	},
+
+	streamEntityValid: function(val) {
+		if (val !== undefined) {
+			if (val === false) {
+				this._destroyUsernameLabel();
+			}
+			else {
+				this._createUsernameLabel();
+			}
+		}
+
+		return IgeEntity.prototype.streamEntityValid.call(this, val);
+	},
 
 	/**
 	 * TODO fix this comment
@@ -142,10 +330,15 @@ var Player = IgeEntity.extend({
 		IgeEntity.prototype.update.call(this, ctx);
 
 		if (!ige.isServer) {
-			//console.log("update is called on client");
+			// If this isn't the player playing on this client, draw a label to help identify this player
+			if (this._usernameLabel !== undefined) {
+				var screenPos = this.screenPosition();
+				this._usernameLabel.css('left', Math.round(screenPos.x - this._usernameLabel.outerWidth() / 2));
+				this._usernameLabel.css('top', Math.round(screenPos.y - this._usernameLabel.outerHeight() / 2));
+			}
 
 			/* Save the old control state for comparison later */
-			oldControls = JSON.stringify(this.controls());
+			oldControls = JSON.stringify(this._controls);
 
 			/* Modify the KEYBOARD controls to reflect which keys the client currently is pushing */
 			this.controls().key.up =
@@ -157,19 +350,10 @@ var Player = IgeEntity.extend({
 			this.controls().key.right =
 				ige.input.actionState('key.right') | ige.input.actionState('key.right_D');
 
-			if (JSON.stringify(this.controls()) !== oldControls) {
-				console.log("contols have changed! sending update to server");
-				console.log("from");
-				console.log(oldControls);
-				console.log("to");
-				console.log(this.controls());
-
+			if (JSON.stringify(this._controls) !== oldControls) { //this._controls !== oldControls) {
 				// Tell the server about our control change
-				ige.network.send('playerControlUpdate', this.controls());
-			}/*
-			else {
-				console.log("controls have not changed : ()");
-			}*/
+				ige.network.send('playerControlUpdate', this._controls);
+			}
 		}
 	},
 
@@ -199,6 +383,7 @@ var Player = IgeEntity.extend({
 	 */
 	currentShip: function(newCurrentShip) {
 		if (newCurrentShip !== undefined) {
+			//TODO remove these logging statements
 			console.log("finally setting current ship!");
 			console.log("with the following id:");
 			console.log(newCurrentShip.id());
@@ -218,11 +403,89 @@ var Player = IgeEntity.extend({
 				ige.$('mainViewport').camera.trackTranslate(this._currentShip, cameraSmoothingAmount);
 			}
 
+			// Update previous controls so we can tell what has changed each update.
+			// We want to send engine missing notifications on a change, not every
+			// update
+			this._prevControls = JSON.parse(JSON.stringify(this._controls));
 			return this;
 		}
 
 		return this._currentShip;
 	}
 });
+
+Player.USERNAME_LABEL_FADE_IN_DURATION = 400;
+Player.USERNAME_LABEL_HYSTERESIS_INTERVAL = 500;
+
+Player.onUsernameRequested = function(username, clientId) {
+	if (!ige.isServer) {
+		return;
+	}
+	var player = ige.server.players[clientId];
+	if (player === undefined) {
+		return;
+	}
+
+	if (!player.hasGuestUsername && player.username()) {
+		ige.network.send('cosmos:player.username.set.error', 'Player already has username ' + player.username(), clientId);
+		console.log("Player already has username: " + player.username());
+		return;
+	}
+
+	if (!Player.usernameIsCorrectLength(username)) {
+		ige.network.send('cosmos:player.username.set.error', 'Username must be between 2 and 12 characters', clientId);
+	}
+	else if (!Player.usernameIsAlphanumericUnderscore(username)) {
+		ige.network.send('cosmos:player.username.set.error', 'Alphanumeric characters and underscores only', clientId);
+	}
+
+	DbPlayer.findByUsername(username, function(err, foundPlayer) {
+		if (err) {
+			console.error('Error finding player with username ' + username + '. Error: ' + err);
+			ige.network.send('cosmos:player.username.set.error', 'Database error', clientId);
+			return;
+		}
+
+		if (foundPlayer) {
+			ige.network.send('cosmos:player.username.set.error', 'Username ' + username + ' is taken');
+		}
+		else {
+			player.username(username);
+			player.hasGuestUsername = false;
+			DbPlayer.update(player.dbId(), player, function(err) {
+				if (err) {
+					console.error('Error updating player ' + player.dbId() + '. Error: ' + err);
+					ige.network.send('cosmos:player.username.set.error', 'Database error', clientId);
+					return;
+				}
+				ige.network.send('cosmos:player.username.set.approve', {'playerId': player.id(), 'username': username});
+			});
+		}
+	});
+};
+
+Player.onUsernameRequestApproved = function(data) {
+	ige.emit('cosmos:player.username.set.approve', data);
+
+	if (ige.client.player !== undefined && data.playerId === ige.client.player.id()) {
+		var player = ige.client.player;
+		player.username(data.username);
+		player.hasGuestUsername = false;
+		ige.emit('cosmos:client.player.username.set', player.username());
+	}
+};
+
+Player.onUsernameRequestError = function(error) {
+	ige.emit('cosmos:player.username.set.error', error);
+};
+
+Player.usernameIsAlphanumericUnderscore = function(username) {
+	var regex = /^([a-zA-Z0-9_])+$/;
+	return regex.test(username);
+};
+
+Player.usernameIsCorrectLength = function(username) {
+	return username.length >= 2 && username.length <= 12;
+};
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Player; }

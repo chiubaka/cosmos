@@ -37,34 +37,24 @@ var ClientNetworkEvents = {
 	},
 
 	_onShipEntity: function(data) {
-		console.log("client network events onShipEntity:");
-
 		if(ige.client.player && ige.$(data.entityId)) {
-			console.log("adding ship to player now");
-			console.log("here is the ship's classid:");
-			console.log(ige.$(data.entityId).classId());
 
 			ige.client.player.currentShip(ige.$(data.entityId));
 			ige.network.send('cargoRequest', { requestUpdates: true });
 		} else {
-			console.log("adding ship to player later");
+			//adding ship to player later
 			if (!ige.client.player) {
-				console.log("because play is not yet here");
 				//save the ship for when the player does arrive
 				ige.client.currentShip = ige.$(data.entityId);
 			}
 
 			if (!ige.$(data.entityId)) {
-				console.log("because ship is not yet here");
 				self._eventListener = ige.network.stream.on('entityCreated', function (entity) {
-					console.log("Event listener was called for the function defined in _onShipEntity");
 					if (entity.id() === data.entityId) {
 
 						if (ige.client.player) {
 							ige.client.player.currentShip(entity);
-							console.log("current ship set to be the passed entity!");
-							console.log("here is the entity's id:");
-							console.log(entity.id());
+							ige.network.send('cargoRequest', { requestUpdates: true });
 						}
 
 						// Set the time stream UI entity to monitor our player entity
@@ -78,6 +68,18 @@ var ClientNetworkEvents = {
 								this.log('Could not disable event listener!', 'warning');
 							}
 						});
+
+						var username = ige.client.player.username();
+
+						// If this player is logged in but doesn't yet have a username, prompt for one.
+						if (ige.client.player.hasGuestUsername && ige.client.player.isLoggedIn()) {
+							ige.client.promptForUsername();
+						}
+						else {
+							ige.emit('cosmos:client.player.username.set', username);
+						}
+
+						ige.emit('cosmos:client.player.streamed');
 					}
 				});
 			}

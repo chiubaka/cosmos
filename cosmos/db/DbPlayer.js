@@ -23,7 +23,7 @@ var DbPlayer = {
 					callback(err, undefined, undefined);
 				}
 				else {
-					callback(err, player.ship, player.currentShip().cargo);
+					callback(err, player.username, player.ship, player.cargo);
 				}
 			});
 		});
@@ -44,15 +44,39 @@ var DbPlayer = {
 		}
 
 		ige.mongo.db.collection('players', function(err, players) {
+			// If this logged in player has a guest username, don't save it to the database. This way, we'll prompt
+			// them to set a username again next time they log in.
+			var username = player.hasGuestUsername ? undefined : player.username();
 			var ship = player.toBlockTypeMatrix();
 			var cargo = player.currentShip().cargo.serializeCargo();
 			players.update(
 				{_id: playerId},
-				{_id: playerId, ship: ship, cargo: cargo},
+				{_id: playerId, username: username, lowerCaseUsername: username.toLowerCase(), ship: ship, cargo: cargo},
 				{upsert: true},
 				callback
 			);
 		});
+	},
+
+	findByUsername: function(username, callback) {
+		if (username === undefined) {
+			callback('Username parameter is undefined.', undefined);
+			return;
+		}
+
+		// Usernames are case insensitive for search purposes
+		username = username.toLowerCase();
+
+		ige.mongo.db.collection('players', function(err, players) {
+			if (err) {
+				callback(err, undefined);
+				return;
+			}
+
+			players.findOne({lowerCaseUsername: username}, function(err, player) {
+				callback(err, player);
+			})
+		})
 	}
 };
 

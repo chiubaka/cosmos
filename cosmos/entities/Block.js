@@ -11,16 +11,6 @@ var Block = IgeEntity.extend({
 	classId: 'Block',
 
 	/**
-	 * The maximum health value for this {@link Block}. This is a constant to make it clear that the value should not,
-	 * in general, be changed (the one exception being in the init function for a {@link Block}). It is an instance
-	 * variable because we still want to take advantage of inheritance on this property.
-	 * @constant {number}
-	 * @memberof Block
-	 * @instance
-	 */
-	MAX_HP: 30,
-
-	/**
 	 * The number of rows that this {@link Block} takes up.
 	 * @type {number}
 	 * @memberof Block
@@ -118,23 +108,6 @@ var Block = IgeEntity.extend({
 	 */
 	_fixtureDebuggingEntity: undefined,
 	/**
-	 * The current HP of this {@link Block}.
-	 * @type {number}
-	 * @memberof Block
-	 * @private
-	 * @instance
-	 */
-	_hp: undefined,
-	/**
-	 * A flag that determines whether or not the health bar for this {@link Block} should be shown. The default value
-	 * is false, and when the value is false the health bar is not shown.
-	 * @type {boolean}
-	 * @memberof Block
-	 * @private
-	 * @instance
-	 */
-	_displayHealth: false,
-	/**
 	 * A flag that determines whether or not this {@link Block} is currently being mined or not. The default value is
 	 * false, and when the value is false this {@link Block} is not currently being mined.
 	 * @type {boolean}
@@ -157,11 +130,23 @@ var Block = IgeEntity.extend({
 		// Use an even number so values don't have to become approximate when we divide by two
 		this.width(Block.WIDTH).height(Block.HEIGHT);
 
-		if (data && data.MAX_HP) {
-			this.MAX_HP = data.MAX_HP;
+		// Check if a health has been provided for this block.
+		if (Healths[this.classId()] !== undefined)
+		{
+			this.addComponent(Health, Healths[this.classId()]);
 		}
 
-		this._hp = this.MAX_HP;
+		// Check if a recipe has been provided for this block. If so, this block is craftable. Otherwise, it is not.
+		if (Recipes[this.classId()] !== undefined)
+		{
+			this.addComponent(Recipe, Recipes[this.classId()]);
+		}
+
+		// Check if a description has been provided for this block. If so, this block is describable. Otherwise, it is not.
+		if (Descriptions[this.classId()] !== undefined)
+		{
+			this.addComponent(Description, Descriptions[this.classId()]);
+		}
 
 		if (!ige.isServer) {
 			this.texture(ige.client.textures.block);
@@ -172,6 +157,16 @@ var Block = IgeEntity.extend({
 			this.compositeCache(true);
 			this.cacheSmoothing(true);
 		}
+	},
+
+	displayName: function() {
+		var tokens = this.classId().match(/([A-Z]?[^A-Z]*)/g).slice(0, -1);
+		var displayName = "";
+		for (var i = 0; i < tokens.length - 1; i++) {
+			var token = tokens[i];
+			displayName += token + " ";
+		}
+		return displayName;
 	},
 
 	/**
@@ -192,6 +187,10 @@ var Block = IgeEntity.extend({
 	 */
 	numCols: function() {
 		return this._numCols;
+	},
+
+	hp: function() {
+		return this.health.value;
 	},
 
 	/**
@@ -311,7 +310,8 @@ var Block = IgeEntity.extend({
 			case 'miningParticles':
 				this._addMiningParticles();
 				break;
-
+			case 'healthBar':
+				this._addHealthBar();
 		}
 	},
 
@@ -331,6 +331,9 @@ var Block = IgeEntity.extend({
 				break;
 			case 'miningParticles':
 				this._removeMiningParticles();
+				break;
+			case 'healthBar':
+				this._removeHealthBar();
 				break;
 		}
 
@@ -407,6 +410,14 @@ var Block = IgeEntity.extend({
 		this._effects['miningParticles'].particleEmitter = new BlockParticleEmitter().mount(this._effectsMountAbove);
 	},
 
+	_addHealthBar: function() {
+		if (this._effects['healthBar'] === undefined) {
+			this._effects['healthBar'] = new HealthBar(this)
+				.mount(this._effectsMountAbove);
+		}
+
+	},
+
 	/**
 	 * Removes mining particles effect from this {@link Block}. If there are multiple people mining this {@link Block},
 	 * then the counter in the mining particles effect state may not go down to zero during this call, in which case
@@ -420,8 +431,20 @@ var Block = IgeEntity.extend({
 
 		if (this._effects['miningParticles'].counter === 0) {
 			this._effects['miningParticles'].particleEmitter.destroy();
-			delete this._effects['miningParticls'];
+			delete this._effects['miningParticles'];
 		}
+	},
+
+	/**
+	 * Removes the health bar from block. This is not usually called because when
+	 * the block (and any effects) are destroyed when the hp is 0.
+	 * @memberof Block
+	 * @private
+	 * @instance
+	 */
+	_removeHealthBar: function() {
+		this._effects['healthBar'].destroy();
+		delete this._effects['healthBar'];
 	},
 
 	/**
@@ -529,13 +552,16 @@ var Block = IgeEntity.extend({
 	 * @memberof Block
 	 * @instance
 	 */
-	damage: function(amount) {
-		this._hp -= amount;
+	takeDamage: function(amount) {
+		this.health.decrease(amount);
 
 		if (!ige.isServer) {
-			this._displayHealth = true;
-			this.cacheDirty(true);
+			if (this._healthBar === undefined) {
+				this.addEffect({type: 'healthBar'});
+			}
 		}
+
+		this.emit('cosmos:block.hp.changed', this.hp());
 	},
 
 	/**

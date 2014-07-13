@@ -38,6 +38,9 @@ var Ship = BlockStructure.extend({
 	 */
 	cargo: undefined,
 
+	//TODO add comment here
+	_prevMovementBlocks: undefined,
+
 	init: function(data) {
 		BlockStructure.prototype.init.call(this, data);
 
@@ -57,6 +60,11 @@ var Ship = BlockStructure.extend({
 		} else {
 			this._initServer();
 		}
+
+		this._prevMovementBlocks = {
+			engines: 1,
+			thrusters: 1
+		};
 
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform']);
@@ -159,17 +167,6 @@ var Ship = BlockStructure.extend({
 	},
 
 	/**
-	 * Called every time a ship collects a block.
-	 * @memberof Ship
-	 * @instance
-	 * @todo Make this a static function because it doesn't use instance data
-	 * @todo Add a cool animation or sound here, or on another listener
-	 */
-	blockCollectListener: function (ship, blockClassId) {
-		ship.cargo.addBlock(blockClassId);
-	},
-
-	/**
 	 * Checks if the ship is able to mine
 	 * @memberof Ship
 	 * @instance
@@ -218,19 +215,23 @@ var Ship = BlockStructure.extend({
 	update: function(ctx) {
 		BlockStructure.prototype.update.call(this, ctx);
 
-		// TODO: Do not spam the ship with notifications if engines/thruster
+		// TODO: Do not spam the player with notifications if engines/thruster
 		// are removed
 		if (ige.isServer) {
 			/* Angular motion */
 			// Angular rotation speed depends on number of thrusters
-			var numRotationalThrusters = this.numBlocksOfType('ThrusterBlock');
-			var angularImpulse = -60 * numRotationalThrusters * ige._tickDelta;
-
 			if (this.controls.left || this.controls.right) {
+				var numRotationalThrusters = this.numBlocksOfType('ThrusterBlock');
+				var angularImpulse = -60 * numRotationalThrusters * ige._tickDelta;
+
 				if (numRotationalThrusters < 1) {
-					ige.network.stream.queueCommand('notificationError',
-						NotificationDefinitions.errorKeys.noRotationalThruster, this._clientId);
+					if (JSON.stringify(this.controls) !== JSON.stringify(this._prevControls) ||
+						this._prevMovementBlocks.thrusters > 0) {
+						ige.network.stream.queueCommand('notificationError',
+							NotificationDefinitions.errorKeys.noRotationalThruster, this._clientId);
+					}
 				}
+				this._prevMovementBlocks.thrusters = numRotationalThrusters;
 
 				if (this.controls.left) {
 					this._box2dBody.ApplyTorque(angularImpulse);
@@ -242,6 +243,20 @@ var Ship = BlockStructure.extend({
 
 			/* Linear motion */
 			if (this.controls.up || this.controls.down) {
+				var engines = this.blocksOfType(EngineBlock.prototype.classId());
+
+				//TODO: This might not work
+				// Notify player that they cannot fly without an engine
+				if (this._prevMovementBlocks.engines.length < 1) {
+					if (JSON.stringify(this.controls) !== JSON.stringify(this._prevControls) ||
+						this._prevMovementBlocks.engines > 0) {
+						ige.network.stream.queueCommand('notificationError',
+							NotificationDefinitions.errorKeys.noEngine, this._clientId);
+						}
+				}
+				this._prevMovementBlocks.engines = engines.length;
+
+
 				var linearImpulse = 3 * ige._tickDelta;
 				if (this.controls.up) {
 					linearImpulse = linearImpulse;
@@ -257,8 +272,6 @@ var Ship = BlockStructure.extend({
 				var y_comp = Math.sin(angle) * linearImpulse;
 
 				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
-
-				var engines = this.blocksOfType(EngineBlock.prototype.classId());
 
 				// Notify ship that they cannot fly without an engine
 				if (engines.length < 1) {
@@ -317,5 +330,14 @@ Ship.BOX2D_CATEGORY = 'ship';
 * @memberof Ship
 */
 Ship.DEPTH = 2;
+
+/**
+* Called every time a ship collects a block.
+* @memberof Ship
+* @todo Add a cool animation or sound here, or on another listener
+*/
+Ship.blockCollectListener = function (ship, blockClassId) {
+	ship.cargo.addBlock(blockClassId);
+};
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Ship; }

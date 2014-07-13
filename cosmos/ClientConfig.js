@@ -3,6 +3,9 @@ var igeClientConfig = {
 		/* === CONSTANTS === */
 		'./constants.js',
 
+		/* === Systems === */
+		'./systems/Inspector.js',
+
 		/* === ENVIRONMENT STATE === */
 
 		/* Render container for block grids and overlays */
@@ -25,23 +28,26 @@ var igeClientConfig = {
 		'./entities/blocks/parts/FuelBlock.js',
 		'./entities/blocks/parts/CargoBlock.js',
 		'./entities/blocks/parts/ControlBlock.js',
-		'./entities/blocks/parts/MiningLaserBlock.js',
 		'./entities/blocks/parts/ThrusterBlock.js',
 
+		/* Weapons */
+		'./entities/blocks/parts/Weapon.js',
+		'./entities/blocks/parts/weapons/MiningLaserBlock.js',
+
 		/* Ship armor blocks */
-		'./entities/blocks/Armor.js',
-		'./entities/blocks/armor/HullBlock.js',
-		'./entities/blocks/armor/CloakBlock.js',
-		'./entities/blocks/armor/CloakBlockLight.js',
-		'./entities/blocks/armor/CloakBlockViolet.js',
-		'./entities/blocks/armor/CloakBlockVioletLight.js',
-		'./entities/blocks/armor/KryptoniteBlock.js',
-		'./entities/blocks/armor/MithrilBlock.js',
-		'./entities/blocks/armor/AdamantiumBlock.js',
-		'./entities/blocks/armor/DragonBlock.js',
-		'./entities/blocks/armor/TitaniumBlock.js',
-		'./entities/blocks/armor/VioletBlock.js',
-		'./entities/blocks/armor/OrangeBlock.js',
+		'./entities/blocks/parts/Armor.js',
+		'./entities/blocks/parts/armor/HullBlock.js',
+		'./entities/blocks/parts/armor/CloakBlock.js',
+		'./entities/blocks/parts/armor/CloakBlockLight.js',
+		'./entities/blocks/parts/armor/CloakBlockViolet.js',
+		'./entities/blocks/parts/armor/CloakBlockVioletLight.js',
+		'./entities/blocks/parts/armor/KryptoniteBlock.js',
+		'./entities/blocks/parts/armor/MithrilBlock.js',
+		'./entities/blocks/parts/armor/AdamantiumBlock.js',
+		'./entities/blocks/parts/armor/DragonBlock.js',
+		'./entities/blocks/parts/armor/TitaniumBlock.js',
+		'./entities/blocks/parts/armor/VioletBlock.js',
+		'./entities/blocks/parts/armor/OrangeBlock.js',
 
 		/* Element blocks */
 		'./entities/blocks/Element.js',
@@ -58,6 +64,7 @@ var igeClientConfig = {
 		'./entities/effects/EngineParticle.js',
 		'./entities/effects/mining/BlockParticleEmitter.js',
 		'./entities/effects/GlowEffect.js',
+		'./entities/effects/HealthBar.js',
 
 		/* Structures (prefabs) */
 		'./entities/prefabs/ExampleShips.js',
@@ -70,6 +77,17 @@ var igeClientConfig = {
 		/* Click scene (captures background client's background clicks) */
 		'./entities/ClickScene.js',
 
+		/* === COMPONENT CONFIG FILES === */
+		'./components/config/Healths.js',
+		'./components/config/Recipes.js',
+
+		/* === COMPONENTS === */
+		'./components/Health.js',
+		'./components/DamageSource.js',
+		'./components/Recipe.js',
+		'./components/Description.js',
+		'./components/config/Descriptions.js',
+
 		/* === PLAYER STATE === */
 		'./entities/player/Player.js',
 		'./entities/ship/Ship.js',
@@ -80,6 +98,10 @@ var igeClientConfig = {
 		'./models/capabilities/ConstructCapability.js',
 		'./models/capabilities/MineCapability.js',
 
+		/* === Crafting === */
+		'./crafting/CraftingSystem.js',
+		'./crafting/CraftingComponent.js',
+
 		/* Notifications */
 		'./notifications/NotificationDefinitions.js',
 		'./notifications/NotificationComponent.js',
@@ -89,7 +111,10 @@ var igeClientConfig = {
 		/* HUD */
 		'./ui/HUDComponent.js',
 		'./ui/BottomToolbarComponent.js',
+		'./ui/LeftToolbarComponent.js',
+		'./ui/WindowsComponent.js',
 		'./ui/ButtonComponent.js',
+		'./ui/WindowComponent.js',
 		'./ui/UserTileComponent.js',
 		'./ui/ChatComponent.js',
 		'./ui/MenuComponent.js',
@@ -97,6 +122,8 @@ var igeClientConfig = {
 		'./ui/NewShipComponent.js',
 		'./ui/RelocateComponent.js',
 		'./ui/CargoComponent.js',
+		'./ui/CraftingUIComponent.js',
+		'./ui/NamePrompt.js',
 
 		/* Minimap */
 		'./ui/MinimapComponent.js',

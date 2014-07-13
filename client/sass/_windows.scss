@@ -1,0 +1,11 @@
+$windows-container-margin-top: $hud-button-height * 2;
+$windows-side-margin: 10px;
+$windows-container-margin-left: $hud-button-width;
+
+#windows {
+	position: absolute;
+	left: $windows-container-margin-left;
+}
+
+@import 'window';
+

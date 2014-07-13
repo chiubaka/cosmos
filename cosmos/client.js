@@ -47,6 +47,7 @@ var Client = IgeClass.extend({
 				'assets/effects/laser/laserbeam.png'),
 			rectangleTexture: new IgeTexture(gameRoot +
 				'assets/effects/particles/Rectangle.js'),
+			healthBar: new IgeTexture(gameRoot + 'assets/HealthBarTexture.js'),
 
 			// Cap textures
 			mineCap_color: new IgeTexture(gameRoot + 'assets/ui/mine/mine-color.png'),
@@ -127,6 +128,10 @@ var Client = IgeClass.extend({
 						ige.network.define('cargoResponse', self._onCargoResponse);
 						ige.network.define('cargoUpdate', self._onCargoUpdate);
 						ige.network.define('confirm', self._onConfirm);
+
+						ige.network.define('cosmos:player.username.set.approve', Player.onUsernameRequestApproved);
+						ige.network.define('cosmos:player.username.set.error', Player.onUsernameRequestError);
+
 						// Setup the network stream handler
 						ige.network.addComponent(IgeStreamComponent)
 							.stream.renderLatency(100); // Render the simulation 100 milliseconds in the past
@@ -136,20 +141,28 @@ var Client = IgeClass.extend({
 						ige.notification.addComponent(NotificationUIComponent)
 							.start();
 
+						// Enable crafting system
+						ige.addComponent(CraftingSystem);
+
 						GameInit.init(self);
 
-						ige.addComponent(HUDComponent);
 						//ige.editor.showStats();
 
 						// Wait until the HUD finishes loading to ask for the player.
 						ige.on('cosmos:hud.loaded', function(hud) {
+							ige.hud.show();
 							// Ask the server to create an entity for us
 							ige.network.send('playerEntity', {sid: self.getSessionId()});
 						});
+						ige.addComponent(HUDComponent);
 					});
 				}
 			});
 		});
+	},
+
+	promptForUsername: function() {
+		ige.addComponent(NamePrompt);
 	},
 
 	getSessionId: function() {

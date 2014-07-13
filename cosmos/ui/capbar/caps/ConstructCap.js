@@ -11,7 +11,7 @@ var ConstructCap = Cap.extend({
 	select: function() {
 		Cap.prototype.select.call(this);
 
-		ige.hud.cargo.open();
+		ige.hud.leftToolbar.windows.cargo.open();
 	}
 });
 

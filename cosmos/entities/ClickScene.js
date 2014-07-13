@@ -33,6 +33,8 @@ var ClickScene = IgeScene2d.extend({
 		if (ige.client.state !== undefined) {
 			ige.client.state.currentCapability().tryPerformAction(this, event, data);
 		}
+
+		ige.emit('cosmos:background.mousedown');
 	}
 });
 

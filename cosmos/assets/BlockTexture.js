@@ -3,52 +3,23 @@ var image = {
 	render: function(ctx, entity) {
 		ctx.globalCompositeOperation = "source-over";
 
-		// Width of the outline
-		ctx.lineWidth = Block.WIDTH / 12;
-
 		// Draw block background
 		if (entity.textureBackground !== undefined) {
 			ctx.fillStyle = entity.textureBackground;
-			ctx.beginPath();
-			ctx.moveTo(-entity._bounds2d.x2, -entity._bounds2d.y2);
-			ctx.lineTo(entity._bounds2d.x2, -entity._bounds2d.y2);
-			ctx.lineTo(entity._bounds2d.x2, entity._bounds2d.y2);
-			ctx.lineTo(-entity._bounds2d.x2, entity._bounds2d.y2);
-			ctx.lineTo(-entity._bounds2d.x2, -entity._bounds2d.y2);
-			ctx.fill();
+			ctx.fillRect(-entity._bounds2d.x2, -entity._bounds2d.y2, entity.width(), entity.height());
 		}
+
+		// Width of the outline
+		ctx.lineWidth = Block.WIDTH / 15;
 
 		// Draw block outline
 		if (entity.textureOutline !== undefined) {
 			ctx.strokeStyle = entity.textureOutline;
-			ctx.beginPath();
-			ctx.moveTo(-entity._bounds2d.x2, -entity._bounds2d.y2);
-			ctx.lineTo(entity._bounds2d.x2, -entity._bounds2d.y2);
-			ctx.lineTo(entity._bounds2d.x2, entity._bounds2d.y2);
-			ctx.lineTo(-entity._bounds2d.x2, entity._bounds2d.y2);
-			ctx.lineTo(-entity._bounds2d.x2, -entity._bounds2d.y2);
-			ctx.stroke();
-		}
-
-		// Draw block health
-		if (entity._displayHealth) {
-			// The current width of the health bar computed based on the percentage of health remaining
-			var healthBarWidth = (entity.width() - 2 * Block.HEALTH_BAR_MARGIN)
-				* (entity._hp / entity.MAX_HP);
-
-			// The x-coordinate to start drawing the health bar based on the margin constant from the Block class
- 			var healthBarStartX = -entity._bounds2d.x2 + Block.HEALTH_BAR_MARGIN;
-
-			// Fill color is red
-			ctx.fillStyle = "rgb(255, 0, 0)";
-			ctx.beginPath();
-			ctx.moveTo(healthBarStartX, entity._bounds2d.y2 - Block.HEALTH_BAR_MARGIN - Block.HEALTH_BAR_HEIGHT);
-			ctx.lineTo(healthBarStartX, entity._bounds2d.y2 - Block.HEALTH_BAR_MARGIN);
-			ctx.lineTo(healthBarStartX + healthBarWidth, entity._bounds2d.y2 - Block.HEALTH_BAR_MARGIN);
-			ctx.lineTo(healthBarStartX + healthBarWidth, entity._bounds2d.y2 - Block.HEALTH_BAR_MARGIN
-				- Block.HEALTH_BAR_HEIGHT);
-			ctx.lineTo(healthBarStartX, entity._bounds2d.y2 - Block.HEALTH_BAR_MARGIN - Block.HEALTH_BAR_HEIGHT);
-			ctx.fill();
+			ctx.strokeRect(-entity._bounds2d.x2 + ctx.lineWidth / 2,
+					-entity._bounds2d.x2 + ctx.lineWidth / 2,
+					entity.width() - ctx.lineWidth,
+					entity.height() - ctx.lineWidth
+			);
 		}
 
 		// Draw block icon

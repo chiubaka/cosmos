@@ -1,0 +1,46 @@
+@import "compass/css3/user-interface";
+
+$hud-button-height: 50px;
+$hud-button-width: $hud-button-height;
+$hud-margin-top: $hud-button-height * 2;
+
+$block-height: 26px;
+$block-width: $block-height;
+
+$bottom-toolbar-z-index: $hud-layer-z-index + 1;
+
+@mixin hud-icon-button($icon) {
+  background-image: url($icon);
+  background-repeat: no-repeat;
+  background-size: 70%;
+  background-position: center;
+}
+
+#hud {
+  @include user-select(none);
+  z-index: $hud-layer-z-index;
+
+  h2 {
+    margin: 0;
+    font-size: 100%;
+    font-weight: bold;
+  }
+}
+
+.block-canvas-container {
+	position: relative;
+
+	span.quantity {
+		position: absolute;
+		color: white;
+		right: -2px;
+		bottom: -2px;
+		text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+	}
+}
+
+@import 'bottom-toolbar';
+@import 'left-toolbar';
+@import 'minimap';
+@import 'notifications';
+@import 'side-buttons';

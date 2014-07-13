@@ -87,20 +87,19 @@ var ServerNetworkEvents = {
 
 			}
 
-			ige.server._createPlayer(clientId, playerId);
-
 			/**
 			 * @callback onPlayerEntityLoadCallback
 			 * @param err {Error | null}
 			 * @param ship {Array} Player's ship, represented as a 2D array
 			 * @param cargo {Array} Player's cargo
 			 */
-			DbPlayer.load(playerId, function(err, ship, cargo) {
+			DbPlayer.load(playerId, function(err, username, ship, cargo) {
 				if (err) {
 					self.log('Cannot load player from database!', 'error')
 				}
 
-				console.log("Creating a player's ship...");
+				ige.server._createPlayer(clientId, playerId, username);
+
 				ige.server._createShip(clientId, playerId, ship, cargo);
 			});
 		});
@@ -114,22 +113,26 @@ var ServerNetworkEvents = {
 	 * @param cargo The cargo to give the player. If none is specified, the player will be given an empty cargo.
 	 * @private
 	 */
-	_createPlayer: function(clientId, playerId, ship, cargo) {
+	_createPlayer: function(clientId, playerId, username) {
 		var player = new Player()
 			.clientId(clientId);
 
-		// Call BlockGrid#debugFixtures before calling BlockGrid#fromBlockMatrix, since debugging entities are
-		// added when fixtures are added.
+		player.username(username);
 
 		if (playerId !== undefined) {
 			player.dbId(playerId);
+		}
+
+		// If the player doesn't yet have a username, generate a guest username for him
+		if (!player.username()) {
+			player.generateGuestUsername();
+			player.hasGuestUsername = true;
 		}
 
 		ige.server.players[clientId] = player;
 
 		var sendData = {
 			entityId: ige.server.players[clientId].id(),
-			playerId: playerId !== undefined ? playerId : "undefined"
 		};
 
 		// Tell the client to track their player entity
@@ -193,7 +196,7 @@ var ServerNetworkEvents = {
 		var playerId = player.dbId();
 		ige.server._destroyPlayer(clientId, player);
 		// We pass no third or fourth argument to _createPlayer() here, which requests a completely new ship
-		ige.server._createPlayer(clientId, playerId);
+		ige.server._createPlayer(clientId, playerId, player.username());
 		ige.network.stream.queueCommand('notificationSuccess',
 			NotificationDefinitions.successKeys.newShip, clientId);
 	},
@@ -261,6 +264,8 @@ var ServerNetworkEvents = {
 			ige.network.send('confirm', confirmData, clientId);
 			ige.network.stream.queueCommand('notificationSuccess',
 				NotificationDefinitions.successKeys.constructNewBlock, clientId);
+
+			DbPlayer.update(player.dbId(), player, function() {});
 		}
 	},
 
@@ -297,6 +302,8 @@ var ServerNetworkEvents = {
 			var blockGrid = ige.$(data.blockGridId);
 			data.action = 'add';
 			blockGrid.processBlockActionServer(data, player);
+
+			DbPlayer.update(player.dbId(), player, function() {});
 		}
 	}
 

@@ -10,8 +10,6 @@ var config = {
 		/* Network */
 		{ name: 'ServerNetworkEvents', path: './ServerNetworkEvents' },
 
-		/* Configuration */
-
 		/* === ENVIRONMENT STATE === */
 		/* Blocks */
 		{ name: 'Block', path: './entities/Block' },
@@ -27,23 +25,26 @@ var config = {
 		{ name: 'FuelBlock', path: './entities/blocks/parts/FuelBlock' },
 		{ name: 'CargoBlock', path: './entities/blocks/parts/CargoBlock' },
 		{ name: 'ControlBlock', path: './entities/blocks/parts/ControlBlock' },
-		{ name: 'MiningLaserBlock', path: './entities/blocks/parts/MiningLaserBlock' },
 		{ name: 'ThrusterBlock', path: './entities/blocks/parts/ThrusterBlock' },
 
+		/* Weapons */
+		{ name: 'Weapon', path: './entities/blocks/parts/Weapon' },
+		{ name: 'MiningLaserBlock', path: './entities/blocks/parts/weapons/MiningLaserBlock' },
+
 		/* Ship armor blocks */
-		{ name: 'Armor', path: './entities/blocks/Armor' },
-		{ name: 'HullBlock', path: './entities/blocks/armor/HullBlock' },
-		{ name: 'CloakBlock', path: './entities/blocks/armor/CloakBlock' },
-		{ name: 'CloakBlockLight', path: './entities/blocks/armor/CloakBlockLight' },
-		{ name: 'CloakBlockViolet', path: './entities/blocks/armor/CloakBlockViolet' },
-		{ name: 'CloakBlockVioletLight', path: './entities/blocks/armor/CloakBlockVioletLight' },
-		{ name: 'KryptoniteBlock', path: './entities/blocks/armor/KryptoniteBlock' },
-		{ name: 'MithrilBlock', path: './entities/blocks/armor/MithrilBlock' },
-		{ name: 'AdamantiumBlock', path: './entities/blocks/armor/AdamantiumBlock' },
-		{ name: 'DragonBlock', path: './entities/blocks/armor/DragonBlock' },
-		{ name: 'TitaniumBlock', path: './entities/blocks/armor/TitaniumBlock' },
-		{ name: 'VioletBlock', path: './entities/blocks/armor/VioletBlock' },
-		{ name: 'OrangeBlock', path: './entities/blocks/armor/OrangeBlock' },
+		{ name: 'Armor', path: './entities/blocks/parts/Armor' },
+		{ name: 'HullBlock', path: './entities/blocks/parts/armor/HullBlock' },
+		{ name: 'CloakBlock', path: './entities/blocks/parts/armor/CloakBlock' },
+		{ name: 'CloakBlockLight', path: './entities/blocks/parts/armor/CloakBlockLight' },
+		{ name: 'CloakBlockViolet', path: './entities/blocks/parts/armor/CloakBlockViolet' },
+		{ name: 'CloakBlockVioletLight', path: './entities/blocks/parts/armor/CloakBlockVioletLight' },
+		{ name: 'KryptoniteBlock', path: './entities/blocks/parts/armor/KryptoniteBlock' },
+		{ name: 'MithrilBlock', path: './entities/blocks/parts/armor/MithrilBlock' },
+		{ name: 'AdamantiumBlock', path: './entities/blocks/parts/armor/AdamantiumBlock' },
+		{ name: 'DragonBlock', path: './entities/blocks/parts/armor/DragonBlock' },
+		{ name: 'TitaniumBlock', path: './entities/blocks/parts/armor/TitaniumBlock' },
+		{ name: 'VioletBlock', path: './entities/blocks/parts/armor/VioletBlock' },
+		{ name: 'OrangeBlock', path: './entities/blocks/parts/armor/OrangeBlock' },
 
 		/* Element blocks */
 		{ name: 'Element', path: './entities/blocks/Element' },
@@ -62,6 +63,17 @@ var config = {
 		{ name: 'Background', path: './entities/scenery/Background' },
 		{ name: 'BlockStructureGenerator', path: './entities/scenery/BlockStructureGenerator' },
 
+		/* === COMPONENT CONFIG FILES === */
+		{ name: 'Healths', path: './components/config/Healths' },
+		{ name: 'Recipes', path: './components/config/Recipes' },
+
+		/* === COMPONENTS === */
+		{ name: 'Health', path: './components/Health' },
+		{ name: 'DamageSource', path: './components/DamageSource' },
+		{ name: 'Recipe', path: './components/Recipe' },
+		{ name: 'Description', path: './components/Description'},
+		{name: 'Descriptions', path: './components/config/Descriptions'},
+
 		/* === PLAYER STATE === */
 		{ name: 'Player', path: './entities/player/Player' },
 		{ name: 'Ship', path: './entities/ship/Ship' },
@@ -70,6 +82,10 @@ var config = {
 		{ name: 'Cargo', path: './models/cargo/Cargo' },
 		{ name: 'CargoContainer', path: './models/cargo/CargoContainer' },
 		{ name: 'CargoItem', path: './models/cargo/CargoItem' },
+
+		/* === Crafting === */
+		{ name: 'CraftingSystem', path: './crafting/CraftingSystem' },
+		{ name: 'CraftingComponent', path: './crafting/CraftingComponent' },
 
 		/* Database */
 		{ name: 'DbConfig', path: './db/DbConfig' },
@@ -92,7 +108,7 @@ var config = {
 
 		/* === EXTERNAL LIBRARIES === */
 		{ name: 'WeightedSelection', path: './lib/weighted' },
-		{ name: 'UuidGenerator', path: './lib/UuidGenerator' }
+		{ name: 'UuidGenerator', path: './lib/UuidGenerator' },
 	]
 };
 
