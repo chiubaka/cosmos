@@ -297,16 +297,12 @@
 			 *
 			 * @return {undefined}
 			 */
-			close : function (elem, wait, logs) {
+			close : function (elem, logs, wait, closeOnClick) {
 				// Unary Plus: +"2" === 2
 				var timer = (wait && !isNaN(wait)) ? +wait : this.delay,
 				    self  = this,
 				    hideElement, transitionDone;
 
-				// set click event on log messages
-				this.bind(elem, "click", function () {
-					hideElement(elem);
-				});
 				// Hide the dialog box after transition
 				// This ensure it doens't block any element from being clicked
 				transitionDone = function (event) {
@@ -332,10 +328,21 @@
 						}
 					}
 				};
-				// never close (until click) if wait is set to 0
-				if (wait === 0) return;
-				// set timeout to auto close the log message
-				setTimeout(function () { hideElement(elem); }, timer);
+
+				if (closeOnClick === true) {
+					// set click event on log messages
+					this.bind(elem, "click", function () {
+						hideElement(elem);
+					});
+					// never close (until click) if wait is set to 0
+					if (wait !== 0) {
+						// set timeout to auto close the log message
+						setTimeout(function () { hideElement(elem); }, timer);
+					}
+				}
+
+				return (function () { hideElement(elem); });
+
 			},
 
 			/**
@@ -517,7 +524,7 @@
 				elLog.appendChild(log);
 				// triggers the CSS animation
 				setTimeout(function() { log.className = log.className + " alertify-log-show"; }, 50);
-				this.close(log, wait, elLog);
+				this.close(log, elLog, wait, true);
 			},
 
 			/**
@@ -557,41 +564,13 @@
 				elQuestLog.appendChild(log);
 				// triggers the CSS animation
 				setTimeout(function() { log.className = log.className + " alertify-log-show"; }, 50);
-				if (wait !== undefined) {
-					this.close(log, wait, elQuestLog);
+				// If wait is undefined, do not allow mouse clicks to close them
+				if (wait === undefined) {
+					return this.close(log, elQuestLog, wait, false);
 				}
-				return this.closeQuestLog(log);
-			},
-
-			closeQuestLog : function (elem) {
-				var self = this;
-				var hideElement, transitionDone;
-				// Hide the dialog box after transition
-				// This ensure it doens't block any element from being clicked
-				transitionDone = function (event) {
-					event.stopPropagation();
-					// unbind event so function only gets called once
-					self.unbind(this, self.transition.type, transitionDone);
-					// remove log message
-					elQuestLog.removeChild(this);
-					if (!elQuestLog.hasChildNodes()) elQuestLog.className += " alertify-logs-hidden";
-				};
-				// this sets the hide class to transition out
-				// or removes the child if css transitions aren't supported
-				hideElement = function (el) {
-					// ensure element exists
-					if (typeof el !== "undefined" && el.parentNode === elQuestLog) {
-						// whether CSS transition exists
-						if (self.transition.supported) {
-							self.bind(el, self.transition.type, transitionDone);
-							el.className += " alertify-log-hide";
-						} else {
-							elQuestLog.removeChild(el);
-							if (!elQuestLog.hasChildNodes()) elQuestLog.className += " alertify-logs-hidden";
-						}
-					}
-				};
-				return (function() {hideElement(elem)});
+				else {
+					return this.close(log, elQuestLog, wait, true);
+				}
 			},
 
 			/**
