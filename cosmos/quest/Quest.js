@@ -11,11 +11,12 @@ var Quest = IgeEventingClass.extend({
 
 	// @client-side
 	processStep: function() {
-		if (this.questState.once !== undefined) {
-			this.questState.once.call(this);
-			delete this.questState.once;
+		var questState = this.questState;
+		if (questState.once !== undefined) {
+			questState.once.call(this);
+			delete questState.once;
 		}
-		this.questState.client.call(this);
+		questState.client.call(this);
 	}
 
 });
