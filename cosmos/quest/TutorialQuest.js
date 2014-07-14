@@ -20,13 +20,11 @@ var TutorialQuest = Quest.extend({
 
 	welcome: {
 		once: function() {
-			var self = this;
 			// Show a pop up box welcoming the player
 			var message = "Welcome to Cosmos!";
-			ige.notification.notificationUI.popupAlert(message, function () {
-				ige.questSystem.eventToServer(self.keys['welcome.action'], self);
-				this.questState = this.moveForward;
-			});
+			var close = alertify.questLog(message, '', 5000);
+			ige.questSystem.eventToServer(this.keys['welcome.action'], this);
+			this.questState = this.moveForward;
 		},
 
 		client: function() {
@@ -40,11 +38,13 @@ var TutorialQuest = Quest.extend({
 
 	moveForward: {
 		once: function () {
-			alertify.log('Move forward by pressing the W key', '', 0);
+			var self = this;
+			var close = alertify.persistentLog('Move forward by pressing the W key');
 			var listener = ige.input.on('inputEvent', function () {
 				alertify.success('Good! You\'ve moved forward!');
 				ige.input.off('inputEvent', listener);
-				this.questState = this.mine;
+				close();
+				self.questState = self.mine;
 			});
 		},
 
@@ -54,7 +54,13 @@ var TutorialQuest = Quest.extend({
 
 	mine: {
 		once: function() {
-			alertify.log('Mine a block', '', 0);
+			var self = this;
+			var close = alertify.persistentlog('Mine a block');
+			var listener = ige.on('cosmos:block.mousedown', function () {
+				alertify.success('Good! You\'ve mined a block!');
+				ige.off('cosmos:block.mousedown', listener);
+				close();
+			});
 		},
 
 		client: function() {
@@ -62,8 +68,23 @@ var TutorialQuest = Quest.extend({
 
 		server: function() {
 		}
-
 	},
+
+	cargo: {
+	},
+
+	craft: {
+	},
+
+	construct: {
+	},
+
+	chat: {
+	},
+
+	relocate: {
+	},
+
 
 	complete: {
 		client: function() {

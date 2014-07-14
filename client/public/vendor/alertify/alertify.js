@@ -12,7 +12,8 @@
 		    isopen    = false,
 		    keys      = { ENTER: 13, ESC: 27, SPACE: 32 },
 		    queue     = [],
-		    $, btnCancel, btnOK, btnReset, btnResetBack, btnFocus, elCallee, elCover, elDialog, elLog, form, input, getTransitionEvent;
+		    $, btnCancel, btnOK, btnReset, btnResetBack, btnFocus, elCallee,
+				elCover, elDialog, elLog, elQuestLog, form, input, getTransitionEvent;
 
 		/**
 		 * Markup pieces
@@ -296,7 +297,7 @@
 			 *
 			 * @return {undefined}
 			 */
-			close : function (elem, wait) {
+			close : function (elem, wait, logs) {
 				// Unary Plus: +"2" === 2
 				var timer = (wait && !isNaN(wait)) ? +wait : this.delay,
 				    self  = this,
@@ -313,21 +314,21 @@
 					// unbind event so function only gets called once
 					self.unbind(this, self.transition.type, transitionDone);
 					// remove log message
-					elLog.removeChild(this);
-					if (!elLog.hasChildNodes()) elLog.className += " alertify-logs-hidden";
+					logs.removeChild(this);
+					if (!logs.hasChildNodes()) logs.className += " alertify-logs-hidden";
 				};
 				// this sets the hide class to transition out
 				// or removes the child if css transitions aren't supported
 				hideElement = function (el) {
 					// ensure element exists
-					if (typeof el !== "undefined" && el.parentNode === elLog) {
+					if (typeof el !== "undefined" && el.parentNode === logs) {
 						// whether CSS transition exists
 						if (self.transition.supported) {
 							self.bind(el, self.transition.type, transitionDone);
 							el.className += " alertify-log-hide";
 						} else {
-							elLog.removeChild(el);
-							if (!elLog.hasChildNodes()) elLog.className += " alertify-logs-hidden";
+							logs.removeChild(el);
+							if (!logs.hasChildNodes()) logs.className += " alertify-logs-hidden";
 						}
 					}
 				};
@@ -450,6 +451,13 @@
 					elDialog.className = "alertify alertify-hidden";
 					document.body.appendChild(elDialog);
 				}
+				// quest log element
+				if ($("alertify-quest") === null) {
+					elQuestLog = document.createElement("section");
+					elQuestLog.setAttribute("id", "alertify-quest");
+					elQuestLog.className = "alertify-quest-logs alertify-quest-logs-hidden";
+					document.body.appendChild(elQuestLog);
+				}
 				// log element
 				if ($("alertify-logs") == null) {
 					elLog = document.createElement("section");
@@ -509,7 +517,81 @@
 				elLog.appendChild(log);
 				// triggers the CSS animation
 				setTimeout(function() { log.className = log.className + " alertify-log-show"; }, 50);
-				this.close(log, wait);
+				this.close(log, wait, elLog);
+			},
+
+			/**
+			 * Show a new quest log message box.
+			 * If wait is specified, the box will close after click or after the
+			 * specified timeout.
+			 * If wait is not specified, the box will not close automatically.
+			 * In both cases, a function is returned that will close the box.
+			 * @return {function} The function that will remove the message box from
+			 * the DOM
+			 */
+			questLog : function (message, type, wait) {
+				// check to ensure the alertify dialog element
+				// has been successfully created
+				var check = function () {
+					if (elQuestLog && elQuestLog.scrollTop !== null) return;
+					else check();
+				};
+				// initialize alertify if it hasn't already been done
+				this.init();
+				check();
+
+				elQuestLog.className = "alertify-quest-logs";
+				var closeFunction = this.questNotify(message, type, wait);
+				return closeFunction;
+			},
+
+			/**
+			 * Add a new quest log message box
+			 */
+			questNotify : function (message, type, wait) {
+				var log = document.createElement("article");
+				log.className = "alertify-log" + ((typeof type === "string" &&
+					type !== "") ? " alertify-log-" + type : "");
+				log.innerHTML = message;
+				// append child
+				elQuestLog.appendChild(log);
+				// triggers the CSS animation
+				setTimeout(function() { log.className = log.className + " alertify-log-show"; }, 50);
+				if (wait !== undefined) {
+					this.close(log, wait, elQuestLog);
+				}
+				return this.closeQuestLog(log);
+			},
+
+			closeQuestLog : function (elem) {
+				var self = this;
+				var hideElement, transitionDone;
+				// Hide the dialog box after transition
+				// This ensure it doens't block any element from being clicked
+				transitionDone = function (event) {
+					event.stopPropagation();
+					// unbind event so function only gets called once
+					self.unbind(this, self.transition.type, transitionDone);
+					// remove log message
+					elQuestLog.removeChild(this);
+					if (!elQuestLog.hasChildNodes()) elQuestLog.className += " alertify-logs-hidden";
+				};
+				// this sets the hide class to transition out
+				// or removes the child if css transitions aren't supported
+				hideElement = function (el) {
+					// ensure element exists
+					if (typeof el !== "undefined" && el.parentNode === elQuestLog) {
+						// whether CSS transition exists
+						if (self.transition.supported) {
+							self.bind(el, self.transition.type, transitionDone);
+							el.className += " alertify-log-hide";
+						} else {
+							elQuestLog.removeChild(el);
+							if (!elQuestLog.hasChildNodes()) elQuestLog.className += " alertify-logs-hidden";
+						}
+					}
+				};
+				return (function() {hideElement(elem)});
 			},
 
 			/**
@@ -607,6 +689,7 @@
 			extend  : _alertify.extend,
 			init    : _alertify.init,
 			log     : function (message, type, wait) { _alertify.log(message, type, wait); return this; },
+			questLog: function (message, type, wait) { return _alertify.questLog(message, type, wait); },
 			prompt  : function (message, fn, placeholder, cssClass) { _alertify.dialog(message, "prompt", fn, placeholder, cssClass); return this; },
 			success : function (message, wait) { _alertify.log(message, "success", wait); return this; },
 			error   : function (message, wait) { _alertify.log(message, "error", wait); return this; },

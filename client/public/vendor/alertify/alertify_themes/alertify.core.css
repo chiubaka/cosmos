@@ -52,6 +52,14 @@
 		display: block;
 		visibility: hidden;
 	}
+.alertify-quest-logs{
+	position: fixed;
+	z-index: 5000;
+	left: 50%;
+	top: 80px;
+	width: 300px;
+}
+
 .alertify-logs {
 	position: fixed;
 	z-index: 5000;
