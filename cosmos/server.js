@@ -89,10 +89,10 @@ var Server = IgeClass.extend({
 						// Add crafting system
 						ige.addComponent(CraftingSystem);
 
+						GameInit.init(self);
+
 						// Accept incoming network connections
 						ige.network.acceptConnections(true);
-
-						GameInit.init(self);
 					}
 				});
 			});

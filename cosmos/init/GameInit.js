@@ -41,6 +41,7 @@ var GameInit = {
 	initBlocks: function() {
 		var globalContext = (ige.isServer) ? global : window;
 		cosmos.blocks = {};
+		cosmos.blocks.constructors = {};
 		cosmos.blocks.instances = {};
 		for (var key in globalContext) {
 			if (globalContext.hasOwnProperty(key)
@@ -48,7 +49,9 @@ var GameInit = {
 				&& globalContext[key].prototype
 				&& globalContext[key].prototype instanceof Block)
 			{
-				var block = new globalContext[key];
+				cosmos.blocks.constructors[key] = globalContext[key];
+
+				var block = new globalContext[key]();
 				cosmos.blocks.instances[key] = block;
 			}
 		}
