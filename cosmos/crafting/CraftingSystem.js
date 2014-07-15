@@ -151,8 +151,7 @@ var CraftingSystem = IgeEventingClass.extend({
 	// Add a recipe to a player
 	addRecipeServer: function(recipe, player, clientId) {
 		player.crafting.addRecipe(recipe);
-		ige.network.stream.queueCommand('cosmos:crafting.addRecipe',
-			recipe, clientId);
+		ige.network.stream.queueCommand('cosmos:crafting.addRecipe', recipe, clientId);
 	},
 
 	// Keep the client side recipe list in sync

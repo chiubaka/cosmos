@@ -6,7 +6,7 @@ var TutorialQuest = Quest.extend({
 		Quest.prototype.init.call(this, instance);
 
 		if (ige.isClient) {
-			this.questState = this.welcome;
+			this.questState = this.construct;
 		}
 
 		if (ige.isServer) {
@@ -134,7 +134,7 @@ var TutorialQuest = Quest.extend({
 					ige.hud.leftToolbar.windows.craftingUI.hideRecipeTooltip(recipeName);
 					ige.craftingSystem.off('cosmos:CraftingSystem.craft.success', listener);
 					alertify.questLog('Good! You\'ve crafted one ' + recipeNameHuman + '!', 'success', 5000);
-					//self.questState = self.craft;
+					self.questState = self.construct;
 				}
 			});
 		},
@@ -149,20 +149,40 @@ var TutorialQuest = Quest.extend({
 		once: function() {
 			var self = this;
 			alertify.questLog('Now, let\'s add something to your ship', '', 5000);
-			var removeQuestLog = alertify.questLog('Click the construct button');
-			// Show the tooltip for the construct button
-			ige.hud.bottomToolbar.capBar.constructCap.showButtonTooltip();
-			var listener = ige.craftingSystem.on('cosmos:CraftingSystem.craft.success', 
-				function (serverRecipeName) {
-				if (serverRecipeName === recipeName) {
-					removeQuestLog();
-					ige.hud.bottomToolbar.capBar.constructCap.hideButtonTooltip();
-					ige.craftingSystem.off('cosmos:CraftingSystem.craft.success', listener);
-					alertify.questLog('Good! You\'ve crafted an Iron Engine!', 'success', 5000);
-					//self.questState = self.craft;
-				}
-			});
+			clickConstruct();
+
+			function clickConstruct() {
+				// Make the player click the construct button
+				var removeQuestLog = alertify.questLog('Click the construct button');
+				// Show the tooltip for the construct button
+				ige.hud.bottomToolbar.capBar.constructCap.showButtonTooltip();
+				var listener = ige.on('capbar cap selected', function (classId) {
+					if (classId === ConstructCap.prototype.classId()) {
+						removeQuestLog();
+						ige.off('cosmos:CargoComponent.buttonClicked', listener);
+						// Hide the tooltip
+						ige.hud.bottomToolbar.capBar.constructCap.hideButtonTooltip;
+						constructShip();
+					}
+				});
+			}
+
+			function constructShip() {
+				// Make the player construct a block on the ship
+				var removeQuestLog = alertify.questLog('Now, click on the construction zones around your ship.');
+				var listener = ige.on('cosmos:BlockGrid.processBlockActionClient.add', 
+					function (selectedType, blockGrid) {
+					if (blockGrid === ige.client.player) {
+						removeQuestLog();
+						ige.hud.bottomToolbar.capBar.constructCap.hideButtonTooltip();
+						ige.craftingSystem.off('cosmos:BlockGrid.processBlockActionClient.add', listener);
+						alertify.questLog('Good! You\'ve constructed a block on your ship!', 'success', 5000);
+						//self.questState = self.craft;
+					}
+				});
+			}
 		},
+
 
 		client: function() {
 		}
