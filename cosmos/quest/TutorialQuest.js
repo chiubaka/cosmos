@@ -6,7 +6,7 @@ var TutorialQuest = Quest.extend({
 		Quest.prototype.init.call(this, instance);
 
 		if (ige.isClient) {
-			this.questState = this.construct;
+			this.questState = this.complete;
 		}
 
 		if (ige.isServer) {
@@ -106,7 +106,7 @@ var TutorialQuest = Quest.extend({
 				removeQuestLog();
 				ige.off('cosmos:CraftingUIComponent.buttonClicked', listener);
 				// Hide the tooltip
-				ige.hud.leftToolbar.windows.craftingUI.hideButtonTooltip;
+				ige.hud.leftToolbar.windows.craftingUI.hideButtonTooltip();
 				alertify.questLog('Good! You\'ve opened crafting!', 'success', 5000);
 				self.questState = self.craftBlock;
 			});
@@ -159,9 +159,9 @@ var TutorialQuest = Quest.extend({
 				var listener = ige.on('capbar cap selected', function (classId) {
 					if (classId === ConstructCap.prototype.classId()) {
 						removeQuestLog();
-						ige.off('cosmos:CargoComponent.buttonClicked', listener);
+						ige.off('capbar cap selected', listener);
 						// Hide the tooltip
-						ige.hud.bottomToolbar.capBar.constructCap.hideButtonTooltip;
+						ige.hud.bottomToolbar.capBar.constructCap.hideButtonTooltip();
 						constructShip();
 					}
 				});
@@ -177,7 +177,7 @@ var TutorialQuest = Quest.extend({
 						ige.hud.bottomToolbar.capBar.constructCap.hideButtonTooltip();
 						ige.craftingSystem.off('cosmos:BlockGrid.processBlockActionClient.add', listener);
 						alertify.questLog('Good! You\'ve constructed a block on your ship!', 'success', 5000);
-						//self.questState = self.craft;
+						self.questState = self.chat;
 					}
 				});
 			}
@@ -190,14 +190,51 @@ var TutorialQuest = Quest.extend({
 
 	},
 
+	// TODO: Skip this if chat is already visible
 	chat: {
+		once: function() {
+			var self = this;
+			var removeQuestLog = alertify.questLog('Now, click the chat button');
+			// Show the tooltip
+			ige.hud.bottomToolbar.chat.showButtonTooltip();
+			var listener = ige.hud.bottomToolbar.chat.on('cosmos:ChatComponent.show', function () {
+				removeQuestLog();
+				ige.hud.bottomToolbar.chat.off('cosmos:ChatComponent.show', listener);
+				// Hide the tooltip
+				ige.hud.bottomToolbar.chat.hideButtonTooltip();
+				alertify.questLog('Good! You\'ve opened the chat!', 'success', 5000);
+				self.questState = self.relocate;
+			});
+		},
+
+		client: function() {
+		}
 	},
 
 	relocate: {
+		once: function() {
+			var self = this;
+			var removeQuestLog = alertify.questLog('Now, click the relocate button');
+			// Show the tooltip
+			ige.hud.bottomToolbar.relocate.showButtonTooltip();
+			var listener = ige.hud.bottomToolbar.relocate.on('cosmos:RelocateComponent.mouseDown', function () {
+				removeQuestLog();
+				ige.hud.bottomToolbar.relocate.off('cosmos:RelocateComponent.mouseDown', listener);
+				// Hide the tooltip
+				ige.hud.bottomToolbar.relocate.hideButtonTooltip();
+				alertify.questLog('Good! You\'ve clicked the relocate button!', 'success', 5000);
+				//self.questState = self.relocate;
+			});
+		},
+
+		client: function() {
+		}
 	},
 
 
 	complete: {
+		once: function() {
+		},
 		client: function() {
 		},
 		server: function() {

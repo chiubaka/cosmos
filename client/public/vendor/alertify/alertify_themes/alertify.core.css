@@ -55,8 +55,12 @@
 .alertify-quest-logs{
 	position: fixed;
 	z-index: 5000;
-	left: 50%;
-	top: 80px;
+	text-align: center;
+	left: 0;
+	right: 0;
+	margin-left: auto;
+	margin-right: auto;
+	top: 8%;
 	width: 300px;
 }
 

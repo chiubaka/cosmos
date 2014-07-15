@@ -135,11 +135,13 @@ var CraftingUIComponent = WindowComponent.extend({
 	},
 
 	showRecipeTooltip: function(recipeName) {
-		this.recipeDOMElements[recipeName].tooltipster('show');
+		var elem = this.recipeDOMElements[recipeName];
+		elem.tooltipster('show');
 	},
 
 	hideRecipeTooltip: function(recipeName) {
-		this.recipeDOMElements[recipeName].tooltipster('hide');
+		var elem = this.recipeDOMElements[recipeName];
+		elem.tooltipster('show');
 	}
 
 });

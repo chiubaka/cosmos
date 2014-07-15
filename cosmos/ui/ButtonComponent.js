@@ -29,10 +29,19 @@ var ButtonComponent = IgeEventingClass.extend({
 	},
 
 	showButtonTooltip: function() {
+		this.element.tooltipster('destroy');
+		this.element.tooltipster({
+			theme: 'tooltip-highlighted',
+			autoClose: false
+		});
 		this.element.tooltipster('show');
 	},
 
 	hideButtonTooltip: function() {
+		this.element.tooltipster('destroy');
+		this.element.tooltipster({
+			theme: 'tooltip',
+		});
 		this.element.tooltipster('hide');
 	}
 
