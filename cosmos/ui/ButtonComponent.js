@@ -28,21 +28,14 @@ var ButtonComponent = IgeEventingClass.extend({
 		this.element = $('#' + id);
 	},
 
-	showButtonTooltip: function() {
-		this.element.tooltipster('destroy');
-		this.element.tooltipster({
-			theme: 'tooltip-highlighted',
-			autoClose: false
-		});
-		this.element.tooltipster('show');
+	// Shows and pins the tooltip for the button
+	pinButtonTooltip: function() {
+		this.element.tooltipster('showPin', 'tooltip-highlighted');
 	},
 
-	hideButtonTooltip: function() {
-		this.element.tooltipster('destroy');
-		this.element.tooltipster({
-			theme: 'tooltip',
-		});
-		this.element.tooltipster('hide');
+	// Hides and unpins the tooltip for the button
+	unpinButtonTooltip: function() {
+		this.element.tooltipster('hideUnpin', 'tooltip');
 	}
 
 });
