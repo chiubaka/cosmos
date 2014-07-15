@@ -22,7 +22,7 @@ var TutorialQuest = Quest.extend({
 		once: function() {
 			// Show a pop up box welcoming the player
 			var message = "Welcome to Cosmos!";
-			var close = alertify.questLog(message, '', 5000);
+			var removeQuestLog = alertify.questLog(message, '', 5000);
 			//ige.questSystem.eventToServer(this.keys['welcome.action'], this);
 			this.questState = this.cargo;
 		},
@@ -39,10 +39,10 @@ var TutorialQuest = Quest.extend({
 	moveForward: {
 		once: function () {
 			var self = this;
-			var close = alertify.questLog('Now, move forward by pressing the W key');
+			var removeQuestLog = alertify.questLog('Now, move forward by pressing the W key');
 			var listener = ige.input.on('keyDown', function (event, keyCode) {
 				if (keyCode === ige.input.key.w) {
-					close();
+					removeQuestLog();
 					ige.input.off('keyDown', listener);
 					alertify.questLog('Good! You\'ve moved forward!', 'success', 5000);
 					self.questState = self.mine;
@@ -54,12 +54,13 @@ var TutorialQuest = Quest.extend({
 		}
 	},
 
+	// TODO: Add a tooltip
 	mine: {
 		once: function() {
 			var self = this;
-			var close = alertify.questLog('Now, mine a block');
+			var removeQuestLog = alertify.questLog('Now, mine a block');
 			var listener = ige.on('cosmos:block.mousedown', function () {
-				close();
+				removeQuestLog();
 				ige.off('cosmos:block.mousedown', listener);
 				alertify.questLog('Good! You\'ve mined a block!', 'success', 5000);
 				self.questState = self.cargo;
@@ -77,14 +78,14 @@ var TutorialQuest = Quest.extend({
 	cargo: {
 		once: function() {
 			var self = this;
-			var close = alertify.questLog('Now, click the cargo button');
+			var removeQuestLog = alertify.questLog('Now, click the cargo button');
 			// Show the tooltip
-			ige.hud.leftToolbar.windows.cargo.button.tooltipster('show');
+			ige.hud.leftToolbar.windows.cargo.showButtonTooltip();
 			var listener = ige.on('cosmos:CargoComponent.buttonClicked', function (classId) {
-				close();
+				removeQuestLog();
 				ige.off('cosmos:CargoComponent.buttonClicked', listener);
 				// Hide the tooltip
-				ige.hud.leftToolbar.windows.cargo.button.tooltipster('hide');
+				ige.hud.leftToolbar.windows.cargo.hideButtonTooltip();
 				alertify.questLog('Good! You\'ve opened the cargo!', 'success', 5000);
 				self.questState = self.craftOpen;
 			});
@@ -98,16 +99,16 @@ var TutorialQuest = Quest.extend({
 	craftOpen: {
 		once: function() {
 			var self = this;
-			var close = alertify.questLog('Now, click the craft button');
+			var removeQuestLog = alertify.questLog('Now, click the craft button');
 			// Show the tooltip
-			ige.hud.leftToolbar.windows.craftingUI.button.tooltipster('show');
+			ige.hud.leftToolbar.windows.craftingUI.showButtonTooltip();
 			var listener = ige.on('cosmos:CraftingUIComponent.buttonClicked', function (classId) {
-				close();
+				removeQuestLog();
 				ige.off('cosmos:CraftingUIComponent.buttonClicked', listener);
 				// Hide the tooltip
-				ige.hud.leftToolbar.windows.craftingUI.button.tooltipster('hide');
+				ige.hud.leftToolbar.windows.craftingUI.hideButtonTooltip;
 				alertify.questLog('Good! You\'ve opened crafting!', 'success', 5000);
-				self.questState = self.craftEngine;
+				self.questState = self.craftBlock;
 			});
 		},
 
@@ -116,21 +117,23 @@ var TutorialQuest = Quest.extend({
 
 	},
 
-	craftEngine: {
+	craftBlock: {
 		once: function() {
 			var self = this;
-			var close = alertify.questLog('Now, let\'s craft an Iron Engine');
-			// Show the tooltip for the Iron Engine recipe
-			var recipeName = IronEngineBlock.prototype.classId();
-			var recipeDOMElement = ige.hud.leftToolbar.windows.craftingUI.recipeDOMElements[recipeName];
-			recipeDOMElement.tooltipster('show');
+			// Here, we choose an Iron Engine to craft
+			var block = cosmos.blocks.instances["IronEngineBlock"];
+			var recipeName = block.classId();
+			var recipeNameHuman = block.recipe.name;
+			var removeQuestLog = alertify.questLog('Now, let\'s craft one ' + recipeNameHuman);
+			// Show the crafting tooltip for the desired block
+			ige.hud.leftToolbar.windows.craftingUI.showRecipeTooltip(recipeName);
 			var listener = ige.craftingSystem.on('cosmos:CraftingSystem.craft.success', 
 				function (serverRecipeName) {
 				if (serverRecipeName === recipeName) {
-					close();
-					recipeDOMElement.tooltipster('hide');
+					removeQuestLog();
+					ige.hud.leftToolbar.windows.craftingUI.hideRecipeTooltip(recipeName);
 					ige.craftingSystem.off('cosmos:CraftingSystem.craft.success', listener);
-					alertify.questLog('Good! You\'ve crafted an Iron Engine!', 'success', 5000);
+					alertify.questLog('Good! You\'ve crafted one ' + recipeNameHuman + '!', 'success', 5000);
 					//self.questState = self.craft;
 				}
 			});
@@ -141,7 +144,30 @@ var TutorialQuest = Quest.extend({
 
 	},
 
+	// Construct something on the player ship
 	construct: {
+		once: function() {
+			var self = this;
+			alertify.questLog('Now, let\'s add something to your ship', '', 5000);
+			var removeQuestLog = alertify.questLog('Click the construct button');
+			// Show the tooltip for the construct button
+
+			var listener = ige.craftingSystem.on('cosmos:CraftingSystem.craft.success', 
+				function (serverRecipeName) {
+				if (serverRecipeName === recipeName) {
+					removeQuestLog();
+					
+					ige.craftingSystem.off('cosmos:CraftingSystem.craft.success', listener);
+					alertify.questLog('Good! You\'ve crafted an Iron Engine!', 'success', 5000);
+					//self.questState = self.craft;
+				}
+			});
+		},
+
+		client: function() {
+		}
+
+
 	},
 
 	chat: {
