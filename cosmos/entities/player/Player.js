@@ -37,6 +37,8 @@ var Player = IgeEntity.extend({
 	_prevControls: undefined,
 	_prevMovementBlocks: undefined,
 
+	_engines: undefined,
+
 	/**
 	 * The clientId associated with the player. Used to send notifications to
 	 * a specific player.
@@ -364,10 +366,10 @@ var Player = IgeEntity.extend({
 		if (newControls) {
 			this._controls = newControls;
 
-			this.currentShip().controls.up = this._controls.key.up;
-			this.currentShip().controls.down = this._controls.key.down;
-			this.currentShip().controls.left = this._controls.key.left;
-			this.currentShip().controls.right = this._controls.key.right;
+			this.currentShip().controls().up = this._controls.key.up;
+			this.currentShip().controls().down = this._controls.key.down;
+			this.currentShip().controls().left = this._controls.key.left;
+			this.currentShip().controls().right = this._controls.key.right;
 
 			console.log("controls of the player have been set to the following:");
 			console.log(newControls);
@@ -383,14 +385,8 @@ var Player = IgeEntity.extend({
 	 */
 	currentShip: function(newCurrentShip) {
 		if (newCurrentShip !== undefined) {
-			//TODO remove these logging statements
-			console.log("finally setting current ship!");
-			console.log("with the following id:");
-			console.log(newCurrentShip.id());
-			console.log("by the way, this player's id is:");
-			console.log(this.id());
-
 			this._currentShip = newCurrentShip;
+			this._currentShip.player(this);
 
 			if (!ige.isServer) {
 					/**

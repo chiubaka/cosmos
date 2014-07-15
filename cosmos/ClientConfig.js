@@ -78,15 +78,17 @@ var igeClientConfig = {
 		'./entities/ClickScene.js',
 
 		/* === COMPONENT CONFIG FILES === */
+		'./components/config/Descriptions.js',
 		'./components/config/Healths.js',
 		'./components/config/Recipes.js',
+		'./components/config/Thrusts.js',
 
 		/* === COMPONENTS === */
-		'./components/Health.js',
 		'./components/DamageSource.js',
-		'./components/Recipe.js',
 		'./components/Description.js',
-		'./components/config/Descriptions.js',
+		'./components/Health.js',
+		'./components/Recipe.js',
+		'./components/Thrust.js',
 
 		/* === PLAYER STATE === */
 		'./entities/player/Player.js',

@@ -28,7 +28,7 @@ var Ship = BlockStructure.extend({
 	 * @memberof Ship
 	 * @instance
 	 */
-	controls: undefined,
+	_controls: undefined,
 
 	/**
 	 * The cargo of the ship.
@@ -41,14 +41,26 @@ var Ship = BlockStructure.extend({
 	//TODO add comment here
 	_prevMovementBlocks: undefined,
 
+	//TODO add comment here
+	_player: undefined,
+
+	//TODO add comment here
+	//TODO shouldn't the engines be kept track of by some component? Like a thrusting component?
+	_engines: undefined,
+
+	_prev_controls: undefined,
+
 	init: function(data) {
+		//TODO can we move this to after the super call?
+		this._engines = [];
+
 		BlockStructure.prototype.init.call(this, data);
 
 		var self = this;//TODO remove this line
 
 		this.category(Ship.BOX2D_CATEGORY);
 
-		this.controls = {
+		this._controls = {
 			left: false,
 			right: false,
 			up: false,
@@ -68,6 +80,35 @@ var Ship = BlockStructure.extend({
 
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform']);
+	},
+
+	//TODO comment this
+	engines: function() {
+		return this._engines;
+	},
+
+	//TODO comment this
+	add: function(row, col, block, checkForNeighbors) {
+		var blockAdded = BlockStructure.prototype.add.call(this, row, col, block, checkForNeighbors);
+		if (blockAdded && ige.isServer) {
+			DbPlayer.update(this.player().dbId(), this, function() {});
+		}
+		if (block instanceof EngineBlock) {
+			this.engines().push(block);
+		}
+		return blockAdded;
+	},
+
+	//TODO comment this
+	remove: function(row, col) {
+		var block = this.get(row, col);
+		if (block instanceof EngineBlock) {
+			this.engines().splice(this.engines().indexOf(block), 1);
+		}
+		BlockStructure.prototype.remove.call(this, row, col);
+		if (ige.isServer) {
+			DbPlayer.update(this.player().dbId(), this, function() {});
+		}
 	},
 
 	/**
@@ -94,6 +135,15 @@ var Ship = BlockStructure.extend({
 			.attractionStrength(1)
 			.relocate();
 			//.debugFixtures(false);//change to true for debugging*/
+	},
+
+	player: function(newPlayer) {
+		if (newPlayer === undefined) {
+			return this._player;
+		}
+
+		this._player = newPlayer;
+		return this;
 	},
 
 	/**
@@ -212,20 +262,32 @@ var Ship = BlockStructure.extend({
 		}
 	},
 
+	controls: function(newControls) {
+		if (newControls === undefined) {
+			return this._controls;
+		}
+
+		this._prev_controls = this._controls;
+		this._controls = newControls;
+		return this;
+	},
+
 	update: function(ctx) {
 		BlockStructure.prototype.update.call(this, ctx);
+
+
 
 		// TODO: Do not spam the player with notifications if engines/thruster
 		// are removed
 		if (ige.isServer) {
 			/* Angular motion */
 			// Angular rotation speed depends on number of thrusters
-			if (this.controls.left || this.controls.right) {
+			if (this.controls().left || this.controls().right) {
 				var numRotationalThrusters = this.numBlocksOfType('ThrusterBlock');
 				var angularImpulse = -60 * numRotationalThrusters * ige._tickDelta;
 
 				if (numRotationalThrusters < 1) {
-					if (JSON.stringify(this.controls) !== JSON.stringify(this._prevControls) ||
+					if (JSON.stringify(this.controls()) !== JSON.stringify(this._prev_controls) ||
 						this._prevMovementBlocks.thrusters > 0) {
 						ige.network.stream.queueCommand('notificationError',
 							NotificationDefinitions.errorKeys.noRotationalThruster, this._clientId);
@@ -233,35 +295,40 @@ var Ship = BlockStructure.extend({
 				}
 				this._prevMovementBlocks.thrusters = numRotationalThrusters;
 
-				if (this.controls.left) {
+				if (this.controls().left) {
 					this._box2dBody.ApplyTorque(angularImpulse);
 				}
-				if (this.controls.right) {
+				if (this.controls().right) {
 					this._box2dBody.ApplyTorque(-angularImpulse);
 				}
 			}
 
-			/* Linear motion */
-			if (this.controls.up || this.controls.down) {
-				var engines = this.blocksOfType(EngineBlock.prototype.classId());
+			if (this.controls().up || this.controls().down) {
+				// the "- Math.PI/2" below makes the ship move forward and backwards, instead of side to side.
+				var angle = this._box2dBody.GetAngle() - Math.PI/2;
+				var scaleRatio = ige.box2d.scaleRatio();
+				var thisX = this.translate().x();
+				var thisY = this.translate().y();
+
+
 
 				//TODO: This might not work
 				// Notify player that they cannot fly without an engine
 				if (this._prevMovementBlocks.engines.length < 1) {
-					if (JSON.stringify(this.controls) !== JSON.stringify(this._prevControls) ||
+					if (JSON.stringify(this._controls) !== JSON.stringify(this._prev_controls) ||
 						this._prevMovementBlocks.engines > 0) {
 						ige.network.stream.queueCommand('notificationError',
 							NotificationDefinitions.errorKeys.noEngine, this._clientId);
 						}
 				}
-				this._prevMovementBlocks.engines = engines.length;
+				this._prevMovementBlocks.engines = this.engines().length;
 
 
 				var linearImpulse = 3 * ige._tickDelta;
-				if (this.controls.up) {
+				if (this._controls.up) {
 					linearImpulse = linearImpulse;
 				}
-				else if (this.controls.down) {
+				else if (this._controls.down) {
 					linearImpulse = -linearImpulse;
 				}
 
@@ -271,28 +338,32 @@ var Ship = BlockStructure.extend({
 				var x_comp = Math.cos(angle) * linearImpulse;
 				var y_comp = Math.sin(angle) * linearImpulse;
 
-				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp);
+				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp)
 
-				// Notify ship that they cannot fly without an engine
-				if (engines.length < 1) {
-					ige.network.stream.queueCommand('notificationError',
-						NotificationDefinitions.errorKeys.noEngine, this._clientId);
+				// Notify player that they cannot fly without an engine
+				if (this.engines().length < 1) {
+					if (JSON.stringify(this._controls) !== JSON.stringify(this._prev_controls) ||
+						this._prevMovementBlocks.engines > 0) {
+						ige.network.stream.queueCommand('notificationError',
+							NotificationDefinitions.errorKeys.noEngine, this.player()._clientId);
+					}
 				}
 
-				for (var i = 0; i < engines.length; i++) {
-					var engine = engines[i];
-					/*
-					TODO: Fixtures should have their own position in box2d units.
-					Something like block.fixture().m_shape.m_centroid should work.
-					But this is a little tricky because box2D fixtures don't seem to
-					compute their own world coordinates or rotated offsets. They only
-					store the unrotated offset.
-					Talk with @rafaelCosman if you want help doing this TODO.
-					*/
+				this._prevMovementBlocks.engines = this.engines().length;
 
-					var scaleRatio = ige.box2d.scaleRatio();
-					var thisX = this.translate().x();
-					var thisY = this.translate().y();
+				for (var i = 0; i < this.engines().length; i++) {
+					var engine = this.engines()[i];
+
+					var linearImpulse = engine.thrust.value * ige._tickDelta;
+					if (this._controls.down) {
+						linearImpulse = -linearImpulse;
+					}
+
+					var impulseX = Math.cos(angle) * linearImpulse;
+					var impulseY = Math.sin(angle) * linearImpulse;
+
+					var impulse = new ige.box2d.b2Vec2(impulseX, impulseY);
+
 					var engineX = engine.translate().x();
 					var engineY = engine.translate().y();
 
