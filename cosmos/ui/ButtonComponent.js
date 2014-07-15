@@ -26,7 +26,16 @@ var ButtonComponent = IgeEventingClass.extend({
 		parent.append(buttonDiv);
 
 		this.element = $('#' + id);
+	},
+
+	showButtonTooltip: function() {
+		this.element.tooltipster('show');
+	},
+
+	hideButtonTooltip: function() {
+		this.element.tooltipster('hide');
 	}
+
 });
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {

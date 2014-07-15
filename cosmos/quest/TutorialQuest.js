@@ -24,7 +24,7 @@ var TutorialQuest = Quest.extend({
 			var message = "Welcome to Cosmos!";
 			var removeQuestLog = alertify.questLog(message, '', 5000);
 			//ige.questSystem.eventToServer(this.keys['welcome.action'], this);
-			this.questState = this.cargo;
+			this.questState = this.moveForward;
 		},
 
 		client: function() {
@@ -151,12 +151,12 @@ var TutorialQuest = Quest.extend({
 			alertify.questLog('Now, let\'s add something to your ship', '', 5000);
 			var removeQuestLog = alertify.questLog('Click the construct button');
 			// Show the tooltip for the construct button
-
+			ige.hud.bottomToolbar.capBar.constructCap.showButtonTooltip();
 			var listener = ige.craftingSystem.on('cosmos:CraftingSystem.craft.success', 
 				function (serverRecipeName) {
 				if (serverRecipeName === recipeName) {
 					removeQuestLog();
-					
+					ige.hud.bottomToolbar.capBar.constructCap.hideButtonTooltip();
 					ige.craftingSystem.off('cosmos:CraftingSystem.craft.success', listener);
 					alertify.questLog('Good! You\'ve crafted an Iron Engine!', 'success', 5000);
 					//self.questState = self.craft;

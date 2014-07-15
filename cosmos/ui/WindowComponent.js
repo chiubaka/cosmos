@@ -139,16 +139,7 @@ var WindowComponent = ButtonComponent.extend({
 			width += $(this).outerWidth(true);
 		});
 		$('#windows').width(width);
-	},
-
-	showButtonTooltip: function() {
-		this.element.tooltipster('show');
-	},
-
-	hideButtonTooltip: function() {
-		this.element.tooltipster('hide');
 	}
-
 });
 
 WindowComponent.MIN_ROWS = 3;
