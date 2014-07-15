@@ -80,6 +80,7 @@ var ClientNetworkEvents = {
 						}
 
 						ige.emit('cosmos:client.player.streamed');
+						ige.removeLoadingScreen();
 					}
 				});
 			}
