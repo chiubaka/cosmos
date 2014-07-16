@@ -31,6 +31,14 @@ var Ship = BlockStructure.extend({
 	_controls: undefined,
 
 	/**
+	* A dictonary that keeps track of the previous state of the controls for this ship.
+	* @type {Object}
+	* @memberof Ship
+	* @instance
+	*/
+	_prev_controls: undefined,
+
+	/**
 	 * The cargo of the ship.
 	 * @type {Cargo}
 	 * @memberof Ship
@@ -41,15 +49,32 @@ var Ship = BlockStructure.extend({
 	//TODO add comment here
 	_prevMovementBlocks: undefined,
 
-	//TODO add comment here
+	/**
+	 * A reference to the player that owns this ship.
+	 * At some point we may have NPCs, in which case this should be a pointer to the more general object which is the superclass of both Player and NPC.
+	 * @type {Player}
+	 * @memberof Ship
+	 * @instance
+	 */
 	_player: undefined,
 
-	//TODO add comment here
-	//TODO shouldn't the engines be kept track of by some component? Like a thrusting component?
+	/**
+	 * A list that stores references to all of the engines in this ship
+	 * //TODO shouldn't the engines be kept track of by some component? Like a engines component?
+	 * @type {Array}
+	 * @memberof Ship
+	 * @instance
+	 */
 	_engines: undefined,
-	_thrusters: undefined,
 
-	_prev_controls: undefined,
+	/**
+	* A list that stores references to all of the thrusters in this ship
+	* //TODO shouldn't the thrusters be kept track of by some component? Like a thrusting component?
+	* @type {Array}
+	* @memberof Ship
+	* @instance
+	*/
+	_thrusters: undefined,
 
 	init: function(data) {
 		//TODO can we move this to after the super call?
