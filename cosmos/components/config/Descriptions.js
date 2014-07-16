@@ -123,7 +123,7 @@ Descriptions[ControlBlock.prototype.classId()] =
 	text: "Control doesn't currently do anything."
 };
 
-Descriptions[EngineBlock.prototype.classId()] =
+Descriptions[IronEngineBlock.prototype.classId()] =
 {
 	text: 'Engines allow your ship to move forward and backwards. The more engines your ship has, the faster ' +
 		'it will move. If you have no engines, your ship cannot move forward or backwards. As you place more blocks '+

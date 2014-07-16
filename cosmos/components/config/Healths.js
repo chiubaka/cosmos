@@ -12,7 +12,7 @@ Healths[ControlBlock.prototype.classId()] =
 	max: 45
 };
 
-Healths[EngineBlock.prototype.classId()] =
+Healths[IronEngineBlock.prototype.classId()] =
 {
 	max: 40
 };

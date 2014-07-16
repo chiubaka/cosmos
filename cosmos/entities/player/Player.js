@@ -37,8 +37,6 @@ var Player = IgeEntity.extend({
 	_prevControls: undefined,
 	_prevMovementBlocks: undefined,
 
-	_engines: undefined,
-
 	/**
 	 * The clientId associated with the player. Used to send notifications to
 	 * a specific player.

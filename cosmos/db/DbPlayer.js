@@ -47,11 +47,14 @@ var DbPlayer = {
 			// If this logged in player has a guest username, don't save it to the database. This way, we'll prompt
 			// them to set a username again next time they log in.
 			var username = player.hasGuestUsername ? undefined : player.username();
-			var ship = player.toBlockTypeMatrix();
+			var lowerCaseUsername = player.hasGuestUsername ? undefined : username.toLowerCase();
+
+			var ship = player.currentShip().toBlockTypeMatrix();
 			var cargo = player.currentShip().cargo.serializeCargo();
+			
 			players.update(
 				{_id: playerId},
-				{_id: playerId, username: username, lowerCaseUsername: username.toLowerCase(), ship: ship, cargo: cargo},
+				{_id: playerId, username: username, lowerCaseUsername: lowerCaseUsername, ship: ship, cargo: cargo},
 				{upsert: true},
 				callback
 			);

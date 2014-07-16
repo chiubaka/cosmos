@@ -91,7 +91,7 @@ var Ship = BlockStructure.extend({
 	add: function(row, col, block, checkForNeighbors) {
 		var blockAdded = BlockStructure.prototype.add.call(this, row, col, block, checkForNeighbors);
 		if (blockAdded && ige.isServer) {
-			DbPlayer.update(this.player().dbId(), this, function() {});
+			DbPlayer.update(this.player().dbId(), this.player(), function() {});
 		}
 		if (block instanceof EngineBlock) {
 			this.engines().push(block);
@@ -107,7 +107,7 @@ var Ship = BlockStructure.extend({
 		}
 		BlockStructure.prototype.remove.call(this, row, col);
 		if (ige.isServer) {
-			DbPlayer.update(this.player().dbId(), this, function() {});
+			DbPlayer.update(this.player().dbId(), this.player(), function() {});
 		}
 	},
 
@@ -314,12 +314,12 @@ var Ship = BlockStructure.extend({
 
 				//TODO: This might not work
 				// Notify player that they cannot fly without an engine
-				if (this._prevMovementBlocks.engines.length < 1) {
+				if (this.engines().length < 1) {
 					if (JSON.stringify(this._controls) !== JSON.stringify(this._prev_controls) ||
 						this._prevMovementBlocks.engines > 0) {
 						ige.network.stream.queueCommand('notificationError',
-							NotificationDefinitions.errorKeys.noEngine, this._clientId);
-						}
+							NotificationDefinitions.errorKeys.noEngine, this.player()._clientId);
+					}
 				}
 				this._prevMovementBlocks.engines = this.engines().length;
 

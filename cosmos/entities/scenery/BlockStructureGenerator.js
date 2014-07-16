@@ -265,7 +265,7 @@ var BlockStructureGenerator = {
 			//here are some easter-egg type things, which will add up to 0.002
 			/* //I've commented this out per LEO-522
 			// The idea is to make mining more exciting by having really unusual things buried inside of asteroids.
-			"EngineBlock": 0.002 * .25,
+			"IronEngineBlock": 0.002 * .25,
 			"FuelBlock": 0.002 * .25,
 			"PowerBlock": 0.002 * .25,
 			"ThrusterBlock": 0.002 * .25
@@ -307,7 +307,7 @@ var BlockStructureGenerator = {
 	 */
 	partDistributions: {
 		STANDARD: {
-			"EngineBlock": .1,
+			"IronEngineBlock": .1,
 			"FuelBlock": .2,
 			"PowerBlock": .1,
 			"ThrusterBlock": .1,
@@ -319,7 +319,7 @@ var BlockStructureGenerator = {
 		},
 
 		HIGH_CARGO: {
-			"EngineBlock": .05,
+			"IronEngineBlock": .05,
 			"FuelBlock": .05,
 			"PowerBlock": .05,
 			"ThrusterBlock": .05,
