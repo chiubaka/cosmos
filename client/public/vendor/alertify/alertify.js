@@ -548,8 +548,7 @@
 				check();
 
 				elQuestLog.className = "alertify-quest-logs";
-				var closeFunction = this.questNotify(message, type, wait);
-				return closeFunction;
+				return this.questNotify(message, type, wait);
 			},
 
 			/**
@@ -565,12 +564,19 @@
 				// triggers the CSS animation
 				setTimeout(function() { log.className = log.className + " alertify-log-show"; }, 50);
 				// If wait is undefined, do not allow mouse clicks to close them
+				var closeFunction;
 				if (wait === undefined) {
-					return this.close(log, elQuestLog, wait, false);
+					closeFunction = this.close(log, elQuestLog, wait, false);
 				}
 				else {
-					return this.close(log, elQuestLog, wait, true);
+					closeFunction = this.close(log, elQuestLog, wait, true);
 				}
+
+				return {
+					close: closeFunction,
+					DOMElement: log
+				}
+
 			},
 
 			/**

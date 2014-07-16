@@ -6,7 +6,7 @@ var TutorialQuest = Quest.extend({
 		Quest.prototype.init.call(this, instance);
 
 		if (ige.isClient) {
-			this.questState = this.complete;
+			this.questState = this.welcome;
 		}
 
 		if (ige.isServer) {
@@ -60,10 +60,10 @@ var TutorialQuest = Quest.extend({
 			pressW();
 
 			function pressW() {
-				var removeQuestLog = alertify.questLog('Press W to move forward');
+				var questLog = alertify.questLog('Press W to move forward');
 				var listener = ige.input.on('keyDown', function (event, keyCode) {
 					if (keyCode === ige.input.key.w) {
-						removeQuestLog();
+						questLog.close();
 						ige.input.off('keyDown', listener);
 						alertify.questLog('Good! You\'ve moved forward!', 'success', msgTimeout);
 						setTimeout(done, msgTimeout / 2);
@@ -88,10 +88,10 @@ var TutorialQuest = Quest.extend({
 			pressS();
 
 			function pressS() {
-				var removeQuestLog = alertify.questLog('Press S to move backward');
+				var questLog = alertify.questLog('Press S to move backward');
 				var listener = ige.input.on('keyDown', function (event, keyCode) {
 					if (keyCode === ige.input.key.s) {
-						removeQuestLog();
+						questLog.close();
 						ige.input.off('keyDown', listener);
 						alertify.questLog('Good! You\'ve moved backward!', 'success', msgTimeout);
 						setTimeout(done, msgTimeout / 2);
@@ -116,10 +116,10 @@ var TutorialQuest = Quest.extend({
 			pressA();
 
 			function pressA() {
-				var removeQuestLog = alertify.questLog('Press A to rotate left');
+				var questLog = alertify.questLog('Press A to rotate left');
 				var listener = ige.input.on('keyDown', function (event, keyCode) {
 					if (keyCode === ige.input.key.a) {
-						removeQuestLog();
+						questLog.close();
 						ige.input.off('keyDown', listener);
 						alertify.questLog('Good! You\'ve rotated left!', 'success', msgTimeout);
 						setTimeout(done, msgTimeout / 2);
@@ -144,10 +144,10 @@ var TutorialQuest = Quest.extend({
 			pressD();
 
 			function pressD() {
-				var removeQuestLog = alertify.questLog('Press D to rotate right');
+				var questLog = alertify.questLog('Press D to rotate right');
 				var listener = ige.input.on('keyDown', function (event, keyCode) {
 					if (keyCode === ige.input.key.d) {
-						removeQuestLog();
+						questLog.close();
 						ige.input.off('keyDown', listener);
 						alertify.questLog('Good! You\'ve rotated right!', 'success', msgTimeout);
 						setTimeout(done, msgTimeout / 2);
@@ -168,13 +168,28 @@ var TutorialQuest = Quest.extend({
 		once: function() {
 			var self = this;
 			var msgTimeout = 5000;
-			var flyingTime = 10000;
 
-			var removeQuestLog = alertify.questLog('Let\'s fly around for a bit using the WASD controls!');
-			setTimeout(doneFlying, flyingTime);
+			flyingMessage();
+
+			function flyingMessage() {
+				var delay = 1000;
+				var repetition = 10;
+				var message = 'Let\'s fly around for a bit using the WASD controls!';
+				var questLog = alertify.questLog(message);
+
+				// Display a count down timer so players know the quest is advancing
+				var countdown = repetition;
+				var intervalId = setInterval(function(){
+					questLog.DOMElement.innerText = message + ' ' + countdown;
+					if (--countdown <= 0) {
+						clearInterval(intervalId);
+						questLog.close();
+						doneFlying();
+					}
+				}, delay);
+			}
 
 			function doneFlying() {
-				removeQuestLog();
 				alertify.questLog('Great! Let\'s try to use some capabilities!',
 					'success', msgTimeout);
 				setTimeout(done, msgTimeout / 2)
@@ -200,12 +215,12 @@ var TutorialQuest = Quest.extend({
 			clickMineButton();
 
 			function clickMineButton() {
-				var removeQuestLog = alertify.questLog('Click the mine button');
+				var questLog = alertify.questLog('Click the mine button');
 				// Show the tooltip for the mine button
 				ige.hud.bottomToolbar.capBar.mineCap.pinButtonTooltip();
 				var listener = ige.on('capbar cap selected', function (classId) {
 					if (classId === MineCap.prototype.classId()) {
-						removeQuestLog();
+						questLog.close();
 						ige.off('capbar cap selected', listener);
 						// Hide the tooltip
 						ige.hud.bottomToolbar.capBar.mineCap.unpinButtonTooltip();
@@ -215,9 +230,9 @@ var TutorialQuest = Quest.extend({
 			}
 
 			function mineBlock() {
-				var removeQuestLog = alertify.questLog('Now, click on an asteroid and mine it');
+				var questLog = alertify.questLog('Now, click on an asteroid and mine it');
 				var listener = ige.on('cosmos:block.mousedown', function () {
-					removeQuestLog();
+					questLog.close();
 					ige.off('cosmos:block.mousedown', listener);
 					alertify.questLog('Good! You\'ve mined a block!', 'success', msgTimeout);
 					setTimeout(done, msgTimeout / 2);
@@ -245,11 +260,11 @@ var TutorialQuest = Quest.extend({
 			clickCargoButton();
 
 			function clickCargoButton() {
-				var removeQuestLog = alertify.questLog('Now, click the cargo button');
+				var questLog = alertify.questLog('Now, click the cargo button');
 				// Show the tooltip
 				ige.hud.leftToolbar.windows.cargo.pinButtonTooltip();
 				var listener = ige.on('cosmos:CargoComponent.buttonClicked', function (classId) {
-					removeQuestLog();
+					questLog.close();
 					ige.off('cosmos:CargoComponent.buttonClicked', listener);
 					// Hide the tooltip
 					ige.hud.leftToolbar.windows.cargo.unpinButtonTooltip();
@@ -277,11 +292,11 @@ var TutorialQuest = Quest.extend({
 			clickCraftButton();
 
 			function clickCraftButton() {
-				var removeQuestLog = alertify.questLog('Click the crafting button');
+				var questLog = alertify.questLog('Click the crafting button');
 				// Show the tooltip
 				ige.hud.leftToolbar.windows.craftingUI.pinButtonTooltip();
 				var listener = ige.on('cosmos:CraftingUIComponent.buttonClicked', function (classId) {
-					removeQuestLog();
+					questLog.close();
 					ige.off('cosmos:CraftingUIComponent.buttonClicked', listener);
 					// Hide the tooltip
 					ige.hud.leftToolbar.windows.craftingUI.unpinButtonTooltip();
@@ -296,13 +311,13 @@ var TutorialQuest = Quest.extend({
 				var block = cosmos.blocks.instances["IronEngineBlock"];
 				var recipeName = block.classId();
 				var recipeNameHuman = block.recipe.name;
-				var removeQuestLog = alertify.questLog('Now, let\'s craft one ' + recipeNameHuman);
+				var questLog = alertify.questLog('Now, let\'s craft one ' + recipeNameHuman);
 				// Show the crafting tooltip for the desired block
 				ige.hud.leftToolbar.windows.craftingUI.pinRecipeTooltip(recipeName);
 				var listener = ige.craftingSystem.on('cosmos:CraftingSystem.craft.success', 
 					function (serverRecipeName) {
 					if (serverRecipeName === recipeName) {
-						removeQuestLog();
+						questLog.close();
 						ige.hud.leftToolbar.windows.craftingUI.unpinRecipeTooltip(recipeName);
 						ige.craftingSystem.off('cosmos:CraftingSystem.craft.success', listener);
 						alertify.questLog('Good! You\'ve crafted one ' + recipeNameHuman + '!',
@@ -338,12 +353,12 @@ var TutorialQuest = Quest.extend({
 
 			function clickConstruct() {
 				// Make the player click the construct button
-				var removeQuestLog = alertify.questLog('Click the construct button');
+				var questLog = alertify.questLog('Click the construct button');
 				// Show the tooltip for the construct button
 				ige.hud.bottomToolbar.capBar.constructCap.pinButtonTooltip();
 				var listener = ige.on('capbar cap selected', function (classId) {
 					if (classId === ConstructCap.prototype.classId()) {
-						removeQuestLog();
+						questLog.close();
 						ige.off('capbar cap selected', listener);
 						// Hide the tooltip
 						ige.hud.bottomToolbar.capBar.constructCap.unpinButtonTooltip();
@@ -354,11 +369,11 @@ var TutorialQuest = Quest.extend({
 
 			function constructShip() {
 				// Make the player construct a block on the ship
-				var removeQuestLog = alertify.questLog('Now, click on the construction zones around your ship.');
+				var questLog = alertify.questLog('Now, click on the construction zones around your ship.');
 				var listener = ige.on('cosmos:BlockGrid.processBlockActionClient.add', 
 					function (selectedType, blockGrid) {
 					if (blockGrid === ige.client.player) {
-						removeQuestLog();
+						questLog.close();
 						ige.craftingSystem.off('cosmos:BlockGrid.processBlockActionClient.add', listener);
 						alertify.questLog('Good! You\'ve constructed a block on your ship!',
 							'success', msgTimeout);
@@ -388,11 +403,11 @@ var TutorialQuest = Quest.extend({
 			clickChat();
 
 			function clickChat() {
-				var removeQuestLog = alertify.questLog('Now, click the chat button');
+				var questLog = alertify.questLog('Now, click the chat button');
 				// Show the tooltip
 				ige.hud.bottomToolbar.chat.pinButtonTooltip();
 				var listener = ige.hud.bottomToolbar.chat.on('cosmos:ChatComponent.show', function () {
-					removeQuestLog();
+					questLog.close();
 					ige.hud.bottomToolbar.chat.off('cosmos:ChatComponent.show', listener);
 					// Hide the tooltip
 					ige.hud.bottomToolbar.chat.unpinButtonTooltip();
@@ -426,11 +441,11 @@ var TutorialQuest = Quest.extend({
 			}
 
 			function clickRelocate() {
-				var removeQuestLog = alertify.questLog('Click the relocate button');
+				var questLog = alertify.questLog('Click the relocate button');
 				// Show the tooltip
 				ige.hud.bottomToolbar.relocate.pinButtonTooltip();
 				var listener = ige.hud.bottomToolbar.relocate.on('cosmos:RelocateComponent.mouseDown', function () {
-					removeQuestLog();
+					questLog.close();
 					ige.hud.bottomToolbar.relocate.off('cosmos:RelocateComponent.mouseDown', listener);
 					// Hide the tooltip
 					ige.hud.bottomToolbar.relocate.unpinButtonTooltip();
@@ -498,11 +513,11 @@ var TutorialQuest = Quest.extend({
 			}
 
 			function clickFeedback() {
-				var removeQuestLog = alertify.questLog('Click the feedback button');
+				var questLog = alertify.questLog('Click the feedback button');
 				// Show the tooltip
 				ige.hud.bottomToolbar.feedback.pinButtonTooltip();
 				var listener = ige.hud.bottomToolbar.feedback.on('cosmos:FeedbackComponent.clicked', function () {
-					removeQuestLog();
+					questLog.close();
 					// Hide the tooltip
 					ige.hud.bottomToolbar.feedback.unpinButtonTooltip();
 					alertify.questLog('Great! You\'ve clicked the feedback button!', 'success',

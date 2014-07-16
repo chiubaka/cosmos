@@ -84,7 +84,6 @@ var ServerNetworkEvents = {
 			}
 			// No player associated with this session! Playing as a guest.
 			else if (playerId === undefined) {
-
 			}
 
 			/**
@@ -230,7 +229,9 @@ var ServerNetworkEvents = {
 			// Activate mining lasers
 			player.fireMiningLasers(targetBlock);
 		}
-		ige.questSystem.addQuestServer('TutorialQuest', 1, player);
+		// TODO: Make the quest instance number smartly
+		// TODO: Make quest available for registered users
+		ige.questSystem.addQuestServer('TutorialQuest', 0, player);
 	},
 
 	_onConstructNew: function(data, clientId) {
