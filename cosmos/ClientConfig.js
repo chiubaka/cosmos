@@ -31,6 +31,7 @@ var igeClientConfig = {
 		'./entities/blocks/parts/CargoBlock.js',
 		'./entities/blocks/parts/ControlBlock.js',
 		'./entities/blocks/parts/ThrusterBlock.js',
+		'./entities/blocks/parts/thrusters/IronThrusterBlock.js',
 
 		/* Weapons */
 		'./entities/blocks/parts/Weapon.js',

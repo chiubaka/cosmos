@@ -2,7 +2,7 @@ var Recipes = {};
 
 /* === PARTS === */
 
-Recipes[ThrusterBlock.prototype.classId()] =
+Recipes[IronThrusterBlock.prototype.classId()] =
 {
 	reactants: [
 		{

@@ -268,7 +268,7 @@ var BlockStructureGenerator = {
 			"IronEngineBlock": 0.002 * .25,
 			"FuelBlock": 0.002 * .25,
 			"PowerBlock": 0.002 * .25,
-			"ThrusterBlock": 0.002 * .25
+			"IronThrusterBlock": 0.002 * .25
 			*/
 		},
 
@@ -310,7 +310,7 @@ var BlockStructureGenerator = {
 			"IronEngineBlock": .1,
 			"FuelBlock": .2,
 			"PowerBlock": .1,
-			"ThrusterBlock": .1,
+			"IronThrusterBlock": .1,
 			"CargoBlock": .1,
 			"HullBlock": .3,
 			"MiningLaserBlock": .1,
@@ -322,7 +322,7 @@ var BlockStructureGenerator = {
 			"IronEngineBlock": .05,
 			"FuelBlock": .05,
 			"PowerBlock": .05,
-			"ThrusterBlock": .05,
+			"IronThrusterBlock": .05,
 			"CargoBlock": .5,
 			"HullBlock": .3
 		},
