@@ -63,7 +63,7 @@ var Client = IgeClass.extend({
 			power: new IgeTexture(gameRoot +
 				'assets/blocks/power/power.svg'),
 			engine: new IgeTexture(gameRoot +
-				'assets/blocks/rocket/rocket.svg'),
+				'assets/blocks/engines/engine.svg'),
 			thruster: new IgeTexture(gameRoot +
 				'assets/blocks/thruster/thruster.svg'),
 			fuel: new IgeTexture(gameRoot +
@@ -77,6 +77,44 @@ var Client = IgeClass.extend({
 		};
 
 		ige.on('texturesLoaded', function () {
+			// Load the SVGs for the block icons from the game server
+			self.svgs = {
+				power: gameRoot + 'assets/blocks/power/power.svg',
+				engine: gameRoot + 'assets/blocks/engines/engine.svg',
+				thruster: gameRoot + 'assets/blocks/thruster/thruster.svg',
+				fuel: gameRoot + 'assets/blocks/fuel/fuel.svg',
+				cargo: gameRoot + 'assets/blocks/cargo/cargo.svg',
+				control: gameRoot + 'assets/blocks/playerctrl/playerctrl.svg',
+				miningLaser: gameRoot + 'assets/blocks/laser/laser.svg',
+				constructionZone: gameRoot +
+					'assets/blocks/construction/construction_zone.svg'
+			}
+
+			// Loop through the svgs object and request each SVG
+			for (var key in self.svgs) {
+				if (self.svgs.hasOwnProperty(key)) {
+					var url = self.svgs[key];
+					var request = new XMLHttpRequest();
+					request.onreadystatechange = function() {
+						if (request.readyState == 4) {
+							if (request.status == 200) {
+								// Replace the value in the svgs object with the actual SVG XML data
+								self.svgs[key] = request.responseText;
+							}
+							else {
+								console.error("Received status code " + request.status + " when trying to load textures from server.");
+							}
+						}
+					};
+
+					// False here specifies a synchronous request, which simplifies concurrency here.
+					// May need to consider changing this if many SVGs need to be downloaded and load
+					// times are getting ridiculous.
+					request.open('GET', url, false);
+					request.send();
+				}
+			}
+
 			// Ask the engine to start
 			ige.start(function (success) {
 				// Check if the engine started successfully
