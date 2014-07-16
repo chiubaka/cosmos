@@ -28,16 +28,32 @@ var QuestSystem = IgeEventingClass.extend({
 	// @client-side
 	_addQuestClient: function(data) {
 		var questName = data[0];
-		var instance = data[1]
-		ige.client.player.quest.addQuest(questName, instance);
+		var questInstance = data[1]
+		ige.client.player.quest.addQuest(questName, questInstance);
+
+		ige.questSystem.log('QuestSystem: Quest ' + questName + ' ' +
+			questInstance + ' added!', 'info');
 	},
 
 	// @server-side
-	removeQuestServer: function() {
+	removeQuestServer: function(quest, player) {
+		var questName = quest.classId();
+		var questInstance = quest.instance;
+		delete player.quest.activeQuests()[questName][questInstance];
+
+		// Delete quest client-side
+		var data = [questName, questInstance];
+		ige.network.stream.queueCommand('cosmos:quest.removeQuest', data, player.clientId());
 	},
 
 	// @client-side
-	_removeQuestClient: function() {
+	_removeQuestClient: function(data) {
+		var questName = data[0];
+		var questInstance = data[1];
+		delete ige.client.player.quest.activeQuests()[questName][questInstance];
+
+		ige.questSystem.log('QuestSystem: Quest ' + questName + ' ' +
+			questInstance + ' removed!', 'info');
 	},
 
 	// @client-side
@@ -75,7 +91,7 @@ var QuestSystem = IgeEventingClass.extend({
 		var quest = instances[questInstance];
 
 		// Emit an event on the quest
-		quest.emit(event);
+		quest.emit(event, [player]);
 	},
 
 	// @server-side

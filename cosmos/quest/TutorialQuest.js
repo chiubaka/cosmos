@@ -6,16 +6,20 @@ var TutorialQuest = Quest.extend({
 		Quest.prototype.init.call(this, instance);
 
 		if (ige.isClient) {
-			this.questState = this.cargo;
+			this.questState = this.complete;
 		}
 
 		if (ige.isServer) {
-			this.on(this.keys['welcome.action'], this.welcome.server);
+			this.on(this.keys['complete'], this.complete.server, this);
 		}
 	},
 
+	// Map messages to numbers to reduce bandwidth
+	// This is important when quests require heavy client-server interaction
 	keys: {
-		'welcome.action': '1',
+		// The client sends a 'complete' message to the server when this quest is
+		// completed
+		'complete': '1',
 	},
 
 	welcome: {
@@ -41,16 +45,11 @@ var TutorialQuest = Quest.extend({
 				self.questState = self.moveForward;
 			}
 
-			//ige.questSystem.eventToServer(this.keys['welcome.action'], this);
-			},
+		},
 
 		client: function() {
 			
 		},
-		// @server-side
-		server: function() {
-			console.log('Server verify');
-		}
 	},
 
 	moveForward: {
@@ -528,12 +527,15 @@ var TutorialQuest = Quest.extend({
 			var msgTimeout = 5000;
 			var message = 'Congratulations! You\'ve completed the tutorial. Your galaxy awaits!';
 			alertify.questLog(message, 'success', msgTimeout);
-
+			ige.questSystem.eventToServer(this.keys['complete'], this);
 		},
 		client: function() {
 		},
-		server: function() {
-			//Remove quest
+		// @server-side
+		server: function(player) {
+			// For now, don't do any server side verification that the client has
+			// completed the quest
+			ige.questSystem.removeQuestServer(this, player);
 		}
 	},
 
