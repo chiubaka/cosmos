@@ -156,6 +156,11 @@ Descriptions[IronThrusterBlock.prototype.classId()] =
 		'before.'
 };
 
+Descriptions[KryptoniteThrusterBlock.prototype.classId()] =
+{
+	text: "A thruster that moves so fast that even Super Man couldn't get away."
+};
+
 /* === WEAPONS === */
 Descriptions[Weapon.prototype.classId()] =
 {

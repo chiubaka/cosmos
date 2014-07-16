@@ -22,11 +22,6 @@ Healths[PowerBlock.prototype.classId()] =
 	max: 40
 };
 
-Healths[IronThrusterBlock.prototype.classId()] =
-{
-	max: 40
-};
-
 /* Armor */
 
 Healths[AdamantiumBlock.prototype.classId()] =
@@ -96,6 +91,18 @@ Healths[IronEngineBlock.prototype.classId()] =
 };
 
 Healths[DragonBreathEngineBlock.prototype.classId()] =
+{
+	max: 40
+};
+
+/* Thrusters */
+
+Healths[IronThrusterBlock.prototype.classId()] =
+{
+	max: 40
+};
+
+Healths[KryptoniteThrusterBlock.prototype.classId()] =
 {
 	max: 40
 };

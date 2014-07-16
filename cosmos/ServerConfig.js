@@ -29,6 +29,7 @@ var config = {
 		{ name: 'ControlBlock', path: './entities/blocks/parts/ControlBlock' },
 		{ name: 'ThrusterBlock', path: './entities/blocks/parts/ThrusterBlock' },
 		{ name: 'IronThrusterBlock', path: './entities/blocks/parts/thrusters/IronThrusterBlock' },
+		{ name: 'KryptoniteThrusterBlock', path: './entities/blocks/parts/thrusters/KryptoniteThrusterBlock' },
 
 		/* Weapons */
 		{ name: 'Weapon', path: './entities/blocks/parts/Weapon' },
