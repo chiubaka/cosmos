@@ -66,6 +66,8 @@ var Client = IgeClass.extend({
 				'assets/blocks/engines/engine.svg'),
 			thruster: new IgeTexture(gameRoot +
 				'assets/blocks/thrusters/thruster.svg'),
+			kryptoniteThruster: new IgeTexture(gameRoot +
+				'assets/blocks/thrusters/kryptoniteThruster.svg'),
 			fuel: new IgeTexture(gameRoot +
 				'assets/blocks/fuel/fuel.svg'),
 			cargo: new IgeTexture(gameRoot +
@@ -73,9 +75,7 @@ var Client = IgeClass.extend({
 			control: new IgeTexture(gameRoot +
 				'assets/blocks/playerctrl/playerctrl.svg'),
 			miningLaser: new IgeTexture(gameRoot +
-				'assets/blocks/laser/laser.svg'),
-			kryptoniteThruster: new IgeTexture(gameRoot +
-				'assets/blocks/thrusters/kryptoniteThruster.svg')
+				'assets/blocks/laser/laser.svg')
 		};
 
 		ige.on('texturesLoaded', function () {
