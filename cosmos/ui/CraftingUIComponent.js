@@ -134,12 +134,12 @@ var CraftingUIComponent = WindowComponent.extend({
 		});
 	},
 
-	showRecipeTooltip: function(recipeName) {
+	pinRecipeTooltip: function(recipeName) {
 		var elem = this.recipeDOMElements[recipeName];
 		elem.tooltipster('showPin');
 	},
 
-	hideRecipeTooltip: function(recipeName) {
+	unpinRecipeTooltip: function(recipeName) {
 		var elem = this.recipeDOMElements[recipeName];
 		elem.tooltipster('hideUnpin');
 	}
