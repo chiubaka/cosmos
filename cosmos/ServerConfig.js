@@ -23,6 +23,7 @@ var config = {
 		{ name: 'PowerBlock', path: './entities/blocks/parts/PowerBlock' },
 		{ name: 'EngineBlock', path: './entities/blocks/parts/EngineBlock' },
 		{ name: 'IronEngineBlock', path: './entities/blocks/parts/engines/IronEngineBlock' },
+		{ name: 'DragonBreathEngineBlock', path: './entities/blocks/parts/engines/DragonBreathEngineBlock' },
 		{ name: 'FuelBlock', path: './entities/blocks/parts/FuelBlock' },
 		{ name: 'CargoBlock', path: './entities/blocks/parts/CargoBlock' },
 		{ name: 'ControlBlock', path: './entities/blocks/parts/ControlBlock' },

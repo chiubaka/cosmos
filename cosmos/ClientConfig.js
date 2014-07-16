@@ -25,6 +25,7 @@ var igeClientConfig = {
 		'./entities/blocks/Part.js',
 		'./entities/blocks/parts/EngineBlock.js',
 		'./entities/blocks/parts/engines/IronEngineBlock.js',
+		'./entities/blocks/parts/engines/DragonBreathEngineBlock.js',
 		'./entities/blocks/parts/PowerBlock.js',
 		'./entities/blocks/parts/FuelBlock.js',
 		'./entities/blocks/parts/CargoBlock.js',
