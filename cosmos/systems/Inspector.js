@@ -13,6 +13,7 @@ var Inspector = IgeEventingClass.extend({
 	blockInspectorMaxHealth: undefined,
 	blockInspectorEnergyUsage: undefined,
 	blockInspectorDamage: undefined,
+	blockInspectorThrust: undefined,
 	blockInspectorDescription: undefined,
 
 	init: function() {
@@ -41,6 +42,7 @@ var Inspector = IgeEventingClass.extend({
 			self.blockInspectorMaxHealth = self.blockInspector.find('#block-max-health');
 			self.blockInspectorEnergyUsage = self.blockInspector.find('#block-energy-usage');
 			self.blockInspectorDamage = self.blockInspector.find('#block-damage');
+			self.blockInspectorThrust = self.blockInspector.find('#block-thrust');
 			self.blockInspectorDescription = self.blockInspector.find('.description').first();
 
 			ige.on('cosmos:block.mousedown', function(block) {
@@ -63,7 +65,7 @@ var Inspector = IgeEventingClass.extend({
 		this.blockInspectorDescription.text(block.description.text);
 
 		this.blockInspector.find('.block-stat').hide();
-		if (block.health !== undefined) {
+		if (block.health instanceof Health) {
 			this.blockInspector.find('#block-stat-health').show();
 			this.blockInspectorCurrentHealth.text(block.health.value);
 			this.blockInspectorMaxHealth.text(block.health.max);
@@ -77,9 +79,14 @@ var Inspector = IgeEventingClass.extend({
 			});
 		}
 
-		if (block.damageSource !== undefined) {
+		if (block.damageSource instanceof DamageSource) {
 			this.blockInspector.find('#block-stat-damage').show();
 			this.blockInspectorDamage.text(block.damageSource.dps);
+		}
+
+		if (block.thrust instanceof Thrust) {
+			this.blockInspector.find('#block-stat-thrust').show();
+			this.blockInspectorThrust.text(block.thrust.value);
 		}
 
 		var canvas = this.blockInspectorTexture[0];
