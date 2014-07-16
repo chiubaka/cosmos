@@ -310,8 +310,6 @@ var Ship = BlockStructure.extend({
 				var thisX = this.translate().x();
 				var thisY = this.translate().y();
 
-
-
 				//TODO: This might not work
 				// Notify player that they cannot fly without an engine
 				if (this.engines().length < 1) {
