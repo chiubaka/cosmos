@@ -314,8 +314,6 @@ var Player = IgeEntity.extend({
 				this._createUsernameLabel();
 			}
 		}
-
-		return IgeEntity.prototype.streamEntityValid.call(this, val);
 	},
 
 	/**

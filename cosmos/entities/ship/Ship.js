@@ -47,12 +47,14 @@ var Ship = BlockStructure.extend({
 	//TODO add comment here
 	//TODO shouldn't the engines be kept track of by some component? Like a thrusting component?
 	_engines: undefined,
+	_thrusters: undefined,
 
 	_prev_controls: undefined,
 
 	init: function(data) {
 		//TODO can we move this to after the super call?
 		this._engines = [];
+		this._thrusters = [];
 
 		BlockStructure.prototype.init.call(this, data);
 
@@ -96,6 +98,9 @@ var Ship = BlockStructure.extend({
 		if (block instanceof EngineBlock) {
 			this.engines().push(block);
 		}
+		if (block instanceof ThrusterBlock) {
+			this._thrusters.push(block);
+		}
 		return blockAdded;
 	},
 
@@ -104,6 +109,9 @@ var Ship = BlockStructure.extend({
 		var block = this.get(row, col);
 		if (block instanceof EngineBlock) {
 			this.engines().splice(this.engines().indexOf(block), 1);
+		}
+		if (block instanceof ThrusterBlock) {
+			this._thrusters.splice(this._thrusters.indexOf(block), 1);
 		}
 		BlockStructure.prototype.remove.call(this, row, col);
 		if (ige.isServer) {
@@ -275,25 +283,26 @@ var Ship = BlockStructure.extend({
 	update: function(ctx) {
 		BlockStructure.prototype.update.call(this, ctx);
 
-
-
 		// TODO: Do not spam the player with notifications if engines/thruster
 		// are removed
 		if (ige.isServer) {
 			/* Angular motion */
 			// Angular rotation speed depends on number of thrusters
 			if (this.controls().left || this.controls().right) {
-				var numRotationalThrusters = this.numBlocksOfType('ThrusterBlock');
-				var angularImpulse = -60 * numRotationalThrusters * ige._tickDelta;
+				var angularImpulse = 0;
+				for (var i = 0; i < this._thrusters.length; i++) {
+					angularImpulse += this._thrusters[i].thrust.value;
+				}
+				angularImpulse = -angularImpulse * ige._tickDelta;
 
-				if (numRotationalThrusters < 1) {
+				if (this._thrusters.length < 1) {
 					if (JSON.stringify(this.controls()) !== JSON.stringify(this._prev_controls) ||
 						this._prevMovementBlocks.thrusters > 0) {
 						ige.network.stream.queueCommand('notificationError',
-							NotificationDefinitions.errorKeys.noRotationalThruster, this._clientId);
+							NotificationDefinitions.errorKeys.noRotationalThruster, this.player()._clientId);
 					}
 				}
-				this._prevMovementBlocks.thrusters = numRotationalThrusters;
+				this._prevMovementBlocks.thrusters = this._thrusters.length;
 
 				if (this.controls().left) {
 					this._box2dBody.ApplyTorque(angularImpulse);
@@ -313,7 +322,7 @@ var Ship = BlockStructure.extend({
 				//TODO: This might not work
 				// Notify player that they cannot fly without an engine
 				if (this.engines().length < 1) {
-					if (JSON.stringify(this._controls) !== JSON.stringify(this._prev_controls) ||
+					if (JSON.stringify(this.controls()) !== JSON.stringify(this._prev_controls) ||
 						this._prevMovementBlocks.engines > 0) {
 						ige.network.stream.queueCommand('notificationError',
 							NotificationDefinitions.errorKeys.noEngine, this.player()._clientId);
