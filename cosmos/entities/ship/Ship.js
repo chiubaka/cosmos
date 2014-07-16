@@ -77,13 +77,11 @@ var Ship = BlockStructure.extend({
 	_thrusters: undefined,
 
 	init: function(data) {
-		//TODO can we move this to after the super call?
+		// Note that these variables must be initialized before the superclass constructor can be called, because it will add things to them by calling add().
 		this._engines = [];
 		this._thrusters = [];
 
 		BlockStructure.prototype.init.call(this, data);
-
-		var self = this;//TODO remove this line
 
 		this.category(Ship.BOX2D_CATEGORY);
 
