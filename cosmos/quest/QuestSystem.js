@@ -8,18 +8,44 @@ var QuestSystem = IgeEventingClass.extend({
 			ige.network.define('cosmos:quest.removeQuest');
 			ige.network.define('cosmos:quest.eventToClient');
 			ige.network.define('cosmos:quest.eventToServer', this._onEventToServer);
+			// The client uses this to ask the server if it can start a quest
+			ige.network.define('cosmos:quest.requestStartQuest', this._onRequestStartQuest);
 		}
 		if (ige.isClient) {
 			ige.network.define('cosmos:quest.addQuest', this._addQuestClient);
 			ige.network.define('cosmos:quest.removeQuest', this._removeQuestClient);
 			ige.network.define('cosmos:quest.eventToClient', this._onEventToClient);
 			ige.addBehaviour('questStepClient', this._questStepClient);
+			ige.on('cosmos:client.player.streamed', this._tutorialQuest, this, true);
 		}
 		this.log('Quest system initiated');
 	},
 
+	/* Handles client attempts to start quests */
 	// @server-side
-	addQuestServer: function(questName, instance, player) {
+	_onRequestStartQuest: function(data, clientId) {
+		// Check if player exists
+		var player = ige.server.players[clientId];
+		if (player === undefined) {
+			ige.questSystem.log('QuestSystem#_onRequestStartQuest: Player is undefined', 'warning');
+			return;
+		}
+		var questName = data;
+
+		// Verify player has unlocked this quest
+		var unlockedQuests = player.quest.unlockedQuests();
+		if (!unlockedQuests.hasOwnProperty(questName)) {
+			ige.questSystem.log('QuestSystem#_onRequestStartQuest: Quest not unlocked', 'warning');
+			return;
+		}
+
+		addQuestServer(questName, player);
+	},
+
+	// @server-side
+	addQuestServer: function(questName, player) {
+		// Get the next available instance number
+		var instance = player.quest.getNextInstance(questName);
 		player.quest.addQuest(questName, instance);
 		var data = [questName, instance];
 		ige.network.stream.queueCommand('cosmos:quest.addQuest', data, player.clientId());
@@ -28,7 +54,7 @@ var QuestSystem = IgeEventingClass.extend({
 	// @client-side
 	_addQuestClient: function(data) {
 		var questName = data[0];
-		var questInstance = data[1]
+		var questInstance = data[1];
 		ige.client.player.quest.addQuest(questName, questInstance);
 
 		ige.questSystem.log('QuestSystem: Quest ' + questName + ' ' +
@@ -56,12 +82,14 @@ var QuestSystem = IgeEventingClass.extend({
 			questInstance + ' removed!', 'info');
 	},
 
+	/* Sends a quest event to the server. */
 	// @client-side
 	eventToServer: function(event, quest) {
 		var data = [quest.classId(), quest.instance, event]
 		ige.network.send('cosmos:quest.eventToServer', data);
 	},
 
+	/* Receives a quest event from the client and emits it on the server's quest */
 	// @server-side
 	_onEventToServer: function(data, clientId) {
 		// Check if player exists
@@ -94,12 +122,16 @@ var QuestSystem = IgeEventingClass.extend({
 		quest.emit(event, [player]);
 	},
 
+	/* Sends an event to a quest on the client */
+	// TODO: Build more functionality as needed when quests need more server
+	// interaction
 	// @server-side
 	eventToClient: function(data, clientId) {
 		ige.network.stream.queueCommand('cosmos:quest.eventToClient', data,
 			clientId);
 	},
 
+	/* Receives an event from the server and emits it on the appropriate quest. */
 	// @client-side
 	_onEventToClient: function(data) {
 		var questName = data[0];
@@ -113,6 +145,7 @@ var QuestSystem = IgeEventingClass.extend({
 		quest.emit(event);
 	},
 
+	/* Loops over the player's active quests and runs their logic */
 	// @client-side
 	_questStepClient: function(ctx) {
 		// Don't start until the player is streamed
@@ -137,6 +170,13 @@ var QuestSystem = IgeEventingClass.extend({
 			}
 		}
 	},
+
+	/* Runs when player entity is streamed on the client. This determines whether
+	 * or not to start the tutorial quest. */
+	// @client-side
+	_tutorialQuest: function() {
+
+	}
 
 
 });

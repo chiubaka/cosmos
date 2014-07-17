@@ -3,16 +3,24 @@ var QuestComponent = IgeEventingClass.extend({
 	componentId: 'quest',
 	
 	_activeQuests: undefined,
+	_unlockedQuests: undefined,
 
 	init: function(entity, options) {
 		this._activeQuests = {};
+		// TODO: Load unlocked quests from DB
+		this._unlockedQuests = {'TutorialQuest': true};
 	},
 
-	activeQuests: function () {
+	activeQuests: function() {
 		return this._activeQuests;
 	},
 
-	addQuest: function (questName, instance) {
+	unlockedQuests: function() {
+		return this._unlockedQuests;
+	},
+
+	addQuest: function(questName, instance) {
+
 		var globalContext = (ige.isServer) ? global : window;
 		if (this._activeQuests.hasOwnProperty(questName)) {
 			var quests = this._activeQuests[questName];
@@ -25,7 +33,7 @@ var QuestComponent = IgeEventingClass.extend({
 		this._activeQuests[questName][instance] = new globalContext[questName](instance);
 	},
 
-	removeQuest: function (questName, instance) {
+	removeQuest: function(questName, instance) {
 		var globalContext = (ige.isServer) ? global : window;
 		if (this._activeQuests.hasOwnProperty(questName)) {
 			var quests = this._activeQuests[questName];
@@ -37,6 +45,26 @@ var QuestComponent = IgeEventingClass.extend({
 		this.log('QuestComponent#removeQuest: Quest does not exist!', 'warn');
 	},
 
+	/**
+	 * Returns the next available instance number for a given quest.
+	 * @param {String}
+	 * @return {Number}
+	 */
+	getNextInstance: function(questName) {
+		var nextInstance = 0;
+
+		if (this._activeQuests.hasOwnProperty(questName)) {
+			var quests = this._activeQuests[questName];
+			nextInstance = _.max(_.map(_.keys(quests),parseIntDecimal)) + 1;
+		}
+		return nextInstance;
+
+		// Needed to create a partial function
+		// TODO: Remove this when lodash 3 is released with placeholder partials
+		function parseIntDecimal(val) {
+			return parseInt(val, 10);
+		}
+	}
 
 
 });

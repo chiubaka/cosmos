@@ -231,7 +231,7 @@ var ServerNetworkEvents = {
 		}
 		// TODO: Make the quest instance number smartly
 		// TODO: Make quest available for registered users
-		ige.questSystem.addQuestServer('TutorialQuest', 0, player);
+		ige.questSystem.addQuestServer('TutorialQuest', player);
 	},
 
 	_onConstructNew: function(data, clientId) {
