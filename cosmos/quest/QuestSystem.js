@@ -16,7 +16,9 @@ var QuestSystem = IgeEventingClass.extend({
 			ige.network.define('cosmos:quest.removeQuest', this._removeQuestClient);
 			ige.network.define('cosmos:quest.eventToClient', this._onEventToClient);
 			ige.addBehaviour('questStepClient', this._questStepClient);
+			// Show the tutorial for the guest user and the logged in guest user
 			ige.on('cosmos:NamePrompt.hide', this._tutorialQuest, this, true);
+			ige.on('cosmos:client.player.streamed', this._tutorialQuest, this, true);
 		}
 		this.log('Quest system initiated');
 	},
@@ -171,19 +173,26 @@ var QuestSystem = IgeEventingClass.extend({
 		}
 	},
 
-	/* Runs when guest name window is hidden. Prompts the user if they want to
-	 * start the tutorial quest */
+	/**
+	 * Runs when guest name window is hidden. Prompts the user if they want to
+	 * start the tutorial quest
+	 */
 	// @client-side
 	_tutorialQuest: function() {
+		// TODO: This is sort of hacky. We want a unified way of showing new
+		// players the tutorial
+		if (ige.namePrompt !== undefined && !ige.namePrompt.hidden) {
+			return;
+		}
 		var message = "Hi! We noticed that you are a guest user. Would you " +
 			"like to complete a short in-game tutorial?";
 		alertify.confirm(message, function (e) {
 			if (e) {
 				var questName = TutorialQuest.prototype.classId();
 				ige.network.send('cosmos:quest.requestStartQuest', questName);
-				console.log('yes');
+				ige.client.metrics.emit('cosmos:quest.tutorialQuest.clicked');
 			} else {
-				console.log('no');
+				ige.client.metrics.emit('cosmos:quest.tutorialQuest.skipped');
 			}
 		});
 	}

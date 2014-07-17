@@ -7,9 +7,11 @@ var NamePrompt = IgeEventingClass.extend({
 	usernameInput: undefined,
 	goButton: undefined,
 	skipButton: undefined,
+	hidden: undefined,
 
 	init: function(){
 		var self = this;
+		// TODO: Move name prompt html from jade file into here. 
 		self.element = $('#name-prompt');
 		self.shipNameInput = self.element.find('#ship-name-input');
 		self.usernameInput = self.element.find('#username-input');
@@ -64,11 +66,13 @@ var NamePrompt = IgeEventingClass.extend({
 	},
 
 	show: function() {
+		this.hidden = false;
 		this.element.show();
 		ige.hud.hide();
 	},
 
 	hide: function() {
+		this.hidden = true;
 		this.element.hide();
 		ige.hud.show();
 		ige.emit('cosmos:NamePrompt.hide');

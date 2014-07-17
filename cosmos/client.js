@@ -118,7 +118,7 @@ var Client = IgeClass.extend({
 
 						// Enable notifications
 						ige.addComponent(NotificationComponent)
-							.start();
+						ige.notification.start();
 
 						// Enable crafting system
 						ige.addComponent(CraftingSystem);

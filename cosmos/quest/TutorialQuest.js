@@ -345,7 +345,6 @@ var TutorialQuest = Quest.extend({
 					questLog.DOMElement.innerHTML = baseMessage + collectionMessage;
 
 					if (canCraft) {
-						console.log('reactants check passed');
 						questLog.close();
 						ige.off('cargo response', responseListener);
 						ige.off('cargo update', updateListener);
@@ -421,7 +420,7 @@ var TutorialQuest = Quest.extend({
 					function (selectedType, blockGrid) {
 					if (blockGrid === ige.client.player) {
 						questLog.close();
-						ige.craftingSystem.off('cosmos:BlockGrid.processBlockActionClient.add', listener);
+						ige.off('cosmos:BlockGrid.processBlockActionClient.add', listener);
 						alertify.questLog('Wow! You\'ve constructed a block on your ship!',
 							'success', msgTimeout);
 						setTimeout(done, msgTimeout / 2);
@@ -590,6 +589,7 @@ var TutorialQuest = Quest.extend({
 			var message = 'Congratulations! You\'ve completed the tutorial. Your galaxy awaits!';
 			alertify.questLog(message, 'success', msgTimeout);
 			ige.questSystem.eventToServer(this.keys['complete'], this);
+			ige.client.metrics.emit('cosmos:quest.tutorialQuest.completed');
 		},
 		clientStep: function() {
 		},
