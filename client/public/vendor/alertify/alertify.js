@@ -13,7 +13,7 @@
 		    keys      = { ENTER: 13, ESC: 27, SPACE: 32 },
 		    queue     = [],
 		    $, btnCancel, btnOK, btnReset, btnResetBack, btnFocus, elCallee,
-				elCover, elDialog, elLog, elQuestLog, form, input, getTransitionEvent;
+				elDialog, elLog, elQuestLog, form, input, getTransitionEvent;
 
 		/**
 		 * Markup pieces
@@ -285,7 +285,6 @@
 				}
 
 				elDialog.className = "alertify alertify-" + type + " " + css;
-				elCover.className  = "alertify-cover";
 				return html;
 			},
 
@@ -364,7 +363,7 @@
 				// check to ensure the alertify dialog element
 				// has been successfully created
 				var check = function () {
-					if ((elLog && elLog.scrollTop !== null) && (elCover && elCover.scrollTop !== null)) return;
+					if ((elLog && elLog.scrollTop !== null) && (elQuestLog && elQuestLog.scrollTop !== null)) return;
 					else check();
 				};
 				// error catching
@@ -424,7 +423,6 @@
 					} else {
 						elDialog.className = "alertify alertify-hide alertify-hidden alertify-isHidden";
 					}
-					elCover.className  = "alertify-cover alertify-cover-hidden";
 					// set focus to the last element or body
 					// after the dialog is closed
 					elCallee.focus();
@@ -442,13 +440,6 @@
 				document.createElement("nav");
 				document.createElement("article");
 				document.createElement("section");
-				// cover
-				if ($("alertify-cover") == null) {
-					elCover = document.createElement("div");
-					elCover.setAttribute("id", "alertify-cover");
-					elCover.className = "alertify-cover alertify-cover-hidden";
-					document.body.appendChild(elCover);
-				}
 				// main element
 				if ($("alertify") == null) {
 					isopen = false;
