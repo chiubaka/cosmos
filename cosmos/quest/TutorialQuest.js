@@ -48,7 +48,7 @@ var TutorialQuest = Quest.extend({
 		},
 
 		clientStep: function() {
-			
+
 		},
 	},
 
@@ -174,7 +174,7 @@ var TutorialQuest = Quest.extend({
 			function flyingMessage() {
 				var delay = 1000;
 				var repetition = 10;
-				var message = 'Let\'s fly around for a bit using the WASD controls!';
+				var message = 'Let\'s fly around for a bit using the WASD controls!\n';
 				var questLog = alertify.questLog(message);
 
 				// Display a count down timer so players know the quest is advancing
@@ -215,7 +215,7 @@ var TutorialQuest = Quest.extend({
 			clickMineButton();
 
 			function clickMineButton() {
-				var questLog = alertify.questLog('Click the mine button');
+				var questLog = alertify.questLog('Click the mine button on the toolbar at the bottom of the screen');
 				// Show the tooltip for the mine button
 				ige.hud.bottomToolbar.capBar.mineCap.pinButtonTooltip();
 				var listener = ige.on('capbar cap selected', function (classId) {
@@ -260,7 +260,7 @@ var TutorialQuest = Quest.extend({
 			clickCargoButton();
 
 			function clickCargoButton() {
-				var questLog = alertify.questLog('Now, click the cargo button');
+				var questLog = alertify.questLog('Now, click the cargo button on the toolbar at the left side of the screen');
 				// Show the tooltip
 				ige.hud.leftToolbar.windows.cargo.pinButtonTooltip();
 				var listener = ige.on('cosmos:CargoComponent.buttonClicked', function (classId) {
@@ -313,7 +313,7 @@ var TutorialQuest = Quest.extend({
 			}
 
 			function waitForReactants() {
-				var baseMessage = 'Now, let\'s craft one ' + recipeNameHuman + '. ';
+				var baseMessage = 'Now, let\'s craft an ' + recipeNameHuman + '. ';
 				var questLog = alertify.questLog(baseMessage);
 				// Show the crafting tooltip for the desired block
 				ige.hud.leftToolbar.windows.craftingUI.pinRecipeTooltip(recipeName);
@@ -324,7 +324,7 @@ var TutorialQuest = Quest.extend({
 				checkForReactants(ige.hud.leftToolbar.windows.cargo.cargoItems);
 
 				function checkForReactants(cargoItems) {
-					var collectionMessage = 'You\'ll need:';
+					var collectionMessage = 'You\'ll need the following resources in addition to the resources already in your cargo:';
 					var canCraft = true;
 					// Go through each of the recipe's reactants and see if we have
 					// enough in our cargo
@@ -360,7 +360,7 @@ var TutorialQuest = Quest.extend({
 					' recipe in the crafting window');
 
 				ige.hud.leftToolbar.windows.craftingUI.pinRecipeTooltip(recipeName);
-				var listener = ige.craftingSystem.on('cosmos:CraftingSystem.craft.success', 
+				var listener = ige.craftingSystem.on('cosmos:CraftingSystem.craft.success',
 					function (serverRecipeName) {
 					if (serverRecipeName === recipeName) {
 						questLog.close();
@@ -416,7 +416,7 @@ var TutorialQuest = Quest.extend({
 			function constructShip() {
 				// Make the player construct a block on the ship
 				var questLog = alertify.questLog('Now, click on the construction zones around your ship.');
-				var listener = ige.on('cosmos:BlockGrid.processBlockActionClient.add', 
+				var listener = ige.on('cosmos:BlockGrid.processBlockActionClient.add',
 					function (selectedType, blockGrid) {
 					if (blockGrid === ige.client.player) {
 						questLog.close();
@@ -457,7 +457,7 @@ var TutorialQuest = Quest.extend({
 					ige.hud.bottomToolbar.chat.off('cosmos:ChatComponent.show', listener);
 					// Hide the tooltip
 					ige.hud.bottomToolbar.chat.unpinButtonTooltip();
-					alertify.questLog('Incredible! You\'ve opened the chat!', 'success',
+					alertify.questLog('Incredible! You\'ve opened the chat!\nYou can use the chat to talk with other players at any time.', 'success',
 						msgTimeout);
 					setTimeout(done, msgTimeout / 2);
 				});
@@ -495,7 +495,7 @@ var TutorialQuest = Quest.extend({
 					ige.hud.bottomToolbar.relocate.off('cosmos:RelocateComponent.mouseDown', listener);
 					// Hide the tooltip
 					ige.hud.bottomToolbar.relocate.unpinButtonTooltip();
-					alertify.questLog('Amazing! You\'ve clicked the relocate button!',
+					alertify.questLog('Good job. You\'ve clicked the relocate button!',
 						'success', msgTimeout);
 					setTimeout(done, msgTimeout / 2);
 				});
@@ -566,7 +566,7 @@ var TutorialQuest = Quest.extend({
 					questLog.close();
 					// Hide the tooltip
 					ige.hud.bottomToolbar.feedback.unpinButtonTooltip();
-					alertify.questLog('Spectacular! You\'ve clicked the feedback button!', 'success',
+					alertify.questLog('Great! Feel free to leave us some feedback.', 'success',
 						msgTimeout);
 					setTimeout(done, msgTimeout / 2);
 				}, self, true);
