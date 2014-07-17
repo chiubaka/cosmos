@@ -236,12 +236,9 @@ var GameInit = {
 
 					contact.SetEnabled(false);
 
-					console.log("testing if we should be attracting");
-
 					// TODO: Make it so blocks are attracted to multiple players
 					if (drop.attractedTo() === undefined && drop.isOwner(ship)) {
 						drop.attractedTo(ship);
-						console.log("drop is now attracted to the ship!");
 					}
 				}
 			},

@@ -335,10 +335,6 @@ var Ship = BlockStructure.extend({
 					if (JSON.stringify(this.controls()) !== JSON.stringify(this._prev_controls) ||
 						this._prevMovementBlocks.thrusters > 0) {
 
-						console.log(JSON.stringify(this.controls()));
-						console.log(JSON.stringify(this._prev_controls));
-						console.log("TEST");
-
 						ige.network.stream.queueCommand('notificationError',
 							NotificationDefinitions.errorKeys.noRotationalThruster, this.player().clientId());
 					}
@@ -366,9 +362,6 @@ var Ship = BlockStructure.extend({
 						this._prevMovementBlocks.engines > 0) {
 						ige.network.stream.queueCommand('notificationError',
 							NotificationDefinitions.errorKeys.noEngine, this.player().clientId());
-						console.log(this.controls());
-						console.log(this._prev_controls);
-						console.log("...");
 					}
 				}
 				this._prevMovementBlocks.engines = this.engines().length;

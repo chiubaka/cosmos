@@ -11,46 +11,72 @@ var ClientNetworkEvents = {
 	 * is received by the client from the server. This is the server telling
 	 * us which entity is our player entity so that we can track it with
 	 * the main camera!
+
+		var sendData = {
+			playerId: ige.server.players[clientId].id(),
+			username: player.username(),
+			hasGuestUsername: player.hasGuestUsername,
+			dbId: player.dbId()
+		};
+
 	 * @param data The data object that contains any data sent from the server.
 	 * @private
 	 */
 	_onPlayerEntity: function(data) {
 		ige.client.player = new Player()
-			.mount(ige.$("spaceGameScene"));
+			.id(data.playerId)
+			.mount(ige.$("spaceGameScene"))
+			.username(data.username)
+			.dbId(data.dbId);
+
+		ige.client.player.hasGuestUsername = data.hasGuestUsername;
 
 		// Set the time stream UI entity to monitor our player entity
 		// time stream data
 		//ige.client.tsVis.monitor(ige.client.player);
 
 		if (ige.client.currentShip) {
-			console.log("adding ship now that player is here");
 			ige.client.player.currentShip(ige.client.currentShip);
-		} else {
-			console.log("player is here but ship is not yet here");
 		}
 
 		ige.client.metrics.fireEvent('player', 'connect', data.playerId);
+
+		// If this player is logged in but doesn't yet have a username, prompt for one.
+		if (ige.client.player.hasGuestUsername && ige.client.player.isLoggedIn()) {
+			ige.client.promptForUsername();
+		}
+		else {
+			ige.emit('cosmos:client.player.username.set', ige.client.player.username());
+		}
+
+		ige.emit('cosmos:client.player.streamed');
 
 		// Set the time stream UI entity to monitor our player entity
 		// time stream data
 		//ige.client.tsVis.monitor(ige.$(data));
 	},
 
+	/*
+	This is how the server assembles the data to send us:
+	var sendData = {
+		shipId: player.currentShip().id()
+	}
+	*/
 	_onShipEntity: function(data) {
-		if(ige.client.player && ige.$(data.entityId)) {
+		if(ige.client.player && ige.$(data.shipId)) {
 
-			ige.client.player.currentShip(ige.$(data.entityId));
+			ige.client.player.currentShip(ige.$(data.shipId));
 			ige.network.send('cargoRequest', { requestUpdates: true });
 		} else {
 			//adding ship to player later
 			if (!ige.client.player) {
 				//save the ship for when the player does arrive
-				ige.client.currentShip = ige.$(data.entityId);
+				ige.client.currentShip = ige.$(data.shipId);
 			}
 
-			if (!ige.$(data.entityId)) {
+			if (!ige.$(data.shipId)) {
 				self._eventListener = ige.network.stream.on('entityCreated', function (entity) {
-					if (entity.id() === data.entityId) {
+					if (entity.id() === data.shipId) {
 
 						if (ige.client.player) {
 							ige.client.player.currentShip(entity);
@@ -69,17 +95,7 @@ var ClientNetworkEvents = {
 							}
 						});
 
-						var username = ige.client.player.username();
-
-						// If this player is logged in but doesn't yet have a username, prompt for one.
-						if (ige.client.player.hasGuestUsername && ige.client.player.isLoggedIn()) {
-							ige.client.promptForUsername();
-						}
-						else {
-							ige.emit('cosmos:client.player.username.set', username);
-						}
-
-						ige.emit('cosmos:client.player.streamed');
+						ige.emit('cosmos:client.ship.streamed');
 						ige.removeLoadingScreen();
 					}
 				});

@@ -98,6 +98,8 @@ var ServerNetworkEvents = {
 					self.log('Cannot load player from database!', 'error')
 				}
 
+				console.log("here is the player's username:");
+				console.log(username);
 				ige.server._createPlayer(clientId, playerId, username);
 
 				ige.server._createShip(clientId, playerId, ship, cargo);
@@ -132,7 +134,10 @@ var ServerNetworkEvents = {
 		ige.server.players[clientId] = player;
 
 		var sendData = {
-			entityId: ige.server.players[clientId].id(),
+			playerId: ige.server.players[clientId].id(),
+			username: player.username(),
+			hasGuestUsername: player.hasGuestUsername,
+			dbId: player.dbId()
 		};
 
 		// Tell the client to track their player entity
@@ -158,7 +163,7 @@ var ServerNetworkEvents = {
 		player.currentShip().cargo.rehydrateCargo(cargo);
 
 		var sendData = {
-			entityId: player.currentShip().id()
+			shipId: player.currentShip().id()
 		}
 
 		ige.network.send('shipEntity', sendData, clientId);

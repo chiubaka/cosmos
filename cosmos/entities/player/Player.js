@@ -128,6 +128,9 @@ var Player = IgeEntity.extend({
 		return this.dbId() !== undefined;
 	},
 
+	/*
+	Getter and setter for the _username property
+	*/
 	username: function(val) {
 		if (val === undefined) {
 			return this._username;
@@ -366,9 +369,6 @@ var Player = IgeEntity.extend({
 			this.currentShip().controls().left = this._controls.key.left;
 			this.currentShip().controls().right = this._controls.key.right;
 
-			console.log("controls of the player have been set to the following:");
-			console.log(newControls);
-
 			return this;
 		}
 
@@ -381,6 +381,7 @@ var Player = IgeEntity.extend({
 	currentShip: function(newCurrentShip) {
 		if (newCurrentShip !== undefined) {
 			this._currentShip = newCurrentShip;
+			console.log(this._currentShip.classId());
 			this._currentShip.player(this);
 
 			if (!ige.isServer) {
@@ -412,12 +413,14 @@ Player.onUsernameRequested = function(username, clientId) {
 	if (!ige.isServer) {
 		return;
 	}
+
 	var player = ige.server.players[clientId];
 	if (player === undefined) {
 		return;
 	}
 
 	if (!player.hasGuestUsername && player.username()) {
+		//This should never be sent unless someone screws with the client:
 		ige.network.send('cosmos:player.username.set.error', 'Player already has username ' + player.username(), clientId);
 		console.log("Player already has username: " + player.username());
 		return;
@@ -458,11 +461,17 @@ Player.onUsernameRequested = function(username, clientId) {
 Player.onUsernameRequestApproved = function(data) {
 	ige.emit('cosmos:player.username.set.approve', data);
 
+	console.log("ige.client.player");
+	console.log(ige.client.player);
+	console.log("ige.client.player.id()");
+	console.log(ige.client.player.id());
+
 	if (ige.client.player !== undefined && data.playerId === ige.client.player.id()) {
 		var player = ige.client.player;
 		player.username(data.username);
 		player.hasGuestUsername = false;
 		ige.emit('cosmos:client.player.username.set', player.username());
+		console.log("cosmos:client.player.username.set");
 	}
 };
 

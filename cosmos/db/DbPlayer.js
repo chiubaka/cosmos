@@ -51,7 +51,7 @@ var DbPlayer = {
 
 			var ship = player.currentShip().toBlockTypeMatrix();
 			var cargo = player.currentShip().cargo.serializeCargo();
-			
+
 			players.update(
 				{_id: playerId},
 				{_id: playerId, username: username, lowerCaseUsername: lowerCaseUsername, ship: ship, cargo: cargo},
