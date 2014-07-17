@@ -23,7 +23,7 @@ var TutorialQuest = Quest.extend({
 	},
 
 	welcome: {
-		once: function() {
+		clientOnce: function() {
 			var self = this;
 			var msgTimeout = 5000;
 
@@ -47,13 +47,13 @@ var TutorialQuest = Quest.extend({
 
 		},
 
-		client: function() {
+		clientStep: function() {
 			
 		},
 	},
 
 	moveForward: {
-		once: function () {
+		clientOnce: function () {
 			var self = this;
 			var msgTimeout = 2000;
 
@@ -76,12 +76,12 @@ var TutorialQuest = Quest.extend({
 			}
 		},
 
-		client: function() {
+		clientStep: function() {
 		}
 	},
 
 	moveBackwards: {
-		once: function () {
+		clientOnce: function () {
 			var self = this;
 			var msgTimeout = 2000;
 
@@ -104,12 +104,12 @@ var TutorialQuest = Quest.extend({
 			}
 		},
 
-		client: function() {
+		clientStep: function() {
 		}
 	},
 
 	rotateLeft: {
-		once: function () {
+		clientOnce: function () {
 			var self = this;
 			var msgTimeout = 2000;
 
@@ -132,12 +132,12 @@ var TutorialQuest = Quest.extend({
 			}
 		},
 
-		client: function() {
+		clientStep: function() {
 		}
 	},
 
 	rotateRight: {
-		once: function () {
+		clientOnce: function () {
 			var self = this;
 			var msgTimeout = 2000;
 
@@ -160,12 +160,12 @@ var TutorialQuest = Quest.extend({
 			}
 		},
 
-		client: function() {
+		clientStep: function() {
 		}
 	},
 
 	moveAround: {
-		once: function() {
+		clientOnce: function() {
 			var self = this;
 			var msgTimeout = 5000;
 
@@ -200,7 +200,7 @@ var TutorialQuest = Quest.extend({
 			}
 		},
 
-		client: function() {
+		clientStep: function() {
 		},
 
 		server: function() {
@@ -208,7 +208,7 @@ var TutorialQuest = Quest.extend({
 	},
 
 	mine: {
-		once: function() {
+		clientOnce: function() {
 			var self = this;
 			var msgTimeout = 5000;
 
@@ -244,7 +244,7 @@ var TutorialQuest = Quest.extend({
 			}
 		},
 
-		client: function() {
+		clientStep: function() {
 		},
 
 		server: function() {
@@ -253,7 +253,7 @@ var TutorialQuest = Quest.extend({
 
 	// TODO: Skip this if the cargo window is already open
 	cargo: {
-		once: function() {
+		clientOnce: function() {
 			var self = this;
 			var msgTimeout = 5000;
 
@@ -279,13 +279,13 @@ var TutorialQuest = Quest.extend({
 			}
 		},
 
-		client: function() {
+		clientStep: function() {
 		}
 	},
 
 	// TODO: Skip this if the crafting window is already open
 	craft: {
-		once: function() {
+		clientOnce: function() {
 			var self = this;
 			var msgTimeout = 5000;
 
@@ -379,14 +379,14 @@ var TutorialQuest = Quest.extend({
 			}
 		},
 
-		client: function() {
+		clientStep: function() {
 		}
 
 	},
 
 	// Construct something on the player ship
 	construct: {
-		once: function() {
+		clientOnce: function() {
 			var self = this;
 			var msgTimeout = 5000;
 
@@ -435,7 +435,7 @@ var TutorialQuest = Quest.extend({
 		},
 
 
-		client: function() {
+		clientStep: function() {
 		}
 
 
@@ -443,7 +443,7 @@ var TutorialQuest = Quest.extend({
 
 	// TODO: Skip this if chat is already visible
 	chat: {
-		once: function() {
+		clientOnce: function() {
 			var self = this;
 			var msgTimeout = 5000;
 
@@ -470,12 +470,12 @@ var TutorialQuest = Quest.extend({
 
 		},
 
-		client: function() {
+		clientStep: function() {
 		}
 	},
 
 	relocate: {
-		once: function() {
+		clientOnce: function() {
 			var self = this;
 			var msgTimeout = 5000;
 
@@ -507,12 +507,12 @@ var TutorialQuest = Quest.extend({
 			}
 		},
 
-		client: function() {
+		clientStep: function() {
 		}
 	},
 
 	newShip: {
-		once: function() {
+		clientOnce: function() {
 			var self = this;
 			var msgTimeout = 5000;
 
@@ -542,12 +542,12 @@ var TutorialQuest = Quest.extend({
 			}
 		},
 
-		client: function() {
+		clientStep: function() {
 		}
 	},
 
 	feedback: {
-		once: function() {
+		clientOnce: function() {
 			var self = this;
 			var msgTimeout = 5000;
 
@@ -578,20 +578,20 @@ var TutorialQuest = Quest.extend({
 			}
 		},
 
-		client: function() {
+		clientStep: function() {
 		}
 	},
 
 
 
 	complete: {
-		once: function() {
+		clientOnce: function() {
 			var msgTimeout = 5000;
 			var message = 'Congratulations! You\'ve completed the tutorial. Your galaxy awaits!';
 			alertify.questLog(message, 'success', msgTimeout);
 			ige.questSystem.eventToServer(this.keys['complete'], this);
 		},
-		client: function() {
+		clientStep: function() {
 		},
 		// @server-side
 		server: function(player) {

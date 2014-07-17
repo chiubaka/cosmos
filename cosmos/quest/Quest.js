@@ -12,11 +12,13 @@ var Quest = IgeEventingClass.extend({
 	// @client-side
 	processStep: function() {
 		var questState = this.questState;
-		if (questState.once !== undefined) {
-			questState.once.call(this);
-			delete questState.once;
+		// TODO: Don't delete clientOnce; we might want to go back to a previous
+		// quest state
+		if (questState.clientOnce !== undefined) {
+			questState.clientOnce.call(this);
+			delete questState.clientOnce;
 		}
-		questState.client.call(this);
+		questState.clientStep.call(this);
 	}
 
 });
