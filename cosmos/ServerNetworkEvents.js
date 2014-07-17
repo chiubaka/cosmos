@@ -229,9 +229,6 @@ var ServerNetworkEvents = {
 			// Activate mining lasers
 			player.fireMiningLasers(targetBlock);
 		}
-		// TODO: Make the quest instance number smartly
-		// TODO: Make quest available for registered users
-		ige.questSystem.addQuestServer('TutorialQuest', player);
 	},
 
 	_onConstructNew: function(data, clientId) {

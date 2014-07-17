@@ -16,7 +16,7 @@ var QuestSystem = IgeEventingClass.extend({
 			ige.network.define('cosmos:quest.removeQuest', this._removeQuestClient);
 			ige.network.define('cosmos:quest.eventToClient', this._onEventToClient);
 			ige.addBehaviour('questStepClient', this._questStepClient);
-			ige.on('cosmos:client.player.streamed', this._tutorialQuest, this, true);
+			ige.on('cosmos:NamePrompt.hide', this._tutorialQuest, this, true);
 		}
 		this.log('Quest system initiated');
 	},
@@ -39,7 +39,7 @@ var QuestSystem = IgeEventingClass.extend({
 			return;
 		}
 
-		addQuestServer(questName, player);
+		ige.questSystem.addQuestServer(questName, player);
 	},
 
 	// @server-side
@@ -171,14 +171,22 @@ var QuestSystem = IgeEventingClass.extend({
 		}
 	},
 
-	/* Runs when player entity is streamed on the client. This determines whether
-	 * or not to start the tutorial quest. */
+	/* Runs when guest name window is hidden. Prompts the user if they want to
+	 * start the tutorial quest */
 	// @client-side
 	_tutorialQuest: function() {
-
+		var message = "Hi! We noticed that you are a guest user. Would you " +
+			"like to complete a short in-game tutorial?";
+		alertify.confirm(message, function (e) {
+			if (e) {
+				var questName = TutorialQuest.prototype.classId();
+				ige.network.send('cosmos:quest.requestStartQuest', questName);
+				console.log('yes');
+			} else {
+				console.log('no');
+			}
+		});
 	}
-
-
 });
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {

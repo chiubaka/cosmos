@@ -71,6 +71,7 @@ var NamePrompt = IgeEventingClass.extend({
 	hide: function() {
 		this.element.hide();
 		ige.hud.show();
+		ige.emit('cosmos:NamePrompt.hide');
 	}
 });
 
