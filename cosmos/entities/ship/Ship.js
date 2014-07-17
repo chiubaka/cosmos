@@ -46,7 +46,12 @@ var Ship = BlockStructure.extend({
 	 */
 	cargo: undefined,
 
-	//TODO add comment here
+	/**
+	 * Stores the number of thrusters and engines that you had the last time that update was run
+	 * @type {Object}
+	 * @memberof Ship
+	 * @instance
+	 */
 	_prevMovementBlocks: undefined,
 
 	/**
@@ -99,20 +104,28 @@ var Ship = BlockStructure.extend({
 		}
 
 		this._prevMovementBlocks = {
-			engines: 1,
-			thrusters: 1
+			engines: this._engines.length,
+			thrusters: this._thrusters.length
 		};
 
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform']);
 	},
 
-	//TODO comment this
+	// Getter for the _engines property
 	engines: function() {
 		return this._engines;
 	},
 
-	//TODO comment this
+	// Getter for the _thrusters property
+	thrusters: function() {
+		return this._thrusters;
+	},
+
+	/*
+	Overrides the superclass's add function
+	Updates the engines and thrusters lists on each add
+	*/
 	add: function(row, col, block, checkForNeighbors) {
 		var blockAdded = BlockStructure.prototype.add.call(this, row, col, block, checkForNeighbors);
 		if (blockAdded && ige.isServer) {
@@ -122,19 +135,22 @@ var Ship = BlockStructure.extend({
 			this.engines().push(block);
 		}
 		if (block instanceof ThrusterBlock) {
-			this._thrusters.push(block);
+			this.thrusters().push(block);
 		}
 		return blockAdded;
 	},
 
-	//TODO comment this
+	/*
+	Overrides the superclass's remove function
+	Updates the engines and thrusters lists on each remove
+	*/
 	remove: function(row, col) {
 		var block = this.get(row, col);
 		if (block instanceof EngineBlock) {
 			this.engines().splice(this.engines().indexOf(block), 1);
 		}
 		if (block instanceof ThrusterBlock) {
-			this._thrusters.splice(this._thrusters.indexOf(block), 1);
+			this.thrusters().splice(this.thrusters().indexOf(block), 1);
 		}
 		BlockStructure.prototype.remove.call(this, row, col);
 		if (ige.isServer) {
@@ -268,7 +284,6 @@ var Ship = BlockStructure.extend({
 	 * @param targetBlock {Block} The {@link Block} that the mining lasers will be focused on.
 	 * @memberof Ship
 	 * @instance
-	 * @todo The fireMiningLasers should be in the Ship class, but it doesn't exist yet.
 	 */
 	fireMiningLasers: function(targetBlock) {
 		var miningLasers = this.blocksOfType(MiningLaserBlock.prototype.classId());
@@ -283,7 +298,6 @@ var Ship = BlockStructure.extend({
 	 * @param targetBlock {Block} The {@link Block} that the mining lasers were focused on.
 	 * @memberof Ship
 	 * @instance
-	 * @todo The turnOffMiningLasers should be in the Ship class, but it doesn't exist yet.
 	 */
 	turnOffMiningLasers: function(targetBlock) {
 		var miningLasers = this.blocksOfType('MiningLaserBlock');
@@ -298,7 +312,6 @@ var Ship = BlockStructure.extend({
 			return this._controls;
 		}
 
-		this._prev_controls = this._controls;
 		this._controls = newControls;
 		return this;
 	},
@@ -313,19 +326,24 @@ var Ship = BlockStructure.extend({
 			// Angular rotation speed depends on number of thrusters
 			if (this.controls().left || this.controls().right) {
 				var angularImpulse = 0;
-				for (var i = 0; i < this._thrusters.length; i++) {
-					angularImpulse += this._thrusters[i].thrust.value;
+				for (var i = 0; i < this.thrusters().length; i++) {
+					angularImpulse += this.thrusters()[i].thrust.value;
 				}
 				angularImpulse = -angularImpulse * ige._tickDelta;
 
-				if (this._thrusters.length < 1) {
+				if (this.thrusters().length < 1) {
 					if (JSON.stringify(this.controls()) !== JSON.stringify(this._prev_controls) ||
 						this._prevMovementBlocks.thrusters > 0) {
+
+						console.log(JSON.stringify(this.controls()));
+						console.log(JSON.stringify(this._prev_controls));
+						console.log("TEST");
+
 						ige.network.stream.queueCommand('notificationError',
 							NotificationDefinitions.errorKeys.noRotationalThruster, this.player()._clientId);
 					}
 				}
-				this._prevMovementBlocks.thrusters = this._thrusters.length;
+				this._prevMovementBlocks.thrusters = this.thrusters().length;
 
 				if (this.controls().left) {
 					this._box2dBody.ApplyTorque(angularImpulse);
@@ -342,13 +360,15 @@ var Ship = BlockStructure.extend({
 				var thisX = this.translate().x();
 				var thisY = this.translate().y();
 
-				//TODO: This might not work
 				// Notify player that they cannot fly without an engine
 				if (this.engines().length < 1) {
 					if (JSON.stringify(this.controls()) !== JSON.stringify(this._prev_controls) ||
 						this._prevMovementBlocks.engines > 0) {
 						ige.network.stream.queueCommand('notificationError',
 							NotificationDefinitions.errorKeys.noEngine, this.player()._clientId);
+						console.log(this.controls());
+						console.log(this._prev_controls);
+						console.log("...");
 					}
 				}
 				this._prevMovementBlocks.engines = this.engines().length;
@@ -402,6 +422,11 @@ var Ship = BlockStructure.extend({
 					this._box2dBody.ApplyImpulse(impulse, engineWorldPosition);
 				}
 			}
+
+			// Update previous controls so we can tell what has changed each update.
+			// We want to send engine missing notifications on a change, not every
+			// update
+			this._prev_controls = JSON.parse(JSON.stringify(this.controls()));
 		}
 	},
 });
