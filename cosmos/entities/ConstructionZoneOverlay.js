@@ -39,13 +39,15 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		IgeEntity.prototype.init.call(this);
 		this._blockGrid = blockGrid;
 		this._renderContainer = new RenderContainer()
-			.mount(this)
+			.mount(this);
 		this._createConstructionZones();
 		this._mountOverlayGrid();
 		this.mouseDown(this._mouseDownHandler);
 
 		var self = this;
 		ige.on('capbar cap selected', function(classId) {
+			console.log('Construction zone overlay hidden: ' + self.renderable._hidden);
+			console.log('Construction zone overlay in view: ' + self._inView);
 			if (classId === 'ConstructCap') {
 				self.show();
 			} else {

@@ -156,6 +156,12 @@ var Block = IgeEntity.extend({
 			// Enable caching so that the smart textures aren't reevaluated every time.
 			this.compositeCache(true);
 			this.cacheSmoothing(true);
+
+			this._pixiDisplayObject = new PIXI.Graphics();
+			this._pixiDisplayObject.beginFill(0xA9FF00, 0.8);
+			this._pixiDisplayObject.lineStyle(2, 0x6FA700, 1);
+			this._pixiDisplayObject.drawRect(0, 0, Block.WIDTH - 2, Block.HEIGHT - 2);
+			this._pixiDisplayObject.endFill();
 		}
 	},
 

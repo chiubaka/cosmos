@@ -30,6 +30,7 @@ var LaserBeam = IgeEntity.extend({
 	 */
 	_fadeInTween: function () {
 		this.tween()
+			.targetObj(this.renderable)
 			.stepTo({_opacity: 1}, 1000, 'inOutCubic')
 			.start();
 

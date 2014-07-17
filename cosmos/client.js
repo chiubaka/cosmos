@@ -30,7 +30,8 @@ var Client = IgeClass.extend({
 		// Implement our game methods
 		this.implement(ClientNetworkEvents);
 
-		// Create the HTML canvas
+		ige.addSystem(IgeRenderingSystem, {autoSize: true});
+		ige.rendering.start();
 		ige.createFrontBuffer(true);
 
 		// Load the textures we want to use
