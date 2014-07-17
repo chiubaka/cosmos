@@ -606,6 +606,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 			};
 		},
 		
+		// Similar to hide, but undoes the effects of showPin()
+		hideUnpin: function(theme, callback) {
+			if (theme !== undefined) {
+				this.options.theme = theme;
+			}
+			this.options.autoClose = true;
+			return this.hide(callback);
+		},
+
 		hide: function(callback) {
 			
 			var self = this;
@@ -689,7 +698,18 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 			
 			return self;
 		},
-		
+
+		// Similar to show(), except pins the tooltip so it doesn't auto
+		// close. Optionally, a new theme can be specified. This is useful for
+		// highlighting tooltips.
+		showPin: function(theme, callback) {
+			if (theme !== undefined) {
+				this.options.theme = theme;
+			}
+			this.options.autoClose = false;
+			return this._showNow(callback);
+		},
+
 		// the public show() method is actually an alias for the private showNow() method
 		show: function(callback) {
 			this._showNow(callback);

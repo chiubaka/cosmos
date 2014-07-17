@@ -9,6 +9,7 @@ var FeedbackComponent = ButtonComponent.extend({
 		this.element.click(function() {
 			$(this).removeClass('unopened');
 			$(this).unbind('click');
+			ige.hud.bottomToolbar.feedback.emit('cosmos:FeedbackComponent.clicked');
 		});
 
 		// Include the UserVoice JavaScript SDK (only needed once on a page)

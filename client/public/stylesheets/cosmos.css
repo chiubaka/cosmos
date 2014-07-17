@@ -100,7 +100,7 @@ h1, h2, h3, h4 {
   user-select: none;
 }
 
-/* line 75, ../../sass/cosmos.scss */
+/* line 87, ../../sass/cosmos.scss */
 .tooltip {
   position: absolute;
   font-size: 75%;
@@ -112,7 +112,19 @@ h1, h2, h3, h4 {
   z-index: 100002;
 }
 
-/* line 86, ../../sass/cosmos.scss */
+/* line 91, ../../sass/cosmos.scss */
+.tooltip-highlighted {
+  position: absolute;
+  font-size: 75%;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, sans-serif;
+  line-height: 18px;
+  padding: 6px;
+  background-color: #f57a03;
+  border-radius: 0px;
+  z-index: 100002;
+}
+
+/* line 95, ../../sass/cosmos.scss */
 .username-label.tooltip {
   display: block;
   z-index: 1;

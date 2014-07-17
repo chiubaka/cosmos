@@ -9,6 +9,9 @@ var CraftingUIComponent = WindowComponent.extend({
 	emptyLabel: undefined,
 
 	selectedType: undefined,
+	// A map of recipes to their respective DOM element. This is useful for
+	// toggling tooltips for a particular recipe in the tutorial quest.
+	recipeDOMElements: undefined,
 
 	init: function() {
 		WindowComponent.prototype.init.call(
@@ -21,6 +24,7 @@ var CraftingUIComponent = WindowComponent.extend({
 			'Crafting',
 			'right'
 		);
+		recipeDOMElements = {};
 	},
 
 	_onWindowLoaded: function() {
@@ -52,6 +56,9 @@ var CraftingUIComponent = WindowComponent.extend({
 			canvases.remove();
 		}
 
+		// Clear the existing recipe map
+		this.recipeDOMElements = {};
+
 		// TODO: Grey out recipes that are known but not craftable
 		var i = 0;
 		_.forOwn(craftableBlocks, function(canCraft, blockType) {
@@ -72,6 +79,9 @@ var CraftingUIComponent = WindowComponent.extend({
 		container.click(function() {
 			ige.craftingSystem.craftClient(block.classId());
 		});
+
+		// Add the recipe DOM element to the recipe map
+		this.recipeDOMElements[block.classId()] = container;
 
 		// Generate tooltip content
 		this.fillTooltip(recipe, container, function(err, out) {
@@ -122,6 +132,16 @@ var CraftingUIComponent = WindowComponent.extend({
 
 			callback(err, out);
 		});
+	},
+
+	pinRecipeTooltip: function(recipeName) {
+		var elem = this.recipeDOMElements[recipeName];
+		elem.tooltipster('showPin');
+	},
+
+	unpinRecipeTooltip: function(recipeName) {
+		var elem = this.recipeDOMElements[recipeName];
+		elem.tooltipster('hideUnpin');
 	}
 
 });

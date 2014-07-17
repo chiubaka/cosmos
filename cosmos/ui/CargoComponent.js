@@ -9,6 +9,7 @@ var CargoComponent = WindowComponent.extend({
 	emptyLabel: undefined,
 
 	selectedType: undefined,
+	cargoItems: undefined,
 
 	init: function() {
 		WindowComponent.prototype.init.call(
@@ -51,6 +52,10 @@ var CargoComponent = WindowComponent.extend({
 	},
 
 	populateFromInventory: function(cargoItems) {
+		// Update client-side list of cargo
+		// TODO: In the future, move this to the yet-to-be-implemented client side
+		// cargo model
+		this.cargoItems = cargoItems;
 		var numTypes = Object.keys(cargoItems).length;
 		console.log('Populating toolbar from server response: ' + numTypes + ' item(s) in inventory');
 

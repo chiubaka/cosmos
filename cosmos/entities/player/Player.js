@@ -102,6 +102,7 @@ var Player = BlockStructure.extend({
 		this.streamSections(['transform', 'score']);
 
 		this.addComponent(CraftingComponent);
+		this.addComponent(QuestComponent);
 	},
 
 	streamCreateData: function() {

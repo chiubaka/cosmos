@@ -38,15 +38,15 @@ var DbPlayer = {
 	 * @memberof DbPlayer
 	 */
 	update: function(playerId, player, callback) {
-		if (playerId === undefined) {
+			// If this logged in player has a guest username, don't save it to the database.
+			// This way, we'll prompt them to set a username again next time they log in.
+		if (playerId === undefined || player.hasGuestUsername) {
 			callback(undefined, undefined);
 			return;
 		}
 
 		ige.mongo.db.collection('players', function(err, players) {
-			// If this logged in player has a guest username, don't save it to the database. This way, we'll prompt
-			// them to set a username again next time they log in.
-			var username = player.hasGuestUsername ? undefined : player.username();
+			var username = player.username();
 			var ship = player.toBlockTypeMatrix();
 			var cargo = player.cargo.serializeCargo();
 			players.update(
