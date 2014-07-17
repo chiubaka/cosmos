@@ -20,7 +20,9 @@ var Quest = IgeEventingClass.extend({
 			questState.clientOnce.call(this);
 			delete questState.clientOnce;
 		}
-		questState.clientStep.call(this);
+		if (questState.clientStep !== undefined) {
+			questState.clientStep.call(this);
+		}
 	}
 
 });
