@@ -340,7 +340,7 @@ var Ship = BlockStructure.extend({
 						console.log("TEST");
 
 						ige.network.stream.queueCommand('notificationError',
-							NotificationDefinitions.errorKeys.noRotationalThruster, this.player()._clientId);
+							NotificationDefinitions.errorKeys.noRotationalThruster, this.player().clientId());
 					}
 				}
 				this._prevMovementBlocks.thrusters = this.thrusters().length;
@@ -365,7 +365,7 @@ var Ship = BlockStructure.extend({
 					if (JSON.stringify(this.controls()) !== JSON.stringify(this._prev_controls) ||
 						this._prevMovementBlocks.engines > 0) {
 						ige.network.stream.queueCommand('notificationError',
-							NotificationDefinitions.errorKeys.noEngine, this.player()._clientId);
+							NotificationDefinitions.errorKeys.noEngine, this.player().clientId());
 						console.log(this.controls());
 						console.log(this._prev_controls);
 						console.log("...");
@@ -395,7 +395,7 @@ var Ship = BlockStructure.extend({
 					if (JSON.stringify(this._controls) !== JSON.stringify(this._prev_controls) ||
 						this._prevMovementBlocks.engines > 0) {
 						ige.network.stream.queueCommand('notificationError',
-							NotificationDefinitions.errorKeys.noEngine, this.player()._clientId);
+							NotificationDefinitions.errorKeys.noEngine, this.player().clientId());
 					}
 				}
 
