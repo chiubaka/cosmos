@@ -93,7 +93,7 @@ var TutorialQuest = Quest.extend({
 					if (keyCode === ige.input.key.s) {
 						questLog.close();
 						ige.input.off('keyDown', listener);
-						alertify.questLog('Good! You\'ve moved backward!', 'success', msgTimeout);
+						alertify.questLog('Great! You\'ve moved backward!', 'success', msgTimeout);
 						setTimeout(done, msgTimeout / 2);
 					}
 				});
@@ -121,7 +121,7 @@ var TutorialQuest = Quest.extend({
 					if (keyCode === ige.input.key.a) {
 						questLog.close();
 						ige.input.off('keyDown', listener);
-						alertify.questLog('Good! You\'ve rotated left!', 'success', msgTimeout);
+						alertify.questLog('Sweet! You\'ve rotated left!', 'success', msgTimeout);
 						setTimeout(done, msgTimeout / 2);
 					}
 				});
@@ -149,7 +149,7 @@ var TutorialQuest = Quest.extend({
 					if (keyCode === ige.input.key.d) {
 						questLog.close();
 						ige.input.off('keyDown', listener);
-						alertify.questLog('Good! You\'ve rotated right!', 'success', msgTimeout);
+						alertify.questLog('Awesome! You\'ve rotated right!', 'success', msgTimeout);
 						setTimeout(done, msgTimeout / 2);
 					}
 				});
@@ -190,7 +190,7 @@ var TutorialQuest = Quest.extend({
 			}
 
 			function doneFlying() {
-				alertify.questLog('Great! Let\'s try to use some capabilities!',
+				alertify.questLog('Nice! Let\'s try to use some capabilities!',
 					'success', msgTimeout);
 				setTimeout(done, msgTimeout / 2)
 			}
@@ -234,7 +234,7 @@ var TutorialQuest = Quest.extend({
 				var listener = ige.on('cosmos:block.mousedown', function () {
 					questLog.close();
 					ige.off('cosmos:block.mousedown', listener);
-					alertify.questLog('Good! You\'ve mined a block!', 'success', msgTimeout);
+					alertify.questLog('Magnificent! You\'ve mined a block!', 'success', msgTimeout);
 					setTimeout(done, msgTimeout / 2);
 				});
 			}
@@ -289,6 +289,12 @@ var TutorialQuest = Quest.extend({
 			var self = this;
 			var msgTimeout = 5000;
 
+			// Here, we choose an Iron Engine to craft
+			var block = cosmos.blocks.instances["IronEngineBlock"];
+			var recipeName = block.classId();
+			var recipeNameHuman = block.recipe.name;
+			var reactants = block.recipe.reactants;
+
 			clickCraftButton();
 
 			function clickCraftButton() {
@@ -302,17 +308,58 @@ var TutorialQuest = Quest.extend({
 					ige.hud.leftToolbar.windows.craftingUI.unpinButtonTooltip();
 					alertify.questLog('Crafting allows you to make powerful new blocks',
 						'', msgTimeout);
-					setTimeout(craftBlock, msgTimeout / 2);
+					setTimeout(waitForReactants, msgTimeout / 2);
 				});
 			}
 
-			function craftBlock() {
-				// Here, we choose an Iron Engine to craft
-				var block = cosmos.blocks.instances["IronEngineBlock"];
-				var recipeName = block.classId();
-				var recipeNameHuman = block.recipe.name;
-				var questLog = alertify.questLog('Now, let\'s craft one ' + recipeNameHuman);
+			function waitForReactants() {
+				var baseMessage = 'Now, let\'s craft one ' + recipeNameHuman + '. ';
+				var questLog = alertify.questLog(baseMessage);
 				// Show the crafting tooltip for the desired block
+				ige.hud.leftToolbar.windows.craftingUI.pinRecipeTooltip(recipeName);
+
+				// Inform the player what they need to collect
+				var responseListener = ige.on('cargo response', checkForReactants, this);
+				var updateListener = ige.on('cargo update', checkForReactants, this);
+				checkForReactants(ige.hud.leftToolbar.windows.cargo.cargoItems);
+
+				function checkForReactants(cargoItems) {
+					var collectionMessage = 'You\'ll need:';
+					var canCraft = true;
+					// Go through each of the recipe's reactants and see if we have
+					// enough in our cargo
+					for (var i = 0; i < reactants.length; i++) {
+						var blockType = reactants[i].blockType;
+						var quantityNeeded = reactants[i].quantity;
+						var quantityHave = 0;
+						if (cargoItems.hasOwnProperty(blockType)) {
+							quantityHave = cargoItems[blockType];
+						}
+						var quantityToCollect = quantityNeeded - quantityHave;
+						if (quantityToCollect > 0) {
+							canCraft = false;
+						}
+						collectionMessage += '<br />' + Math.max(0, quantityToCollect) + ' ' +
+							Block.displayNameFromClassId(blockType);
+					}
+					questLog.DOMElement.innerHTML = baseMessage + collectionMessage;
+
+					if (canCraft) {
+						console.log('reactants check passed');
+						questLog.close();
+						ige.off('cargo response', responseListener);
+						ige.off('cargo update', updateListener);
+						alertify.questLog('Bravo! You\'ve collected all necessary blocks!',
+							'success', msgTimeout);
+						setTimeout(craftBlock, msgTimeout / 2);
+					}
+				}
+			}
+
+			function craftBlock() {
+				var questLog = alertify.questLog('Now, click the ' + recipeNameHuman +
+					' recipe in the crafting window');
+
 				ige.hud.leftToolbar.windows.craftingUI.pinRecipeTooltip(recipeName);
 				var listener = ige.craftingSystem.on('cosmos:CraftingSystem.craft.success', 
 					function (serverRecipeName) {
@@ -320,7 +367,7 @@ var TutorialQuest = Quest.extend({
 						questLog.close();
 						ige.hud.leftToolbar.windows.craftingUI.unpinRecipeTooltip(recipeName);
 						ige.craftingSystem.off('cosmos:CraftingSystem.craft.success', listener);
-						alertify.questLog('Good! You\'ve crafted one ' + recipeNameHuman + '!',
+						alertify.questLog('Woohoo! You\'ve crafted one ' + recipeNameHuman + '!',
 							'success', msgTimeout);
 						setTimeout(done, msgTimeout / 2);
 					}
@@ -375,7 +422,7 @@ var TutorialQuest = Quest.extend({
 					if (blockGrid === ige.client.player) {
 						questLog.close();
 						ige.craftingSystem.off('cosmos:BlockGrid.processBlockActionClient.add', listener);
-						alertify.questLog('Good! You\'ve constructed a block on your ship!',
+						alertify.questLog('Wow! You\'ve constructed a block on your ship!',
 							'success', msgTimeout);
 						setTimeout(done, msgTimeout / 2);
 					}
@@ -411,7 +458,7 @@ var TutorialQuest = Quest.extend({
 					ige.hud.bottomToolbar.chat.off('cosmos:ChatComponent.show', listener);
 					// Hide the tooltip
 					ige.hud.bottomToolbar.chat.unpinButtonTooltip();
-					alertify.questLog('Good! You\'ve opened the chat!', 'success',
+					alertify.questLog('Incredible! You\'ve opened the chat!', 'success',
 						msgTimeout);
 					setTimeout(done, msgTimeout / 2);
 				});
@@ -449,7 +496,7 @@ var TutorialQuest = Quest.extend({
 					ige.hud.bottomToolbar.relocate.off('cosmos:RelocateComponent.mouseDown', listener);
 					// Hide the tooltip
 					ige.hud.bottomToolbar.relocate.unpinButtonTooltip();
-					alertify.questLog('Good! You\'ve clicked the relocate button!',
+					alertify.questLog('Amazing! You\'ve clicked the relocate button!',
 						'success', msgTimeout);
 					setTimeout(done, msgTimeout / 2);
 				});
@@ -520,7 +567,7 @@ var TutorialQuest = Quest.extend({
 					questLog.close();
 					// Hide the tooltip
 					ige.hud.bottomToolbar.feedback.unpinButtonTooltip();
-					alertify.questLog('Great! You\'ve clicked the feedback button!', 'success',
+					alertify.questLog('Spectacular! You\'ve clicked the feedback button!', 'success',
 						msgTimeout);
 					setTimeout(done, msgTimeout / 2);
 				}, self, true);
