@@ -200,8 +200,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @instance
 	 */
 	_streamControlFunc: function(clientId) {
-		return true;//TODO remove this line
-
 		var player = ige.server.players[clientId];
 
 		// Start streaming asap in order to cache entities on the client.

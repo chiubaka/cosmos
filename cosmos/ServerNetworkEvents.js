@@ -197,9 +197,11 @@ var ServerNetworkEvents = {
 		}
 
 		var playerId = player.dbId();
-		ige.server._destroyPlayer(clientId, player);
+		//ige.server._destroyPlayer(clientId, player);
 		// We pass no third or fourth argument to _createPlayer() here, which requests a completely new ship
-		ige.server._createPlayer(clientId, playerId, player.username());
+		//ige.server._createPlayer(clientId, playerId, player.username());
+		player.currentShip().destroy();
+		ige.server._createShip(clientId, playerId);
 		ige.network.stream.queueCommand('notificationSuccess',
 			NotificationDefinitions.successKeys.newShip, clientId);
 	},

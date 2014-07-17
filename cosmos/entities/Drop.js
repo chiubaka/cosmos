@@ -102,13 +102,9 @@ var Drop = BlockGrid.extend({
 	 * TODO have this function use the owner() function instead of referenceing _owner
 	 */
 	isOwner: function(entity) {
-		console.log(entity.classId());
-
 		if (this._owner === undefined) {
 			return true;
 		}
-
-		console.log(this.owner().classId());
 
 		if (this._owner.classId() === "Player" && entity.classId() === "Player") {
 			return this._owner.currentShip() === entity.currentShip();
