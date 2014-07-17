@@ -31,6 +31,11 @@ var Player = IgeEntity.extend({
 	_username: undefined,
 	_usernameLabel: undefined,
 	hasGuestUsername: undefined,
+
+	/**
+	* The player's controls object. This represents the state of the player's instructions to to the game, like which keys are depressed.
+	* Network messages are used to keep this property in sync between the server and the client.
+	*/
 	_controls: undefined,
 	// Keep track of previous values so we can send the client notifications only
 	// on a change.
@@ -46,12 +51,6 @@ var Player = IgeEntity.extend({
 	 * @instance
 	 */
 	 _clientId: undefined,
-
-	/**
-	 * The player's controls object. This represents the state of the player's instructions to to the game, like which keys are depressed.
-	 * Network messages are used to keep this property in sync between the server and the client.
-	 */
-	_controls: undefined,
 
 	/**
 	 * The Ship object that this player is currently controlling. At some point, players may be able to control more than one ship.
