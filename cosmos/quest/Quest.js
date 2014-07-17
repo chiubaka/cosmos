@@ -1,8 +1,10 @@
 var Quest = IgeEventingClass.extend({
 	classId: 'Quest',
+	// How far the player is in the quest
 	questState: undefined,
+	// The instance number of the quest. Some quests can be instantiated multiple times,
+	// for example a "mine X blocks" quest
 	instance: undefined,
-	objectiveNotifications: undefined,
 
 	init: function(instance) {
 		this.instance = instance;
