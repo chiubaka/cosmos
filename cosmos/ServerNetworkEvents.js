@@ -98,8 +98,6 @@ var ServerNetworkEvents = {
 					self.log('Cannot load player from database!', 'error')
 				}
 
-				console.log("here is the player's username:");
-				console.log(username);
 				ige.server._createPlayer(clientId, playerId, username);
 
 				ige.server._createShip(clientId, playerId, ship, cargo);

@@ -381,7 +381,7 @@ var Player = IgeEntity.extend({
 	currentShip: function(newCurrentShip) {
 		if (newCurrentShip !== undefined) {
 			this._currentShip = newCurrentShip;
-			console.log(this._currentShip.classId());
+			//Give the new ship a reference back to this player object
 			this._currentShip.player(this);
 
 			if (!ige.isServer) {
@@ -461,17 +461,11 @@ Player.onUsernameRequested = function(username, clientId) {
 Player.onUsernameRequestApproved = function(data) {
 	ige.emit('cosmos:player.username.set.approve', data);
 
-	console.log("ige.client.player");
-	console.log(ige.client.player);
-	console.log("ige.client.player.id()");
-	console.log(ige.client.player.id());
-
 	if (ige.client.player !== undefined && data.playerId === ige.client.player.id()) {
 		var player = ige.client.player;
 		player.username(data.username);
 		player.hasGuestUsername = false;
 		ige.emit('cosmos:client.player.username.set', player.username());
-		console.log("cosmos:client.player.username.set");
 	}
 };
 
