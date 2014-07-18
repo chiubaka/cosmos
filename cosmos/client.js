@@ -33,6 +33,9 @@ var Client = IgeClass.extend({
 		ige.addSystem(IgeRenderingSystem, {autoSize: true});
 		ige.rendering.start();
 
+		ige.addSystem(PixiRenderingSystem, {autoSize: true});
+		ige.pixiRendering.start();
+
 		// Load the textures we want to use
 		this.textures = {
 			block: new IgeTexture(gameRoot + 'assets/BlockTexture.js'),

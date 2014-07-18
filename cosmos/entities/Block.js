@@ -125,6 +125,7 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	init: function(data) {
+		var self = this;
 		IgeEntity.prototype.init.call(this);
 
 		// Use an even number so values don't have to become approximate when we divide by two
@@ -150,6 +151,15 @@ var Block = IgeEntity.extend({
 
 		if (!ige.isServer) {
 			this.texture(ige.client.textures.block);
+			this.addComponent(PixiRenderableComponent, {createDisplayObject: function() {
+				var displayObject = new PIXI.Graphics();
+				displayObject.beginFill(0xA9FF00, 0.8);
+				displayObject.lineStyle(2, 0x6FA700, 1);
+				displayObject.drawRect(0, 0, self.width() - 2, self.height() - 2);
+				displayObject.endFill();
+
+				return displayObject;
+			}});
 
 			this._effects = {};
 
