@@ -11,7 +11,7 @@ var SteelThrusterBlock = ThrusterBlock.extend({
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(110, 110, 110)";
 			this.textureOutline = "rgb(100, 100, 100)";
-			this.textureSvg = ige.client.textures.kryptoniteThruster;
+			this.textureSvg = ige.client.textures.thruster;
 		}
 	}
 });

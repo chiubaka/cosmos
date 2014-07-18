@@ -256,11 +256,10 @@ var BlockStructureGenerator = {
 			"DragonBlock": 10,
 			"KryptoniteBlock": 10,
 			"TitaniumBlock": 1,
-			"CloakBlock": 1,
-			"CloakVioletBlock": 1,
+			//"CloakBlock": 1,
+			//"CloakVioletBlock": 1,
 			"MythrilBlock": 1,
 			"AdamantiumBlock": 1,
-			"VioletBlock": 1,
 			"SteelBlock": 1,
 			//here are some easter-egg type things, which will add up to 0.002
 			/* //I've commented this out per LEO-522
