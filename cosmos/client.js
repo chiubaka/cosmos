@@ -32,7 +32,6 @@ var Client = IgeClass.extend({
 
 		ige.addSystem(IgeRenderingSystem, {autoSize: true});
 		ige.rendering.start();
-		ige.createFrontBuffer(true);
 
 		// Load the textures we want to use
 		this.textures = {
