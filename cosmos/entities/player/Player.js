@@ -51,7 +51,7 @@ var Player = IgeEntity.extend({
 	_currentShip: undefined,
 
 	init: function() {
-		IgeEntity.prototype.init.call(this, data);
+		IgeEntity.prototype.init.call(this);
 
 		this._controls = {
 			key: {

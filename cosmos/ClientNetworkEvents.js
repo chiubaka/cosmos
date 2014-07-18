@@ -15,11 +15,11 @@ var ClientNetworkEvents = {
 	 * @private
 	 */
 	_onPlayerEntity: function(data) {
-		ige.client.player = new Player()
-			.id(data.playerId)
-			.mount(ige.$("spaceGameScene"))
-			.username(data.username)
-			.loggedIn(data.loggedIn)
+		ige.client.player = new Player();
+		ige.client.player.id(data.playerId);
+		ige.client.player.username(data.username);
+		ige.client.player.loggedIn(data.loggedIn);
+		ige.client.player.mount(ige.$("spaceGameScene"));
 
 		ige.client.player.hasGuestUsername = data.hasGuestUsername;
 
@@ -33,8 +33,9 @@ var ClientNetworkEvents = {
 
 		ige.client.metrics.fireEvent('player', 'connect', data.playerId);
 
-		// If this player is logged in but doesn't yet have a username, prompt for one.
-		if (ige.client.player.hasGuestUsername && ige.client.player.isLoggedIn()) {
+		// If this player is logged in and has a guest username, prompt for a real
+		// username.
+		if (ige.client.player.loggedIn() && ige.client.player.hasGuestUsername) {
 			ige.client.promptForUsername();
 		}
 		else {

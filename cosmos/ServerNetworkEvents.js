@@ -55,10 +55,12 @@ var ServerNetworkEvents = {
 
 			// Remove the player from the game
 			player.destroy();
+			// Remove the player's ship from the game
+			player.currentShip().destroy();
 
 			// Remove the reference to the player entity
 			// so that we don't leak memory
-			delete player;
+			delete ige.server.players[player];
 		});
 	},
 
@@ -95,12 +97,10 @@ var ServerNetworkEvents = {
 			 */
 			DbPlayer.load(playerId, function(err, username, ship, cargo) {
 				if (err) {
-					self.log('Cannot load player from database!', 'error')
+					self.log('Cannot load player from database!', 'error');
 				}
 
-				ige.server._createPlayer(clientId, playerId, username);
-
-				ige.server._createShip(clientId, playerId, ship, cargo);
+				ige.server._createPlayer(clientId, playerId, username, ship, cargo);
 			});
 		});
 	},
@@ -113,11 +113,11 @@ var ServerNetworkEvents = {
 	 * @param cargo The cargo to give the player. If none is specified, the player will be given an empty cargo.
 	 * @private
 	 */
-	_createPlayer: function(clientId, playerId, username) {
+	_createPlayer: function(clientId, playerId, username, ship, cargo) {
 		// If the player isn't logged in, give the player a unique id.
 		// Otherwise, give the player the saved database id
 		var loggedIn;
-		if (playerId !== undefined) {
+		if (playerId === undefined) {
 			// TODO: Make sure this id doesn't conflict with previous player IDs
 			playerId = ige.newIdHex();
 			loggedIn = false;
@@ -126,17 +126,19 @@ var ServerNetworkEvents = {
 			loggedIn = true;
 		}
 
-		var player = new Player()
-			.id(playerId)
-			.clientId(clientId)
-			.username(username)
-			.loggedIn(loggedIn);
-
+		var player = new Player();
+		player.id(playerId);
+		player.clientId(clientId);
+		player.loggedIn(loggedIn);
+		player.username(username);
 
 		// If the player doesn't yet have a username, generate a guest username for him
 		if (!player.username()) {
 			player.generateGuestUsername();
 			player.hasGuestUsername = true;
+		}
+		else {
+			player.hasGuestUsername = false;
 		}
 
 		ige.server.players[clientId] = player;
@@ -150,6 +152,9 @@ var ServerNetworkEvents = {
 
 		// Tell the client to track their player entity
 		ige.network.send('playerEntity', sendData, clientId);
+
+		// Load the player's ships
+		ige.server._createShip(clientId, playerId, ship, cargo);
 	},
 
 	_createShip: function(clientId, playerId, ship, cargo) {
