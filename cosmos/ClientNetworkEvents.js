@@ -11,14 +11,6 @@ var ClientNetworkEvents = {
 	 * is received by the client from the server. This is the server telling
 	 * us which entity is our player entity so that we can track it with
 	 * the main camera!
-
-		var sendData = {
-			playerId: ige.server.players[clientId].id(),
-			username: player.username(),
-			hasGuestUsername: player.hasGuestUsername,
-			dbId: player.dbId()
-		};
-
 	 * @param data The data object that contains any data sent from the server.
 	 * @private
 	 */
@@ -27,7 +19,7 @@ var ClientNetworkEvents = {
 			.id(data.playerId)
 			.mount(ige.$("spaceGameScene"))
 			.username(data.username)
-			.dbId(data.dbId);
+			.loggedIn(data.loggedIn)
 
 		ige.client.player.hasGuestUsername = data.hasGuestUsername;
 

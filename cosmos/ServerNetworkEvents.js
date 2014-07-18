@@ -48,7 +48,7 @@ var ServerNetworkEvents = {
 		 * @param err {Error | null}
 		 * @param result {*}
 		 */
-		DbPlayer.update(player.dbId(), player, function(err, result) {
+		DbPlayer.update(player.id(), player, function(err, result) {
 			if (err) {
 				self.log('Cannot save player in database!', 'error')
 			}
@@ -114,14 +114,24 @@ var ServerNetworkEvents = {
 	 * @private
 	 */
 	_createPlayer: function(clientId, playerId, username) {
-		var player = new Player()
-			.clientId(clientId);
-
-		player.username(username);
-
+		// If the player isn't logged in, give the player a unique id.
+		// Otherwise, give the player the saved database id
+		var loggedIn;
 		if (playerId !== undefined) {
-			player.dbId(playerId);
+			// TODO: Make sure this id doesn't conflict with previous player IDs
+			playerId = ige.newIdHex();
+			loggedIn = false;
 		}
+		else {
+			loggedIn = true;
+		}
+
+		var player = new Player()
+			.id(playerId)
+			.clientId(clientId)
+			.username(username)
+			.loggedIn(loggedIn);
+
 
 		// If the player doesn't yet have a username, generate a guest username for him
 		if (!player.username()) {
@@ -135,7 +145,7 @@ var ServerNetworkEvents = {
 			playerId: ige.server.players[clientId].id(),
 			username: player.username(),
 			hasGuestUsername: player.hasGuestUsername,
-			dbId: player.dbId()
+			loggedIn: player.loggedIn()
 		};
 
 		// Tell the client to track their player entity
@@ -196,7 +206,7 @@ var ServerNetworkEvents = {
 			return;
 		}
 
-		var playerId = player.dbId();
+		var playerId = player.id();
 		//ige.server._destroyPlayer(clientId, player);
 		// We pass no third or fourth argument to _createPlayer() here, which requests a completely new ship
 		//ige.server._createPlayer(clientId, playerId, player.username());
@@ -270,7 +280,7 @@ var ServerNetworkEvents = {
 			ige.network.stream.queueCommand('notificationSuccess',
 				NotificationDefinitions.successKeys.constructNewBlock, clientId);
 
-			DbPlayer.update(player.dbId(), player, function() {});
+			DbPlayer.update(player.id(), player, function() {});
 		}
 	},
 
@@ -308,7 +318,7 @@ var ServerNetworkEvents = {
 			data.action = 'add';
 			blockGrid.processBlockActionServer(data, player);
 
-			DbPlayer.update(player.dbId(), player, function() {});
+			DbPlayer.update(player.id(), player, function() {});
 		}
 	}
 

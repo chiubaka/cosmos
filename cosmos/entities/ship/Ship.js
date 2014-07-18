@@ -129,7 +129,7 @@ var Ship = BlockStructure.extend({
 	add: function(row, col, block, checkForNeighbors) {
 		var blockAdded = BlockStructure.prototype.add.call(this, row, col, block, checkForNeighbors);
 		if (blockAdded && ige.isServer) {
-			DbPlayer.update(this.player().dbId(), this.player(), function() {});
+			DbPlayer.update(this.player().id(), this.player(), function() {});
 		}
 		if (block instanceof EngineBlock) {
 			this.engines().push(block);
@@ -154,7 +154,7 @@ var Ship = BlockStructure.extend({
 		}
 		BlockStructure.prototype.remove.call(this, row, col);
 		if (ige.isServer) {
-			DbPlayer.update(this.player().dbId(), this.player(), function() {});
+			DbPlayer.update(this.player().id(), this.player(), function() {});
 		}
 	},
 

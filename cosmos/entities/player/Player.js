@@ -19,15 +19,7 @@ var Player = IgeEntity.extend({
 	 * @instance
 	 */
 	_sid: undefined,
-	/**
-	 * The ID for this {@link Player} object in the database. Used for loading and storing data associated with a
-	 * particular {@link Player}.
-	 * @type {string}
-	 * @memberof Player
-	 * @private
-	 * @instance
-	 */
-	_dbId: undefined,
+	_loggedIn: undefined,
 	_username: undefined,
 	_usernameLabel: undefined,
 	hasGuestUsername: undefined,
@@ -58,7 +50,7 @@ var Player = IgeEntity.extend({
 	 */
 	_currentShip: undefined,
 
-	init: function(data) {
+	init: function() {
 		IgeEntity.prototype.init.call(this, data);
 
 		this._controls = {
@@ -79,19 +71,7 @@ var Player = IgeEntity.extend({
 			}
 		};
 
-		if (ige.isClient) {
-			this._initClient(data);
-		}
-
 		this.addComponent(CraftingComponent);
-	},
-
-	streamCreateData: function() {
-		var data = BlockStructure.prototype.streamCreateData.call(this);
-		data.username = this.username();
-		data.dbId = this.dbId();
-		data.hasGuestUsername = this.hasGuestUsername;
-		return data;
 	},
 
 	/**
@@ -109,23 +89,12 @@ var Player = IgeEntity.extend({
 		return this;
 	},
 
-	/**
-	 * Getter/setter for the dbId parameter, which stores the database ID of this player.
-	 * @param val {string?} The new value to use or undefined if we are invoking this function as the getter.
-	 * @returns {string|Player} Either the current database ID or this object so that we can chain setter calls.
-	 * @memberof Player
-	 * @instance
-	 */
-	dbId: function(val) {
+	loggedIn: function(val) {
 		if (val === undefined) {
-			return this._dbId;
+			return this._loggedIn;
 		}
-		this._dbId = val;
+		this._loggedIn = val;
 		return this;
-	},
-
-	isLoggedIn: function() {
-		return this.dbId() !== undefined;
 	},
 
 	/*
@@ -178,35 +147,6 @@ var Player = IgeEntity.extend({
 		}
 		this._clientId = val;
 		return this;
-	},
-
-	/**
-	 * Perform client-specific initialization here. Called by init()
-	 * @memberof Player
-	 * @private
-	 * @instance
-	 */
-	_initClient: function(data) {
-		var self = this;
-		this.hasGuestUsername = false;
-		this.depth(Player.DEPTH);
-		if (data !== undefined) {
-			this.username(data.username);
-			this.dbId(data.dbId);
-			this.hasGuestUsername = data.hasGuestUsername;
-		}
-
-		// Either the username was already streamed, in which case it is here and we can create a label
-		if (this.username()) {
-			if (ige.client.player === undefined) {
-				ige.on('cosmos:client.player.streamed', function() {
-					self._createUsernameLabel();
-				}, self, true);
-			}
-			else {
-				this._createUsernameLabel();
-			}
-		}
 	},
 
 	_createUsernameLabel: function() {
@@ -446,9 +386,9 @@ Player.onUsernameRequested = function(username, clientId) {
 		else {
 			player.username(username);
 			player.hasGuestUsername = false;
-			DbPlayer.update(player.dbId(), player, function(err) {
+			DbPlayer.update(player.id(), player, function(err) {
 				if (err) {
-					console.error('Error updating player ' + player.dbId() + '. Error: ' + err);
+					console.error('Error updating player ' + player.id() + '. Error: ' + err);
 					ige.network.send('cosmos:player.username.set.error', 'Database error', clientId);
 					return;
 				}

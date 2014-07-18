@@ -136,7 +136,7 @@ var CraftingSystem = IgeEventingClass.extend({
 
 		cargo.addBlock(recipeName);
 
-		DbPlayer.update(player.dbId(), player, function() {});
+		DbPlayer.update(player.id(), player, function() {});
 	},
 
 	// Add a recipe to a player
