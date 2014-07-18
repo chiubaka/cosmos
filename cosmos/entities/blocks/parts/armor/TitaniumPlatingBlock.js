@@ -1,5 +1,5 @@
-var TitaniumBlock = Armor.extend({
-	classId: 'TitaniumBlock',
+var TitaniumPlatingBlock = Armor.extend({
+	classId: 'TitaniumPlatingBlock',
 
 	init: function(data) {
 		Armor.prototype.init.call(this, data);
@@ -11,4 +11,4 @@ var TitaniumBlock = Armor.extend({
 	}
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = TitaniumBlock; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = TitaniumPlatingBlock; }

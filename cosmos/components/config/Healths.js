@@ -27,7 +27,7 @@ Healths[PowerBlock.prototype.classId()] =
 
 /* Armor */
 
-Healths[AdamantiumBlock.prototype.classId()] =
+Healths[AdamantiumPlatingBlock.prototype.classId()] =
 {
 	max: 60
 };
@@ -52,17 +52,17 @@ Healths[CloakBlockVioletLight.prototype.classId()] =
 	max: 60
 };
 
-Healths[DragonBlock.prototype.classId()] =
+Healths[DragonPlatingBlock.prototype.classId()] =
 {
 	max: 60
 };
 
-Healths[HullBlock.prototype.classId()] =
+Healths[IronPlatingBlock.prototype.classId()] =
 {
 	max: 30
 };
 
-Healths[KryptoniteBlock.prototype.classId()] =
+Healths[KryptonitePlatingBlock.prototype.classId()] =
 {
 	max: 60
 };
@@ -72,17 +72,12 @@ Healths[MythrilPlatingBlock.prototype.classId()] =
 	max: 60
 };
 
-Healths[OrangeBlock.prototype.classId()] =
+Healths[SteelPlatingBlock.prototype.classId()] =
 {
 	max: 60
 };
 
-Healths[TitaniumBlock.prototype.classId()] =
-{
-	max: 60
-};
-
-Healths[VioletBlock.prototype.classId()] =
+Healths[TitaniumPlatingBlock.prototype.classId()] =
 {
 	max: 60
 };
@@ -93,9 +88,14 @@ Healths[IronEngineBlock.prototype.classId()] =
 	max: 40
 };
 
+Healths[SteelEngineBlock.prototype.classId()] =
+{
+	max: 50
+};
+
 Healths[DragonBreathEngineBlock.prototype.classId()] =
 {
-	max: 40
+	max: 60
 };
 
 /* Thrusters */
@@ -105,9 +105,14 @@ Healths[IronThrusterBlock.prototype.classId()] =
 	max: 40
 };
 
+Healths[SteelThrusterBlock.prototype.classId()] =
+{
+	max: 50
+};
+
 Healths[KryptoniteThrusterBlock.prototype.classId()] =
 {
-	max: 40
+	max: 60
 };
 
 /* Weapons */
@@ -151,6 +156,26 @@ Healths[IceBlock.prototype.classId()] =
 Healths[IronBlock.prototype.classId()] =
 {
 	max: 25
+};
+
+Healths[DragonBlock.prototype.classId()] =
+{
+	max: 50
+};
+
+Healths[KryptoniteBlock.prototype.classId()] =
+{
+	max: 40
+};
+
+Healths[SteelBlock.prototype.classId()] =
+{
+	max: 30
+};
+
+Healths[TitaniumBlock.prototype.classId()] =
+{
+	max: 55
 };
 
 Healths[MythrilBlock.prototype.classId()] =

@@ -26,16 +26,39 @@ Recipes[IronEngineBlock.prototype.classId()] =
 	equipment: []
 };
 
+Recipes[SteelEngineBlock.prototype.classId()] =
+{
+	reactants: [
+		{
+			blockType: SteelBlock.prototype.classId(),
+			quantity: 3
+		},
+		{
+			blockType: SteelPlatingBlock.prototype.classId(),
+			quantity: 1
+		},
+		{
+			blockType: CarbonBlock.prototype.classId(),
+			quantity: 3
+		}
+	],
+	equipment: []
+};
+
 Recipes[DragonBreathEngineBlock.prototype.classId()] =
 {
 	reactants: [
 		{
-			blockType: IronEngineBlock.prototype.classId(),
-			quantity: 1
+			blockType: DragonBlock.prototype.classId(),
+			quantity: 3
 		},
 		{
-			blockType: DragonBlock.prototype.classId(),
-			quantity: 1
+			blockType: CarbonBlock.prototype.classId(),
+			quantity: 3
+		},
+		{
+			blockType: IceBlock.prototype.classId(),
+			quantity: 3
 		}
 	],
 	equipment: []
@@ -62,6 +85,21 @@ Recipes[IronThrusterBlock.prototype.classId()] =
 	equipment: []
 };
 
+Recipes[SteelThrusterBlock.prototype.classId()] =
+{
+	reactants: [
+		{
+			blockType: SteelBlock.prototype.classId(),
+			quantity: 3
+		},
+		{
+			blockType: GoldBlock.prototype.classId(),
+			quantity: 1
+		}
+	],
+	equipment: []
+};
+
 Recipes[KryptoniteThrusterBlock.prototype.classId()] =
 {
 	reactants: [
@@ -70,7 +108,7 @@ Recipes[KryptoniteThrusterBlock.prototype.classId()] =
 			quantity: 1
 		},
 		{
-			blockType: KryptoniteBlock.prototype.classId(),
+			blockType: KryptonitePlatingBlock.prototype.classId(),
 			quantity: 1
 		}
 	],
@@ -119,6 +157,44 @@ Recipes[MythrilPlatingBlock.prototype.classId()] =
 	equipment: []
 };
 
+Recipes[AdamantiumPlatingBlock.prototype.classId()] =
+{
+	reactants: [
+		{
+			blockType: AdamantiumBlock.prototype.classId(),
+			quantity: 3
+		},
+		{
+			blockType: CarbonBlock.prototype.classId(),
+			quantity: 2
+		},
+		{
+			blockType: IceBlock.prototype.classId(),
+			quantity: 10
+		}
+	],
+	equipment: []
+};
+
+Recipes[SteelPlatingBlock.prototype.classId()] =
+{
+	reactants: [
+		{
+			blockType: SteelBlock.prototype.classId(),
+			quantity: 4
+		},
+		{
+			blockType: CarbonBlock.prototype.classId(),
+			quantity: 1
+		},
+		{
+			blockType: IronBlock.prototype.classId(),
+			quantity: 2
+		}
+	],
+	equipment: []
+};
+
 
 
 
@@ -142,6 +218,23 @@ Recipes[RefinedMythrilBlock.prototype.classId()] =
 	],
 	equipment: []
 };
+
+Recipes[SteelBlock.prototype.classId()] =
+{
+	reactants: [
+		{
+			blockType: IronBlock.prototype.classId(),
+			quantity: 1
+		},
+		{
+			blockType: CarbonBlock.prototype.classId(),
+			quantity: 3
+		}
+	],
+	equipment: []
+};
+
+
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
 	module.exports = Recipes; }

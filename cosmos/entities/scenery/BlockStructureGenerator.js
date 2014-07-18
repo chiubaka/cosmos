@@ -261,7 +261,7 @@ var BlockStructureGenerator = {
 			"MythrilBlock": 1,
 			"AdamantiumBlock": 1,
 			"VioletBlock": 1,
-			"OrangeBlock": 1,
+			"SteelBlock": 1,
 			//here are some easter-egg type things, which will add up to 0.002
 			/* //I've commented this out per LEO-522
 			// The idea is to make mining more exciting by having really unusual things buried inside of asteroids.
@@ -312,9 +312,9 @@ var BlockStructureGenerator = {
 			"PowerBlock": .1,
 			"IronThrusterBlock": .1,
 			"CargoBlock": .1,
-			"HullBlock": .3,
+			"IronPlatingBlock": .3,
 			"MiningLaserBlock": .1,
-			"TitaniumBlock": .1,
+			"TitaniumPlatingBlock": .1,
 			"CloakBlock": .1
 		},
 
@@ -324,7 +324,7 @@ var BlockStructureGenerator = {
 			"PowerBlock": .05,
 			"IronThrusterBlock": .05,
 			"CargoBlock": .5,
-			"HullBlock": .3
+			"IronPlatingBlock": .3
 		},
 
 		/**

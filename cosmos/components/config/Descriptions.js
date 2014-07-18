@@ -12,9 +12,9 @@ Descriptions[Armor.prototype.classId()] =
 	text: 'An armor block. Useful for protecting important parts of your ship.'
 };
 
-Descriptions[AdamantiumBlock.prototype.classId()] =
+Descriptions[AdamantiumPlatingBlock.prototype.classId()] =
 {
-	text: Descriptions[Armor.prototype.classId()].text + ' Provides extra defense against cats.'
+	text: Descriptions[Armor.prototype.classId()].text
 };
 
 Descriptions[CloakBlock.prototype.classId()] =
@@ -32,17 +32,17 @@ Descriptions[CloakBlockVioletLight.prototype.classId()] =
 	text: Descriptions[Armor.prototype.classId()].text + " Doesn't actually cloak your ship."
 };
 
-Descriptions[DragonBlock.prototype.classId()] =
+Descriptions[DragonPlatingBlock.prototype.classId()] =
 {
 	text: Descriptions[Armor.prototype.classId()].text + " Provides extra defense against fire."
 };
 
-Descriptions[HullBlock.prototype.classId()] =
+Descriptions[IronPlatingBlock.prototype.classId()] =
 {
 	text: Descriptions[Armor.prototype.classId()].text + ""
 };
 
-Descriptions[KryptoniteBlock.prototype.classId()] =
+Descriptions[KryptonitePlatingBlock.prototype.classId()] =
 {
 	text: Descriptions[Armor.prototype.classId()].text + " Provides extra defense against super-humans."
 };
@@ -52,21 +52,15 @@ Descriptions[MythrilPlatingBlock.prototype.classId()] =
 	text: Descriptions[Armor.prototype.classId()].text + " There was once a myth about this block. But you've forgotten what it was."
 };
 
-Descriptions[OrangeBlock.prototype.classId()] =
+Descriptions[SteelPlatingBlock.prototype.classId()] =
 {
-	text: Descriptions[Armor.prototype.classId()].text + " No one knows why this block is orange."
+	text: Descriptions[Armor.prototype.classId()].text
 };
 
-Descriptions[TitaniumBlock.prototype.classId()] =
+Descriptions[TitaniumPlatingBlock.prototype.classId()] =
 {
 	text: Descriptions[Armor.prototype.classId()].text + " Not only that, it sells for over $1k per kg on the open market."
 };
-
-Descriptions[VioletBlock.prototype.classId()] =
-{
-	text: Descriptions[Armor.prototype.classId()].text + " Very purple. Very very purple."
-};
-
 
 
 
@@ -112,6 +106,26 @@ Descriptions[IronBlock.prototype.classId()] =
 	text: "Iron is the primary component of most asteroids. It is also the basic metal out of which many basic ship-parts are created."
 };
 
+Descriptions[DragonBlock.prototype.classId()] =
+{
+	text: "The essential remains of space dragons. Dragon can be used to craft advanced engines."
+};
+
+Descriptions[KryptoniteBlock.prototype.classId()] =
+{
+	text: "Kryptonite is a not-yet-understood element that radiates a disruptive magnetic field. It can be used to craft advanced thrusters."
+};
+
+Descriptions[SteelBlock.prototype.classId()] =
+{
+	text: "Steel is tempered form of iron, strengthed by added carbon. Steel is a basic building block of many ship-parts."
+};
+
+Descriptions[TitaniumBlock.prototype.classId()] =
+{
+	text: "Titanium is one of the strongest metals known to man. It can be used to build advanced defence systems."
+};
+
 Descriptions[MythrilBlock.prototype.classId()] =
 {
 	text: "Mythril is a rare and strong metal. Refine Mythril before using it to make ship-parts."
@@ -143,6 +157,7 @@ Descriptions[ControlBlock.prototype.classId()] =
 	text: "Control doesn't currently do anything."
 };
 
+/* Engines */
 Descriptions[IronEngineBlock.prototype.classId()] =
 {
 	text: 'Engines allow your ship to move forward and backwards. The more engines your ship has, the faster ' +
@@ -150,6 +165,11 @@ Descriptions[IronEngineBlock.prototype.classId()] =
 		'on your ship, your ship will become heavier and you will need more Engines in order to fly at the same ' +
 		'speed as before. Additionally, if you place engines on your ship in a lopsided manner, your ship will not ' +
 		'fly straight.'
+};
+
+Descriptions[SteelEngineBlock.prototype.classId()] =
+{
+	text: "An engine with more strength and durability than the Iron Engine."
 };
 
 Descriptions[DragonBreathEngineBlock.prototype.classId()] =
@@ -168,12 +188,18 @@ Descriptions[PowerBlock.prototype.classId()] =
 	text: "Power doesn't currently do anything."
 };
 
+/* Thrusters */
 Descriptions[IronThrusterBlock.prototype.classId()] =
 {
 	text: 'Thrusters allow your ship to rotate left and right. The more thrusters your ship has, the faster ' +
 		'it can rotate. If you have no thrusters, your ship cannot rotate. As you place more blocks on your ship, ' +
 		'your ship will become heavier and you will need more thrusters in order to rotate at the same speed as ' +
 		'before.'
+};
+
+Descriptions[SteelThrusterBlock.prototype.classId()] =
+{
+	text: "A thruster with more strength and durability than the Iron Thruster."
 };
 
 Descriptions[KryptoniteThrusterBlock.prototype.classId()] =

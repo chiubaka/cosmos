@@ -23,16 +23,25 @@ var igeClientConfig = {
 
 		/* Ship part blocks */
 		'./entities/blocks/Part.js',
+
+		/* Engines */
 		'./entities/blocks/parts/EngineBlock.js',
 		'./entities/blocks/parts/engines/IronEngineBlock.js',
+		'./entities/blocks/parts/engines/SteelEngineBlock.js',
 		'./entities/blocks/parts/engines/DragonBreathEngineBlock.js',
+
+		/* Misc */
 		'./entities/blocks/parts/PowerBlock.js',
 		'./entities/blocks/parts/FuelBlock.js',
 		'./entities/blocks/parts/CargoBlock.js',
 		'./entities/blocks/parts/ControlBlock.js',
+
+		/* Thrusters */
 		'./entities/blocks/parts/ThrusterBlock.js',
 		'./entities/blocks/parts/thrusters/IronThrusterBlock.js',
+		'./entities/blocks/parts/thrusters/SteelThrusterBlock.js',
 		'./entities/blocks/parts/thrusters/KryptoniteThrusterBlock.js',
+
 
 		/* Weapons */
 		'./entities/blocks/parts/Weapon.js',
@@ -40,18 +49,17 @@ var igeClientConfig = {
 
 		/* Ship armor blocks */
 		'./entities/blocks/parts/Armor.js',
-		'./entities/blocks/parts/armor/HullBlock.js',
+		'./entities/blocks/parts/armor/IronPlatingBlock.js',
 		'./entities/blocks/parts/armor/CloakBlock.js',
 		'./entities/blocks/parts/armor/CloakBlockLight.js',
 		'./entities/blocks/parts/armor/CloakBlockViolet.js',
 		'./entities/blocks/parts/armor/CloakBlockVioletLight.js',
-		'./entities/blocks/parts/armor/KryptoniteBlock.js',
-		'./entities/blocks/parts/armor/AdamantiumBlock.js',
+		'./entities/blocks/parts/armor/KryptonitePlatingBlock.js',
+		'./entities/blocks/parts/armor/AdamantiumPlatingBlock.js',
 		'./entities/blocks/parts/armor/MythrilPlatingBlock.js',
-		'./entities/blocks/parts/armor/DragonBlock.js',
-		'./entities/blocks/parts/armor/TitaniumBlock.js',
-		'./entities/blocks/parts/armor/VioletBlock.js',
-		'./entities/blocks/parts/armor/OrangeBlock.js',
+		'./entities/blocks/parts/armor/DragonPlatingBlock.js',
+		'./entities/blocks/parts/armor/TitaniumPlatingBlock.js',
+		'./entities/blocks/parts/armor/SteelPlatingBlock.js',
 
 		/* Element blocks */
 		'./entities/blocks/Element.js',
@@ -64,6 +72,11 @@ var igeClientConfig = {
 		'./entities/blocks/elements/MythrilBlock.js',
 		'./entities/blocks/elements/RefinedMythrilBlock.js',
 
+		'./entities/blocks/elements/AdamantiumBlock.js',
+		'./entities/blocks/elements/DragonBlock.js',
+		'./entities/blocks/elements/KryptoniteBlock.js',
+		'./entities/blocks/elements/SteelBlock.js',
+		'./entities/blocks/elements/TitaniumBlock.js',
 
 
 		/* Effects */
