@@ -72,6 +72,7 @@ var Player = IgeEntity.extend({
 		};
 
 		this.addComponent(CraftingComponent);
+		this.addComponent(QuestComponent);
 	},
 
 	/**

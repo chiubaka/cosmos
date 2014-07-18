@@ -89,6 +89,9 @@ var Server = IgeClass.extend({
 						// Add crafting system
 						ige.addComponent(CraftingSystem);
 
+						// Add quest system
+						ige.addComponent(QuestSystem);
+
 						GameInit.init(self);
 
 						// Accept incoming network connections

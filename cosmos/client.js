@@ -119,12 +119,14 @@ var Client = IgeClass.extend({
 							.stream.renderLatency(100); // Render the simulation 100 milliseconds in the past
 
 						// Enable notifications
-						ige.addComponent(NotificationComponent);
-						ige.notification.addComponent(NotificationUIComponent)
-							.start();
+						ige.addComponent(NotificationComponent)
+						ige.notification.start();
 
 						// Enable crafting system
 						ige.addComponent(CraftingSystem);
+
+						// Enable quest system
+						ige.addComponent(QuestSystem);
 
 						GameInit.init(self);
 

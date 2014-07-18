@@ -108,6 +108,12 @@ var igeClientConfig = {
 		'./crafting/CraftingSystem.js',
 		'./crafting/CraftingComponent.js',
 
+		/* === Quests === */
+		'./quest/QuestSystem.js',
+		'./quest/QuestComponent.js',
+		'./quest/Quest.js',
+		'./quest/TutorialQuest.js',
+
 		/* Notifications */
 		'./notifications/NotificationDefinitions.js',
 		'./notifications/NotificationComponent.js',

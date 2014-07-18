@@ -86,7 +86,6 @@ var ServerNetworkEvents = {
 			}
 			// No player associated with this session! Playing as a guest.
 			else if (playerId === undefined) {
-
 			}
 
 			/**
