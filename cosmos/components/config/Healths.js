@@ -64,22 +64,22 @@ Healths[IronPlatingBlock.prototype.classId()] =
 
 Healths[KryptonitePlatingBlock.prototype.classId()] =
 {
-	max: 60
+	max: 85
 };
 
 Healths[MythrilPlatingBlock.prototype.classId()] =
 {
-	max: 60
+	max: 80
 };
 
 Healths[SteelPlatingBlock.prototype.classId()] =
 {
-	max: 60
+	max: 50
 };
 
 Healths[TitaniumPlatingBlock.prototype.classId()] =
 {
-	max: 60
+	max: 90
 };
 
 /* Engines */
