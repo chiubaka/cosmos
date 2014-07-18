@@ -46,8 +46,8 @@ var igeClientConfig = {
 		'./entities/blocks/parts/armor/CloakBlockViolet.js',
 		'./entities/blocks/parts/armor/CloakBlockVioletLight.js',
 		'./entities/blocks/parts/armor/KryptoniteBlock.js',
-		'./entities/blocks/parts/armor/MithrilBlock.js',
 		'./entities/blocks/parts/armor/AdamantiumBlock.js',
+		'./entities/blocks/parts/armor/MythrilPlatingBlock.js',
 		'./entities/blocks/parts/armor/DragonBlock.js',
 		'./entities/blocks/parts/armor/TitaniumBlock.js',
 		'./entities/blocks/parts/armor/VioletBlock.js',
@@ -61,6 +61,10 @@ var igeClientConfig = {
 		'./entities/blocks/elements/CobaltBlock.js',
 		'./entities/blocks/elements/GoldBlock.js',
 		'./entities/blocks/elements/IceBlock.js',//not really an element
+		'./entities/blocks/elements/MythrilBlock.js',
+		'./entities/blocks/elements/RefinedMythrilBlock.js',
+
+
 
 		/* Effects */
 		'./entities/effects/mining/LaserBeam.js',

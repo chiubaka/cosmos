@@ -1,5 +1,8 @@
 var Healths = {};
 
+
+
+
 /* === PARTS === */
 
 Healths[CargoBlock.prototype.classId()] =
@@ -64,7 +67,7 @@ Healths[KryptoniteBlock.prototype.classId()] =
 	max: 60
 };
 
-Healths[MithrilBlock.prototype.classId()] =
+Healths[MythrilPlatingBlock.prototype.classId()] =
 {
 	max: 60
 };
@@ -114,6 +117,10 @@ Healths[MiningLaserBlock.prototype.classId()] =
 	max: 50
 };
 
+
+
+
+
 /* === ELEMENTS === */
 
 Healths[CarbonBlock.prototype.classId()] =
@@ -145,5 +152,17 @@ Healths[IronBlock.prototype.classId()] =
 {
 	max: 25
 };
+
+Healths[MythrilBlock.prototype.classId()] =
+{
+	max: 60
+};
+
+Healths[RefinedMythrilBlock.prototype.classId()] =
+{
+	max: 80
+};
+
+
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Healths; }

@@ -1,8 +1,11 @@
 var Recipes = {};
 
+
+
+
 /* === PARTS === */
 
-/* Engines */
+/* === Engines === */
 
 Recipes[IronEngineBlock.prototype.classId()] =
 {
@@ -38,7 +41,7 @@ Recipes[DragonBreathEngineBlock.prototype.classId()] =
 	equipment: []
 };
 
-/* Thrusters */
+/* === Thrusters === */
 
 Recipes[IronThrusterBlock.prototype.classId()] =
 {
@@ -74,7 +77,7 @@ Recipes[KryptoniteThrusterBlock.prototype.classId()] =
 	equipment: []
 };
 
-/* Weapons */
+/* === Weapons === */
 
 Recipes[MiningLaserBlock.prototype.classId()] =
 {
@@ -89,6 +92,51 @@ Recipes[MiningLaserBlock.prototype.classId()] =
 		},
 		{
 			blockType: GoldBlock.prototype.classId(),
+			quantity: 1
+		}
+	],
+	equipment: []
+};
+
+/* === Armor === */
+
+Recipes[MythrilPlatingBlock.prototype.classId()] =
+{
+	reactants: [
+		{
+			blockType: RefinedMythrilBlock.prototype.classId(),
+			quantity: 3
+		},
+		{
+			blockType: CarbonBlock.prototype.classId(),
+			quantity: 2
+		},
+		{
+			blockType: FluorineBlock.prototype.classId(),
+			quantity: 1
+		}
+	],
+	equipment: []
+};
+
+
+
+
+
+
+/* === RESOURES === */
+
+/* === Refined Elements === */
+
+Recipes[RefinedMythrilBlock.prototype.classId()] =
+{
+	reactants: [
+		{
+			blockType: MythrilBlock.prototype.classId(),
+			quantity: 3
+		},
+		{
+			blockType: CarbonBlock.prototype.classId(),
 			quantity: 1
 		}
 	],

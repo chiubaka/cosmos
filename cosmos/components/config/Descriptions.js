@@ -47,7 +47,7 @@ Descriptions[KryptoniteBlock.prototype.classId()] =
 	text: Descriptions[Armor.prototype.classId()].text + " Provides extra defense against super-humans."
 };
 
-Descriptions[MithrilBlock.prototype.classId()] =
+Descriptions[MythrilPlatingBlock.prototype.classId()] =
 {
 	text: Descriptions[Armor.prototype.classId()].text + " There was once a myth about this block. But you've forgotten what it was."
 };
@@ -66,6 +66,11 @@ Descriptions[VioletBlock.prototype.classId()] =
 {
 	text: Descriptions[Armor.prototype.classId()].text + " Very purple. Very very purple."
 };
+
+
+
+
+
 
 
 /* === Elements === */
@@ -107,7 +112,22 @@ Descriptions[IronBlock.prototype.classId()] =
 	text: "Iron is the primary component of most asteroids. It is also the basic metal out of which many basic ship-parts are created."
 };
 
-/* === === */
+Descriptions[MythrilBlock.prototype.classId()] =
+{
+	text: "Mythril is a rare and strong metal. Refine Mythril before using it to make ship-parts."
+};
+
+Descriptions[RefinedMythrilBlock.prototype.classId()] =
+{
+	text: "Refined Mythril is ready to be crafted into useful ship-parts."
+};
+
+
+
+
+
+
+/* === Parts === */
 Descriptions[Part.prototype.classId()] =
 {
 	text: 'A ship part block with no special properties (yet).'

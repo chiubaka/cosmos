@@ -258,7 +258,7 @@ var BlockStructureGenerator = {
 			"TitaniumBlock": 1,
 			"CloakBlock": 1,
 			"CloakVioletBlock": 1,
-			"MithrilBlock": 1,
+			"MythrilBlock": 1,
 			"AdamantiumBlock": 1,
 			"VioletBlock": 1,
 			"OrangeBlock": 1,

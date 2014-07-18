@@ -43,8 +43,8 @@ var config = {
 		{ name: 'CloakBlockViolet', path: './entities/blocks/parts/armor/CloakBlockViolet' },
 		{ name: 'CloakBlockVioletLight', path: './entities/blocks/parts/armor/CloakBlockVioletLight' },
 		{ name: 'KryptoniteBlock', path: './entities/blocks/parts/armor/KryptoniteBlock' },
-		{ name: 'MithrilBlock', path: './entities/blocks/parts/armor/MithrilBlock' },
 		{ name: 'AdamantiumBlock', path: './entities/blocks/parts/armor/AdamantiumBlock' },
+		{ name: 'MythrilPlatingBlock', path: './entities/blocks/parts/armor/MythrilPlatingBlock' },
 		{ name: 'DragonBlock', path: './entities/blocks/parts/armor/DragonBlock' },
 		{ name: 'TitaniumBlock', path: './entities/blocks/parts/armor/TitaniumBlock' },
 		{ name: 'VioletBlock', path: './entities/blocks/parts/armor/VioletBlock' },
@@ -58,6 +58,10 @@ var config = {
 		{ name: 'GoldBlock', path: './entities/blocks/elements/GoldBlock' },
 		{ name: 'CobaltBlock', path: './entities/blocks/elements/CobaltBlock' },
 		{ name: 'IceBlock', path: './entities/blocks/elements/IceBlock' },//not really an element
+		{ name: 'MythrilBlock', path: './entities/blocks/elements/MythrilBlock' },
+
+		/* Refined element blocks */
+		{ name: 'RefinedMythrilBlock', path: './entities/blocks/elements/RefinedMythrilBlock' },
 
 		/* Structures (Prefabs) */
 		{ name: 'ExampleShips', path: './entities/prefabs/ExampleShips' },
