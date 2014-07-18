@@ -48,7 +48,9 @@ function changeBlockName(db, collectionName, blockName, newBlockName, callback) 
 			for (var i = 0; i < players.length; i++) {
 				var player = players[i];
 				var ship = player.ship;
+				var cargo = player.cargo;
 
+				// Change old blocks on ships
 				for (var row = 0; row < ship.length; row++) {
 					var shipRow = ship[row];
 					for (var col = 0; col < shipRow.length; col++) {
@@ -57,7 +59,22 @@ function changeBlockName(db, collectionName, blockName, newBlockName, callback) 
 						}
 					}
 				}
+
+				// Change old blocks on cargo
+				// Loop through all cargo containers
+				for (var container = 0; container < cargo.length; container++) {
+					var containerData = cargo[container].containerData;
+					// Check if cargo container has this type of block
+					if (containerData.hasOwnProperty(blockName)){
+						// Create new block property
+						containerData[newBlockName] = containerData[blockName];
+						// Delete old block property
+						delete containerData[blockName];
+					}
+				}
+
 				player.ship = ship;
+				player.cargo = cargo;
 
 				updatesInProgress++;
 				collection.update({_id: player._id}, player, function(err, result) {
