@@ -418,7 +418,7 @@ var TutorialQuest = Quest.extend({
 				var questLog = alertify.questLog('Now, click on the construction zones around your ship.');
 				var listener = ige.on('cosmos:BlockGrid.processBlockActionClient.add',
 					function (selectedType, blockGrid) {
-					if (blockGrid === ige.client.player) {
+					if (blockGrid === ige.client.player.currentShip()) {
 						questLog.close();
 						ige.off('cosmos:BlockGrid.processBlockActionClient.add', listener);
 						alertify.questLog('Wow! You\'ve constructed a block on your ship!',

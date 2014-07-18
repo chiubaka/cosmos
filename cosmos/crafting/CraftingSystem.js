@@ -42,7 +42,7 @@ var CraftingSystem = IgeEventingClass.extend({
 			return;
 		}
 		// Check if player cargo exists
-		cargo = player.cargo;
+		cargo = player.currentShip().cargo;
 		if (cargo === undefined) {
 			ige.craftingSystem.log('CraftingSystem#_craftServer: Cargo is undefined', 'warning');
 			return;
@@ -61,7 +61,7 @@ var CraftingSystem = IgeEventingClass.extend({
 		}
 
 	},
-	
+
 	/**
 	 * Checks if the recipe is craftable by the player.
 	 * A recipe is craftable if the player has:
@@ -137,7 +137,7 @@ var CraftingSystem = IgeEventingClass.extend({
 
 		cargo.addBlock(recipeName);
 
-		DbPlayer.update(player.dbId(), player, function() {});
+		DbPlayer.update(player.id(), player, function() {});
 	},
 
 	// @client-side

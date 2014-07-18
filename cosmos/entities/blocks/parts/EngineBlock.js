@@ -19,7 +19,7 @@ var EngineBlock = Part.extend({
 	 * @instance
 	 */
 	onAdded: function() {
-		if (!ige.isServer && this.blockGrid().classId() === 'Player') {
+		if (!ige.isServer && this.blockGrid().classId() === 'Ship') {
 			this.addEffect(NetworkUtils.effect('engineParticles', this));
 		}
 	},
@@ -31,7 +31,7 @@ var EngineBlock = Part.extend({
 	 * @instance
 	 */
 	onRemove: function() {
-		if (!ige.isServer && this.blockGrid().classId() === 'Player') {
+		if (!ige.isServer && this.blockGrid().classId() === 'Ship') {
 			this.removeEffect(NetworkUtils.effect('engineParticles', this));
 		}
 	},

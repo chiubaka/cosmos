@@ -18,7 +18,7 @@ var QuestSystem = IgeEventingClass.extend({
 			ige.addBehaviour('questStepClient', this._questStepClient);
 			// Show the tutorial for the guest user and the logged in guest user
 			ige.on('cosmos:NamePrompt.hide', this._tutorialQuest, this, true);
-			ige.on('cosmos:client.player.streamed', this._tutorialQuest, this, true);
+			ige.on('cosmos:client.ship.streamed', this._tutorialQuest, this, true);
 		}
 		this.log('Quest system initiated');
 	},
@@ -181,7 +181,8 @@ var QuestSystem = IgeEventingClass.extend({
 	_tutorialQuest: function() {
 		// TODO: This is sort of hacky. We want a unified way of showing new
 		// players the tutorial
-		if (ige.namePrompt !== undefined && !ige.namePrompt.hidden) {
+		if ((ige.namePrompt !== undefined && !ige.namePrompt.hidden) ||
+			(ige.client.player.loggedIn() && !ige.client.player.hasGuestUsername)) {
 			return;
 		}
 		var message = "Hi! We noticed that you are a guest user. Would you " +
