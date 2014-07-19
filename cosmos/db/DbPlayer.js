@@ -20,7 +20,7 @@ var DbPlayer = {
 		ige.mongo.db.collection('players', function(err, players) {
 			players.findOne({_id: playerId}, function(err, player) {
 				if (player == undefined) {
-					callback(err, undefined, undefined);
+					callback(err, undefined, undefined, undefined);
 				}
 				else {
 					callback(err, player.username, player.ship, player.cargo);
@@ -38,20 +38,25 @@ var DbPlayer = {
 	 * @memberof DbPlayer
 	 */
 	update: function(playerId, player, callback) {
-		if (playerId === undefined) {
+		// Don't save players who are not logged in
+		if (player.loggedIn() === false) {
 			callback(undefined, undefined);
 			return;
 		}
 
 		ige.mongo.db.collection('players', function(err, players) {
-			// If this logged in player has a guest username, don't save it to the database. This way, we'll prompt
-			// them to set a username again next time they log in.
+			// If this logged in player has a guest username, don't save it to the
+			// database. This way, we'll prompt them to set a username again next
+			// time they log in.
 			var username = player.hasGuestUsername ? undefined : player.username();
-			var ship = player.toBlockTypeMatrix();
-			var cargo = player.cargo.serializeCargo();
+			var lowerCaseUsername = player.hasGuestUsername ? undefined : username.toLowerCase();
+
+			var ship = player.currentShip().toBlockTypeMatrix();
+			var cargo = player.currentShip().cargo.serializeCargo();
+
 			players.update(
 				{_id: playerId},
-				{_id: playerId, username: username, lowerCaseUsername: username.toLowerCase(), ship: ship, cargo: cargo},
+				{_id: playerId, username: username, lowerCaseUsername: lowerCaseUsername, ship: ship, cargo: cargo},
 				{upsert: true},
 				callback
 			);

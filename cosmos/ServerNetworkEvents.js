@@ -40,7 +40,7 @@ var ServerNetworkEvents = {
 	_destroyPlayer: function(clientId, player) {
 		// Handle destroying player state first
 		// Unsubscribe players from updates
-		player.cargo.unsubscribeFromUpdates(clientId);
+		player.currentShip().cargo.unsubscribeFromUpdates(clientId);
 
 		var self = this;
 		/**
@@ -48,17 +48,19 @@ var ServerNetworkEvents = {
 		 * @param err {Error | null}
 		 * @param result {*}
 		 */
-		DbPlayer.update(player.dbId(), player, function(err, result) {
+		DbPlayer.update(player.id(), player, function(err, result) {
 			if (err) {
 				self.log('Cannot save player in database!', 'error')
 			}
 
 			// Remove the player from the game
 			player.destroy();
+			// Remove the player's ship from the game
+			player.currentShip().destroy();
 
 			// Remove the reference to the player entity
 			// so that we don't leak memory
-			delete player;
+			delete ige.server.players[player];
 		});
 	},
 
@@ -84,7 +86,6 @@ var ServerNetworkEvents = {
 			}
 			// No player associated with this session! Playing as a guest.
 			else if (playerId === undefined) {
-
 			}
 
 			/**
@@ -95,7 +96,7 @@ var ServerNetworkEvents = {
 			 */
 			DbPlayer.load(playerId, function(err, username, ship, cargo) {
 				if (err) {
-					self.log('Cannot load player from database!', 'error')
+					self.log('Cannot load player from database!', 'error');
 				}
 
 				ige.server._createPlayer(clientId, playerId, username, ship, cargo);
@@ -112,46 +113,72 @@ var ServerNetworkEvents = {
 	 * @private
 	 */
 	_createPlayer: function(clientId, playerId, username, ship, cargo) {
-		var player = new Player()
-			// Call BlockGrid#debugFixtures before calling BlockGrid#fromBlockMatrix, since debugging entities are
-			// added when fixtures are added.
-			.debugFixtures(false);
-
-		player.username(username);
-
-		if (ship === undefined) {
-			player.fromBlockMatrix(ExampleShips.starterShip(), false);
+		// If the player isn't logged in, give the player a unique id.
+		// Otherwise, give the player the saved database id
+		var loggedIn;
+		if (playerId === undefined) {
+			// TODO: Make sure this id doesn't conflict with previous player IDs
+			playerId = ige.newIdHex();
+			loggedIn = false;
 		}
 		else {
-			player.fromBlockTypeMatrix(ship, false);
+			loggedIn = true;
 		}
 
-		if (playerId !== undefined) {
-			player.dbId(playerId);
-		}
+		var player = new Player();
+		player.id(playerId);
+		player.clientId(clientId);
+		player.loggedIn(loggedIn);
+		player.username(username);
 
+		// If the player doesn't yet have a username, generate a guest username for him
 		if (!player.username()) {
 			player.generateGuestUsername();
 			player.hasGuestUsername = true;
 		}
-
-		player.addSensor(300)
-			.attractionStrength(1)
-			.streamMode(1)
-			.clientId(clientId)
-			.mount(ige.server.spaceGameScene)
-			.relocate();
-
-		player.cargo.rehydrateCargo(cargo);
+		else {
+			player.hasGuestUsername = false;
+		}
 
 		ige.server.players[clientId] = player;
 
 		var sendData = {
-			entityId: ige.server.players[clientId].id(),
+			playerId: ige.server.players[clientId].id(),
+			username: player.username(),
+			hasGuestUsername: player.hasGuestUsername,
+			loggedIn: player.loggedIn()
 		};
 
 		// Tell the client to track their player entity
 		ige.network.send('playerEntity', sendData, clientId);
+
+		// Load the player's ships
+		ige.server._createShip(clientId, playerId, ship, cargo);
+	},
+
+	_createShip: function(clientId, playerId, ship, cargo) {
+		player = ige.server.players[clientId];
+
+		player.currentShip(
+			new Ship()
+				.streamMode(1)
+				.mount(ige.$("spaceGameScene"))
+		);
+
+		if (ship === undefined) {
+			player.currentShip().fromBlockMatrix(ExampleShips.starterShip(), false);
+		}
+		else {
+			player.currentShip().fromBlockTypeMatrix(ship, false);
+		}
+
+		player.currentShip().cargo.rehydrateCargo(cargo);
+
+		var sendData = {
+			shipId: player.currentShip().id()
+		}
+
+		ige.network.send('shipEntity', sendData, clientId);
 	},
 
 	/**
@@ -166,7 +193,7 @@ var ServerNetworkEvents = {
 			return;
 		}
 
-		player.relocate();
+		player.currentShip().relocate();
 		ige.network.stream.queueCommand('notificationSuccess',
 			NotificationDefinitions.successKeys.relocateShip, clientId);
 	},
@@ -183,16 +210,18 @@ var ServerNetworkEvents = {
 			return;
 		}
 
-		var playerId = player.dbId();
-		ige.server._destroyPlayer(clientId, player);
+		var playerId = player.id();
+		//ige.server._destroyPlayer(clientId, player);
 		// We pass no third or fourth argument to _createPlayer() here, which requests a completely new ship
-		ige.server._createPlayer(clientId, playerId, player.username());
+		//ige.server._createPlayer(clientId, playerId, player.username());
+		player.currentShip().destroy();
+		ige.server._createShip(clientId, playerId);
 		ige.network.stream.queueCommand('notificationSuccess',
 			NotificationDefinitions.successKeys.newShip, clientId);
 	},
 
 	/**
-	Called when the player updates the state of his control object
+	Called when the player updates the state of his control object.
 	data in this case represents the *new* state of the player's controls
 	*/
 	_onPlayerControlUpdate: function(data, clientId) {
@@ -201,7 +230,7 @@ var ServerNetworkEvents = {
 			return;
 		}
 
-		player._controls = data;
+		player.controls(data);
 	},
 
 	// TODO: User access control. Restrict what players can do based on clientId
@@ -218,17 +247,17 @@ var ServerNetworkEvents = {
 			return;
 		}
 
-		if (!player.canMine()) {
+		if (!player.currentShip().canMine()) {
 			return;
 		}
 
 		data.action = 'mine';
 		if(blockGrid.processBlockActionServer(data, player)) {
-			player.mining = true;
+			player.currentShip().mining = true;
 
 			var targetBlock = blockGrid.get(data.row, data.col);
 			// Activate mining lasers
-			player.fireMiningLasers(targetBlock);
+			player.currentShip().fireMiningLasers(targetBlock);
 		}
 	},
 
@@ -239,7 +268,7 @@ var ServerNetworkEvents = {
 		}
 
 		// TODO: Extract this into a new method and call it with an event emission!
-		var blockToPlace = player.cargo.extractType(data.selectedType)[0];
+		var blockToPlace = player.currentShip().cargo.extractType(data.selectedType)[0];
 
 		if (blockToPlace !== undefined) {
 			//console.log("Placing item: " + blockToPlace.classId(), 'info');
@@ -252,10 +281,10 @@ var ServerNetworkEvents = {
 
 			var confirmData = { category: 'construct', action: 'new', label: data.selectedType };
 			ige.network.send('confirm', confirmData, clientId);
-			ige.network.stream.queueCommand('notificationSuccess', 
+			ige.network.stream.queueCommand('notificationSuccess',
 				NotificationDefinitions.successKeys.constructNewBlock, clientId);
 
-			DbPlayer.update(player.dbId(), player, function() {});
+			DbPlayer.update(player.id(), player, function() {});
 		}
 	},
 
@@ -265,7 +294,7 @@ var ServerNetworkEvents = {
 			return;
 		}
 
-		var playerCargo = player.cargo;
+		var playerCargo = player.currentShip().cargo;
 
 		if (data !== undefined && data !== null) {
 			if (data.requestUpdates) {
@@ -286,14 +315,14 @@ var ServerNetworkEvents = {
 		}
 
 		// TODO: This extracts a block from the cargo and throws it away. Should use the result of this in the future!
-		var extractedBlocks = player.cargo.extractType(data.selectedType);
+		var extractedBlocks = player.currentShip().cargo.extractType(data.selectedType);
 
 		if (extractedBlocks.length > 0) {
 			var blockGrid = ige.$(data.blockGridId);
 			data.action = 'add';
 			blockGrid.processBlockActionServer(data, player);
 
-			DbPlayer.update(player.dbId(), player, function() {});
+			DbPlayer.update(player.id(), player, function() {});
 		}
 	}
 

@@ -181,7 +181,7 @@ var GameInit = {
 	initEnvironment: function() {
 		var server = ige.server;
 
-		var NUM_NORMAL_ASTEROIDS = 20;
+		var NUM_NORMAL_ASTEROIDS = 40;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
 			var asteroid = BlockStructureGenerator
 				.genProceduralAsteroid(200, BlockStructureGenerator.elementDistributions.randomDistribution())
@@ -191,21 +191,9 @@ var GameInit = {
 			this.moveRandomly(asteroid);
 		}
 
-		// Instead of creating a bunch of these up front, we might want to create them just ahead of a user as he's
-		// flying, and delete them right behind. This will be more efficient.
-		var NUM_SMALL_ASTEROIDS = 0;
-		for (var asteroidNumber = 0; asteroidNumber < NUM_SMALL_ASTEROIDS; asteroidNumber++) {
-			var asteroid = BlockStructureGenerator.singleBlock()
-				.category('smallAsteroid')
-				.id('littleAsteroid' + asteroidNumber)
-				.streamMode(1)
-				.mount(server.spaceGameScene)
-			this.moveRandomly(asteroid);
-		}
-
 		// TODO: The procedural generation algorithm is causing strange problems with the new BlockGrid system. Leave
 		// this stuff commented out until it is figured out.
-		var NUM_DERELICT_SPACESHIPS = 40;
+		var NUM_DERELICT_SPACESHIPS = 10;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_DERELICT_SPACESHIPS; asteroidNumber++) {
 			//note that the signature of gen.. is
 			// genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution)
@@ -229,42 +217,44 @@ var GameInit = {
 			// Listen for when contact's begin
 			function(contact) {
 				// If player ship is near small asteroids, attract them
-				if (contact.igeEitherCategory(Player.BOX2D_CATEGORY) &&
+				if (contact.igeEitherCategory(Ship.BOX2D_CATEGORY) &&
 					contact.igeEitherCategory(Drop.BOX2D_CATEGORY)) {
 					var drop = contact.igeEntityByCategory(Drop.BOX2D_CATEGORY);
-					var player = contact.igeEntityByCategory(Player.BOX2D_CATEGORY);
+					var ship = contact.igeEntityByCategory(Ship.BOX2D_CATEGORY);
 
 					contact.SetEnabled(false);
 
 					// TODO: Make it so blocks are attracted to multiple players
-					if (drop.attractedTo() === undefined && drop.isOwner(player)) {
-						drop.attractedTo(player);
+					if (drop.attractedTo() === undefined && drop.isOwner(ship)) {
+						drop.attractedTo(ship);
 					}
 				}
 			},
+
 			// Listen for when contacts end
 			function(contact) {
-				if (contact.igeEitherCategory(Player.BOX2D_CATEGORY) &&
+				if (contact.igeEitherCategory(Ship.BOX2D_CATEGORY) &&
 					contact.igeEitherCategory(Drop.BOX2D_CATEGORY)) {
-					var player = contact.igeEntityByCategory(Player.BOX2D_CATEGORY);
+					var ship = contact.igeEntityByCategory(Ship.BOX2D_CATEGORY);
 					var drop = contact.igeEntityByCategory(Drop.BOX2D_CATEGORY);
-					if (drop.isOwner(player)) {
+					if (drop.isOwner(ship)) {
 						drop.attractedTo(undefined);
 					}
 				}
 			},
+
 			// Presolve events. This is called after collision is detected, but
 			// before collision repsonse is calculated.
 			function(contact) {
 				if (contact.igeEitherCategory(Drop.BOX2D_CATEGORY)) {
 					contact.SetEnabled(false);
-					if (contact.igeEitherCategory(Player.BOX2D_CATEGORY)) {
+					if (contact.igeEitherCategory(Ship.BOX2D_CATEGORY)) {
 						var drop = contact.igeEntityByCategory(Drop.BOX2D_CATEGORY);
-						var player = contact.igeEntityByCategory(Player.BOX2D_CATEGORY);
-						var shipFixture = contact.fixtureByCategory(Player.BOX2D_CATEGORY);
+						var ship = contact.igeEntityByCategory(Ship.BOX2D_CATEGORY);
+						var shipFixture = contact.fixtureByCategory(Ship.BOX2D_CATEGORY);
 
 						// Asteroid has hit ship blocks, destroy the asteroid
-						if (!shipFixture.m_isSensor && drop.isOwner(player)) {
+						if (!shipFixture.m_isSensor && drop.isOwner(ship)) {
 							// Disable contact so player doesn't move due to collision
 							contact.SetEnabled(false);
 							// Ignore multiple collision points
@@ -273,7 +263,7 @@ var GameInit = {
 							}
 							var block = drop.block();
 							ige.emit('block collected',
-								[player, block.classId()]);
+								[player.currentShip(), block.classId()]);
 							drop.destroy();
 						}
 					}
@@ -282,7 +272,7 @@ var GameInit = {
 	},
 
 	initServerEvents: function() {
-		ige.on('block collected', Player.prototype.blockCollectListener);
+		ige.on('block collected', Ship.blockCollectListener);
 	},
 
 	initClientEvents: function() {
@@ -358,7 +348,7 @@ var GameInit = {
 	// TODO: Move this to a helper function that operates on IgeEntities
 	moveRandomly: function(entity) {
 		//this is the maximum distance that we will translate entities to
-		var MAX_DISTANCE = 7000;
+		var MAX_DISTANCE = 9000;
 		entity.translateTo((Math.random() - .5) * MAX_DISTANCE, (Math.random() - .5) * MAX_DISTANCE, 0);
 	}
 };

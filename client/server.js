@@ -18,7 +18,7 @@ var ENDPOINT_LAYER = process.env.ENDPOINT_LAYER || "local";
 // Local server
 // TODO: CHANGE THIS BASED ON LOCATION AND ENVIRONMENT
 var SERVER_HOST = {
-	local: "http://tl-cosmos.localtest.me:2001", 
+	local: "http://tl-cosmos.localtest.me:2001",
 	dev: "http://dev.cosmos.teamleonine.com",
 	preview: "http://preview.cosmos.teamleonine.com"
 };
@@ -26,7 +26,7 @@ var SERVER_HOST = {
 // Client secrets and callback URLs
 // Microsoft
 var MICROSOFT_CLIENT_ID = {
-	local: "000000004011FE88", 
+	local: "000000004011FE88",
 	dev: "000000004C11BAB2",
 	preview: "000000004C11C46D"
 };
@@ -219,7 +219,7 @@ app.get(FACEBOOK_AUTH_ROUTE,
 	}
 );
 
-app.get(FACEBOOK_CALLBACK, 
+app.get(FACEBOOK_CALLBACK,
 	passport.authenticate('facebook', { failureRedirect: '/login' }),
 	function(req, res) {
 		res.redirect(SUCCESS_REDIRECT_PATH);
@@ -232,7 +232,7 @@ app.get(FACEBOOK_CALLBACK,
 app.get(GOOGLE_AUTH_ROUTE,
   passport.authenticate('google', { scope: GOOGLE_SCOPE }));
 
-app.get(GOOGLE_CALLBACK, 
+app.get(GOOGLE_CALLBACK,
 	passport.authenticate('google', { failureRedirect: '/login' }),
 	function(req, res) {
 		// Successful authentication, redirect home.
@@ -251,7 +251,7 @@ http.createServer(app).listen(app.get('port'), function () {
 
 function ensureAuthenticated(req, res, next) {
 	if (req.isAuthenticated()) {
-		return next(); 
+		return next();
 	}
 	res.redirect('/login');
 }

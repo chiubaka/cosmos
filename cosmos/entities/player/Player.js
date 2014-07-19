@@ -8,7 +8,7 @@
  * @todo This design should be replaced by something more natural (like there should be a ship class) and/or
  * something component-based.
  */
-var Player = BlockStructure.extend({
+var Player = IgeEntity.extend({
 	classId: 'Player',
 
 	/**
@@ -19,35 +19,20 @@ var Player = BlockStructure.extend({
 	 * @instance
 	 */
 	_sid: undefined,
-	/**
-	 * The ID for this {@link Player} object in the database. Used for loading and storing data associated with a
-	 * particular {@link Player}.
-	 * @type {string}
-	 * @memberof Player
-	 * @private
-	 * @instance
-	 */
-	_dbId: undefined,
+	_loggedIn: undefined,
 	_username: undefined,
 	_usernameLabel: undefined,
 	hasGuestUsername: undefined,
+
+	/**
+	* The player's controls object. This represents the state of the player's instructions to to the game, like which keys are depressed.
+	* Network messages are used to keep this property in sync between the server and the client.
+	*/
 	_controls: undefined,
 	// Keep track of previous values so we can send the client notifications only
 	// on a change.
 	_prevControls: undefined,
 	_prevMovementBlocks: undefined,
-
-	_engines: undefined,
-	_thrusters: undefined,
-
-	/**
-	 * Whether or not this {@link Player} is mining. Used to restrict players from mining more than one {@link Block}
-	 * at a time.
-	 * @type {boolean}
-	 * @memberof Player
-	 * @instance
-	 */
-	mining: false,
 
 	/**
 	 * The clientId associated with the player. Used to send notifications to
@@ -59,15 +44,14 @@ var Player = BlockStructure.extend({
 	 */
 	 _clientId: undefined,
 
-	init: function(data) {
-		this._engines = [];
-		this._thrusters = [];
-		BlockStructure.prototype.init.call(this, data);
+	/**
+	 * The Ship object that this player is currently controlling. At some point, players may be able to control more than one ship.
+	 * Right now a player can only control one ship.
+	 */
+	_currentShip: undefined,
 
-		var self = this;
-
-		this.category(Player.BOX2D_CATEGORY);
-		this._attractionStrength = 1;
+	init: function() {
+		IgeEntity.prototype.init.call(this);
 
 		this._controls = {
 			key: {
@@ -87,29 +71,8 @@ var Player = BlockStructure.extend({
 			}
 		};
 
-		this._prevMovementBlocks = {
-			engines: 1,
-			thrusters: 1
-		};
-
-		if (ige.isClient) {
-			this._initClient(data);
-		} else {
-			this._initServer();
-		}
-
-		// Define the data sections that will be included in the stream
-		this.streamSections(['transform', 'score']);
-
 		this.addComponent(CraftingComponent);
-	},
-
-	streamCreateData: function() {
-		var data = BlockStructure.prototype.streamCreateData.call(this);
-		data.username = this.username();
-		data.dbId = this.dbId();
-		data.hasGuestUsername = this.hasGuestUsername;
-		return data;
+		this.addComponent(QuestComponent);
 	},
 
 	/**
@@ -127,25 +90,17 @@ var Player = BlockStructure.extend({
 		return this;
 	},
 
-	/**
-	 * Getter/setter for the dbId parameter, which stores the database ID of this player.
-	 * @param val {string?} The new value to use or undefined if we are invoking this function as the getter.
-	 * @returns {string|Player} Either the current database ID or this object so that we can chain setter calls.
-	 * @memberof Player
-	 * @instance
-	 */
-	dbId: function(val) {
+	loggedIn: function(val) {
 		if (val === undefined) {
-			return this._dbId;
+			return this._loggedIn;
 		}
-		this._dbId = val;
+		this._loggedIn = val;
 		return this;
 	},
 
-	isLoggedIn: function() {
-		return this.dbId() !== undefined;
-	},
-
+	/*
+	Getter and setter for the _username property
+	*/
 	username: function(val) {
 		if (val === undefined) {
 			return this._username;
@@ -193,36 +148,6 @@ var Player = BlockStructure.extend({
 		}
 		this._clientId = val;
 		return this;
-	},
-
-
-	/**
-	 * Perform client-specific initialization here. Called by init()
-	 * @memberof Player
-	 * @private
-	 * @instance
-	 */
-	_initClient: function(data) {
-		var self = this;
-		this.hasGuestUsername = false;
-		this.depth(Player.DEPTH);
-		if (data !== undefined) {
-			this.username(data.username);
-			this.dbId(data.dbId);
-			this.hasGuestUsername = data.hasGuestUsername;
-		}
-
-		// Either the username was already streamed, in which case it is here and we can create a label
-		if (this.username()) {
-			if (ige.client.player === undefined) {
-				ige.on('cosmos:client.player.streamed', function() {
-					self._createUsernameLabel();
-				}, self, true);
-			}
-			else {
-				this._createUsernameLabel();
-			}
-		}
 	},
 
 	_createUsernameLabel: function() {
@@ -332,187 +257,10 @@ var Player = BlockStructure.extend({
 				this._createUsernameLabel();
 			}
 		}
-
-		return BlockStructure.prototype.streamEntityValid.call(this, val);
-	},
-
-	destroy: function() {
-		this._destroyUsernameLabel();
-		BlockStructure.prototype.destroy.call(this);
 	},
 
 	/**
-	 * Perform server-specific initialization here. Called by init()
-	 * @memberof Player
-	 * @private
-	 * @instance
-	 */
-	_initServer: function() {
-		this.cargo = new Cargo();
-	},
-
-	add: function(row, col, block, checkForNeighbors) {
-		var blockAdded = BlockStructure.prototype.add.call(this, row, col, block, checkForNeighbors);
-		if (blockAdded && ige.isServer) {
-			DbPlayer.update(this.dbId(), this, function() {});
-		}
-		if (block instanceof EngineBlock) {
-			this._engines.push(block);
-		}
-		else if (block instanceof ThrusterBlock) {
-			this._thrusters.push(block);
-		}
-		return blockAdded;
-	},
-
-	remove: function(row, col) {
-		var block = this.get(row, col);
-		if (block instanceof EngineBlock) {
-			this._engines.splice(this._engines.indexOf(block), 1);
-		}
-		else if (block instanceof ThrusterBlock) {
-			this._thrusters.splice(this._thrusters.indexOf(block), 1);
-		}
-		BlockStructure.prototype.remove.call(this, row, col);
-		if (ige.isServer) {
-			DbPlayer.update(this.dbId(), this, function() {});
-		}
-	},
-
-	/**
-	 * Add the sensor fixture. Called in ServerNetworkEvents after the box2Dbody
-	 * is created.
-	 * @param radius {number} The radius of the attraction field
-	 * @return {Player} This object is returned to facilitate setter chaining.
-	 * @memberof Player
-	 * @instance
-	 */
-	addSensor: function(radius) {
-		// Create the fixture
-		var fixtureDef = {
-			density: 0.0,
-			friction: 0.0,
-			restitution: 0.0,
-			isSensor: true,
-			shape: {
-				type: 'circle',
-				data: {
-					radius: radius,
-					x: 0,
-					y: 0
-				}
-			}
-		};
-
-		var tempFixture = ige.box2d.createFixture(fixtureDef);
-		var tempShape = new ige.box2d.b2CircleShape();
-
-		tempShape.SetRadius(fixtureDef.shape.data.radius / ige.box2d._scaleRatio);
-		tempShape.SetLocalPosition(new ige.box2d.b2Vec2(fixtureDef.shape.data.x /
-			ige.box2d._scaleRatio, fixtureDef.shape.data.y / ige.box2d._scaleRatio));
-
-		tempFixture.shape = tempShape;
-
-		this._box2dBody.CreateFixture(tempFixture);
-
-		return this;
-	},
-
-	/**
-	 * Get/set the strength of attraction
-	 * @param strength {number?} A multiplier for attraction force
-	 * @return {(number|Player)} The current attraction strength if no argument is passed or this object if an argument
-	 * is passed in order to support setter chaining.
-	 * @memberof Player
-	 * @instance
-	 */
-	attractionStrength: function(strength) {
-		if (strength === undefined) {
-			return this._attractionStrength;
-		}
-		else {
-			this._attractionStrength = strength;
-			return this;
-		}
-	},
-
-	/**
-	 * Changes the player's location to a random new location.
-	 * @memberof Player
-	 * @instance
-	 */
-	relocate: function() {
-		this.translateTo(
-			(Math.random() - .5) * Player.PLAYER_START_RADIUS,
-			(Math.random() - .5) * Player.PLAYER_START_RADIUS,
-			0
-		);
-	},
-
-	/**
-	 * Called every time a ship collects a block.
-	 * @memberof Player
-	 * @instance
-	 * @todo Make this a static function because it doesn't use instance data
-	 * @todo Add a cool animation or sound here, or on another listener
-	 */
-	blockCollectListener: function (player, blockClassId) {
-		player.cargo.addBlock(blockClassId);
-		DbPlayer.update(player.dbId(), player, function() {});
-	},
-
-	/**
-	 * Checks if the player is able to mine
-	 * @memberof Player
-	 * @instance
-	 * @return {Boolean} True if player can mine
-	 */
-	 canMine: function () {
-		// Do not start mining if we are already mining
-		if (this.mining) {
-			return false;
-		}
-
-		// Do not start mining if player has no mining lasers
-		if (this.numBlocksOfType(MiningLaserBlock.prototype.classId()) === 0) {
-			ige.network.stream.queueCommand('notificationError',
-				NotificationDefinitions.errorKeys.noMiningLaser, this._clientId);
-			return false;
-		}
-		return true;
-	 },
-
-	/**
-	 * Sends messages to clients to tell them to turn on all of the mining lasers for this player.
-	 * @param targetBlock {Block} The {@link Block} that the mining lasers will be focused on.
-	 * @memberof Player
-	 * @instance
-	 * @todo The fireMiningLasers should be in the Ship class, but it doesn't exist yet.
-	 */
-	fireMiningLasers: function(targetBlock) {
-		var miningLasers = this.blocksOfType(MiningLaserBlock.prototype.classId());
-		for (var i = 0; i < miningLasers.length; i++) {
-			var miningLaser = miningLasers[i];
-			ige.network.send('addEffect', NetworkUtils.effect('miningLaser', miningLaser, targetBlock));
-		}
-	},
-
-	/**
-	 * Sends messages to clients to tell them to turn off all of the mining lasers for this player.
-	 * @param targetBlock {Block} The {@link Block} that the mining lasers were focused on.
-	 * @memberof Player
-	 * @instance
-	 * @todo The turnOffMiningLasers should be in the Ship class, but it doesn't exist yet.
-	 */
-	turnOffMiningLasers: function(targetBlock) {
-		var miningLasers = this.blocksOfType('MiningLaserBlock');
-		for (var i = 0; i < miningLasers.length; i++) {
-			var miningLaser = miningLasers[i];
-			ige.network.send('removeEffect', NetworkUtils.effect('miningLaser', miningLaser, targetBlock));
-		}
-	},
-
-	/**
+	 * TODO fix this comment
 	 * Override the {@link IgeEntity#update} function to provide support for player controls and {@link Block} functions
 	 * like applying force where {@link EngineBlock}s are or turning faster when there are more {@link ThrusterBlock}s.
 	 * @param ctx {Object} The render context.
@@ -520,6 +268,8 @@ var Player = BlockStructure.extend({
 	 * @instance
 	 */
 	update: function(ctx) {
+		IgeEntity.prototype.update.call(this, ctx);
+
 		if (!ige.isServer) {
 			// If this isn't the player playing on this client, draw a label to help identify this player
 			if (this._usernameLabel !== undefined) {
@@ -532,13 +282,13 @@ var Player = BlockStructure.extend({
 			oldControls = JSON.stringify(this._controls);
 
 			/* Modify the KEYBOARD controls to reflect which keys the client currently is pushing */
-			this._controls.key.up =
+			this.controls().key.up =
 				ige.input.actionState('key.up') | ige.input.actionState('key.up_W');
-			this._controls.key.down =
+			this.controls().key.down =
 				ige.input.actionState('key.down') | ige.input.actionState('key.down_S');
-			this._controls.key.left =
+			this.controls().key.left =
 				ige.input.actionState('key.left') | ige.input.actionState('key.left_A');
-			this._controls.key.right =
+			this.controls().key.right =
 				ige.input.actionState('key.right') | ige.input.actionState('key.right_D');
 
 			if (JSON.stringify(this._controls) !== oldControls) { //this._controls !== oldControls) {
@@ -546,105 +296,56 @@ var Player = BlockStructure.extend({
 				ige.network.send('playerControlUpdate', this._controls);
 			}
 		}
+	},
 
-		if (ige.isServer) {
-			/* Angular motion */
-			// Angular rotation speed depends on number of thrusters
-			if (this._controls.key.left || this._controls.key.right) {
-				var angularImpulse = 0;
-				for (var i = 0; i < this._thrusters.length; i++) {
-					angularImpulse += this._thrusters[i].thrust.value;
-				}
-				angularImpulse = -angularImpulse * ige._tickDelta;
+	/**
+	 * Getter and setter for the controls property.
+	 */
+	controls: function(newControls) {
+		if (newControls) {
+			this._controls = newControls;
 
-				if (this._thrusters.length < 1) {
-					if (JSON.stringify(this._controls) !== JSON.stringify(this._prevControls) ||
-						this._prevMovementBlocks.thrusters > 0) {
-						ige.network.stream.queueCommand('notificationError',
-							NotificationDefinitions.errorKeys.noRotationalThruster, this._clientId);
-					}
-				}
-				this._prevMovementBlocks.thrusters = this._thrusters.length;
+			this.currentShip().controls().up = this._controls.key.up;
+			this.currentShip().controls().down = this._controls.key.down;
+			this.currentShip().controls().left = this._controls.key.left;
+			this.currentShip().controls().right = this._controls.key.right;
 
-				if (this._controls.key.left) {
-					this._box2dBody.ApplyTorque(angularImpulse);
-				}
-				if (this._controls.key.right) {
-					this._box2dBody.ApplyTorque(-angularImpulse);
-				}
+			return this;
+		}
+
+		return this._controls;
+	},
+
+	/**
+	 * Getter and setter for the _currentShip property
+	 */
+	currentShip: function(newCurrentShip) {
+		if (newCurrentShip !== undefined) {
+			this._currentShip = newCurrentShip;
+			//Give the new ship a reference back to this player object
+			this._currentShip.player(this);
+
+			if (!ige.isServer) {
+					/**
+					* Initializes all of the cameras that need to track the ship.
+					* This is currently just one camera: the camera for the main viewport.
+					* The minimap doesn't actually use IGE, it uses HTML instead, and so it doesn't have a camera.
+					*/
+				var cameraSmoothingAmount = 0;
+
+				ige.$('mainViewport').camera.trackTranslate(this._currentShip, cameraSmoothingAmount);
 			}
 
-			if (this._controls.key.up || this._controls.key.down) {
-				// the "- Math.PI/2" below makes the ship move forward and backwards, instead of side to side.
-				var angle = this._box2dBody.GetAngle() - Math.PI/2;
-				var scaleRatio = ige.box2d.scaleRatio();
-
-				// Notify player that they cannot fly without an engine
-				if (this._engines.length < 1) {
-					if (JSON.stringify(this._controls) !== JSON.stringify(this._prevControls) ||
-						this._prevMovementBlocks.engines > 0) {
-						ige.network.stream.queueCommand('notificationError',
-							NotificationDefinitions.errorKeys.noEngine, this._clientId);
-					}
-				}
-
-				this._prevMovementBlocks.engines = this._engines.length;
-
-				for (var i = 0; i < this._engines.length; i++) {
-					var engine = this._engines[i];
-
-					var linearImpulse = engine.thrust.value * ige._tickDelta;
-					if (this._controls.key.down) {
-						linearImpulse = -linearImpulse;
-					}
-
-					var impulseX = Math.cos(angle) * linearImpulse;
-					var impulseY = Math.sin(angle) * linearImpulse;
-
-					var impulse = new ige.box2d.b2Vec2(impulseX, impulseY);
-
-					var enginePosition = this._drawLocationForBlock(engine);
-					enginePosition.x = enginePosition.x / scaleRatio;
-					enginePosition.y = -enginePosition.y / scaleRatio;
-
-					var engineWorldPosition = this._box2dBody.GetWorldPoint(enginePosition);
-					this._box2dBody.ApplyImpulse(impulse, engineWorldPosition);
-				}
-			}
 			// Update previous controls so we can tell what has changed each update.
 			// We want to send engine missing notifications on a change, not every
 			// update
 			this._prevControls = JSON.parse(JSON.stringify(this._controls));
+			return this;
 		}
 
-		BlockGrid.prototype.update.call(this, ctx);
+		return this._currentShip;
 	}
 });
-
-/**
- * The radius from the center of the world within which players will spawn.
- * @constant {number}
- * @default
- * @memberof Player
- */
-Player.PLAYER_START_RADIUS = 4000;
-
-/**
- * The Box2D category of all player entities. Used by Box2D to determine what to do in certain collision scenarios.
- * @constant {string}
- * @default
- * @memberof Player
- */
-Player.BOX2D_CATEGORY = 'player';
-
-/**
- * The default depth layer for {@link Player}s when rendered to the screen. Should be rendered above other
- * {@link BlockGrid}s.
- * @constant {number}
- * @default
- * @memberof Player
- */
-Player.DEPTH = 2;
 
 Player.USERNAME_LABEL_FADE_IN_DURATION = 400;
 Player.USERNAME_LABEL_HYSTERESIS_INTERVAL = 500;
@@ -653,12 +354,14 @@ Player.onUsernameRequested = function(username, clientId) {
 	if (!ige.isServer) {
 		return;
 	}
+
 	var player = ige.server.players[clientId];
 	if (player === undefined) {
 		return;
 	}
 
 	if (!player.hasGuestUsername && player.username()) {
+		//This should never be sent unless someone screws with the client:
 		ige.network.send('cosmos:player.username.set.error', 'Player already has username ' + player.username(), clientId);
 		console.log("Player already has username: " + player.username());
 		return;
@@ -684,9 +387,9 @@ Player.onUsernameRequested = function(username, clientId) {
 		else {
 			player.username(username);
 			player.hasGuestUsername = false;
-			DbPlayer.update(player.dbId(), player, function(err) {
+			DbPlayer.update(player.id(), player, function(err) {
 				if (err) {
-					console.error('Error updating player ' + player.dbId() + '. Error: ' + err);
+					console.error('Error updating player ' + player.id() + '. Error: ' + err);
 					ige.network.send('cosmos:player.username.set.error', 'Database error', clientId);
 					return;
 				}

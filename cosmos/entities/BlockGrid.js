@@ -204,18 +204,18 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		// Start streaming asap in order to cache entities on the client.
 		// TODO: Don't stream BlockGrids to players if their ship hasn't spawned
-		// yet. We need to know the player's position in order to limit entity
+		// yet. We need to know theπ player's position in order to limit entity
 		// streaming.
 		// TODO: Make createConstructionZone and fromBlockTypeMatrix faster.
 		// TODO: Make a proper entity preloader.
-		if (player === undefined) {
+		if (player === undefined || player.currentShip() === undefined) {
 			this._previouslyStreamed[clientId] = true;
 			return true;
 		}
 
 		// Checks if the entity is visible to the player. This means that the
 		// player's visible rectangle intersects with this entity's aabb rectangle.
-		var playerWorldPosition = player.worldPosition();
+		var playerWorldPosition = player.currentShip().worldPosition();
 		var width = Constants.minimapArea.MAXIMUM_WIDTH;
 		var height = Constants.minimapArea.MAXIMUM_HEIGHT;
 		var viewableRect = new IgeRect(
@@ -404,7 +404,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		new Drop().mount(ige.server.spaceGameScene)
 			.block(block)
-			.owner(player)
+			.owner(player.currentShip())
 			.translateTo(finalX, finalY, 0)
 			.rotate().z(theta)
 			.streamMode(1);
@@ -799,6 +799,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 					Block.blockFromClassId(data.selectedType)
 				);
 				this.add(data.row, data.col, Block.blockFromClassId(data.selectedType));
+				ige.emit('cosmos:BlockGrid.processBlockActionClient.add', [data.selectedType, this] );
 				this._renderContainer.refresh();
 				break;
 			default:
