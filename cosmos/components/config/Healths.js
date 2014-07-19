@@ -22,14 +22,18 @@ Healths[FuelBlock.prototype.classId()] =
 
 Healths[PowerBlock.prototype.classId()] =
 {
-	max: 40
+	max: 10
 };
 
 /* Armor */
-
-Healths[AdamantiumPlatingBlock.prototype.classId()] =
+Healths[IronPlatingBlock.prototype.classId()] =
 {
-	max: 60
+	max: 40
+};
+
+Healths[SteelPlatingBlock.prototype.classId()] =
+{
+	max: 50
 };
 
 Healths[CloakBlock.prototype.classId()] =
@@ -52,19 +56,14 @@ Healths[CloakBlockVioletLight.prototype.classId()] =
 	max: 60
 };
 
-Healths[DragonPlatingBlock.prototype.classId()] =
-{
-	max: 60
-};
-
-Healths[IronPlatingBlock.prototype.classId()] =
-{
-	max: 30
-};
-
 Healths[KryptonitePlatingBlock.prototype.classId()] =
 {
-	max: 85
+	max: 65
+};
+
+Healths[TitaniumPlatingBlock.prototype.classId()] =
+{
+	max: 70
 };
 
 Healths[MythrilPlatingBlock.prototype.classId()] =
@@ -72,15 +71,16 @@ Healths[MythrilPlatingBlock.prototype.classId()] =
 	max: 80
 };
 
-Healths[SteelPlatingBlock.prototype.classId()] =
-{
-	max: 50
-};
-
-Healths[TitaniumPlatingBlock.prototype.classId()] =
+Healths[AdamantiumPlatingBlock.prototype.classId()] =
 {
 	max: 90
 };
+
+Healths[DragonPlatingBlock.prototype.classId()] =
+{
+	max: 95
+};
+
 
 /* Engines */
 Healths[IronEngineBlock.prototype.classId()] =
@@ -123,34 +123,31 @@ Healths[MiningLaserBlock.prototype.classId()] =
 };
 
 
-
-
-
 /* === ELEMENTS === */
+Healths[IceBlock.prototype.classId()] =
+{
+	max: 8
+};
 
 Healths[CarbonBlock.prototype.classId()] =
 {
 	max: 15
 };
 
+
+Healths[GoldBlock.prototype.classId()] =
+{
+	max: 20
+};
+
 Healths[CobaltBlock.prototype.classId()] =
 {
-	max: 60
+	max: 20
 };
 
 Healths[FluorineBlock.prototype.classId()] =
 {
-	max: 50
-};
-
-Healths[GoldBlock.prototype.classId()] =
-{
-	max: 50
-};
-
-Healths[IceBlock.prototype.classId()] =
-{
-	max: 8
+	max: 20
 };
 
 Healths[IronBlock.prototype.classId()] =
@@ -158,36 +155,43 @@ Healths[IronBlock.prototype.classId()] =
 	max: 25
 };
 
-Healths[DragonBlock.prototype.classId()] =
-{
-	max: 50
-};
-
-Healths[KryptoniteBlock.prototype.classId()] =
-{
-	max: 40
-};
-
 Healths[SteelBlock.prototype.classId()] =
 {
 	max: 30
 };
 
+Healths[KryptoniteBlock.prototype.classId()] =
+{
+	max: 35
+};
+
 Healths[TitaniumBlock.prototype.classId()] =
 {
-	max: 55
+	max: 40
 };
+
 
 Healths[MythrilBlock.prototype.classId()] =
 {
-	max: 60
+	max: 50
 };
 
 Healths[RefinedMythrilBlock.prototype.classId()] =
 {
-	max: 80
+	max: 60
 };
 
+
+Healths[AdamantiumBlock.prototype.classId()] =
+{
+	max: 60
+};
+
+
+Healths[DragonBlock.prototype.classId()] =
+{
+	max: 65
+};
 
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Healths; }
