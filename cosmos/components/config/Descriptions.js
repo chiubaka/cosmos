@@ -111,6 +111,12 @@ Descriptions[DragonBlock.prototype.classId()] =
 	text: "The essential remains of space dragons. Dragon can be used to craft advanced engines."
 };
 
+Descriptions[AdamantiumBlock.prototype.classId()] =
+{
+	text: "Wolverine's favorite element. Adamantium is an extremely strong metal."
+};
+
+
 Descriptions[KryptoniteBlock.prototype.classId()] =
 {
 	text: "Kryptonite is a not-yet-understood element that radiates a disruptive magnetic field. It can be used to craft advanced thrusters."
@@ -123,7 +129,7 @@ Descriptions[SteelBlock.prototype.classId()] =
 
 Descriptions[TitaniumBlock.prototype.classId()] =
 {
-	text: "Titanium is one of the strongest metals known to man. It can be used to build advanced defence systems."
+	text: "Titanium is one of the strongest metals known to man. It can be used to build advanced defense systems."
 };
 
 Descriptions[MythrilBlock.prototype.classId()] =
