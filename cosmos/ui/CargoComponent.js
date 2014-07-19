@@ -118,7 +118,7 @@ var CargoComponent = WindowComponent.extend({
 			position: 'bottom',
 			theme: 'tooltip cargo',
 			maxWidth: '200'
-		}
+		});
 	}
 });
 
