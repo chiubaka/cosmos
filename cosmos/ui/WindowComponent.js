@@ -29,6 +29,9 @@ var WindowComponent = ButtonComponent.extend({
 				}
 				else {
 					self.open();
+					// cosmos:CargoComponent.buttonClicked
+					// cosmos:CraftingUIComponent.buttonClicked
+					ige.emit('cosmos:' + self.classId() + '.buttonClicked');
 				}
 			});
 

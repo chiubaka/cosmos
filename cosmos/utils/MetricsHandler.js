@@ -6,7 +6,7 @@
  * @typedef {Object} MetricsHandler
  * @namespace
  */
-var MetricsHandler = IgeClass.extend({
+var MetricsHandler = IgeEventingClass.extend({
 	classId: "MetricsHandler",
 	/**
 	 * Enables sending metrics to Google Analytics 
@@ -73,6 +73,19 @@ var MetricsHandler = IgeClass.extend({
 		ige.on('cosmos:namePrompt.skipped', function() {
 			self.fireEvent('namePrompt', 'skipped');
 		});
+
+		this.on('cosmos:quest.tutorialQuest.clicked', function() {
+			self.fireEvent('tutorialQuest', 'clicked');
+		});
+
+		this.on('cosmos:quest.tutorialQuest.skipped', function() {
+			self.fireEvent('tutorialQuest', 'skipped');
+		});
+
+		this.on('cosmos:quest.tutorialQuest.completed', function() {
+			self.fireEvent('tutorialQuest', 'completed');
+		});
+
 	},
 
 	/**

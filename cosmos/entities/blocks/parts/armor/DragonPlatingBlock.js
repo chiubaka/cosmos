@@ -1,5 +1,5 @@
-var DragonBlock = Armor.extend({
-	classId: 'DragonBlock',
+var DragonPlatingBlock = Armor.extend({
+	classId: 'DragonPlatingBlock',
 
 	init: function(data) {
 		Armor.prototype.init.call(this, data);
@@ -12,4 +12,4 @@ var DragonBlock = Armor.extend({
 	}
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = DragonBlock; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = DragonPlatingBlock; }

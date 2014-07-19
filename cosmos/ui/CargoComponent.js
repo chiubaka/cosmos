@@ -9,6 +9,7 @@ var CargoComponent = WindowComponent.extend({
 	emptyLabel: undefined,
 
 	selectedType: undefined,
+	cargoItems: undefined,
 
 	init: function() {
 		WindowComponent.prototype.init.call(
@@ -51,6 +52,10 @@ var CargoComponent = WindowComponent.extend({
 	},
 
 	populateFromInventory: function(cargoItems) {
+		// Update client-side list of cargo
+		// TODO: In the future, move this to the yet-to-be-implemented client side
+		// cargo model
+		this.cargoItems = cargoItems;
 		var numTypes = Object.keys(cargoItems).length;
 		console.log('Populating toolbar from server response: ' + numTypes + ' item(s) in inventory');
 
@@ -64,6 +69,9 @@ var CargoComponent = WindowComponent.extend({
 
 		var blockCanvasContainerDivs = this.table.find('.block-canvas-container');
 		blockCanvasContainerDivs.remove();
+		// Destroy old tooltips
+		var tooltipsteredCells = this.table.find('.tooltipstered');
+		_.map(tooltipsteredCells, function(cell){$(cell).tooltipster('destroy')})
 
 		var index = 0;
 		for (var type in cargoItems) {
@@ -103,18 +111,14 @@ var CargoComponent = WindowComponent.extend({
 
 	fillTooltip: function(type, container) {
 		var content = Block.displayNameFromClassId(type);
-		if (container.hasClass('tooltipstered')) {
-			container.tooltipster('content', content);
-		}
-		else {
-			container.tooltipster({
-				content: content,
-				delay: 0,
-				position: 'bottom',
-				theme: 'tooltip cargo',
-				maxWidth: '200'
-			});
-		}
+
+		container.tooltipster({
+			content: content,
+			delay: 0,
+			position: 'bottom',
+			theme: 'tooltip cargo',
+			maxWidth: '200'
+		});
 	}
 });
 

@@ -13,6 +13,7 @@ var RelocateComponent = ButtonComponent.extend({
 	mouseDown: function() {
 		ige.network.send('relocate');
 		ige.emit('relocate button clicked');
+		ige.hud.bottomToolbar.relocate.emit('cosmos:RelocateComponent.mouseDown');
 	}
 });
 

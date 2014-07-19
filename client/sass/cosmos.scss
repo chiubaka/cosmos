@@ -69,18 +69,27 @@ h1, h2, h3, h4 {
 }
 
 $tooltip-background-color: rgba(12, 10, 7, 1);
+$tooltip-highlighted-background-color: rgba(245, 122, 3, 1);
 $tooltip-line-height: 18px;
 $tooltip-padding: 6px;
 
-.tooltip {
+@mixin tooltip($background-color) {
 	position: absolute;
 	font-size: 75%;
 	font-family: $cosmos-font-family;
 	line-height: $tooltip-line-height;
 	padding: $tooltip-padding;
-	background-color: $tooltip-background-color;
+	background-color: $background-color;
 	border-radius: 0px;
 	z-index: 100002;
+}
+
+.tooltip {
+	@include tooltip($tooltip-background-color);
+}
+
+.tooltip-highlighted {
+	@include tooltip($tooltip-highlighted-background-color);
 }
 
 .username-label.tooltip {

@@ -23,9 +23,10 @@ var NotificationUIComponent = IgeEventingClass.extend({
 				ige.requireStylesheet(self.notificationUIRoot +
 					'alertify_themes/alertify.default.css');
 
-				ige.notification.registerInfoHandler(ige.notification.notificationUI.infoHandler);
-				ige.notification.registerErrorHandler(ige.notification.notificationUI.errorHandler);
-				ige.notification.registerSuccessHandler(ige.notification.notificationUI.successHandler);
+				ige.notification.registerInfoHandler(ige.hud.notificationUI.infoHandler);
+				ige.notification.registerErrorHandler(ige.hud.notificationUI.errorHandler);
+				ige.notification.registerSuccessHandler(ige.hud.notificationUI.successHandler);
+				ige.emit('cosmos:hud.subcomponent.loaded');
 				}, null, true);
 
 		}
@@ -76,7 +77,7 @@ var NotificationUIComponent = IgeEventingClass.extend({
 			var notification = NotificationDefinitions.successes[successesIndex];
 			alertify.log(notification, "success");
 		}
-	}
+	},
 });
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = NotificationUIComponent; }

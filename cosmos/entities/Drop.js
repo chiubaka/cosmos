@@ -99,11 +99,17 @@ var Drop = BlockGrid.extend({
 	 * @returns {boolean} True if the provided entity is the same as this {@link Drop}'s owner. False otherwise.
 	 * @memberof Drop
 	 * @instance
+	 * TODO have this function use the owner() function instead of referenceing _owner
 	 */
 	isOwner: function(entity) {
 		if (this._owner === undefined) {
 			return true;
 		}
+
+		if (this._owner.classId() === "Player" && entity.classId() === "Player") {
+			return this._owner.currentShip() === entity.currentShip();
+		}
+
 		return this._owner === entity;
 	},
 

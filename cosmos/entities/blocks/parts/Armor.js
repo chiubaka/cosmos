@@ -3,6 +3,10 @@ var Armor = Part.extend({
 
 	init: function(data) {
 		Part.prototype.init.call(this, data);
+
+		if (ige.isClient) {
+			this.textureSvg = ige.client.textures.plating;
+		}
 	}
 });
 

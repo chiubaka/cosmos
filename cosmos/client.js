@@ -8,7 +8,7 @@ var Client = IgeClass.extend({
 				e.preventDefault();
 			}
 		}, false);
-		
+
 		ige.setFps(Constants.fps.CLIENT_FPS);
 
 		// Load our textures
@@ -78,7 +78,9 @@ var Client = IgeClass.extend({
 			control: new IgeTexture(gameRoot +
 				'assets/blocks/playerctrl/playerctrl.svg'),
 			miningLaser: new IgeTexture(gameRoot +
-				'assets/blocks/laser/laser.svg')
+				'assets/blocks/laser/laser.svg'),
+			plating: new IgeTexture(gameRoot +
+				'assets/blocks/armor/plating.svg')
 		};
 
 		ige.on('texturesLoaded', function () {
@@ -101,6 +103,8 @@ var Client = IgeClass.extend({
 
 						// Setup the network command listeners
 						ige.network.define('playerEntity', self._onPlayerEntity);
+						ige.network.define('shipEntity', self._onShipEntity);
+
 						// Called when the server needs to broadcast updates about a block
 						ige.network.define('blockAction', self._onBlockAction);
 						// Called when the server wants to add an effect to a block
@@ -120,12 +124,14 @@ var Client = IgeClass.extend({
 							.stream.renderLatency(100); // Render the simulation 100 milliseconds in the past
 
 						// Enable notifications
-						ige.addComponent(NotificationComponent);
-						ige.notification.addComponent(NotificationUIComponent)
-							.start();
+						ige.addComponent(NotificationComponent)
+						ige.notification.start();
 
 						// Enable crafting system
 						ige.addComponent(CraftingSystem);
+
+						// Enable quest system
+						ige.addComponent(QuestSystem);
 
 						GameInit.init(self);
 

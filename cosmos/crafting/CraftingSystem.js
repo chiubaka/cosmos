@@ -12,9 +12,11 @@ var CraftingSystem = IgeEventingClass.extend({
 		if (ige.isServer) {
 			ige.network.define('cosmos:crafting.craft', this._craftServer);
 			ige.network.define('cosmos:crafting.addRecipe');
+			ige.network.define('cosmos:CraftingSystem._craftServer.success');
 		}
 		if (ige.isClient) {
 			ige.network.define('cosmos:crafting.addRecipe', this._addRecipeClient);
+			ige.network.define('cosmos:CraftingSystem._craftServer.success', this._onCraftServerSuccess);
 			// Update the crafting state so items are correctly grayed out in the UI
 			ige.on('cargo response', this._refreshCraftingState);
 			ige.on('cargo update', this._refreshCraftingState);
@@ -40,7 +42,7 @@ var CraftingSystem = IgeEventingClass.extend({
 			return;
 		}
 		// Check if player cargo exists
-		cargo = player.cargo;
+		cargo = player.currentShip().cargo;
 		if (cargo === undefined) {
 			ige.craftingSystem.log('CraftingSystem#_craftServer: Cargo is undefined', 'warning');
 			return;
@@ -54,13 +56,12 @@ var CraftingSystem = IgeEventingClass.extend({
 
 		if (ige.craftingSystem._canCraft(cargo, player, recipeName)) {
 			ige.craftingSystem._doCraft(cargo, player, recipeName);
-			ige.network.stream.queueCommand('notificationSuccess',
-				NotificationDefinitions.successKeys.crafting_success,
-				clientId);
+			ige.network.stream.queueCommand('cosmos:CraftingSystem._craftServer.success',
+				recipeName, clientId);
 		}
 
 	},
-	
+
 	/**
 	 * Checks if the recipe is craftable by the player.
 	 * A recipe is craftable if the player has:
@@ -136,14 +137,21 @@ var CraftingSystem = IgeEventingClass.extend({
 
 		cargo.addBlock(recipeName);
 
-		DbPlayer.update(player.dbId(), player, function() {});
+		DbPlayer.update(player.id(), player, function() {});
+	},
+
+	// @client-side
+	_onCraftServerSuccess: function(data) {
+		var recipeName = data;
+		ige.notification.emit('notificationSuccess', NotificationDefinitions.successKeys.crafting_success);
+		ige.craftingSystem.emit('cosmos:CraftingSystem.craft.success', recipeName);
+
 	},
 
 	// Add a recipe to a player
 	addRecipeServer: function(recipe, player, clientId) {
 		player.crafting.addRecipe(recipe);
-		ige.network.stream.queueCommand('cosmos:crafting.addRecipe',
-			recipe, clientId);
+		ige.network.stream.queueCommand('cosmos:crafting.addRecipe', recipe, clientId);
 	},
 
 	// Keep the client side recipe list in sync

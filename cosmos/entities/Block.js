@@ -132,20 +132,17 @@ var Block = IgeEntity.extend({
 		this.width(Block.WIDTH).height(Block.HEIGHT);
 
 		// Check if a health has been provided for this block.
-		if (Healths[this.classId()] !== undefined)
-		{
+		if (Healths[this.classId()] !== undefined) {
 			this.addComponent(Health, Healths[this.classId()]);
 		}
 
 		// Check if a recipe has been provided for this block. If so, this block is craftable. Otherwise, it is not.
-		if (Recipes[this.classId()] !== undefined)
-		{
+		if (Recipes[this.classId()] !== undefined) {
 			this.addComponent(Recipe, Recipes[this.classId()]);
 		}
 
 		// Check if a description has been provided for this block. If so, this block is describable. Otherwise, it is not.
-		if (Descriptions[this.classId()] !== undefined)
-		{
+		if (Descriptions[this.classId()] !== undefined) {
 			this.addComponent(Description, Descriptions[this.classId()]);
 		}
 

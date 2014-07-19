@@ -13,13 +13,13 @@ var ExampleShips = {
 	starterShip: function() {
 		return [
 			[undefined,           undefined,   new MiningLaserBlock(), undefined,   undefined],
-			[undefined,           new HullBlock(), new HullBlock(),            new HullBlock(), undefined],
-			[undefined,           new HullBlock(), new ControlBlock(),     new HullBlock(), undefined],
-			[undefined,           new HullBlock(), new PowerBlock(),       new HullBlock(), undefined],
-			[new IronThrusterBlock(), new HullBlock(), new CargoBlock,         new HullBlock(), new IronThrusterBlock()],
-			[undefined,           new HullBlock(), new CargoBlock,         new HullBlock(), undefined],
-			[undefined,           new HullBlock(), new FuelBlock,          new HullBlock(), undefined],
-			[undefined,           new HullBlock(), new IronEngineBlock(),      new HullBlock(), undefined]
+			[undefined,           new IronPlatingBlock(), new IronPlatingBlock(),            new IronPlatingBlock(), undefined],
+			[undefined,           new IronPlatingBlock(), new ControlBlock(),     new IronPlatingBlock(), undefined],
+			[undefined,           new IronPlatingBlock(), new PowerBlock(),       new IronPlatingBlock(), undefined],
+			[new IronThrusterBlock(), new IronPlatingBlock(), new CargoBlock,         new IronPlatingBlock(), new IronThrusterBlock()],
+			[undefined,           new IronPlatingBlock(), new CargoBlock,         new IronPlatingBlock(), undefined],
+			[undefined,           new IronPlatingBlock(), new FuelBlock,          new IronPlatingBlock(), undefined],
+			[undefined,           new IronPlatingBlock(), new IronEngineBlock(),      new IronPlatingBlock(), undefined]
 		]
 	},
 
@@ -31,13 +31,13 @@ var ExampleShips = {
 	starterShipSingleMisplacedEngine: function() {
 		return [
 			[undefined,           undefined,         new MiningLaserBlock(), undefined,         undefined],
-			[undefined,           new HullBlock(),       new HullBlock(),            new HullBlock(),       undefined],
-			[undefined,           new HullBlock(),       new ControlBlock(),     new HullBlock(),       undefined],
-			[undefined,           new HullBlock(),       new PowerBlock(),       new HullBlock(),       undefined],
-			[new IronThrusterBlock(), new HullBlock(),       new CargoBlock,         new HullBlock(),       new IronThrusterBlock()],
-			[undefined,           new HullBlock(),       new CargoBlock,         new HullBlock(),       undefined],
-			[undefined,           new HullBlock(),       new FuelBlock,          new HullBlock(),       undefined],
-			[undefined,           new HullBlock(),       new IronEngineBlock(),      new HullBlock(),       undefined],
+			[undefined,           new IronPlatingBlock(),       new IronPlatingBlock(),            new IronPlatingBlock(),       undefined],
+			[undefined,           new IronPlatingBlock(),       new ControlBlock(),     new IronPlatingBlock(),       undefined],
+			[undefined,           new IronPlatingBlock(),       new PowerBlock(),       new IronPlatingBlock(),       undefined],
+			[new IronThrusterBlock(), new IronPlatingBlock(),       new CargoBlock,         new IronPlatingBlock(),       new IronThrusterBlock()],
+			[undefined,           new IronPlatingBlock(),       new CargoBlock,         new IronPlatingBlock(),       undefined],
+			[undefined,           new IronPlatingBlock(),       new FuelBlock,          new IronPlatingBlock(),       undefined],
+			[undefined,           new IronPlatingBlock(),       new IronEngineBlock(),      new IronPlatingBlock(),       undefined],
 			[undefined,           new IronEngineBlock(), undefined,              undefined,         undefined]
 		]
 	},
@@ -50,13 +50,13 @@ var ExampleShips = {
 	starterShipDoubleEngines: function() {
 		return [
 			[undefined,           undefined,         new MiningLaserBlock(), undefined,         undefined],
-			[undefined,           new HullBlock(),       new HullBlock(),            new HullBlock(),       undefined],
-			[undefined,           new HullBlock(),       new ControlBlock(),     new HullBlock(),       undefined],
-			[undefined,           new HullBlock(),       new PowerBlock(),       new HullBlock(),       undefined],
-			[new IronThrusterBlock(), new HullBlock(),       new CargoBlock,         new HullBlock(),       new IronThrusterBlock()],
-			[undefined,           new HullBlock(),       new CargoBlock,         new HullBlock(),       undefined],
-			[undefined,           new HullBlock(),       new FuelBlock,          new HullBlock(),       undefined],
-			[undefined,           new HullBlock(),       undefined,              new HullBlock(),       undefined],
+			[undefined,           new IronPlatingBlock(),       new IronPlatingBlock(),            new IronPlatingBlock(),       undefined],
+			[undefined,           new IronPlatingBlock(),       new ControlBlock(),     new IronPlatingBlock(),       undefined],
+			[undefined,           new IronPlatingBlock(),       new PowerBlock(),       new IronPlatingBlock(),       undefined],
+			[new IronThrusterBlock(), new IronPlatingBlock(),       new CargoBlock,         new IronPlatingBlock(),       new IronThrusterBlock()],
+			[undefined,           new IronPlatingBlock(),       new CargoBlock,         new IronPlatingBlock(),       undefined],
+			[undefined,           new IronPlatingBlock(),       new FuelBlock,          new IronPlatingBlock(),       undefined],
+			[undefined,           new IronPlatingBlock(),       undefined,              new IronPlatingBlock(),       undefined],
 			[undefined,           new IronEngineBlock(), undefined,              new IronEngineBlock(), undefined]
 		]
 	},

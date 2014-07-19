@@ -1,3 +1,10 @@
+/**
+ * ClientNetworkEvents stores functions that are called as a result of network events.
+ * When adding a new event to this class, make sure to link it with the appropriate network event in client.js. For example,
+ * ige.network.define('playerEntity', self._onPlayerEntity);
+ * links the network event 'playerEntity' to the function _onPlayerEntity.
+ * If you don't do this, your function won't ever be called.
+ */
 var ClientNetworkEvents = {
 	/**
 	 * Is called when a network packet with the "playerEntity" command
@@ -8,59 +15,84 @@ var ClientNetworkEvents = {
 	 * @private
 	 */
 	_onPlayerEntity: function(data) {
-		var self = this;
-		ige.client.player = undefined;
+		ige.client.player = new Player();
+		ige.client.player.id(data.playerId);
+		ige.client.player.username(data.username);
+		ige.client.player.loggedIn(data.loggedIn);
+		ige.client.player.mount(ige.$("spaceGameScene"));
 
-		if (ige.$(data.entityId)) {
-			ClientNetworkEvents.initCameras(ige.$(data.entityId));
+		ige.client.player.hasGuestUsername = data.hasGuestUsername;
 
-			// Set the time stream UI entity to monitor our player entity
-			// time stream data
-			ige.client.tsVis.monitor(ige.$(data.entityId));
+		// Set the time stream UI entity to monitor our player entity
+		// time stream data
+		//ige.client.tsVis.monitor(ige.client.player);
+
+		if (ige.client.currentShip) {
+			ige.client.player.currentShip(ige.client.currentShip);
+		}
+
+		ige.client.metrics.fireEvent('player', 'connect', data.playerId);
+
+		// If this player is logged in and has a guest username, prompt for a real
+		// username.
+		if (ige.client.player.loggedIn() && ige.client.player.hasGuestUsername) {
+			ige.client.promptForUsername();
+		}
+		else {
+			ige.emit('cosmos:client.player.username.set', ige.client.player.username());
+		}
+
+		ige.emit('cosmos:client.player.streamed');
+
+		// Set the time stream UI entity to monitor our player entity
+		// time stream data
+		//ige.client.tsVis.monitor(ige.$(data));
+	},
+
+	/*
+	This is how the server assembles the data to send us:
+	var sendData = {
+		shipId: player.currentShip().id()
+	}
+	*/
+	_onShipEntity: function(data) {
+		if(ige.client.player && ige.$(data.shipId)) {
+
+			ige.client.player.currentShip(ige.$(data.shipId));
+			ige.network.send('cargoRequest', { requestUpdates: true });
 		} else {
-			// The client has not yet received the entity via the network
-			// stream so lets ask the stream to tell us when it creates a
-			// new entity and then check if that entity is the one we
-			// should be tracking!
-			self._eventListener = ige.network.stream.on('entityCreated', function (entity) {
-				if (entity.id() === data.entityId) {
-					var player = entity;
-					// Tell the camera to track out player entity
-					ClientNetworkEvents.initCameras(ige.$(data.entityId));
+			//adding ship to player later
+			if (!ige.client.player) {
+				//save the ship for when the player does arrive
+				ige.client.currentShip = ige.$(data.shipId);
+			}
 
-					// Make it easy to find the player's entity
-					ige.client.player = player;
+			if (!ige.$(data.shipId)) {
+				self._eventListener = ige.network.stream.on('entityCreated', function (entity) {
+					if (entity.id() === data.shipId) {
 
-					ige.client.metrics.fireEvent('player', 'connect', player.dbId());
-
-					ige.network.send('cargoRequest', { requestUpdates: true });
-
-					// Set the time stream UI entity to monitor our player entity
-					// time stream data
-					//ige.client.tsVis.monitor(ige.$(data));
-
-					// Turn off the listener for this event now that we
-					// have found and started tracking our player entity
-					ige.network.stream.off('entityCreated', self._eventListener, function (result) {
-						if (!result) {
-							this.log('Could not disable event listener!', 'warning');
+						if (ige.client.player) {
+							ige.client.player.currentShip(entity);
+							ige.network.send('cargoRequest', { requestUpdates: true });
 						}
-					});
 
-					var username = player.username();
+						// Set the time stream UI entity to monitor our player entity
+						// time stream data
+						//ige.client.tsVis.monitor(ige.$(data));
 
-					// If this player is logged in but doesn't yet have a username, prompt for one.
-					if (player.hasGuestUsername && player.isLoggedIn()) {
-						ige.client.promptForUsername();
+						// Turn off the listener for this event now that we
+						// have found and started tracking our player entity
+						ige.network.stream.off('entityCreated', self._eventListener, function (result) {
+							if (!result) {
+								this.log('Could not disable event listener!', 'warning');
+							}
+						});
+
+						ige.emit('cosmos:client.ship.streamed');
+						ige.removeLoadingScreen();
 					}
-					else {
-						ige.emit('cosmos:client.player.username.set', username);
-					}
-
-					ige.emit('cosmos:client.player.streamed');
-					ige.removeLoadingScreen();
-				}
-			});
+				});
+			}
 		}
 	},
 
@@ -92,12 +124,6 @@ var ClientNetworkEvents = {
 	_onConfirm: function(data) {
 		ige.client.metrics.fireEvent(data.category, data.action, data.label);
 	},
-
-	initCameras: function(entityToTrack) {
-		var cameraSmoothingAmount = 0;
-
-		ige.$('mainViewport').camera.trackTranslate(entityToTrack, cameraSmoothingAmount);
-	}
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = ClientNetworkEvents; }

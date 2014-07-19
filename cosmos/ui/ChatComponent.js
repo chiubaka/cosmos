@@ -56,10 +56,12 @@ var ChatComponent = ButtonComponent.extend({
 				self.button.click(function(event) {
 					if (self.chatClient.is(':visible')) {
 						self.chatClient.hide();
+						self.emit('cosmos:ChatComponent.hide');
 					}
 					else {
 						self.chatClient.show();
 						self.clearUnread();
+						self.emit('cosmos:ChatComponent.show');
 					}
 				});
 
