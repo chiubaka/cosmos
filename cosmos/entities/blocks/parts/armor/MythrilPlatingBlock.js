@@ -1,5 +1,5 @@
-var MithrilBlock = Armor.extend({
-	classId: 'MithrilBlock',
+var MythrilPlatingBlock = Armor.extend({
+	classId: 'MythrilPlatingBlock',
 
 	init: function(data) {
 		Armor.prototype.init.call(this, data);
@@ -12,4 +12,4 @@ var MithrilBlock = Armor.extend({
 	}
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = MithrilBlock; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = MythrilPlatingBlock; }

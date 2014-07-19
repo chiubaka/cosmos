@@ -181,7 +181,7 @@ var GameInit = {
 	initEnvironment: function() {
 		var server = ige.server;
 
-		var NUM_NORMAL_ASTEROIDS = 20;
+		var NUM_NORMAL_ASTEROIDS = 40;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
 			var asteroid = BlockStructureGenerator
 				.genProceduralAsteroid(200, BlockStructureGenerator.elementDistributions.randomDistribution())
@@ -191,21 +191,9 @@ var GameInit = {
 			this.moveRandomly(asteroid);
 		}
 
-		// Instead of creating a bunch of these up front, we might want to create them just ahead of a user as he's
-		// flying, and delete them right behind. This will be more efficient.
-		var NUM_SMALL_ASTEROIDS = 0;
-		for (var asteroidNumber = 0; asteroidNumber < NUM_SMALL_ASTEROIDS; asteroidNumber++) {
-			var asteroid = BlockStructureGenerator.singleBlock()
-				.category('smallAsteroid')
-				.id('littleAsteroid' + asteroidNumber)
-				.streamMode(1)
-				.mount(server.spaceGameScene)
-			this.moveRandomly(asteroid);
-		}
-
 		// TODO: The procedural generation algorithm is causing strange problems with the new BlockGrid system. Leave
 		// this stuff commented out until it is figured out.
-		var NUM_DERELICT_SPACESHIPS = 40;
+		var NUM_DERELICT_SPACESHIPS = 10;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_DERELICT_SPACESHIPS; asteroidNumber++) {
 			//note that the signature of gen.. is
 			// genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution)
@@ -360,7 +348,7 @@ var GameInit = {
 	// TODO: Move this to a helper function that operates on IgeEntities
 	moveRandomly: function(entity) {
 		//this is the maximum distance that we will translate entities to
-		var MAX_DISTANCE = 7000;
+		var MAX_DISTANCE = 9000;
 		entity.translateTo((Math.random() - .5) * MAX_DISTANCE, (Math.random() - .5) * MAX_DISTANCE, 0);
 	}
 };

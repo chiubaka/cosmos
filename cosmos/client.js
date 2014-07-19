@@ -75,7 +75,9 @@ var Client = IgeClass.extend({
 			control: new IgeTexture(gameRoot +
 				'assets/blocks/playerctrl/playerctrl.svg'),
 			miningLaser: new IgeTexture(gameRoot +
-				'assets/blocks/laser/laser.svg')
+				'assets/blocks/laser/laser.svg'),
+			plating: new IgeTexture(gameRoot +
+				'assets/blocks/armor/plating.svg')
 		};
 
 		ige.on('texturesLoaded', function () {
