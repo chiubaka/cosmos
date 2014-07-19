@@ -11,7 +11,7 @@ var SteelEngineBlock = EngineBlock.extend({
 
 		if (!ige.isServer) {
 			this.textureBackground = "rgb(139, 139, 139)";
-			this.textureOutline = "rgb(78, 78, 78)";
+			this.textureOutline = "rgb(255, 78, 0)";
 			this.textureSvg = ige.client.textures.engine;
 		}
 	}
