@@ -30,6 +30,8 @@ var BlockStructure = BlockGrid.extend({
 			// the ConstructionZoneOverlay class.
 			this._constructionZoneOverlay = new ConstructionZoneOverlay(this)
 				.mount(this);
+
+			this.addComponent(PixiRenderableComponent);
 		}
 	},
 
