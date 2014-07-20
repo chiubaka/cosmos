@@ -263,7 +263,7 @@ var GameInit = {
 							}
 							var block = drop.block();
 							ige.emit('block collected',
-								[player.currentShip(), block.classId()]);
+								[ship, block.classId()]);
 							drop.destroy();
 						}
 					}
