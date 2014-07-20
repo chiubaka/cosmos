@@ -131,7 +131,7 @@ Healths[IceBlock.prototype.classId()] =
 
 Healths[CarbonBlock.prototype.classId()] =
 {
-	max: 15
+	max: 10
 };
 
 
