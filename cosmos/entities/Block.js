@@ -146,12 +146,17 @@ var Block = IgeEntity.extend({
 			this.addComponent(Description, Descriptions[this.classId()]);
 		}
 
+
+
 		if (!ige.isServer) {
+			this.backgroundColor = this.backgroundColor || 0xA9FF00;
+			this.borderColor = this.borderColor || 0x6FA700;
+
 			this.texture(ige.client.textures.block);
 			this.addComponent(PixiRenderableComponent, {createDisplayObject: function() {
 				var displayObject = new PIXI.Graphics();
-				displayObject.beginFill(0xA9FF00, 0.8);
-				displayObject.lineStyle(2, 0x6FA700, 1);
+				displayObject.beginFill(self.backgroundColor, 0.8);
+				displayObject.lineStyle(2, self.borderColor, 1);
 				displayObject.drawRect(0, 0, self.width() - 2, self.height() - 2);
 				displayObject.endFill();
 
