@@ -22,7 +22,6 @@ var BlockStructure = BlockGrid.extend({
 
 	init: function(data) {
 		BlockGrid.prototype.init.call(this, data);
-
 		if (!ige.isServer) {
 			// TODO: Lazily create when needed to speed up load time.
 			// TODO: Examine ConstructionZoneOverlay to make sure it is compatible with new BlockGrid backing.
@@ -30,8 +29,6 @@ var BlockStructure = BlockGrid.extend({
 			// the ConstructionZoneOverlay class.
 			this._constructionZoneOverlay = new ConstructionZoneOverlay(this)
 				.mount(this);
-
-			this.addComponent(PixiRenderableComponent);
 		}
 	},
 

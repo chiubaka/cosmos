@@ -164,6 +164,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			this.streamControl(this._streamControlFunc.bind(this))
 		}
 		else {
+			this.addComponent(PixiRenderableComponent);
 			this.depth(BlockGrid.DEPTH);
 			this._renderContainer = new RenderContainer()
 				.mount(this);

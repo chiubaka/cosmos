@@ -38,6 +38,11 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 	init: function (blockGrid) {
 		IgeEntity.prototype.init.call(this);
 		this._blockGrid = blockGrid;
+
+		if (!ige.isServer) {
+			this.addComponent(PixiRenderableComponent);
+		}
+
 		this._renderContainer = new RenderContainer()
 			.mount(this);
 		this._createConstructionZones();
