@@ -9,13 +9,14 @@ var IronPlatingBlock = Armor.extend({
 	classId: 'IronPlatingBlock',
 
 	init: function(data) {
-		Armor.prototype.init.call(this, data);
-
-
 		if (!ige.isServer) {
+			this.backgroundColor = 0xD9D9D9;
+			this.borderColor = 0xC9C9C9;
 			this.textureBackground = "rgb(217, 217, 217)";
 			this.textureOutline = "rgb(201, 201, 201)";
 		}
+
+		Armor.prototype.init.call(this, data);
 	}
 });
 
