@@ -9,13 +9,15 @@ var FuelBlock = Part.extend({
 	classId: 'FuelBlock',
 
 	init: function(data) {
-		Part.prototype.init.call(this, data);
-
 		if (!ige.isServer) {
+			this.backgroundColor = 0xF2F2F2;
+			this.borderColor = 0x00D30A;
 			this.textureBackground = "rgb(242, 242, 242)";
 			this.textureOutline = "rgb(0, 211, 10)";
 			this.textureSvg = ige.client.textures.fuel;
 		}
+
+		Part.prototype.init.call(this, data);
 	}
 });
 

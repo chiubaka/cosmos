@@ -10,13 +10,15 @@ var PowerBlock = Part.extend({
 	classId: 'PowerBlock',
 
 	init: function(data) {
-		Part.prototype.init.call(this, data);
-
 		if (!ige.isServer) {
+			this.backgroundColor = 0xF2F2F2;
+			this.borderColor = 0xFFBE0D;
 			this.textureBackground = "rgb(242, 242, 242)";
 			this.textureOutline = "rgb(255, 190, 13)";
 			this.textureSvg = ige.client.textures.power;
 		}
+
+		Part.prototype.init.call(this, data);
 	}
 });
 
