@@ -12,6 +12,7 @@ var FuelBlock = Part.extend({
 		if (!ige.isServer) {
 			this.backgroundColor = 0xF2F2F2;
 			this.borderColor = 0x00D30A;
+			this.iconFrame = 'fuel';
 			this.textureBackground = "rgb(242, 242, 242)";
 			this.textureOutline = "rgb(0, 211, 10)";
 			this.textureSvg = ige.client.textures.fuel;

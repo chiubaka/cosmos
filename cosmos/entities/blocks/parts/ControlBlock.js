@@ -12,6 +12,7 @@ var ControlBlock = Part.extend({
 		if (!ige.isServer) {
 			this.backgroundColor = 0xF2F2F2;
 			this.borderColor = 0x088FFF;
+			this.iconFrame = 'playerctrl';
 			this.textureBackground = "rgb(242, 242, 242)";
 			this.textureOutline = "rgb(8, 143, 255)";
 			this.textureSvg = ige.client.textures.control;
