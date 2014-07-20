@@ -110,6 +110,7 @@ var igeClientConfig = {
 		'./components/Health.js',
 		'./components/Recipe.js',
 		'./components/Thrust.js',
+		'./components/ParallaxBackgroundRenderableComponent.js',
 
 		/* === PLAYER STATE === */
 		'./entities/player/Player.js',

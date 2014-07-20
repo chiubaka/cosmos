@@ -35,7 +35,9 @@ var Client = IgeClass.extend({
 
 		ige.addSystem(PixiRenderingSystem, {autoSize: true});
 		ige.pixiRendering.loadTextures({
-			plating: gameRoot + 'assets/blocks/armor/plating.svg'
+			plating: gameRoot + 'assets/blocks/armor/plating.svg',
+			background_helix_nebula: gameRoot + 'assets/backgrounds/helix_nebula.jpg',
+			background_starfield: gameRoot + 'assets/backgrounds/starfield.png'
 		});
 		ige.pixiRendering.start();
 
