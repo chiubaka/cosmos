@@ -16,7 +16,6 @@ var ConstructionZoneBlock = Block.extend({
 			// Construction zone texture should take up whole block (no outline)
 			this.iconScaleFactor = 1;
 			this.textureSvg = ige.client.textures.constructionZone;
-
 		}
 	}
 });

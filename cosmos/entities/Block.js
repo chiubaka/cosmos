@@ -159,13 +159,31 @@ var Block = IgeEntity.extend({
 				this.borderAlpha = 0;
 			}
 
+			this.iconScale = this.iconScale || 0.85;
+
 			this.texture(ige.client.textures.block);
 			this.addComponent(PixiRenderableComponent, {createDisplayObject: function() {
-				var displayObject = new PIXI.Graphics();
-				displayObject.beginFill(self.backgroundColor, self.backgroundAlpha);
-				displayObject.lineStyle(2, self.borderColor, self.borderAlpha);
-				displayObject.drawRect(0, 0, self.width() - 2, self.height() - 2);
-				displayObject.endFill();
+				var displayObject = new PIXI.DisplayObjectContainer();
+
+				var graphic = new PIXI.Graphics();
+				graphic.beginFill(self.backgroundColor, self.backgroundAlpha);
+				graphic.lineStyle(2, self.borderColor, self.borderAlpha);
+				graphic.drawRect(0, 0, self.width() - 2, self.height() - 2);
+				graphic.endFill();
+
+				displayObject.addChild(graphic);
+
+				if (self.iconTexture) {
+					var icon = new PIXI.Sprite(self.iconTexture);
+
+					icon.width = self.width() * self.iconScale;
+					icon.height = self.height() * self.iconScale;
+
+					icon.position.x = (self.width() - icon.width) / 2;
+					icon.position.y = (self.height() - icon.height) / 2;
+
+					displayObject.addChild(icon);
+				}
 
 				return displayObject;
 			}});

@@ -34,6 +34,9 @@ var Client = IgeClass.extend({
 		ige.rendering.start();
 
 		ige.addSystem(PixiRenderingSystem, {autoSize: true});
+		ige.pixiRendering.loadTextures({
+			plating: gameRoot + 'assets/blocks/armor/plating.svg'
+		});
 		ige.pixiRendering.start();
 
 		// Load the textures we want to use
