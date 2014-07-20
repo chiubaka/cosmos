@@ -159,7 +159,8 @@ var Block = IgeEntity.extend({
 				this.borderAlpha = 0;
 			}
 
-			this.iconScale = this.iconScale || 0.85;
+			this.iconScale = this.iconScale || 0.6;
+			this.borderWidth = 2;
 
 			this.texture(ige.client.textures.block);
 			this.addComponent(PixiRenderableComponent, {createDisplayObject: function() {
@@ -167,9 +168,17 @@ var Block = IgeEntity.extend({
 
 				var graphic = new PIXI.Graphics();
 				graphic.beginFill(self.backgroundColor, self.backgroundAlpha);
-				graphic.lineStyle(2, self.borderColor, self.borderAlpha);
-				graphic.drawRect(0, 0, self.width() - 2, self.height() - 2);
+				graphic.lineStyle(self.borderWidth, self.borderColor, self.borderAlpha);
+				graphic.drawRect(
+					self.borderWidth,
+					self.borderWidth,
+					self.width() - self.borderWidth * 2,
+					self.height() - self.borderWidth * 2
+				);
 				graphic.endFill();
+
+				graphic.position.x = 0;
+				graphic.position.y = 0;
 
 				displayObject.addChild(graphic);
 
