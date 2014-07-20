@@ -130,7 +130,7 @@ Healths[MiningLaserBlock.prototype.classId()] =
 
 Healths[CarbonBlock.prototype.classId()] =
 {
-	max: 15
+	max: 10
 };
 
 Healths[CobaltBlock.prototype.classId()] =
