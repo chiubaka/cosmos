@@ -3,7 +3,6 @@
 * @class
 * @typedef {AdamantiumBlock}
 * @namespace
-* @todo Use this to craft things.
 */
 var AdamantiumBlock = Element.extend({
 	classId: 'AdamantiumBlock',

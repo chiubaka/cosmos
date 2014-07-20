@@ -27,6 +27,11 @@ Descriptions[CloakBlockLight.prototype.classId()] =
 	text: Descriptions[Armor.prototype.classId()].text + " Doesn't actually cloak your ship."
 };
 
+Descriptions[CloakBlockViolet.prototype.classId()] =
+{
+	text: Descriptions[Armor.prototype.classId()].text + " Doesn't actually cloak your ship."
+};
+
 Descriptions[CloakBlockVioletLight.prototype.classId()] =
 {
 	text: Descriptions[Armor.prototype.classId()].text + " Doesn't actually cloak your ship."

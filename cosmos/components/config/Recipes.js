@@ -138,39 +138,16 @@ Recipes[MiningLaserBlock.prototype.classId()] =
 
 /* === Armor === */
 
-Recipes[MythrilPlatingBlock.prototype.classId()] =
+Recipes[IronPlatingBlock.prototype.classId()] =
 {
 	reactants: [
 		{
-			blockType: RefinedMythrilBlock.prototype.classId(),
-			quantity: 3
-		},
-		{
-			blockType: CarbonBlock.prototype.classId(),
+			blockType: IronBlock.prototype.classId(),
 			quantity: 2
 		},
 		{
-			blockType: FluorineBlock.prototype.classId(),
+			blockType: CarbonBlock.prototype.classId(),
 			quantity: 1
-		}
-	],
-	equipment: []
-};
-
-Recipes[AdamantiumPlatingBlock.prototype.classId()] =
-{
-	reactants: [
-		{
-			blockType: AdamantiumBlock.prototype.classId(),
-			quantity: 3
-		},
-		{
-			blockType: CarbonBlock.prototype.classId(),
-			quantity: 2
-		},
-		{
-			blockType: IceBlock.prototype.classId(),
-			quantity: 10
 		}
 	],
 	equipment: []
@@ -190,6 +167,63 @@ Recipes[SteelPlatingBlock.prototype.classId()] =
 		{
 			blockType: IronBlock.prototype.classId(),
 			quantity: 2
+		}
+	],
+	equipment: []
+};
+
+Recipes[MythrilPlatingBlock.prototype.classId()] =
+{
+	reactants: [
+		{
+			blockType: RefinedMythrilBlock.prototype.classId(),
+			quantity: 3
+		},
+		{
+			blockType: CarbonBlock.prototype.classId(),
+			quantity: 2
+		},
+		{
+			blockType: FluorineBlock.prototype.classId(),
+			quantity: 1
+		}
+	],
+	equipment: []
+};
+
+Recipes[KryptonitePlatingBlock.prototype.classId()] =
+{
+	reactants: [
+		{
+			blockType: KryptoniteBlock.prototype.classId(),
+			quantity: 4
+		},
+		{
+			blockType: CarbonBlock.prototype.classId(),
+			quantity: 2
+		},
+		{
+			blockType: IceBlock.prototype.classId(),
+			quantity: 2
+		}
+	],
+	equipment: []
+};
+
+Recipes[AdamantiumPlatingBlock.prototype.classId()] =
+{
+	reactants: [
+		{
+			blockType: AdamantiumBlock.prototype.classId(),
+			quantity: 3
+		},
+		{
+			blockType: CarbonBlock.prototype.classId(),
+			quantity: 2
+		},
+		{
+			blockType: IceBlock.prototype.classId(),
+			quantity: 10
 		}
 	],
 	equipment: []
@@ -228,7 +262,7 @@ Recipes[SteelBlock.prototype.classId()] =
 		},
 		{
 			blockType: CarbonBlock.prototype.classId(),
-			quantity: 3
+			quantity: 2
 		}
 	],
 	equipment: []
