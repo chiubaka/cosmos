@@ -9,13 +9,14 @@ var FluorineBlock = Element.extend({
 	classId: 'FluorineBlock',
 
 	init: function(data) {
-		Element.prototype.init.call(this, data);
-
-
 		if (!ige.isServer) {
+			this.backgroundColor = 0x551A8C;
+			this.borderColor = 0x262626;
 			this.textureBackground = "rgb(85, 26, 140)";
 			this.textureOutline = "rgb(38, 38, 38)";
 		}
+
+		Element.prototype.init.call(this, data);
 	}
 });
 

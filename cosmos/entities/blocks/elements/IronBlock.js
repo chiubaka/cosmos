@@ -9,13 +9,14 @@ var IronBlock = Element.extend({
 	classId: 'IronBlock',
 
 	init: function(data) {
-		Element.prototype.init.call(this, data);
-
-
 		if (!ige.isServer) {
+			this.backgroundColor = 0xC8C8C8;
+			this.borderColor = 0xD2D2D2;
 			this.textureBackground = "rgb(200, 200, 200)";
 			this.textureOutline = "rgb(210, 210, 210)";
 		}
+
+		Element.prototype.init.call(this, data);
 	}
 });
 

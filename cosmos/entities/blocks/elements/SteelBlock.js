@@ -9,13 +9,14 @@ var SteelBlock = Element.extend({
 	classId: 'SteelBlock',
 
 	init: function(data) {
-		Element.prototype.init.call(this, data);
-
-
 		if (!ige.isServer) {
+			this.backgroundColor = 0x6E6E6E;
+			this.borderColor = 0x505050;
 			this.textureBackground = "rgb(110, 110, 110)";
 			this.textureOutline = "rgb(80, 80, 80)";
 		}
+
+		Element.prototype.init.call(this, data);
 	}
 });
 
