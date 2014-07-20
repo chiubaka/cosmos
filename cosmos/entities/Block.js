@@ -173,8 +173,8 @@ var Block = IgeEntity.extend({
 
 				displayObject.addChild(graphic);
 
-				if (self.iconTexture) {
-					var icon = new PIXI.Sprite(self.iconTexture);
+				if (self.iconFrame) {
+					var icon = PIXI.Sprite.fromFrame(self.iconFrame);
 
 					icon.width = self.width() * self.iconScale;
 					icon.height = self.height() * self.iconScale;

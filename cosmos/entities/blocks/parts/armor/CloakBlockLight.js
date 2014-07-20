@@ -5,6 +5,8 @@ var CloakBlockLight = Armor.extend({
 		if (!ige.isServer) {
 			this.backgroundColor = 0x000000;
 			this.borderColor = 0xC8C8C8;
+			this.backgroundAlpha = 0.3;
+			this.borderAlpha = 0.5;
 			this.textureBackground = "rgba(0, 0, 0, 0.3)";
 			this.textureOutline = "rgba(200, 200, 200, 0.5)";
 		}

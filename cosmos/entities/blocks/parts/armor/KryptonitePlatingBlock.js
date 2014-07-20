@@ -5,6 +5,7 @@ var KryptonitePlatingBlock = Armor.extend({
 		if (!ige.isServer) {
 			this.backgroundColor = 0xA9FF00;
 			this.borderColor = 0x6FA700;
+			this.backgroundAlpha = 0.8;
 			this.textureBackground = "rgba(169, 255, 0, 0.8)";
 			this.textureOutline = "rgb(111, 167, 0)";
 		}

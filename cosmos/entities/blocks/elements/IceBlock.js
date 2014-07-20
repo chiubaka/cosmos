@@ -13,6 +13,7 @@ var IceBlock = Element.extend({
 		if (!ige.isServer) {
 			this.backgroundColor = 0x3FAFDD;
 			this.borderColor = 0x81CEE2;
+			this.backgroundAlpha = 0.3;
 			this.textureBackground = "rgba(63, 175, 221, 0.3)";
 			this.textureOutline = "rgb(129, 206, 226)";
 		}
