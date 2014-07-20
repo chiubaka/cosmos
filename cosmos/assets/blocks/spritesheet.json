@@ -1,6 +1,6 @@
 {"frames": {
 
-"cargo.svg":
+"cargo":
 {
 	"frame": {"x":82,"y":2,"w":78,"h":78},
 	"rotated": false,
@@ -8,7 +8,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":78,"h":78},
 	"sourceSize": {"w":78,"h":78}
 },
-"construction_zone.png":
+"construction_zone":
 {
 	"frame": {"x":2,"y":162,"w":78,"h":78},
 	"rotated": false,
@@ -16,39 +16,39 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":78,"h":78},
 	"sourceSize": {"w":78,"h":78}
 },
-"engine.svg":
+"engine":
 {
-	"frame": {"x":82,"y":82,"w":68,"h":78},
+	"frame": {"x":162,"y":2,"w":68,"h":78},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":5,"y":0,"w":68,"h":78},
 	"sourceSize": {"w":78,"h":78}
 },
-"fuel.svg":
+"fuel":
 {
-	"frame": {"x":162,"y":162,"w":52,"h":78},
+	"frame": {"x":150,"y":82,"w":52,"h":78},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":13,"y":0,"w":52,"h":78},
 	"sourceSize": {"w":78,"h":78}
 },
-"laser.svg":
+"laser":
 {
-	"frame": {"x":82,"y":162,"w":66,"h":78},
-	"rotated": true,
+	"frame": {"x":82,"y":82,"w":66,"h":78},
+	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":6,"y":0,"w":66,"h":78},
 	"sourceSize": {"w":78,"h":78}
 },
-"plating.svg":
+"plating":
 {
-	"frame": {"x":152,"y":82,"w":60,"h":78},
+	"frame": {"x":82,"y":162,"w":60,"h":78},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":9,"y":0,"w":60,"h":78},
 	"sourceSize": {"w":78,"h":78}
 },
-"playerctrl.svg":
+"playerctrl":
 {
 	"frame": {"x":2,"y":82,"w":78,"h":78},
 	"rotated": false,
@@ -56,15 +56,15 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":78,"h":78},
 	"sourceSize": {"w":78,"h":78}
 },
-"power.svg":
+"power":
 {
-	"frame": {"x":162,"y":2,"w":52,"h":78},
+	"frame": {"x":144,"y":162,"w":52,"h":78},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":13,"y":0,"w":52,"h":78},
 	"sourceSize": {"w":78,"h":78}
 },
-"thruster.svg":
+"thruster":
 {
 	"frame": {"x":2,"y":2,"w":78,"h":78},
 	"rotated": false,
@@ -77,8 +77,8 @@
 	"version": "1.0",
 	"image": "spritesheet.png",
 	"format": "RGBA8888",
-	"size": {"w":216,"h":242},
+	"size": {"w":256,"h":256},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:ba8abe78545c357a55f6f10036141c20:9a36e99e70aba5e1f139c57965d56edf:729adc6043343cfda41c447ce8f464d6$"
+	"smartupdate": "$TexturePacker:SmartUpdate:58b3df9387b7b3d9f6f2b816bdd8b863:9a36e99e70aba5e1f139c57965d56edf:729adc6043343cfda41c447ce8f464d6$"
 }
 }

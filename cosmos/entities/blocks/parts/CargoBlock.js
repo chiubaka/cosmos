@@ -13,6 +13,7 @@ var CargoBlock = Part.extend({
 		if (!ige.isServer) {
 			this.backgroundColor = 0xF2F2F2;
 			this.borderColor = 0x262626;
+			this.iconFrame = 'cargo';
 			this.textureBackground = "rgb(242, 242, 242)";
 			this.textureOutline = "rgb(38, 38, 38)";
 			this.textureSvg = ige.client.textures.cargo;
