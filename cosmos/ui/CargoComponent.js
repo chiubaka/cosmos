@@ -107,6 +107,14 @@ var CargoComponent = WindowComponent.extend({
 		}
 
 		this.fillTooltip(type, container);
+
+		container.mouseover(function() {
+			ige.hud.inspector.inspect(cosmos.blocks.instances[type]);
+		});
+
+		container.mouseout(function() {
+			ige.hud.inspector.hide();
+		});
 	},
 
 	fillTooltip: function(type, container) {

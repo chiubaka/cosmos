@@ -88,6 +88,14 @@ var CraftingUIComponent = WindowComponent.extend({
 			// Draw the block
 			self.drawBlockInContainer(container, block.classId());
 		});
+
+		container.mouseover(function() {
+			ige.hud.inspector.inspect(block);
+		});
+
+		container.mouseout(function() {
+			ige.hud.inspector.hide();
+		});
 	},
 
 	fillTooltip: function(recipe, container, callback) {
