@@ -190,13 +190,13 @@ var TutorialQuest = Quest.extend({
 			}
 
 			function doneFlying() {
-				alertify.questLog('Nice! Let\'s try to use some capabilities!',
+				alertify.questLog('Nice! Let\'s look at the minimap!',
 					'success', msgTimeout);
 				setTimeout(done, msgTimeout / 2)
 			}
 
 			function done() {
-				self.questState = self.mine;
+				self.questState = self.minimap;
 			}
 		},
 
@@ -205,6 +205,43 @@ var TutorialQuest = Quest.extend({
 
 		server: function() {
 		}
+	},
+
+	minimap: {
+		clientOnce: function() {
+			var self = this;
+			var msgTimeout = 10000;
+
+			minimapWelcome();
+
+			function minimapWelcome() {
+				ige.hud.minimap.addGlow();
+				var message = "The mini-map is located near the lower right corner." + "<br>" +
+					"It allows you to see more of the world.";
+				alertify.questLog(message, '', msgTimeout);
+				setTimeout(minimapExplain, msgTimeout / 2);
+			}
+
+			function minimapExplain() {
+				var message = '<font style="color:#00ff00;"> You show up as green</font><br>' +
+					'<font style="color:#ff0000;"> Other players show up as red</font><br>' +
+					'<font style="color:#808080;"> Neutral objects show up as gray</font>';
+				alertify.questLog(message, '', msgTimeout);
+				setTimeout(minimapDone, msgTimeout / 2);
+			}
+
+			function minimapDone() {
+				ige.hud.minimap.removeGlow();
+				alertify.questLog("Let's try out some capabilities!",
+					'success', 5000);
+				setTimeout(done, 5000 / 2);
+			}
+
+			function done() {
+				self.questState = self.mine;
+			}
+		}
+
 	},
 
 	mine: {
