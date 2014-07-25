@@ -64,7 +64,7 @@ Types[MythrilPlatingBlock.prototype.classId()] =
 
 Types[TitaniumPlatingBlock.prototype.classId()] =
 {
-	text: "Advanced Armor"
+	text: "Level 3 Armor"
 };
 
 
