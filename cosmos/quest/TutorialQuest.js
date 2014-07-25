@@ -6,7 +6,7 @@ var TutorialQuest = Quest.extend({
 		Quest.prototype.init.call(this, instance);
 
 		if (ige.isClient) {
-			this.questState = this.mine;
+			this.questState = this.welcome;
 		}
 
 		if (ige.isServer) {
@@ -234,9 +234,15 @@ var TutorialQuest = Quest.extend({
 				var listener = ige.on('cosmos:BlockStructure.processBlockActionServer.minedBlock', function () {
 					questLog.close();
 					ige.off('cosmos:BlockStructure.processBlockActionServer.minedBlock', listener);
-					alertify.questLog('Magnificent! You\'ve mined a block!', 'success', msgTimeout);
-					setTimeout(done, msgTimeout / 2);
+					alertify.questLog("Magnificent! You've mined a block!", 'success', msgTimeout);
+					setTimeout(collectionMessage, msgTimeout / 2);
 				});
+			}
+
+			function collectionMessage() {
+				var questLog = alertify.questLog("Move close to mined blocks to " +
+				"collect them", '', msgTimeout);
+				setTimeout(done, msgTimeout / 2);
 			}
 
 			function done() {
