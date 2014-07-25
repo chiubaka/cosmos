@@ -11,7 +11,7 @@ var NewShipComponent = ButtonComponent.extend({
 
 	mouseDown: function() {
 		var message = "Whoa! This will destroy your current ship and cargo." + "<br>" +
-			"Do you want to continue?"
+			"Do you want to continue?";
 
 		alertify.set({ buttonFocus: "cancel" }); // "none", "ok", "cancel"
 		alertify.confirm(message, function (e) {
