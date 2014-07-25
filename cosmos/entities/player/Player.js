@@ -113,7 +113,8 @@ var Player = IgeEntity.extend({
 
 		this._username = val;
 
-		if (!ige.isServer && this._usernameLabel !== undefined) {
+		if (ige.isClient) {
+			this._createUsernameLabel();
 			this._usernameLabel.text(this._username);
 		}
 
@@ -150,11 +151,14 @@ var Player = IgeEntity.extend({
 		return this;
 	},
 
+	/*
+	TODO: the usernames should really be a part of the ship, instead of the player object.
+	Because only when a ship is streamed to you do you potentially care about that player.
+	Otherwise you don't need the player data at all.
+	*/
 	_createUsernameLabel: function() {
-		// Don't create the username label again if it already exists. Also don't create a label for the client's
-		// player.
-		if (this._usernameLabel !== undefined ||
-			(ige.client.player !== undefined && this.id() === ige.client.player.id())) {
+		// Don't create the username label again if it already exists.
+		if (this._usernameLabel !== undefined) {
 			return;
 		}
 		var self = this;
@@ -248,17 +252,6 @@ var Player = IgeEntity.extend({
 		this._usernameLabel = undefined;
 	},
 
-	streamEntityValid: function(val) {
-		if (val !== undefined) {
-			if (val === false) {
-				this._destroyUsernameLabel();
-			}
-			else {
-				this._createUsernameLabel();
-			}
-		}
-	},
-
 	/**
 	 * TODO fix this comment
 	 * Override the {@link IgeEntity#update} function to provide support for player controls and {@link Block} functions
@@ -272,8 +265,8 @@ var Player = IgeEntity.extend({
 
 		if (!ige.isServer) {
 			// If this isn't the player playing on this client, draw a label to help identify this player
-			if (this._usernameLabel !== undefined) {
-				var screenPos = this.screenPosition();
+			if (this._usernameLabel !== undefined && this.id() !== ige.client.player.id() && this.currentShip()) {
+				var screenPos = this.currentShip().screenPosition();
 				this._usernameLabel.css('left', Math.round(screenPos.x - this._usernameLabel.outerWidth() / 2));
 				this._usernameLabel.css('top', Math.round(screenPos.y - this._usernameLabel.outerHeight() / 2));
 			}
@@ -333,7 +326,9 @@ var Player = IgeEntity.extend({
 					*/
 				var cameraSmoothingAmount = 0;
 
-				ige.$('mainViewport').camera.trackTranslate(this._currentShip, cameraSmoothingAmount);
+				if (ige.client.player.id() === this.id()) {
+					ige.$('mainViewport').camera.trackTranslate(this._currentShip, cameraSmoothingAmount);
+				}
 			}
 
 			// Update previous controls so we can tell what has changed each update.
@@ -344,6 +339,20 @@ var Player = IgeEntity.extend({
 		}
 
 		return this._currentShip;
+	},
+
+	/*
+	toJSON returns a dictionary that containts the public members of this player class.
+	Note that toJSON should not return any members that are not meant to be read by all game clients.
+	*/
+	toJSON: function() {
+		return {
+			playerId: this.id(),
+			username: this.username(),
+			hasGuestUsername: this.hasGuestUsername,
+			loggedIn: this.loggedIn(),
+			shipId: this.currentShip().id()
+		}
 	}
 });
 
@@ -402,11 +411,14 @@ Player.onUsernameRequested = function(username, clientId) {
 Player.onUsernameRequestApproved = function(data) {
 	ige.emit('cosmos:player.username.set.approve', data);
 
-	if (ige.client.player !== undefined && data.playerId === ige.client.player.id()) {
-		var player = ige.client.player;
+	var player = ige.$(data.playerId);
+	if (player) {
 		player.username(data.username);
 		player.hasGuestUsername = false;
-		ige.emit('cosmos:client.player.username.set', player.username());
+
+		if (player.id() === ige.client.player.id()) {
+			ige.emit('cosmos:client.player.username.set', player.username());
+		}
 	}
 };
 

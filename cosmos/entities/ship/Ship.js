@@ -99,6 +99,11 @@ var Ship = BlockStructure.extend({
 
 		if (ige.isClient) {
 			this._initClient();
+			var player = ige.$(data.playerId);
+			if (player) {
+				this.player(player);
+				this.player().currentShip(this);
+			}
 		} else {
 			this._initServer();
 		}
@@ -110,6 +115,22 @@ var Ship = BlockStructure.extend({
 
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform']);
+	},
+
+	streamCreateData: function() {
+		var data = BlockStructure.prototype.streamCreateData.call(this);
+		if (this.player()) {
+			data.playerId = this.player().id();
+		}
+		return data;
+	},
+
+	destroy: function() {
+		if (ige.isClient && this.player()) {
+			this.player()._destroyUsernameLabel();
+		}
+
+		BlockStructure.prototype.destroy.call(this);
 	},
 
 	// Getter for the _engines property
@@ -138,6 +159,19 @@ var Ship = BlockStructure.extend({
 			this.thrusters().push(block);
 		}
 		return blockAdded;
+	},
+
+	streamEntityValid: function(val) {
+		if (val !== undefined && this.player() !== undefined) {
+			if (val === false) {
+				this.player()._destroyUsernameLabel();
+			}
+			else {
+				this.player()._createUsernameLabel();
+			}
+		}
+
+		return BlockStructure.prototype.streamEntityValid.call(this, val);
 	},
 
 	/*
@@ -190,6 +224,9 @@ var Ship = BlockStructure.extend({
 		}
 
 		this._player = newPlayer;
+		if (ige.isClient) {
+			this._player._createUsernameLabel();
+		}
 		return this;
 	},
 

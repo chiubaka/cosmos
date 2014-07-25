@@ -100,6 +100,8 @@ var Client = IgeClass.extend({
 
 						// Setup the network command listeners
 						ige.network.define('playerEntity', self._onPlayerEntity);
+						ige.network.define('playerConnected', self._onPlayerConnected);
+						ige.network.define('playerDisconnected', self._onPlayerDisconnected);
 						ige.network.define('shipEntity', self._onShipEntity);
 
 						// Called when the server needs to broadcast updates about a block
@@ -112,6 +114,9 @@ var Client = IgeClass.extend({
 						ige.network.define('cargoResponse', self._onCargoResponse);
 						ige.network.define('cargoUpdate', self._onCargoUpdate);
 						ige.network.define('confirm', self._onConfirm);
+
+						ige.network.define('cosmos:BlockStructure.processBlockActionServer.minedBlock',
+							self._onMinedBlock);
 
 						ige.network.define('cosmos:player.username.set.approve', Player.onUsernameRequestApproved);
 						ige.network.define('cosmos:player.username.set.error', Player.onUsernameRequestError);
