@@ -16,7 +16,7 @@ Recipes[IronEngineBlock.prototype.classId()] =
 		},
 		{
 			blockType: CarbonBlock.prototype.classId(),
-			quantity: 3
+			quantity: 2
 		},
 		{
 			blockType: IceBlock.prototype.classId(),
@@ -50,7 +50,7 @@ Recipes[DragonBreathEngineBlock.prototype.classId()] =
 		},
 		{
 			blockType: DragonBlock.prototype.classId(),
-			quantity: 3
+			quantity: 2
 		}
 	],
 	equipment: []
@@ -101,7 +101,7 @@ Recipes[KryptoniteThrusterBlock.prototype.classId()] =
 		},
 		{
 			blockType: KryptoniteBlock.prototype.classId(),
-			quantity: 1
+			quantity: 2
 		}
 	],
 	equipment: []
