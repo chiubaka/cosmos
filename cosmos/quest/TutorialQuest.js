@@ -241,7 +241,7 @@ var TutorialQuest = Quest.extend({
 
 			function collectionMessage() {
 				var questLog = alertify.questLog("Move close to mined blocks to " +
-				"collect them", '', msgTimeout);
+					"collect them", '', msgTimeout);
 				setTimeout(done, msgTimeout / 2);
 			}
 
