@@ -338,7 +338,9 @@ var Player = IgeEntity.extend({
 					*/
 				var cameraSmoothingAmount = 0;
 
-				ige.$('mainViewport').camera.trackTranslate(this._currentShip, cameraSmoothingAmount);
+				if (ige.client.player.id() === this.id()) {
+					ige.$('mainViewport').camera.trackTranslate(this._currentShip, cameraSmoothingAmount);
+				}
 			}
 
 			// Update previous controls so we can tell what has changed each update.
