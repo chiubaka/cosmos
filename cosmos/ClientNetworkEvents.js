@@ -79,6 +79,10 @@ var ClientNetworkEvents = {
 		shipId: player.currentShip().id()
 	}
 	*/
+	// TODO: Refactor this code to use the paradigm where the ship sends the playerId in streamCreateData and where
+	// messages that create players send down the shipId. This way, it's pretty well-defined that either we're ready
+	// when the player is received or when the ship is received and every player and every ship can be paired to the
+	// appropriate extant entity.
 	_onShipEntity: function(data) {
 		if(ige.client.player && ige.$(data.shipId)) {
 
