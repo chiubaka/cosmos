@@ -207,15 +207,19 @@ h1, h2, h3, h4 {
   width: 200px;
   cursor: pointer;
 }
-/* line 28, ../../sass/_user-tile.scss */
+/* line 25, ../../sass/_user-tile.scss */
+#user-tile .user-info .ship-name {
+  display: none;
+}
+/* line 29, ../../sass/_user-tile.scss */
 #user-tile .user-info .username {
-  font-size: 75%;
+  font-size: 100%;
   font-weight: 600;
-  line-height: 50%;
+  line-height: 50px;
   position: relative;
   top: -8.33333px;
 }
-/* line 36, ../../sass/_user-tile.scss */
+/* line 37, ../../sass/_user-tile.scss */
 #user-tile .user-info .more-triangle {
   float: right;
   line-height: 33.33333px;
