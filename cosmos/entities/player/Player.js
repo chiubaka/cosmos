@@ -336,6 +336,10 @@ var Player = IgeEntity.extend({
 		return this._currentShip;
 	},
 
+	/*
+	toJSON returns a dictionary that containts the public members of this player class.
+	Note that toJSON should not return any members that are not meant to be read by all game clients.
+	*/
 	toJSON: function() {
 		return {
 			playerId: this.id(),
