@@ -265,7 +265,7 @@ var Player = IgeEntity.extend({
 
 		if (!ige.isServer) {
 			// If this isn't the player playing on this client, draw a label to help identify this player
-			if (this._usernameLabel !== undefined && this.id() !== ige.client.player.id() && this.currentShip()) {
+			if (this._usernameLabel !== undefined && (ige.client.player && ige.client.player.id() !== this.id()) && this.currentShip()) {
 				var screenPos = this.currentShip().screenPosition();
 				this._usernameLabel.css('left', Math.round(screenPos.x - this._usernameLabel.outerWidth() / 2));
 				this._usernameLabel.css('top', Math.round(screenPos.y - this._usernameLabel.outerHeight() / 2));
@@ -326,7 +326,7 @@ var Player = IgeEntity.extend({
 					*/
 				var cameraSmoothingAmount = 0;
 
-				if (ige.client.player.id() === this.id()) {
+				if (ige.client.player && ige.client.player.id() === this.id()) {
 					ige.$('mainViewport').camera.trackTranslate(this._currentShip, cameraSmoothingAmount);
 				}
 			}
@@ -416,7 +416,7 @@ Player.onUsernameRequestApproved = function(data) {
 		player.username(data.username);
 		player.hasGuestUsername = false;
 
-		if (player.id() === ige.client.player.id()) {
+		if (ige.client.player && ige.client.player.id() === player.id()) {
 			ige.emit('cosmos:client.player.username.set', player.username());
 		}
 	}

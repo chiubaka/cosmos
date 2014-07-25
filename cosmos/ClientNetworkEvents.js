@@ -50,7 +50,7 @@ var ClientNetworkEvents = {
 	},
 
 	_onPlayerConnected: function(data) {
-		if (ige.client.player.id === data.playerId || ige.$(data.playerId)) {
+		if ((ige.client.player && ige.client.player.id() === data.playerId) || ige.$(data.playerId)) {
 			return;
 		}
 
