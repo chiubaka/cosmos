@@ -10,8 +10,16 @@ var NewShipComponent = ButtonComponent.extend({
 	},
 
 	mouseDown: function() {
-		ige.network.send('new ship');
-		ige.emit('new ship button clicked');
+		var message = "Whoa! This will destroy your current ship and cargo." + "<br>" +
+			"Do you want to continue?";
+
+		alertify.set({ buttonFocus: "cancel" }); // "none", "ok", "cancel"
+		alertify.confirm(message, function (e) {
+			if (e) {
+				ige.network.send('new ship');
+				ige.emit('new ship button clicked');
+			}
+		});
 	}
 });
 
