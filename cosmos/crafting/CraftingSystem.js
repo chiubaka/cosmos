@@ -170,14 +170,10 @@ var CraftingSystem = IgeEventingClass.extend({
 
 	// TODO:Serialize and persist to DB
 	serializeRecipes: function() {
-
 	},
 
 	rehydrateRecipes: function () {
 	}
-
-
-
 });
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
