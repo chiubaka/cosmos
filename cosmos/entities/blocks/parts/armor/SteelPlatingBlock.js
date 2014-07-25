@@ -6,8 +6,8 @@ var SteelPlatingBlock = Armor.extend({
 
 
 		if (!ige.isServer) {
-			this.textureBackground = "rgb(139, 139, 139)";
-			this.textureOutline = "rgb(80, 80, 80)";
+			this.textureBackground = "rgb(160, 160, 160)";
+			this.textureOutline = "rgb(201, 201, 201)";
 		}
 	}
 });

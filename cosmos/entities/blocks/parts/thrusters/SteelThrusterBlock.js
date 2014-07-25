@@ -9,7 +9,7 @@ var SteelThrusterBlock = ThrusterBlock.extend({
 		}
 
 		if (!ige.isServer) {
-			this.textureBackground = "rgb(110, 110, 110)";
+			this.textureBackground = "rgb(160, 160, 160)";
 			this.textureOutline = "rgb(255, 78, 0)";
 			this.textureSvg = ige.client.textures.thruster;
 		}
