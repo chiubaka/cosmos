@@ -53,7 +53,7 @@ var Inspector = IgeEventingClass.extend({
 			});
 
 			ige.on('cosmos:background.mousedown', function() {
-				self.blockInspector.hide();
+				self.hide();
 			});
 
 			ige.emit('cosmos:hud.subcomponent.loaded', self);
@@ -102,6 +102,10 @@ var Inspector = IgeEventingClass.extend({
 		ctx.scale(scaleWidth, scaleHeight);
 		ctx.translate(block._bounds2d.x2, block._bounds2d.y2);
 		block.texture().render(ctx, block);
+	},
+
+	hide: function() {
+		this.blockInspector.hide();
 	},
 
 	loadHtml: function (url, callback) {

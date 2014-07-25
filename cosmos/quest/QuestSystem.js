@@ -185,8 +185,8 @@ var QuestSystem = IgeEventingClass.extend({
 			(ige.client.player.loggedIn() && !ige.client.player.hasGuestUsername)) {
 			return;
 		}
-		var message = "Hi! We noticed that you are a guest user. Would you " +
-			"like to complete a short in-game tutorial?";
+		var message = "Hi! We noticed that you are a guest user." + "<br>" +
+			"Would you like to complete a short in-game tutorial?";
 		alertify.confirm(message, function (e) {
 			if (e) {
 				var questName = TutorialQuest.prototype.classId();
