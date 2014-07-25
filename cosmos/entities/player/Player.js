@@ -115,6 +115,7 @@ var Player = IgeEntity.extend({
 
 		if (ige.isClient) {
 			this._createUsernameLabel();
+			this._usernameLabel.text(this._username);
 		}
 
 		return this;
@@ -151,10 +152,8 @@ var Player = IgeEntity.extend({
 	},
 
 	_createUsernameLabel: function() {
-		// Don't create the username label again if it already exists. Also don't create a label for the client's
-		// player.
-		if (this._usernameLabel !== undefined ||
-			(ige.client.player !== undefined && this.id() === ige.client.player.id())) {
+		// Don't create the username label again if it already exists.
+		if (this._usernameLabel !== undefined) {
 			return;
 		}
 		var self = this;
@@ -261,7 +260,7 @@ var Player = IgeEntity.extend({
 
 		if (!ige.isServer) {
 			// If this isn't the player playing on this client, draw a label to help identify this player
-			if (this._usernameLabel !== undefined && this.currentShip()) {
+			if (this._usernameLabel !== undefined && this.id() !== ige.client.player.id() && this.currentShip()) {
 				var screenPos = this.currentShip().screenPosition();
 				this._usernameLabel.css('left', Math.round(screenPos.x - this._usernameLabel.outerWidth() / 2));
 				this._usernameLabel.css('top', Math.round(screenPos.y - this._usernameLabel.outerHeight() / 2));
@@ -403,11 +402,14 @@ Player.onUsernameRequested = function(username, clientId) {
 Player.onUsernameRequestApproved = function(data) {
 	ige.emit('cosmos:player.username.set.approve', data);
 
-	if (ige.client.player !== undefined && data.playerId === ige.client.player.id()) {
-		var player = ige.client.player;
+	var player = ige.$(data.playerId);
+	if (player) {
 		player.username(data.username);
 		player.hasGuestUsername = false;
-		ige.emit('cosmos:client.player.username.set', player.username());
+
+		if (player.id() === ige.client.player.id()) {
+			ige.emit('cosmos:client.player.username.set', player.username());
+		}
 	}
 };
 
