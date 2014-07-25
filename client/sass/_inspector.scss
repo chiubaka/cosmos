@@ -11,68 +11,65 @@ $block-inspector-texture-height: $hud-button-height * 1.5 - 2 * $inspector-paddi
 $block-inspector-texture-width: $block-inspector-texture-height;
 
 #inspector {
-  position: absolute;
-  top: $inspector-position-top;
-  right: 0;
-  color: $inspector-font-color;
+	position: absolute;
+	top: $inspector-position-top;
+	right: 0;
+	color: $inspector-font-color;
 
-  .pullout, .button {
-    float: right;
-  }
+	.pullout, .button {
+		float: right;
+	}
 
-  .pullout {
-    width: $block-inspector-width;
-  }
+	.pullout {
+		width: $block-inspector-width;
+	}
 
-  #block-inspector.pullout {
-    display: none;
-    background-color: $inspector-button-background-color;
-    font-size: 75%;
+	#block-inspector.pullout {
+		display: none;
+		background-color: $inspector-button-background-color;
+		font-size: 75%;
 
-    p {
-      margin: 0;
-    }
+		p {
+			margin: 0;
+		}
 
-    .top, .middle, .bottom {
-      padding: $inspector-padding;
-    }
+		.top, .middle, .bottom {
+			padding: $inspector-padding;
+		}
 
-    .top {
-      height: $hud-button-height - 2 * $inspector-padding;
+		.top {
+			#block-name {
+				font-weight: bold;
+				margin: 0;
+				font-size: 125%;
+			}
+		}
 
-      #block-name {
-        line-height: $hud-button-height - 2 * $inspector-padding;
-        font-weight: bold;
-        margin: 0;
-        font-size: 125%;
-      }
-    }
+		.middle {
+			overflow: auto;
+			background-color: $inspector-button-hover-background-color;
 
-    .middle {
-      overflow: auto;
-      background-color: $inspector-button-hover-background-color;
+			#block-texture {
+				height: $block-inspector-texture-height;
+				width: $block-inspector-texture-width;
+				margin-right: $inspector-padding;
+				float: left;
+			}
 
-      #block-texture {
-        height: $block-inspector-texture-height;
-        width: $block-inspector-texture-width;
-        margin-right: $inspector-padding;
-        float: left;
-      }
+			#block-stats {
+				width: $block-inspector-width - $block-inspector-texture-width - 3 * $inspector-padding;
+				float: left;
+			}
+		}
 
-      #block-stats {
-        width: $block-inspector-width - $block-inspector-texture-width - 3 * $inspector-padding;
-        float: left;
-      }
-    }
+		.bottom {
+			max-height: $hud-button-height * 4;
+			overflow-y: auto;
+		}
+	}
 
-    .bottom {
-      max-height: $hud-button-height * 4;
-      overflow-y: auto;
-    }
-  }
-
-  .button {
-    display: none;
-    @include side-button-with-icon('../images/icons/icon_inspector.png', $inspector-button-background-color, $inspector-button-hover-background-color, $inspector-button-border-color, true);
-  }
+	.button {
+		display: none;
+		@include side-button-with-icon('../images/icons/icon_inspector.png', $inspector-button-background-color, $inspector-button-hover-background-color, $inspector-button-border-color, true);
+	}
 }

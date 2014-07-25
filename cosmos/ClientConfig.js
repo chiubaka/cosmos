@@ -100,6 +100,7 @@ var igeClientConfig = {
 
 		/* === COMPONENT CONFIG FILES === */
 		'./components/config/Descriptions.js',
+		'./components/config/Types.js',
 		'./components/config/Healths.js',
 		'./components/config/Recipes.js',
 		'./components/config/Thrusts.js',
@@ -107,6 +108,7 @@ var igeClientConfig = {
 		/* === COMPONENTS === */
 		'./components/DamageSource.js',
 		'./components/Description.js',
+		'./components/Type.js',
 		'./components/Health.js',
 		'./components/Recipe.js',
 		'./components/Thrust.js',

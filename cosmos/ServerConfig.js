@@ -83,6 +83,7 @@ var config = {
 
 		/* === COMPONENT CONFIG FILES === */
 		{ name: 'Descriptions', path: './components/config/Descriptions' },
+		{ name: 'Types', path: './components/config/Types' },
 		{ name: 'Healths', path: './components/config/Healths' },
 		{ name: 'Recipes', path: './components/config/Recipes' },
 		{ name: 'Thrusts', path: './components/config/Thrusts' },
@@ -90,6 +91,7 @@ var config = {
 		/* === COMPONENTS === */
 		{ name: 'DamageSource', path: './components/DamageSource' },
 		{ name: 'Description', path: './components/Description'},
+		{ name: 'Type', path: './components/Type'},
 		{ name: 'Health', path: './components/Health' },
 		{ name: 'Recipe', path: './components/Recipe' },
 		{ name: 'Thrust', path: './components/Thrust' },

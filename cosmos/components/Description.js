@@ -10,7 +10,7 @@ var Description = IgeClass.extend({
 			return;
 		}
 
-		// Take the dps as a parameter
+		// Take the text as a parameter
 		this.text = data.text;
 	}
 });

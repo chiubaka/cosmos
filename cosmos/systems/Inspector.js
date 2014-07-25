@@ -8,6 +8,7 @@ var Inspector = IgeEventingClass.extend({
 	block: undefined,
 	blockInspector: undefined,
 	blockInspectorName: undefined,
+	blockInspectorType: undefined,
 	blockInspectorTexture: undefined,
 	blockInspectorCurrentHealth: undefined,
 	blockInspectorMaxHealth: undefined,
@@ -32,6 +33,8 @@ var Inspector = IgeEventingClass.extend({
 
 			self.blockInspector = self.element.find('#block-inspector');
 			self.blockInspectorName = self.blockInspector.find('#block-name');
+
+			self.blockInspectorType = self.blockInspector.find('#block-type');
 
 			self.blockInspectorTexture = self.blockInspector.find('#block-texture');
 			// Sets the height and width of the canvas equal to its CSS height and width
@@ -62,6 +65,7 @@ var Inspector = IgeEventingClass.extend({
 		this.block = block;
 		this.blockInspector.show();
 		this.blockInspectorName.text(block.displayName());
+		this.blockInspectorType.text(block.type.text);
 		this.blockInspectorDescription.text(block.description.text);
 
 		this.blockInspector.find('.block-stat').hide();
