@@ -142,19 +142,20 @@ var ServerNetworkEvents = {
 
 		ige.server.players[clientId] = player;
 
-		var sendData = {
-			playerId: ige.server.players[clientId].id(),
-			username: player.username(),
-			hasGuestUsername: player.hasGuestUsername,
-			loggedIn: player.loggedIn()
-		};
+		// Load the player's ships
+		ige.server._createShip(clientId, playerId, ship, cargo);
+
+		var sendData = player.toJSON();
 
 		// Tell the client to track their player entity
 		ige.network.send('playerEntity', sendData, clientId);
 		ige.network.send('playerConnected', sendData);
 
-		// Load the player's ships
-		ige.server._createShip(clientId, playerId, ship, cargo);
+		_.forEach(ige.server.players, function(playerToSend) {
+			if (ige.server.players[clientId].id() !== playerToSend.id()) {
+				ige.network.send('playerConnected', playerToSend.toJSON(), clientId);
+			}
+		});
 	},
 
 	_createShip: function(clientId, playerId, ship, cargo) {

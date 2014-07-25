@@ -50,7 +50,7 @@ var ClientNetworkEvents = {
 	},
 
 	_onPlayerConnected: function(data) {
-		if (ige.client.player.id === data.playerId) {
+		if (ige.client.player.id === data.playerId || ige.$(data.playerId)) {
 			return;
 		}
 
@@ -60,6 +60,10 @@ var ClientNetworkEvents = {
 			.mount(ige.$("spaceGameScene"));
 
 		player.hasGuestUsername = data.hasGuestUsername;
+
+		if (ige.$(data.shipId)) {
+			player.currentShip(ige.$(data.shipId));
+		}
 	},
 
 	/*

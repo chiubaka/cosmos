@@ -71,17 +71,6 @@ var Player = IgeEntity.extend({
 			}
 		};
 
-		if (this.username()) {
-			if (ige.client.player === undefined) {
-				ige.on('cosmos:client.player.streamed', function() {
-					self._createUsernameLabel();
-				}, self, true);
-			}
-			else {
-				this._createUsernameLabel();
-			}
-		}
-
 		this.addComponent(CraftingComponent);
 		this.addComponent(QuestComponent);
 	},
@@ -124,8 +113,8 @@ var Player = IgeEntity.extend({
 
 		this._username = val;
 
-		if (!ige.isServer && this._usernameLabel !== undefined) {
-			this._usernameLabel.text(this._username);
+		if (ige.isClient) {
+			this._createUsernameLabel();
 		}
 
 		return this;
@@ -285,7 +274,7 @@ var Player = IgeEntity.extend({
 
 		if (!ige.isServer) {
 			// If this isn't the player playing on this client, draw a label to help identify this player
-			if (this._usernameLabel !== undefined) {
+			if (this._usernameLabel !== undefined && this.currentShip()) {
 				var screenPos = this.currentShip().screenPosition();
 				this._usernameLabel.css('left', Math.round(screenPos.x - this._usernameLabel.outerWidth() / 2));
 				this._usernameLabel.css('top', Math.round(screenPos.y - this._usernameLabel.outerHeight() / 2));
@@ -360,6 +349,16 @@ var Player = IgeEntity.extend({
 		}
 
 		return this._currentShip;
+	},
+
+	toJSON: function() {
+		return {
+			playerId: this.id(),
+			username: this.username(),
+			hasGuestUsername: this.hasGuestUsername,
+			loggedIn: this.loggedIn(),
+			shipId: this.currentShip().id()
+		}
 	}
 });
 
