@@ -34,7 +34,7 @@ Recipes[SteelEngineBlock.prototype.classId()] =
 			quantity: 1
 		},
 		{
-			blockType: SteelPlatingBlock.prototype.classId(),
+			blockType: SteelBlock.prototype.classId(),
 			quantity: 2
 		}
 	],
