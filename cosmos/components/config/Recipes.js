@@ -34,7 +34,7 @@ Recipes[SteelEngineBlock.prototype.classId()] =
 			quantity: 1
 		},
 		{
-			blockType: SteelPlatingBlock.prototype.classId(),
+			blockType: SteelBlock.prototype.classId(),
 			quantity: 2
 		}
 	],
@@ -45,15 +45,11 @@ Recipes[DragonBreathEngineBlock.prototype.classId()] =
 {
 	reactants: [
 		{
+			blockType: SteelEngineBlock.prototype.classId(),
+			quantity: 1
+		},
+		{
 			blockType: DragonBlock.prototype.classId(),
-			quantity: 3
-		},
-		{
-			blockType: CarbonBlock.prototype.classId(),
-			quantity: 3
-		},
-		{
-			blockType: IceBlock.prototype.classId(),
 			quantity: 3
 		}
 	],
@@ -85,7 +81,7 @@ Recipes[SteelThrusterBlock.prototype.classId()] =
 {
 	reactants: [
 		{
-			blockType: IronEngineBlock.prototype.classId(),
+			blockType: IronThrusterBlock.prototype.classId(),
 			quantity: 1
 		},
 		{

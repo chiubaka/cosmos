@@ -47,19 +47,19 @@ Types[IronPlatingBlock.prototype.classId()] =
 	text: "Level 1 Armor"
 };
 
+Types[SteelPlatingBlock.prototype.classId()] =
+{
+	text: "Level 2 Armor"
+};
+
 Types[KryptonitePlatingBlock.prototype.classId()] =
 {
-	text: "Advanced Armor"
+	text: "Level 3 Armor"
 };
 
 Types[MythrilPlatingBlock.prototype.classId()] =
 {
 	text: "Advanced Armor"
-};
-
-Types[SteelPlatingBlock.prototype.classId()] =
-{
-	text: "Level 2 Armor"
 };
 
 Types[TitaniumPlatingBlock.prototype.classId()] =
