@@ -46,6 +46,13 @@ $block-inspector-texture-width: $block-inspector-texture-height;
         margin: 0;
         font-size: 125%;
       }
+
+      #block-type {
+        line-height: $hud-button-height - 2 * $inspector-padding;
+        font-weight: bold;
+        margin: 0;
+        font-size: 125%;
+      }
     }
 
     .middle {
