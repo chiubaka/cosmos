@@ -46,6 +46,8 @@ var Server = IgeClass.extend({
 					if (success) {
 						/* This is called when a player connects to the server and asks for a player object to be made for them */
 						ige.network.define('playerEntity', self._onPlayerEntity);
+						ige.network.define('playerConnected');
+						ige.network.define('playerDisconnected');
 						/* This is called when a player pushes down or releases a key */
 						ige.network.define('playerControlUpdate', self._onPlayerControlUpdate);
 
