@@ -49,12 +49,40 @@ var ClientNetworkEvents = {
 		//ige.client.tsVis.monitor(ige.$(data));
 	},
 
+	_onPlayerConnected: function(data) {
+		if ((ige.client.player && ige.client.player.id() === data.playerId) || ige.$(data.playerId)) {
+			return;
+		}
+
+		var player = new Player().id(data.playerId)
+			.username(data.username)
+			.loggedIn(data.loggedIn)
+			.mount(ige.$("spaceGameScene"));
+
+		player.hasGuestUsername = data.hasGuestUsername;
+
+		if (ige.$(data.shipId)) {
+			player.currentShip(ige.$(data.shipId));
+		}
+	},
+
+	_onPlayerDisconnected: function(data) {
+		var player = ige.$(data);
+		if (player) {
+			player.destroy();
+		}
+	},
+
 	/*
 	This is how the server assembles the data to send us:
 	var sendData = {
 		shipId: player.currentShip().id()
 	}
 	*/
+	// TODO: Refactor this code to use the paradigm where the ship sends the playerId in streamCreateData and where
+	// messages that create players send down the shipId. This way, it's pretty well-defined that either we're ready
+	// when the player is received or when the ship is received and every player and every ship can be paired to the
+	// appropriate extant entity.
 	_onShipEntity: function(data) {
 		if(ige.client.player && ige.$(data.shipId)) {
 
@@ -99,6 +127,10 @@ var ClientNetworkEvents = {
 	_onBlockAction: function(data) {
 		var blockGrid = ige.$(data.blockGridId);
 		blockGrid.processBlockActionClient(data);
+	},
+
+	_onMinedBlock: function(data) {
+		ige.emit('cosmos:BlockStructure.processBlockActionServer.minedBlock');
 	},
 
 	_onAddEffect: function(effect) {

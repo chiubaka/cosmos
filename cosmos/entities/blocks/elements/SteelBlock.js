@@ -13,7 +13,7 @@ var SteelBlock = Element.extend({
 
 
 		if (!ige.isServer) {
-			this.textureBackground = "rgb(110, 110, 110)";
+			this.textureBackground = "rgb(160, 160, 160)";
 			this.textureOutline = "rgb(80, 80, 80)";
 		}
 	}

@@ -144,9 +144,11 @@ var Block = IgeEntity.extend({
 			this.log("No health found for " + this.classId() + ". The health component is mandatory for all blocks", 'error');
 		}
 
-		// Check if a recipe has been provided for this block. If so, this block is craftable. Otherwise, it is not.
-		if (Recipes[this.classId()] !== undefined) {
-			this.addComponent(Recipe, Recipes[this.classId()]);
+		// Check if a type has been provided for this block.
+		if (Types[this.classId()] !== undefined) {
+			this.addComponent(Type, Types[this.classId()]);
+		} else if(!(this instanceof ConstructionZoneBlock || isAbstractClass)) {
+			this.log("No type found for " + this.classId() + ". The health component is mandatory for all blocks", 'error');
 		}
 
 		// Check if a description has been provided for this block. If so, this block is describable. Otherwise, it is not.
@@ -154,6 +156,11 @@ var Block = IgeEntity.extend({
 			this.addComponent(Description, Descriptions[this.classId()]);
 		} else if(!(this instanceof ConstructionZoneBlock || isAbstractClass)) {
 			this.log("No description found for " + this.classId() + ". The descriptions component is mandatory for all blocks", 'error');
+		}
+
+		// Check if a recipe has been provided for this block. If so, this block is craftable. Otherwise, it is not.
+		if (Recipes[this.classId()] !== undefined) {
+			this.addComponent(Recipe, Recipes[this.classId()]);
 		}
 
 		if (!ige.isServer) {

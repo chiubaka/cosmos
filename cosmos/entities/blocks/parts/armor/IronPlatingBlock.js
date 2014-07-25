@@ -13,8 +13,8 @@ var IronPlatingBlock = Armor.extend({
 
 
 		if (!ige.isServer) {
-			this.textureBackground = "rgb(217, 217, 217)";
-			this.textureOutline = "rgb(201, 201, 201)";
+			this.textureBackground = "rgb(100, 100, 100)";
+			this.textureOutline = "rgb(80, 80, 80)";
 		}
 	}
 });
