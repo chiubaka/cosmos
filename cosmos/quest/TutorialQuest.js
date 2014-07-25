@@ -230,7 +230,7 @@ var TutorialQuest = Quest.extend({
 			}
 
 			function mineBlock() {
-				var questLog = alertify.questLog('Now, click on an asteroid and mine it');
+				var questLog = alertify.questLog('Now, click on the edges of an asteroid and mine it');
 				var listener = ige.on('cosmos:BlockStructure.processBlockActionServer.minedBlock', function () {
 					questLog.close();
 					ige.off('cosmos:BlockStructure.processBlockActionServer.minedBlock', listener);
