@@ -113,6 +113,9 @@ var Client = IgeClass.extend({
 						ige.network.define('cargoUpdate', self._onCargoUpdate);
 						ige.network.define('confirm', self._onConfirm);
 
+						ige.network.define('cosmos:BlockStructure.processBlockActionServer.minedBlock',
+							self._onMinedBlock);
+
 						ige.network.define('cosmos:player.username.set.approve', Player.onUsernameRequestApproved);
 						ige.network.define('cosmos:player.username.set.error', Player.onUsernameRequestError);
 
