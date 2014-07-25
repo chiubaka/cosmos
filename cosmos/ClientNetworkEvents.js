@@ -66,6 +66,13 @@ var ClientNetworkEvents = {
 		}
 	},
 
+	_onPlayerDisconnected: function(data) {
+		var player = ige.$(data);
+		if (player) {
+			player.destroy();
+		}
+	},
+
 	/*
 	This is how the server assembles the data to send us:
 	var sendData = {

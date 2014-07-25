@@ -126,7 +126,7 @@ var Ship = BlockStructure.extend({
 	},
 
 	destroy: function() {
-		if (this.player()) {
+		if (ige.isClient && this.player()) {
 			this.player()._destroyUsernameLabel();
 		}
 

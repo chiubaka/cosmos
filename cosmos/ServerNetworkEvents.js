@@ -58,6 +58,8 @@ var ServerNetworkEvents = {
 			// Remove the player's ship from the game
 			player.currentShip().destroy();
 
+			ige.network.send('playerDisconnected', player.id());
+
 			// Remove the reference to the player entity
 			// so that we don't leak memory
 			delete ige.server.players[player];

@@ -153,16 +153,8 @@ var Player = IgeEntity.extend({
 	_createUsernameLabel: function() {
 		// Don't create the username label again if it already exists. Also don't create a label for the client's
 		// player.
-		console.log('Create username label called!');
 		if (this._usernameLabel !== undefined ||
 			(ige.client.player !== undefined && this.id() === ige.client.player.id())) {
-			console.log("Didn't create username label!");
-			if (this._usernameLabel !== undefined) {
-				console.log("\tBecause username label already exists!");
-			}
-			else {
-				console.log("\tBecause this is the client's player: " + ige.client.player.id() + '=' + this.id());
-			}
 			return;
 		}
 		var self = this;
@@ -249,11 +241,8 @@ var Player = IgeEntity.extend({
 	_destroyUsernameLabel: function() {
 		// If there is no username label, there isn't anything to destroy
 		if (this._usernameLabel === undefined) {
-			console.log('Username label not destroyed.');
 			return;
 		}
-
-		console.log('Username label destroyed.');
 
 		this._usernameLabel.remove();
 		this._usernameLabel = undefined;
@@ -270,17 +259,12 @@ var Player = IgeEntity.extend({
 	update: function(ctx) {
 		IgeEntity.prototype.update.call(this, ctx);
 
-		console.log("Update player: " + this.id());
-
 		if (!ige.isServer) {
 			// If this isn't the player playing on this client, draw a label to help identify this player
 			if (this._usernameLabel !== undefined && this.currentShip()) {
 				var screenPos = this.currentShip().screenPosition();
 				this._usernameLabel.css('left', Math.round(screenPos.x - this._usernameLabel.outerWidth() / 2));
 				this._usernameLabel.css('top', Math.round(screenPos.y - this._usernameLabel.outerHeight() / 2));
-			}
-			else {
-				//console.log('Username label undefined.');
 			}
 
 			/* Save the old control state for comparison later */
