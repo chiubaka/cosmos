@@ -85,7 +85,7 @@ Recipes[SteelThrusterBlock.prototype.classId()] =
 {
 	reactants: [
 		{
-			blockType: IronEngineBlock.prototype.classId(),
+			blockType: IronThrusterBlock.prototype.classId(),
 			quantity: 1
 		},
 		{
