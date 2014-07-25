@@ -125,6 +125,14 @@ var Ship = BlockStructure.extend({
 		return data;
 	},
 
+	destroy: function() {
+		if (this.player()) {
+			this.player()._destroyUsernameLabel();
+		}
+
+		BlockStructure.prototype.destroy.call(this);
+	},
+
 	// Getter for the _engines property
 	engines: function() {
 		return this._engines;
