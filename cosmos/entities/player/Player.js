@@ -151,6 +151,11 @@ var Player = IgeEntity.extend({
 		return this;
 	},
 
+	/*
+	TODO: the usernames should really be a part of the ship, instead of the player object.
+	Because only when a ship is streamed to you do you potentially care about that player.
+	Otherwise you don't need the player data at all.
+	*/
 	_createUsernameLabel: function() {
 		// Don't create the username label again if it already exists.
 		if (this._usernameLabel !== undefined) {
