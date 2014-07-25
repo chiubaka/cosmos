@@ -317,6 +317,9 @@ var TutorialQuest = Quest.extend({
 				var questLog = alertify.questLog(baseMessage);
 				// Show the crafting tooltip for the desired block
 				ige.hud.leftToolbar.windows.craftingUI.pinRecipeTooltip(recipeName);
+				// Autohide the crafting tooltip so it doesn't get in the way
+				setTimeout(function() {ige.hud.leftToolbar.windows.craftingUI.unpinRecipeTooltip(
+					recipeName)}, msgTimeout)
 
 				// Inform the player what they need to collect
 				var responseListener = ige.on('cargo response', checkForReactants, this);
