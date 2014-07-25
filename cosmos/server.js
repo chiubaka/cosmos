@@ -73,6 +73,8 @@ var Server = IgeClass.extend({
 
 						ige.network.define('shipEntity');
 
+						ige.network.define('cosmos:BlockStructure.processBlockActionServer.minedBlock');
+
 						ige.network.define('cosmos:player.username.set.request', Player.onUsernameRequested);
 						ige.network.define('cosmos:player.username.set.approve');
 						ige.network.define('cosmos:player.username.set.error');

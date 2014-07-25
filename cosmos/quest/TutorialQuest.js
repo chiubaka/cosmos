@@ -6,7 +6,7 @@ var TutorialQuest = Quest.extend({
 		Quest.prototype.init.call(this, instance);
 
 		if (ige.isClient) {
-			this.questState = this.welcome;
+			this.questState = this.mine;
 		}
 
 		if (ige.isServer) {
@@ -231,9 +231,9 @@ var TutorialQuest = Quest.extend({
 
 			function mineBlock() {
 				var questLog = alertify.questLog('Now, click on an asteroid and mine it');
-				var listener = ige.on('cosmos:block.mousedown', function () {
+				var listener = ige.on('cosmos:BlockStructure.processBlockActionServer.minedBlock', function () {
 					questLog.close();
-					ige.off('cosmos:block.mousedown', listener);
+					ige.off('cosmos:BlockStructure.processBlockActionServer.minedBlock', listener);
 					alertify.questLog('Magnificent! You\'ve mined a block!', 'success', msgTimeout);
 					setTimeout(done, msgTimeout / 2);
 				});
