@@ -70,6 +70,14 @@ var MinimapComponent = IgeEventingClass.extend({
 		this.element.hide();
 	},
 
+	addGlow: function() {
+		this.element.addClass('glow-pulse');
+	},
+
+	removeGlow: function() {
+		this.element.removeClass('glow-pulse');
+	},
+
 	updateCoordinates: function() {
 		var minimap = ige.hud.minimap;
 		minimap.coordinates.text(minimap.getCoordinatesString());
