@@ -140,6 +140,19 @@ var Ship = BlockStructure.extend({
 		return blockAdded;
 	},
 
+	streamEntityValid: function(val) {
+		if (val !== undefined && this.player() !== undefined) {
+			if (val === false) {
+				this.player()._destroyUsernameLabel();
+			}
+			else {
+				this.player()._createUsernameLabel();
+			}
+		}
+
+		return BlockStructure.prototype.streamEntityValid.call(this, val);
+	},
+
 	/*
 	Overrides the superclass's remove function
 	Updates the engines and thrusters lists on each remove
@@ -190,6 +203,9 @@ var Ship = BlockStructure.extend({
 		}
 
 		this._player = newPlayer;
+		if (ige.isClient) {
+			this._player._createUsernameLabel();
+		}
 		return this;
 	},
 

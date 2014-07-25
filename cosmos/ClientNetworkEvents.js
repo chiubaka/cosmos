@@ -49,6 +49,19 @@ var ClientNetworkEvents = {
 		//ige.client.tsVis.monitor(ige.$(data));
 	},
 
+	_onPlayerConnected: function(data) {
+		if (ige.client.player.id === data.playerId) {
+			return;
+		}
+
+		var player = new Player().id(data.playerId)
+			.username(data.username)
+			.loggedIn(data.loggedIn)
+			.mount(ige.$("spaceGameScene"));
+
+		player.hasGuestUsername = data.hasGuestUsername;
+	},
+
 	/*
 	This is how the server assembles the data to send us:
 	var sendData = {

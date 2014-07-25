@@ -151,6 +151,7 @@ var ServerNetworkEvents = {
 
 		// Tell the client to track their player entity
 		ige.network.send('playerEntity', sendData, clientId);
+		ige.network.send('playerConnected', sendData);
 
 		// Load the player's ships
 		ige.server._createShip(clientId, playerId, ship, cargo);
