@@ -45,15 +45,11 @@ Recipes[DragonBreathEngineBlock.prototype.classId()] =
 {
 	reactants: [
 		{
+			blockType: SteelEngineBlock.prototype.classId(),
+			quantity: 1
+		},
+		{
 			blockType: DragonBlock.prototype.classId(),
-			quantity: 3
-		},
-		{
-			blockType: CarbonBlock.prototype.classId(),
-			quantity: 3
-		},
-		{
-			blockType: IceBlock.prototype.classId(),
 			quantity: 3
 		}
 	],
