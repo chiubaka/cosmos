@@ -1,33 +1,35 @@
 var Thrusts = {};
 
+var BASE_ENGINE_POWER = 30;
 Thrusts[IronEngineBlock.prototype.classId()] =
 {
-	value: 3
+	value: 1 * BASE_ENGINE_POWER
 };
 
 Thrusts[SteelEngineBlock.prototype.classId()] =
 {
-	value: 6
+	value: 2 * BASE_ENGINE_POWER
 };
 
 Thrusts[DragonBreathEngineBlock.prototype.classId()] =
 {
-	value: 9
+	value: 3 * BASE_ENGINE_POWER
 };
 
+var BASE_THRUST_POWER = 200;
 Thrusts[IronThrusterBlock.prototype.classId()] =
 {
-	value: 60
+	value: 1 * BASE_THRUST_POWER
 };
 
 Thrusts[SteelThrusterBlock.prototype.classId()] =
 {
-	value: 120
+	value: 2 * BASE_THRUST_POWER
 };
 
 Thrusts[KryptoniteThrusterBlock.prototype.classId()] =
 {
-	value: 180
+	value: 3 * BASE_THRUST_POWER
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Thrusts }
