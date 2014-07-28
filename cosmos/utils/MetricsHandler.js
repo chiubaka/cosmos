@@ -68,6 +68,7 @@ var MetricsHandler = IgeEventingClass.extend({
 
 		ige.on('cosmos:client.player.login', function(username) {
 			self.fireEvent('player', 'login', username);
+			mixpanel.identify(username);
 		});
 
 		ige.on('cosmos:namePrompt.skipped', function() {
