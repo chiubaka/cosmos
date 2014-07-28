@@ -9,7 +9,7 @@
 var MetricsHandler = IgeEventingClass.extend({
 	classId: "MetricsHandler",
 	/**
-	 * Enables sending metrics to Google Analytics 
+	 * Enables sending metrics to Google Analytics
 	 * @memberof MetricsHandler
 	 * @instance
 	 */
@@ -27,7 +27,7 @@ var MetricsHandler = IgeEventingClass.extend({
 
 		this.listenEvents();
 	},
-	
+
 	/**
 	 * Sets up event listeners to various events so we can report metrics on
 	 * them.
@@ -130,7 +130,12 @@ var MetricsHandler = IgeEventingClass.extend({
 		} else {
 			console.info("Metrics: [EVENT] " + category + "/" + action);
 		}
+
+		// send the event to Google Analytics
 		ga('send', 'event', category, action, label, value);
+
+		// send the event to mixpanel
+		mixpanel.track(category + "." + action + "." + label);
 	},
 });
 
