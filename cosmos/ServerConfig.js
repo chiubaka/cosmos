@@ -17,6 +17,7 @@ var config = {
 		{ name: 'BlockStructure', path: './entities/BlockStructure' },
 		{ name: 'ConstructionZoneBlock', path: 'entities/blocks/ConstructionZoneBlock' },
 		{ name: 'Drop', path: 'entities/Drop' },
+		{ name: 'HaxBlock', path: 'entities/HaxBlock' },
 
 		/* Ship part blocks */
 		{ name: 'Part', path: './entities/blocks/Part' },
@@ -137,7 +138,6 @@ var config = {
 
 		/* === EXTERNAL LIBRARIES === */
 		{ name: 'WeightedSelection', path: './lib/weighted' },
-		{ name: 'UuidGenerator', path: './lib/UuidGenerator' },
 	]
 };
 

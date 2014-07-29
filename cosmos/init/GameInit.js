@@ -21,7 +21,8 @@ var GameInit = {
 		this.initBlocks();
 
 		if (ige.isServer) {
-			this.initEnvironment();
+			//this.initEnvironment();
+			this.initHaxBlocks();
 			this.initPhysics();
 			this.initServerEvents();
 		} else {
@@ -172,6 +173,13 @@ var GameInit = {
 	},
 
 	initDebugDisplay: function() {
+	},
+	
+	initHaxBlocks: function() {
+		var server = ige.server;
+		new HaxBlock()
+			.streamMode(1)
+			.mount(server.spaceGameScene);
 	},
 
 	/**

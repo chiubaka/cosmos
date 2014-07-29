@@ -20,6 +20,7 @@ var igeClientConfig = {
 		'./entities/BlockStructure.js',
 		'./entities/blocks/ConstructionZoneBlock.js',
 		'./entities/Drop.js',
+		'./entities/HaxBlock.js',
 
 		/* Ship part blocks */
 		'./entities/blocks/Part.js',
