@@ -177,9 +177,10 @@ var GameInit = {
 	
 	initHaxBlocks: function() {
 		var server = ige.server;
-		new HaxBlock()
+		var haxBlock = new HaxBlock()
 			.streamMode(1)
 			.mount(server.spaceGameScene);
+		ige.physicsSystem.newBody(haxBlock);
 	},
 
 	/**
