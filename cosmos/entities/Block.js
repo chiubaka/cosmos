@@ -159,7 +159,7 @@ var Block = IgeEntity.extend({
 				this.borderAlpha = 0;
 			}
 
-			this.iconScale = this.iconScale || 0.6;
+			this.iconScale = this.iconScale || 0.8;
 			this.borderWidth = 2;
 
 			this.texture(ige.client.textures.block);
@@ -172,13 +172,13 @@ var Block = IgeEntity.extend({
 				graphic.drawRect(
 					self.borderWidth,
 					self.borderWidth,
-					self.width() - self.borderWidth * 2,
-					self.height() - self.borderWidth * 2
+					self.width() - self.borderWidth,
+					self.height() - self.borderWidth
 				);
 				graphic.endFill();
 
-				graphic.position.x = 0;
-				graphic.position.y = 0;
+				graphic.position.x = -Block.WIDTH / 2;
+				graphic.position.y = -Block.HEIGHT / 2;
 
 				displayObject.addChild(graphic);
 
@@ -188,8 +188,8 @@ var Block = IgeEntity.extend({
 					icon.width = self.width() * self.iconScale;
 					icon.height = self.height() * self.iconScale;
 
-					icon.position.x = (self.width() - icon.width) / 2;
-					icon.position.y = (self.height() - icon.height) / 2;
+					icon.position.x = (self.width() - icon.width) / 2 - Block.WIDTH / 2;
+					icon.position.y = (self.height() - icon.height) / 2 - Block.HEIGHT / 2;
 
 					displayObject.addChild(icon);
 				}
@@ -202,12 +202,6 @@ var Block = IgeEntity.extend({
 			// Enable caching so that the smart textures aren't reevaluated every time.
 			this.compositeCache(true);
 			this.cacheSmoothing(true);
-
-			this._pixiDisplayObject = new PIXI.Graphics();
-			this._pixiDisplayObject.beginFill(0xA9FF00, 0.8);
-			this._pixiDisplayObject.lineStyle(2, 0x6FA700, 1);
-			this._pixiDisplayObject.drawRect(0, 0, Block.WIDTH - 2, Block.HEIGHT - 2);
-			this._pixiDisplayObject.endFill();
 		}
 	},
 
