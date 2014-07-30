@@ -8,12 +8,6 @@
  */
 var MetricsHandler = IgeEventingClass.extend({
 	classId: "MetricsHandler",
-	/**
-	 * Enables sending metrics to Google Analytics
-	 * @memberof MetricsHandler
-	 * @instance
-	 */
-	enabled: false,
 
 	init: function() {
 		console.info("Metrics: Initializing...");
