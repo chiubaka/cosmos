@@ -129,6 +129,7 @@ var MetricsHandler = IgeEventingClass.extend({
 			analytics.track('cosmos:namePrompt.skipped');
 		});
 
+		/* === Tutorial Quest === */
 		this.on('cosmos:quest.tutorialQuest.clicked', function() {
 			self.fireEvent('tutorialQuest', 'clicked');
 
@@ -141,6 +142,13 @@ var MetricsHandler = IgeEventingClass.extend({
 
 			// send the event to analytics
 			analytics.track('cosmos:quest.tutorialQuest.skipped');
+		});
+
+		this.on("cosmos:quest.tutorialQuest.welcome.completed", function() {
+			self.fireEvent('tutorialQuest', 'completed');
+
+			// send the event to analytics
+			analytics.track("cosmos:quest.tutorialQuest.welcome.completed");
 		});
 
 		this.on('cosmos:quest.tutorialQuest.completed', function() {

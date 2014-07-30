@@ -1,7 +1,6 @@
 var TutorialQuest = Quest.extend({
 	classId: "TutorialQuest",
 
-
 	init: function(instance) {
 		Quest.prototype.init.call(this, instance);
 
@@ -42,13 +41,13 @@ var TutorialQuest = Quest.extend({
 			}
 
 			function done() {
+				ige.client.metrics.emit("cosmos:quest.tutorialQuest.welcome.completed");
 				self.questState = self.moveForward;
 			}
 
 		},
 
 		clientStep: function() {
-
 		},
 	},
 
