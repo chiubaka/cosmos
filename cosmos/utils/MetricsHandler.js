@@ -112,8 +112,7 @@ var MetricsHandler = IgeEventingClass.extend({
 
 			analytics.people.set({
 				"$last_login": new Date(),         // properties can be dates...
-
-		    "username": username
+		    		"username": username
 			});
 
 			// send the event to analytics
