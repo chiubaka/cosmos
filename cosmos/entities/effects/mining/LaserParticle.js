@@ -27,6 +27,15 @@ var LaserParticle = IgeParticle.extend({
 		this.texture(ige.client.textures.rectangleTexture)
 			.width(7)
 			.height(7)
+
+		this.addComponent(PixiRenderableComponent, {createDisplayObject: function() {
+			var particle = new PIXI.Graphics();
+			particle.beginFill(0xff5a00);
+			particle.drawRect(0, 0, 7, 7);
+			particle.endFill();
+
+			return particle;
+		}});
 	},
 
 });

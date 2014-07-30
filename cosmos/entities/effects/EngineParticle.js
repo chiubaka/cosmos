@@ -25,6 +25,17 @@ var EngineParticle = IgeParticle.extend({
 		this.texture(ige.client.textures.rectangleTexture)
 			.width(10)
 			.height(10)
+
+		if (ige.isClient) {
+			this.addComponent(PixiRenderableComponent, {createDisplayObject: function() {
+				var particle = new PIXI.Graphics();
+				particle.beginFill(0xccffff);
+				particle.drawRect(0, 0, 10, 10);
+				particle.endFill();
+
+				return particle;
+			}});
+		}
 	},
 
 });
