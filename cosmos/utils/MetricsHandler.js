@@ -49,7 +49,7 @@ var MetricsHandler = IgeEventingClass.extend({
 			self.firePage(selectedCap);
 
 			// send the event to analytics
-			analytics.track('clientstate selected cap changed',
+			analytics.track('cosmos:clientstate selected cap changed',
 				{
 					'selectedCap': selectedCap
 				});
@@ -59,7 +59,7 @@ var MetricsHandler = IgeEventingClass.extend({
 			self.fireEvent('tool', 'clear', classId + "-" + toolName);
 
 			// send the event to analytics
-			analytics.track('toolbar tool cleared',
+			analytics.track('cosmos:toolbar tool cleared',
 				{
 					'classId': classId,
 					'toolName': toolName
@@ -70,7 +70,7 @@ var MetricsHandler = IgeEventingClass.extend({
 			self.fireEvent('tool', 'click', classId + "-" + toolName);
 
 			// send the event to analytics
-			analytics.track('toolbar tool selected',
+			analytics.track('cosmos:toolbar tool selected',
 				{
 					'classId': classId,
 					'toolName': toolName
@@ -81,7 +81,7 @@ var MetricsHandler = IgeEventingClass.extend({
 			self.fireEvent('cap', 'click', classId);
 
 			// send the event to analytics
-			analytics.track('capbar cap selected',
+			analytics.track('cosmos:capbar cap selected',
 				{
 					'classId': classId
 				});
@@ -91,7 +91,7 @@ var MetricsHandler = IgeEventingClass.extend({
 			self.fireEvent('cap', 'clear', classId);
 
 			// send the event to analytics
-			analytics.track('capbar cap cleared',
+			analytics.track('cosmos:capbar cap cleared',
 				{
 					'classId': classId
 				});
@@ -101,7 +101,7 @@ var MetricsHandler = IgeEventingClass.extend({
 			self.fireEvent('respawn', 'click');
 
 			// send the event to analytics
-			analytics.track('respawn button clicked');
+			analytics.track('cosmos:respawn button clicked');
 		});
 
 		ige.on('cosmos:client.player.login', function(username) {
