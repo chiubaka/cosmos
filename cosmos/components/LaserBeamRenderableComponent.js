@@ -11,12 +11,10 @@ var LaserBeamRenderableComponent = PixiRenderableComponent.extend({
 		var blockGrid = ige.$(this._entity._targetId);
 		var block = undefined;
 		if (blockGrid !== undefined) {
-			console.log('Laser beam: target block grid is defined');
 			block = blockGrid.get(this._entity._targetRow, this._entity._targetCol);
 		}
 
 		if (block === undefined) {
-			console.log('Laser beam: target block is undefined');
 			//PixiRenderableComponent.prototype.update.call(this);
 			return;
 		}
@@ -30,7 +28,8 @@ var LaserBeamRenderableComponent = PixiRenderableComponent.extend({
 		this._displayObject.position.y = this._entity.translate().y();
 		this._displayObject.rotation = angle - laserMount.parent().rotate().z() - Math.radians(90);
 		this._displayObject.height = distance * 2;
-		console.log("Laser beam length: " + this._displayObject.height);
+
+		this._displayObject.alpha = this._opacity;
 
 		//PixiRenderableComponent.prototype.update.call(this);
 	}

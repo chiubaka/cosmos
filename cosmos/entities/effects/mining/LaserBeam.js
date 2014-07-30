@@ -15,15 +15,15 @@ var LaserBeam = IgeEntity.extend({
 			this.texture(ige.client.textures.laserBeamTexture)
 				.width(10)
 
-			// Fade in the laser beam
-			this.opacity(0);
-			this._fadeInTween();
-
 			this.addComponent(LaserBeamRenderableComponent, {createDisplayObject: function () {
 				var sprite = PIXI.Sprite.fromFrame('laserbeam');
 				sprite.width = 10;
 				return sprite;
 			}});
+
+			// Fade in the laser beam
+			this.opacity(0);
+			this._fadeInTween();
 		}
 	},
 
@@ -39,6 +39,13 @@ var LaserBeam = IgeEntity.extend({
 			.targetObj(this.renderable)
 			.stepTo({_opacity: 1}, 1000, 'inOutCubic')
 			.start();
+
+		if (this.pixiRenderable) {
+			this.tween()
+				.targetObj(this.pixiRenderable)
+				.stepTo({_opacity: 1}, 1000, 'inOutCubic')
+				.start();
+		}
 
 		return this;
 	},
