@@ -2,7 +2,7 @@
 
 "cargo":
 {
-	"frame": {"x":82,"y":2,"w":78,"h":78},
+	"frame": {"x":2,"y":2,"w":78,"h":78},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":78,"h":78},
@@ -10,7 +10,7 @@
 },
 "construction_zone":
 {
-	"frame": {"x":2,"y":162,"w":78,"h":78},
+	"frame": {"x":82,"y":2,"w":78,"h":78},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":78,"h":78},
@@ -18,39 +18,47 @@
 },
 "engine":
 {
-	"frame": {"x":162,"y":2,"w":68,"h":78},
+	"frame": {"x":162,"y":2,"w":78,"h":78},
 	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":5,"y":0,"w":68,"h":78},
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":78,"h":78},
 	"sourceSize": {"w":78,"h":78}
 },
 "fuel":
 {
-	"frame": {"x":150,"y":82,"w":52,"h":78},
+	"frame": {"x":242,"y":2,"w":78,"h":78},
 	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":13,"y":0,"w":52,"h":78},
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":78,"h":78},
 	"sourceSize": {"w":78,"h":78}
 },
 "laser":
 {
-	"frame": {"x":82,"y":82,"w":66,"h":78},
+	"frame": {"x":322,"y":2,"w":78,"h":78},
 	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":6,"y":0,"w":66,"h":78},
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":78,"h":78},
 	"sourceSize": {"w":78,"h":78}
+},
+"laserbeam":
+{
+	"frame": {"x":402,"y":2,"w":92,"h":46},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":92,"h":46},
+	"sourceSize": {"w":92,"h":46}
 },
 "plating":
 {
-	"frame": {"x":82,"y":162,"w":60,"h":78},
+	"frame": {"x":496,"y":2,"w":78,"h":78},
 	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":9,"y":0,"w":60,"h":78},
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":78,"h":78},
 	"sourceSize": {"w":78,"h":78}
 },
 "playerctrl":
 {
-	"frame": {"x":2,"y":82,"w":78,"h":78},
+	"frame": {"x":576,"y":2,"w":78,"h":78},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":78,"h":78},
@@ -58,15 +66,15 @@
 },
 "power":
 {
-	"frame": {"x":144,"y":162,"w":52,"h":78},
+	"frame": {"x":656,"y":2,"w":78,"h":78},
 	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":13,"y":0,"w":52,"h":78},
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":78,"h":78},
 	"sourceSize": {"w":78,"h":78}
 },
 "thruster":
 {
-	"frame": {"x":2,"y":2,"w":78,"h":78},
+	"frame": {"x":736,"y":2,"w":78,"h":78},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":78,"h":78},
@@ -77,8 +85,8 @@
 	"version": "1.0",
 	"image": "spritesheet.png",
 	"format": "RGBA8888",
-	"size": {"w":256,"h":256},
+	"size": {"w":816,"h":82},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:8e752f312fe4052575b2edd3d847763b:b234ddebfad8d4ef5778f28b320c639d:729adc6043343cfda41c447ce8f464d6$"
+	"smartupdate": "$TexturePacker:SmartUpdate:0a63da11749b4a7e641f57b4cef5f2cc:7e7ee31f190e2bc7e25f9b2e5bcdfb70:729adc6043343cfda41c447ce8f464d6$"
 }
 }

@@ -31,3 +31,5 @@ var ParallaxBackgroundRenderableComponent = PixiRenderableComponent.extend({
 		this._displayObject.position.y = camera._translate.y / this._parallaxLag - this._entity.height() / 2;
 	}
 });
+
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = ParallaxBackgroundRenderableComponent; }

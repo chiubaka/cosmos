@@ -18,6 +18,12 @@ var LaserBeam = IgeEntity.extend({
 			// Fade in the laser beam
 			this.opacity(0);
 			this._fadeInTween();
+
+			this.addComponent(LaserBeamRenderableComponent, {createDisplayObject: function () {
+				var sprite = PIXI.Sprite.fromFrame('laserbeam');
+				sprite.width = 10;
+				return sprite;
+			}});
 		}
 	},
 
@@ -87,7 +93,7 @@ var LaserBeam = IgeEntity.extend({
 			var distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
 			var angle = Math.atan2(deltaY,deltaX);
 
-			this.rotate().z(angle - laserMount.parent().rotate().z() - Math.radians(270))
+			this.rotate().z(angle - laserMount.parent().rotate().z() - Math.radians(270));
 			// Distance * 2 because image is half blank
 			this.height(distance * 2);
 		}

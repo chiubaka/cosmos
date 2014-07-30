@@ -170,8 +170,8 @@ var Block = IgeEntity.extend({
 				graphic.beginFill(self.backgroundColor, self.backgroundAlpha);
 				graphic.lineStyle(self.borderWidth, self.borderColor, self.borderAlpha);
 				graphic.drawRect(
-					self.borderWidth,
-					self.borderWidth,
+					self.borderWidth / 2,
+					self.borderWidth / 2,
 					self.width() - self.borderWidth,
 					self.height() - self.borderWidth
 				);
@@ -295,7 +295,7 @@ var Block = IgeEntity.extend({
 			return;
 		}
 
-		this._effectsMountAbove = new IgeEntity().depth(this.depth() + 1);
+		this._effectsMountAbove = new IgeEntity().addComponent(PixiRenderableComponent).depth(this.depth() + 1);
 	},
 
 	/**
@@ -309,7 +309,7 @@ var Block = IgeEntity.extend({
 			return;
 		}
 
-		this._effectsMountBelow = new IgeEntity().depth(this.depth() - 1);
+		this._effectsMountBelow = new IgeEntity().addComponent(PixiRenderableComponent).depth(this.depth() - 1);
 	},
 
 	/**

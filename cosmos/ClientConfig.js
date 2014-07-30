@@ -111,6 +111,7 @@ var igeClientConfig = {
 		'./components/Recipe.js',
 		'./components/Thrust.js',
 		'./components/ParallaxBackgroundRenderableComponent.js',
+		'./components/LaserBeamRenderableComponent.js',
 
 		/* === PLAYER STATE === */
 		'./entities/player/Player.js',
