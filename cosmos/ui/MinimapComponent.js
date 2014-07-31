@@ -93,7 +93,7 @@ var MinimapComponent = IgeEventingClass.extend({
 			ctx.save();
 
 			var entity = sceneChildren[i];
-			if (entity.streamEntityValid()) {
+			if (entity.streamEntityValid() && !entity._newBorn) {
 				// The player (show in green)
 				// TODO this makes the player's currentship green. What happens if the player has other ships? Right now this isn't a problem, but it will be soon.
 				if (ige.client.player && entity === ige.client.player.currentShip()) {
