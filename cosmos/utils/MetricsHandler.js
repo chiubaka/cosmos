@@ -51,7 +51,8 @@ var MetricsHandler = IgeEventingClass.extend({
 			"cosmos:construct.existing": true,
 
 			/* misc */
-			"cosmos:block.mine": true
+			"cosmos:block.mine": true,
+			"cosmos:block.attack": true//note that this includes when you mine yourself as well as when you mine other players
 		}
 	},
 
