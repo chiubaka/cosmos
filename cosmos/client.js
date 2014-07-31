@@ -96,7 +96,7 @@ var Client = IgeClass.extend({
 
 					// Use DeploymentUtils to get the appropriate game server to connect to.
 					ige.network.start(DeploymentUtils.getServerUrl(), function() {
-						ige.client.metrics.fireEvent('network', 'connect');
+						ige.client.metrics.track('cosmos:network.connect');
 
 						// Setup the network command listeners
 						ige.network.define('playerEntity', self._onPlayerEntity);
@@ -181,7 +181,7 @@ var Client = IgeClass.extend({
 	/* Send performance metrics to Google analytics */
 	startClientPerformanceMetrics: function() {
 		setInterval(function() {
-			ige.client.metrics.fireEvent('engine', 'performance', 'FPS', ige.fps());
+			ige.client.metrics.track('cosmos:engine.performance', {'FPS': ige.fps()});
 		}, 10000); // Send every 10s
 	}
 });

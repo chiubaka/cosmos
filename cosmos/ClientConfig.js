@@ -174,7 +174,6 @@ var igeClientConfig = {
 		/* Helper utilities */
 		'./utils/BlockGridPadding.js',
 		'./utils/DeploymentUtils.js',
-		'./utils/MetricsHandler.js',
 		'./utils/NetworkUtils.js',
 		'./utils/RandomInterval.js',
 		'./utils/PrototypeMixins.js',
@@ -189,7 +188,10 @@ var igeClientConfig = {
 		/* Initialization */
 		'./init/GameInit.js',
 		'./client.js',
-		'./index.js'
+		'./index.js',
+
+		/* Metrics */
+		'./utils/MetricsHandler.js'
 	]
 };
 

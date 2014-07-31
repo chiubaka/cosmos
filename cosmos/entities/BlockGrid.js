@@ -791,11 +791,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 				block.takeDamage(data.amount);
 				break;
 			case 'add':
-				ige.client.metrics.fireEvent(
-					'construct',
-					'existing',
-					Block.blockFromClassId(data.selectedType)
-				);
+				ige.client.metrics.track(
+					'cosmos:construct.existing',
+					{'type': data.selectedType});
 				this.add(data.row, data.col, Block.blockFromClassId(data.selectedType));
 				ige.emit('cosmos:BlockGrid.processBlockActionClient.add', [data.selectedType, this] );
 				this._renderContainer.refresh();
