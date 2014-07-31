@@ -41,7 +41,7 @@ var TutorialQuest = Quest.extend({
 			}
 
 			function done() {
-				ige.client.metrics.emit("cosmos:quest.tutorialQuest.welcome.completed");
+				ige.client.metrics.track("cosmos:quest.tutorialQuest.welcome.completed");
 				self.questState = self.moveForward;
 			}
 
@@ -71,6 +71,7 @@ var TutorialQuest = Quest.extend({
 			}
 
 			function done() {
+				ige.client.metrics.track("cosmos:quest.tutorialQuest.moveForward.completed");
 				self.questState = self.moveBackwards;
 			}
 		},
@@ -99,6 +100,7 @@ var TutorialQuest = Quest.extend({
 			}
 
 			function done() {
+				ige.client.metrics.track("cosmos:quest.tutorialQuest.moveBackwards.completed");
 				self.questState = self.rotateLeft;
 			}
 		},
@@ -127,6 +129,7 @@ var TutorialQuest = Quest.extend({
 			}
 
 			function done() {
+				ige.client.metrics.track("cosmos:quest.tutorialQuest.rotateLeft.completed");
 				self.questState = self.rotateRight;
 			}
 		},
@@ -155,6 +158,7 @@ var TutorialQuest = Quest.extend({
 			}
 
 			function done() {
+				ige.client.metrics.track("cosmos:quest.tutorialQuest.rotateRight.completed");
 				self.questState = self.moveAround;
 			}
 		},
@@ -195,6 +199,7 @@ var TutorialQuest = Quest.extend({
 			}
 
 			function done() {
+				ige.client.metrics.track("cosmos:quest.tutorialQuest.moveAround.completed");
 				self.questState = self.minimap;
 			}
 		},
@@ -237,6 +242,7 @@ var TutorialQuest = Quest.extend({
 			}
 
 			function done() {
+				ige.client.metrics.track("cosmos:quest.tutorialQuest.minimap.completed");
 				self.questState = self.mine;
 			}
 		}
@@ -282,6 +288,7 @@ var TutorialQuest = Quest.extend({
 			}
 
 			function done() {
+				ige.client.metrics.track("cosmos:quest.tutorialQuest.mine.completed");
 				self.questState = self.cargo;
 			}
 		},
@@ -317,6 +324,7 @@ var TutorialQuest = Quest.extend({
 			}
 
 			function done() {
+				ige.client.metrics.track("cosmos:quest.tutorialQuest.cargo.completed");
 				self.questState = self.craft;
 			}
 		},
@@ -419,6 +427,7 @@ var TutorialQuest = Quest.extend({
 			}
 
 			function done() {
+				ige.client.metrics.track("cosmos:quest.tutorialQuest.craft.completed");
 				self.questState = self.construct;
 			}
 		},
@@ -474,6 +483,7 @@ var TutorialQuest = Quest.extend({
 			}
 
 			function done() {
+				ige.client.metrics.track("cosmos:quest.tutorialQuest.construct.completed");
 				self.questState = self.chat;
 			}
 		},
@@ -502,7 +512,7 @@ var TutorialQuest = Quest.extend({
 					ige.hud.bottomToolbar.chat.off("cosmos:ChatComponent.show", listener);
 					// Hide the tooltip
 					ige.hud.bottomToolbar.chat.unpinButtonTooltip();
-					alertify.questLog("Incredible! You\'ve opened the chat!\nYou can use the chat to talk with other players at any time.", "success",
+					alertify.questLog("You\'ve opened the chat!\nYou can use the chat to talk with other players at any time.", "success",
 						msgTimeout);
 					setTimeout(done, msgTimeout / 2);
 				});
@@ -547,6 +557,7 @@ var TutorialQuest = Quest.extend({
 			}
 
 			function done() {
+				ige.client.metrics.track("cosmos:quest.tutorialQuest.chat.completed");
 				self.questState = self.newShip;
 			}
 		},
@@ -618,6 +629,7 @@ var TutorialQuest = Quest.extend({
 			}
 
 			function done() {
+				ige.client.metrics.track("cosmos:quest.tutorialQuest.newShip.completed");
 				self.questState = self.complete;
 			}
 		},
@@ -634,7 +646,7 @@ var TutorialQuest = Quest.extend({
 			var message = "Congratulations! You've completed the tutorial. Your galaxy awaits!";
 			alertify.questLog(message, "success", msgTimeout);
 			ige.questSystem.eventToServer(this.keys['complete'], this);
-			ige.client.metrics.emit("cosmos:quest.tutorialQuest.completed");
+			ige.client.metrics.track("cosmos:quest.tutorialQuest.completed");
 		},
 		clientStep: function() {
 		},

@@ -283,7 +283,7 @@ var ServerNetworkEvents = {
 				.fromBlockMatrix([[blockToPlace]])
 				.translateTo(data.x, data.y, 0);
 
-			var confirmData = { category: 'construct', action: 'new', label: data.selectedType };
+			var confirmData = { event:'cosmos:construct.new', data: {'type': data.selectedType} };
 			ige.network.send('confirm', confirmData, clientId);
 			ige.network.stream.queueCommand('notificationSuccess',
 				NotificationDefinitions.successKeys.constructNewBlock, clientId);

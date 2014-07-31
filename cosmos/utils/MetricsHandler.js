@@ -1,7 +1,7 @@
 ﻿/**
  * The MetricsHandler class handles in game metrics like what UI elements
  * are being clicked and FPS.
- * Currently, this uses Google Analytics.
+ * Currently, this uses Segment.io.
  * @class
  * @typedef {Object} MetricsHandler
  * @namespace
@@ -9,104 +9,58 @@
 var MetricsHandler = IgeEventingClass.extend({
 	classId: "MetricsHandler",
 
+	validStrings: undefined,
+
 	init: function() {
 		console.info("Metrics: Initializing...");
 
-		this.listenEvents();
+		this.validStrings = {
+			/* Tutorial Quest */
+			"cosmos:quest.tutorialQuest.clicked": true,
+			"cosmos:quest.tutorialQuest.skipped": true,
+			"cosmos:quest.tutorialQuest.welcome.completed": true,
+			"cosmos:quest.tutorialQuest.moveForward.completed": true,
+			"cosmos:quest.tutorialQuest.moveBackwards.completed": true,
+			"cosmos:quest.tutorialQuest.rotateLeft.completed": true,
+			"cosmos:quest.tutorialQuest.rotateRight.completed": true,
+			"cosmos:quest.tutorialQuest.moveAround.completed": true,
+			"cosmos:quest.tutorialQuest.minimap.completed": true,
+			"cosmos:quest.tutorialQuest.mine.completed": true,
+			"cosmos:quest.tutorialQuest.cargo.completed": true,
+			"cosmos:quest.tutorialQuest.craft.completed": true,
+			"cosmos:quest.tutorialQuest.construct.completed": true,
+			"cosmos:quest.tutorialQuest.chat.completed": true,
+			"cosmos:quest.tutorialQuest.newShip.completed": true,
+			"cosmos:quest.tutorialQuest.completed": true,
+
+			/* player */
+			"cosmos:player.connect": true,
+			"cosmos:player.attack": true,
+
+			/* engine */
+			"cosmos:engine.performance": true,
+
+			/* network */
+			"cosmos:network.connect": true,
+
+			/* construction */
+			"cosmos:construct.attempt.new": true,
+			"cosmos:construct.new": true,
+
+			"cosmos:construct.attempt.existing": true,
+			"cosmos:construct.existing": true,
+
+			/* misc */
+			"cosmos:block.mine": true
+		}
 	},
 
-	/**
-	 * Sets up event listeners to various events so we can report metrics on
-	 * them.
-	 * @memberof MetricsHandler
-	 * @instance
-	 */
-	listenEvents: function() {
-		var self = this;
+	track: function(event, data) {
+		if (!this.validStrings[event]) {
+			this.log("The invalid event " + event + " was sent to the metrics handler. Prepare to die.", "error");
+		}
 
-		ige.on('ige network error', function() {
-			analytics.track('ige network error');
-		});
-
-		ige.on('clientstate selected cap changed', function(selectedCap) {
-			analytics.track('cosmos:clientstate selected cap changed',
-				{
-					'selectedCap': selectedCap
-				});
-		});
-
-		ige.on('toolbar tool cleared', function(classId, toolName) {
-			analytics.track('cosmos:toolbar tool cleared',
-				{
-					'classId': classId,
-					'toolName': toolName
-				});
-		});
-
-		ige.on('toolbar tool selected', function(classId, toolName) {
-			analytics.track('cosmos:toolbar tool selected',
-				{
-					'classId': classId,
-					'toolName': toolName
-				});
-		});
-
-		ige.on('capbar cap selected', function(classId) {
-			analytics.track('cosmos:capbar cap selected',
-				{
-					'classId': classId
-				});
-		});
-
-		ige.on('capbar cap cleared', function(classId) {
-			analytics.track('cosmos:capbar cap cleared',
-				{
-					'classId': classId
-				});
-		});
-
-		ige.on('respawn button clicked', function() {
-			analytics.track('cosmos:respawn button clicked');
-		});
-
-		ige.on('cosmos:client.player.login', function(username) {
-			analytics.identify(username);
-
-			analytics.people.set({
-				"$last_login": new Date(),         // properties can be dates...
-		    		"username": username
-			});
-
-			// send the event to analytics
-			analytics.track('cosmos:client.player.login',
-				{
-					'username': username
-				});
-		});
-
-		ige.on('cosmos:namePrompt.skipped', function() {
-			analytics.track('cosmos:namePrompt.skipped');
-		});
-
-		/* === Tutorial Quest === */
-		this.on('cosmos:quest.tutorialQuest.clicked', function() {
-			analytics.track('cosmos:quest.tutorialQuest.clicked');
-		});
-
-		this.on('cosmos:quest.tutorialQuest.skipped', function() {
-			analytics.track('cosmos:quest.tutorialQuest.skipped');
-		});
-
-		this.on("cosmos:quest.tutorialQuest.welcome.completed", function() {
-			self.fireEvent('tutorialQuest', 'completed');
-
-			// send the event to analytics
-			analytics.track("cosmos:quest.tutorialQuest.welcome.completed");
-		});
-
-		this.on('cosmos:quest.tutorialQuest.completed', function() {
-			analytics.track('cosmos:quest.tutorialQuest.completed');
-		});
+		analytics.track(event, data);
 	}
 });
 
