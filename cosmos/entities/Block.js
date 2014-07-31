@@ -159,8 +159,8 @@ var Block = IgeEntity.extend({
 				this.borderAlpha = 0;
 			}
 
-			this.iconScale = this.iconScale || 0.8;
 			this.borderWidth = 2;
+			this.iconScale = this.iconScale || (Block.WIDTH - 3 * this.borderWidth) / Block.WIDTH;
 
 			this.texture(ige.client.textures.block);
 			this.addComponent(PixiRenderableComponent, {createDisplayObject: function() {

@@ -30,7 +30,6 @@ var BlockParticleEmitter = IgeParticleEmitter.extend({
 				.particleMountTarget(ige.client.effectsScene)
 				.start()
 		}
-
 	},
 
 });
