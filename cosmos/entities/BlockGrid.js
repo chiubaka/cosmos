@@ -1627,7 +1627,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		var oldY = block.translate().y();
 		var drawLocation = this._drawLocationForBlock(block);
 
-		block.translateTo(drawLocation.x, drawLocation.y, 0)
+		block.translateTo(drawLocation.x, drawLocation.y, 0);
 
 		return {x: drawLocation.x - oldX, y: drawLocation.y - oldY};
 	},

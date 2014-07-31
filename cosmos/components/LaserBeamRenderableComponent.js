@@ -24,13 +24,13 @@ var LaserBeamRenderableComponent = PixiRenderableComponent.extend({
 		var deltaY = block.worldPosition().y - laserMount.worldPosition().y;
 		var distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
 		var angle = Math.atan2(deltaY, deltaX);
-		this._displayObject.position.x = this._entity.translate().x();
-		this._displayObject.position.y = this._entity.translate().y();
-		this._displayObject.rotation = angle - laserMount.parent().rotate().z() - Math.radians(90);
+
 		this._displayObject.height = distance * 2;
+		this._displayObject.rotation = angle - laserMount.parent().rotate().z() - Math.radians(90);
+		this._displayObject.position.x = -this._displayObject.width / 2;
 
 		this._displayObject.alpha = this._opacity;
-
+		
 		//PixiRenderableComponent.prototype.update.call(this);
 	}
 });
