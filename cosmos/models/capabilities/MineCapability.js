@@ -61,7 +61,7 @@ var MineCapability = Capability.extend({
 	 */
 	Block_mouseDown: function(sender, event, data) {
 		if (sender.parent().parent().classId() === BlockGrid.prototype.classId()) {
-			ige.client.metrics.track('cosmos:block.mine', {'type': sender.classId()});
+			ige.client.metrics.track('cosmos:block.mine', {'type': sender.classId()});//TODO this is never being called
 		} else {
 			ige.client.metrics.track('cosmos:player.attack', {'type': sender.classId()});
 		}
