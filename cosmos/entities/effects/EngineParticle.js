@@ -27,7 +27,7 @@ var EngineParticle = IgeParticle.extend({
 			.height(10)
 
 		if (ige.isClient) {
-			this.addComponent(PixiRenderableComponent, {createDisplayObject: function() {
+			this.addComponent(ParticleRenderableComponent, {createDisplayObject: function() {
 				var particle = new PIXI.Graphics();
 				particle.beginFill(0xccffff);
 				particle.drawRect(0, 0, 10, 10);

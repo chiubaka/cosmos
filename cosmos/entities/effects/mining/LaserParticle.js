@@ -28,7 +28,7 @@ var LaserParticle = IgeParticle.extend({
 			.width(7)
 			.height(7)
 
-		this.addComponent(PixiRenderableComponent, {createDisplayObject: function() {
+		this.addComponent(ParticleRenderableComponent, {createDisplayObject: function() {
 			var particle = new PIXI.Graphics();
 			particle.beginFill(0xff5a00);
 			particle.drawRect(0, 0, 7, 7);
