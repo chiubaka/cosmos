@@ -11,9 +11,11 @@ var RenderContainer = IgeEntity.extend({
 	init: function () {
 		IgeEntity.prototype.init.call(this);
 		//this.updateChildren(true);
-		this.compositeCache(true);
 
 		this.addComponent(PixiRenderableComponent);
+
+		// TODO: Once Pixi has some notion of cache dirty, reenable this
+		//this.compositeCache(true);
 	},
 
 	/**
