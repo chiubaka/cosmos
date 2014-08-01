@@ -22,20 +22,18 @@ var EngineParticle = IgeParticle.extend({
 		this._emitter = emitter;
 		IgeParticle.prototype.init.call(this);
 
+		this.addComponent(ParticleRenderableComponent, {createDisplayObject: function() {
+			var particle = new PIXI.Graphics();
+			particle.beginFill(0xccffff);
+			particle.drawRect(0, 0, 10, 10);
+			particle.endFill();
+
+			return particle;
+		}});
+
 		this.texture(ige.client.textures.rectangleTexture)
 			.width(10)
 			.height(10)
-
-		if (ige.isClient) {
-			this.addComponent(ParticleRenderableComponent, {createDisplayObject: function() {
-				var particle = new PIXI.Graphics();
-				particle.beginFill(0xccffff);
-				particle.drawRect(0, 0, 10, 10);
-				particle.endFill();
-
-				return particle;
-			}});
-		}
 	},
 
 });
