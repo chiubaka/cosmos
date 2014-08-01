@@ -59,7 +59,8 @@ var GlowEffect = IgeEntity.extend({
 			this.shadowColor = (data && data.shadowColor) || GlowEffect.DEFAULT_SHADOW_COLOR;
 			this.decrementingShadowBlur = (data && data.decrementingShadowBlur) || true;
 			this.textureBackground = (data && data.textureBackground) || GlowEffect.DEFAULT_TEXTURE_BACKGROUND;
-			this.texture(ige.client.textures.glow);
+			//this.texture(ige.client.textures.glow);
+			// TODO: Add a PixiRenderableComponent for Glow Effect
 		}
 	}
 });
