@@ -39,9 +39,7 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		IgeEntity.prototype.init.call(this);
 		this._blockGrid = blockGrid;
 
-		if (!ige.isServer) {
-			this.addComponent(PixiRenderableComponent);
-		}
+		this.addComponent(PixiRenderableComponent);
 
 		this._renderContainer = new RenderContainer()
 			.mount(this);
@@ -51,8 +49,6 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 
 		var self = this;
 		ige.on('capbar cap selected', function(classId) {
-			console.log('Construction zone overlay hidden: ' + self.renderable._hidden);
-			console.log('Construction zone overlay in view: ' + self._inView);
 			if (classId === 'ConstructCap') {
 				self.show();
 			} else {
