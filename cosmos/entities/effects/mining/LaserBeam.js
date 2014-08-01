@@ -11,16 +11,16 @@ var LaserBeam = IgeEntity.extend({
 	init: function (createData) {
 		IgeEntity.prototype.init.call(this);
 
+		this.addComponent(LaserBeamRenderableComponent, {createDisplayObject: function () {
+			var sprite = PIXI.Sprite.fromFrame('laserbeam');
+			sprite.width = 10;
+			sprite.position.x = -sprite.width / 2;
+			return sprite;
+		}});
+
 		if (!ige.isServer) {
 			this.texture(ige.client.textures.laserBeamTexture)
 				.width(10)
-
-			this.addComponent(LaserBeamRenderableComponent, {createDisplayObject: function () {
-				var sprite = PIXI.Sprite.fromFrame('laserbeam');
-				sprite.width = 10;
-				sprite.position.x = -sprite.width / 2;
-				return sprite;
-			}});
 
 			// Fade in the laser beam
 			this.opacity(0);

@@ -1,6 +1,6 @@
 var ParallaxBackgroundRenderableComponent = PixiRenderableComponent.extend({
 	classId: 'ParallaxBackgroundRenderableComponent',
-	componentId: 'pixiRenderable',
+	componentId: 'renderable',
 
 	init: function(entity, data) {
 		PixiRenderableComponent.prototype.init.call(this, entity, data);

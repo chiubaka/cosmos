@@ -1,6 +1,6 @@
 var LaserBeamRenderableComponent = PixiRenderableComponent.extend({
 	classId: 'LaserBeamRenderableComponent',
-	componentId: 'pixiRenderable',
+	componentId: 'renderable',
 
 	init: function(entity, data) {
 		PixiRenderableComponent.prototype.init.call(this, entity, data);

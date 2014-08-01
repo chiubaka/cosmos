@@ -47,7 +47,7 @@ var ParallaxBackground = IgeEntity.extend({
 	 * @instance
 	 */
 	parallaxLag: function(val) {
-		return this.pixiRenderable.parallaxLag(val);
+		return this.renderable.parallaxLag(val);
 		if (val !== undefined) {
 			this.pixiRenderable._parallaxLag = val;
 			return this;
@@ -59,9 +59,9 @@ var ParallaxBackground = IgeEntity.extend({
 		var camera = ige._currentCamera;
 
 		this.translateTo(
-			camera._translate.x / this.pixiRenderable._parallaxLag,
-			camera._translate.y / this.pixiRenderable._parallaxLag,
-			camera._translate.z / this.pixiRenderable._parallaxLag);
+			camera._translate.x / this.renderable._parallaxLag,
+			camera._translate.y / this.renderable._parallaxLag,
+			camera._translate.z / this.renderable._parallaxLag);
 
 		IgeEntity.prototype.update.call(this, ctx);
 	}

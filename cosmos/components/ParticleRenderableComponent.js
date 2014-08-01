@@ -1,6 +1,6 @@
 var ParticleRenderableComponent = PixiRenderableComponent.extend({
 	classId: 'ParticleRenderableComponent',
-	componentId: 'pixiRenderable',
+	componentId: 'renderable',
 
 	init: function(entity, data) {
 		PixiRenderableComponent.prototype.init.call(this, entity, data);
