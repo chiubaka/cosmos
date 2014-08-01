@@ -542,7 +542,7 @@ var TutorialQuest = Quest.extend({
 			}
 
 			function clickRelocate() {
-				var questLog = alertify.questLog("Click the relocate button");
+				var questLog = alertify.questLog("Click the relocate button on the toolbar in the lower right");
 				// Show the tooltip
 				ige.hud.bottomToolbar.relocate.pinButtonTooltip();
 				var listener = ige.hud.bottomToolbar.relocate.on("cosmos:RelocateComponent.mouseDown", function () {
