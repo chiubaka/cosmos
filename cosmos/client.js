@@ -182,7 +182,7 @@ var Client = IgeClass.extend({
 	startClientPerformanceMetrics: function() {
 		setInterval(function() {
 			ige.client.metrics.track('cosmos:engine.performance', {'FPS': ige.fps()});
-		}, 10000); // Send every 10s
+		}, 200000); // Send every 200s
 	}
 });
 
