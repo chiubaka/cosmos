@@ -18,6 +18,7 @@ var igeClientConfig = {
 		'./entities/Block.js',
 		'./entities/BlockGrid.js',
 		'./entities/BlockStructure.js',
+		'./entities/GeneratedBlockStructure.js',
 		'./entities/blocks/ConstructionZoneBlock.js',
 		'./entities/Drop.js',
 
@@ -115,6 +116,7 @@ var igeClientConfig = {
 		'./components/ParallaxBackgroundRenderableComponent.js',
 		'./components/LaserBeamRenderableComponent.js',
 		'./components/ParticleRenderableComponent.js',
+		'./components/RespawnableComponent.js',
 
 		/* === PLAYER STATE === */
 		'./entities/player/Player.js',
