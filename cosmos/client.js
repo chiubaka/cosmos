@@ -30,124 +30,139 @@ var Client = IgeClass.extend({
 		// Implement our game methods
 		this.implement(ClientNetworkEvents);
 
-		// Create the HTML canvas
-		ige.createFrontBuffer(true);
+		// IGE rendering system is left attached in order to support the textures system which, for now, is still used
+		// for displaying blocks in canvases in the HUD.
+		ige.addSystem(IgeRenderingSystem, {autoSize: true});
 
-		// Load the textures we want to use
-		this.textures = {
-			block: new IgeTexture(gameRoot + 'assets/BlockTexture.js'),
-			glow: new IgeTexture(gameRoot + 'assets/GlowEffectTexture.js'),
-			background_helix_nebula: new IgeTexture(gameRoot +
-				'assets/backgrounds/helix_nebula.jpg'),
-			background_starfield: new IgeTexture(gameRoot +
-				'assets/backgrounds/starfield.png'),
-			fixtureDebuggingTexture: new IgeTexture(gameRoot +
-				'assets/debug/FixtureDebuggingTexture.js'),
-			laserBeamTexture: new IgeTexture(gameRoot +
-				'assets/effects/laser/laserbeam.png'),
-			rectangleTexture: new IgeTexture(gameRoot +
-				'assets/effects/particles/Rectangle.js'),
-			healthBar: new IgeTexture(gameRoot + 'assets/HealthBarTexture.js'),
+		ige.addSystem(PixiRenderingSystem, {autoSize: true});
+		ige.rendering.loadTextures({
+			background_helix_nebula: gameRoot + 'assets/backgrounds/helix_nebula.jpg',
+			background_starfield: gameRoot + 'assets/backgrounds/starfield.png'
+		});
+		ige.rendering.loadSpriteSheets([gameRoot + 'assets/blocks/spritesheet.json']);
+		ige.rendering.start();
 
-			// Cap textures
-			mineCap_color: new IgeTexture(gameRoot + 'assets/ui/mine/mine-color.png'),
-			mineCap_white: new IgeTexture(gameRoot + 'assets/ui/mine/mine-white.png'),
-			constructCap_color: new IgeTexture(gameRoot + 'assets/ui/construct/construct-color.png'),
-			constructCap_white: new IgeTexture(gameRoot + 'assets/ui/construct/construct-white.png'),
-			baseCap_color: new IgeTexture(gameRoot + 'assets/ui/base/base-color.png'),
-			baseCap_white: new IgeTexture(gameRoot + 'assets/ui/base/base-white.png'),
+		ige.rendering.on('texturesLoaded', function() {
 
-			// Block textures
-			constructionZone: new IgeTexture(gameRoot +
-				'assets/blocks/construction/construction_zone.svg'),
-			power: new IgeTexture(gameRoot +
-				'assets/blocks/power/power.svg'),
-			engine: new IgeTexture(gameRoot +
-				'assets/blocks/engines/engine.svg'),
-			thruster: new IgeTexture(gameRoot +
-				'assets/blocks/thrusters/thruster.svg'),
-			kryptoniteThruster: new IgeTexture(gameRoot +
-				'assets/blocks/thrusters/kryptoniteThruster.svg'),
-			fuel: new IgeTexture(gameRoot +
-				'assets/blocks/fuel/fuel.svg'),
-			cargo: new IgeTexture(gameRoot +
-				'assets/blocks/cargo/cargo.svg'),
-			control: new IgeTexture(gameRoot +
-				'assets/blocks/playerctrl/playerctrl.svg'),
-			miningLaser: new IgeTexture(gameRoot +
-				'assets/blocks/laser/laser.svg'),
-			plating: new IgeTexture(gameRoot +
-				'assets/blocks/armor/plating.svg')
-		};
+			ige.rendering.log('Finished Pixi loading textures.');
 
-		ige.on('texturesLoaded', function () {
-			// Ask the engine to start
-			ige.start(function (success) {
-				// Check if the engine started successfully
-				if (success) {
-					ige.client.metrics = new MetricsHandler();
-					ige.client.startClientPerformanceMetrics();
+			// Load the textures we want to use
+			self.textures = {
+				block: new IgeTexture(gameRoot + 'assets/BlockTexture.js'),
+				glow: new IgeTexture(gameRoot + 'assets/GlowEffectTexture.js'),
+				background_helix_nebula: new IgeTexture(gameRoot +
+					'assets/backgrounds/helix_nebula.jpg'),
+				background_starfield: new IgeTexture(gameRoot +
+					'assets/backgrounds/starfield.png'),
+				fixtureDebuggingTexture: new IgeTexture(gameRoot +
+					'assets/debug/FixtureDebuggingTexture.js'),
+				laserBeamTexture: new IgeTexture(gameRoot +
+					'assets/effects/laser/laserbeam.png'),
+				rectangleTexture: new IgeTexture(gameRoot +
+					'assets/effects/particles/Rectangle.js'),
+				healthBar: new IgeTexture(gameRoot + 'assets/HealthBarTexture.js'),
 
-					// Start the networking (you can do this elsewhere if it
-					// makes sense to connect to the server later on rather
-					// than before the scene etc are created... maybe you want
-					// a splash screen or a menu first? Then connect after you've
-					// got a username or something?
+				// Cap textures
+				mineCap_color: new IgeTexture(gameRoot + 'assets/ui/mine/mine-color.png'),
+				mineCap_white: new IgeTexture(gameRoot + 'assets/ui/mine/mine-white.png'),
+				constructCap_color: new IgeTexture(gameRoot + 'assets/ui/construct/construct-color.png'),
+				constructCap_white: new IgeTexture(gameRoot + 'assets/ui/construct/construct-white.png'),
+				baseCap_color: new IgeTexture(gameRoot + 'assets/ui/base/base-color.png'),
+				baseCap_white: new IgeTexture(gameRoot + 'assets/ui/base/base-white.png'),
 
-					// Use DeploymentUtils to get the appropriate game server to connect to.
-					ige.network.start(DeploymentUtils.getServerUrl(), function() {
-						ige.client.metrics.track('cosmos:network.connect');
+				// Block textures
+				constructionZone: new IgeTexture(gameRoot +
+					'assets/blocks/construction/construction_zone.svg'),
+				power: new IgeTexture(gameRoot +
+					'assets/blocks/power/power.svg'),
+				engine: new IgeTexture(gameRoot +
+					'assets/blocks/engines/engine.svg'),
+				thruster: new IgeTexture(gameRoot +
+					'assets/blocks/thrusters/thruster.svg'),
+				kryptoniteThruster: new IgeTexture(gameRoot +
+					'assets/blocks/thrusters/kryptoniteThruster.svg'),
+				fuel: new IgeTexture(gameRoot +
+					'assets/blocks/fuel/fuel.svg'),
+				cargo: new IgeTexture(gameRoot +
+					'assets/blocks/cargo/cargo.svg'),
+				control: new IgeTexture(gameRoot +
+					'assets/blocks/playerctrl/playerctrl.svg'),
+				miningLaser: new IgeTexture(gameRoot +
+					'assets/blocks/laser/laser.svg'),
+				plating: new IgeTexture(gameRoot +
+					'assets/blocks/armor/plating.svg')
+			};
 
-						// Setup the network command listeners
-						ige.network.define('playerEntity', self._onPlayerEntity);
-						ige.network.define('playerConnected', self._onPlayerConnected);
-						ige.network.define('playerDisconnected', self._onPlayerDisconnected);
-						ige.network.define('shipEntity', self._onShipEntity);
+			ige.on('texturesLoaded', function () {
+				// Ask the engine to start
+				ige.start(function (success) {
+					// Check if the engine started successfully
+					if (success) {
+						ige.client.metrics = new MetricsHandler();
+						ige.client.startClientPerformanceMetrics();
 
-						// Called when the server needs to broadcast updates about a block
-						ige.network.define('blockAction', self._onBlockAction);
-						// Called when the server wants to add an effect to a block
-						ige.network.define('addEffect', self._onAddEffect);
-						// Called when the server wants to remove an effect from a block
-						ige.network.define('removeEffect', self._onRemoveEffect);
+						// Start the networking (you can do this elsewhere if it
+						// makes sense to connect to the server later on rather
+						// than before the scene etc are created... maybe you want
+						// a splash screen or a menu first? Then connect after you've
+						// got a username or something?
 
-						ige.network.define('cargoResponse', self._onCargoResponse);
-						ige.network.define('cargoUpdate', self._onCargoUpdate);
-						ige.network.define('confirm', self._onConfirm);
+						// Use DeploymentUtils to get the appropriate game server to connect to.
+						ige.network.start(DeploymentUtils.getServerUrl(), function () {
+							ige.client.metrics.track('cosmos:network.connect');
 
-						ige.network.define('cosmos:BlockStructure.processBlockActionServer.minedBlock',
-							self._onMinedBlock);
+							// Setup the network command listeners
+							ige.network.define('playerEntity', self._onPlayerEntity);
+							ige.network.define('playerConnected', self._onPlayerConnected);
+							ige.network.define('playerDisconnected', self._onPlayerDisconnected);
+							ige.network.define('shipEntity', self._onShipEntity);
 
-						ige.network.define('cosmos:player.username.set.approve', Player.onUsernameRequestApproved);
-						ige.network.define('cosmos:player.username.set.error', Player.onUsernameRequestError);
+							// Called when the server needs to broadcast updates about a block
+							ige.network.define('blockAction', self._onBlockAction);
+							// Called when the server wants to add an effect to a block
+							ige.network.define('addEffect', self._onAddEffect);
+							// Called when the server wants to remove an effect from a block
+							ige.network.define('removeEffect', self._onRemoveEffect);
 
-						// Setup the network stream handler
-						ige.network.addComponent(IgeStreamComponent)
-							.stream.renderLatency(100); // Render the simulation 100 milliseconds in the past
+							ige.network.define('cargoResponse', self._onCargoResponse);
+							ige.network.define('cargoUpdate', self._onCargoUpdate);
+							ige.network.define('confirm', self._onConfirm);
 
-						// Enable notifications
-						ige.addComponent(NotificationComponent)
-						ige.notification.start();
+							ige.network.define('cosmos:BlockStructure.processBlockActionServer.minedBlock',
+								self._onMinedBlock);
 
-						// Enable crafting system
-						ige.addComponent(CraftingSystem);
+							ige.network.define('cosmos:player.username.set.approve', Player.onUsernameRequestApproved);
+							ige.network.define('cosmos:player.username.set.error', Player.onUsernameRequestError);
 
-						// Enable quest system
-						ige.addComponent(QuestSystem);
+							// Setup the network stream handler
+							ige.network.addComponent(IgeStreamComponent)
+								.stream.renderLatency(100); // Render the simulation 100 milliseconds in the past
 
-						GameInit.init(self);
+							// Enable notifications
+							ige.addComponent(NotificationComponent);
+							ige.notification.start();
 
-						//ige.editor.showStats();
+							// Enable crafting system
+							ige.addComponent(CraftingSystem);
 
-						// Wait until the HUD finishes loading to ask for the player.
-						ige.on('cosmos:hud.loaded', function(hud) {
-							ige.hud.show();
-							// Ask the server to create an entity for us
-							ige.network.send('playerEntity', {sid: self.getSessionId()});
+							// Enable quest system
+							ige.addComponent(QuestSystem);
+
+							GameInit.init(self);
+
+							//ige.editor.showStats();
+
+							ige.addComponent(HUDComponent);
+							// Wait until the HUD finishes loading to ask for the player.
+							ige.on('cosmos:hud.loaded', function (hud) {
+								ige.hud.log('HUD Loaded.');
+								ige.hud.show();
+								// Ask the server to create an entity for us
+								ige.network.send('playerEntity', {sid: self.getSessionId()});
+							});
 						});
-						ige.addComponent(HUDComponent);
-					});
-				}
+					}
+				});
 			});
 		});
 	},

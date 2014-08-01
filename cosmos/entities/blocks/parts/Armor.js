@@ -2,11 +2,12 @@ var Armor = Part.extend({
 	classId: 'Armor',
 
 	init: function(data) {
-		Part.prototype.init.call(this, data);
-
 		if (ige.isClient) {
+			this.iconFrame = 'plating';
 			this.textureSvg = ige.client.textures.plating;
 		}
+
+		Part.prototype.init.call(this, data);
 	}
 });
 

@@ -21,6 +21,19 @@ var ParallaxBackground = IgeEntity.extend({
 	_parallaxLag: 1,
 
 	init: function() {
+		var self = this;
+		if (ige.isClient) {
+			this.addComponent(ParallaxBackgroundRenderableComponent, {createDisplayObject: function() {
+				var background = new PIXI.Sprite(self.backgroundTexture);
+				background.height = self.backgroundHeight;
+				background.width = self.backgroundWidth;
+				background.position.x = -background.width / 2;
+				background.position.y = -background.height / 2;
+
+				return background;
+			}});
+		}
+
 		IgeEntity.prototype.init.call(this);
 	},
 
@@ -34,8 +47,9 @@ var ParallaxBackground = IgeEntity.extend({
 	 * @instance
 	 */
 	parallaxLag: function(val) {
+		return this.renderable.parallaxLag(val);
 		if (val !== undefined) {
-			this._parallaxLag = val;
+			this.pixiRenderable._parallaxLag = val;
 			return this;
 		}
 		return this._parallaxLag;
@@ -45,9 +59,9 @@ var ParallaxBackground = IgeEntity.extend({
 		var camera = ige._currentCamera;
 
 		this.translateTo(
-			camera._translate.x / this._parallaxLag,
-			camera._translate.y / this._parallaxLag,
-			camera._translate.z / this._parallaxLag);
+			camera._translate.x / this.renderable._parallaxLag,
+			camera._translate.y / this.renderable._parallaxLag,
+			camera._translate.z / this.renderable._parallaxLag);
 
 		IgeEntity.prototype.update.call(this, ctx);
 	}

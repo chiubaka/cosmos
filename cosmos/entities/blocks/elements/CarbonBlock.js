@@ -9,13 +9,14 @@ var CarbonBlock = Element.extend({
 	classId: 'CarbonBlock',
 
 	init: function(data) {
-		Element.prototype.init.call(this, data);
-
-
 		if (!ige.isServer) {
+			this.backgroundColor = 0x282828;
+			this.borderColor = 0x505050;
 			this.textureBackground = "rgb(40, 40, 40)";
 			this.textureOutline = "rgb(80, 80, 80)";
 		}
+
+		Element.prototype.init.call(this, data);
 	}
 });
 

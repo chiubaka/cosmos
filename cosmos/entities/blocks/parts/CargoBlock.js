@@ -10,13 +10,16 @@ var CargoBlock = Part.extend({
 	classId: 'CargoBlock',
 
 	init: function(data) {
-		Part.prototype.init.call(this, data);
-
 		if (!ige.isServer) {
+			this.backgroundColor = 0xF2F2F2;
+			this.borderColor = 0x262626;
+			this.iconFrame = 'cargo';
 			this.textureBackground = "rgb(242, 242, 242)";
 			this.textureOutline = "rgb(38, 38, 38)";
 			this.textureSvg = ige.client.textures.cargo;
 		}
+
+		Part.prototype.init.call(this, data);
 	}
 });
 
