@@ -180,9 +180,9 @@ var Client = IgeClass.extend({
 
 	/* Send performance metrics to Google analytics */
 	startClientPerformanceMetrics: function() {
-		setInterval(function() {
+		/*setInterval(function() {
 			ige.client.metrics.track('cosmos:engine.performance', {'FPS': ige.fps()});
-		}, 200000); // Send every 200s
+		}, 200000); */// Send every 200s//This has been removed temporarially because the low send rate makes it not very useful. TODO: At some point let's make an aggregate statistic and send that over all at once.
 	}
 });
 
