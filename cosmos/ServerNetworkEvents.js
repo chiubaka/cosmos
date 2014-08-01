@@ -268,6 +268,7 @@ var ServerNetworkEvents = {
 				.streamMode(1)
 				.mount(server.spaceGameScene);
 			ige.physicsSystem.newBody(haxBlock);
+			ige.physicsSystem.newFixture(haxBlock, haxBlock, 0, 0);
 	},
 
 	_onConstructNew: function(data, clientId) {
