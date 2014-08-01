@@ -5,6 +5,7 @@ var RespawnableComponent = IgeClass.extend({
 	_entity: undefined,
 	_respawnTime: undefined,
 	_respawnAction: undefined,
+	_respawnTimeout: undefined,
 
 	init: function(entity, data) {
 		var self = this;
@@ -19,10 +20,19 @@ var RespawnableComponent = IgeClass.extend({
 		this._respawnAction = data.respawnAction;
 
 		this._respawnTime = Math.floor(Math.random() * data.maxRespawnTime) + data.minRespawnTime;
-		setTimeout(function() {
+		this._respawnTimeout = setTimeout(function() {
 			self._entity.destroy();
 			self._respawnAction();
-			console.log('Respawning!');
+			self._entity.log('Respawning!');
+		}, this._respawnTime);
+	},
+
+	resetTimeout: function() {
+		var self = this;
+		clearTimeout(this._respawnTimeout);
+		this._respawnTimeout = setTimeout(function() {
+			self._entity.destroy();
+			self._respawnAction();
 		}, this._respawnTime);
 	}
 });

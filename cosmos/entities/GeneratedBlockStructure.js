@@ -20,13 +20,20 @@ var GeneratedBlockStructure = BlockStructure.extend({
 			this.addComponent(RespawnableComponent, {
 				minRespawnTime: GeneratedBlockStructure.MIN_RESPAWN_TIME,
 				maxRespawnTime: GeneratedBlockStructure.MAX_RESPAWN_TIME,
-				respawnAction: BlockStructureGenerator.spawnStructure.bind(
-					null,
+				respawnAction: GameInit.spawnStructure.bind(
+					GameInit,
 					this._maxNumBlocks,
 					this._blockDistribution,
 					this._symmetric
 				)
 			});
+		}
+	},
+
+	remove: function(row, col) {
+		BlockStructure.prototype.remove.call(this, row, col);
+		if (ige.isServer) {
+			this.respawn.resetTimeout();
 		}
 	}
 });
@@ -35,13 +42,13 @@ var GeneratedBlockStructure = BlockStructure.extend({
  * Minimum time it takes to respawn this structure.
  * @type {number}
  */
-GeneratedBlockStructure.MIN_RESPAWN_TIME = 10 * 1000;//60 * 1000 * 2; // 2 minutes
+GeneratedBlockStructure.MIN_RESPAWN_TIME = 60 * 1000 * 2; // 2 minutes
 
 /**
  * Maximum time it takes to respawn this structure.
  * @type {number}
  */
-GeneratedBlockStructure.MAX_RESPAWN_TIME = 10 * 1000;//60 * 1000 * 5; // 5 minutes
+GeneratedBlockStructure.MAX_RESPAWN_TIME = 60 * 1000 * 15; // 15 minutes
 
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = GeneratedBlockStructure; }

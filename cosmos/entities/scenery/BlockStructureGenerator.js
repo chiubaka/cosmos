@@ -6,12 +6,6 @@
  * @namespace
  */
 var BlockStructureGenerator = {
-	spawnStructure: function(maxNumBlocks, blockDistribution, symmetric) {
-		var asteroid = BlockStructureGenerator
-			.genProceduralAsteroid(maxNumBlocks, blockDistribution, symmetric)
-			.streamMode(1)
-			.mount(ige.server.spaceGameScene)
-	},
 
 	/**
 	 * Procedurally generates an asteroid recursively
