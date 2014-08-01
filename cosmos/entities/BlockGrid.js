@@ -150,6 +150,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this._endRow = 0;
 		this._previouslyStreamed = {};
 
+		this.addComponent(PixiRenderableComponent);
+
 		if (ige.isServer) {
 			this.box2dBody({
 				type: 'dynamic',
@@ -164,7 +166,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 			this.streamControl(this._streamControlFunc.bind(this))
 		}
 		else {
-			this.addComponent(PixiRenderableComponent);
 			this.depth(BlockGrid.DEPTH);
 			this._renderContainer = new RenderContainer()
 				.mount(this);
