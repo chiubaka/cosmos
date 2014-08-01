@@ -208,8 +208,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// TODO: Make a proper entity preloader to stop jittering when BlockGrids
 		// are created on screen
 		if (player === undefined || player.currentShip() === undefined) {
-			this._previouslyStreamed[clientId] = false;
-			return false;
+			this._previouslyStreamed[clientId] = true;
+			return true;
 		}
 
 
