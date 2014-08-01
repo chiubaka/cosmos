@@ -11,7 +11,7 @@ var RespawnableComponent = IgeClass.extend({
 		this._entity = entity;
 
 		if (data === undefined || data.minRespawnTime === undefined || data.maxRespawnTime === undefined
-			|| data.respawnAction) {
+			|| data.respawnAction === undefined) {
 			this.log('Init parameters not provided for RespawnableComponent.', 'error');
 			return;
 		}
@@ -22,6 +22,7 @@ var RespawnableComponent = IgeClass.extend({
 		setTimeout(function() {
 			self._entity.destroy();
 			self._respawnAction();
+			console.log('Respawning!');
 		}, this._respawnTime);
 	}
 });

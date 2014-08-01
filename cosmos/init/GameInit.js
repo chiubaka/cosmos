@@ -181,7 +181,7 @@ var GameInit = {
 	initEnvironment: function() {
 		var server = ige.server;
 
-		var NUM_NORMAL_ASTEROIDS = 40;
+		var NUM_NORMAL_ASTEROIDS = 1;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
 			var asteroid = BlockStructureGenerator
 				.genProceduralAsteroid(200, BlockStructureGenerator.elementDistributions.randomDistribution())
@@ -193,7 +193,7 @@ var GameInit = {
 
 		// TODO: The procedural generation algorithm is causing strange problems with the new BlockGrid system. Leave
 		// this stuff commented out until it is figured out.
-		var NUM_DERELICT_SPACESHIPS = 10;
+		var NUM_DERELICT_SPACESHIPS = 0;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_DERELICT_SPACESHIPS; asteroidNumber++) {
 			//note that the signature of gen.. is
 			// genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution)
