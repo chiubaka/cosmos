@@ -60,7 +60,6 @@ var MineCapability = Capability.extend({
 	 * @instance
 	 */
 	Block_mouseDown: function(sender, event, data) {
-		console.log(sender.parent().parent().classId());
 		if (sender.parent().parent() instanceof Ship) {
 			ige.client.metrics.track('cosmos:block.attack', {'type': sender.classId()});//note that this includes when you mine yourself
 		} else {
