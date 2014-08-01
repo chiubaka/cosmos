@@ -12,13 +12,17 @@ var MiningLaserBlock = Weapon.extend({
 
 	init: function(data) {
 		data = {MAX_HP: this.MAX_HP};
-		Weapon.prototype.init.call(this, data);
 
 		if (!ige.isServer) {
+			this.backgroundColor = 0xF2F2F2;
+			this.borderColor = 0xD03F2C;
+			this.iconFrame = 'laser';
 			this.textureBackground = "rgb(242, 242, 242)";
 			this.textureOutline = "rgb(208, 63, 44)";
 			this.textureSvg = ige.client.textures.miningLaser;
 		}
+
+		Weapon.prototype.init.call(this, data);
 	},
 
 	/**

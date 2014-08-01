@@ -6,6 +6,7 @@
  * @namespace
  */
 var BlockStructureGenerator = {
+
 	/**
 	 * Procedurally generates an asteroid recursively
 	 * @param maxNumBlocks {number} The maximum number of {@link Block}s to place in this procedurally generated
@@ -17,8 +18,6 @@ var BlockStructureGenerator = {
 	 * @memberof BlockStructureGenerator
 	 */
 	genProceduralAsteroid: function(maxNumBlocks, blockDistribution, symmetric) {
-		var blockStructure = new BlockStructure();
-
 		// Whether or not to generate a symmetric asteroid
 		symmetric = symmetric || false;
 
@@ -26,6 +25,12 @@ var BlockStructureGenerator = {
 		blockDistribution = blockDistribution || this.elementDistributions.STANDARD;
 
 		maxNumBlocks = maxNumBlocks || 100;
+
+		var blockStructure = new GeneratedBlockStructure({
+			maxNumBlocks: maxNumBlocks,
+			blockDistribution: blockDistribution,
+			symmetric: symmetric
+		});
 
 		// Number of blocks that can be contained in this asteroid.
 		var blocksRemaining = Math.floor(this.weightedRandom(maxNumBlocks, maxNumBlocks * 0.75, 0.25));
@@ -176,7 +181,9 @@ var BlockStructureGenerator = {
 	 */
 	singleBlock: function(distribution) {
 		distribution = distribution || this.elementDistributions.STANDARD;
-		var blockStructure = new BlockStructure();
+		var blockStructure = new GeneratedBlockStructure({
+			blockDistribution: distribution
+		});
 		blockStructure.add(0, 0, this._drawFromDistribution(distribution));
 
 		return blockStructure;

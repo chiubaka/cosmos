@@ -60,10 +60,10 @@ var MineCapability = Capability.extend({
 	 * @instance
 	 */
 	Block_mouseDown: function(sender, event, data) {
-		if (sender.parent().parent().classId() === BlockGrid.prototype.classId()) {
-			ige.client.metrics.track('cosmos:block.mine', {'type': sender.classId()});
+		if (sender.parent().parent() instanceof Ship) {
+			ige.client.metrics.track('cosmos:block.attack', {'type': sender.classId()});//note that this includes when you mine yourself
 		} else {
-			ige.client.metrics.track('cosmos:player.attack', {'type': sender.classId()});
+			ige.client.metrics.track('cosmos:block.mine', {'type': sender.classId()});
 		}
 
 		ige.network.send('mineBlock', data);

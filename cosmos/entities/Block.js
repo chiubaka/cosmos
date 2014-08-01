@@ -125,6 +125,7 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	init: function(data) {
+		var self = this;
 		IgeEntity.prototype.init.call(this);
 
 		// Use an even number so values don't have to become approximate when we divide by two
@@ -162,6 +163,53 @@ var Block = IgeEntity.extend({
 		if (Recipes[this.classId()] !== undefined) {
 			this.addComponent(Recipe, Recipes[this.classId()]);
 		}
+
+		this.backgroundAlpha = this.backgroundAlpha || 1;
+		if (!this.backgroundColor) {
+			this.backgroundAlpha = 0;
+		}
+
+		this.borderAlpha = this.borderAlpha || 1;
+		if (!this.borderColor) {
+			this.borderAlpha = 0;
+		}
+
+		this.borderWidth = 2;
+		this.iconScale = this.iconScale || (Block.WIDTH - 3 * this.borderWidth) / Block.WIDTH;
+
+		this.addComponent(PixiRenderableComponent, {createDisplayObject: function() {
+			var displayObject = new PIXI.DisplayObjectContainer();
+
+			var graphic = new PIXI.Graphics();
+			graphic.beginFill(self.backgroundColor, self.backgroundAlpha);
+			graphic.lineStyle(self.borderWidth, self.borderColor, self.borderAlpha);
+			graphic.drawRect(
+					self.borderWidth / 2,
+					self.borderWidth / 2,
+					self.width() - self.borderWidth,
+					self.height() - self.borderWidth
+			);
+			graphic.endFill();
+
+			graphic.position.x = -Block.WIDTH / 2;
+			graphic.position.y = -Block.HEIGHT / 2;
+
+			displayObject.addChild(graphic);
+
+			if (self.iconFrame) {
+				var icon = PIXI.Sprite.fromFrame(self.iconFrame);
+
+				icon.width = self.width() * self.iconScale;
+				icon.height = self.height() * self.iconScale;
+
+				icon.position.x = (self.width() - icon.width) / 2 - Block.WIDTH / 2;
+				icon.position.y = (self.height() - icon.height) / 2 - Block.HEIGHT / 2;
+
+				displayObject.addChild(icon);
+			}
+
+			return displayObject;
+		}});
 
 		if (!ige.isServer) {
 			this.texture(ige.client.textures.block);
@@ -264,7 +312,7 @@ var Block = IgeEntity.extend({
 			return;
 		}
 
-		this._effectsMountAbove = new IgeEntity().depth(this.depth() + 1);
+		this._effectsMountAbove = new IgeEntity().addComponent(PixiRenderableComponent).depth(this.depth() + 1);
 	},
 
 	/**
@@ -278,7 +326,7 @@ var Block = IgeEntity.extend({
 			return;
 		}
 
-		this._effectsMountBelow = new IgeEntity().depth(this.depth() - 1);
+		this._effectsMountBelow = new IgeEntity().addComponent(PixiRenderableComponent).depth(this.depth() - 1);
 	},
 
 	/**

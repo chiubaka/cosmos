@@ -183,27 +183,23 @@ var GameInit = {
 
 		var NUM_NORMAL_ASTEROIDS = 40;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
-			var asteroid = BlockStructureGenerator
-				.genProceduralAsteroid(200, BlockStructureGenerator.elementDistributions.randomDistribution())
-				.id('genRandomAsteroid' + asteroidNumber)
-				.streamMode(1)
-				.mount(server.spaceGameScene)
-			this.moveRandomly(asteroid);
+			this.spawnStructure(200, BlockStructureGenerator.elementDistributions.randomDistribution());
 		}
 
 		// TODO: The procedural generation algorithm is causing strange problems with the new BlockGrid system. Leave
 		// this stuff commented out until it is figured out.
 		var NUM_DERELICT_SPACESHIPS = 10;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_DERELICT_SPACESHIPS; asteroidNumber++) {
-			//note that the signature of gen.. is
-			// genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution)
-			var asteroid = BlockStructureGenerator
-				.genProceduralAsteroid(60, BlockStructureGenerator.partDistributions.randomDistribution(), true)
-				.id('spaceShip' + asteroidNumber)
-				.streamMode(1)
-				.mount(server.spaceGameScene)
-			this.moveRandomly(asteroid);
+			this.spawnStructure(60, BlockStructureGenerator.partDistributions.randomDistribution(), true);
 		}
+	},
+
+	spawnStructure: function(maxNumBlocks, blockDistribution, symmetric) {
+		var structure = BlockStructureGenerator
+			.genProceduralAsteroid(maxNumBlocks, blockDistribution, symmetric)
+			.streamMode(1)
+			.mount(ige.server.spaceGameScene);
+		this.moveRandomly(structure);
 	},
 
 	/**
