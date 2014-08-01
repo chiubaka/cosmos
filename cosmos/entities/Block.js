@@ -146,56 +146,55 @@ var Block = IgeEntity.extend({
 			this.addComponent(Description, Descriptions[this.classId()]);
 		}
 
+		this.backgroundAlpha = this.backgroundAlpha || 1;
+		if (!this.backgroundColor) {
+			this.backgroundAlpha = 0;
+		}
 
+		this.borderAlpha = this.borderAlpha || 1;
+		if (!this.borderColor) {
+			this.borderAlpha = 0;
+		}
 
-		if (!ige.isServer) {
-			this.backgroundAlpha = this.backgroundAlpha || 1;
-			if (!this.backgroundColor) {
-				this.backgroundAlpha = 0;
-			}
+		this.borderWidth = 2;
+		this.iconScale = this.iconScale || (Block.WIDTH - 3 * this.borderWidth) / Block.WIDTH;
 
-			this.borderAlpha = this.borderAlpha || 1;
-			if (!this.borderColor) {
-				this.borderAlpha = 0;
-			}
+		this.addComponent(PixiRenderableComponent, {createDisplayObject: function() {
+			var displayObject = new PIXI.DisplayObjectContainer();
 
-			this.borderWidth = 2;
-			this.iconScale = this.iconScale || (Block.WIDTH - 3 * this.borderWidth) / Block.WIDTH;
-
-			this.texture(ige.client.textures.block);
-			this.addComponent(PixiRenderableComponent, {createDisplayObject: function() {
-				var displayObject = new PIXI.DisplayObjectContainer();
-
-				var graphic = new PIXI.Graphics();
-				graphic.beginFill(self.backgroundColor, self.backgroundAlpha);
-				graphic.lineStyle(self.borderWidth, self.borderColor, self.borderAlpha);
-				graphic.drawRect(
+			var graphic = new PIXI.Graphics();
+			graphic.beginFill(self.backgroundColor, self.backgroundAlpha);
+			graphic.lineStyle(self.borderWidth, self.borderColor, self.borderAlpha);
+			graphic.drawRect(
 					self.borderWidth / 2,
 					self.borderWidth / 2,
 					self.width() - self.borderWidth,
 					self.height() - self.borderWidth
-				);
-				graphic.endFill();
+			);
+			graphic.endFill();
 
-				graphic.position.x = -Block.WIDTH / 2;
-				graphic.position.y = -Block.HEIGHT / 2;
+			graphic.position.x = -Block.WIDTH / 2;
+			graphic.position.y = -Block.HEIGHT / 2;
 
-				displayObject.addChild(graphic);
+			displayObject.addChild(graphic);
 
-				if (self.iconFrame) {
-					var icon = PIXI.Sprite.fromFrame(self.iconFrame);
+			if (self.iconFrame) {
+				var icon = PIXI.Sprite.fromFrame(self.iconFrame);
 
-					icon.width = self.width() * self.iconScale;
-					icon.height = self.height() * self.iconScale;
+				icon.width = self.width() * self.iconScale;
+				icon.height = self.height() * self.iconScale;
 
-					icon.position.x = (self.width() - icon.width) / 2 - Block.WIDTH / 2;
-					icon.position.y = (self.height() - icon.height) / 2 - Block.HEIGHT / 2;
+				icon.position.x = (self.width() - icon.width) / 2 - Block.WIDTH / 2;
+				icon.position.y = (self.height() - icon.height) / 2 - Block.HEIGHT / 2;
 
-					displayObject.addChild(icon);
-				}
+				displayObject.addChild(icon);
+			}
 
-				return displayObject;
-			}});
+			return displayObject;
+		}});
+
+		if (!ige.isServer) {
+			this.texture(ige.client.textures.block);
 
 			this._effects = {};
 
