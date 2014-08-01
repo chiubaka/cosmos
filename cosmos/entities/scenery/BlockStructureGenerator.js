@@ -6,6 +6,13 @@
  * @namespace
  */
 var BlockStructureGenerator = {
+	spawnStructure: function(maxNumBlocks, blockDistribution, symmetric) {
+		var asteroid = BlockStructureGenerator
+			.genProceduralAsteroid(maxNumBlocks, blockDistribution, symmetric)
+			.streamMode(1)
+			.mount(server.spaceGameScene)
+	},
+
 	/**
 	 * Procedurally generates an asteroid recursively
 	 * @param maxNumBlocks {number} The maximum number of {@link Block}s to place in this procedurally generated
