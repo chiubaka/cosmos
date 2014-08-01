@@ -51,7 +51,7 @@ var EngineBlock = Part.extend({
 
 		switch (effect.type) {
 			case 'engineParticles':
-				this._addEngineParticlesEffect();
+				//this._addEngineParticlesEffect();
 				break;
 		}
 	},
