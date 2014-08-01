@@ -30,18 +30,19 @@ var Client = IgeClass.extend({
 		// Implement our game methods
 		this.implement(ClientNetworkEvents);
 
+		// IGE rendering system is left attached in order to support the textures system which, for now, is still used
+		// for displaying blocks in canvases in the HUD.
 		ige.addSystem(IgeRenderingSystem, {autoSize: true});
-		ige.rendering.start();
 
 		ige.addSystem(PixiRenderingSystem, {autoSize: true});
-		ige.pixiRendering.loadTextures({
+		ige.rendering.loadTextures({
 			background_helix_nebula: gameRoot + 'assets/backgrounds/helix_nebula.jpg',
 			background_starfield: gameRoot + 'assets/backgrounds/starfield.png'
 		});
-		ige.pixiRendering.loadSpriteSheets([gameRoot + 'assets/blocks/spritesheet.json']);
-		ige.pixiRendering.start();
+		ige.rendering.loadSpriteSheets([gameRoot + 'assets/blocks/spritesheet.json']);
+		ige.rendering.start();
 
-		ige.pixiRendering.on('texturesLoaded', function() {
+		ige.rendering.on('texturesLoaded', function() {
 
 			// Load the textures we want to use
 			self.textures = {
