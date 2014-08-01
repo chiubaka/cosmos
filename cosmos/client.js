@@ -44,6 +44,8 @@ var Client = IgeClass.extend({
 
 		ige.rendering.on('texturesLoaded', function() {
 
+			ige.rendering.log('Finished Pixi loading textures.');
+
 			// Load the textures we want to use
 			self.textures = {
 				block: new IgeTexture(gameRoot + 'assets/BlockTexture.js'),
@@ -107,10 +109,12 @@ var Client = IgeClass.extend({
 
 						// Use DeploymentUtils to get the appropriate game server to connect to.
 						ige.network.start(DeploymentUtils.getServerUrl(), function () {
-							ige.client.metrics.fireEvent('network', 'connect');
+							ige.client.metrics.track('cosmos:network.connect');
 
 							// Setup the network command listeners
 							ige.network.define('playerEntity', self._onPlayerEntity);
+							ige.network.define('playerConnected', self._onPlayerConnected);
+							ige.network.define('playerDisconnected', self._onPlayerDisconnected);
 							ige.network.define('shipEntity', self._onShipEntity);
 
 							// Called when the server needs to broadcast updates about a block
@@ -124,6 +128,9 @@ var Client = IgeClass.extend({
 							ige.network.define('cargoUpdate', self._onCargoUpdate);
 							ige.network.define('confirm', self._onConfirm);
 
+							ige.network.define('cosmos:BlockStructure.processBlockActionServer.minedBlock',
+								self._onMinedBlock);
+
 							ige.network.define('cosmos:player.username.set.approve', Player.onUsernameRequestApproved);
 							ige.network.define('cosmos:player.username.set.error', Player.onUsernameRequestError);
 
@@ -132,7 +139,7 @@ var Client = IgeClass.extend({
 								.stream.renderLatency(100); // Render the simulation 100 milliseconds in the past
 
 							// Enable notifications
-							ige.addComponent(NotificationComponent)
+							ige.addComponent(NotificationComponent);
 							ige.notification.start();
 
 							// Enable crafting system
@@ -145,13 +152,14 @@ var Client = IgeClass.extend({
 
 							//ige.editor.showStats();
 
+							ige.addComponent(HUDComponent);
 							// Wait until the HUD finishes loading to ask for the player.
 							ige.on('cosmos:hud.loaded', function (hud) {
+								ige.hud.log('HUD Loaded.');
 								ige.hud.show();
 								// Ask the server to create an entity for us
 								ige.network.send('playerEntity', {sid: self.getSessionId()});
 							});
-							ige.addComponent(HUDComponent);
 						});
 					}
 				});
@@ -188,7 +196,7 @@ var Client = IgeClass.extend({
 	/* Send performance metrics to Google analytics */
 	startClientPerformanceMetrics: function() {
 		setInterval(function() {
-			ige.client.metrics.fireEvent('engine', 'performance', 'FPS', ige.fps());
+			ige.client.metrics.track('cosmos:engine.performance', {'FPS': ige.fps()});
 		}, 10000); // Send every 10s
 	}
 });

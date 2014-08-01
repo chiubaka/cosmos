@@ -58,6 +58,8 @@ var ServerNetworkEvents = {
 			// Remove the player's ship from the game
 			player.currentShip().destroy();
 
+			ige.network.send('playerDisconnected', player.id());
+
 			// Remove the reference to the player entity
 			// so that we don't leak memory
 			delete ige.server.players[player];
@@ -142,18 +144,20 @@ var ServerNetworkEvents = {
 
 		ige.server.players[clientId] = player;
 
-		var sendData = {
-			playerId: ige.server.players[clientId].id(),
-			username: player.username(),
-			hasGuestUsername: player.hasGuestUsername,
-			loggedIn: player.loggedIn()
-		};
+		// Load the player's ships
+		ige.server._createShip(clientId, playerId, ship, cargo);
+
+		var sendData = player.toJSON();
 
 		// Tell the client to track their player entity
 		ige.network.send('playerEntity', sendData, clientId);
+		ige.network.send('playerConnected', sendData);
 
-		// Load the player's ships
-		ige.server._createShip(clientId, playerId, ship, cargo);
+		_.forEach(ige.server.players, function(playerToSend) {
+			if (ige.server.players[clientId].id() !== playerToSend.id()) {
+				ige.network.send('playerConnected', playerToSend.toJSON(), clientId);
+			}
+		});
 	},
 
 	_createShip: function(clientId, playerId, ship, cargo) {
@@ -279,7 +283,7 @@ var ServerNetworkEvents = {
 				.fromBlockMatrix([[blockToPlace]])
 				.translateTo(data.x, data.y, 0);
 
-			var confirmData = { category: 'construct', action: 'new', label: data.selectedType };
+			var confirmData = { event:'cosmos:construct.new', data: {'type': data.selectedType} };
 			ige.network.send('confirm', confirmData, clientId);
 			ige.network.stream.queueCommand('notificationSuccess',
 				NotificationDefinitions.successKeys.constructNewBlock, clientId);

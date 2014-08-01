@@ -10,10 +10,10 @@ var IronPlatingBlock = Armor.extend({
 
 	init: function(data) {
 		if (!ige.isServer) {
-			this.backgroundColor = 0xD9D9D9;
-			this.borderColor = 0xC9C9C9;
-			this.textureBackground = "rgb(217, 217, 217)";
-			this.textureOutline = "rgb(201, 201, 201)";
+			this.backgroundColor = 0x646464;
+			this.borderColor = 0x505050;
+			this.textureBackground = "rgb(100, 100, 100)";
+			this.textureOutline = "rgb(80, 80, 80)";
 		}
 
 		Armor.prototype.init.call(this, data);

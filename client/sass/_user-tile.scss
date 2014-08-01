@@ -23,12 +23,13 @@ $user-info-padding: $bottom-toolbar-item-padding;
     cursor: pointer;
 
     .ship-name {
+      display: none;
     }
 
     .username {
-      font-size: 75%;
+      font-size: 100%;
       font-weight: 600;
-      line-height: 50%;
+      line-height: $bottom-toolbar-item-height;
       position: relative;
       top: -$user-info-padding;
     }

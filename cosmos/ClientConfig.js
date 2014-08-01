@@ -100,6 +100,7 @@ var igeClientConfig = {
 
 		/* === COMPONENT CONFIG FILES === */
 		'./components/config/Descriptions.js',
+		'./components/config/Types.js',
 		'./components/config/Healths.js',
 		'./components/config/Recipes.js',
 		'./components/config/Thrusts.js',
@@ -107,6 +108,7 @@ var igeClientConfig = {
 		/* === COMPONENTS === */
 		'./components/DamageSource.js',
 		'./components/Description.js',
+		'./components/Type.js',
 		'./components/Health.js',
 		'./components/Recipe.js',
 		'./components/Thrust.js',
@@ -175,7 +177,6 @@ var igeClientConfig = {
 		/* Helper utilities */
 		'./utils/BlockGridPadding.js',
 		'./utils/DeploymentUtils.js',
-		'./utils/MetricsHandler.js',
 		'./utils/NetworkUtils.js',
 		'./utils/RandomInterval.js',
 		'./utils/PrototypeMixins.js',
@@ -190,7 +191,10 @@ var igeClientConfig = {
 		/* Initialization */
 		'./init/GameInit.js',
 		'./client.js',
-		'./index.js'
+		'./index.js',
+
+		/* Metrics */
+		'./utils/MetricsHandler.js'
 	]
 };
 

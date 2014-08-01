@@ -10,9 +10,9 @@ var SteelBlock = Element.extend({
 
 	init: function(data) {
 		if (!ige.isServer) {
-			this.backgroundColor = 0x6E6E6E;
+			this.backgroundColor = 0xA0A0A0;
 			this.borderColor = 0x505050;
-			this.textureBackground = "rgb(110, 110, 110)";
+			this.textureBackground = "rgb(160, 160, 160)";
 			this.textureOutline = "rgb(80, 80, 80)";
 		}
 

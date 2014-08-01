@@ -185,15 +185,15 @@ var QuestSystem = IgeEventingClass.extend({
 			(ige.client.player.loggedIn() && !ige.client.player.hasGuestUsername)) {
 			return;
 		}
-		var message = "Hi! We noticed that you are a guest user. Would you " +
-			"like to complete a short in-game tutorial?";
+		var message = "Hi! We noticed that you are a guest user." + "<br>" +
+			"Would you like to complete a short in-game tutorial?";
 		alertify.confirm(message, function (e) {
 			if (e) {
 				var questName = TutorialQuest.prototype.classId();
 				ige.network.send('cosmos:quest.requestStartQuest', questName);
-				ige.client.metrics.emit('cosmos:quest.tutorialQuest.clicked');
+				ige.client.metrics.track('cosmos:quest.tutorialQuest.clicked');
 			} else {
-				ige.client.metrics.emit('cosmos:quest.tutorialQuest.skipped');
+				ige.client.metrics.track('cosmos:quest.tutorialQuest.skipped');
 			}
 		});
 	}

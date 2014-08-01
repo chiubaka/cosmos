@@ -8,6 +8,7 @@ var Inspector = IgeEventingClass.extend({
 	block: undefined,
 	blockInspector: undefined,
 	blockInspectorName: undefined,
+	blockInspectorType: undefined,
 	blockInspectorTexture: undefined,
 	blockInspectorCurrentHealth: undefined,
 	blockInspectorMaxHealth: undefined,
@@ -33,6 +34,8 @@ var Inspector = IgeEventingClass.extend({
 			self.blockInspector = self.element.find('#block-inspector');
 			self.blockInspectorName = self.blockInspector.find('#block-name');
 
+			self.blockInspectorType = self.blockInspector.find('#block-type');
+
 			self.blockInspectorTexture = self.blockInspector.find('#block-texture');
 			// Sets the height and width of the canvas equal to its CSS height and width
 			self.blockInspectorTexture[0].width = self.blockInspectorTexture.width();
@@ -50,7 +53,7 @@ var Inspector = IgeEventingClass.extend({
 			});
 
 			ige.on('cosmos:background.mousedown', function() {
-				self.blockInspector.hide();
+				self.hide();
 			});
 
 			ige.emit('cosmos:hud.subcomponent.loaded', self);
@@ -62,6 +65,7 @@ var Inspector = IgeEventingClass.extend({
 		this.block = block;
 		this.blockInspector.show();
 		this.blockInspectorName.text(block.displayName());
+		this.blockInspectorType.text(block.type.text);
 		this.blockInspectorDescription.text(block.description.text);
 
 		this.blockInspector.find('.block-stat').hide();
@@ -98,6 +102,10 @@ var Inspector = IgeEventingClass.extend({
 		ctx.scale(scaleWidth, scaleHeight);
 		ctx.translate(block._bounds2d.x2, block._bounds2d.y2);
 		block.texture().render(ctx, block);
+	},
+
+	hide: function() {
+		this.blockInspector.hide();
 	},
 
 	loadHtml: function (url, callback) {

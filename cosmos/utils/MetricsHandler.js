@@ -1,137 +1,67 @@
 ﻿/**
  * The MetricsHandler class handles in game metrics like what UI elements
  * are being clicked and FPS.
- * Currently, this uses Google Analytics.
+ * Currently, this uses Segment.io.
  * @class
  * @typedef {Object} MetricsHandler
  * @namespace
  */
 var MetricsHandler = IgeEventingClass.extend({
 	classId: "MetricsHandler",
-	/**
-	 * Enables sending metrics to Google Analytics 
-	 * @memberof MetricsHandler
-	 * @instance
-	 */
-	enabled: false,
+
+	validStrings: undefined,
 
 	init: function() {
 		console.info("Metrics: Initializing...");
 
-		if (ga !== undefined) {
-			console.info("Metrics: Google Analytics found, metrics are go!");
-			this.enabled = true;
-			this.fireEvent('metrics', 'start');
-			this.fireEvent('engine', 'start');
-		}
+		this.validStrings = {
+			/* Tutorial Quest */
+			"cosmos:quest.tutorialQuest.clicked": true,
+			"cosmos:quest.tutorialQuest.skipped": true,
+			"cosmos:quest.tutorialQuest.welcome.completed": true,
+			"cosmos:quest.tutorialQuest.moveForward.completed": true,
+			"cosmos:quest.tutorialQuest.moveBackwards.completed": true,
+			"cosmos:quest.tutorialQuest.rotateLeft.completed": true,
+			"cosmos:quest.tutorialQuest.rotateRight.completed": true,
+			"cosmos:quest.tutorialQuest.moveAround.completed": true,
+			"cosmos:quest.tutorialQuest.minimap.completed": true,
+			"cosmos:quest.tutorialQuest.mine.completed": true,
+			"cosmos:quest.tutorialQuest.cargo.completed": true,
+			"cosmos:quest.tutorialQuest.craft.completed": true,
+			"cosmos:quest.tutorialQuest.construct.completed": true,
+			"cosmos:quest.tutorialQuest.chat.completed": true,
+			"cosmos:quest.tutorialQuest.newShip.completed": true,
+			"cosmos:quest.tutorialQuest.completed": true,
 
-		this.listenEvents();
-	},
-	
-	/**
-	 * Sets up event listeners to various events so we can report metrics on
-	 * them.
-	 * @memberof MetricsHandler
-	 * @instance
-	 */
-	listenEvents: function() {
-		var self = this;
+			/* player */
+			"cosmos:player.connect": true,
+			"cosmos:player.attack": true,
 
-		ige.on('ige network error', function() {
-			self.fireEvent('network', 'error');
-			self.fireEvent('engine', 'stop');
-		});
+			/* engine */
+			"cosmos:engine.performance": true,
 
-		ige.on('clientstate selected cap changed', function(selectedCap) {
-			self.firePage(selectedCap);
-		});
+			/* network */
+			"cosmos:network.connect": true,
 
-		ige.on('toolbar tool cleared', function(classId, toolName) {
-			self.fireEvent('tool', 'clear', classId + "-" + toolName);
-		});
+			/* construction */
+			"cosmos:construct.attempt.new": true,
+			"cosmos:construct.new": true,
 
-		ige.on('toolbar tool selected', function(classId, toolName) {
-			self.fireEvent('tool', 'click', classId + "-" + toolName);
-		});
+			"cosmos:construct.attempt.existing": true,
+			"cosmos:construct.existing": true,
 
-		ige.on('capbar cap selected', function(classId) {
-			self.fireEvent('cap', 'click', classId);
-		});
-
-		ige.on('capbar cap cleared', function(classId) {
-			self.fireEvent('cap', 'clear', classId);
-		});
-
-		ige.on('respawn button clicked', function() {
-			self.fireEvent('respawn', 'click');
-		});
-
-		ige.on('cosmos:client.player.login', function(username) {
-			self.fireEvent('player', 'login', username);
-		});
-
-		ige.on('cosmos:namePrompt.skipped', function() {
-			self.fireEvent('namePrompt', 'skipped');
-		});
-
-		this.on('cosmos:quest.tutorialQuest.clicked', function() {
-			self.fireEvent('tutorialQuest', 'clicked');
-		});
-
-		this.on('cosmos:quest.tutorialQuest.skipped', function() {
-			self.fireEvent('tutorialQuest', 'skipped');
-		});
-
-		this.on('cosmos:quest.tutorialQuest.completed', function() {
-			self.fireEvent('tutorialQuest', 'completed');
-		});
-
-	},
-
-	/**
-	 * Fires a Google Analytics pageview event
-	 * @param page {String} Page are currently used to distinguish between
-	 * different capabilities activated.
-	 * @param title {String} Titles are currently unused.
-	 * @memberof MetricsHandler
-	 * @instance
-	 */
-	firePage: function(page, title) {
-		if (!this.enabled) {
-			return;
-		}
-		console.info("Metrics: [PAGEVIEW] " + page);
-		if (title === undefined) {
-			ga('send', 'pageview', page);
-			return;
-		} else {
-			ga('send', 'pageview', {
-				'page': page,
-				'title': title
-			});
+			/* misc */
+			"cosmos:block.mine": true
 		}
 	},
 
-	/**
-	 * Fires a Google Analytics event
-	 * @param category {String} Major category of event, e.g. construct
-	 * @param action {String} Action of event, e.g. existing
-	 * @param label {String} Label of event, e.g. CarbonBlock
-	 * @param value {String=} Specific value (optional) used for FPS value
-	 * @memberof MetricsHandler
-	 * @instance
-	 */
-	fireEvent: function(category, action, label, value) {
-		if (!this.enabled) {
-			return;
+	track: function(event, data) {
+		if (!this.validStrings[event]) {
+			this.log("The invalid event " + event + " was sent to the metrics handler. Prepare to die.", "error");
 		}
-		if (label !== undefined) {
-			console.info("Metrics: [EVENT] " + category + "/" + action + " - " + label);
-		} else {
-			console.info("Metrics: [EVENT] " + category + "/" + action);
-		}
-		ga('send', 'event', category, action, label, value);
-	},
+
+		analytics.track(event, data);
+	}
 });
 
 MetricsHandler.PLAYER_DIMENSION = 'dimension1';

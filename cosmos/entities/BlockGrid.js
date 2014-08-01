@@ -205,7 +205,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 		var player = ige.server.players[clientId];
 
 		// TODO: Make createConstructionZone and fromBlockTypeMatrix faster.
-		// TODO: Make a proper entity preloader.
+		// TODO: Make a proper entity preloader to stop jittering when BlockGrids
+		// are created on screen
 		if (player === undefined || player.currentShip() === undefined) {
 			this._previouslyStreamed[clientId] = false;
 			return false;
@@ -791,11 +792,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 				block.takeDamage(data.amount);
 				break;
 			case 'add':
-				ige.client.metrics.fireEvent(
-					'construct',
-					'existing',
-					Block.blockFromClassId(data.selectedType)
-				);
+				ige.client.metrics.track(
+					'cosmos:construct.existing',
+					{'type': data.selectedType});
 				this.add(data.row, data.col, Block.blockFromClassId(data.selectedType));
 				ige.emit('cosmos:BlockGrid.processBlockActionClient.add', [data.selectedType, this] );
 				this._renderContainer.refresh();

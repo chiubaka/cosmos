@@ -1,0 +1,23 @@
+/* Effects for hud elements (like glow) */
+@import "compass/css3/user-interface";
+@import "compass/css3/animation";
+@import "compass/css3";
+
+@include keyframes(white-pulse) {
+	0%, 100% {
+		@include box-shadow(0px 0px 90px 25px rgba(0, 0, 0, 0));
+	}
+	50% {
+		@include box-shadow(0px 0px 90px 25px rgba(255, 255, 255, 1));
+	}
+}
+
+.glow-pulse {
+	/* easeInOutCubic */
+	@include transition(all 2000ms cubic-bezier(0.645, 0.045, 0.355, 1.000));
+
+  @include animation-name(white-pulse);
+  @include animation-duration(2s);
+  @include animation-iteration-count(infinite);
+}
+

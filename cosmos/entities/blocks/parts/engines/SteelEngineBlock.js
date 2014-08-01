@@ -8,9 +8,9 @@ var SteelEngineBlock = EngineBlock.extend({
 		}
 
 		if (!ige.isServer) {
-			this.backgroundColor = 0x8B8B8B;
+			this.backgroundColor = 0xA0A0A0;
 			this.borderColor = 0xFF4E00;
-			this.textureBackground = "rgb(139, 139, 139)";
+			this.textureBackground = "rgb(160, 160, 160)";
 			this.textureOutline = "rgb(255, 78, 0)";
 			this.textureSvg = ige.client.textures.engine;
 		}

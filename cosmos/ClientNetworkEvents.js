@@ -31,7 +31,7 @@ var ClientNetworkEvents = {
 			ige.client.player.currentShip(ige.client.currentShip);
 		}
 
-		ige.client.metrics.fireEvent('player', 'connect', data.playerId);
+		ige.client.metrics.track('cosmos:player.connect', {'playerId': data.playerId});
 
 		// If this player is logged in and has a guest username, prompt for a real
 		// username.
@@ -49,12 +49,40 @@ var ClientNetworkEvents = {
 		//ige.client.tsVis.monitor(ige.$(data));
 	},
 
+	_onPlayerConnected: function(data) {
+		if ((ige.client.player && ige.client.player.id() === data.playerId) || ige.$(data.playerId)) {
+			return;
+		}
+
+		var player = new Player().id(data.playerId)
+			.username(data.username)
+			.loggedIn(data.loggedIn)
+			.mount(ige.$("spaceGameScene"));
+
+		player.hasGuestUsername = data.hasGuestUsername;
+
+		if (ige.$(data.shipId)) {
+			player.currentShip(ige.$(data.shipId));
+		}
+	},
+
+	_onPlayerDisconnected: function(data) {
+		var player = ige.$(data);
+		if (player) {
+			player.destroy();
+		}
+	},
+
 	/*
 	This is how the server assembles the data to send us:
 	var sendData = {
 		shipId: player.currentShip().id()
 	}
 	*/
+	// TODO: Refactor this code to use the paradigm where the ship sends the playerId in streamCreateData and where
+	// messages that create players send down the shipId. This way, it's pretty well-defined that either we're ready
+	// when the player is received or when the ship is received and every player and every ship can be paired to the
+	// appropriate extant entity.
 	_onShipEntity: function(data) {
 		if(ige.client.player && ige.$(data.shipId)) {
 
@@ -101,6 +129,10 @@ var ClientNetworkEvents = {
 		blockGrid.processBlockActionClient(data);
 	},
 
+	_onMinedBlock: function(data) {
+		ige.emit('cosmos:BlockStructure.processBlockActionServer.minedBlock');
+	},
+
 	_onAddEffect: function(effect) {
 		var blockGrid = ige.$(effect.sourceBlock.blockGridId);
 		blockGrid.addEffect(effect);
@@ -121,8 +153,8 @@ var ClientNetworkEvents = {
 		ige.emit('cargo update', [cargoList]);
 	},
 
-	_onConfirm: function(data) {
-		ige.client.metrics.fireEvent(data.category, data.action, data.label);
+	_onConfirm: function(confirmData) {
+		ige.client.metrics.track(confirmData.event, confirmData.data);
 	},
 };
 

@@ -1,18 +1,18 @@
-﻿/**  
+﻿/**
  * MineCapability.js
  * The MineCapability implementation encapsulates state checking and event
  * handling that drives the mining game mechanic. Specifically, it listens
  * for clicks on existing blocks and checks to see if they're minable.
- * 
+ *
  * @author Derrick Liu
  *
  * @class
  * @typedef {Object} MineCapability
- * @namespace  
+ * @namespace
  */
 var MineCapability = Capability.extend({
 	classId: "MineCapability",
-	
+
 	/**
 	 * Initialize with MineCapability event registration
 	 * @memberof MineCapability
@@ -61,9 +61,9 @@ var MineCapability = Capability.extend({
 	 */
 	Block_mouseDown: function(sender, event, data) {
 		if (sender.parent().parent().classId() === BlockGrid.prototype.classId()) {
-			ige.client.metrics.fireEvent('block', 'mine', sender.classId());
+			ige.client.metrics.track('cosmos:block.mine', {'type': sender.classId()});//TODO this is never being called
 		} else {
-			ige.client.metrics.fireEvent('player', 'attack', sender.classId());
+			ige.client.metrics.track('cosmos:player.attack', {'type': sender.classId()});
 		}
 
 		ige.network.send('mineBlock', data);
@@ -78,7 +78,7 @@ var MineCapability = Capability.extend({
 	 * @instance
 	 */
 	ClickScene_canMouseDown: function(sender, event, data) {
-		ige.notification.emit('notificationError', 
+		ige.notification.emit('notificationError',
 			NotificationDefinitions.errorKeys.noMineEmptySpace);
 		return false;
 	},
