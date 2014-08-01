@@ -470,7 +470,9 @@ var Block = IgeEntity.extend({
 		}
 
 		this._effects['miningParticles'].counter++;
-		this._effects['miningParticles'].particleEmitter = new BlockParticleEmitter().mount(this._effectsMountAbove);
+		if (!this._effects['miningParticles'].particleEmitter) {
+			this._effects['miningParticles'].particleEmitter = new BlockParticleEmitter().mount(this._effectsMountAbove);
+		}
 	},
 
 	_addHealthBar: function() {
