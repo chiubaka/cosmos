@@ -12,15 +12,11 @@ Recipes[IronEngineBlock.prototype.classId()] =
 	reactants: [
 		{
 			blockType: IronBlock.prototype.classId(),
-			quantity: 3
-		},
-		{
-			blockType: CarbonBlock.prototype.classId(),
 			quantity: 2
 		},
 		{
 			blockType: IceBlock.prototype.classId(),
-			quantity: 1
+			quantity: 2
 		}
 	],
 	equipment: []
@@ -35,7 +31,7 @@ Recipes[SteelEngineBlock.prototype.classId()] =
 		},
 		{
 			blockType: SteelBlock.prototype.classId(),
-			quantity: 2
+			quantity: 1
 		}
 	],
 	equipment: []
