@@ -107,27 +107,6 @@ Recipes[KryptoniteThrusterBlock.prototype.classId()] =
 	equipment: []
 };
 
-/* === Weapons === */
-
-Recipes[MiningLaserBlock.prototype.classId()] =
-{
-	reactants: [
-		{
-			blockType: IronBlock.prototype.classId(),
-			quantity: 3
-		},
-		{
-			blockType: CarbonBlock.prototype.classId(),
-			quantity: 1
-		},
-		{
-			blockType: GoldBlock.prototype.classId(),
-			quantity: 1
-		}
-	],
-	equipment: []
-};
-
 /* === Armor === */
 
 Recipes[IronPlatingBlock.prototype.classId()] =
@@ -204,27 +183,48 @@ Recipes[AdamantiumPlatingBlock.prototype.classId()] =
 	],
 	equipment: []
 };
-/*
+
 Recipes[MythrilPlatingBlock.prototype.classId()] =
 {
 	reactants: [
 		{
-			blockType: RefinedMythrilBlock.prototype.classId(),
+			blockType: AdamantiumPlatingBlock.prototype.classId(),
+			quantity: 1
+		},
+		{
+			blockType: GoldBlock.prototype.classId(),
+			quantity: 10
+		},
+		{
+			blockType: MythrilBlock.prototype.classId(),
+			quantity: 3
+		}
+	],
+	equipment: []
+};
+
+
+
+/* === Weapons === */
+
+Recipes[MiningLaserBlock.prototype.classId()] =
+{
+	reactants: [
+		{
+			blockType: IronBlock.prototype.classId(),
 			quantity: 3
 		},
 		{
 			blockType: CarbonBlock.prototype.classId(),
-			quantity: 2
+			quantity: 1
 		},
 		{
-			blockType: FluorineBlock.prototype.classId(),
+			blockType: GoldBlock.prototype.classId(),
 			quantity: 1
 		}
 	],
 	equipment: []
 };
-*//*
-*/
 
 
 

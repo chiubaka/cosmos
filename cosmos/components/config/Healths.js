@@ -66,11 +66,6 @@ Healths[TitaniumPlatingBlock.prototype.classId()] =
 	max: 70
 };
 
-Healths[MythrilPlatingBlock.prototype.classId()] =
-{
-	max: 80
-};
-
 Healths[DragonPlatingBlock.prototype.classId()] =
 {
 	max: 90
@@ -79,6 +74,11 @@ Healths[DragonPlatingBlock.prototype.classId()] =
 Healths[AdamantiumPlatingBlock.prototype.classId()] =
 {
 	max: 150
+};
+
+Healths[MythrilPlatingBlock.prototype.classId()] =
+{
+	max: 500
 };
 
 
