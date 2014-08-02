@@ -10,13 +10,14 @@ var GoldBlock = Element.extend({
 	classId: 'GoldBlock',
 
 	init: function(data) {
-		Element.prototype.init.call(this, data);
-
-
 		if (!ige.isServer) {
+			this.backgroundColor = 0xFFD700;
+			this.borderColor = 0xDAA520;
 			this.textureBackground = "rgb(255,215,0)";
 			this.textureOutline = "rgb(218,165,32)";
 		}
+
+		Element.prototype.init.call(this, data);
 	}
 });
 

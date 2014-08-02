@@ -10,6 +10,7 @@ var ThrusterBlock = Part.extend({
 	classId: 'ThrusterBlock',
 
 	init: function(data) {
+		this.iconFrame = 'thruster';
 		Part.prototype.init.call(this, data);
 	}
 });

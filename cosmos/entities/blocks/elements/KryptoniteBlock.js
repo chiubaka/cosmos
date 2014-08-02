@@ -9,13 +9,15 @@ var KryptoniteBlock = Element.extend({
 	classId: 'KryptoniteBlock',
 
 	init: function(data) {
-		Element.prototype.init.call(this, data);
-
-
 		if (!ige.isServer) {
+			this.backgroundColor = 0x9FF500;
+			this.borderColor = 0x6FA700;
+			this.backgroundAlpha = 0.8;
 			this.textureBackground = "rgba(159, 245, 0, 0.8)";
 			this.textureOutline = "rgb(111, 167, 0)";
 		}
+
+		Element.prototype.init.call(this, data);
 	}
 });
 

@@ -9,13 +9,14 @@ var CobaltBlock = Element.extend({
 	classId: 'CobaltBlock',
 
 	init: function(data) {
-		Element.prototype.init.call(this, data);
-
-
 		if (!ige.isServer) {
+			this.backgroundColor = 0x0047AB;
+			this.borderColor = 0x000080;
 			this.textureBackground = "rgb(0, 71, 171)";
 			this.textureOutline = "rgb(0, 0, 128)";
 		}
+
+		Element.prototype.init.call(this, data);
 	}
 });
 

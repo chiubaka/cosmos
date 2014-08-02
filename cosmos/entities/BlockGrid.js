@@ -150,11 +150,13 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this._endRow = 0;
 		this._previouslyStreamed = {};
 
+		this.addComponent(PixiRenderableComponent);
+
 		if (ige.isServer) {
 			this.box2dBody({
 				type: 'dynamic',
 				linearDamping: 0.4,
-				angularDamping: 0.8,
+				angularDamping: 1.5,
 				allowSleep: true,
 				bullet: false,
 				gravitic: false,
@@ -206,8 +208,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// TODO: Make a proper entity preloader to stop jittering when BlockGrids
 		// are created on screen
 		if (player === undefined || player.currentShip() === undefined) {
-			this._previouslyStreamed[clientId] = false;
-			return false;
+			this._previouslyStreamed[clientId] = true;
+			return true;
 		}
 
 		// Checks if the entity is visible to the player. This means that the
@@ -1621,7 +1623,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		var oldY = block.translate().y();
 		var drawLocation = this._drawLocationForBlock(block);
 
-		block.translateTo(drawLocation.x, drawLocation.y, 0)
+		block.translateTo(drawLocation.x, drawLocation.y, 0);
 
 		return {x: drawLocation.x - oldX, y: drawLocation.y - oldY};
 	},

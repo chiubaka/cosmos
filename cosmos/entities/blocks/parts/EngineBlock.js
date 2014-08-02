@@ -9,6 +9,7 @@ var EngineBlock = Part.extend({
 	classId: 'EngineBlock',
 
 	init: function (data) {
+		this.iconFrame = 'engine';
 		Part.prototype.init.call(this, data);
 	},
 
@@ -50,7 +51,6 @@ var EngineBlock = Part.extend({
 
 		switch (effect.type) {
 			case 'engineParticles':
-				// TODO: Reenable this once the particle effects don't take so much out of the server
 				//this._addEngineParticlesEffect();
 				break;
 		}
