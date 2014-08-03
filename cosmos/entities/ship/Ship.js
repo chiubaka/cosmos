@@ -356,8 +356,6 @@ var Ship = BlockStructure.extend({
 	update: function(ctx) {
 		BlockStructure.prototype.update.call(this, ctx);
 
-		// TODO: Do not spam the player with notifications if engines/thruster
-		// are removed
 		if (ige.isServer) {
 			/* Angular motion */
 			// Angular rotation speed depends on number of thrusters
@@ -380,9 +378,11 @@ var Ship = BlockStructure.extend({
 
 				if (this.controls().left) {
 					this._box2dBody.ApplyTorque(angularImpulse);
+					ige.physicsSystem.applyAngularImpulse(haxBlock, angularImpulse);
 				}
 				if (this.controls().right) {
 					this._box2dBody.ApplyTorque(-angularImpulse);
+					ige.physicsSystem.applyAngularImpulse(haxBlock, -angularImpulse);
 				}
 			}
 
@@ -450,6 +450,9 @@ var Ship = BlockStructure.extend({
 
 					var engineWorldPosition = this._box2dBody.GetWorldPoint(enginePosition);
 					this._box2dBody.ApplyImpulse(impulse, engineWorldPosition);
+					ige.physicsSystem.applyLinearImpulseLocal(haxBlock, impulseX,
+						impulseY, 0, 0);
+
 				}
 			}
 

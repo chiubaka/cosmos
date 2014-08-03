@@ -263,12 +263,6 @@ var ServerNetworkEvents = {
 			// Activate mining lasers
 			player.currentShip().fireMiningLasers(targetBlock);
 		}
-			var server = ige.server;
-			var haxBlock = new HaxBlock()
-				.streamMode(1)
-				.mount(server.spaceGameScene);
-			ige.physicsSystem.newBody(haxBlock);
-			ige.physicsSystem.newFixture(haxBlock, haxBlock, 0, 0);
 	},
 
 	_onConstructNew: function(data, clientId) {

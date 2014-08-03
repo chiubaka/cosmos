@@ -21,12 +21,16 @@ var GameInit = {
 		this.initBlocks();
 
 		if (ige.isServer) {
+
 			var server = ige.server;
-			var haxBlock = new HaxBlock()
+			haxBlock = new HaxBlock()
 				.streamMode(1)
 				.mount(server.spaceGameScene);
-			ige.physicsSystem.newBody(haxBlock);
-			ige.physicsSystem.newFixture(haxBlock, haxBlock, 0, 0);
+			var opts = {x: 0, y: 0, angle: 0, linearDamping: 1, angularDamping: 1, bullet: true};
+			ige.physicsSystem.newBody(haxBlock, opts);
+			var opts = {x: 0, y: 0};
+			ige.physicsSystem.newFixture(haxBlock, haxBlock, opts);
+
 			//this.initEnvironment();
 			this.initPhysics();
 			this.initServerEvents();
