@@ -10,6 +10,23 @@ var FixtureDebuggingBlock = IgeEntity.extend({
 			this.depth(data.depth);
 		}
 
+
+		this.addComponent(PixiRenderableComponent, {createDisplayObject: function() {
+			var graphic = new PIXI.Graphics();
+			graphic.beginFill(0x000000, 0.5);
+			graphic.lineStyle(Block.BORDER_WIDTH, 0x640000, self.borderAlpha);
+			graphic.drawRect(
+					Block.BORDER_WIDTH / 2,
+					Block.BORDER_WIDTH / 2,
+					self.width() - Block.BORDER_WIDTH,
+					self.height() - Block.BORDER_WIDTH
+			);
+			graphic.endFill();
+
+			graphic.position.x = -Block.WIDTH / 2;
+			graphic.position.y = -Block.HEIGHT / 2;
+		}});
+
 		if (!ige.isServer) {
 			this.texture(ige.client.textures.fixtureDebuggingTexture);
 		}
