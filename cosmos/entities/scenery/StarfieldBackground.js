@@ -9,9 +9,14 @@ var StarfieldBackground = ParallaxBackground.extend({
 	classId: 'StarfieldBackground',
 
 	init: function () {
+		if (ige.isClient) {
+			this.backgroundTexture = PIXI.TextureCache.background_starfield;
+			this.backgroundHeight = this.backgroundWidth = 6000;
+		}
+
 		ParallaxBackground.prototype.init.call(this);
 
-		if (!ige.isServer) {
+		if (ige.isClient) {
 			this.texture(ige.client.textures.background_starfield)
 				.width(6000)
 				.height(6000)

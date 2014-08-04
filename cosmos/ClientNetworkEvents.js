@@ -31,7 +31,7 @@ var ClientNetworkEvents = {
 			ige.client.player.currentShip(ige.client.currentShip);
 		}
 
-		ige.client.metrics.fireEvent('player', 'connect', data.playerId);
+		ige.client.metrics.track('cosmos:player.connect', {'playerId': data.playerId});
 
 		// If this player is logged in and has a guest username, prompt for a real
 		// username.
@@ -153,8 +153,8 @@ var ClientNetworkEvents = {
 		ige.emit('cargo update', [cargoList]);
 	},
 
-	_onConfirm: function(data) {
-		ige.client.metrics.fireEvent(data.category, data.action, data.label);
+	_onConfirm: function(confirmData) {
+		ige.client.metrics.track(confirmData.event, confirmData.data);
 	},
 };
 

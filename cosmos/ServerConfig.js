@@ -15,6 +15,7 @@ var config = {
 		{ name: 'Block', path: './entities/Block' },
 		{ name: 'BlockGrid', path: './entities/BlockGrid' },
 		{ name: 'BlockStructure', path: './entities/BlockStructure' },
+		{ name: 'GeneratedBlockStructure', path: './entities/GeneratedBlockStructure' },
 		{ name: 'ConstructionZoneBlock', path: 'entities/blocks/ConstructionZoneBlock' },
 		{ name: 'Drop', path: 'entities/Drop' },
 		{ name: 'HaxBlock', path: 'entities/HaxBlock' },
@@ -96,6 +97,7 @@ var config = {
 		{ name: 'Health', path: './components/Health' },
 		{ name: 'Recipe', path: './components/Recipe' },
 		{ name: 'Thrust', path: './components/Thrust' },
+		{ name: 'RespawnableComponent', path: './components/RespawnableComponent' },
 
 		/* === PLAYER STATE === */
 		{ name: 'Player', path: './entities/player/Player' },

@@ -191,9 +191,9 @@ var QuestSystem = IgeEventingClass.extend({
 			if (e) {
 				var questName = TutorialQuest.prototype.classId();
 				ige.network.send('cosmos:quest.requestStartQuest', questName);
-				ige.client.metrics.emit('cosmos:quest.tutorialQuest.clicked');
+				ige.client.metrics.track('cosmos:quest.tutorialQuest.clicked');
 			} else {
-				ige.client.metrics.emit('cosmos:quest.tutorialQuest.skipped');
+				ige.client.metrics.track('cosmos:quest.tutorialQuest.skipped');
 			}
 		});
 	}

@@ -2,13 +2,19 @@ var HaxBlock = IgeEntity.extend({
 	classId: 'HaxBlock',
 
 	init: function() {
-		IgeEntity.prototype.init.call(this);
-		if (!ige.isServer) {
-			this.texture(ige.client.textures.background_helix_nebula);
+		if (ige.isClient) {
+			this.backgroundTexture = PIXI.TextureCache.background_helix_nebula;
+			this.backgroundWidth = 100;
+			this.backgroundHeight = 100;
 		}
-		this.width(100);
-		this.height(100);
-		this.addComponent(TLPhysicsComponent);
+
+		ParallaxBackground.prototype.init.call(this);
+
+		if (ige.isClient) {
+			this.texture(ige.client.textures.background_helix_nebula)
+				.width(100)
+				.height(100);
+		}
 	}
 
 });

@@ -18,6 +18,7 @@ var igeClientConfig = {
 		'./entities/Block.js',
 		'./entities/BlockGrid.js',
 		'./entities/BlockStructure.js',
+		'./entities/GeneratedBlockStructure.js',
 		'./entities/blocks/ConstructionZoneBlock.js',
 		'./entities/Drop.js',
 		'./entities/HaxBlock.js',
@@ -113,6 +114,10 @@ var igeClientConfig = {
 		'./components/Health.js',
 		'./components/Recipe.js',
 		'./components/Thrust.js',
+		'./components/ParallaxBackgroundRenderableComponent.js',
+		'./components/LaserBeamRenderableComponent.js',
+		'./components/ParticleRenderableComponent.js',
+		'./components/RespawnableComponent.js',
 
 		/* === PLAYER STATE === */
 		'./entities/player/Player.js',
@@ -175,7 +180,6 @@ var igeClientConfig = {
 		/* Helper utilities */
 		'./utils/BlockGridPadding.js',
 		'./utils/DeploymentUtils.js',
-		'./utils/MetricsHandler.js',
 		'./utils/NetworkUtils.js',
 		'./utils/RandomInterval.js',
 		'./utils/PrototypeMixins.js',
@@ -190,7 +194,10 @@ var igeClientConfig = {
 		/* Initialization */
 		'./init/GameInit.js',
 		'./client.js',
-		'./index.js'
+		'./index.js',
+
+		/* Metrics */
+		'./utils/MetricsHandler.js'
 	]
 };
 

@@ -11,6 +11,13 @@ var LaserBeam = IgeEntity.extend({
 	init: function (createData) {
 		IgeEntity.prototype.init.call(this);
 
+		this.addComponent(LaserBeamRenderableComponent, {createDisplayObject: function () {
+			var sprite = PIXI.Sprite.fromFrame('laserbeam');
+			sprite.width = 10;
+			sprite.position.x = -sprite.width / 2;
+			return sprite;
+		}});
+
 		if (!ige.isServer) {
 			this.texture(ige.client.textures.laserBeamTexture)
 				.width(10)
@@ -30,8 +37,16 @@ var LaserBeam = IgeEntity.extend({
 	 */
 	_fadeInTween: function () {
 		this.tween()
+			.targetObj(this.renderable)
 			.stepTo({_opacity: 1}, 1000, 'inOutCubic')
 			.start();
+
+		if (this.pixiRenderable) {
+			this.tween()
+				.targetObj(this.pixiRenderable)
+				.stepTo({_opacity: 1}, 1000, 'inOutCubic')
+				.start();
+		}
 
 		return this;
 	},
@@ -86,7 +101,7 @@ var LaserBeam = IgeEntity.extend({
 			var distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
 			var angle = Math.atan2(deltaY,deltaX);
 
-			this.rotate().z(angle - laserMount.parent().rotate().z() - Math.radians(270))
+			this.rotate().z(angle - laserMount.parent().rotate().z() - Math.radians(270));
 			// Distance * 2 because image is half blank
 			this.height(distance * 2);
 		}

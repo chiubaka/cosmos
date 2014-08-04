@@ -25,11 +25,16 @@ var GameInit = {
 			var server = ige.server;
 			haxBlock = new HaxBlock()
 				.streamMode(1)
-				.mount(server.spaceGameScene);
-			var opts = {x: 0, y: 0, angle: 0, linearDamping: 1, angularDamping: 1, bullet: true};
-			ige.physicsSystem.newBody(haxBlock, opts);
-			var opts = {x: 0, y: 0};
-			ige.physicsSystem.newFixture(haxBlock, haxBlock, opts);
+				.mount(server.spaceGameScene)
+				.addComponent(TLPhysicsComponent);
+			var opts = {x: 0, y: 0, angle: 0, linearDamping: 1, angularDamping: 1,
+				bullet: false, bodyType: "DYNAMIC"};
+			haxBlock.physics.newBody(opts);
+			var opts = {x: 0, y: 0, friction: 0.5, restitution: 0.5, density: 1.0,
+				isSensor: false};
+			haxBlock.physics.newFixture(haxBlock, opts);
+
+			haxBlock.translateTo(0,0,0);
 
 			//this.initEnvironment();
 			this.initPhysics();
@@ -193,27 +198,23 @@ var GameInit = {
 
 		var NUM_NORMAL_ASTEROIDS = 40;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
-			var asteroid = BlockStructureGenerator
-				.genProceduralAsteroid(200, BlockStructureGenerator.elementDistributions.randomDistribution())
-				.id('genRandomAsteroid' + asteroidNumber)
-				.streamMode(1)
-				.mount(server.spaceGameScene)
-			this.moveRandomly(asteroid);
+			this.spawnStructure(200, BlockStructureGenerator.elementDistributions.randomDistribution());
 		}
 
 		// TODO: The procedural generation algorithm is causing strange problems with the new BlockGrid system. Leave
 		// this stuff commented out until it is figured out.
 		var NUM_DERELICT_SPACESHIPS = 10;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_DERELICT_SPACESHIPS; asteroidNumber++) {
-			//note that the signature of gen.. is
-			// genProceduralAsteroid: function(maxSize, maxNumBlocks, blockDistribution)
-			var asteroid = BlockStructureGenerator
-				.genProceduralAsteroid(60, BlockStructureGenerator.partDistributions.randomDistribution(), true)
-				.id('spaceShip' + asteroidNumber)
-				.streamMode(1)
-				.mount(server.spaceGameScene)
-			this.moveRandomly(asteroid);
+			this.spawnStructure(60, BlockStructureGenerator.partDistributions.randomDistribution(), true);
 		}
+	},
+
+	spawnStructure: function(maxNumBlocks, blockDistribution, symmetric) {
+		var structure = BlockStructureGenerator
+			.genProceduralAsteroid(maxNumBlocks, blockDistribution, symmetric)
+			.streamMode(1)
+			.mount(ige.server.spaceGameScene);
+		this.moveRandomly(structure);
 	},
 
 	/**

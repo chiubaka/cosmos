@@ -378,11 +378,11 @@ var Ship = BlockStructure.extend({
 
 				if (this.controls().left) {
 					this._box2dBody.ApplyTorque(angularImpulse);
-					ige.physicsSystem.applyAngularImpulse(haxBlock, angularImpulse);
+					haxBlock.physics.applyAngularImpulse(angularImpulse);
 				}
 				if (this.controls().right) {
 					this._box2dBody.ApplyTorque(-angularImpulse);
-					ige.physicsSystem.applyAngularImpulse(haxBlock, -angularImpulse);
+					haxBlock.physics.applyAngularImpulse(-angularImpulse);
 				}
 			}
 
@@ -450,8 +450,8 @@ var Ship = BlockStructure.extend({
 
 					var engineWorldPosition = this._box2dBody.GetWorldPoint(enginePosition);
 					this._box2dBody.ApplyImpulse(impulse, engineWorldPosition);
-					ige.physicsSystem.applyLinearImpulseLocal(haxBlock, impulseX,
-						impulseY, 0, 0);
+					var opts = {impulseX: impulseX, impulseY: impulseY, posX: 0, posY: 0};
+					haxBlock.physics.applyLinearImpulseLocal(opts);
 
 				}
 			}
