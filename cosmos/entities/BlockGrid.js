@@ -128,7 +128,7 @@ var BlockGrid = IgeEntity.extend({
 	init: function(data) {
 		var self = this;
 
-		IgeEntityBox2d.prototype.init.call(this);
+		IgeEntity.prototype.init.call(this);
 
 		this._numBlocks = 0;
 		this._grid = {};
@@ -145,13 +145,13 @@ var BlockGrid = IgeEntity.extend({
 
 		if (ige.isServer) {
 			this.addComponent(TLPhysicsComponent);
-			this.newBody({
-				body_type: 'DYNAMIC',
+			this.physics.newBody({
+				bodyType: 'DYNAMIC',
 				x: 0,
 				y: 0,
 				angle: 0,
-				linear_damping: 0.4,
-				angular_damping: 1.0,
+				linearDamping: 0.4,
+				angularDamping: 1.0,
 				bullet: false
 			});
 
@@ -366,7 +366,7 @@ var BlockGrid = IgeEntity.extend({
 	 * removed {@link Block}.
 	 * @param row {number} The row of the {@link Block} to drop.
 	 * @param col {number} The col of the {@link Block} to drop.
-	 * @param player {IgeEntityBox2d} The {@link Player} that caused this {@link Block} to be dropped. Used to constrain
+	 * @param player {IgeEntity} The {@link Player} that caused this {@link Block} to be dropped. Used to constrain
 	 * who can pick up the {@link Drop}. If undefined, all players will be able to pick up the {@link Drop}.
 	 * @memberof BlockGrid
 	 * @instance
@@ -431,7 +431,8 @@ var BlockGrid = IgeEntity.extend({
 		}
 
 		if (ige.isServer) {
-			this._box2dBody.DestroyFixture(block.fixture());
+			// TODO: @Eric reimplement this
+			//this._box2dBody.DestroyFixture(block.fixture());
 
 			// TODO: Compute correct velocities for new bodies, if needed
 
@@ -1285,20 +1286,21 @@ var BlockGrid = IgeEntity.extend({
 		block.fixtureDef(fixtureDef);
 
 
+		// TODO: @Eric reimplement this
 		// Destroy the existing fixture
-		if (block.fixture() !== undefined) {
-			this._box2dBody.DestroyFixture(block.fixture());
-		}
+		//if (block.fixture() !== undefined) {
+			//this._box2dBody.DestroyFixture(block.fixture());
+		//}
 
 		// Add a new fixture based on the new fixture def
-		block.fixture(ige.box2d.addFixture(this._box2dBody, fixtureDef));
+		block.fixture(this.physics.newFixture(block, fixtureDef));
 	},
 
 	/**
 	 * Creates and returns a fixture def object for the given {@link Block} by computing the fixture's x, y, width,
 	 * and height based on the {@link Block}'s properties.
 	 * @param block {Block} The {@link Block} to make a fixture def for.
-	 * @returns {b2FixtureDef} A Box2d FixtureDef object, used to create an actual Box2d fixture.
+	 * @returns {Object} A object containing a fixture definition
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
@@ -1306,22 +1308,18 @@ var BlockGrid = IgeEntity.extend({
 	_createFixtureDef: function(block) {
 		var drawLocation = this._drawLocationForBlock(block);
 		return {
-			density: BlockGrid.BLOCK_FIXTURE_DENSITY,
 			friction: BlockGrid.BLOCK_FIXTURE_FRICTION,
 			restitution: BlockGrid.BLOCK_FIXTURE_RESTITUTION,
-			shape: {
-				type: 'rectangle',
-				data: {
-					// The position of the fixture relative to the body
-					// The fixtures are slightly smaller than the actual block grid so that you can fit into a hole
-					// which is exactly the same width (in terms of blocks) as your ship
-					x: drawLocation.x + BlockGrid.BLOCK_FIXTURE_PADDING,
-					y: drawLocation.y + BlockGrid.BLOCK_FIXTURE_PADDING,
-					width: (block.numCols() * Block.WIDTH) / 2 - (2 * BlockGrid.BLOCK_FIXTURE_PADDING),
-					height: (block.numRows() * Block.HEIGHT) / 2 - (2 * BlockGrid.BLOCK_FIXTURE_PADDING)
-				}
-			}
-		};
+			density: BlockGrid.BLOCK_FIXTURE_DENSITY,
+			isSensor: false,
+			hwidth: (block.numCols() * Block.WIDTH) / 2 -
+				(2 * BlockGrid.BLOCK_FIXTURE_PADDING),
+			hheight: (block.numRows() * Block.HEIGHT) / 2 -
+				(2 * BlockGrid.BLOCK_FIXTURE_PADDING),
+			x: drawLocation.x + BlockGrid.BLOCK_FIXTURE_PADDING,
+			y: drawLocation.y + BlockGrid.BLOCK_FIXTURE_PADDING,
+			angle: 0.0
+		}
 	},
 
 	/**

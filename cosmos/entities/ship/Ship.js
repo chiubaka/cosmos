@@ -212,8 +212,9 @@ var Ship = BlockStructure.extend({
 		this.cargo = new Cargo();
 
 		this
-			.addSensor(300)
-			.attractionStrength(1)
+			//.addSensor(300)
+			// TODO: @Eric reimplement this
+			//.attractionStrength(1)
 			.relocate();
 	},
 
@@ -238,6 +239,8 @@ var Ship = BlockStructure.extend({
 	 * @instance
 	 */
 	addSensor: function(radius) {
+		// TODO: @Eric Reimplement this
+		return;
 		// Create the fixture
 		var fixtureDef = {
 			density: 0.0,
@@ -375,23 +378,19 @@ var Ship = BlockStructure.extend({
 				}
 				this._prevMovementBlocks.thrusters = this.thrusters().length;
 
+				// TODO: @Eric remove this hack
+				angularImpulse = 100;
 				if (this.controls().left) {
-					this._box2dBody.ApplyTorque(angularImpulse);
+					this.physics.applyAngularImpulse(angularImpulse);
 					haxBlock.physics.applyAngularImpulse(angularImpulse);
 				}
 				if (this.controls().right) {
-					this._box2dBody.ApplyTorque(-angularImpulse);
+					this.physics.applyAngularImpulse(-angularImpulse);
 					haxBlock.physics.applyAngularImpulse(-angularImpulse);
 				}
 			}
 
 			if (this.controls().up || this.controls().down) {
-				// the "- Math.PI/2" below makes the ship move forward and backwards, instead of side to side.
-				var angle = this._box2dBody.GetAngle() - Math.PI/2;
-				var scaleRatio = ige.box2d.scaleRatio();
-				var thisX = this.translate().x();
-				var thisY = this.translate().y();
-
 				// Notify player that they cannot fly without an engine
 				if (this.engines().length < 1) {
 					if (JSON.stringify(this.controls()) !== JSON.stringify(this._prev_controls) ||
@@ -411,25 +410,11 @@ var Ship = BlockStructure.extend({
 					linearImpulse = -linearImpulse;
 				}
 
-				// the "- Math.PI/2" below makes the ship move forward and backwards, instead of side to side.
-				var angle = this._box2dBody.GetAngle() - Math.PI/2;
+				// The "- Math.PI/2" below makes the ship move forward and backwards,
+				// instead of side to side.
+				var angle = this._translate.z - Math.PI/2;
 
-				var x_comp = Math.cos(angle) * linearImpulse;
-				var y_comp = Math.sin(angle) * linearImpulse;
-
-				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp)
-
-				// Notify player that they cannot fly without an engine
-				if (this.engines().length < 1) {
-					if (JSON.stringify(this._controls) !== JSON.stringify(this._prev_controls) ||
-						this._prevMovementBlocks.engines > 0) {
-						ige.network.stream.queueCommand('notificationError',
-							NotificationDefinitions.errorKeys.noEngine, this.player().clientId());
-					}
-				}
-
-				this._prevMovementBlocks.engines = this.engines().length;
-
+				// Apply impulse at all engine locations
 				for (var i = 0; i < this.engines().length; i++) {
 					var engine = this.engines()[i];
 
@@ -441,16 +426,13 @@ var Ship = BlockStructure.extend({
 					var impulseX = Math.cos(angle) * linearImpulse;
 					var impulseY = Math.sin(angle) * linearImpulse;
 
-					var impulse = new ige.box2d.b2Vec2(impulseX, impulseY);
-
 					var enginePosition = this._drawLocationForBlock(engine);
-					enginePosition.x = enginePosition.x / scaleRatio;
-					enginePosition.y = -enginePosition.y / scaleRatio;
 
-					var engineWorldPosition = this._box2dBody.GetWorldPoint(enginePosition);
-					this._box2dBody.ApplyImpulse(impulse, engineWorldPosition);
 					var opts = {impulseX: impulseX, impulseY: impulseY, posX: 0, posY: 0};
 					haxBlock.physics.applyLinearImpulseLocal(opts);
+					var opts = {impulseX: impulseX, impulseY: impulseY,
+						posX: enginePosition.x, posY: -enginePosition.y};
+					this.physics.applyLinearImpulseLocal(opts);
 
 				}
 			}

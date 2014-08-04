@@ -22,6 +22,10 @@ var ExampleShips = {
 			[undefined,           new SteelPlatingBlock(), new IronEngineBlock(),      new SteelPlatingBlock(), undefined]
 		]
 	},
+	
+	one: function () {
+		return [[new IronEngineBlock()]];
+	},
 
 	/**
 	 * This is the ship in the middle of the video. It has two engines, but one of them is misplaced and unbalanced.

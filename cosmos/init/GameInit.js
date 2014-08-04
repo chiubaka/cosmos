@@ -31,12 +31,12 @@ var GameInit = {
 				bullet: false, bodyType: "DYNAMIC"};
 			haxBlock.physics.newBody(opts);
 			var opts = {x: 0, y: 0, friction: 0.5, restitution: 0.5, density: 1.0,
-				isSensor: false};
+				isSensor: false, hwidth: 50, hheight: 50, angle: 0};
 			haxBlock.physics.newFixture(haxBlock, opts);
 
 			haxBlock.translateTo(0,0,0);
 
-			//this.initEnvironment();
+			this.initEnvironment();
 			this.initPhysics();
 			this.initServerEvents();
 		} else {
@@ -196,11 +196,11 @@ var GameInit = {
 	initEnvironment: function() {
 		var server = ige.server;
 
-		var NUM_NORMAL_ASTEROIDS = 40;
+		var NUM_NORMAL_ASTEROIDS = 5;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
-			this.spawnStructure(200, BlockStructureGenerator.elementDistributions.randomDistribution());
+			this.spawnStructure(1, BlockStructureGenerator.elementDistributions.randomDistribution());
 		}
-
+		return;
 		// TODO: The procedural generation algorithm is causing strange problems with the new BlockGrid system. Leave
 		// this stuff commented out until it is figured out.
 		var NUM_DERELICT_SPACESHIPS = 10;
@@ -222,6 +222,8 @@ var GameInit = {
 	 * TODO: Running physics on the client may improve performance.
 	 */
 	initPhysics: function() {
+		// TODO: @Eric Reimplement this
+		return;
 		// Set the contact listener methods to detect when
 		// contacts (collisions) begin and end
 		ige.box2d.contactListener(
