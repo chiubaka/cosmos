@@ -378,15 +378,11 @@ var Ship = BlockStructure.extend({
 				}
 				this._prevMovementBlocks.thrusters = this.thrusters().length;
 
-				// TODO: @Eric remove this hack
-				angularImpulse = 100;
 				if (this.controls().left) {
-					this.physics.applyAngularImpulse(angularImpulse);
-					haxBlock.physics.applyAngularImpulse(angularImpulse);
+					this.physicsBody.applyAngularImpulse(angularImpulse);
 				}
 				if (this.controls().right) {
-					this.physics.applyAngularImpulse(-angularImpulse);
-					haxBlock.physics.applyAngularImpulse(-angularImpulse);
+					this.physicsBody.applyAngularImpulse(-angularImpulse);
 				}
 			}
 
@@ -401,7 +397,6 @@ var Ship = BlockStructure.extend({
 				}
 				this._prevMovementBlocks.engines = this.engines().length;
 
-
 				var linearImpulse = 3 * ige._tickDelta;
 				if (this._controls.up) {
 					linearImpulse = linearImpulse;
@@ -412,7 +407,7 @@ var Ship = BlockStructure.extend({
 
 				// The "- Math.PI/2" below makes the ship move forward and backwards,
 				// instead of side to side.
-				var angle = this._translate.z - Math.PI/2;
+				var angle = this._rotate.z - Math.PI/2;
 
 				// Apply impulse at all engine locations
 				for (var i = 0; i < this.engines().length; i++) {
@@ -429,10 +424,9 @@ var Ship = BlockStructure.extend({
 					var enginePosition = this._drawLocationForBlock(engine);
 
 					var opts = {impulseX: impulseX, impulseY: impulseY, posX: 0, posY: 0};
-					haxBlock.physics.applyLinearImpulseLocal(opts);
 					var opts = {impulseX: impulseX, impulseY: impulseY,
 						posX: enginePosition.x, posY: -enginePosition.y};
-					this.physics.applyLinearImpulseLocal(opts);
+					this.physicsBody.applyLinearImpulseLocal(opts);
 
 				}
 			}

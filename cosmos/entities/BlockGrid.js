@@ -144,8 +144,8 @@ var BlockGrid = IgeEntity.extend({
 		this.addComponent(PixiRenderableComponent);
 
 		if (ige.isServer) {
-			this.addComponent(TLPhysicsComponent);
-			this.physics.newBody({
+			this.addComponent(TLPhysicsBodyComponent);
+			this.physicsBody.newBody({
 				bodyType: 'DYNAMIC',
 				x: 0,
 				y: 0,
@@ -1293,7 +1293,7 @@ var BlockGrid = IgeEntity.extend({
 		//}
 
 		// Add a new fixture based on the new fixture def
-		block.fixture(this.physics.newFixture(block, fixtureDef));
+		block.fixture(this.physicsBody.newFixture(block, fixtureDef));
 	},
 
 	/**
