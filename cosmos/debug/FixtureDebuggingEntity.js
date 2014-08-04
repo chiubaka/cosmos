@@ -2,6 +2,7 @@ var FixtureDebuggingBlock = IgeEntity.extend({
 	classId: 'FixtureDebuggingBlock',
 
 	init: function(data) {
+		var self = this;
 		IgeEntity.prototype.init.call(this);
 
 		if (data !== undefined) {
@@ -9,7 +10,6 @@ var FixtureDebuggingBlock = IgeEntity.extend({
 			this.height(data.height);
 			this.depth(data.depth);
 		}
-
 
 		this.addComponent(PixiRenderableComponent, {createDisplayObject: function() {
 			var graphic = new PIXI.Graphics();
@@ -25,6 +25,8 @@ var FixtureDebuggingBlock = IgeEntity.extend({
 
 			graphic.position.x = -Block.WIDTH / 2;
 			graphic.position.y = -Block.HEIGHT / 2;
+
+			return graphic;
 		}});
 
 		if (!ige.isServer) {
