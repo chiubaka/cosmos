@@ -215,7 +215,6 @@ var Ship = BlockStructure.extend({
 			.addSensor(300)
 			.attractionStrength(1)
 			.relocate();
-			//.debugFixtures(false);//change to true for debugging*/
 	},
 
 	player: function(newPlayer) {

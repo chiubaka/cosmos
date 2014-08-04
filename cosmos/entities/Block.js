@@ -98,15 +98,7 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	_fixtureDef: undefined,
-	/**
-	 * An entity associated with this {@link Block} which is used to visualize a {@link BlockGrid}'s fixtures. Only
-	 * used if this {@link Block} is in a {@link BlockGrid} that has debugFixtures set to true.
-	 * @type {Object}
-	 * @memberof Block
-	 * @private
-	 * @instance
-	 */
-	_fixtureDebuggingEntity: undefined,
+
 	/**
 	 * A flag that determines whether or not this {@link Block} is currently being mined or not. The default value is
 	 * false, and when the value is false this {@link Block} is not currently being mined.

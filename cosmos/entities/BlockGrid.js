@@ -8,7 +8,7 @@
  * @typedef {Object} BlockGrid
  * @namespace
  */
-var BlockGrid = IgeEntityBox2d.extend({
+var BlockGrid = IgeEntity.extend({
 	classId: 'BlockGrid',
 
 	/**
@@ -111,15 +111,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 * @instance
 	 */
 	_renderContainer: undefined,
-	/**
-	 * Flag for determining whether or not debug shadow entities should be added to track the location of this
-	 * {@link BlockGrid}'s Box2D fixtures.
-	 * @type {boolean}
-	 * @memberof BlockGrid
-	 * @private
-	 * @instance
-	 */
-	_debugFixtures: false,
 
 	/**
 	 * A hash whose keys are clientIds and values are Booleans.
@@ -153,14 +144,15 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this.addComponent(PixiRenderableComponent);
 
 		if (ige.isServer) {
-			this.box2dBody({
-				type: 'dynamic',
-				linearDamping: 0.4,
-				angularDamping: 1.5,
-				allowSleep: true,
-				bullet: false,
-				gravitic: false,
-				fixedRotation: false,
+			this.addComponent(TLPhysicsComponent);
+			this.newBody({
+				body_type: 'DYNAMIC',
+				x: 0,
+				y: 0,
+				angle: 0,
+				linear_damping: 0.4,
+				angular_damping: 1.0,
+				bullet: false
 			});
 
 			this.streamControl(this._streamControlFunc.bind(this))
@@ -440,9 +432,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		if (ige.isServer) {
 			this._box2dBody.DestroyFixture(block.fixture());
-			if (this._debugFixtures) {
-				block.fixtureDebuggingEntity().destroy();
-			}
 
 			// TODO: Compute correct velocities for new bodies, if needed
 
@@ -802,28 +791,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
 		}
-	},
-
-	/**
-	 * Gets/sets the {@link BlockGrid#_debugFixtures|_debugFixtures}, which tells the {@link BlockGrid} whether or not
-	 * it should create shadow entities for the fixtures of this {@link BlockGrid}. This helps to visualize the fixtures
-	 * so that they can be debugged. The {@link BlockGrid#_debugFixtures|_debugFixtures} flag must be set to true
-	 * before any {@link Block}s are added to this {@link BlockGrid} for visualization to occur.
-	 * @param flag {boolean} Optional parameter. If provided, the flag will be used as the new value of
-	 * {@link BlockGrid#_debugFixtures|_debugFixtures}
-	 * @return {*} If no argument is provided, returns the current value of
-	 * {@link BlockGrid#_debugFixtures|_debugFixtures}. Otherwise, returns this object to make setter call chaining
-	 * convenient.
-	 * @memberof BlockGrid
-	 * @instance
-	 */
-	debugFixtures: function(flag) {
-		if (flag === undefined) {
-			return this._debugFixtures;
-		}
-
-		this._debugFixtures = flag;
-		return this;
 	},
 
 	/**
@@ -1325,22 +1292,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		// Add a new fixture based on the new fixture def
 		block.fixture(ige.box2d.addFixture(this._box2dBody, fixtureDef));
-
-		if (this.debugFixtures()) {
-			if (block.fixtureDebuggingEntity() !== undefined) {
-				block.fixtureDebuggingEntity().destroy();
-			}
-
-			var fixtureDebuggingEntity = new FixtureDebuggingEntity()
-				.mount(this)
-				.depth(this.depth() + 1)
-				.translateTo(fixtureDef.shape.data.x, fixtureDef.shape.data.y, 0)
-				.width(fixtureDef.shape.data.width * 2)
-				.height(fixtureDef.shape.data.height * 2)
-				.streamMode(1);
-
-			block.fixtureDebuggingEntity(fixtureDebuggingEntity);
-		}
 	},
 
 	/**
