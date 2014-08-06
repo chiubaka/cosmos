@@ -21,5 +21,7 @@ describe("A BlockGrid", function() {
 
 
 	// TODO: Create tests in this category.
-	describe("should be able to handle blocks of different sizes:");
+	xdescribe("should be able to handle blocks of different sizes:", function() {
+
+	});
 });
