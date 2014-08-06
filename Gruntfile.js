@@ -53,6 +53,11 @@ module.exports = function(grunt) {
 				cmd: 'cd ige; node server/ige.js -deploy ../cosmos -to ../cosmos/tests'
 			}
 		},
+		jsbeautifier: {
+			test: {
+				src: ['cosmos/tests/game.js']
+			}
+		},
 		watch: {
 			css: {
 				files: '**/*.scss',
@@ -72,7 +77,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-dust');
 	grunt.loadNpmTasks('grunt-karma');
 	grunt.loadNpmTasks('grunt-exec');
+	grunt.loadNpmTasks('grunt-jsbeautifier');
 	grunt.registerTask('default', ['watch']);
 	grunt.registerTask('deploy', ['dust']);
-	grunt.registerTask('test', ['karma:unit:start', 'exec:ige_deploy', 'karma:unit:run']);
+	grunt.registerTask('test', ['karma:unit:start', 'exec:ige_deploy', 'jsbeautifier:test', 'karma:unit:run']);
 }
