@@ -54,6 +54,9 @@ var BlockGridNew = IgeEntityBox2d.extend({
 			return;
 		}
 
+		// TODO: Determine where to place the block based on its row and column.
+		var gridCoordinates = this._gridCoordinatesForLocation(location);
+
 		// TODO: Add a fixture for the block.
 
 		// TODO: Translate blocks to the right place within the BlockGrid based on row and column.
@@ -71,6 +74,14 @@ var BlockGridNew = IgeEntityBox2d.extend({
 		// TODO: Remove fixture for the block.
 
 		return this._grid.remove(location);
+	},
+
+	_gridCoordinatesForLocation: function(location) {
+		// If there are no blocks in this grid yet, then the grid coordinates should always be
+		// (0, 0).
+		if (this.count() === 0) {
+			return {x: 0, y: 0};
+		}
 	},
 
 	_validLocation: function(location) {
