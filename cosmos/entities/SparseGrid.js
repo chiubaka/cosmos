@@ -1,5 +1,6 @@
 var SparseGrid = function() {
 	var grid = {};
+	var colCounts = {};
 
 	this.add = function(object, loc) {
 		if (object === undefined) {
@@ -17,7 +18,11 @@ var SparseGrid = function() {
 			createCol(loc.col);
 		}
 
-		grid[loc.row][loc.col] = object;
+		// Place the object at the specified location in the grid.
+		grid[loc.col][loc.row] = object;
+
+		// Update the number of items in the specified column.
+		colCounts[loc.col]++;
 	};
 
 	this.get = function(loc) {
@@ -55,18 +60,26 @@ var SparseGrid = function() {
 			return;
 		}
 
+		// Remove the object at the specified location.
 		delete grid[loc.col][loc.row];
 
-		// TODO: If a column is empty after deleting an element at a given row, we should delete the
-		// column to recover some space.
-	};
+		// Update the number of items in the specified column.
+		colCounts[loc.col]--;
 
+		// Clean up memory for the column if it is now empty.
+		if (colCounts[loc.col] === 0) {
+			delete grid[loc.col];
+			delete colCounts[loc.col];
+		}
+	};
+[]
 	function hasCol(col) {
 		return grid[col] !== undefined;
 	}
 
 	function createCol(col) {
 		grid[col] = {};
+		colCounts[col] = 0;
 	}
 };
 
