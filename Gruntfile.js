@@ -21,6 +21,16 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+		karma: {
+			unit: {
+				background: true,
+				options: {
+					files: [
+						'cosmos/tests/**/*.js'
+					]
+				}
+			}
+		},
 		watch: {
 			css: {
 				files: '**/*.scss',
@@ -32,12 +42,17 @@ module.exports = function(grunt) {
 			},
 			options: {
 				atBegin: true
+			},
+			karma: {
+				files: ['cosmos/tests/**/*.js'],
+				tasks: ['karma:unit:run']
 			}
 		}
 	});
 	grunt.loadNpmTasks('grunt-contrib-compass');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-dust');
+	grunt.loadNpmTasks('grunt-karma');
 	grunt.registerTask('default', ['watch']);
 	grunt.registerTask('deploy', ['dust']);
 }
