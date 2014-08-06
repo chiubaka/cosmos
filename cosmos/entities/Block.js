@@ -80,24 +80,6 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	_effects: undefined,
-	/**
-	 * The Box2D fixture associated with this {@link Block}. Only valid if this {@link Block}'s
-	 * {@link Block#_blockGrid|_blockGrid} property is set.
-	 * @type {Object}
-	 * @memberof Block
-	 * @private
-	 * @instance
-	 */
-	_fixture: undefined,
-	/**
-	 * The Box2D fixture definition associated with this {@link Block}. Only valid if this {@link Block}'s
-	 * {@link Block#_blockGrid|_blockGrid} property is set.
-	 * @type {Object}
-	 * @memberof Block
-	 * @private
-	 * @instance
-	 */
-	_fixtureDef: undefined,
 
 	/**
 	 * A flag that determines whether or not this {@link Block} is currently being mined or not. The default value is
@@ -552,38 +534,6 @@ var Block = IgeEntity.extend({
 			return this;
 		}
 		return this._col;
-	},
-
-	/**
-	 * Getter/setter for the {@link Block#_fixture|_fixture} property.
-	 * @param newFixture {number} Optional parameter. If set, this is the new fixture for this {@link Block}.
-	 * @returns {*} The current fixture if no parameter is passed or this object if a parameter is passed to make setter
-	 * chaining convenient.
-	 * @memberof Block
-	 * @instance
-	 */
-	fixture: function(newFixture) {
-		if (newFixture !== undefined) {
-			this._fixture = newFixture;
-			return this;
-		}
-		return this._fixture;
-	},
-
-	/**
-	 * Getter/setter for the {@link Block#_fixtureDef|_fixtureDef} property.
-	 * @param newFixtureDef {number} Optional parameter. If set, this is the new fixture for this {@link Block}.
-	 * @returns {*} The current fixture definition if no parameter is passed or this object if a parameter is passed to
-	 * make setter chaining convenient.
-	 * @memberof Block
-	 * @instance
-	 */
-	fixtureDef: function(newFixtureDef) {
-		if (newFixtureDef !== undefined) {
-			this._fixtureDef = newFixtureDef;
-			return this;
-		}
-		return this._fixtureDef;
 	},
 
 	/**

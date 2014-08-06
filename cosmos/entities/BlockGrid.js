@@ -302,6 +302,11 @@ var BlockGrid = IgeEntity.extend({
 			return false;
 		}
 
+		if(ige.isServer) {
+			// Add physics fixture component
+			block.addComponent(TLPhysicsFixtureComponent);
+		}
+
 		// Store the row and col in the block so that we can figure out where we are from the block.
 		block.row(row).col(col);
 
@@ -1281,19 +1286,17 @@ var BlockGrid = IgeEntity.extend({
 			return;
 		}
 
+		// Destroy the existing fixture
+		if (block.physicsFixture.fixtureDef() !== undefined) {
+			this.physicsBody.destroyFixture(block);
+		}
+
 		// Update the fixture def
 		var fixtureDef = this._createFixtureDef(block);
-		block.fixtureDef(fixtureDef);
-
-
-		// TODO: @Eric reimplement this
-		// Destroy the existing fixture
-		//if (block.fixture() !== undefined) {
-			//this._box2dBody.DestroyFixture(block.fixture());
-		//}
+		block.physicsFixture.fixtureDef(fixtureDef);
 
 		// Add a new fixture based on the new fixture def
-		block.fixture(this.physicsBody.newFixture(block, fixtureDef));
+		this.physicsBody.newFixture(block, fixtureDef);
 	},
 
 	/**

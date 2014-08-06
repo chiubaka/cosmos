@@ -16,7 +16,7 @@ var Server = IgeClass.extend({
 		ige.setFps(Constants.fps.SERVER_FPS);
 
 		// Add physics system
-		ige.addComponent(TLPhysicsSystem, {scaleFactor: 10});
+		ige.addComponent(TLPhysicsSystem, {scaleFactor: 100});
 
 		ige.addComponent(IgeMongoDbComponent, DbConfig.config);
 		ige.addComponent(IgeNetIoComponent);

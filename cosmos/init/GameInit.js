@@ -23,7 +23,7 @@ var GameInit = {
 		if (ige.isServer) {
 
 			var server = ige.server;
-			//this.initEnvironment();
+			this.initEnvironment();
 			this.initPhysics();
 			this.initServerEvents();
 		} else {
@@ -182,24 +182,17 @@ var GameInit = {
 	 */
 	initEnvironment: function() {
 		var server = ige.server;
-		var NUM_NORMAL_ASTEROIDS = 40;
-		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
-			this.spawnStructure(200, BlockStructureGenerator.elementDistributions.randomDistribution());
-		}
 
+		var NUM_NORMAL_ASTEROIDS = 100;
+		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
+			this.spawnStructure(5, BlockStructureGenerator.elementDistributions.randomDistribution());
+		}
+return;
 		// TODO: The procedural generation algorithm is causing strange problems with the new BlockGrid system. Leave
 		// this stuff commented out until it is figured out.
 		var NUM_DERELICT_SPACESHIPS = 10;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_DERELICT_SPACESHIPS; asteroidNumber++) {
-			this.spawnStructure(60, BlockStructureGenerator.partDistributions.randomDistribution(), true);
-		}
-
-
-		for (var i = 0; i < 100; i++) {
-			var engine = new IronEngineBlock()
-				.streamMode(1)
-				.mount(ige.server.spaceGameScene)
-			this.moveRandomly(engine);
+			this.spawnStructure(10, BlockStructureGenerator.partDistributions.randomDistribution(), true);
 		}
 	},
 
