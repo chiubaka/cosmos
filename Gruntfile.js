@@ -27,6 +27,16 @@ module.exports = function(grunt) {
 				options: {
 					files: [
 						'cosmos/tests/**/*.js'
+					],
+					plugins: [
+						'karma-jasmine',
+						'karma-phantomjs-launcher'
+					],
+					frameworks: [
+						'jasmine'
+					],
+					browsers: [
+						'PhantomJS'
 					]
 				}
 			}
