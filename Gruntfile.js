@@ -25,13 +25,15 @@ module.exports = function(grunt) {
 			unit: {
 				background: true,
 				options: {
+					reporters: ['spec'],
 					files: [
 						'client/public/vendor/lodash/lodash.min.js',
 						'cosmos/tests/**/*.js'
 					],
 					plugins: [
 						'karma-jasmine',
-						'karma-phantomjs-launcher'
+						'karma-phantomjs-launcher',
+						'karma-spec-reporter'
 					],
 					frameworks: [
 						'jasmine'
