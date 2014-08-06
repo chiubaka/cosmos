@@ -66,6 +66,28 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 			expect(this.grid.get(new GridLocation(0, 0))).not.toBeDefined();
 		});
 
+		it("should do nothing if asked to remove an object at an unoccupied location.", function() {
+			this.grid.remove(new GridLocation(0, 0));
+			expect(this.grid.count()).toBe(0);
+		});
+
+		it("should keep track of the number of objects it contains.", function() {
+			expect(this.grid.count()).toBe(0);
+			this.grid.add(this.testObject, new GridLocation(0, 0));
+			expect(this.grid.count()).toBe(1);
+			this.grid.add(this.testObject, new GridLocation(0, 1));
+			expect(this.grid.count()).toBe(2);
+			this.grid.remove(new GridLocation(0, 0));
+			expect(this.grid.count()).toBe(1);
+			this.grid.remove(new GridLocation(0, 0));
+			expect(this.grid.count()).toBe(1);
+			this.grid.remove(new GridLocation(0, 1));
+			expect(this.grid.count()).toBe(0);
+		});
+
+		it("should replace the existing object and return it if asked to place an object at an" +
+			"occupied location");
+
 		it("should be able to handle hundreds of objects.");
 	});
 };

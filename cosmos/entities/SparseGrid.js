@@ -1,5 +1,6 @@
 var SparseGrid = function() {
 	var grid = {};
+	var count = 0;
 	var colCounts = {};
 
 	this.add = function(object, loc) {
@@ -23,6 +24,13 @@ var SparseGrid = function() {
 
 		// Update the number of items in the specified column.
 		colCounts[loc.col]++;
+
+		// Update the global count.
+		count++;
+	};
+
+	this.count = function() {
+		return count;
 	};
 
 	this.get = function(loc) {
@@ -65,6 +73,9 @@ var SparseGrid = function() {
 
 		// Update the number of items in the specified column.
 		colCounts[loc.col]--;
+
+		// Update the global count.
+		count--;
 
 		// Clean up memory for the column if it is now empty.
 		if (colCounts[loc.col] === 0) {
