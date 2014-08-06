@@ -9,24 +9,34 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 		beforeEach(beforeEachFunc);
 		afterEach(afterEachFunc);
 
-		it("should fail gracefully if no object is passed to the add function.", function() {
-			this.grid.add(undefined, new GridLocation(0, 0));
-		});
+		describe("should have public interface functions that fails gracefully:", function() {
+			beforeEach(function() {
+				TestUtils.disableLogging();
+			});
 
-		it("should fail gracefully if no location is passed to the add function.", function() {
-			this.grid.add(this.testObject, undefined);
-		});
+			afterEach(function() {
+				TestUtils.enableLogging();
+			});
 
-		it("should fail gracefully if no location is passed to the get function.", function() {
-			this.grid.get(undefined);
-		});
+			it("should fail gracefully if no object is passed to the add function.", function() {
+				this.grid.add(undefined, new GridLocation(0, 0));
+			});
 
-		it("should fail gracefully if no location is passed to the has function.", function() {
-			this.grid.has(undefined);
-		});
+			it("should fail gracefully if no location is passed to the add function.", function() {
+				this.grid.add(this.testObject, undefined);
+			});
 
-		it("should fail gracefully if no location is passed to the remove function.", function() {
-			this.grid.remove(undefined);
+			it("should fail gracefully if no location is passed to the get function.", function() {
+				this.grid.get(undefined);
+			});
+
+			it("should fail gracefully if no location is passed to the has function.", function() {
+				this.grid.has(undefined);
+			});
+
+			it("should fail gracefully if no location is passed to the remove function.", function() {
+				this.grid.remove(undefined);
+			});
 		});
 
 		it("should return undefined if asked to retrieve an object at a location that is unoccupied.", function() {
