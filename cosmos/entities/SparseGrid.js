@@ -3,37 +3,6 @@ var SparseGrid = function() {
 	var count = 0;
 	var colCounts = {};
 
-	this.add = function(object, loc) {
-		if (object === undefined) {
-			console.warn("SparseGrid#add: no object parameter to add.");
-			return;
-		}
-		if (!GridLocation.validateLocation(loc)) {
-			console.warn("SparseGrid#add: no valid loc provided.");
-			return;
-		}
-
-		// If the specified column doesn't exist yet, create it because otherwise
-		// grid[loc.col][loc.row] will throw an exception.
-		if (!hasCol(loc.col)) {
-			createCol(loc.col);
-		}
-
-		// Save the object that is already at this location, if any so that we can return it.
-		var existingObject = this.get(loc);
-
-		// Place the object at the specified location in the grid.
-		grid[loc.col][loc.row] = object;
-
-		// Update the number of items in the specified column.
-		colCounts[loc.col]++;
-
-		// Update the global count.
-		count++;
-
-		return existingObject;
-	};
-
 	this.count = function() {
 		return count;
 	};
@@ -62,6 +31,38 @@ var SparseGrid = function() {
 		return hasCol(loc.col) && grid[loc.col][loc.row] !== undefined;
 	};
 
+	this.put = function(object, loc) {
+		if (object === undefined) {
+			console.warn("SparseGrid#put: no object parameter to put.");
+			return;
+		}
+
+		if (!GridLocation.validateLocation(loc)) {
+			console.warn("SparseGrid#put: no valid loc provided.");
+			return;
+		}
+
+		// If the specified column doesn't exist yet, create it because otherwise
+		// grid[loc.col][loc.row] will throw an exception.
+		if (!hasCol(loc.col)) {
+			createCol(loc.col);
+		}
+
+		// Save the object that is already at this location, if any so that we can return it.
+		var existingObject = this.get(loc);
+
+		// Place the object at the specified location in the grid.
+		grid[loc.col][loc.row] = object;
+
+		// Update the number of items in the specified column.
+		colCounts[loc.col]++;
+
+		// Update the global count.
+		count++;
+
+		return existingObject;
+	};
+
 	this.remove = function(loc) {
 		if (!GridLocation.validateLocation(loc)) {
 			console.warn("SparseGrid#remove: no valid loc provided.");
@@ -88,7 +89,7 @@ var SparseGrid = function() {
 			delete colCounts[loc.col];
 		}
 	};
-[]
+
 	function hasCol(col) {
 		return grid[col] !== undefined;
 	}

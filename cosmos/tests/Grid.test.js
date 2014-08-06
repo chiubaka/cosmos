@@ -18,12 +18,12 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 				TestUtils.enableLogging();
 			});
 
-			it("should fail gracefully if no object is passed to the add function.", function() {
-				this.grid.add(undefined, new GridLocation(0, 0));
+			it("should fail gracefully if no object is passed to the put function.", function() {
+				this.grid.put(undefined, new GridLocation(0, 0));
 			});
 
-			it("should fail gracefully if no location is passed to the add function.", function() {
-				this.grid.add(this.testObjects[0], undefined);
+			it("should fail gracefully if no location is passed to the put function.", function() {
+				this.grid.put(this.testObjects[0], undefined);
 			});
 
 			it("should fail gracefully if no location is passed to the get function.", function() {
@@ -45,22 +45,22 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 
 		it("should be able to tell whether or not a given location is occupied.", function() {
 			expect(this.grid.has(new GridLocation(0, 0))).toBe(false);
-			this.grid.add(this.testObjects[0], new GridLocation(0, 0));
+			this.grid.put(this.testObjects[0], new GridLocation(0, 0));
 			expect(this.grid.has(new GridLocation(0, 0))).toBe(true);
 		});
 
-		it("should be able to retrieve an object that has been added to it.", function() {
-			this.grid.add(this.testObjects[0], new GridLocation(0, 0));
+		it("should be able to retrieve an object that has been placed in it.", function() {
+			this.grid.put(this.testObjects[0], new GridLocation(0, 0));
 			expect(this.grid.get(new GridLocation(0, 0))).toBe(this.testObjects[0]);
 		});
 
 		it("should be able to handle negative values.", function() {
-			this.grid.add(this.testObjects[0], new GridLocation(-1, -1));
+			this.grid.put(this.testObjects[0], new GridLocation(-1, -1));
 			expect(this.grid.get(new GridLocation(-1, -1))).toBe(this.testObjects[0]);
 		});
 
 		it("should not be able to retrieve an object that has been removed from it.", function() {
-			this.grid.add(this.testObjects[0], new GridLocation(0, 0));
+			this.grid.put(this.testObjects[0], new GridLocation(0, 0));
 			expect(this.grid.get(new GridLocation(0, 0))).toBe(this.testObjects[0]);
 			this.grid.remove(new GridLocation(0, 0));
 			expect(this.grid.get(new GridLocation(0, 0))).not.toBeDefined();
@@ -73,9 +73,9 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 
 		it("should keep track of the number of objects it contains.", function() {
 			expect(this.grid.count()).toBe(0);
-			this.grid.add(this.testObjects[0], new GridLocation(0, 0));
+			this.grid.put(this.testObjects[0], new GridLocation(0, 0));
 			expect(this.grid.count()).toBe(1);
-			this.grid.add(this.testObjects[0], new GridLocation(0, 1));
+			this.grid.put(this.testObjects[0], new GridLocation(0, 1));
 			expect(this.grid.count()).toBe(2);
 			this.grid.remove(new GridLocation(0, 0));
 			expect(this.grid.count()).toBe(1);
@@ -88,8 +88,8 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 		it("should replace the existing object and return it if asked to place an object at an" +
 			"occupied location",
 			function() {
-				this.grid.add(this.testObjects[0], new GridLocation(0, 0));
-				expect(this.grid.add(this.testObjects[1], new GridLocation(0, 0)))
+				this.grid.put(this.testObjects[0], new GridLocation(0, 0));
+				expect(this.grid.put(this.testObjects[1], new GridLocation(0, 0)))
 					.toBe(this.testObjects[0]);
 				expect(this.grid.get(new GridLocation(0, 0))).toBe(this.testObjects[1]);
 			}
@@ -102,7 +102,7 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 			// Add numObjects objects to the grid.
 			for (var i = 0; i < numObjects; i++) {
 				var object = this.testObjects[i % this.testObjects.length];
-				this.grid.add(object, new GridLocation(i, i));
+				this.grid.put(object, new GridLocation(i, i));
 			}
 			expect(this.grid.count()).toBe(numObjects);
 
