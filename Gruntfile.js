@@ -28,8 +28,8 @@ module.exports = function(grunt) {
 					reporters: ['spec'],
 					files: [
 						'client/public/vendor/lodash/lodash.min.js',
-						'cosmos/tests/config.js',
 						'cosmos/tests/TestUtils.js',
+						'cosmos/tests/config.js',
 						'cosmos/tests/game.js',
 						'cosmos/tests/Grid.test.js',
 						'cosmos/tests/**/*.js'
