@@ -41,7 +41,7 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 
 		it("should not be able to retrieve an object that has been removed from it.", function() {
 			this.grid.add(this.testObject, new GridLocation(0, 0));
-			expect(this.grid.get(new GridLocation(0, 0)).toBe(this.testObject));
+			expect(this.grid.get(new GridLocation(0, 0))).toBe(this.testObject);
 			this.grid.remove(new GridLocation(0, 0));
 			expect(this.grid.get(new GridLocation(0, 0))).not.toBeDefined();
 		});
