@@ -16,6 +16,7 @@ var igeClientConfig = {
 
 		/* Blocks */
 		'./entities/Block.js',
+		'./entities/SparseGrid.js',
 		'./entities/BlockGrid.js',
 		'./entities/BlockGridNew.js',
 		'./entities/GridLocation.js',

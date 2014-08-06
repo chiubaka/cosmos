@@ -13,6 +13,7 @@ var config = {
 		/* === ENVIRONMENT STATE === */
 		/* Blocks */
 		{ name: 'Block', path: './entities/Block' },
+		{ name: 'SparseGrid', path: './entities/SparseGrid' },
 		{ name: 'BlockGrid', path: './entities/BlockGrid' },
 		{ name: 'BlockGridNew', path: './entities/BlockGridNew' },
 		{ name: 'GridLocation', path: './entities/GridLocation' },

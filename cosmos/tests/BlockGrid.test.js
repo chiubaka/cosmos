@@ -1,12 +1,14 @@
 var GridClass = BlockGridNew;
 
-describe("A BlockGrid", function() {
+xdescribe("A BlockGrid", function() {
 	testGrid(
+		// beforeEachFunc
 		function() {
 			this.grid = new GridClass();
 			ige.isServer = true;
 			this.testObject = new IronBlock();
 		},
+		// afterEachFunc
 		function() {
 			this.testObject.destroy();
 			ige.isServer = false;
