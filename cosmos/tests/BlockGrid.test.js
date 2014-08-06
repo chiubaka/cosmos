@@ -1,6 +1,6 @@
 var GridClass = BlockGridNew;
 
-xdescribe("A BlockGrid", function() {
+describe("A BlockGrid", function() {
 	testGrid(
 		// beforeEachFunc
 		function() {
