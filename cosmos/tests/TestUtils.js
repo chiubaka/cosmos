@@ -7,7 +7,7 @@ var TestUtils = {
 	}
 };
 
-TestUtils.disableConsoleLogs = function() {
+TestUtils.disableLogging = function() {
 	// If console logs are already disabled do nothing.
 	if (!TestUtils.loggingEnabled) {
 		return;
@@ -20,7 +20,7 @@ TestUtils.disableConsoleLogs = function() {
 	console.error = function() {};
 };
 
-TestUtils.enableConsoleLogs = function() {
+TestUtils.enableLogging = function() {
 	// If console logs are already enabled do nothing.
 	if (TestUtils.loggingEnabled) {
 		return;
