@@ -19,6 +19,9 @@ var SparseGrid = function() {
 			createCol(loc.col);
 		}
 
+		// Save the object that is already at this location, if any so that we can return it.
+		var existingObject = this.get(loc);
+
 		// Place the object at the specified location in the grid.
 		grid[loc.col][loc.row] = object;
 
@@ -27,6 +30,8 @@ var SparseGrid = function() {
 
 		// Update the global count.
 		count++;
+
+		return existingObject;
 	};
 
 	this.count = function() {

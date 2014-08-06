@@ -89,7 +89,7 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 			"occupied location",
 			function() {
 				this.grid.add(this.testObjects[0], new GridLocation(0, 0));
-				expect(this.grid.add(this.testObjects[1]), new GridLocation(0, 0))
+				expect(this.grid.add(this.testObjects[1], new GridLocation(0, 0)))
 					.toBe(this.testObjects[0]);
 				expect(this.grid.get(new GridLocation(0, 0))).toBe(this.testObjects[1]);
 			}
