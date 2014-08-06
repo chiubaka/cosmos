@@ -68,5 +68,5 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-exec');
 	grunt.registerTask('default', ['watch']);
 	grunt.registerTask('deploy', ['dust']);
-	grunt.registerTask('test', ['exec:ige_deploy', 'karma:unit:start', 'karma:unit:test']);
+	grunt.registerTask('test', ['karma:unit:start', 'exec:ige_deploy', 'karma:unit:run']);
 }
