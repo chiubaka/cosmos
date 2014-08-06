@@ -11,14 +11,14 @@ var BlockGridNew = IgeEntityBox2d.extend({
 		// TODO: Finish BlockGridNew initialization.
 	},
 
-	add: function(block, location) {
+	put: function(block, location) {
 		// Validate parameters
 		if (!block) {
-			this.log("Invalid block passed to BlockGridNew#add.", "error");
+			this.log("Invalid block passed to BlockGridNew#put.", "error");
 			return;
 		}
 		if (!GridLocation.validateLocation(location)) {
-			this.log("Invalid location passed to BlockGridNew#add.", "error");
+			this.log("Invalid location passed to BlockGridNew#put.", "error");
 			return;
 		}
 
