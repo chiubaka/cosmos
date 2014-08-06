@@ -23,8 +23,8 @@ module.exports = function(grunt) {
 		},
 		karma: {
 			unit: {
-				background: true,
 				options: {
+					singleRun: true,
 					reporters: ['spec'],
 					files: [
 						'client/public/vendor/lodash/lodash.min.js',
@@ -80,5 +80,16 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-jsbeautifier');
 	grunt.registerTask('default', ['watch']);
 	grunt.registerTask('deploy', ['dust']);
-	grunt.registerTask('test', ['karma:unit:start', 'exec:ige_deploy', 'jsbeautifier:test', 'karma:unit:run']);
-}
+	grunt.registerTask('test', 'Runs tests for Cosmos.', function() {
+		if (grunt.option('no-compile') || grunt.option('nc')) {
+			grunt.task.run(['karma:unit']);
+		}
+		else {
+			grunt.task.run([
+				'exec:ige_deploy',
+				'jsbeautifier:test',
+				'karma:unit'
+			]);
+		}
+	});
+};
