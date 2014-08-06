@@ -21,22 +21,32 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 			this.grid.get(undefined);
 		});
 
-		it("should fail gracefully if no location is passed to the remove function.", function() {
-			this.grid.remove(undefined);
+		it("should fail gracefully if no location is passed to the has function.", function() {
+			this.grid.has(undefined);
 		});
 
-		it("should be able to handle negative values.", function() {
-			this.grid.add(this.testObject, new GridLocation(-1, -1));
-			expect(this.grid.get(new GridLocation(-1, -1))).toBe(this.testObject);
+		it("should fail gracefully if no location is passed to the remove function.", function() {
+			this.grid.remove(undefined);
 		});
 
 		it("should return undefined if asked to retrieve an object at a location that is unoccupied.", function() {
 			expect(this.grid.get(new GridLocation(10, 10))).not.toBeDefined();
 		});
 
+		it("should be able to tell whether or not a given location is occupied.", function() {
+			expect(this.grid.has(new GridLocation(0, 0))).toBe(false);
+			this.grid.add(this.testObject, new GridLocation(0, 0));
+			expect(this.grid.has(new GridLocation(0, 0))).toBe(true);
+		});
+
 		it("should be able to retrieve an object that has been added to it.", function() {
 			this.grid.add(this.testObject, new GridLocation(0, 0));
 			expect(this.grid.get(new GridLocation(0, 0))).toBe(this.testObject);
+		});
+
+		it("should be able to handle negative values.", function() {
+			this.grid.add(this.testObject, new GridLocation(-1, -1));
+			expect(this.grid.get(new GridLocation(-1, -1))).toBe(this.testObject);
 		});
 
 		it("should not be able to retrieve an object that has been removed from it.", function() {
