@@ -7,7 +7,7 @@ var SparseGrid = function() {
 			return;
 		}
 		if (!GridLocation.validateLocation(loc)) {
-			console.warn("SparseGrid#add: no loc provided.");
+			console.warn("SparseGrid#add: no valid loc provided.");
 			return;
 		}
 
@@ -22,7 +22,7 @@ var SparseGrid = function() {
 
 	this.get = function(loc) {
 		if (!GridLocation.validateLocation(loc)) {
-			console.warn("SparseGrid#get: no loc provided.");
+			console.warn("SparseGrid#get: no valid loc provided.");
 			return;
 		}
 
@@ -37,7 +37,7 @@ var SparseGrid = function() {
 
 	this.has = function(loc) {
 		if (!GridLocation.validateLocation(loc)) {
-			console.warn("SparseGrid#has: no loc provided.");
+			console.warn("SparseGrid#has: no valid loc provided.");
 			return;
 		}
 
@@ -46,7 +46,7 @@ var SparseGrid = function() {
 
 	this.remove = function(loc) {
 		if (!GridLocation.validateLocation(loc)) {
-			console.warn("SparseGrid#remove: no loc provided.");
+			console.warn("SparseGrid#remove: no valid loc provided.");
 			return;
 		}
 
