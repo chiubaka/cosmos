@@ -15,6 +15,7 @@ var config = {
 		{ name: 'Block', path: './entities/Block' },
 		{ name: 'BlockGrid', path: './entities/BlockGrid' },
 		{ name: 'BlockGridNew', path: './entities/BlockGridNew' },
+		{ name: 'GridLocation', path: './entities/GridLocation' },
 		{ name: 'BlockStructure', path: './entities/BlockStructure' },
 		{ name: 'GeneratedBlockStructure', path: './entities/GeneratedBlockStructure' },
 		{ name: 'ConstructionZoneBlock', path: 'entities/blocks/ConstructionZoneBlock' },

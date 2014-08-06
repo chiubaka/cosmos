@@ -1,12 +1,3 @@
-var GridLocation = function(col, row) {
-	this.col = col;
-	this.row = row;
-};
-
-GridLocation.prototype.validateLocation = function(location) {
-	return (location && location.row !== undefined && location.col !== undefined);
-};
-
 // TODO: Find and replace BlockGridNew with BlockGrid once this class completely takes the place of the old BlockGrid.
 
 var BlockGridNew = IgeEntityBox2d.extend({
@@ -27,7 +18,7 @@ var BlockGridNew = IgeEntityBox2d.extend({
 			return;
 		}
 		if (!GridLocation.validateLocation(location)) {
-			this.log("Invalid location passed to BlockGridNew#add.", error);
+			this.log("Invalid location passed to BlockGridNew#add.", "error");
 			return;
 		}
 
@@ -41,7 +32,7 @@ var BlockGridNew = IgeEntityBox2d.extend({
 	get: function(location) {
 		// Validate parameters
 		if (!GridLocation.validateLocation(location)) {
-			this.log("Invalid location passed to BlockGridNew#get.", error);
+			this.log("Invalid location passed to BlockGridNew#get.", "error");
 			return;
 		}
 
@@ -51,7 +42,7 @@ var BlockGridNew = IgeEntityBox2d.extend({
 	remove: function(location) {
 		// Validate parameters
 		if (!GridLocation.validateLocation(location)) {
-			this.log("Invalid location passed to BlockGridNew#get.", error);
+			this.log("Invalid location passed to BlockGridNew#get.", "error");
 			return;
 		}
 

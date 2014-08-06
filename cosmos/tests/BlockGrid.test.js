@@ -28,7 +28,7 @@ describe("A BlockGrid", function() {
 		grid.add(ironBlock, new GridLocation(0, 0));
 		expect(grid.get(new GridLocation(0, 0)).toBe(ironBlock));
 		grid.remove(new GridLocation(0, 0));
-		expect(grid.get(new GridLocation(0, 0))).toBe(undefined);
+		expect(grid.get(new GridLocation(0, 0))).not.toBeDefined();
 	});
 
 	it("should be able to handle negative values.", function() {
@@ -37,7 +37,7 @@ describe("A BlockGrid", function() {
 	});
 
 	it("should return undefined if asked to retrieve a block at a location that is unoccupied.", function() {
-		expect(grid.get(10, 10)).toBe(undefined);
+		expect(grid.get(10, 10)).not.toBeDefined();
 	});
 
 	it("should fail gracefully if no block is passed to the add function.", function() {
@@ -56,7 +56,5 @@ describe("A BlockGrid", function() {
 		grid.remove(undefined);
 	});
 
-	it("should be able to handle hundreds of blocks.", function() {
-		pending();
-	});
+	it("should be able to handle hundreds of blocks.");
 });
