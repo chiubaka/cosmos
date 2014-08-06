@@ -4,7 +4,7 @@ var GridLocation = function(col, row) {
 };
 
 GridLocation.validateLocation = function(location) {
-	return (location && location.row !== undefined && location.col !== undefined);
+	return (location !== undefined && location.row !== undefined && location.col !== undefined);
 };
 
 if (typeof(module) !== "undefined" && typeof(module.exports) !== "undefined") { module.exports = GridLocation; }
