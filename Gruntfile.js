@@ -26,6 +26,7 @@ module.exports = function(grunt) {
 				background: true,
 				options: {
 					files: [
+						'client/public/vendor/lodash/lodash.min.js',
 						'cosmos/tests/**/*.js'
 					],
 					plugins: [
@@ -41,6 +42,11 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+		exec: {
+			ige_deploy: {
+				cmd: 'cd ige; node server/ige.js -deploy ../cosmos -to ../cosmos/tests'
+			}
+		},
 		watch: {
 			css: {
 				files: '**/*.scss',
@@ -52,10 +58,6 @@ module.exports = function(grunt) {
 			},
 			options: {
 				atBegin: true
-			},
-			karma: {
-				files: ['cosmos/tests/**/*.js'],
-				tasks: ['karma:unit:run']
 			}
 		}
 	});
@@ -63,6 +65,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-dust');
 	grunt.loadNpmTasks('grunt-karma');
+	grunt.loadNpmTasks('grunt-exec');
 	grunt.registerTask('default', ['watch']);
 	grunt.registerTask('deploy', ['dust']);
+	grunt.registerTask('test', ['exec:ige_deploy', 'karma:unit:start', 'karma:unit:test']);
 }
