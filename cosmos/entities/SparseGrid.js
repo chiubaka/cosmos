@@ -11,8 +11,10 @@ var SparseGrid = function() {
 			return;
 		}
 
-		if (!hasRowInCol(loc)) {
-			createRowInCol(loc);
+		// If the specified column doesn't exist yet, create it because otherwise
+		// grid[loc.col][loc.row] will throw an exception.
+		if (!hasCol(loc.col)) {
+			createCol(loc.col);
 		}
 
 		grid[loc.row][loc.col] = object;
@@ -23,11 +25,23 @@ var SparseGrid = function() {
 			console.warn("SparseGrid#get: no loc provided.");
 			return;
 		}
-		if (!hasCol(loc.col) || !hasRowInCol(loc)) {
+
+		// If the specified column doesn't exist, then grid[loc.col][loc.row] will throw an
+		// exception so just return.
+		if (!hasCol(loc.col)) {
 			return;
 		}
 
 		return grid[loc.col][loc.row];
+	};
+
+	this.has = function(loc) {
+		if (!GridLocation.validateLocation(loc)) {
+			console.warn("SparseGrid#has: no loc provided.");
+			return;
+		}
+
+		return hasCol(loc.col) && grid[loc.col][loc.row] !== undefined;
 	};
 
 	this.remove = function(loc) {
@@ -35,19 +49,12 @@ var SparseGrid = function() {
 			console.warn("SparseGrid#remove: no loc provided.");
 			return;
 		}
-	};
 
-	function hasRowInCol(loc) {
-		return grid[loc.col] !== undefined && grid[loc.col][loc.row] !== undefined;
-	}
-
-	function createRowInCol(loc) {
-		if (!hasCol(loc.col)) {
-			createCol(loc.col);
+		// If we don't have anything at the specified location, there's nothing to do.
+		if (!this.has(col)) {
+			return;
 		}
-
-		grid[loc.col][loc.row] = {};
-	}
+	};
 
 	function hasCol(col) {
 		return grid[col] !== undefined;
