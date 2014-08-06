@@ -17,4 +17,9 @@ describe("A BlockGrid", function() {
 			this.grid.destroy();
 		}
 	);
+
+
+
+	// TODO: Create tests in this category.
+	describe("should be able to handle blocks of different sizes:");
 });

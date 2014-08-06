@@ -30,7 +30,6 @@ var BlockGridNew = IgeEntityBox2d.extend({
 			return;
 		}
 
-		// TODO: Return the block at the specified location.
 		return this._grid.get(location);
 	},
 
@@ -55,7 +54,10 @@ var BlockGridNew = IgeEntityBox2d.extend({
 			return;
 		}
 
-		// TODO: Add the block at the specified location.
+		// TODO: Add a fixture for the block.
+
+		// TODO: Translate blocks to the right place within the BlockGrid based on row and column.
+
 		return this._grid.put(block,location);
 	},
 
@@ -66,7 +68,8 @@ var BlockGridNew = IgeEntityBox2d.extend({
 			return;
 		}
 
-		// TODO: Remove the block at the specified location.
+		// TODO: Remove fixture for the block.
+
 		this._grid.remove(location);
 	},
 
