@@ -27,6 +27,8 @@ module.exports = function(grunt) {
 				options: {
 					files: [
 						'client/public/vendor/lodash/lodash.min.js',
+						'cosmos/tests/config.js',
+						'cosmos/tests/game.js',
 						'cosmos/tests/**/*.js'
 					],
 					plugins: [
