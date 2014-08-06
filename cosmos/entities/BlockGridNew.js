@@ -4,11 +4,15 @@ var BlockGridNew = IgeEntityBox2d.extend({
 	classId: "BlockGridNew",
 
 	_grid: undefined,
+	_lowerLocBound: undefined,
+	_upperLocBound: undefined,
 
 	init: function(data) {
 		IgeEntityBox2d.prototype.init.call(this, data);
 
 		this._grid = new SparseGrid();
+		this._lowerLocBound = new GridLocation(0, 0);
+		this._upperLocBound = new GridLocation(0, 0);
 
 		// TODO: Create Box2dBody.
 
@@ -54,6 +58,8 @@ var BlockGridNew = IgeEntityBox2d.extend({
 			return;
 		}
 
+		this._updateLocationBounds(location);
+
 		// TODO: Determine where to place the block based on its row and column.
 		var gridCoordinates = this._gridCoordinatesForLocation(location);
 
@@ -82,6 +88,16 @@ var BlockGridNew = IgeEntityBox2d.extend({
 		if (this.count() === 0) {
 			return {x: 0, y: 0};
 		}
+	},
+
+	_updateLocationBounds: function(location) {
+		// Update lower bound.
+		this._lowerLocBound.col = Math.min(this._lowerLocBound.col, location.col);
+		this._lowerLocBound.row = Math.min(this._lowerLocBound.row, location.row);
+
+		// Update upper bound.
+		this._upperLocBound.col = Math.max(this._upperLocBound.col, location.col);
+		this._upperLocBound.row = Math.max(this._upperLocBound.row, location.row);
 	},
 
 	_validLocation: function(location) {

@@ -35,6 +35,58 @@ describe("A BlockGrid", function() {
 		}
 	);
 
+	describe("should correctly update its location bounds", function() {
+		function placeBlocksAndCheckLocationBounds() {
+			this.grid.put(this.testObjects[0], new GridLocation(0, 0));
+			expect(this.grid._lowerLocBound).toEqual(new GridLocation(0, 0));
+			expect(this.grid._upperLocBound).toEqual(new GridLocation(0, 0));
+
+			this.grid.put(this.testObjects[0], new GridLocation(10, 0));
+			expect(this.grid._lowerLocBound).toEqual(new GridLocation(0, 0));
+			expect(this.grid._upperLocBound).toEqual(new GridLocation(10, 0));
+
+			this.grid.put(this.testObjects[0], new GridLocation(0, 9));
+			expect(this.grid._lowerLocBound).toEqual(new GridLocation(0, 0));
+			expect(this.grid._upperLocBound).toEqual(new GridLocation(10, 9));
+
+			this.grid.put(this.testObjects[0], new GridLocation(-9, 0));
+			expect(this.grid._lowerLocBound).toEqual(new GridLocation(-9, 0));
+			expect(this.grid._upperLocBound).toEqual(new GridLocation(10, 9));
+
+			this.grid.put(this.testObjects[0], new GridLocation(0, -10));
+			expect(this.grid._lowerLocBound).toEqual(new GridLocation(-9, -10));
+			expect(this.grid._upperLocBound).toEqual(new GridLocation(10, 9));
+		}
+
+		it("when blocks are placed", function() {
+			placeBlocksAndCheckLocationBounds.call(this);
+		});
+
+		it("when blocks are removed", function() {
+			placeBlocksAndCheckLocationBounds.call(this);
+
+			this.grid.remove(new GridLocation(0, 0));
+			expect(this.grid._lowerLocBound).toEqual(new GridLocation(-9, -10));
+			expect(this.grid._upperLocBound).toEqual(new GridLocation(10, 9));
+
+			this.grid.remove(new GridLocation(10, 0));
+			expect(this.grid._lowerLocBound).toEqual(new GridLocation(-9, -10));
+			expect(this.grid._upperLocBound).toEqual(new GridLocation(0, 9));
+
+			this.grid.remove(new GridLocation(0 , -10));
+			expect(this.grid._lowerLocBound).toEqual(new GridLocation(-9, 0));
+			expect(this.grid._upperLocBound).toEqual(new GridLocation(0, 9));
+
+			this.grid.remove(new GridLocation(0 , 9));
+			expect(this.grid._lowerLocBound).toEqual(new GridLocation(-9, 0));
+			expect(this.grid._upperLocBound).toEqual(new GridLocation(0, 0));
+
+			this.grid.remove(new GridLocation(-9 , 0));
+			expect(this.grid._lowerLocBound).toEqual(new GridLocation(0, 0));
+			expect(this.grid._upperLocBound).toEqual(new GridLocation(0, 0));
+		});
+	});
+
 	// TODO: Create tests in this category.
 	xdescribe("should be able to handle blocks of different sizes:", function() {
 
