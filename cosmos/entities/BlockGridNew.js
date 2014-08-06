@@ -70,7 +70,7 @@ var BlockGridNew = IgeEntityBox2d.extend({
 
 		// TODO: Remove fixture for the block.
 
-		this._grid.remove(location);
+		return this._grid.remove(location);
 	},
 
 	_validLocation: function(location) {

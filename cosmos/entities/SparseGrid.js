@@ -49,7 +49,7 @@ var SparseGrid = function() {
 		}
 
 		// Save the object that is already at this location, if any so that we can return it.
-		var existingObject = this.get(loc);
+		var previousObject = this.get(loc);
 
 		// Place the object at the specified location in the grid.
 		grid[loc.col][loc.row] = object;
@@ -60,7 +60,7 @@ var SparseGrid = function() {
 		// Update the global count.
 		count++;
 
-		return existingObject;
+		return previousObject;
 	};
 
 	this.remove = function(loc) {
@@ -73,6 +73,8 @@ var SparseGrid = function() {
 		if (!this.has(loc)) {
 			return;
 		}
+
+		var previousObject = grid[loc.col][loc.row];
 
 		// Remove the object at the specified location.
 		delete grid[loc.col][loc.row];
@@ -88,6 +90,8 @@ var SparseGrid = function() {
 			delete grid[loc.col];
 			delete colCounts[loc.col];
 		}
+
+		return previousObject;
 	};
 
 	function hasCol(col) {
