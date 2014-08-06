@@ -6,11 +6,13 @@ xdescribe("A BlockGrid", function() {
 		function() {
 			this.grid = new GridClass();
 			ige.isServer = true;
-			this.testObject = new IronBlock();
+			this.testObjects = [new IronBlock(), new CarbonBlock(), new IceBlock()];
 		},
 		// afterEachFunc
 		function() {
-			this.testObject.destroy();
+			for (var i = 0; i < this.testObjects.length; i++) {
+				this.testObjects[i].destroy();
+			}
 			ige.isServer = false;
 			this.grid.destroy();
 		}

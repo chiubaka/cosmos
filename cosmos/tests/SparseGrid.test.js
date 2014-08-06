@@ -3,7 +3,7 @@ describe("A SparseGrid", function() {
 		// beforeEachFunc
 		function() {
 			this.grid = new SparseGrid();
-			this.testObject = 4;
+			this.testObjects = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 		},
 		// afterEachFunc
 		function() {}
