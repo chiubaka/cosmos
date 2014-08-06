@@ -4,20 +4,20 @@ module.exports = function(grunt) {
 		compass: {
 			dist: {
 				options: {
-					sassDir: 'sass',
-					cssDir: 'public/stylesheets'
+					sassDir: 'client/sass',
+					cssDir: 'client/public/stylesheets'
 				}
 			}
 		},
 		dust: {
 			dist: {
 				files: {
-					'public/js/templates.dust.js': 'views/**/*.dust'
+					'client/public/js/templates.dust.js': 'client/views/**/*.dust'
 				},
 				options: {
 					wrapper: false,
 					runtime: false,
-					basePath: 'views'
+					basePath: 'client/views'
 				}
 			}
 		},
@@ -27,7 +27,7 @@ module.exports = function(grunt) {
 				tasks: ['compass', 'dust']
 			},
 			dust: {
-				files: 'views/**/*.dust',
+				files: 'client/views/**/*.dust',
 				tasks: ['dust']
 			},
 			options: {
