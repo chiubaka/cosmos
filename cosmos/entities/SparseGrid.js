@@ -51,9 +51,14 @@ var SparseGrid = function() {
 		}
 
 		// If we don't have anything at the specified location, there's nothing to do.
-		if (!this.has(col)) {
+		if (!this.has(loc)) {
 			return;
 		}
+
+		delete grid[loc.col][loc.row];
+
+		// TODO: If a column is empty after deleting an element at a given row, we should delete the
+		// column to recover some space.
 	};
 
 	function hasCol(col) {
