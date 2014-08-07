@@ -20,6 +20,7 @@ var igeClientConfig = {
 		'./entities/BlockGrid.js',
 		'./entities/BlockGridNew.js',
 		'./entities/GridLocation.js',
+		'./entities/GridDimensions.js',
 		'./entities/BlockStructure.js',
 		'./entities/GeneratedBlockStructure.js',
 		'./entities/blocks/ConstructionZoneBlock.js',

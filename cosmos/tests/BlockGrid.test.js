@@ -24,11 +24,14 @@ describe("A BlockGrid", function() {
 		function() {
 			it("should always return (0, 0) if there are no blocks already in the grid",
 				function() {
-					expect(this.grid._gridCoordinatesForLocation(new GridLocation(10, 10)))
+					this.testObjects[0].location(new GridLocation(10, 10));
+					expect(this.grid._gridCoordinatesForBlock(this.testObjects[0]))
 						.toEqual(jasmine.objectContaining({x: 0, y: 0}));
-					expect(this.grid._gridCoordinatesForLocation(new GridLocation(0, 0)))
+					this.testObjects[0].location(new GridLocation(0, 0));
+					expect(this.grid._gridCoordinatesForBlock(this.testObjects[0]))
 						.toEqual(jasmine.objectContaining({x: 0, y: 0}));
-					expect(this.grid._gridCoordinatesForLocation(new GridLocation(-10, -10)))
+					this.testObjects[0].location(new GridLocation(-10, -10));
+					expect(this.grid._gridCoordinatesForBlock(this.testObjects[0]))
 						.toEqual(jasmine.objectContaining({x: 0, y: 0}));
 				}
 			);

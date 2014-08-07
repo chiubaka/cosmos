@@ -54,6 +54,8 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	_col: undefined,
+	_location: undefined,
+	_dimensions: undefined,
 	/**
 	 * An IgeEntity that all of the foreground effects for this {@link Block} get mounted to.
 	 * @type {IgeEntity}
@@ -138,6 +140,9 @@ var Block = IgeEntity.extend({
 			|| this.classId() === "Weapon"
 			|| this.classId() === "Element";
 
+		// TODO: Change this to support blocks of multiple sizes
+		this._setDimensions(new GridDimensions(1, 1));
+
 		// Check if a health has been provided for this block.
 		if (Healths[this.classId()] !== undefined) {
 			this.addComponent(Health, Healths[this.classId()]);
@@ -219,6 +224,26 @@ var Block = IgeEntity.extend({
 			this.compositeCache(true);
 			this.cacheSmoothing(true);
 		}
+	},
+
+	/**
+	 * Getter for the dimensions of a block. READ ONLY.
+	 */
+	dimensions: function() {
+		return this._dimensions;
+	},
+
+	_setDimensions: function(newDimensions) {
+		this._dimensions = newDimensions;
+	},
+
+	location: function(newLocation) {
+		if (newLocation !== undefined) {
+			this._location = newLocation;
+			return this;
+		}
+
+		return this._location;
 	},
 
 	displayName: function() {

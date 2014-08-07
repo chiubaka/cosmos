@@ -64,10 +64,10 @@ var BlockGridNew = IgeEntityBox2d.extend({
 
 		this._updateLocationBounds(location);
 
-		var relLocation = this._relativeLocation(location);
+		block.location(location);
 
 		// TODO: Determine where to place the block based on its row and column.
-		var gridCoordinates = this._gridCoordinatesForLocation(relLocation);
+		var gridCoordinates = this._gridCoordinatesForBlock(block);
 
 		// TODO: Add a fixture for the block.
 
@@ -90,12 +90,21 @@ var BlockGridNew = IgeEntityBox2d.extend({
 		return this._grid.remove(location);
 	},
 
-	_gridCoordinatesForLocation: function(relLocation) {
+	_gridCoordinatesForBlock: function(block) {
 		// If there are no blocks in this grid yet, then the grid coordinates should always be
 		// (0, 0).
 		if (this.count() === 0) {
 			return {x: 0, y: 0};
 		}
+
+		var relLocation = this._relativeLocation(block.location());
+
+		var x = Block.WIDTH * relLocation.col - this._bounds2d.x2 +
+			(block.dimensions().cols * Block.WIDTH) / 2;
+		var y = Block.HEIGHT * relLocation.row - this._bounds2d.y2 +
+			(block.dimensions().rows * Block.HEIGHT) / 2;
+
+		return {x: x, y: y};
 	},
 
 	/**
