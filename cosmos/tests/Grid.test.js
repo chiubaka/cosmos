@@ -62,11 +62,6 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 			expect(this.grid.get(new IgePoint2d(0, 0))).toBe(this.testObjects[0]);
 		});
 
-		it("should be able to handle negative values.", function() {
-			this.grid.put(this.testObjects[0], new IgePoint2d(-1, -1));
-			expect(this.grid.get(new IgePoint2d(-1, -1))).toBe(this.testObjects[0]);
-		});
-
 		it("should return the previous object if remove is called on an occupied location.",
 			function() {
 				this.grid.put(this.testObjects[0], new IgePoint2d(0, 0));
@@ -146,6 +141,31 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 				.toEqual([]);
 			expect(this.grid._grid[0][0]).toBe(this.testObjects["1x1"][0]);
 			expect(this.grid._colCounts[0]).toEqual(1);
+			expect(this.grid.count()).toEqual(1);
+
+			expect(this.grid.put(this.testObjects["2x2"][0], new IgePoint2d(10, 10), false))
+				.toEqual([]);
+			for (var x = 10; x < 12; x++) {
+				for (var y = 10; y < 12; y++) {
+					expect(this.grid._grid[x][y]).toBe(this.testObjects["2x2"][0]);
+				}
+				expect(this.grid._colCounts[x]).toEqual(2);
+				expect(this.grid._colCounts[x]).toEqual(2);
+			}
+			expect(this.grid.count()).toEqual(2);
+		});
+
+		it("should be able to handle negative values.", function() {
+			expect(this.grid.put(this.testObjects["2x2"][0], new IgePoint2d(-5, -3), false))
+				.toEqual([]);
+
+			for (var x = -5; x < -3; x++) {
+				for (var y = -3; y < -1; y++) {
+					expect(this.grid._grid[x][y]).toBe(this.testObjects["2x2"][0]);
+				}
+				expect(this.grid._colCounts[x]).toEqual(2);
+				expect(this.grid._colCounts[x]).toEqual(2);
+			}
 			expect(this.grid.count()).toEqual(1);
 		});
 
