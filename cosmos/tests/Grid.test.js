@@ -10,7 +10,7 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 		beforeEach(beforeEachFunc);
 		afterEach(afterEachFunc);
 
-		describe("should have public interface functions that fails gracefully:", function() {
+		describe("should have public interface functions that fails gracefully", function() {
 			beforeEach(function() {
 				TestUtils.disableLogging();
 			});
@@ -19,23 +19,23 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 				TestUtils.enableLogging();
 			});
 
-			it("should fail gracefully if no object is passed to the put function.", function() {
+			it("when no object is passed to the put function.", function() {
 				this.grid.put(undefined, new GridLocation(0, 0));
 			});
 
-			it("should fail gracefully if no location is passed to the put function.", function() {
+			it("when no location is passed to the put function.", function() {
 				this.grid.put(this.testObjects[0], undefined);
 			});
 
-			it("should fail gracefully if no location is passed to the get function.", function() {
+			it("when no location is passed to the get function.", function() {
 				this.grid.get(undefined);
 			});
 
-			it("should fail gracefully if no location is passed to the has function.", function() {
+			it("when no location is passed to the has function.", function() {
 				this.grid.has(undefined);
 			});
 
-			it("should fail gracefully if no location is passed to the remove function.",
+			it("when no location is passed to the remove function.",
 				function() {
 					this.grid.remove(undefined);
 				}
