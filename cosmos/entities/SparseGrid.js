@@ -1,71 +1,78 @@
-var SparseGrid = function() {
-	var grid = {};
-	var count = 0;
-	var colCounts = {};
+var SparseGrid = IgeClass.extend({
+	classId: 'SparseGrid',
 
-	this.count = function() {
-		return count;
-	};
+	_count: undefined,
+	_grid: undefined,
 
-	this.get = function(loc) {
+	init: function(data) {
+		this._grid = {};
+		this._count = 0;
+		this._colCounts = {};
+	},
+
+	count: function() {
+		return this._count;
+	},
+
+	get: function(loc) {
 		if (!GridLocation.validateLocation(loc)) {
-			console.warn("SparseGrid#get: no valid loc provided.");
+			this.log("SparseGrid#get: no valid loc provided.", "warning");
 			return;
 		}
 
 		// If the specified column doesn't exist, then grid[loc.col][loc.row] will throw an
 		// exception so just return.
-		if (!hasCol(loc.col)) {
+		if (!this._hasCol(loc.col)) {
 			return;
 		}
 
-		return grid[loc.col][loc.row];
-	};
+		return this._grid[loc.col][loc.row];
+	},
 
-	this.has = function(loc) {
+	has: function(loc) {
 		if (!GridLocation.validateLocation(loc)) {
-			console.warn("SparseGrid#has: no valid loc provided.");
+			this.log("SparseGrid#has: no valid loc provided.", "warning");
 			return false;
 		}
 
-		return hasCol(loc.col) && grid[loc.col][loc.row] !== undefined;
-	};
+		return this._hasCol(loc.col) && this._grid[loc.col][loc.row] !== undefined;
+	},
 
-	this.put = function(object, loc) {
+	put: function(object, loc) {
 		if (object === undefined) {
-			console.warn("SparseGrid#put: no object parameter to put.");
+			this.log("SparseGrid#put: no object parameter to put.", "warning");
 			return;
 		}
 
 		if (!GridLocation.validateLocation(loc)) {
-			console.warn("SparseGrid#put: no valid loc provided.");
+			this.log("SparseGrid#put: no valid loc provided.", "warning");
 			return;
 		}
 
 		// If the specified column doesn't exist yet, create it because otherwise
 		// grid[loc.col][loc.row] will throw an exception.
-		if (!hasCol(loc.col)) {
-			createCol(loc.col);
+		if (!this._hasCol(loc.col)) {
+			this._createCol(loc.col);
 		}
 
 		// Save the object that is already at this location, if any so that we can return it.
 		var previousObject = this.get(loc);
 
 		// Place the object at the specified location in the grid.
-		grid[loc.col][loc.row] = object;
+		this._grid[loc.col][loc.row] = object;
 
 		// Update the number of items in the specified column.
-		colCounts[loc.col]++;
+		this._colCounts[loc.col]++;
 
 		// Update the global count.
-		count++;
+		this._count++;
 
 		return previousObject;
-	};
+	},
 
-	this.remove = function(loc) {
+	remove: function(loc) {
 		if (!GridLocation.validateLocation(loc)) {
-			console.warn("SparseGrid#remove: no valid loc provided.");
+			this.log("SparseGrid#remove: no valid loc provided.", "warning");
 			return;
 		}
 
@@ -74,34 +81,34 @@ var SparseGrid = function() {
 			return;
 		}
 
-		var previousObject = grid[loc.col][loc.row];
+		var previousObject = this._grid[loc.col][loc.row];
 
 		// Remove the object at the specified location.
-		delete grid[loc.col][loc.row];
+		delete this._grid[loc.col][loc.row];
 
 		// Update the number of items in the specified column.
-		colCounts[loc.col]--;
+		this._colCounts[loc.col]--;
 
 		// Update the global count.
-		count--;
+		this._count--;
 
 		// Clean up memory for the column if it is now empty.
-		if (colCounts[loc.col] === 0) {
-			delete grid[loc.col];
-			delete colCounts[loc.col];
+		if (this._colCounts[loc.col] === 0) {
+			delete this._grid[loc.col];
+			delete this._colCounts[loc.col];
 		}
 
 		return previousObject;
-	};
+	},
 
-	function hasCol(col) {
-		return grid[col] !== undefined;
-	}
+	_hasCol: function(col) {
+		return this._grid[col] !== undefined;
+	},
 
-	function createCol(col) {
-		grid[col] = {};
-		colCounts[col] = 0;
+	_createCol: function(col) {
+		this._grid[col] = {};
+		this._colCounts[col] = 0;
 	}
-};
+});
 
 if (typeof(module) !== "undefined" && typeof(module.exports) !== "undefined") { module.exports = SparseGrid; }
