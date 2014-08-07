@@ -37,12 +37,12 @@ describe("A BlockGrid", function() {
 
 	describe("should correctly update its location bounds", function() {
 		function placeBlocksAndCheckLocationBounds() {
-			this.grid.put(this.testObjects[0], new GridLocation(0, 0));
-			expect(this.grid._lowerLocBound).toEqual(new GridLocation(0, 0));
-			expect(this.grid._upperLocBound).toEqual(new GridLocation(0, 0));
+			this.grid.put(this.testObjects[0], new GridLocation(5, 0));
+			expect(this.grid._lowerLocBound).toEqual(new GridLocation(5, 0));
+			expect(this.grid._upperLocBound).toEqual(new GridLocation(5, 0));
 
 			this.grid.put(this.testObjects[0], new GridLocation(10, 0));
-			expect(this.grid._lowerLocBound).toEqual(new GridLocation(0, 0));
+			expect(this.grid._lowerLocBound).toEqual(new GridLocation(5, 0));
 			expect(this.grid._upperLocBound).toEqual(new GridLocation(10, 0));
 
 			this.grid.put(this.testObjects[0], new GridLocation(0, 9));
@@ -65,7 +65,7 @@ describe("A BlockGrid", function() {
 		it("when blocks are removed", function() {
 			placeBlocksAndCheckLocationBounds.call(this);
 
-			this.grid.remove(new GridLocation(0, 0));
+			this.grid.remove(new GridLocation(5, 0));
 			expect(this.grid._lowerLocBound).toEqual(new GridLocation(-9, -10));
 			expect(this.grid._upperLocBound).toEqual(new GridLocation(10, 9));
 
