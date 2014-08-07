@@ -134,6 +134,8 @@ var Client = IgeClass.extend({
 							ige.network.define('cosmos:player.username.set.approve', Player.onUsernameRequestApproved);
 							ige.network.define('cosmos:player.username.set.error', Player.onUsernameRequestError);
 
+							ige.network.define('cosmos:ship.death', self._onShipDeath);
+
 							// Setup the network stream handler
 							ige.network.addComponent(IgeStreamComponent)
 								.stream.renderLatency(100); // Render the simulation 100 milliseconds in the past
