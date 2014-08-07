@@ -10,7 +10,7 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 		beforeEach(beforeEachFunc);
 		afterEach(afterEachFunc);
 
-		describe("should have public interface functions that fails gracefully", function() {
+		/*(describe("should have public interface functions that fails gracefully", function() {
 			beforeEach(function() {
 				TestUtils.disableLogging();
 			});
@@ -145,6 +145,73 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 			for (var i = 0; i < numObjects; i += 2) {
 				expect(this.grid.get(new IgePoint2d(i, i))).not.toBeDefined();
 			}
+		});*/
+
+		it("should be able to place objects of different dimensions.", function() {
+			expect(true).toBe(false);
 		});
+
+		it("should have references to a large object at each location that it occupies.",
+			function() {
+				expect(true).toBe(false);
+			}
+		);
+
+		it("should return null if an object is placed without replacement and any of the spaces " +
+			"it would occupy is already occupied.",
+			function() {
+				expect(this.grid.put(this.testObjects["1x1"][0], new IgePoint2d(0, 0), false))
+					.toEqual([]);
+				expect(this.grid.put(this.testObjects["2x2"][0], new IgePoint2d(0, 0), false))
+					.toBe(null);
+
+				expect(this.grid.put(this.testObjects["2x2"][0], new IgePoint2d(1, 1), false))
+					.toEqual([]);
+				expect(this.grid.put(this.testObjects["1x1"][0], new IgePoint2d(1, 1), false))
+					.toEqual(null);
+			}
+		);
+
+		it("should return a list of replaced objects if an object is placed with replacement and " +
+			"any of the spaces it would occupy is already occupied.",
+			function() {
+				expect(this.grid.put(this.testObjects["1x1"][0], new IgePoint2d(0, 0), true))
+					.toEqual([]);
+				expect(this.grid.put(this.testObjects["1x1"][1], new IgePoint2d(1, 0), true))
+					.toEqual([]);
+				expect(this.grid.put(this.testObjects["1x1"][2], new IgePoint2d(1, 1), true))
+					.toEqual([]);
+				expect(this.grid.put(this.testObjects["1x1"][3], new IgePoint2d(0, 1), true))
+					.toEqual([]);
+
+				expect(this.grid.put(this.testObjects["2x2"][0], new IgePoint2d(0, 0), false))
+					.toContain([this.testObjects["1x1"]);
+
+				expect(this.grid.put(this.testObjects["2x2"], new IgePoint2d(1, 1), false))
+					.toEqual([]);
+				expect(this.grid.put(this.testObjects["1x1"], new IgePoint2d(1, 1), false))
+					.toEqual(null);
+			}
+		);
+
+		it("should return an empty list if an object is placed successfully without displacing " +
+				"any other objects.",
+			function() {
+
+			}
+		);
+
+		it("should clear all locations that an object occupied when that object is removed.",
+			function() {
+
+			}
+		);
+
+		it("should clear all locations that displaced objects occupied when a new object is " +
+			"added.",
+			function() {
+
+			}
+		);
 	});
 };
