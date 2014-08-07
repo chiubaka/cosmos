@@ -1,6 +1,6 @@
 var GridClass = BlockGridNew;
 
-describe("A BlockGrid", function() {
+xdescribe("A BlockGrid", function() {
 	function beforeEachFunc() {
 		this.grid = new GridClass();
 		ige.isServer = true;

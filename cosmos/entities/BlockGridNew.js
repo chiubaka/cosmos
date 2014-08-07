@@ -11,8 +11,8 @@ var BlockGridNew = IgeEntityBox2d.extend({
 		IgeEntityBox2d.prototype.init.call(this, data);
 
 		this._grid = new SparseGrid();
-		this._lowerLocBound = new GridLocation(0, 0);
-		this._upperLocBound = new GridLocation(0, 0);
+		this._lowerLocBound = new IgePoint2d(0, 0);
+		this._upperLocBound = new IgePoint2d(0, 0);
 
 		// TODO: Create Box2dBody.
 
@@ -32,7 +32,7 @@ var BlockGridNew = IgeEntityBox2d.extend({
 
 	get: function(location) {
 		// Validate parameters
-		if (!GridLocation.validateLocation(location)) {
+		if (!IgePoint2d.validatePoint(location)) {
 			this.log("Invalid location passed to BlockGridNew#get.", "warning");
 			return;
 		}
@@ -42,7 +42,7 @@ var BlockGridNew = IgeEntityBox2d.extend({
 
 	has: function(location) {
 		// Validate parameters
-		if (!GridLocation.validateLocation(location)) {
+		if (!IgePoint2d.validatePoint(location)) {
 			this.log("Invalid location passed to BlockGridNew#has.", "warning");
 			return false;
 		}
@@ -57,7 +57,7 @@ var BlockGridNew = IgeEntityBox2d.extend({
 			return;
 		}
 
-		if (!GridLocation.validateLocation(location)) {
+		if (!IgePoint2d.validatePoint(location)) {
 			this.log("Invalid location passed to BlockGridNew#put.", "warning");
 			return;
 		}
@@ -80,7 +80,7 @@ var BlockGridNew = IgeEntityBox2d.extend({
 
 	remove: function(location) {
 		// Validate parameters
-		if (!GridLocation.validateLocation(location)) {
+		if (!IgePoint2d.validatePoint(location)) {
 			this.log("Invalid location passed to BlockGridNew#get.", "warning");
 			return;
 		}
@@ -99,9 +99,9 @@ var BlockGridNew = IgeEntityBox2d.extend({
 
 		var relLocation = this._relativeLocation(block.location());
 
-		var x = Block.WIDTH * relLocation.col - this._bounds2d.x2 +
+		var x = Block.WIDTH * relLocation.x - this._bounds2d.x2 +
 			(block.dimensions().cols * Block.WIDTH) / 2;
-		var y = Block.HEIGHT * relLocation.row - this._bounds2d.y2 +
+		var y = Block.HEIGHT * relLocation.y - this._bounds2d.y2 +
 			(block.dimensions().rows * Block.HEIGHT) / 2;
 
 		return {x: x, y: y};
@@ -125,12 +125,12 @@ var BlockGridNew = IgeEntityBox2d.extend({
 		}
 
 		// Update lower bound.
-		this._lowerLocBound.col = Math.min(this._lowerLocBound.col, location.col);
-		this._lowerLocBound.row = Math.min(this._lowerLocBound.row, location.row);
+		this._lowerLocBound.x = Math.min(this._lowerLocBound.x, location.x);
+		this._lowerLocBound.y = Math.min(this._lowerLocBound.y, location.y);
 
 		// Update upper bound.
-		this._upperLocBound.col = Math.max(this._upperLocBound.col, location.col);
-		this._upperLocBound.row = Math.max(this._upperLocBound.row, location.row);
+		this._upperLocBound.x = Math.max(this._upperLocBound.x, location.x);
+		this._upperLocBound.y = Math.max(this._upperLocBound.y, location.y);
 	}
 });
 
