@@ -49,12 +49,6 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 			}
 		);
 
-		it("should be able to tell whether or not a given location is occupied.", function() {
-			expect(this.grid.has(new IgePoint2d(0, 0))).toBe(false);
-			this.grid.put(this.testObjects[0], new IgePoint2d(0, 0));
-			expect(this.grid.has(new IgePoint2d(0, 0))).toBe(true);
-		});
-
 		it("should report that a location is unoccupied if asked about an invalid location.",
 			function() {
 				TestUtils.disableLogging();
@@ -147,6 +141,24 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 			}
 		});*/
 
+		it("should be able to put objects inside of itself.", function() {
+			expect(this.grid.put(this.testObjects["1x1"][0], new IgePoint2d(0, 0), false))
+				.toEqual([]);
+			expect(this.grid._grid[0][0]).toBe(this.testObjects["1x1"][0]);
+			expect(this.grid._colCounts[0]).toEqual(1);
+			expect(this.grid.count()).toEqual(1);
+		});
+
+		it("should be able to tell whether or not a given location is occupied.", function() {
+			expect(this.grid.has(new IgePoint2d(0, 0))).toBe(false);
+			this.grid.put(this.testObjects["1x1"][0], new IgePoint2d(0, 0), false);
+			expect(this.grid.has(new IgePoint2d(0, 0))).toBe(true);
+		});
+
+		it("should be able to tell whether or not a given area is occupied.", function() {
+
+		});
+
 		it("should be able to place objects of different dimensions.", function() {
 			expect(true).toBe(false);
 		});
@@ -184,13 +196,16 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 				expect(this.grid.put(this.testObjects["1x1"][3], new IgePoint2d(0, 1), true))
 					.toEqual([]);
 
-				expect(this.grid.put(this.testObjects["2x2"][0], new IgePoint2d(0, 0), false))
-					.toContain([this.testObjects["1x1"]);
+				var displaced = this.grid.put(
+					this.testObjects["2x2"][0],
+					new IgePoint2d(0, 0),
+					true
+				);
 
-				expect(this.grid.put(this.testObjects["2x2"], new IgePoint2d(1, 1), false))
-					.toEqual([]);
-				expect(this.grid.put(this.testObjects["1x1"], new IgePoint2d(1, 1), false))
-					.toEqual(null);
+				var self = this;
+				_.forEach(this.testObjects["1x1"], function(obj) {
+					expect(displaced).toContain(obj);
+				});
 			}
 		);
 

@@ -1,8 +1,9 @@
-var TestGridObject = IgeClass.extend({
+var TestGridObject = IgeEntity.extend({
 	classId: 'TestGridObject',
 
 	init: function(width, height) {
-		this.addComponent(GridData, width, height);
+		IgeEntity.prototype.init.call(this);
+		this.addComponent(GridData, {width: width, height: height});
 	}
 });
 
@@ -11,6 +12,7 @@ describe("A SparseGrid", function() {
 		// beforeEachFunc
 		function() {
 			this.grid = new SparseGrid();
+			this.testObjects = {};
 			this.testObjects["1x1"] = [
 				new TestGridObject(1, 1),
 				new TestGridObject(1, 1),

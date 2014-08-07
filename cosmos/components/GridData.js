@@ -2,13 +2,13 @@ var GridData = IgeClass.extend({
 	classId: 'GridData',
 	componentId: 'gridData',
 
-	location: undefined,
+	loc: undefined,
 	width: undefined,
 	height: undefined,
 
-	init: function(width, height) {
-		this.width = width;
-		this.height = height;
+	init: function(entity, data) {
+		this.width = data.width;
+		this.height = data.height;
 	}
 });
 
