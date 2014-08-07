@@ -116,10 +116,6 @@ var BlockGridNew = IgeEntityBox2d.extend({
 		// Update upper bound.
 		this._upperLocBound.col = Math.max(this._upperLocBound.col, location.col);
 		this._upperLocBound.row = Math.max(this._upperLocBound.row, location.row);
-	},
-
-	_validLocation: function(location) {
-		return location && location.row && location.col;
 	}
 });
 
