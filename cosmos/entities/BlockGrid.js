@@ -147,6 +147,7 @@ var BlockGrid = IgeEntity.extend({
 			this.addComponent(TLPhysicsBodyComponent);
 			this.physicsBody.newBody({
 				bodyType: 'DYNAMIC',
+				bodyCategory: this.category() || "",
 				x: 0,
 				y: 0,
 				angle: 0,
@@ -389,8 +390,8 @@ var BlockGrid = IgeEntity.extend({
 		// Calculate position of new Drop, taking into account rotation
 		var gridX = this.translate().x();
 		var gridY = this.translate().y();
-		var fixtureX = block.fixtureDef().shape.data.x;
-		var fixtureY = block.fixtureDef().shape.data.y;
+		var fixtureX = block.physicsFixture.fixtureDef().x;
+		var fixtureY = block.physicsFixture.fixtureDef().y;
 		var theta = this.rotate().z();
 
 		var finalX = Math.cos(theta) * fixtureX - Math.sin(theta) * fixtureY + gridX;
@@ -436,8 +437,7 @@ var BlockGrid = IgeEntity.extend({
 		}
 
 		if (ige.isServer) {
-			// TODO: @Eric reimplement this
-			//this._box2dBody.DestroyFixture(block.fixture());
+			this.physicsBody.destroyFixture(block);
 
 			// TODO: Compute correct velocities for new bodies, if needed
 

@@ -86,9 +86,10 @@ var Ship = BlockStructure.extend({
 		this._engines = [];
 		this._thrusters = [];
 
-		BlockStructure.prototype.init.call(this, data);
-
+		// Set category because BlockGrid superclass will initialize physics body
 		this.category(Ship.BOX2D_CATEGORY);
+
+		BlockStructure.prototype.init.call(this, data);
 
 		this._controls = {
 			left: false,

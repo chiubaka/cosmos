@@ -209,6 +209,13 @@ return;
 	 * TODO: Running physics on the client may improve performance.
 	 */
 	initPhysics: function() {
+		var customContacts = [{
+				body1_category: Ship.BOX2D_CATEGORY,
+				body2_category: Drop.BOX2D_CATEGORY,
+				disable_contact: true
+			}
+		];
+		ige.physicsSystem.newCustomContacts(customContacts);
 		// TODO: @Eric Reimplement this
 		return;
 		// Set the contact listener methods to detect when

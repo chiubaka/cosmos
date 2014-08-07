@@ -30,8 +30,11 @@ var Drop = BlockGrid.extend({
 	_attractedTo: undefined,
 
 	init: function(data) {
-		BlockGrid.prototype.init.call(this, data);
+		// Set category because BlockGrid superclass will initialize physics body
 		this.category(Drop.BOX2D_CATEGORY);
+
+		BlockGrid.prototype.init.call(this, data);
+
 		this.depth(Drop.DEPTH);
 
 		this.height(Block.HEIGHT);
