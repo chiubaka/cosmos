@@ -25,7 +25,7 @@ var SparseGrid = function() {
 	this.has = function(loc) {
 		if (!GridLocation.validateLocation(loc)) {
 			console.warn("SparseGrid#has: no valid loc provided.");
-			return;
+			return false;
 		}
 
 		return hasCol(loc.col) && grid[loc.col][loc.row] !== undefined;

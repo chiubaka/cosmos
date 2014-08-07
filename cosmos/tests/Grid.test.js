@@ -55,6 +55,14 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 			expect(this.grid.has(new GridLocation(0, 0))).toBe(true);
 		});
 
+		it("should report that a location is unoccupied if asked about an invalid location.",
+			function() {
+				TestUtils.disableLogging();
+				expect(this.grid.has()).toBe(false);
+				TestUtils.enableLogging();
+			}
+		);
+
 		it("should be able to retrieve an object that has been placed in it.", function() {
 			this.grid.put(this.testObjects[0], new GridLocation(0, 0));
 			expect(this.grid.get(new GridLocation(0, 0))).toBe(this.testObjects[0]);

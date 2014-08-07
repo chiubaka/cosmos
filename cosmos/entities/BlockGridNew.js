@@ -20,6 +20,9 @@ var BlockGridNew = IgeEntityBox2d.extend({
 	},
 
 	count: function() {
+		// TODO: Modify this so that the BlockGrid keeps its own count in order to properly support
+		// blocks of multiple sizes, since several references will be placed in the underlying
+		// SparseGrid for blocks that are larger than 1x1.
 		return this._grid.count();
 	},
 
@@ -41,6 +44,7 @@ var BlockGridNew = IgeEntityBox2d.extend({
 		// Validate parameters
 		if (!GridLocation.validateLocation(location)) {
 			this.log("Invalid location passed to BlockGridNew#has.", "warning");
+			return false;
 		}
 
 		return this._grid.has(location);
@@ -69,6 +73,8 @@ var BlockGridNew = IgeEntityBox2d.extend({
 
 		// TODO: Translate blocks to the right place within the BlockGrid based on row and column.
 
+		// TODO: Modify this so that it places several references to blocks that are larger than
+		// 1x1
 		return this._grid.put(block,location);
 	},
 
