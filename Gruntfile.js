@@ -48,7 +48,8 @@ module.exports = function(grunt) {
 		},
 		exec: {
 			ige_deploy: {
-				cmd: 'cd ige; node server/ige.js -deploy ../cosmos -to ../cosmos/tests'
+				cmd: 'cd ige; node server/ige.js -deploy ../cosmos -to ../cosmos/tests ' +
+					'-clear true -clearClasses false'
 			}
 		},
 		jsbeautifier: {
@@ -85,7 +86,7 @@ module.exports = function(grunt) {
 		else {
 			grunt.task.run([
 				'exec:ige_deploy',
-				'jsbeautifier:test',
+				//'jsbeautifier:test',
 				'karma:unit'
 			]);
 		}
