@@ -195,7 +195,8 @@ var Ship = BlockStructure.extend({
 		if (!this.controllable()) {
 			// Then it is dead
 			this.log("Ship death");
-			ige.network.send("cosmos:ship.death");
+			data = {};
+			ige.network.stream.queueCommand('cosmos:ship.death', data, this.player().clientId());
 		}
 	},
 
