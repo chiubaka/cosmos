@@ -164,8 +164,6 @@ var ClientNetworkEvents = {
 		alertify.alert(message, function (e) {
 			if (e) {
 				ige.network.send('new ship');
-			} else {
-				//ige.client.metrics.track('cosmos:???');
 			}
 		});
 	}
