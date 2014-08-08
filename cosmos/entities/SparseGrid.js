@@ -171,6 +171,10 @@ var SparseGrid = IgeClass.extend({
 		return previousObjects;
 	},
 
+	relativeLocation: function(loc) {
+		return loc.minusPoint(this._lowerBound);
+	},
+
 	remove: function(loc, width, height) {
 		if (!IgePoint2d.validatePoint(loc)) {
 			this.log("SparseGrid#remove: no valid loc provided.", "warning");

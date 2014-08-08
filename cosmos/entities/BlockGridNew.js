@@ -11,8 +11,9 @@ var BlockGridNew = IgeEntityBox2d.extend({
 		IgeEntityBox2d.prototype.init.call(this, data);
 
 		this._grid = new SparseGrid();
-		this._lowerLocBound = new IgePoint2d(0, 0);
-		this._upperLocBound = new IgePoint2d(0, 0);
+
+		this.width(0);
+		this.height(0);
 
 		// TODO: Create Box2dBody.
 
@@ -20,37 +21,22 @@ var BlockGridNew = IgeEntityBox2d.extend({
 	},
 
 	count: function() {
-		// TODO: Modify this so that the BlockGrid keeps its own count in order to properly support
-		// blocks of multiple sizes, since several references will be placed in the underlying
-		// SparseGrid for blocks that are larger than 1x1.
 		return this._grid.count();
 	},
 
-	each: function(action) {
-		// TODO: Call action with each block as a parameter. This is effectively an iterator.
+	each: function(func, location, width, height) {
+		return this._grid.each(func, location, width, height);
 	},
 
-	get: function(location) {
-		// Validate parameters
-		if (!IgePoint2d.validatePoint(location)) {
-			this.log("Invalid location passed to BlockGridNew#get.", "warning");
-			return;
-		}
-
-		return this._grid.get(location);
+	get: function(location, width, height) {
+		return this._grid.get(location, width, height);
 	},
 
-	has: function(location) {
-		// Validate parameters
-		if (!IgePoint2d.validatePoint(location)) {
-			this.log("Invalid location passed to BlockGridNew#has.", "warning");
-			return false;
-		}
-
-		return this._grid.has(location);
+	has: function(location, width, height) {
+		return this._grid.has(location, width, height);
 	},
 
-	put: function(block, location) {
+	put: function(block, location, replace) {
 		// Validate parameters
 		if (!block) {
 			this.log("Invalid block passed to BlockGridNew#put.", "warning");
@@ -62,9 +48,14 @@ var BlockGridNew = IgeEntityBox2d.extend({
 			return;
 		}
 
-		this._updateLocationBounds(location);
+		var previousBlocks = this._grid.put(block, location, replace);
 
-		block.location(location);
+		if (previousBlocks === null) {
+			return null;
+		}
+
+		this.width(this._grid.width() * Block.WIDTH);
+		this.height(this._grid.height() * Block.HEIGHT);
 
 		// TODO: Determine where to place the block based on its row and column.
 		var gridCoordinates = this._gridCoordinatesForBlock(block);
@@ -75,10 +66,10 @@ var BlockGridNew = IgeEntityBox2d.extend({
 
 		// TODO: Modify this so that it places several references to blocks that are larger than
 		// 1x1
-		return this._grid.put(block,location);
+		return previousBlocks;
 	},
 
-	remove: function(location) {
+	remove: function(location, width, height) {
 		// Validate parameters
 		if (!IgePoint2d.validatePoint(location)) {
 			this.log("Invalid location passed to BlockGridNew#get.", "warning");
@@ -87,7 +78,7 @@ var BlockGridNew = IgeEntityBox2d.extend({
 
 		// TODO: Remove fixture for the block.
 
-		return this._grid.remove(location);
+		return this._grid.remove(location, width, height);
 	},
 
 	_gridCoordinatesForBlock: function(block) {
@@ -97,14 +88,15 @@ var BlockGridNew = IgeEntityBox2d.extend({
 			return {x: 0, y: 0};
 		}
 
-		var relLocation = this._relativeLocation(block.location());
+		var relLoc = this._grid.relativeLocation(block.gridData.loc);
 
-		var x = Block.WIDTH * relLocation.x - this._bounds2d.x2 +
-			(block.dimensions().cols * Block.WIDTH) / 2;
-		var y = Block.HEIGHT * relLocation.y - this._bounds2d.y2 +
-			(block.dimensions().rows * Block.HEIGHT) / 2;
+		var coordinates =
+		{
+			x: Block.WIDTH * relLoc.x - this._bounds2d.x2 + block._bounds2d.x2,
+			y: Block.HEIGHT * relLoc.y - this._bounds2d.y2 + block._bounds2d.y2
+		}
 
-		return {x: x, y: y};
+		return coordinates;
 	},
 
 	/**
@@ -115,22 +107,6 @@ var BlockGridNew = IgeEntityBox2d.extend({
 	 */
 	_relativeLocation: function(location) {
 		return GridLocation.subtract(location, this._lowerLocBound);
-	},
-
-	_updateLocationBounds: function(location) {
-		if (this.count() === 0) {
-			this._lowerLocBound = GridLocation.copy(location);
-			this._upperLocBound = GridLocation.copy(location);
-			return;
-		}
-
-		// Update lower bound.
-		this._lowerLocBound.x = Math.min(this._lowerLocBound.x, location.x);
-		this._lowerLocBound.y = Math.min(this._lowerLocBound.y, location.y);
-
-		// Update upper bound.
-		this._upperLocBound.x = Math.max(this._upperLocBound.x, location.x);
-		this._upperLocBound.y = Math.max(this._upperLocBound.y, location.y);
 	}
 });
 

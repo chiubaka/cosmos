@@ -1,10 +1,56 @@
 var GridClass = BlockGridNew;
 
-xdescribe("A BlockGrid", function() {
+describe("A BlockGrid", function() {
 	function beforeEachFunc() {
 		this.grid = new GridClass();
 		ige.isServer = true;
-		this.testObjects = [new IronBlock(), new CarbonBlock(), new IceBlock()];
+		this.testObjects = {};
+		this.testObjects["1x1"] = [
+			new IronBlock(),
+			new CarbonBlock(),
+			new IceBlock(),
+			new GoldBlock()
+		];
+
+		// TODO: This is a hack. When we actually have blocks that are 2x2 and 3x3, I won't need
+		// this.
+		var iron2x2 = new IronBlock();
+		iron2x2.gridData.width = iron2x2.gridData.height = 2;
+
+		var carbon2x2 = new CarbonBlock();
+		carbon2x2.gridData.width = carbon2x2.gridData.height = 2;
+
+		var ice2x2 = new IceBlock();
+		ice2x2.gridData.width = ice2x2.gridData.height = 2;
+
+		var gold2x2 = new GoldBlock();
+		gold2x2.gridData.width = gold2x2.gridData.height = 2;
+
+		this.testObjects["2x2"] = [
+			iron2x2,
+			carbon2x2,
+			ice2x2,
+			gold2x2
+		];
+
+		var iron3x3 = new IronBlock();
+		iron3x3.gridData.width = iron3x3.gridData.height = 3;
+
+		var carbon3x3 = new CarbonBlock();
+		carbon3x3.gridData.width = carbon3x3.gridData.height = 3;
+
+		var ice3x3 = new IceBlock();
+		ice3x3.gridData.width = ice3x3.gridData.height = 3;
+
+		var gold3x3 = new GoldBlock();
+		gold3x3.gridData.width = gold3x3.gridData.height = 3;
+
+		this.testObjects["3x3"] = [
+			iron3x3,
+			carbon3x3,
+			ice3x3,
+			gold3x3
+		];
 	}
 
 	function afterEachFunc() {
@@ -18,80 +64,38 @@ xdescribe("A BlockGrid", function() {
 	beforeEach(beforeEachFunc);
 	afterEach(afterEachFunc);
 
-	testGrid(function() {}, function() {});//beforeEachFunc, afterEachFunc);
+	testGrid(GridClass, function() {});//beforeEachFunc, afterEachFunc);
 
-	describe("should correctly determine the grid coordinates for a given grid location:",
+	it("should always return grid coordinates (0, 0) if there are no blocks already in the " +
+			"grid.",
 		function() {
-			it("should always return (0, 0) if there are no blocks already in the grid",
-				function() {
-					this.testObjects[0].location(new GridLocation(10, 10));
-					expect(this.grid._gridCoordinatesForBlock(this.testObjects[0]))
-						.toEqual(jasmine.objectContaining({x: 0, y: 0}));
-					this.testObjects[0].location(new GridLocation(0, 0));
-					expect(this.grid._gridCoordinatesForBlock(this.testObjects[0]))
-						.toEqual(jasmine.objectContaining({x: 0, y: 0}));
-					this.testObjects[0].location(new GridLocation(-10, -10));
-					expect(this.grid._gridCoordinatesForBlock(this.testObjects[0]))
-						.toEqual(jasmine.objectContaining({x: 0, y: 0}));
-				}
-			);
+			this.testObjects["1x1"][0].gridData.loc = new IgePoint2d(10, 10);
+			expect(this.grid._gridCoordinatesForBlock(this.testObjects["1x1"][0]))
+				.toEqual(jasmine.objectContaining({x: 0, y: 0}));
+
+			this.testObjects["1x1"][0].gridData.loc = new IgePoint2d(0, 0);
+			expect(this.grid._gridCoordinatesForBlock(this.testObjects["1x1"][0]))
+				.toEqual(jasmine.objectContaining({x: 0, y: 0}));
+
+			this.testObjects["1x1"][0].gridData.loc = new IgePoint2d(-10, -10);
+			expect(this.grid._gridCoordinatesForBlock(this.testObjects["1x1"][0]))
+				.toEqual(jasmine.objectContaining({x: 0, y: 0}));
 		}
 	);
 
-	describe("should correctly update its location bounds", function() {
-		function placeBlocksAndCheckLocationBounds() {
-			this.grid.put(this.testObjects[0], new GridLocation(5, 0));
-			expect(this.grid._lowerLocBound).toEqual(new GridLocation(5, 0));
-			expect(this.grid._upperLocBound).toEqual(new GridLocation(5, 0));
+	it("should correctly determine the grid coordinates for a given grid location.", function() {
+		this.grid.put(this.testObjects["1x1"][0], new IgePoint2d(0, 0), false);
 
-			this.grid.put(this.testObjects[0], new GridLocation(10, 0));
-			expect(this.grid._lowerLocBound).toEqual(new GridLocation(5, 0));
-			expect(this.grid._upperLocBound).toEqual(new GridLocation(10, 0));
+		this.testObjects["1x1"][1].gridData.loc = new IgePoint2d(1, 1);
+		expect(this.grid._gridCoordinatesForBlock(this.testObjects["1x1"][1]))
+			.toEqual(jasmine.objectContaining({x: 26, y: 26}));
 
-			this.grid.put(this.testObjects[0], new GridLocation(0, 9));
-			expect(this.grid._lowerLocBound).toEqual(new GridLocation(0, 0));
-			expect(this.grid._upperLocBound).toEqual(new GridLocation(10, 9));
+		this.testObjects["1x1"][2].gridData.loc = new IgePoint2d(-4, -4);
+		expect(this.grid._gridCoordinatesForBlock(this.testObjects["1x1"][2]))
+			.toEqual(jasmine.objectContaining({x: -104, y: -104}));
 
-			this.grid.put(this.testObjects[0], new GridLocation(-9, 0));
-			expect(this.grid._lowerLocBound).toEqual(new GridLocation(-9, 0));
-			expect(this.grid._upperLocBound).toEqual(new GridLocation(10, 9));
-
-			this.grid.put(this.testObjects[0], new GridLocation(0, -10));
-			expect(this.grid._lowerLocBound).toEqual(new GridLocation(-9, -10));
-			expect(this.grid._upperLocBound).toEqual(new GridLocation(10, 9));
-		}
-
-		it("when blocks are placed", function() {
-			placeBlocksAndCheckLocationBounds.call(this);
-		});
-
-		it("when blocks are removed", function() {
-			placeBlocksAndCheckLocationBounds.call(this);
-
-			this.grid.remove(new GridLocation(5, 0));
-			expect(this.grid._lowerLocBound).toEqual(new GridLocation(-9, -10));
-			expect(this.grid._upperLocBound).toEqual(new GridLocation(10, 9));
-
-			this.grid.remove(new GridLocation(10, 0));
-			expect(this.grid._lowerLocBound).toEqual(new GridLocation(-9, -10));
-			expect(this.grid._upperLocBound).toEqual(new GridLocation(0, 9));
-
-			this.grid.remove(new GridLocation(0 , -10));
-			expect(this.grid._lowerLocBound).toEqual(new GridLocation(-9, 0));
-			expect(this.grid._upperLocBound).toEqual(new GridLocation(0, 9));
-
-			this.grid.remove(new GridLocation(0 , 9));
-			expect(this.grid._lowerLocBound).toEqual(new GridLocation(-9, 0));
-			expect(this.grid._upperLocBound).toEqual(new GridLocation(0, 0));
-
-			this.grid.remove(new GridLocation(-9 , 0));
-			expect(this.grid._lowerLocBound).toEqual(new GridLocation(0, 0));
-			expect(this.grid._upperLocBound).toEqual(new GridLocation(0, 0));
-		});
-	});
-
-	// TODO: Create tests in this category.
-	xdescribe("should be able to handle blocks of different sizes:", function() {
-
+		this.testObjects["1x1"][3].gridData.loc = new IgePoint2d(-5, 2);
+		expect(this.grid._gridCoordinatesForBlock(this.testObjects["1x1"][3]))
+			.toEqual(jasmine.objectContaining({x: -130, y: 52}));
 	});
 });

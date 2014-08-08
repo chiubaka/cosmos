@@ -46,10 +46,7 @@ module.exports = function(grunt) {
 						'jasmine'
 					],
 					browsers: [
-						'PhantomJS',
-						'Chrome',
-						'Safari',
-						'Firefox'
+						'PhantomJS'
 					]
 				}
 			}
