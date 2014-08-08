@@ -25,7 +25,6 @@ module.exports = function(grunt) {
 			unit: {
 				options: {
 					singleRun: true,
-					reportSlowerThan: 8,
 					reporters: ['spec'],
 					files: [
 						'client/public/vendor/lodash/lodash.min.js',
@@ -37,13 +36,19 @@ module.exports = function(grunt) {
 					plugins: [
 						'karma-jasmine',
 						'karma-phantomjs-launcher',
+						'karma-chrome-launcher',
+						'karma-safari-launcher',
+						'karma-firefox-launcher',
 						'karma-spec-reporter'
 					],
 					frameworks: [
 						'jasmine'
 					],
 					browsers: [
-						'PhantomJS'
+						'PhantomJS',
+						'Chrome',
+						'Safari',
+						'Firefox'
 					]
 				}
 			}
