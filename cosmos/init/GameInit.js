@@ -209,13 +209,33 @@ return;
 	 * TODO: Running physics on the client may improve performance.
 	 */
 	initPhysics: function() {
+		var contactIdentifiers = {
+			'ship_drop': 1,
+		}
+
 		var customContacts = [{
 				body1_category: Ship.BOX2D_CATEGORY,
 				body2_category: Drop.BOX2D_CATEGORY,
-				disable_contact: true
+				disable_contact: true,
+				identifier: contactIdentifiers.ship_drop
 			}
 		];
 		ige.physicsSystem.newCustomContacts(customContacts);
+		// TODO: 
+		ige.physicsSystem.registerCollisionCallbacks({
+			beginContact: function(body1_id, body2_id, identifier) {
+				console.log('Begin contact. :' + identifier);
+			},
+
+			endContact: function(body1_id, body2_id, identifier) {
+			},
+
+			preSolve: function(body1_id, body2_id, identifier) {
+			},
+
+			postSolve: function(body1_id, body2_id, identifier) {
+			}
+		});
 		// TODO: @Eric Reimplement this
 		return;
 		// Set the contact listener methods to detect when
