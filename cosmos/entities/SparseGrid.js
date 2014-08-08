@@ -111,6 +111,17 @@ var SparseGrid = IgeClass.extend({
 			return;
 		}
 
+		if (!(object.gridData instanceof GridData)) {
+			this.log("SparseGrid#put: object does not have grid data component.", "warning");
+			return;
+		}
+
+		if (object.gridData.grid !== undefined) {
+			this.log("SparseGrid#put: attempt to add object that has already been added to a grid.",
+				"warning");
+			return;
+		}
+
 		var width = object.gridData.width;
 		var height = object.gridData.height;
 
@@ -132,6 +143,7 @@ var SparseGrid = IgeClass.extend({
 
 		// Update the location of the object.
 		object.gridData.loc = loc;
+		object.gridData.grid = this;
 
 		// Place the object in the grid.
 		this._setObject(object);
@@ -156,6 +168,7 @@ var SparseGrid = IgeClass.extend({
 		var self = this;
 		_.forEach(previousObjects, function(previousObject) {
 			self._unsetObject(previousObject);
+			previousObject.gridData.grid = undefined;
 		});
 
 		return previousObjects;

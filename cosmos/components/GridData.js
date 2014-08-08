@@ -3,6 +3,8 @@ var GridData = IgeClass.extend({
 	componentId: 'gridData',
 
 	loc: undefined,
+	grid: undefined,
+
 	width: undefined,
 	height: undefined,
 

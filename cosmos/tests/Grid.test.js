@@ -197,7 +197,7 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 
 			// Check if this works with negative values.
 			expect(this.grid.has(new IgePoint2d(-6, -6), 2, 2)).toBe(false);
-			this.grid.put(this.testObjects["1x1"][0], new IgePoint2d(-5, -6), false);
+			this.grid.put(this.testObjects["1x1"][1], new IgePoint2d(-5, -6), false);
 			expect(this.grid.has(new IgePoint2d(-6, -6), 2, 2)).toBe(true);
 
 			// Check if this function works even if only the top-left corner of a larger block is in
@@ -209,7 +209,7 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 			// Check if this function works even if only the bottom-right corner of a larger block
 			// is in the area.
 			expect(this.grid.has(new IgePoint2d(8, 8), 2, 2)).toBe(false);
-			this.grid.put(this.testObjects["2x2"][0], new IgePoint2d(7, 7), false);
+			this.grid.put(this.testObjects["2x2"][1], new IgePoint2d(7, 7), false);
 			expect(this.grid.has(new IgePoint2d(8, 8), 2, 2)).toBe(true);
 		});
 
@@ -339,6 +339,26 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 			expect(this.grid.count()).toBe(0);
 		});
 
+		it("should refuse to add an object if that object has already been added to a grid.",
+			function() {
+				TestUtils.disableLogging();
+
+				this.grid.put(this.testObjects["1x1"][0], new IgePoint2d(5, 0), false);
+				expect(this.grid.get(new IgePoint2d(5, 0))).toEqual([this.testObjects["1x1"][0]]);
+
+				this.grid.put(this.testObjects["1x1"][0], new IgePoint2d(6, 0), false);
+				expect(this.grid.get(new IgePoint2d(6, 0))).toEqual([]);
+
+				this.grid.remove(new IgePoint2d(5, 0));
+				expect(this.grid.get(new IgePoint2d(5, 0))).toEqual([]);
+
+				this.grid.put(this.testObjects["1x1"][0], new IgePoint2d(10, 10), false);
+				expect(this.grid.get(new IgePoint2d(10, 10))).toEqual([this.testObjects["1x1"][0]]);
+
+				TestUtils.enableLogging();
+			}
+		);
+
 		it("should return null if an object is placed without replacement and any of the spaces " +
 			"it would occupy is already occupied.",
 			function() {
@@ -347,9 +367,9 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 				expect(this.grid.put(this.testObjects["2x2"][0], new IgePoint2d(0, 0), false))
 					.toBe(null);
 
-				expect(this.grid.put(this.testObjects["2x2"][0], new IgePoint2d(1, 1), false))
+				expect(this.grid.put(this.testObjects["2x2"][1], new IgePoint2d(1, 1), false))
 					.toEqual([]);
-				expect(this.grid.put(this.testObjects["1x1"][0], new IgePoint2d(1, 1), false))
+				expect(this.grid.put(this.testObjects["1x1"][1], new IgePoint2d(1, 1), false))
 					.toEqual(null);
 			}
 		);
