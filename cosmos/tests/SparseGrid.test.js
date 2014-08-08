@@ -35,6 +35,92 @@ describe("A SparseGrid", function() {
 
 	testGrid();
 
+	it("should have undefined column counts for empty columns.", function() {
+		expect(this.grid._colCounts[0]).not.toBeDefined();
+		expect(this.grid._colCounts[100]).not.toBeDefined();
+		expect(this.grid._colCounts[-100]).not.toBeDefined();
+	});
+
+	it("should update column counts when objects are added.", function() {
+		this.grid.put(this.testObjects["1x1"][0], new IgePoint2d(10, 9), true);
+		expect(this.grid._colCounts[10]).toEqual(1);
+
+		this.grid.put(this.testObjects["3x3"][0], new IgePoint2d(10, 10), true);
+		expect(this.grid._colCounts[10]).toEqual(4);
+		expect(this.grid._colCounts[11]).toEqual(3);
+		expect(this.grid._colCounts[12]).toEqual(3);
+	});
+
+	it("should update column counts when objects are removed.", function() {
+		this.grid.put(this.testObjects["1x1"][0], new IgePoint2d(10, 9), true);
+		expect(this.grid._colCounts[10]).toEqual(1);
+
+		this.grid.put(this.testObjects["3x3"][0], new IgePoint2d(10, 10), true);
+		expect(this.grid._colCounts[10]).toEqual(4);
+		expect(this.grid._colCounts[11]).toEqual(3);
+		expect(this.grid._colCounts[12]).toEqual(3);
+
+		this.grid.put(this.testObjects["2x2"][0], new IgePoint2d(10, 13), false);
+		expect(this.grid._colCounts[10]).toEqual(6);
+		expect(this.grid._colCounts[11]).toEqual(5);
+		expect(this.grid._colCounts[12]).toEqual(3);
+
+		this.grid.remove(new IgePoint2d(10, 10));
+		expect(this.grid._colCounts[10]).toEqual(3);
+		expect(this.grid._colCounts[11]).toEqual(2);
+		expect(this.grid._colCounts[12]).not.toBeDefined();
+
+		this.grid.remove(new IgePoint2d(10, 9));
+		expect(this.grid._colCounts[10]).toEqual(2);
+		expect(this.grid._colCounts[11]).toEqual(2);
+		expect(this.grid._colCounts[12]).not.toBeDefined();
+
+		this.grid.remove(new IgePoint2d(10, 13));
+		expect(this.grid._colCounts[10]).not.toBeDefined();
+		expect(this.grid._colCounts[11]).not.toBeDefined();
+		expect(this.grid._colCounts[12]).not.toBeDefined();
+	});
+
+	it("should delete columns when their column count reaches 0.", function() {
+		this.grid.put(this.testObjects["1x1"][0], new IgePoint2d(10, 9), true);
+		expect(this.grid._colCounts[10]).toEqual(1);
+
+		this.grid.put(this.testObjects["3x3"][0], new IgePoint2d(10, 10), true);
+		expect(this.grid._colCounts[10]).toEqual(4);
+		expect(this.grid._colCounts[11]).toEqual(3);
+		expect(this.grid._colCounts[12]).toEqual(3);
+
+		this.grid.put(this.testObjects["2x2"][0], new IgePoint2d(10, 13), false);
+		expect(this.grid._colCounts[10]).toEqual(6);
+		expect(this.grid._colCounts[11]).toEqual(5);
+		expect(this.grid._colCounts[12]).toEqual(3);
+
+		expect(this.grid._grid[12]).toBeDefined();
+
+		this.grid.remove(new IgePoint2d(10, 10));
+		expect(this.grid._colCounts[10]).toEqual(3);
+		expect(this.grid._colCounts[11]).toEqual(2);
+		expect(this.grid._colCounts[12]).not.toBeDefined();
+		expect(this.grid._grid[12]).not.toBeDefined();
+
+		this.grid.remove(new IgePoint2d(10, 9));
+		expect(this.grid._colCounts[10]).toEqual(2);
+		expect(this.grid._colCounts[11]).toEqual(2);
+		expect(this.grid._colCounts[12]).not.toBeDefined();
+		expect(this.grid._grid[12]).not.toBeDefined();
+
+		expect(this.grid._grid[10]).toBeDefined();
+		expect(this.grid._grid[11]).toBeDefined();
+
+		this.grid.remove(new IgePoint2d(10, 13));
+		expect(this.grid._colCounts[10]).not.toBeDefined();
+		expect(this.grid._colCounts[11]).not.toBeDefined();
+		expect(this.grid._colCounts[12]).not.toBeDefined();
+
+		expect(this.grid._grid[10]).not.toBeDefined();
+		expect(this.grid._grid[11]).not.toBeDefined();
+	});
+
 	it("should have references to a large object at each location that it occupies.",
 		function() {
 			expect(this.grid.put(this.testObjects["3x3"][0], new IgePoint2d(10, 10), false))
@@ -43,7 +129,6 @@ describe("A SparseGrid", function() {
 				for (var y = 10; y < 13; y++) {
 					expect(this.grid._grid[x][y]).toBe(this.testObjects["3x3"][0]);
 				}
-				expect(this.grid._colCounts[x]).toEqual(3);
 				expect(this.grid._colCounts[x]).toEqual(3);
 			}
 			expect(this.grid.count()).toEqual(1);
