@@ -1315,6 +1315,7 @@ var BlockGrid = IgeEntity.extend({
 			restitution: BlockGrid.BLOCK_FIXTURE_RESTITUTION,
 			density: BlockGrid.BLOCK_FIXTURE_DENSITY,
 			isSensor: false,
+			shapeType: 'BOX',
 			hwidth: (block.numCols() * Block.WIDTH) / 2 -
 				(2 * BlockGrid.BLOCK_FIXTURE_PADDING),
 			hheight: (block.numRows() * Block.HEIGHT) / 2 -

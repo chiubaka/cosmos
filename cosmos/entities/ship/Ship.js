@@ -213,7 +213,7 @@ var Ship = BlockStructure.extend({
 		this.cargo = new Cargo();
 
 		this
-			//.addSensor(300)
+			.addSensor(300)
 			// TODO: @Eric reimplement this
 			//.attractionStrength(1)
 			.relocate();
@@ -240,34 +240,18 @@ var Ship = BlockStructure.extend({
 	 * @instance
 	 */
 	addSensor: function(radius) {
-		// TODO: @Eric Reimplement this
-		return;
-		// Create the fixture
 		var fixtureDef = {
-			density: 0.0,
 			friction: 0.0,
 			restitution: 0.0,
+			density: 0.0,
 			isSensor: true,
-			shape: {
-				type: 'circle',
-				data: {
-					radius: radius,
-					x: 0,
-					y: 0
-				}
-			}
+			shapeType: 'CIRCLE',
+			radius: radius,
+			x: 0.0,
+			y: 0.0
 		};
 
-		var tempFixture = ige.box2d.createFixture(fixtureDef);
-		var tempShape = new ige.box2d.b2CircleShape();
-
-		tempShape.SetRadius(fixtureDef.shape.data.radius / ige.box2d._scaleRatio);
-		tempShape.SetLocalPosition(new ige.box2d.b2Vec2(fixtureDef.shape.data.x /
-			ige.box2d._scaleRatio, fixtureDef.shape.data.y / ige.box2d._scaleRatio));
-
-		tempFixture.shape = tempShape;
-
-		this._box2dBody.CreateFixture(tempFixture);
+		this.physicsBody.newFixture(this, fixtureDef);
 
 		return this;
 	},
