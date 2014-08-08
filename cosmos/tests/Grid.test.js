@@ -50,7 +50,8 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 
 			it("when a location without the GridData component is passed to the put function.",
 				function() {
-					this.grid.put(this.testObjects["1x1"][0], {x: 0, y: 0}, true);
+					this.testObjects["1x1"][0].gridData = undefined;
+					this.grid.put(this.testObjects["1x1"][0], new IgePoint2d(0, 0), true);
 				}
 			);
 

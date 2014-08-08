@@ -3,11 +3,15 @@ var SparseGrid = IgeClass.extend({
 
 	_count: undefined,
 	_grid: undefined,
+	_lowerBound: undefined,
+	_upperBound: undefined,
 
 	init: function(data) {
 		this._grid = {};
 		this._count = 0;
 		this._colCounts = {};
+		this._lowerBound = new IgePoint2d(0, 0);
+		this._upperBound = new IgePoint2d(0, 0);
 	},
 
 	count: function() {
@@ -111,6 +115,13 @@ var SparseGrid = IgeClass.extend({
 		return brokeEarly;
 	},
 
+	height: function() {
+		if (this.count() === 0) {
+			return 0;
+		}
+		return this._upperBound.y - this._lowerBound.y + 1;
+	},
+
 	put: function(object, loc, replace) {
 		if (object === undefined) {
 			this.log("SparseGrid#put: no object parameter to put.", "warning");
@@ -161,6 +172,8 @@ var SparseGrid = IgeClass.extend({
 		object.gridData.loc = loc;
 		object.gridData.grid = this;
 
+		this._updateBoundsPut(object);
+
 		// Place the object in the grid.
 		this._setObject(object);
 
@@ -181,17 +194,40 @@ var SparseGrid = IgeClass.extend({
 
 		//console.log("SparseGrid#remove: " + previousObjects.length + " objects to replace.");
 
+		var extremeBounds = {
+			left: Number.MAX_VALUE,
+			top: Number.MAX_VALUE,
+			right: -Number.MAX_VALUE,
+			bottom: -Number.MAX_VALUE
+		};
+
 		var self = this;
 		_.forEach(previousObjects, function(previousObject) {
 			self._unsetObject(previousObject);
 			previousObject.gridData.grid = undefined;
+
+			var bounds = previousObject.gridData.bounds();
+
+			extremeBounds.left = Math.min(extremeBounds.left, bounds.left);
+			extremeBounds.top = Math.min(extremeBounds.top, bounds.top);
+			extremeBounds.right = Math.max(extremeBounds.right, bounds.right);
+			extremeBounds.bottom = Math.max(extremeBounds.bottom, bounds.bottom);
 		});
+
+		this._updateBoundsRemove(extremeBounds);
 
 		return previousObjects;
 	},
 
 	toJSON: function() {
 
+	},
+
+	width: function() {
+		if (this.count() === 0) {
+			return 0;
+		}
+		return this._upperBound.x - this._lowerBound.x + 1;
 	},
 
 	_createX: function(x) {
@@ -266,6 +302,63 @@ var SparseGrid = IgeClass.extend({
 		this._count--;
 
 		//console.log("SparseGrid#_unsetObject: decrementing count: " + this._count);
+	},
+
+	_updateBoundsPut: function(object) {
+		var left = object.gridData.loc.x;
+		var top = object.gridData.loc.y;
+		var right = left + object.gridData.width - 1;
+		var bottom = top + object.gridData.height - 1;
+
+		if (this.count() === 0) {
+			this._lowerBound = object.gridData.loc.clone();
+			this._upperBound.x = new IgePoint2d(right, bottom);
+			return;
+		}
+
+		this._lowerBound.x = Math.min(this._lowerBound.x, left);
+		this._lowerBound.y = Math.min(this._lowerBound.y, top);
+
+		this._upperBound.x = Math.max(this._upperBound.x, right);
+		this._upperBound.y = Math.max(this._upperBound.y, bottom);
+	},
+
+	_updateBoundsRemove: function(extremeBounds) {
+		if (this.count() === 0) {
+			return;
+		}
+
+		if (extremeBounds.left === this._lowerBound.x || extremeBounds.right === this._upperBound.x) {
+			this._updateHorizontalBounds();
+		}
+
+		if (extremeBounds.top === this._lowerBound.y || extremeBounds.top === this._upperBound.y) {
+			this._updateVerticalBounds();
+		}
+	},
+
+	_updateHorizontalBounds: function() {
+		this._upperBound.x = -Number.MAX_VALUE;
+		this._lowerBound.x = Number.MAX_VALUE;
+		var self = this;
+		_.forOwn(this._grid, function(col, key) {
+			var num = parseInt(key);
+			self._upperBound.x = Math.max(self._upperBound.x, num);
+			self._lowerBound.x = Math.min(self._lowerBound.x, num);
+		});
+	},
+
+	_updateVerticalBounds: function() {
+		this._upperBound.y = -Number.MAX_VALUE;
+		this._lowerBound.y = Number.MAX_VALUE;
+		var self = this;
+		_.forOwn(this._grid, function(col, key) {
+			_.forOwn(col, function(val, key) {
+				var num = parseInt(key);
+				self._upperBound.y = Math.max(self._upperBound.y, num);
+				self._lowerBound.y = Math.min(self._lowerBound.y, num);
+			})
+		});
 	}
 });
 
