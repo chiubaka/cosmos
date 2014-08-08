@@ -49,6 +49,9 @@ var SparseGrid = IgeClass.extend({
 			return;
 		}
 
+		//console.log("SparseGrid#get: loc.x: " + loc.x + ", loc.y: " + loc.y + ", width: " + width +
+		//	", height: " + height + ".");
+
 		// If no width and height are provided, just get the location provided.
 		width = (width === undefined) ? 1 : width;
 		height = (height === undefined) ? 1 : height;
@@ -57,6 +60,8 @@ var SparseGrid = IgeClass.extend({
 		var objectsSet = {};
 
 		this.each(function(object) {
+			//console.log("SparseGrid#get: considering object at x:" + object.gridData.loc.x +
+			//	", y:" + object.gridData.loc.y + ".");
 			if (!objectsSet[object.id()]) {
 				objectsSet[object.id()] = true;
 				objects.push(object);
@@ -146,6 +151,8 @@ var SparseGrid = IgeClass.extend({
 
 		var previousObjects = this.get(loc, width, height);
 
+		//console.log("SparseGrid#remove: " + previousObjects.length + " objects to replace.");
+
 		var self = this;
 		_.forEach(previousObjects, function(previousObject) {
 			self._unsetObject(previousObject);
@@ -228,6 +235,8 @@ var SparseGrid = IgeClass.extend({
 
 		// Update the global count.
 		this._count--;
+
+		//console.log("SparseGrid#_unsetObject: decrementing count: " + this._count);
 	}
 });
 
