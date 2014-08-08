@@ -25,6 +25,7 @@ module.exports = function(grunt) {
 			unit: {
 				options: {
 					singleRun: true,
+					reportSlowerThan: 8,
 					reporters: ['spec'],
 					files: [
 						'client/public/vendor/lodash/lodash.min.js',
