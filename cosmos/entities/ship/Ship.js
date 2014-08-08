@@ -214,8 +214,7 @@ var Ship = BlockStructure.extend({
 
 		this
 			.addSensor(300)
-			// TODO: @Eric reimplement this
-			//.attractionStrength(1)
+			.attractionStrength(0.01)
 			.relocate();
 	},
 

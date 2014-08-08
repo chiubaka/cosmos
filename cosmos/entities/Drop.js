@@ -146,13 +146,8 @@ var Drop = BlockGrid.extend({
 			// Attract the block grid to another body. For example, small asteroids
 			// are attracted to player ships.
 			if (this.attractedTo() !== undefined) {
-				var attractedToBody = this.attractedTo()._box2dBody;
-				var thisBody = this._box2dBody;
-				var impulse = new ige.box2d.b2Vec2(0, 0);
-				impulse.Add(attractedToBody.GetWorldCenter());
-				impulse.Subtract(thisBody.GetWorldCenter());
-				impulse.Multiply(this.attractedTo().attractionStrength());
-				thisBody.ApplyImpulse(impulse, thisBody.GetWorldCenter());
+				var attractor = this.attractedTo();
+				this.physicsBody.attractTo(attractor, attractor.attractionStrength());
 			}
 
 
