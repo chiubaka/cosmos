@@ -148,6 +148,10 @@ var Ship = BlockStructure.extend({
 	Updates the engines and thrusters lists on each add
 	*/
 	add: function(row, col, block, checkForNeighbors) {
+		if (block instanceof ControlBlock) {
+			return false;
+		}
+
 		var blockAdded = BlockStructure.prototype.add.call(this, row, col, block, checkForNeighbors);
 		if (blockAdded && ige.isServer) {
 			DbPlayer.update(this.player().id(), this.player(), function() {});
