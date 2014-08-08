@@ -357,7 +357,7 @@ var testGrid = function(GridClass, TestGridObject) {
 			var NUM_ITERATIONS = 1000;
 			var json;
 
-			it("when adding objects in a row.", function() {
+			it("when placing objects in a row.", function() {
 				var start = +new Date();//.getTime();
 				for (var x = 0; x < NUM_ITERATIONS; x++) {
 					this.grid.put(new TestGridObject(1, 1), new IgePoint2d(x, 0), false);
@@ -370,7 +370,7 @@ var testGrid = function(GridClass, TestGridObject) {
 				expect(averageTime).toBeLessThan(1);
 			});
 
-			it("when adding objects in a column.", function() {
+			it("when placing objects in a column.", function() {
 				var start = +new Date();//.getTime();
 				for (var y = 0; y < NUM_ITERATIONS; y++) {
 					this.grid.put(new TestGridObject(1, 1), new IgePoint2d(0, y), false);
@@ -383,7 +383,7 @@ var testGrid = function(GridClass, TestGridObject) {
 				expect(averageTime).toBeLessThan(1);
 			});
 
-			it("when adding objects along a diagonal.", function() {
+			it("when placing objects along a diagonal.", function() {
 				var start = +new Date();//.getTime();
 				for (var i = 0; i < NUM_ITERATIONS; i++) {
 					this.grid.put(new TestGridObject(1, 1), new IgePoint2d(i, i), false);
