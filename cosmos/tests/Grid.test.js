@@ -19,6 +19,23 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 				TestUtils.enableLogging();
 			});
 
+			it("when an invalid function is passed to the each function.", function() {
+				this.grid.each();
+				this.grid.each({});
+			});
+
+			it("when no location is passed to the each function.", function() {
+				this.grid.each(function() {}, undefined, 4, 4);
+			});
+
+			it("when no width is passed to the each function.", function() {
+				this.grid.each(function() {}, new IgePoint2d(0, 0), undefined, 4);
+			});
+
+			it("when no height is passed to the each function.", function() {
+				this.grid.each(function() {}, new IgePoint2d(0, 0), 4, undefined);
+			});
+
 			it("when no object is passed to the put function.", function() {
 				this.grid.put(undefined, new IgePoint2d(0, 0), true);
 			});

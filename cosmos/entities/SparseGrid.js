@@ -15,10 +15,26 @@ var SparseGrid = IgeClass.extend({
 	},
 
 	each: function(func, loc, width, height) {
+		if (typeof(func) !== "function") {
+			this.log("SparseGrid#each: passed func value is not a function.", "warning");
+			return;
+		}
+
 		if (!IgePoint2d.validatePoint(loc)) {
 			// If location is not provided, iterate over all items in the grid
 			// TODO: Set loc, width, height so that all items are iterated over
 			this.log("Invalid point passed to SparseGrid#each.", "warning");
+			return;
+		}
+
+		if (width === undefined) {
+			this.log("SparseGrid#each: no width parameter provided.", "warning");
+			return;
+		}
+
+		if (height === undefined) {
+			this.log("SparseGrid#each: no height parameter provided.", "warning");
+			return;
 		}
 
 		for (var x = loc.x; x < loc.x + width; x++) {
