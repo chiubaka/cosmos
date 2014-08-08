@@ -312,7 +312,7 @@ var SparseGrid = IgeClass.extend({
 
 		if (this.count() === 0) {
 			this._lowerBound = object.gridData.loc.clone();
-			this._upperBound.x = new IgePoint2d(right, bottom);
+			this._upperBound = new IgePoint2d(right, bottom);
 			return;
 		}
 
