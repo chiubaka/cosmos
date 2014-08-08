@@ -10,7 +10,7 @@ Healths[CargoBlock.prototype.classId()] =
 	max: 20
 };
 
-Healths[ControlBlock.prototype.classId()] =
+Healths[BridgeBlock.prototype.classId()] =
 {
 	max: 45
 };

@@ -160,9 +160,9 @@ Types[CargoBlock.prototype.classId()] =
 	text: "Cargo Hold"
 };
 
-Types[ControlBlock.prototype.classId()] =
+Types[BridgeBlock.prototype.classId()] =
 {
-	text: "Control"
+	text: "Command Center"
 };
 
 /* Engines */
