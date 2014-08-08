@@ -198,7 +198,6 @@ var Ship = BlockStructure.extend({
 		// If the ship has no longer controllable
 		if (!this.controllable()) {
 			// Then it is dead
-			this.log("Ship death");
 			data = {};
 			ige.network.stream.queueCommand('cosmos:ship.death', data, this.player().clientId());
 		}
