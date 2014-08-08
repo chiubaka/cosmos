@@ -1,11 +1,33 @@
 var TestGridObject = IgeEntity.extend({
 	classId: 'TestGridObject',
 
-	init: function(width, height) {
+	value: undefined,
+
+	init: function(width, height, value) {
 		IgeEntity.prototype.init.call(this);
 		this.addComponent(GridData, {width: width, height: height});
+
+		if (value !== undefined) {
+			this.value = value;
+		}
+		else {
+			this.value = Math.floor(Math.random() * 100000) + 1;
+		}
+	},
+
+	toJSON: function() {
+		return {
+			value: this.value,
+			gridData: this.gridData.toJSON()
+		}
 	}
 });
+
+TestGridObject.fromJSON = function(json) {
+	var object = new TestGridObject(json.gridData.width, json.gridData.height, json.value);
+	object.gridData.loc = new IgePoint2d(json.gridData.loc.x, json.gridData.loc.y);
+	return object;
+}
 
 describe("A SparseGrid", function() {
 	function beforeEachFunc() {
@@ -33,7 +55,7 @@ describe("A SparseGrid", function() {
 
 	beforeEach(beforeEachFunc);
 
-	testGrid();
+	testGrid(SparseGrid, TestGridObject);
 
 	it("should have undefined column counts for empty columns.", function() {
 		expect(this.grid._colCounts[0]).not.toBeDefined();
@@ -198,6 +220,50 @@ describe("A SparseGrid", function() {
 	it("should always have a height of 0 if there are no objects inside of it.", function() {
 		expect(this.grid.height()).toBe(0);
 	});
+
+	it("should be serializable to JSON and deserialized back to an equivalent object.",
+		function() {
+			for (var i = 0; i < 1500; i++) {
+				var size = 1;
+				var x = i;
+				if (i < 500) {
+
+				}
+				else if (i < 1000) {
+					size = 2;
+					x = x * 2;
+				}
+				else {
+					size = 3;
+					x = x * 3;
+				}
+				this.grid.put(new TestGridObject(size, size), new IgePoint2d(x, 0), false);
+			}
+
+			var json = this.grid.toJSON();
+
+			var deserialized = SparseGrid.fromJSON(TestGridObject, json);
+
+			for (var i = 0; i < 1000; i++) {
+				var x = i;
+				if (i < 500) {
+
+				}
+				else if (i < 1000) {
+					x = x * 2;
+				}
+				else {
+					x = x * 3;
+				}
+
+				var originalObject = this.grid.get(new IgePoint2d(x, 0))[0];
+				var clonedObject = deserialized.get(new IgePoint2d(x, 0))[0];
+				expect(clonedObject.value).toEqual(originalObject.value);
+				expect(clonedObject.gridData.width).toEqual(originalObject.gridData.width);
+				expect(clonedObject.gridData.height).toEqual(originalObject.gridData.height);
+			}
+		}
+	);
 
 	describe("should update internal bounds and dimensions", function() {
 		it("when an object is added.", function() {

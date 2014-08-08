@@ -1,21 +1,11 @@
 /**
  * Tests an object that has the Grid interface. If no before or after function is provided, it is
  * expected that the parent describe sets up all of the necessary test objects.
- * @param beforeEachFunc {function?} The function to run before each Grid interface test. This
- * function must, at minimum, create an object and assign it to this.grid and assign an array of
- * objects to this.testObjects.
- * @param afterEachFunc {function?} The function to run after each Grid interface test.
+ * @param GridClass {Object} The object for the GridClass.
+ * @param TestGridObject {Object} The object for the TestGridObject.
  */
-var testGrid = function(beforeEachFunc, afterEachFunc) {
+var testGrid = function(GridClass, TestGridObject) {
 	describe("implementing the Grid interface", function() {
-		if (typeof(beforeEachFunc) === "function") {
-			beforeEach(beforeEachFunc);
-		}
-
-		if (typeof(afterEachFunc) === "function") {
-			afterEach(afterEachFunc);
-		}
-
 		describe("should have public interface functions that fails gracefully", function() {
 			beforeEach(function() {
 				TestUtils.disableLogging();
@@ -362,5 +352,77 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 				TestUtils.enableLogging();
 			}
 		);
+
+		describe("should be time efficient", function() {
+			var NUM_ITERATIONS = 1000;
+			var json;
+
+			it("when adding objects in a row.", function() {
+				var start = +new Date();//.getTime();
+				for (var x = 0; x < NUM_ITERATIONS; x++) {
+					this.grid.put(new TestGridObject(1, 1), new IgePoint2d(x, 0), false);
+				}
+				var end = +new Date();//.getTime();
+				var diff = end - start;
+				var averageTime = diff / NUM_ITERATIONS;
+
+				console.log(averageTime);
+				expect(averageTime).toBeLessThan(1);
+			});
+
+			it("when adding objects in a column.", function() {
+				var start = +new Date();//.getTime();
+				for (var y = 0; y < NUM_ITERATIONS; y++) {
+					this.grid.put(new TestGridObject(1, 1), new IgePoint2d(0, y), false);
+				}
+				var end = +new Date();//.getTime();
+				var diff = end - start;
+				var averageTime = diff / NUM_ITERATIONS;
+
+				console.log(averageTime);
+				expect(averageTime).toBeLessThan(1);
+			});
+
+			it("when adding objects along a diagonal.", function() {
+				var start = +new Date();//.getTime();
+				for (var i = 0; i < NUM_ITERATIONS; i++) {
+					this.grid.put(new TestGridObject(1, 1), new IgePoint2d(i, i), false);
+				}
+				var end = +new Date();//.getTime();
+				var diff = end - start;
+				var averageTime = diff / NUM_ITERATIONS;
+
+				console.log(averageTime);
+				expect(averageTime).toBeLessThan(1);
+			});
+
+			it("when serializing to JSON.", function() {
+				for (var x = 0; x < 500; x++) {
+					this.grid.put(new TestGridObject(1, 1), new IgePoint2d(x, 0), false);
+				}
+
+				var start = +new Date();//.getTime();
+				for (var i = 0; i < NUM_ITERATIONS; i++) {
+					json = this.grid.toJSON();
+				}
+				var end = +new Date();//.getTime();
+				var diff = end - start;
+				var averageTime = diff / NUM_ITERATIONS;
+				console.log(averageTime);
+				expect(averageTime).toBeLessThan(8);
+			});
+
+			it("when deserializing from JSON.", function() {
+				var start = +new Date();//.getTime();
+				for (var i = 0; i < NUM_ITERATIONS; i++) {
+					GridClass.fromJSON(TestGridObject, json);
+				}
+				var end = +new Date();//.getTime();
+				var diff = end - start;
+				var averageTime = diff / NUM_ITERATIONS;
+				console.log(averageTime);
+				expect(averageTime).toBeLessThan(8);
+			});
+		});
 	});
 };

@@ -220,7 +220,15 @@ var SparseGrid = IgeClass.extend({
 	},
 
 	toJSON: function() {
+		var objects = this.get(this._lowerBound, this.width(), this.height());
 
+		var json = [];
+
+		_.forEach(objects, function(object) {
+			json.push(object.toJSON());
+		});
+
+		return json;
 	},
 
 	width: function() {
@@ -361,5 +369,16 @@ var SparseGrid = IgeClass.extend({
 		});
 	}
 });
+
+SparseGrid.fromJSON = function(ObjectClass, json) {
+	var grid = new SparseGrid();
+
+	_.forEach(json, function(objectJSON) {
+		var object = ObjectClass.fromJSON(objectJSON);
+		grid.put(object, object.gridData.loc, false);
+	});
+
+	return grid;
+};
 
 if (typeof(module) !== "undefined" && typeof(module.exports) !== "undefined") { module.exports = SparseGrid; }

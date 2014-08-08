@@ -21,6 +21,17 @@ var GridData = IgeClass.extend({
 		bounds.bottom = bounds.top + this.height;
 
 		return bounds;
+	},
+
+	toJSON: function() {
+		return {
+			loc: {
+				x: this.loc.x,
+				y: this.loc.y,
+			},
+			width: this.width,
+			height: this.height,
+		};
 	}
 });
 
