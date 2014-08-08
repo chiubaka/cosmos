@@ -36,6 +36,8 @@ var MetricsHandler = IgeEventingClass.extend({
 			/* player */
 			"cosmos:player.connect": true,
 			"cosmos:player.attack": true,
+			'cosmos:player.relocate.mouseDown': true,
+			'cosmos:player.newShip.mouseDown': true,
 
 			/* engine */
 			"cosmos:engine.performance": true,
