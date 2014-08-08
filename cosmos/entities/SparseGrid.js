@@ -47,8 +47,6 @@ var SparseGrid = IgeClass.extend({
 				continue;
 			}
 
-			//console.log("SparseGrid#each: has x: " + x);
-
 			for (var y = loc.y; y < loc.y + height; y++) {
 				var object = this._grid[x][y];
 				if (object !== undefined) {
@@ -69,9 +67,6 @@ var SparseGrid = IgeClass.extend({
 			return;
 		}
 
-		//console.log("SparseGrid#get: loc.x: " + loc.x + ", loc.y: " + loc.y + ", width: " + width +
-		//	", height: " + height + ".");
-
 		// If no width and height are provided, just get the location provided.
 		width = (width === undefined) ? 1 : width;
 		height = (height === undefined) ? 1 : height;
@@ -80,8 +75,6 @@ var SparseGrid = IgeClass.extend({
 		var objectsSet = {};
 
 		this.each(function(object) {
-			//console.log("SparseGrid#get: considering object at x:" + object.gridData.loc.x +
-			//	", y:" + object.gridData.loc.y + ".");
 			if (!objectsSet[object.id()]) {
 				objectsSet[object.id()] = true;
 				objects.push(object);
@@ -104,8 +97,6 @@ var SparseGrid = IgeClass.extend({
 		// The each function will return true to indicate that it looped through everything and
 		// false to indicate that it finished early (due to our stopping it).
 		var brokeEarly = this.each(function(object) {
-			//console.log("SparseGrid#has: object found: " + object.id());
-
 			// Return true to stop the iterator early.
 			return true;
 		}, loc, width, height);
@@ -192,8 +183,6 @@ var SparseGrid = IgeClass.extend({
 
 		var previousObjects = this.get(loc, width, height);
 
-		//console.log("SparseGrid#remove: " + previousObjects.length + " objects to replace.");
-
 		var extremeBounds = {
 			left: Number.MAX_VALUE,
 			top: Number.MAX_VALUE,
@@ -254,8 +243,6 @@ var SparseGrid = IgeClass.extend({
 			this._createX(x);
 		}
 
-		// TODO: Remove all commented out console.log statements.
-		//console.log("SparseGrid#_set: object has been placed at location (" + x + ", " + y + ").");
 		this._grid[x][y] = object;
 
 		// Increase the col count for this x value so that we can tell when a grid column is empty.
@@ -266,13 +253,9 @@ var SparseGrid = IgeClass.extend({
 		var x = object.gridData.loc.x;
 		var y = object.gridData.loc.y;
 
-		//console.log("SparseGrid#_setObject: object width: " + object.gridData.width +
-		//	", object height: " + object.gridData.height + ".");
-
 		// Loop through and place a reference to the object at each location it will occupy.
 		for (var dx = 0; dx < object.gridData.width; dx++) {
 			for (var dy = 0; dy < object.gridData.height; dy++) {
-				//console.log("SparseGrid#_setObject: inner loop called.");
 				this._set(object, x + dx, y + dy);
 			}
 		}
@@ -308,8 +291,6 @@ var SparseGrid = IgeClass.extend({
 
 		// Update the global count.
 		this._count--;
-
-		//console.log("SparseGrid#_unsetObject: decrementing count: " + this._count);
 	},
 
 	_updateBoundsPut: function(object) {
