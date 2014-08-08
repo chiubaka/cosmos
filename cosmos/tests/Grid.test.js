@@ -402,26 +402,67 @@ var testGrid = function(beforeEachFunc, afterEachFunc) {
 		it("should return an empty list if an object is placed successfully without displacing " +
 				"any other objects.",
 			function() {
+				expect(this.grid.put(this.testObjects["1x1"][0], new IgePoint2d(10, 10), true))
+					.toEqual([]);
 
+				expect(this.grid.put(this.testObjects["1x1"][1], new IgePoint2d(-10, -10), false))
+					.toEqual([]);
 			}
 		);
 
 		it("should clear all locations that an object occupied when that object is removed.",
 			function() {
+				expect(this.grid.put(this.testObjects["3x3"][0], new IgePoint2d(10, 10), true))
+					.toEqual([]);
 
+				expect(this.grid.remove(new IgePoint2d(10, 10))).toEqual([this.testObjects["3x3"][0]]);
+
+				for (var x = 10; x < 13; x++) {
+					for (var y = 10; y < 13; y++) {
+						if (this.grid._grid[x]) {
+							expect(this.grid._grid[x][y]).not.toBeDefined();
+						}
+					}
+				}
+
+				expect(this.grid.put(this.testObjects["3x3"][0], new IgePoint2d(10, 10), true))
+					.toEqual([]);
+
+				expect(this.grid.remove(new IgePoint2d(10, 10), 2, 2)).toEqual([this.testObjects["3x3"][0]]);
+
+				for (var x = 10; x < 13; x++) {
+					for (var y = 10; y < 13; y++) {
+						if (this.grid._grid[x]) {
+							expect(this.grid._grid[x][y]).not.toBeDefined();
+						}
+					}
+				}
 			}
 		);
 
 		it("should clear all locations that displaced objects occupied when a new object is " +
 			"added.",
 			function() {
+				this.grid.put(this.testObjects["2x2"][0], new IgePoint2d(100, 100), false);
+				expect(this.grid.put(this.testObjects["1x1"][0], new IgePoint2d(100, 100), true))
+					.toEqual([this.testObjects["2x2"][0]]);
 
+				for (var x = 100; x < 102; x++) {
+					for (var y = 100; y < 102; y++) {
+						if (x === 100 && y === 100) {
+							continue;
+						}
+						if (this.grid._grid[x]) {
+							expect(this.grid._grid[x][y]).not.toBeDefined();
+						}
+					}
+				}
 			}
 		);
 
 		xit("should be able to handle hundreds of objects.", function() {
 			// Num objects must be even or the test will break.
-			var numObjects = 100;
+			var numObjects = 200;
 
 			// Add numObjects objects to the grid.
 			for (var i = 0; i < numObjects; i++) {
