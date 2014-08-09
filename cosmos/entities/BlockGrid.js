@@ -8,7 +8,7 @@ var BlockGrid = IgeEntity.extend({
 	_upperLocBound: undefined,
 
 	init: function(data) {
-		IgeEntityBox2d.prototype.init.call(this, data);
+		IgeEntity.prototype.init.call(this, data);
 
 		this._grid = new SparseGrid();
 

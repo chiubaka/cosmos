@@ -264,7 +264,7 @@ var Ship = BlockStructure.extend({
 
 		tempFixture.shape = tempShape;
 
-		this._box2dBody.CreateFixture(tempFixture);
+		this._physicsContainer._box2dBody.CreateFixture(tempFixture);
 
 		return this;
 	},
