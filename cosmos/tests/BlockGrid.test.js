@@ -3,7 +3,7 @@ var GridClass = BlockGridNew;
 describe("A BlockGrid", function() {
 	function beforeEachFunc() {
 		this.grid = new GridClass();
-		ige.isServer = true;
+		//ige.isServer = true;
 		this.testObjects = {};
 		this.testObjects["1x1"] = [
 			new IronBlock(),
@@ -54,7 +54,7 @@ describe("A BlockGrid", function() {
 	}
 
 	function afterEachFunc() {
-		ige.isServer = false;
+		//ige.isServer = false;
 		this.grid.destroy();
 	}
 
@@ -88,13 +88,13 @@ describe("A BlockGrid", function() {
 	});
 
 	it("should correctly compute render coordinates for locations.", function() {
-		expect(this.grid._renderCoordinatesForLocation(new IgePoint2d(0, 0)))
+		expect(BlockGrid.coordinatesForLocation(new IgePoint2d(0, 0)))
 			.toEqual(jasmine.objectContaining({x: 0, y: 0}));
 
-		expect(this.grid._renderCoordinatesForLocation(new IgePoint2d(100, 99)))
+		expect(BlockGrid.coordinatesForLocation(new IgePoint2d(100, 99)))
 			.toEqual(jasmine.objectContaining({x: 2600, y: 2574}));
 
-		expect(this.grid._renderCoordinatesForLocation(new IgePoint2d(-13, -20)))
+		expect(BlockGrid.coordinatesForLocation(new IgePoint2d(-13, -20)))
 			.toEqual(jasmine.objectContaining({x: -338, y: -520}));
 	});
 
