@@ -264,7 +264,7 @@ var Ship = BlockStructure.extend({
 
 		tempFixture.shape = tempShape;
 
-		this._physicsContainer._box2dBody.CreateFixture(tempFixture);
+		this.box2dBody().CreateFixture(tempFixture);
 
 		return this;
 	},
@@ -379,16 +379,16 @@ var Ship = BlockStructure.extend({
 				this._prevMovementBlocks.thrusters = this.thrusters().length;
 
 				if (this.controls().left) {
-					this._box2dBody.ApplyTorque(angularImpulse);
+					this.box2dBody().ApplyTorque(angularImpulse);
 				}
 				if (this.controls().right) {
-					this._box2dBody.ApplyTorque(-angularImpulse);
+					this.box2dBody().ApplyTorque(-angularImpulse);
 				}
 			}
 
 			if (this.controls().up || this.controls().down) {
 				// the "- Math.PI/2" below makes the ship move forward and backwards, instead of side to side.
-				var angle = this._box2dBody.GetAngle() - Math.PI/2;
+				var angle = this.box2dBody().GetAngle() - Math.PI/2;
 				var scaleRatio = ige.box2d.scaleRatio();
 				var thisX = this.translate().x();
 				var thisY = this.translate().y();
@@ -413,7 +413,7 @@ var Ship = BlockStructure.extend({
 				}
 
 				// the "- Math.PI/2" below makes the ship move forward and backwards, instead of side to side.
-				var angle = this._box2dBody.GetAngle() - Math.PI/2;
+				var angle = this.box2dBody().GetAngle() - Math.PI/2;
 
 				var x_comp = Math.cos(angle) * linearImpulse;
 				var y_comp = Math.sin(angle) * linearImpulse;
@@ -448,8 +448,8 @@ var Ship = BlockStructure.extend({
 					enginePosition.x = enginePosition.x / scaleRatio;
 					enginePosition.y = -enginePosition.y / scaleRatio;
 
-					var engineWorldPosition = this._box2dBody.GetWorldPoint(enginePosition);
-					this._box2dBody.ApplyImpulse(impulse, engineWorldPosition);
+					var engineWorldPosition = this.box2dBody().GetWorldPoint(enginePosition);
+					this.box2dBody().ApplyImpulse(impulse, engineWorldPosition);
 				}
 			}
 

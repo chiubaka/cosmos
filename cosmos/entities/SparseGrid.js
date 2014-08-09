@@ -148,7 +148,7 @@ var SparseGrid = IgeClass.extend({
 		return brokeEarly;
 	},
 
-	height: function() {
+	gridHeight: function() {
 		if (this.count() === 0) {
 			return 0;
 		}
@@ -286,7 +286,7 @@ var SparseGrid = IgeClass.extend({
 	},
 
 	toJSON: function() {
-		var objects = this.get(this._lowerBound, this.width(), this.height());
+		var objects = this.get(this._lowerBound, this.gridWidth(), this.gridHeight());
 
 		var json = {};
 
@@ -302,7 +302,7 @@ var SparseGrid = IgeClass.extend({
 		return json;
 	},
 
-	width: function() {
+	gridWidth: function() {
 		if (this.count() === 0) {
 			return 0;
 		}
@@ -314,8 +314,8 @@ var SparseGrid = IgeClass.extend({
 		this._colCounts[x] = 0;
 	},
 
-	_hasX: function(col) {
-		return this._grid[col] !== undefined;
+	_hasX: function(x) {
+		return this._grid[x] !== undefined;
 	},
 
 	_set: function(object, x, y) {

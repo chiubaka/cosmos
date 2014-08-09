@@ -1,16 +1,15 @@
 var BlockGrid = IgeEntity.extend({
 	classId: "BlockGrid",
 
-	_grid: undefined,
-	_lowerLocBound: undefined,
 	_physicsContainer: undefined,
 	_renderContainer: undefined,
-	_upperLocBound: undefined,
 
 	init: function(data) {
 		IgeEntity.prototype.init.call(this, data);
 
-		this._grid = new SparseGrid();
+		this.implement(SparseGrid);
+		SparseGrid.prototype.init.call(this, data);
+		//this._grid = new SparseGrid();
 
 		this.width(0);
 		this.height(0);
@@ -27,7 +26,7 @@ var BlockGrid = IgeEntity.extend({
 
 			if (data !== undefined) {
 				console.log("Parsing grid from JSON.");
-				this._grid.fromJSON(Block, data);
+				this.fromJSON(Block, data);
 			}
 			else {
 				console.log("Stream create data was undefined.");
@@ -41,12 +40,8 @@ var BlockGrid = IgeEntity.extend({
 		// #endif
 	},
 
-	count: function() {
-		return this._grid.count();
-	},
-
-	each: function(func, location, width, height) {
-		return this._grid.each(func, location, width, height);
+	box2dBody: function() {
+		return this._physicsContainer._box2dBody;
 	},
 
 	/**
@@ -108,26 +103,6 @@ var BlockGrid = IgeEntity.extend({
 		return this;
 	},
 
-	get: function(location, width, height) {
-		return this._grid.get(location, width, height);
-	},
-
-	gridHeight: function() {
-		return this._grid.height();
-	},
-
-	gridWidth: function() {
-		return this._grid.width();
-	},
-
-	has: function(location, width, height) {
-		return this._grid.has(location, width, height);
-	},
-
-	lowerBound: function() {
-		return this._grid.lowerBound();
-	},
-
 	put: function(block, location, replace) {
 		// Validate parameters
 		if (!block) {
@@ -140,7 +115,7 @@ var BlockGrid = IgeEntity.extend({
 			return;
 		}
 
-		var previousBlocks = this._grid.put(block, location, replace);
+		var previousBlocks = SparseGrid.prototype.put.call(this, block, location, replace);
 
 		// If previous blocks was null, then this block was placed on top of another block without
 		// replacement.
@@ -148,8 +123,8 @@ var BlockGrid = IgeEntity.extend({
 			return null;
 		}
 
-		this.width(this._grid.width() * Block.WIDTH);
-		this.height(this._grid.height() * Block.HEIGHT);
+		this.width(this.gridWidth() * Block.WIDTH);
+		this.height(this.gridHeight() * Block.HEIGHT);
 
 		// #ifdef SERVER
 		if (ige.isServer) {
@@ -177,15 +152,11 @@ var BlockGrid = IgeEntity.extend({
 
 		// TODO: Remove fixture for the block.
 
-		return this._grid.remove(location, width, height);
+		return SparseGrid.prototype.remove.call(this, location, width, height);
 	},
 
 	streamCreateData: function() {
 		return this.toJSON();
-	},
-
-	toJSON: function() {
-		return this._grid.toJSON();
 	},
 
 	_addFixture: function(block) {
@@ -227,8 +198,8 @@ var BlockGrid = IgeEntity.extend({
 	_translateContainers: function() {
 		var topLeftCoordinates = BlockGrid.coordinatesForLocation(this.lowerBound());
 		var gridCenter = {
-			x: topLeftCoordinates.x - Block.WIDTH / 2 + (this._grid.width() * Block.WIDTH) / 2,
-			y: topLeftCoordinates.y - Block.HEIGHT / 2 + (this._grid.height() * Block.HEIGHT) / 2
+			x: topLeftCoordinates.x - Block.WIDTH / 2 + (this.gridWidth() * Block.WIDTH) / 2,
+			y: topLeftCoordinates.y - Block.HEIGHT / 2 + (this.gridHeight() * Block.HEIGHT) / 2
 		};
 
 		var container;
