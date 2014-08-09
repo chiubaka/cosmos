@@ -5,6 +5,7 @@ var BlockGridNew = IgeEntityBox2d.extend({
 
 	_grid: undefined,
 	_lowerLocBound: undefined,
+	_renderContainer: undefined,
 	_upperLocBound: undefined,
 
 	init: function(data) {
@@ -15,7 +16,18 @@ var BlockGridNew = IgeEntityBox2d.extend({
 		this.width(0);
 		this.height(0);
 
-		// TODO: Create Box2dBody.
+		// #ifdef CLIENT
+		if (ige.isClient) {
+			// Create the render container and mount it to this entity.
+			this._renderContainer = new RenderContainer();
+			this._renderContainer.width(0);
+			this._renderContainer.height(0);
+			this._renderContainer.mount(this);
+		}
+		// #endif
+		this._renderContainer = new RenderContainer();
+
+		// TODO: Create Box2dBody
 
 		// TODO: Finish BlockGridNew initialization.
 	},
@@ -48,8 +60,13 @@ var BlockGridNew = IgeEntityBox2d.extend({
 			return;
 		}
 
+		var oldLowerBound = this._grid.lowerBound();
+		var oldUpperBound = this._grid.upperBound();
+
 		var previousBlocks = this._grid.put(block, location, replace);
 
+		// If previous blocks was null, then this block was placed on top of another block without
+		// replacement.
 		if (previousBlocks === null) {
 			return null;
 		}
@@ -57,8 +74,11 @@ var BlockGridNew = IgeEntityBox2d.extend({
 		this.width(this._grid.width() * Block.WIDTH);
 		this.height(this._grid.height() * Block.HEIGHT);
 
-		// TODO: Determine where to place the block based on its row and column.
-		var gridCoordinates = this._gridCoordinatesForBlock(block);
+		this._mountToRenderContainer(block);
+
+		var translation = this._translateRenderContainer();
+
+		this._counteractTranslation(translation);
 
 		// TODO: Add a fixture for the block.
 
@@ -81,6 +101,21 @@ var BlockGridNew = IgeEntityBox2d.extend({
 		return this._grid.remove(location, width, height);
 	},
 
+	_counteractTranslation: function(translation) {
+		// The grid should translate in the opposite direction from the render container.
+		var inverted = {x: -translation.x, y: -translation.y};
+
+		var theta = this.rotate().z();
+
+		// Rotate the translation vector based on the current angle of the grid.
+		var gridTranslation = {
+			x: inverted.x * Math.cos(theta) - inverted.y * Math.sin(theta),
+			y: inverted.x * Math.sin(theta) + inverted.y * Math.cos(theta)
+		};
+
+		this.translateBy(gridTranslation.x, gridTranslation.y);
+	},
+
 	_gridCoordinatesForBlock: function(block) {
 		// If there are no blocks in this grid yet, then the grid coordinates should always be
 		// (0, 0).
@@ -94,19 +129,65 @@ var BlockGridNew = IgeEntityBox2d.extend({
 		{
 			x: Block.WIDTH * relLoc.x - this._bounds2d.x2 + block._bounds2d.x2,
 			y: Block.HEIGHT * relLoc.y - this._bounds2d.y2 + block._bounds2d.y2
-		}
+		};
 
 		return coordinates;
 	},
 
-	/**
-	 * Returns a new location object that represents the given location relative to the location
-	 * bounds of this BlockGrid.
-	 * @param location
-	 * @private
-	 */
-	_relativeLocation: function(location) {
-		return GridLocation.subtract(location, this._lowerLocBound);
+	_mountToRenderContainer: function(block) {
+		var renderCoordinates = this._renderCoordinatesForBlock(block);
+		// Attach the block to the render container.
+		block.mount(this._renderContainer);
+		// Move the block within the render container to the right location.
+		block.translateTo(renderCoordinates.x, renderCoordinates.y, 0);
+	},
+
+	_renderCoordinatesForBlock: function(block) {
+		var loc = block.gridData.loc;
+
+		var renderCoordinates = this._renderCoordinatesForLocation(loc);
+
+		// Because we need to return the center of the block. For larger blocks, this requires
+		// adding as many half blocks as one minus the width of the block.
+		renderCoordinates.x += (block.gridData.width - 1) * Block.WIDTH / 2;
+		// Because we need to return the center of the block. For larger blocks, this requires
+		// adding as many half blocks as one minus the height of the block.
+		renderCoordinates.y += (block.gridData.height - 1) * Block.HEIGHT / 2;
+
+		return renderCoordinates;
+	},
+
+	_renderCoordinatesForLocation: function(loc) {
+		return {
+			// Translates to the horizontal center of the location.
+			x: Block.WIDTH * loc.x,
+			// Translates to the vertical center of the location.
+			y: Block.HEIGHT * loc.y
+		}
+	},
+
+	_translateRenderContainer: function() {
+		var topLeftCoordinates = this._renderCoordinatesForLocation(this._grid.lowerBound());
+		var renderCenter = {
+			x: topLeftCoordinates.x + (this._grid.width() * Block.WIDTH) / 2,
+			y: topLeftCoordinates.y + (this._grid.height() * Block.HEIGHT) / 2
+		};
+
+		var translation = {
+			x: 0,
+			y: 0
+		};
+
+		if (this.count() > 1) {
+			translation.x = this._renderContainer.translate().x() + renderCenter.x;
+			translation.y = this._renderContainer.translate().y() + renderCenter.y;
+			this._renderContainer.translateBy(translation.x, translation.y);
+		}
+		else {
+			this._renderContainer.translateTo(-renderCenter.x, -renderCenter.y);
+		}
+
+		return translation;
 	}
 });
 
