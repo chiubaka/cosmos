@@ -16,7 +16,7 @@ Thrusts[DragonBreathEngineBlock.prototype.classId()] =
 	value: 3 * BASE_ENGINE_POWER
 };
 
-var BASE_THRUST_POWER = 200;
+var BASE_THRUST_POWER = 100;
 Thrusts[IronThrusterBlock.prototype.classId()] =
 {
 	value: 1 * BASE_THRUST_POWER
