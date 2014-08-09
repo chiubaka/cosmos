@@ -60,9 +60,6 @@ var BlockGridNew = IgeEntityBox2d.extend({
 			return;
 		}
 
-		var oldLowerBound = this._grid.lowerBound();
-		var oldUpperBound = this._grid.upperBound();
-
 		var previousBlocks = this._grid.put(block, location, replace);
 
 		// If previous blocks was null, then this block was placed on top of another block without

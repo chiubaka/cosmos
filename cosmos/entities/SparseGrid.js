@@ -113,6 +113,10 @@ var SparseGrid = IgeClass.extend({
 		return this._upperBound.y - this._lowerBound.y + 1;
 	},
 
+	lowerBound: function() {
+		return this._lowerBound.clone();
+	},
+
 	put: function(object, loc, replace) {
 		if (object === undefined) {
 			this.log("SparseGrid#put: no object parameter to put.", "warning");
