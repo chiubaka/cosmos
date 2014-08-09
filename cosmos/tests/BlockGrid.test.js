@@ -1,4 +1,4 @@
-var GridClass = BlockGridNew;
+var GridClass = BlockGrid;
 
 describe("A BlockGrid", function() {
 	function beforeEachFunc() {

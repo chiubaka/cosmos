@@ -17,7 +17,6 @@ var config = {
 		{ name: 'SparseGrid', path: './entities/SparseGrid' },
 		{ name: 'BlockGridPhysicsContainer', path: './entities/BlockGridPhysicsContainer' },
 		{ name: 'BlockGrid', path: './entities/BlockGrid' },
-		{ name: 'BlockGridNew', path: './entities/BlockGridNew' },
 		{ name: 'BlockStructure', path: './entities/BlockStructure' },
 		{ name: 'GeneratedBlockStructure', path: './entities/GeneratedBlockStructure' },
 		{ name: 'ConstructionZoneBlock', path: 'entities/blocks/ConstructionZoneBlock' },
