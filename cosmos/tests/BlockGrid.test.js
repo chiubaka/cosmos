@@ -107,6 +107,38 @@ describe("A BlockGrid", function() {
 			this.grid.put(this.testObjects["1x1"][1], new IgePoint2d(0, 0), false);
 			expect(this.grid._renderContainer.translate().x()).toBe(-Block.WIDTH / 2);
 			expect(this.grid._renderContainer.translate().y()).toBe(-Block.HEIGHT / 2);
+
+			this.grid.put(this.testObjects["2x2"][0], new IgePoint2d(-3, -3), false);
+			expect(this.grid._renderContainer.translate().x()).toBe(Block.WIDTH);
+			expect(this.grid._renderContainer.translate().y()).toBe(Block.HEIGHT);
+
+			this.grid.put(this.testObjects["3x3"][0], new IgePoint2d(-1, -6), false);
+			expect(this.grid._renderContainer.translate().x()).toBe(Block.WIDTH);
+			expect(this.grid._renderContainer.translate().y()).toBe(Block.HEIGHT * 2.5);
+		}
+	);
+
+	it("should cancel out translation of the render container by counter translating the entire " +
+		"grid.",
+		function() {
+			expect(this.grid.translate().x()).toBe(0);
+			expect(this.grid.translate().y()).toBe(0);
+
+			this.grid.put(this.testObjects["1x1"][0], new IgePoint2d(1, 1), false);
+			expect(this.grid.translate().x()).toBe(0);
+			expect(this.grid.translate().y()).toBe(0);
+
+			this.grid.put(this.testObjects["1x1"][1], new IgePoint2d(0, 0), false);
+			expect(this.grid.translate().x()).toBe(-Block.WIDTH / 2);
+			expect(this.grid.translate().y()).toBe(-Block.HEIGHT / 2);
+
+			this.grid.put(this.testObjects["2x2"][0], new IgePoint2d(-3, -3), false);
+			expect(this.grid.translate().x()).toBe(-Block.WIDTH * 2);
+			expect(this.grid.translate().y()).toBe(-Block.HEIGHT * 2);
+
+			this.grid.put(this.testObjects["3x3"][0], new IgePoint2d(-1, -6), false);
+			expect(this.grid.translate().x()).toBe(-Block.WIDTH * 2);
+			expect(this.grid.translate().y()).toBe(-Block.HEIGHT * 3.5);
 		}
 	);
 });

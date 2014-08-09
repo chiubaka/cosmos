@@ -101,6 +101,11 @@ var BlockGridNew = IgeEntityBox2d.extend({
 	},
 
 	_counteractTranslation: function(translation) {
+		// No need to counteract translation for the first block added to the grid!
+		if (this.count() <= 1) {
+			return;
+		}
+
 		// The grid should translate in the opposite direction from the render container.
 		var inverted = {x: -translation.x, y: -translation.y};
 
@@ -111,6 +116,8 @@ var BlockGridNew = IgeEntityBox2d.extend({
 			x: inverted.x * Math.cos(theta) - inverted.y * Math.sin(theta),
 			y: inverted.x * Math.sin(theta) + inverted.y * Math.cos(theta)
 		};
+
+		console.log(gridTranslation);
 
 		this.translateBy(gridTranslation.x, gridTranslation.y, 0);
 	},
@@ -149,7 +156,6 @@ var BlockGridNew = IgeEntityBox2d.extend({
 
 	_translateRenderContainer: function() {
 		var topLeftCoordinates = this._renderCoordinatesForLocation(this._grid.lowerBound());
-		console.log(topLeftCoordinates);
 		var renderCenter = {
 			x: topLeftCoordinates.x - Block.WIDTH / 2 + (this._grid.width() * Block.WIDTH) / 2,
 			y: topLeftCoordinates.y - Block.HEIGHT / 2 + (this._grid.height() * Block.HEIGHT) / 2
