@@ -646,6 +646,12 @@ var Block = IgeEntity.extend({
 			return this;
 		}
 		return this._isBeingMined;
+	},
+
+	toJSON: function() {
+		return {
+			type: this.classId()
+		}
 	}
 });
 
@@ -709,6 +715,10 @@ Block.blockFromClassId = function(classId) {
 		return undefined;
 	}
 	return new cosmos.blocks.constructors[classId]();
+};
+
+Block.fromJSON = function(json) {
+	return Block.blockFromClassId(json.type);
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Block; }

@@ -17,20 +17,20 @@ var BlockGrid = IgeEntity.extend({
 
 		this.addComponent(PixiRenderableComponent);
 
-		console.log(ige.isServer);
-
 		// #ifdef CLIENT
 		if (ige.isClient) {
-			console.log("Init client!");
 			// Create the render container and mount it to this entity.
 			this._renderContainer = new RenderContainer();
 			this._renderContainer.width(0);
 			this._renderContainer.height(0);
 			this._renderContainer.mount(this);
+
+			if (data !== undefined) {
+				this._grid.fromJSON(Block, data);
+			}
 		}
 		// #else
 		else {
-			console.log("Init server!");
 			this._physicsContainer = new BlockGridPhysicsContainer();
 			this._physicsContainer.mount(this);
 		}
@@ -43,6 +43,65 @@ var BlockGrid = IgeEntity.extend({
 
 	each: function(func, location, width, height) {
 		return this._grid.each(func, location, width, height);
+	},
+
+	/**
+	 * Resets this BlockGrid's internal state to represent the grid that is represented by the provided {@link Block}
+	 * matrix, which is a matrix of {@link Block}s. undefined is used to indicate that a space in the matrix is empty.
+	 * @param blockMatrix {Array} An array of arrays that holds {@link Block objects}. undefined is used to indicate
+	 * that a space in the blockMatrix is empty. The blockMatrix must be a rectangular matrix (every row has the same
+	 * number of columns and every column has the same number of rows, but the total number of rows and total number
+	 * of columns is not required to be the same).
+	 * @param checkForNeighbors {boolean} Whether or not we should validate that each {@link Block} will be
+	 * attached to the existing structure in this {@link BlockGrid}. Default behavior is to check for neighbors.
+	 * @return {BlockGrid} Return this object to make function chaining convenient.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	fromBlockMatrix: function(blockMatrix, checkForNeighbors) {
+		for (var row = 0; row < blockMatrix.length; row++) {
+			for (var col = 0; col < blockMatrix[row].length; col++) {
+				if (blockMatrix[row][col]) {
+					this.put(blockMatrix[row][col], new IgePoint2d(col, row), false);
+				}
+			}
+		}
+
+		return this;
+	},
+
+	/**
+	 * Resets this BlockGrid's internal state to represent the grid that is represented by the provided block type
+	 * matrix, which is a matrix of class ID's where each class ID represents a block type in the grid.
+	 * This is used for de-serializing a BlockGrid object.
+	 * @param blockTypeMatrix {Array} An array of arrays that holds classId's for Block objects. undefined is used to
+	 * indicate that a space in the blockTypeMatrix does not include a Block. The blockTypeMatrix must be a rectangular
+	 * matrix (every row has the same number of columns and every column has the same number of rows, but the total number
+	 * of rows and total number of columns is not required to be the same).
+	 * @param checkForNeighbors {boolean} Whether or not we should validate that each {@link Block} will be
+	 * attached to the existing structure in this {@link BlockGrid}. Default behavior is to check for neighbors.
+	 * @returns {BlockGrid} Return this object to make function chaining convenient.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	fromBlockTypeMatrix: function(blockTypeMatrix, checkForNeighbors, startRow, startCol) {
+		startRow = startRow || 0;
+		startCol = startCol || 0;
+
+		for (var row = 0; row < blockTypeMatrix.length; row++) {
+			for (var col = 0; col < blockTypeMatrix[row].length; col++) {
+				if (blockTypeMatrix[row][col]) {
+					// The add() function knows how to deal with receiving undefined
+					this.put(
+						Block.blockFromClassId(blockTypeMatrix[row][col]),
+						new IgePoint2d(startCol + cow, startRol + row),
+						false
+					);
+				}
+			}
+		}
+
+		return this;
 	},
 
 	get: function(location, width, height) {
@@ -76,8 +135,15 @@ var BlockGrid = IgeEntity.extend({
 		this.width(this._grid.width() * Block.WIDTH);
 		this.height(this._grid.height() * Block.HEIGHT);
 
-		this._mountToRenderContainer(block);
-		this._addFixture(block);
+		// #ifdef SERVER
+		if (ige.isServer) {
+			this._addFixture(block);
+		}
+		// #else
+		else {
+			this._mountToRenderContainer(block);
+		}
+		// #endif
 
 		var translation = this._translateContainers();
 
@@ -96,6 +162,14 @@ var BlockGrid = IgeEntity.extend({
 		// TODO: Remove fixture for the block.
 
 		return this._grid.remove(location, width, height);
+	},
+
+	streamCreateData: function() {
+		return this.toJSON();
+	},
+
+	toJSON: function() {
+		return this._grid.toJSON();
 	},
 
 	_addFixture: function(block) {
@@ -141,20 +215,23 @@ var BlockGrid = IgeEntity.extend({
 			y: topLeftCoordinates.y - Block.HEIGHT / 2 + (this._grid.height() * Block.HEIGHT) / 2
 		};
 
-		var oldTranslate = {
-			x: this._renderContainer.translate().x(),
-			y: this._renderContainer.translate().y()
-		};
+		var container;
 
 		// #ifdef SERVER
 		if (ige.isServer) {
-			this._physicsContainer.translateTo(-gridCenter.x, -gridCenter.y, 0);
+			container = this._physicsContainer;
 		}
 		// #else
 		else {
-			this._renderContainer.translateTo(-gridCenter.x, -gridCenter.y, 0);
+			container = this._renderContainer;
 		}
 		// #endif
+
+		var oldTranslate = {
+			x: container.translate().x(),
+			y: container.translate().y()
+		};
+		container.translateTo(-gridCenter.x, -gridCenter.y, 0);
 
 		// Return the amount the render container was translated by. These equations amount to
 		// new render container translate minus old render container translate.

@@ -61,6 +61,14 @@ var SparseGrid = IgeClass.extend({
 		return false;
 	},
 
+	fromJSON: function(ObjectClass, json) {
+		var self = this;
+		_.forEach(json, function(objectJSON) {
+			var object = ObjectClass.fromJSON(objectJSON);
+			self.put(object, object.gridData.loc, false);
+		});
+	},
+
 	get: function(loc, width, height) {
 		if (!IgePoint2d.validatePoint(loc)) {
 			this.log("SparseGrid#get: no valid loc provided.", "warning");
@@ -362,10 +370,7 @@ var SparseGrid = IgeClass.extend({
 SparseGrid.fromJSON = function(ObjectClass, json) {
 	var grid = new SparseGrid();
 
-	_.forEach(json, function(objectJSON) {
-		var object = ObjectClass.fromJSON(objectJSON);
-		grid.put(object, object.gridData.loc, false);
-	});
+	grid.fromJSON(ObjectClass, json);
 
 	return grid;
 };
