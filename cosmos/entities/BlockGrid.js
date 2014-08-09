@@ -2,6 +2,7 @@ var BlockGrid = IgeEntity.extend({
 	classId: "BlockGrid",
 
 	_physicsContainer: undefined,
+	_physicsOffset: undefined,
 	_renderContainer: undefined,
 
 	init: function(data) {
@@ -160,6 +161,27 @@ var BlockGrid = IgeEntity.extend({
 		return this.toJSON();
 	},
 
+	update: function(ctx, tickDelta) {
+		IgeEntity.prototype.update.call(this, ctx, tickDelta);
+		if (ige.isServer && this._physicsContainer.translate().x() !== this._physicsOffset.x
+			&& this._physicsContainer.translate().y() !== this._physicsOffset.y) {
+			console.log("Need to reconcile block grid with physics container!");
+			console.log("Physics container: x: " + this._physicsContainer.translate().x() + ", y: "
+				+ this._physicsContainer.translate().y());
+			console.log("Physics offset: x: " + this._physicsOffset.x + ", y: " +
+				this._physicsOffset.y);
+
+			var correction = {
+				x: this._physicsContainer.translate().x() - this._physicsOffset.x,
+				y: this._physicsContainer.translate().y() - this._physicsOffset.y
+			}
+
+			this._physicsContainer.translateTo(this._physicsOffset.x, this._physicsOffset.y, 0);
+
+			this._counteractTranslation(correction);
+		}
+	},
+
 	_addFixture: function(block) {
 		// #ifdef SERVER
 		if (ige.isServer) {
@@ -205,11 +227,17 @@ var BlockGrid = IgeEntity.extend({
 			y: topLeftCoordinates.y - Block.HEIGHT / 2 + (this.gridHeight() * Block.HEIGHT) / 2
 		};
 
+		var translateTo = {
+			x: -gridCenter.x,
+			y: -gridCenter.y
+		}
+
 		var container;
 
 		// #ifdef SERVER
 		if (ige.isServer) {
 			container = this._physicsContainer;
+			this._physicsOffset = translateTo;
 		}
 		// #else
 		else {
@@ -221,7 +249,7 @@ var BlockGrid = IgeEntity.extend({
 			x: container.translate().x(),
 			y: container.translate().y()
 		};
-		container.translateTo(-gridCenter.x, -gridCenter.y, 0);
+		container.translateTo(translateTo.x, translateTo.y, 0);
 
 		// Return the amount the render container was translated by. These equations amount to
 		// new render container translate minus old render container translate.
