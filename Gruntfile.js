@@ -31,6 +31,7 @@ module.exports = function(grunt) {
 						'cosmos/tests/TestUtils.js',
 						'cosmos/tests/config.js',
 						'cosmos/tests/game.js',
+						'cosmos/tests/igeSetup.js',
 						'cosmos/tests/**/*.js'
 					],
 					plugins: [
