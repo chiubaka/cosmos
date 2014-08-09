@@ -88,8 +88,9 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		var constructionZoneLocations = this._blockGrid.constructionZoneLocations();
 		for (var i = 0; i < constructionZoneLocations.length; i++) {
 			var location = constructionZoneLocations[i];
-			var row = location.row - this._blockGrid.startRow() + 1;
-			var col = location.col - this._blockGrid.startCol() + 1;
+			var lowerBound = this._blockGrid.lowerBound();
+			var row = location.y - lowerBound.y + 1;
+			var col = location.x - lowerBound.x + 1;
 			this._overlayGrid[row][col] = new ConstructionZoneBlock();
 		}
 	},

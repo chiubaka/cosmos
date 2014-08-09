@@ -69,11 +69,37 @@ var SparseGrid = IgeClass.extend({
 		return false;
 	},
 
+	/**
+	 * Given a {@link Block}, returns the neighboring locations to the {@link Block} that do not have other blocks.
+	 * @param block {Block} The {@link Block} to get the emptying neighboring locations for.
+	 * @returns {Array} A list of location objects, which are of the format {row: number, col: number}. Each location
+	 * represents a location neighboring the given {@link Block} that did not have a neighbor.
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
+	emptyNeighboringLocations: function(object) {
+		var emptyNeighboringLocations = [];
+		var neighboringLocations = this.neighboringLocations(object);
+
+		var self = this;
+		_.forEach(neighboringLocations, function(loc) {
+			if (self.has(loc)) {
+				emptyNeighboringLocations.push(loc);
+			}
+		});
+
+		return emptyNeighboringLocations;
+	},
+
 	fromJSON: function(ObjectClass, json) {
 		var self = this;
-		_.forEach(json, function(objectJSON) {
-			var object = ObjectClass.fromJSON(objectJSON);
-			self.put(object, object.gridData.loc, false);
+		console.log(json);
+		_.forOwn(json, function(row, x) {
+			_.forOwn(row, function(objectJSON, y) {
+				var object = ObjectClass.fromJSON(objectJSON);
+				self.put(object, object.gridData.loc, false);
+			});
 		});
 	},
 
@@ -131,6 +157,33 @@ var SparseGrid = IgeClass.extend({
 
 	lowerBound: function() {
 		return this._lowerBound.clone();
+	},
+
+	neighboringLocations: function(object) {
+		var neighboringLocations = [];
+
+		var x = object.gridData.loc.x;
+		var y = object.gridData.loc.y;
+		var width = object.gridData.width;
+		var height = object.gridData.height;
+
+		var topY = y - 1;
+		var bottomY = y + height;
+
+		for (var dx = 0; dx < width; dx++) {
+			neighboringLocations.push(new IgePoint2d(topY, x + dx));
+			neighboringLocations.push(new IgePoint2d(bottomY, x + dx));
+		}
+
+		var leftX = x - 1;
+		var rightX = x + width;
+
+		for (var dy = 0; dy < height; dy++) {
+			neighboringLocations.push(new IgePoint2d(y + dy, leftX));
+			neighboringLocations.push(new IgePoint2d(y + dy, rightX));
+		}
+
+		return neighboringLocations;
 	},
 
 	put: function(object, loc, replace) {
@@ -235,10 +288,15 @@ var SparseGrid = IgeClass.extend({
 	toJSON: function() {
 		var objects = this.get(this._lowerBound, this.width(), this.height());
 
-		var json = [];
+		var json = {};
 
 		_.forEach(objects, function(object) {
-			json.push(object.toJSON());
+			var loc = object.gridData.loc;
+			if (json[loc.x] === undefined) {
+				json[loc.x] = {};
+			}
+
+			json[loc.x][loc.y] = object.toJSON();
 		});
 
 		return json;

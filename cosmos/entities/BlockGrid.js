@@ -26,7 +26,11 @@ var BlockGrid = IgeEntity.extend({
 			this._renderContainer.mount(this);
 
 			if (data !== undefined) {
+				console.log("Parsing grid from JSON.");
 				this._grid.fromJSON(Block, data);
+			}
+			else {
+				console.log("Stream create data was undefined.");
 			}
 		}
 		// #else
@@ -118,6 +122,10 @@ var BlockGrid = IgeEntity.extend({
 
 	has: function(location, width, height) {
 		return this._grid.has(location, width, height);
+	},
+
+	lowerBound: function() {
+		return this._grid.lowerBound();
 	},
 
 	put: function(block, location, replace) {
@@ -217,7 +225,7 @@ var BlockGrid = IgeEntity.extend({
 	},
 
 	_translateContainers: function() {
-		var topLeftCoordinates = BlockGrid.coordinatesForLocation(this._grid.lowerBound());
+		var topLeftCoordinates = BlockGrid.coordinatesForLocation(this.lowerBound());
 		var gridCenter = {
 			x: topLeftCoordinates.x - Block.WIDTH / 2 + (this._grid.width() * Block.WIDTH) / 2,
 			y: topLeftCoordinates.y - Block.HEIGHT / 2 + (this._grid.height() * Block.HEIGHT) / 2

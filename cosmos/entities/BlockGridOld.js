@@ -827,30 +827,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	/**
-	 * Given a {@link Block}, returns the neighboring locations to the {@link Block} that do not have other blocks.
-	 * @param block {Block} The {@link Block} to get the emptying neighboring locations for.
-	 * @returns {Array} A list of location objects, which are of the format {row: number, col: number}. Each location
-	 * represents a location neighboring the given {@link Block} that did not have a neighbor.
-	 * @memberof BlockGrid
-	 * @private
-	 * @instance
-	 */
-	_emptyNeighboringLocations: function(block) {
-		var emptyNeighboringLocations = [];
-		var neighboringLocations = this._neighboringLocations(block.row(), block.col(), block);
-
-		for (var i = 0; i < neighboringLocations.length; i++) {
-			var location = neighboringLocations[i];
-
-			if (!this._isOccupied(location.row, location.col)) {
-				emptyNeighboringLocations.push(location);
-			}
-		}
-
-		return emptyNeighboringLocations;
-	},
-
-	/**
 	 * Creates and returns a list of all of the {@link Block}s in this {@link BlockGrid}. There is no guarantee about
 	 * the order of the {@link Block}s returned by this function.
 	 * @returns {Array} An array that contains all of the {@link Block} objects kept in this {@link BlockGrid}.
@@ -1009,45 +985,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 
 		return neighboringOpenLocations;
-	},
-
-	/**
-	 * Creates a list of the locations that neighbor this {@link Block}. Utility function that makes it easy for other
-	 * functions that need to check locations that neighbor a {@link Block} to iterate over neighbors of a
-	 * {@link Block}.
-	 * @param row {number} The top left row of the {@link Block}.
-	 * @param col {number} The top left col of the {@link Block}.
-	 * @param block {Block} The {@link Block} to find neighboring locations for.
-	 * @returns {Array} A list of the locations that neighbor the given {@link Block}. Location objects are in the
-	 * format {row: number, col: number}.
-	 * @private
-	 */
-	_neighboringLocations: function(row, col, block) {
-		var neighboringLocations = [];
-		var blockNumRows = block.numRows();
-		var blockNumCols = block.numCols();
-
-		// Check top and bottom boundaries
-		var startCol = col;
-		var topRow = row - 1;
-		var bottomRow = row + blockNumRows;
-
-		for (var x = 0; x < blockNumCols; x++) {
-			neighboringLocations.push({row: topRow, col: startCol + x});
-			neighboringLocations.push({row: bottomRow, col: startCol + x});
-		}
-
-		// Check left and right boundary
-		var startRow = row;
-		var leftCol = col - 1;
-		var rightCol = col + blockNumCols;
-
-		for (var y = 0; y < blockNumRows; y++) {
-			neighboringLocations.push({row: startRow + y, col: leftCol});
-			neighboringLocations.push({row: startRow + y, col: rightCol});
-		}
-
-		return neighboringLocations;
 	},
 
 	/**

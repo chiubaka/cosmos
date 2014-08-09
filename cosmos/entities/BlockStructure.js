@@ -45,7 +45,7 @@ var BlockStructure = BlockGrid.extend({
 		var constructionZoneLocations = [];
 		var self = this;
 		this.each(function(block) {
-			constructionZoneLocations.push.apply(constructionZoneLocations, self._emptyNeighboringLocations(block));
+			constructionZoneLocations.push.apply(constructionZoneLocations, self._grid.emptyNeighboringLocations(block));
 		});
 		return constructionZoneLocations;
 	},

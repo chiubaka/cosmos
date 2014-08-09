@@ -116,9 +116,9 @@ var Ship = BlockStructure.extend({
 		// Define the data sections that will be included in the stream
 		this.streamSections(['transform']);
 	},
-
 	streamCreateData: function() {
 		var data = BlockStructure.prototype.streamCreateData.call(this);
+
 		if (this.player()) {
 			data.playerId = this.player().id();
 		}
