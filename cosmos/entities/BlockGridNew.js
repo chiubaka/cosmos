@@ -115,24 +115,6 @@ var BlockGridNew = IgeEntityBox2d.extend({
 		this.translateBy(gridTranslation.x, gridTranslation.y, 0);
 	},
 
-	_gridCoordinatesForBlock: function(block) {
-		// If there are no blocks in this grid yet, then the grid coordinates should always be
-		// (0, 0).
-		if (this.count() === 0) {
-			return {x: 0, y: 0};
-		}
-
-		var relLoc = this._grid.relativeLocation(block.gridData.loc);
-
-		var coordinates =
-		{
-			x: Block.WIDTH * relLoc.x - this._bounds2d.x2 + block._bounds2d.x2,
-			y: Block.HEIGHT * relLoc.y - this._bounds2d.y2 + block._bounds2d.y2
-		};
-
-		return coordinates;
-	},
-
 	_mountToRenderContainer: function(block) {
 		var renderCoordinates = this._renderCoordinatesForBlock(block);
 		// Attach the block to the render container.
@@ -167,26 +149,25 @@ var BlockGridNew = IgeEntityBox2d.extend({
 
 	_translateRenderContainer: function() {
 		var topLeftCoordinates = this._renderCoordinatesForLocation(this._grid.lowerBound());
+		console.log(topLeftCoordinates);
 		var renderCenter = {
-			x: topLeftCoordinates.x + (this._grid.width() * Block.WIDTH) / 2,
-			y: topLeftCoordinates.y + (this._grid.height() * Block.HEIGHT) / 2
+			x: topLeftCoordinates.x - Block.WIDTH / 2 + (this._grid.width() * Block.WIDTH) / 2,
+			y: topLeftCoordinates.y - Block.HEIGHT / 2 + (this._grid.height() * Block.HEIGHT) / 2
 		};
 
-		var translation = {
-			x: 0,
-			y: 0
+		var oldTranslate = {
+			x: this._renderContainer.translate().x(),
+			y: this._renderContainer.translate().y()
 		};
 
-		if (this.count() > 1) {
-			translation.x = this._renderContainer.translate().x() + renderCenter.x;
-			translation.y = this._renderContainer.translate().y() + renderCenter.y;
-			this._renderContainer.translateBy(translation.x, translation.y, 0);
-		}
-		else {
-			this._renderContainer.translateTo(-renderCenter.x, -renderCenter.y, 0);
-		}
+		this._renderContainer.translateTo(-renderCenter.x, -renderCenter.y, 0);
 
-		return translation;
+		// Return the amount the render container was translated by. These equations amount to
+		// new render container translate minus old render container translate.
+		return {
+			x: -renderCenter.x - oldTranslate.x,
+			y: -renderCenter.y - oldTranslate.y
+		};
 	}
 });
 

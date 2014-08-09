@@ -54,9 +54,6 @@ describe("A BlockGrid", function() {
 	}
 
 	function afterEachFunc() {
-		for (var i = 0; i < this.testObjects.length; i++) {
-			this.testObjects[i].destroy();
-		}
 		ige.isServer = false;
 		this.grid.destroy();
 	}
@@ -66,5 +63,50 @@ describe("A BlockGrid", function() {
 
 	testGrid(GridClass, function() {});//beforeEachFunc, afterEachFunc);
 
+	it("should have the correct width and height after blocks are placed in it.", function() {
+		expect(this.grid.width()).toBe(0);
+		expect(this.grid.height()).toBe(0);
 
+		this.grid.put(this.testObjects["1x1"][0], new IgePoint2d(0, 0), false);
+		expect(this.grid.width()).toBe(Block.WIDTH);
+		expect(this.grid.height()).toBe(Block.HEIGHT);
+
+		this.grid.put(this.testObjects["2x2"][0], new IgePoint2d(2, 2), false);
+		expect(this.grid.width()).toBe(Block.WIDTH * 4);
+		expect(this.grid.height()).toBe(Block.HEIGHT * 4);
+
+		this.grid.put(this.testObjects["3x3"][0], new IgePoint2d(-5, -5), false);
+		expect(this.grid.width()).toBe(Block.WIDTH * 9);
+		expect(this.grid.height()).toBe(Block.HEIGHT * 9);
+	});
+
+	it("should mount blocks to its render container on the client.", function() {
+		expect(this.grid._renderContainer).toBeDefined();
+
+		this.grid.put(this.testObjects["1x1"][0], new IgePoint2d(0, 0), false);
+		expect(this.testObjects["1x1"][0]._parent).toBe(this.grid._renderContainer);
+	});
+
+	it("should correctly compute render coordinates for locations.", function() {
+		expect(this.grid._renderCoordinatesForLocation(new IgePoint2d(0, 0)))
+			.toEqual(jasmine.objectContaining({x: 0, y: 0}));
+
+		expect(this.grid._renderCoordinatesForLocation(new IgePoint2d(100, 99)))
+			.toEqual(jasmine.objectContaining({x: 2600, y: 2574}));
+
+		expect(this.grid._renderCoordinatesForLocation(new IgePoint2d(-13, -20)))
+			.toEqual(jasmine.objectContaining({x: -338, y: -520}));
+	});
+
+	it("should translate the render container based on blocks that are added to the grid.",
+		function() {
+			this.grid.put(this.testObjects["1x1"][0], new IgePoint2d(1, 1), false);
+			expect(this.grid._renderContainer.translate().x()).toBe(-Block.WIDTH);
+			expect(this.grid._renderContainer.translate().y()).toBe(-Block.HEIGHT);
+
+			this.grid.put(this.testObjects["1x1"][1], new IgePoint2d(0, 0), false);
+			expect(this.grid._renderContainer.translate().x()).toBe(-Block.WIDTH / 2);
+			expect(this.grid._renderContainer.translate().y()).toBe(-Block.HEIGHT / 2);
+		}
+	);
 });
