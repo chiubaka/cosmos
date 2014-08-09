@@ -64,7 +64,7 @@ var Drop = BlockGrid.extend({
 		}
 
 		if (this.get(0, 0) !== undefined) {
-			console.error("Tried to replace the existing block in a Drop.");
+			this.log('Tried to replace the existing block in a Drop.', 'error');
 			return;
 		}
 
@@ -142,13 +142,18 @@ var Drop = BlockGrid.extend({
 	 */
 	update: function(ctx) {
 		if (ige.isServer) {
-
-			// Attract the block grid to another body. For example, small asteroids
-			// are attracted to player ships.
 			if (this.attractedTo() !== undefined) {
+				// If the attractedTo entity is destroyed, remove the reference
+				if (ige.$(this.attractedTo().id()) === undefined) {
+					this._attractedTo = undefined;
+					return;
+				}
+
+				// Attract the block grid to another body. For example, small asteroids
+				// are attracted to player ships.
 				var attractor = this.attractedTo();
 				this.physicsBody.attractTo(attractor, attractor.attractionStrength());
-			}
+		}
 
 
 			//This is just a little bit larger than the background image. That's why I chose this size.

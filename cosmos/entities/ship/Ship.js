@@ -240,6 +240,7 @@ var Ship = BlockStructure.extend({
 	 */
 	addSensor: function(radius) {
 		var fixtureDef = {
+			fixtureCategory: 'attractor',
 			friction: 0.0,
 			restitution: 0.0,
 			density: 0.0,

@@ -147,10 +147,10 @@ var BlockGrid = IgeEntity.extend({
 			this.addComponent(TLPhysicsBodyComponent);
 			this.physicsBody.newBody({
 				bodyType: 'DYNAMIC',
-				bodyCategory: this.category() || "",
-				x: 0,
-				y: 0,
-				angle: 0,
+				bodyCategory: this.category() || '',
+				x: 0.0,
+				y: 0.0,
+				angle: 0.0,
 				linearDamping: 0.4,
 				angularDamping: 1.0,
 				bullet: false
@@ -1311,6 +1311,7 @@ var BlockGrid = IgeEntity.extend({
 	_createFixtureDef: function(block) {
 		var drawLocation = this._drawLocationForBlock(block);
 		return {
+			fixtureCategory: block.category() || '',
 			friction: BlockGrid.BLOCK_FIXTURE_FRICTION,
 			restitution: BlockGrid.BLOCK_FIXTURE_RESTITUTION,
 			density: BlockGrid.BLOCK_FIXTURE_DENSITY,

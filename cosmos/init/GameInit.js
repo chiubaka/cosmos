@@ -214,13 +214,13 @@ return;
 			'ship_drop': 1,
 		}
 		var customContacts = [{
-				body1_category: Ship.BOX2D_CATEGORY,
-				body2_category: Drop.BOX2D_CATEGORY,
+				category1: Ship.BOX2D_CATEGORY,
+				category2: Drop.BOX2D_CATEGORY,
 				disable_contact: true,
 				identifier: contactIdentifiers.ship_drop
 			}
 		];
-		ige.physicsSystem.newCustomContacts(customContacts);
+		ige.physicsSystem.newCustomContacts({contacts: customContacts, contactType: 'BEGIN_CONTACT'});
 
 		// Set up collision callbacks
 		ige.physicsSystem.registerCollisionCallbacks({
