@@ -27,7 +27,6 @@ var BlockGridNew = IgeEntityBox2d.extend({
 			this._renderContainer.mount(this);
 		}
 		// #endif
-		this._renderContainer = new RenderContainer();
 
 		// TODO: Create Box2dBody
 
