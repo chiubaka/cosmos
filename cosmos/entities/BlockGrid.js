@@ -108,6 +108,14 @@ var BlockGrid = IgeEntity.extend({
 		return this._grid.get(location, width, height);
 	},
 
+	gridHeight: function() {
+		return this._grid.height();
+	},
+
+	gridWidth: function() {
+		return this._grid.width();
+	},
+
 	has: function(location, width, height) {
 		return this._grid.has(location, width, height);
 	},

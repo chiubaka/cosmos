@@ -25,10 +25,18 @@ var SparseGrid = IgeClass.extend({
 		}
 
 		if (!IgePoint2d.validatePoint(loc)) {
-			// If location is not provided, iterate over all items in the grid
-			// TODO: Set loc, width, height so that all items are iterated over
-			this.log("Invalid point passed to SparseGrid#each.", "warning");
-			return null;
+			// If location is not provided, iterate over all items in the grid. This is a separate
+			// loop because iterating over the keys is slightly more efficient in this case.
+			for (var x in this._grid) {
+				if (this._grid.hasOwnProperty(x)) {
+					for (var y in this._grid[x]) {
+						if (func(this._grid[x][y]) === true) {
+							return true;
+						}
+					}
+				}
+			}
+			return false;
 		}
 
 		if (width === undefined) {

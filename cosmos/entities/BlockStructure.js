@@ -43,13 +43,10 @@ var BlockStructure = BlockGrid.extend({
 	 */
 	constructionZoneLocations: function() {
 		var constructionZoneLocations = [];
-		var iterator = this.iterator();
-		while (iterator.hasNext()) {
-			var block = iterator.next();
-			// Fancy way of concatenating two arrays. Referenced from here:
-			// http://stackoverflow.com/questions/4156101/javascript-push-array-values-into-another-array
-			constructionZoneLocations.push.apply(constructionZoneLocations, this._emptyNeighboringLocations(block));
-		}
+		var self = this;
+		this.each(function(block) {
+			constructionZoneLocations.push.apply(constructionZoneLocations, self._emptyNeighboringLocations(block));
+		});
 		return constructionZoneLocations;
 	},
 

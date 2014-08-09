@@ -650,7 +650,8 @@ var Block = IgeEntity.extend({
 
 	toJSON: function() {
 		return {
-			type: this.classId()
+			type: this.classId(),
+			gridData: this.gridData.toJSON()
 		}
 	}
 });
@@ -718,7 +719,9 @@ Block.blockFromClassId = function(classId) {
 };
 
 Block.fromJSON = function(json) {
-	return Block.blockFromClassId(json.type);
+	var block = Block.blockFromClassId(json.type);
+	block.gridData.loc = new IgePoint2d(json.gridData.loc.x, json.gridData.loc.y);
+	return block;
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Block; }

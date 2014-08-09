@@ -27,10 +27,10 @@ var GridData = IgeClass.extend({
 		return {
 			loc: {
 				x: this.loc.x,
-				y: this.loc.y,
+				y: this.loc.y
 			},
 			width: this.width,
-			height: this.height,
+			height: this.height
 		};
 	}
 });
