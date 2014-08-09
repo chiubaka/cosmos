@@ -1677,32 +1677,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 });
 
 /**
- * The default density value of a fixture created for a {@link Block}.
- * @constant {number}
- * @memberof BlockGrid
- */
-BlockGrid.BLOCK_FIXTURE_DENSITY = 1.0;
-/**
- * The default friction value of a fixture created for a {@link Block}.
- * @constant {number}
- * @memberof BlockGrid
- */
-BlockGrid.BLOCK_FIXTURE_FRICTION = 0.5;
-/**
- * The default restitution value of a fixture created for a {@link Block}.
- * @constant {number}
- * @memberof BlockGrid
- */
-BlockGrid.BLOCK_FIXTURE_RESTITUTION = 0.5;
-/**
- * The default padding value of a fixture create for a {@link Block}. Padding defines the difference in space between
- * the rendered {@link Block} and the fixture for that {@link Block}.
- * @constant {number}
- * @memberof BlockGrid
- */
-BlockGrid.BLOCK_FIXTURE_PADDING = .1;
-
-/**
  * The depth layer to place {@link BlockGrid}s on.
  * @constant {number}
  * @memberof BlockGrid

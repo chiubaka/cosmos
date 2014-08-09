@@ -35,6 +35,7 @@ var BlockGrid = IgeEntity.extend({
 		// #else
 		else {
 			this._physicsContainer = new BlockGridPhysicsContainer();
+			this._physicsContainer.blockGrid(this);
 			this._physicsContainer.mount(this);
 		}
 		// #endif
@@ -169,7 +170,9 @@ var BlockGrid = IgeEntity.extend({
 
 	_counteractTranslation: function(translation) {
 		// No need to counteract translation for the first block added to the grid!
-		if (this.count() <= 1) {
+		// Also, since BlockGrids are streamd to the clients, no reason to translate on the client
+		// because this would cause double translation.
+		if (this.count() <= 1 || ige.isClient) {
 			return;
 		}
 
@@ -228,6 +231,32 @@ var BlockGrid = IgeEntity.extend({
 		};
 	}
 });
+
+/**
+ * The default density value of a fixture created for a {@link Block}.
+ * @constant {number}
+ * @memberof BlockGrid
+ */
+BlockGrid.BLOCK_FIXTURE_DENSITY = 1.0;
+/**
+ * The default friction value of a fixture created for a {@link Block}.
+ * @constant {number}
+ * @memberof BlockGrid
+ */
+BlockGrid.BLOCK_FIXTURE_FRICTION = 0.5;
+/**
+ * The default restitution value of a fixture created for a {@link Block}.
+ * @constant {number}
+ * @memberof BlockGrid
+ */
+BlockGrid.BLOCK_FIXTURE_RESTITUTION = 0.5;
+/**
+ * The default padding value of a fixture create for a {@link Block}. Padding defines the difference in space between
+ * the rendered {@link Block} and the fixture for that {@link Block}.
+ * @constant {number}
+ * @memberof BlockGrid
+ */
+BlockGrid.BLOCK_FIXTURE_PADDING = .1;
 
 BlockGrid.coordinatesForBlock = function(block) {
 	var loc = block.gridData.loc;

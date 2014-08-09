@@ -442,11 +442,28 @@ var Ship = BlockStructure.extend({
 
 					var impulse = new ige.box2d.b2Vec2(impulseX, impulseY);
 
-					var enginePosition = this._drawLocationForBlock(engine);
+					var enginePosition = BlockGrid.coordinatesForBlock(engine);
+					console.log("Engine location: ");
+					console.log(engine.gridData.loc);
+
+					console.log("Engine coordinates: ");
+					console.log(enginePosition);
+
 					enginePosition.x = enginePosition.x / scaleRatio;
 					enginePosition.y = -enginePosition.y / scaleRatio;
 
+					var bodyPosition = this.box2dBody().GetPosition();
+					bodyPosition.x = bodyPosition.x * scaleRatio;
+					bodyPosition.y = -bodyPosition.y * scaleRatio;
+					console.log("Body position: ");
+					console.log(bodyPosition);
+
 					var engineWorldPosition = this.box2dBody().GetWorldPoint(enginePosition);
+					console.log("Engine world position: ");
+					console.log(engineWorldPosition);
+					console.log("Impulse: ");
+					console.log(impulse);
+					console.log();
 					this.box2dBody().ApplyImpulse(impulse, engineWorldPosition);
 				}
 			}
@@ -456,7 +473,7 @@ var Ship = BlockStructure.extend({
 			// update
 			this._prev_controls = JSON.parse(JSON.stringify(this.controls()));
 		}
-	},
+	}
 });
 
 /**

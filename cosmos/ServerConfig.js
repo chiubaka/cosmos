@@ -15,6 +15,7 @@ var config = {
 		{ name: 'Block', path: './entities/Block' },
 		{ name: 'GridData', path: './components/GridData' },
 		{ name: 'SparseGrid', path: './entities/SparseGrid' },
+		{ name: 'BlockGridFixtureDebugContainer', path: './entities/BlockGridFixtureDebugContainer' },
 		{ name: 'BlockGridPhysicsContainer', path: './entities/BlockGridPhysicsContainer' },
 		{ name: 'BlockGrid', path: './entities/BlockGrid' },
 		{ name: 'BlockStructure', path: './entities/BlockStructure' },

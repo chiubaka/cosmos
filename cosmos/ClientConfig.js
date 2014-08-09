@@ -18,6 +18,7 @@ var igeClientConfig = {
 		'./entities/Block.js',
 		'./components/GridData.js',
 		'./entities/SparseGrid.js',
+		'./entities/BlockGridFixtureDebugContainer.js',
 		'./entities/BlockGridPhysicsContainer.js',
 		'./entities/BlockGrid.js',
 		'./entities/BlockStructure.js',
