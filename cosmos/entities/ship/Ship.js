@@ -143,22 +143,21 @@ var Ship = BlockStructure.extend({
 		return this._thrusters;
 	},
 
-	/*
-	Overrides the superclass's add function
-	Updates the engines and thrusters lists on each add
-	*/
-	add: function(row, col, block, checkForNeighbors) {
-		var blockAdded = BlockStructure.prototype.add.call(this, row, col, block, checkForNeighbors);
-		if (blockAdded && ige.isServer) {
+	put: function(block, loc, replace) {
+		var result = BlockStructure.prototype.put.call(this, block, loc, replace);
+		if (result !== null && ige.isServer) {
 			DbPlayer.update(this.player().id(), this.player(), function() {});
 		}
+
 		if (block instanceof EngineBlock) {
 			this.engines().push(block);
 		}
+
 		if (block instanceof ThrusterBlock) {
 			this.thrusters().push(block);
 		}
-		return blockAdded;
+
+		return result;
 	},
 
 	streamEntityValid: function(val) {
@@ -174,19 +173,18 @@ var Ship = BlockStructure.extend({
 		return BlockStructure.prototype.streamEntityValid.call(this, val);
 	},
 
-	/*
-	Overrides the superclass's remove function
-	Updates the engines and thrusters lists on each remove
-	*/
-	remove: function(row, col) {
-		var block = this.get(row, col);
-		if (block instanceof EngineBlock) {
-			this.engines().splice(this.engines().indexOf(block), 1);
-		}
-		if (block instanceof ThrusterBlock) {
-			this.thrusters().splice(this.thrusters().indexOf(block), 1);
-		}
-		BlockStructure.prototype.remove.call(this, row, col);
+	remove: function(loc, width, height) {
+		var removed = BlockStructure.prototype.remove.call(this, loc, width, height);
+		_.forEach(removed, function(removedBlock) {
+			if (removedBlock instanceof EngineBlock) {
+				this.engines().splice(this.engines().indexOf(block), 1);
+			}
+
+			if (block instanceof ThursterBlock) {
+				this.thrusters().splice(this.thrusters().indexOf(block), 1);
+			}
+		});
+
 		if (ige.isServer) {
 			DbPlayer.update(this.player().id(), this.player(), function() {});
 		}
