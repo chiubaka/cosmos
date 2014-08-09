@@ -16,6 +16,8 @@ var BlockGridNew = IgeEntityBox2d.extend({
 		this.width(0);
 		this.height(0);
 
+		this.addComponent(PixiRenderableComponent);
+
 		// #ifdef CLIENT
 		if (ige.isClient) {
 			// Create the render container and mount it to this entity.
@@ -110,7 +112,7 @@ var BlockGridNew = IgeEntityBox2d.extend({
 			y: inverted.x * Math.sin(theta) + inverted.y * Math.cos(theta)
 		};
 
-		this.translateBy(gridTranslation.x, gridTranslation.y);
+		this.translateBy(gridTranslation.x, gridTranslation.y, 0);
 	},
 
 	_gridCoordinatesForBlock: function(block) {
@@ -178,10 +180,10 @@ var BlockGridNew = IgeEntityBox2d.extend({
 		if (this.count() > 1) {
 			translation.x = this._renderContainer.translate().x() + renderCenter.x;
 			translation.y = this._renderContainer.translate().y() + renderCenter.y;
-			this._renderContainer.translateBy(translation.x, translation.y);
+			this._renderContainer.translateBy(translation.x, translation.y, 0);
 		}
 		else {
-			this._renderContainer.translateTo(-renderCenter.x, -renderCenter.y);
+			this._renderContainer.translateTo(-renderCenter.x, -renderCenter.y, 0);
 		}
 
 		return translation;

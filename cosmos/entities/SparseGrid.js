@@ -21,24 +21,24 @@ var SparseGrid = IgeClass.extend({
 	each: function(func, loc, width, height) {
 		if (typeof(func) !== "function") {
 			this.log("SparseGrid#each: passed func value is not a function.", "warning");
-			return;
+			return null;
 		}
 
 		if (!IgePoint2d.validatePoint(loc)) {
 			// If location is not provided, iterate over all items in the grid
 			// TODO: Set loc, width, height so that all items are iterated over
 			this.log("Invalid point passed to SparseGrid#each.", "warning");
-			return;
+			return null;
 		}
 
 		if (width === undefined) {
 			this.log("SparseGrid#each: no width parameter provided.", "warning");
-			return;
+			return null;
 		}
 
 		if (height === undefined) {
 			this.log("SparseGrid#each: no height parameter provided.", "warning");
-			return;
+			return null;
 		}
 
 		for (var x = loc.x; x < loc.x + width; x++) {
@@ -64,7 +64,7 @@ var SparseGrid = IgeClass.extend({
 	get: function(loc, width, height) {
 		if (!IgePoint2d.validatePoint(loc)) {
 			this.log("SparseGrid#get: no valid loc provided.", "warning");
-			return;
+			return null;
 		}
 
 		// If no width and height are provided, just get the location provided.
@@ -120,28 +120,28 @@ var SparseGrid = IgeClass.extend({
 	put: function(object, loc, replace) {
 		if (object === undefined) {
 			this.log("SparseGrid#put: no object parameter to put.", "warning");
-			return;
+			return null;
 		}
 
 		if (!IgePoint2d.validatePoint(loc)) {
 			this.log("SparseGrid#put: no valid loc provided.", "warning");
-			return;
+			return null;
 		}
 
 		if (replace === undefined) {
 			this.log("SparseGrid#put: no replace value provided.", "warning");
-			return;
+			return null;
 		}
 
 		if (!(object.gridData instanceof GridData)) {
 			this.log("SparseGrid#put: object does not have grid data component.", "warning");
-			return;
+			return null;
 		}
 
 		if (object.gridData.grid !== undefined) {
 			this.log("SparseGrid#put: attempt to add object that has already been added to a grid.",
 				"warning");
-			return;
+			return null;
 		}
 
 		var width = object.gridData.width;
@@ -182,7 +182,7 @@ var SparseGrid = IgeClass.extend({
 	remove: function(loc, width, height) {
 		if (!IgePoint2d.validatePoint(loc)) {
 			this.log("SparseGrid#remove: no valid loc provided.", "warning");
-			return;
+			return null;
 		}
 
 		// If no width and height are provided, just remove the location provided.

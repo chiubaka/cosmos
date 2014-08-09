@@ -66,59 +66,5 @@ describe("A BlockGrid", function() {
 
 	testGrid(GridClass, function() {});//beforeEachFunc, afterEachFunc);
 
-	it("should always return grid coordinates (0, 0) if there are no blocks already in the " +
-			"grid.",
-		function() {
-			this.testObjects["1x1"][0].gridData.loc = new IgePoint2d(10, 10);
-			expect(this.grid._gridCoordinatesForBlock(this.testObjects["1x1"][0]))
-				.toEqual(jasmine.objectContaining({x: 0, y: 0}));
 
-			this.testObjects["1x1"][0].gridData.loc = new IgePoint2d(0, 0);
-			expect(this.grid._gridCoordinatesForBlock(this.testObjects["1x1"][0]))
-				.toEqual(jasmine.objectContaining({x: 0, y: 0}));
-
-			this.testObjects["1x1"][0].gridData.loc = new IgePoint2d(-10, -10);
-			expect(this.grid._gridCoordinatesForBlock(this.testObjects["1x1"][0]))
-				.toEqual(jasmine.objectContaining({x: 0, y: 0}));
-		}
-	);
-
-	it("should correctly determine the grid coordinates for a given grid location.", function() {
-		// With one block in the grid.
-		this.grid.put(this.testObjects["1x1"][0], new IgePoint2d(0, 0), false);
-
-		this.testObjects["1x1"][1].gridData.loc = new IgePoint2d(1, 1);
-		expect(this.grid._gridCoordinatesForBlock(this.testObjects["1x1"][1]))
-			.toEqual(jasmine.objectContaining({x: 26, y: 26}));
-
-		this.testObjects["1x1"][2].gridData.loc = new IgePoint2d(-4, -4);
-		expect(this.grid._gridCoordinatesForBlock(this.testObjects["1x1"][2]))
-			.toEqual(jasmine.objectContaining({x: -104, y: -104}));
-
-		this.testObjects["1x1"][3].gridData.loc = new IgePoint2d(-5, 2);
-		expect(this.grid._gridCoordinatesForBlock(this.testObjects["1x1"][3]))
-			.toEqual(jasmine.objectContaining({x: -130, y: 52}));
-
-		// With two blocks in the grid.
-		this.grid.put(this.testObjects["1x1"][1], new IgePoint2d(0, 1), false);
-
-		this.testObjects["1x1"][2].gridData.loc = new IgePoint2d(-4, -4);
-		expect(this.grid._gridCoordinatesForBlock(this.testObjects["1x1"][2]))
-			.toEqual(jasmine.objectContaining({x: -104, y: -117}));
-
-		this.testObjects["1x1"][3].gridData.loc = new IgePoint2d(-5, 2);
-		expect(this.grid._gridCoordinatesForBlock(this.testObjects["1x1"][3]))
-			.toEqual(jasmine.objectContaining({x: -130, y: 39}));
-
-		// With a larger block in the grid.
-		this.grid.put(this.testObjects["2x2"][0], new IgePoint2d(1, 1), false);
-
-		this.testObjects["1x1"][2].gridData.loc = new IgePoint2d(-4, -4);
-		expect(this.grid._gridCoordinatesForBlock(this.testObjects["1x1"][2]))
-			.toEqual(jasmine.objectContaining({x: -104, y: -104}));
-
-		this.testObjects["1x1"][3].gridData.loc = new IgePoint2d(-5, 2);
-		expect(this.grid._gridCoordinatesForBlock(this.testObjects["1x1"][3]))
-			.toEqual(jasmine.objectContaining({x: -130, y: 52}));
-	});
 });
