@@ -226,7 +226,11 @@ return;
 		}];
 
 		var endContacts = [{
-			disable_contact: false,
+			a_body_category: Ship.BOX2D_CATEGORY,
+			a_fixture_category: '',
+			b_body_category: Drop.BOX2D_CATEGORY,
+			b_fixture_category: '',
+			disable_contact:false,
 			identifier: contactIdentifiers['shipDropEnd']
 		}];
 
@@ -237,8 +241,8 @@ return;
 
 		ige.physicsSystem.newCustomContacts({contacts: beginContacts, contactType:
 			'BEGIN_CONTACT'});
-		//ige.physicsSystem.newCustomContacts({contacts: endContacts, contactType:
-			//'END_CONTACT'});
+		ige.physicsSystem.newCustomContacts({contacts: endContacts, contactType:
+			'END_CONTACT'});
 		//ige.physicsSystem.newCustomContacts({contacts: preSolveContacts, contactType:
 			//'PRE_SOLVE'});
 
@@ -261,6 +265,7 @@ return;
 			},
 
 			endContact: function(entity1, entity2, identifier) {
+				console.log('End contact');
 				switch (identifier) {
 					case contactIdentifiers.shipDropEnd:
 						var entities = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY);
