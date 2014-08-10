@@ -27,7 +27,8 @@ var LaserBeamRenderableComponent = PixiRenderableComponent.extend({
 
 		this._displayObject.height = distance * 2;
 		this._displayObject.rotation = angle - laserMount.parent().rotate().z() - Math.radians(90);
-		this._displayObject.position.x = -this._displayObject.width / 2;
+		this._displayObject.position.x = -this._displayObject.width / 2 + this._entity.translate().x();
+		this._displayObject.position.y = this._entity.translate().y();
 
 		this._displayObject.alpha = this._opacity;
 		

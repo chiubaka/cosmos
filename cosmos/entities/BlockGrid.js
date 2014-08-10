@@ -39,18 +39,21 @@ var BlockGrid = IgeEntityBox2d.extend({
 		if (ige.isClient) {
 			this._effectsAboveContainer = new IgeEntity()
 				.addComponent(PixiRenderableComponent)
+				.depth(this.depth() + 1)
 				.width(0)
 				.height(0)
 				.mount(this);
 
 			this._effectsBelowContainer = new IgeEntity()
 				.addComponent(PixiRenderableComponent)
+				.depth(this.depth() - 1)
 				.width(0)
 				.height(0)
 				.mount(this);
 
 			// Create the render container and mount it to this entity.
 			this._renderContainer = new RenderContainer()
+				.depth(this.depth())
 				.width(0)
 				.height(0)
 				.mount(this);
@@ -542,10 +545,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 		// #else
 		else {
-			oldTranslate = {
-				x: this._renderContainer.translate().x(),
-				y: this._renderContainer.translate().y()
-			};
 			this._effectsAboveContainer.translateTo(-gridCenter.x, -gridCenter.y, 0);
 			this._effectsBelowContainer.translateTo(-gridCenter.x, -gridCenter.y, 0);
 			this._renderContainer.translateTo(-gridCenter.x, -gridCenter.y, 0);
