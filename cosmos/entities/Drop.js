@@ -53,7 +53,9 @@ var Drop = BlockGrid.extend({
 		}
 		else {
 			setTimeout(function() {
-				self.setOwner(undefined);
+				if (self.alive()) {
+					self.setOwner(undefined);
+				}
 			}, Drop.OWNERSHIP_PERIOD)
 		}
 	},

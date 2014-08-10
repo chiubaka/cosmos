@@ -185,7 +185,7 @@ var GameInit = {
 
 		var NUM_NORMAL_ASTEROIDS = 1;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
-			this.spawnStructure(5, BlockStructureGenerator.elementDistributions.randomDistribution());
+			this.spawnStructure(200, BlockStructureGenerator.elementDistributions.randomDistribution());
 		}
 return;
 		// TODO: The procedural generation algorithm is causing strange problems with the new BlockGrid system. Leave
