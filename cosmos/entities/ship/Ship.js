@@ -438,33 +438,16 @@ var Ship = BlockStructure.extend({
 						linearImpulse = -linearImpulse;
 					}
 
-					var impulseX = Math.cos(angle) * linearImpulse;
-					var impulseY = Math.sin(angle) * linearImpulse;
+					var impulseX = MathUtils.round(Math.cos(angle) * linearImpulse);
+					var impulseY = MathUtils.round(Math.sin(angle) * linearImpulse);
 
 					var impulse = new ige.box2d.b2Vec2(impulseX, impulseY);
 
 					var enginePosition = BlockGrid.coordinatesForBlock(engine);
-					console.log("Engine location: ");
-					console.log(engine.gridData.loc);
-
-					console.log("Engine coordinates: ");
-					console.log(enginePosition);
-
 					enginePosition.x = enginePosition.x / scaleRatio;
 					enginePosition.y = -enginePosition.y / scaleRatio;
 
-					var bodyPosition = this._box2dBody.GetPosition();
-					bodyPosition.x = bodyPosition.x * scaleRatio;
-					bodyPosition.y = -bodyPosition.y * scaleRatio;
-					console.log("Body position: ");
-					console.log(bodyPosition);
-
 					var engineWorldPosition = this._box2dBody.GetWorldPoint(enginePosition);
-					console.log("Engine world position: ");
-					console.log(engineWorldPosition);
-					console.log("Impulse: ");
-					console.log(impulse);
-					console.log();
 					this._box2dBody.ApplyImpulse(impulse, engineWorldPosition);
 				}
 			}

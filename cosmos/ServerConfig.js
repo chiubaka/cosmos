@@ -137,6 +137,7 @@ var config = {
 
 		/* Helper Utilities */
 		{ name: 'BlockGridPadding', path: './utils/BlockGridPadding' },
+		{ name: 'MathUtils', path: './utils/MathUtils' },
 		{ name: 'NetworkUtils', path: './utils/NetworkUtils' },
 		{ name: 'PrototypeMixins', path: './utils/PrototypeMixins' },
 		{ name: 'RandomInterval', path: './utils/RandomInterval' },

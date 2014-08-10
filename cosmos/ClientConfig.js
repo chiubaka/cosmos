@@ -183,6 +183,7 @@ var igeClientConfig = {
 		/* Helper utilities */
 		'./utils/BlockGridPadding.js',
 		'./utils/DeploymentUtils.js',
+		'./utils/MathUtils.js',
 		'./utils/NetworkUtils.js',
 		'./utils/RandomInterval.js',
 		'./utils/PrototypeMixins.js',
