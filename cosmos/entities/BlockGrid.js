@@ -18,6 +18,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 */
 	_previouslyStreamed: undefined,
 	// #else
+	_effectsAboveContainer: undefined,
+	_effectsBelowContainer: undefined,
 	_renderContainer: undefined,
 	// #endif
 
@@ -35,11 +37,23 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		// #ifdef CLIENT
 		if (ige.isClient) {
+			this._effectsAboveContainer = new IgeEntity()
+				.addComponent(PixiRenderableComponent)
+				.width(0)
+				.height(0)
+				.mount(this);
+
+			this._effectsBelowContainer = new IgeEntity()
+				.addComponent(PixiRenderableComponent)
+				.width(0)
+				.height(0)
+				.mount(this);
+
 			// Create the render container and mount it to this entity.
-			this._renderContainer = new RenderContainer();
-			this._renderContainer.width(0);
-			this._renderContainer.height(0);
-			this._renderContainer.mount(this);
+			this._renderContainer = new RenderContainer()
+				.width(0)
+				.height(0)
+				.mount(this);
 
 			if (data !== undefined) {
 				this.fromJSON(Block, data);
@@ -65,6 +79,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// #endif
 	},
 
+	// #ifdef CLIENT
 	/**
 	 * Adds an effect to a {@link Block} in this {@link BlockGrid}
 	 * @param effect {Object} An effect object containing information for the type of effect, the source block
@@ -74,38 +89,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 	 */
 	addEffect: function(effect) {
 		var block = this.get(new IgePoint2d(effect.sourceBlock.col, effect.sourceBlock.row))[0];
-
 		block.addEffect(effect);
 	},
+	// #endif
 
-	/**
-	 * Creates the above effects mount for the given {@link Block} and moves the mount to the correct location based on where
-	 * the {@link Block} is in the grid. An effects mount is a blank IGE Entity that is used to correctly position
-	 * effects for blocks (e.g. mining particles or engine particles). Effects mounts are associated with {@link Block}s
-	 * and their location is updated anytime the {@link Block}s in this {@link BlockGrid} move.
-	 * @param block {Block} The {@link Block} to create an effects mount for.
-	 * @memberof BlockGrid
-	 * @instance
-	 */
-	createAboveEffectsMount: function(block) {
-		block.createAboveEffectsMount();
-		this.updateEffect(block);
-	},
-
-	/**
-	 * Creates the below effects mount for the given {@link Block} and moves the mount to the correct location based on where
-	 * the {@link Block} is in the grid. An effects mount is a blank IGE Entity that is used to correctly position
-	 * effects for blocks (e.g. mining particles or engine particles). Effects mounts are associated with {@link Block}s
-	 * and their location is updated anytime the {@link Block}s in this {@link BlockGrid} move.
-	 * @param block {Block} The {@link Block} to create an effects mount for.
-	 * @memberof BlockGrid
-	 * @instance
-	 */
-	createBelowEffectsMount: function(block) {
-		block.createBelowEffectsMount();
-		this.updateEffect(block);
-	},
-
+	// #ifdef SERVER
 	/**
 	 * Removes the {@link Block} at the specified row and column from the grid and creates a {@link Drop} for the
 	 * removed {@link Block}.
@@ -146,6 +134,19 @@ var BlockGrid = IgeEntityBox2d.extend({
 			.rotate().z(theta)
 			.streamMode(1);*/
 	},
+	// #endif
+
+	// #ifdef CLIENT
+	effectsAboveContainer: function() {
+		return this._effectsAboveContainer;
+	},
+	// #endif
+
+	// #ifdef CLIENT
+	effectsBelowContainer: function() {
+		return this._effectsBelowContainer;
+	},
+	// #endif
 
 	/**
 	 * Resets this BlockGrid's internal state to represent the grid that is represented by the provided {@link Block}
@@ -419,28 +420,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return this.get(new IgePoint2d(x, y))[0];
 	},
 
-	_counteractTranslation: function(translation) {
-		// No need to counteract translation for the first block added to the grid!
-		// Also, since BlockGrids are streamd to the clients, no reason to translate on the client
-		// because this would cause double translation.
-		if (this.count() <= 1 || ige.isClient) {
-			return;
-		}
-
-		// The grid should translate in the opposite direction from the render container.
-		var inverted = {x: -translation.x, y: -translation.y};
-
-		var theta = this.rotate().z();
-
-		// Rotate the translation vector based on the current angle of the grid.
-		var gridTranslation = {
-			x: inverted.x * Math.cos(theta) - inverted.y * Math.sin(theta),
-			y: inverted.x * Math.sin(theta) + inverted.y * Math.cos(theta)
-		};
-
-		this.translateBy(gridTranslation.x, gridTranslation.y, 0);
-	},
-
 	_createFixtureDef: function(block) {
 		var coordinates = BlockGrid.coordinatesForBlock(block);
 		var width = block.width();
@@ -563,12 +542,13 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 		// #else
 		else {
-			var container = this._renderContainer;
 			oldTranslate = {
-				x: container.translate().x(),
-				y: container.translate().y()
+				x: this._renderContainer.translate().x(),
+				y: this._renderContainer.translate().y()
 			};
-			container.translateTo(-gridCenter.x, -gridCenter.y, 0);
+			this._effectsAboveContainer.translateTo(-gridCenter.x, -gridCenter.y, 0);
+			this._effectsBelowContainer.translateTo(-gridCenter.x, -gridCenter.y, 0);
+			this._renderContainer.translateTo(-gridCenter.x, -gridCenter.y, 0);
 		}
 		// #endif
 	}

@@ -11,7 +11,7 @@ var LaserBeamRenderableComponent = PixiRenderableComponent.extend({
 		var blockGrid = ige.$(this._entity._targetId);
 		var block = undefined;
 		if (blockGrid !== undefined) {
-			block = blockGrid.get(this._entity._targetRow, this._entity._targetCol);
+			block = blockGrid.get(new IgePoint2d(this._entity._targetCol, this._entity._targetRow))[0];
 		}
 
 		if (block === undefined) {

@@ -363,13 +363,6 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	addEffect: function(effect) {
-		if (this._effectsMountAbove === undefined) {
-			this.blockGrid().createAboveEffectsMount(this);
-		}
-		if (this._effectsMountBelow === undefined) {
-			this.blockGrid().createBelowEffectsMount(this);
-		}
-
 		switch (effect.type) {
 			case 'glow':
 				this._addGlowEffect(effect);
@@ -403,15 +396,6 @@ var Block = IgeEntity.extend({
 				this._removeHealthBar();
 				break;
 		}
-
-		if (!this._hasEffects()) {
-			if (this._effectsMountAbove !== undefined) {
-				this._effectsMountAbove.destroy();
-			}
-			if (this._effectsMountBelow !== undefined) {
-				this._effectsMountBelow.destroy();
-			}
-		}
 	},
 
 	/**
@@ -439,9 +423,30 @@ var Block = IgeEntity.extend({
 			this._effects['glow'].destroy();
 		}
 
-		this._effects['glow'] = new GlowEffect(effect)
-			.depth(this.depth() - 1)
-			.mount(this._effectsMountBelow);
+		var effectsCenter = this._effectsCenter();
+
+		this._effects['glow'] = new GlowEffect(effect);
+		this._mountEffect(this._effects['glow'], false);
+	},
+
+	_effectsAboveContainer: function() {
+		return this.gridData.grid.effectsAboveContainer();
+	},
+
+	_effectsBelowContainer: function() {
+		return this.gridData.grid.effectsBelowContainer();
+	},
+
+	_effectsCenter: function() {
+		return BlockGrid.coordinatesForBlock(this);
+	},
+
+	_mountEffect: function(effect, above) {
+		var effectsCenter = this._effectsCenter();
+
+		var container = above ? this._effectsAboveContainer() : this._effectsBelowContainer();
+
+		effect.translateTo(effectsCenter.x, effectsCenter.y, 0).mount(container);
 	},
 
 	/**
@@ -475,16 +480,16 @@ var Block = IgeEntity.extend({
 
 		this._effects['miningParticles'].counter++;
 		if (!this._effects['miningParticles'].particleEmitter) {
-			this._effects['miningParticles'].particleEmitter = new BlockParticleEmitter().mount(this._effectsMountAbove);
+			this._effects['miningParticles'].particleEmitter = new BlockParticleEmitter();
+			this._mountEffect(this._effects['miningParticles'].particleEmitter, true);
 		}
 	},
 
 	_addHealthBar: function() {
 		if (this._effects['healthBar'] === undefined) {
-			this._effects['healthBar'] = new HealthBar(this)
-				.mount(this._effectsMountAbove);
+			this._effects['healthBar'] = new HealthBar(this);
+			this._mountEffect(this._effects['healthBar'], true);
 		}
-
 	},
 
 	/**

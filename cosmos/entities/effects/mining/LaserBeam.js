@@ -75,11 +75,12 @@ var LaserBeam = IgeEntity.extend({
 	 */
 	update: function(ctx) {
 		if (!ige.isServer) {
+			// TODO: This is duplicate code?!
 			var laserMount = this.parent();
 			var blockGrid = ige.$(this._targetId);
 			var block = undefined;
 			if (blockGrid !== undefined) {
-				block = blockGrid.get(this._targetRow, this._targetCol);
+				block = blockGrid.get(new IgePoint2d(this._targetCol, this._targetRow))[0];
 			}
 
 			// Check if the block is undefined. This happens in the update() ticks
