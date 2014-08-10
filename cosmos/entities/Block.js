@@ -269,6 +269,8 @@ var Block = IgeEntity.extend({
 	 */
 	mouseDown: function(event, control) {
 		var self = this;
+		// TOOD: Synchronize block ID's between server and client so that we can uniquely identify
+		// a block without referring to its block grid, row, and col.
 		var data = {
 			blockGridId: this.blockGrid().id(),
 			row: this._row,
@@ -523,13 +525,8 @@ var Block = IgeEntity.extend({
 	 * @memberof Block
 	 * @instance
 	 */
-	blockGrid: function(newBlockGrid) {
-		if (newBlockGrid === undefined) {
-			return this._blockGrid;
-		}
-
-		this._blockGrid = newBlockGrid;
-		return this;
+	blockGrid: function() {
+		return this.gridData.grid;
 	},
 
 	/**

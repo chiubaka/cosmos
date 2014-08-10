@@ -147,6 +147,11 @@ var SparseGrid = IgeClass.extend({
 		return brokeEarly;
 	},
 
+	hasNeighboringOpenLocations: function(loc, width, height) {
+		var neighboringOpenLocations = this.neighboringOpenLocations(loc, width, height);
+		return neighboringOpenLocations.length > 0;
+	},
+
 	gridHeight: function() {
 		if (this.count() === 0) {
 			return 0;
@@ -158,13 +163,12 @@ var SparseGrid = IgeClass.extend({
 		return this._lowerBound.clone();
 	},
 
-	neighboringLocations: function(object) {
+	neighboringLocations: function(loc, width, height) {
+		// TODO: Validate the location, width, and height.
 		var neighboringLocations = [];
 
-		var x = object.gridData.loc.x;
-		var y = object.gridData.loc.y;
-		var width = object.gridData.width;
-		var height = object.gridData.height;
+		var x = loc.x;
+		var y = loc.y;
 
 		var topY = y - 1;
 		var bottomY = y + height;
@@ -183,6 +187,36 @@ var SparseGrid = IgeClass.extend({
 		}
 
 		return neighboringLocations;
+	},
+
+	neighboringLocationsForObject: function(object) {
+		// TODO: Validate that the object has the GridData component.
+		return this.neighboringLocations(object.gridData.loc, object.gridData.width,
+			object.gridData.height);
+	},
+
+	neighboringOpenLocations: function(loc, width, height) {
+		var neighboringLocations = this.neighboringLocations(loc, width, height);
+		var neighboringOpenLocations = [];
+
+		var self = this;
+		_.forEach(neighboringLocations, function(neighboringLocation) {
+			if (!self.has(neighboringLocation)) {
+				neighboringOpenLocations.push(neighboringLocation);
+			}
+		});
+
+		return neighboringOpenLocations;
+	},
+
+	neighboringOpenLocationsForObject: function(object) {
+		return this.neighboringOpenLocations(object.gridData.loc);
+	},
+
+	objectHasNeighboringOpenLocations: function(object) {
+		// TODO: Validate that the object has the GridData component.
+		return this.hasNeighboringOpenLocations(object.gridData.loc, object.gridData.width,
+			object.gridData.height);
 	},
 
 	put: function(object, loc, replace) {
