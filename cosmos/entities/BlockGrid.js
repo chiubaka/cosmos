@@ -173,7 +173,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		if (this._debug && ige.isServer) {
 			this._debugContainer.translateTo(this._physicsOffset.x, this._physicsOffset.y, 0);
-			this._debugContainer.rotateTo(this.rotate().x(), this.rotate().y(), this.rotate().z());
 		}
 	},
 

@@ -25,8 +25,6 @@ var GameInit = {
 			this.initPhysics();
 			this.initServerEvents();
 		} else {
-			new IceBlock().mount(ige.client.spaceGameScene);
-
 			this.initPlayerState();
 			this.initPlayerControls();
 			//this.initTimeStream(game);
