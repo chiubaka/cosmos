@@ -10,7 +10,7 @@ var ExampleShips = {
 	 * @retruns {Array} A {@link Block} matrix that represents the starter ship.
 	 * @memberof ExampleShips
 	 */
-	/*starterShip: function() {
+	starterShip: function() {
 		return [
 			[undefined,           undefined,   new MiningLaserBlock(), undefined,   undefined],
 			[undefined,           new SteelPlatingBlock(), new SteelPlatingBlock(),            new SteelPlatingBlock(), undefined],
@@ -21,9 +21,6 @@ var ExampleShips = {
 			[undefined,           new SteelPlatingBlock(), new FuelBlock,          new SteelPlatingBlock(), undefined],
 			[undefined,           new SteelPlatingBlock(), new IronEngineBlock(),      new SteelPlatingBlock(), undefined]
 		]
-	},*/
-	starterShip: function() {
-		return [[new IronEngineBlock()]]
 	},
 
 	/**
