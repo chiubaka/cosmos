@@ -21,8 +21,8 @@ var Background = ParallaxBackground.extend({
 		}
 
 		if (ige.isClient) {
-			this.backgroundTexture = PIXI.TextureCache.background_starfield;
-			this.backgroundHeight = this.backgroundWidth = 6000;
+			this.backgroundTexture = PIXI.TextureCache['background' + this.gridX + '-' + this.gridY];
+			this.backgroundHeight = this.backgroundWidth = 1024;
 		}
 
 		ParallaxBackground.prototype.init.call(this);
