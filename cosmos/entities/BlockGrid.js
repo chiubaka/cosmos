@@ -66,6 +66,47 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	/**
+	 * Adds an effect to a {@link Block} in this {@link BlockGrid}
+	 * @param effect {Object} An effect object containing information for the type of effect, the source block
+	 * (block on which to mount the effect), and an optional target block for effects like the mining laser.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	addEffect: function(effect) {
+		var block = this.get(new IgePoint2d(effect.sourceBlock.col, effect.sourceBlock.row))[0];
+
+		block.addEffect(effect);
+	},
+
+	/**
+	 * Creates the above effects mount for the given {@link Block} and moves the mount to the correct location based on where
+	 * the {@link Block} is in the grid. An effects mount is a blank IGE Entity that is used to correctly position
+	 * effects for blocks (e.g. mining particles or engine particles). Effects mounts are associated with {@link Block}s
+	 * and their location is updated anytime the {@link Block}s in this {@link BlockGrid} move.
+	 * @param block {Block} The {@link Block} to create an effects mount for.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	createAboveEffectsMount: function(block) {
+		block.createAboveEffectsMount();
+		this.updateEffect(block);
+	},
+
+	/**
+	 * Creates the below effects mount for the given {@link Block} and moves the mount to the correct location based on where
+	 * the {@link Block} is in the grid. An effects mount is a blank IGE Entity that is used to correctly position
+	 * effects for blocks (e.g. mining particles or engine particles). Effects mounts are associated with {@link Block}s
+	 * and their location is updated anytime the {@link Block}s in this {@link BlockGrid} move.
+	 * @param block {Block} The {@link Block} to create an effects mount for.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	createBelowEffectsMount: function(block) {
+		block.createBelowEffectsMount();
+		this.updateEffect(block);
+	},
+
+	/**
 	 * Removes the {@link Block} at the specified row and column from the grid and creates a {@link Drop} for the
 	 * removed {@link Block}.
 	 * @param row {number} The row of the {@link Block} to drop.
@@ -98,12 +139,12 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		this.remove(loc);
 
-		new Drop().mount(ige.server.spaceGameScene)
+		/*new Drop().mount(ige.server.spaceGameScene)
 			.block(blocks[0])
 			.owner(player.currentShip())
 			.translateTo(finalX, finalY, 0)
 			.rotate().z(theta)
-			.streamMode(1);
+			.streamMode(1);*/
 	},
 
 	/**
@@ -163,6 +204,35 @@ var BlockGrid = IgeEntityBox2d.extend({
 		}
 
 		return this;
+	},
+
+	/**
+	 * Process actions on {@link Block}s client-side.
+	 * @param data {Object} An object representing the action sent from the server.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	processBlockActionClient: function(data) {
+		switch (data.action) {
+			case 'remove':
+				this.remove(new IgePoint2d(data.col, data.row));
+				this._renderContainer.refresh();
+				break;
+			case 'damage':
+				var block = this.get(new IgePoint2d(data.col, data.row))[0];
+				block.takeDamage(data.amount);
+				break;
+			case 'add':
+				ige.client.metrics.track(
+					'cosmos:construct.existing',
+					{'type': data.selectedType});
+				this.put(Block.blockFromClassId(data.selectedType), new IgePoint2d(data.col, data.row), true);
+				ige.emit('cosmos:BlockGrid.processBlockActionClient.add', [data.selectedType, this]);
+				this._renderContainer.refresh();
+				break;
+			default:
+				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
+		}
 	},
 
 	/**
@@ -245,6 +315,19 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// TODO: Remove fixture for the block.
 
 		return SparseGrid.prototype.remove.call(this, location, width, height);
+	},
+
+	/**
+	 * Removes an effect from a {@link Block} in this {@link BlockGrid}
+	 * @param effect {Object} An effect object containing information for the type of effect, the source block
+	 * (block on which to mount the effect), and an optional target block for effects like the mining laser.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	removeEffect: function(effect) {
+		var block = this.get(new IgePoint2d(effect.sourceBlock.col, effect.sourceBlock.row))[0];
+
+		block.removeEffect(effect);
 	},
 
 	streamCreateData: function() {

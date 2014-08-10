@@ -273,8 +273,8 @@ var Block = IgeEntity.extend({
 		// a block without referring to its block grid, row, and col.
 		var data = {
 			blockGridId: this.blockGrid().id(),
-			row: this._row,
-			col: this._col
+			row: this.gridData.loc.y,
+			col: this.gridData.loc.x
 		};
 
 		// TODO: Expand when clientState supports multiple current capabilities
