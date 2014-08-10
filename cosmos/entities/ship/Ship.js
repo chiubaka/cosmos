@@ -213,7 +213,7 @@ var Ship = BlockStructure.extend({
 		this.cargo = new Cargo();
 
 		this
-			.addSensor(300)
+			.addSensor(1000)
 			.attractionStrength(0.01)
 			.relocate();
 	},
@@ -240,7 +240,7 @@ var Ship = BlockStructure.extend({
 	 */
 	addSensor: function(radius) {
 		var fixtureDef = {
-			fixtureCategory: 'attractor',
+			fixtureCategory: Ship.BOX2D_ATTRACTOR_CATEGORY,
 			friction: 0.0,
 			restitution: 0.0,
 			density: 0.0,
@@ -439,7 +439,7 @@ Ship.SHIP_START_RADIUS = 4000;
 * @memberof Ship
 */
 Ship.BOX2D_CATEGORY = 'ship';
-
+Ship.ATTRACTOR_BOX2D_CATEGORY = 'attractor';
 /**
 * The default depth layer for {@link Ship}s when rendered to the screen. Should be rendered above other
 * {@link BlockGrid}s.

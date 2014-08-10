@@ -147,7 +147,8 @@ var BlockGrid = IgeEntity.extend({
 			this.addComponent(TLPhysicsBodyComponent);
 			this.physicsBody.newBody({
 				bodyType: 'DYNAMIC',
-				bodyCategory: this.category() || '',
+				bodyCategory: this.category(),
+				linkedId: this instanceof Drop ? this.getOwner().id() : undefined,
 				x: 0.0,
 				y: 0.0,
 				angle: 0.0,
@@ -399,9 +400,9 @@ var BlockGrid = IgeEntity.extend({
 
 		this.remove(row, col);
 
-		new Drop().mount(ige.server.spaceGameScene)
+		new Drop({owner: player.currentShip()})
+			.mount(ige.server.spaceGameScene)
 			.block(block)
-			.owner(player.currentShip())
 			.translateTo(finalX, finalY, 0)
 			.rotate().z(theta)
 			.streamMode(1);
@@ -1311,7 +1312,7 @@ var BlockGrid = IgeEntity.extend({
 	_createFixtureDef: function(block) {
 		var drawLocation = this._drawLocationForBlock(block);
 		return {
-			fixtureCategory: block.category() || '',
+			fixtureCategory: block.category(),
 			friction: BlockGrid.BLOCK_FIXTURE_FRICTION,
 			restitution: BlockGrid.BLOCK_FIXTURE_RESTITUTION,
 			density: BlockGrid.BLOCK_FIXTURE_DENSITY,

@@ -211,26 +211,47 @@ return;
 	initPhysics: function() {
 		// Set up custom contacts
 		var contactIdentifiers = {
-			'ship_drop': 1,
+			'shipDropBegin': 1,
+			'shipDropEnd': 2,
+			'shipDropPreSolve': 3
 		}
-		var customContacts = [{
-				category1: Ship.BOX2D_CATEGORY,
-				category2: Drop.BOX2D_CATEGORY,
-				disable_contact: true,
-				identifier: contactIdentifiers.ship_drop
-			}
-		];
-		ige.physicsSystem.newCustomContacts({contacts: customContacts, contactType: 'BEGIN_CONTACT'});
+
+		var beginContacts = [{
+			a_body_category: Ship.BOX2D_CATEGORY,
+			a_fixture_category: '',
+			b_body_category: Drop.BOX2D_CATEGORY,
+			b_fixture_category: '',
+			disable_contact: true,
+			identifier: contactIdentifiers['shipDropBegin']
+		}];
+
+		var endContacts = [{
+			disable_contact: false,
+			identifier: contactIdentifiers['shipDropEnd']
+		}];
+
+		var preSolveContacts = [{
+			disable_contact: true,
+			identifier: contactIdentifiers['shipDropPreSolve']
+		}];
+
+		ige.physicsSystem.newCustomContacts({contacts: beginContacts, contactType:
+			'BEGIN_CONTACT'});
+		//ige.physicsSystem.newCustomContacts({contacts: endContacts, contactType:
+			//'END_CONTACT'});
+		//ige.physicsSystem.newCustomContacts({contacts: preSolveContacts, contactType:
+			//'PRE_SOLVE'});
 
 		// Set up collision callbacks
 		ige.physicsSystem.registerCollisionCallbacks({
-			beginContact: function(body1_id, body2_id, identifier) {
+			beginContact: function(entity1, entity2, identifier) {
 				console.log('Begin contact. :' + identifier);
 				switch (identifier) {
-					case contactIdentifiers.ship_drop:
-						var entities = entityByCategory(body1_id, body2_id, Drop.BOX2D_CATEGORY);
+					case contactIdentifiers.shipDropBegin:
+						var entities = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY);
 						var drop = entities[0];
 						var ship = entities[1];
+						console.log('attr ship');
 						drop.attractedTo(ship);
 						break;
 					default:
@@ -239,20 +260,49 @@ return;
 				}
 			},
 
-			endContact: function(body1_id, body2_id, identifier) {
+			endContact: function(entity1, entity2, identifier) {
+				switch (identifier) {
+					case contactIdentifiers.shipDropEnd:
+						var entities = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY);
+						var drop = entities[0];
+						var ship = entities[1];
+						if (drop.isOwner(ship)) {
+							drop.attractedTo(undefined);
+						}
+						break;
+					default:
+						this.log('GameInit#initPhysics: endContact bad identifier', 'warning');
+						break;
+				}
 			},
 
-			preSolve: function(body1_id, body2_id, identifier) {
+			preSolve: function(entity1, entity2, identifier) {
+				switch (identifier) {
+					case contactIdentifiers.shipDropPreSolve:
+						var entities = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY);
+						var drop = entities[0];
+						var ship = entities[1];
+
+						// Ignore multiple collision points
+						if (drop === undefined || !drop.alive()) {
+							return;
+						}
+						var block = drop.block();
+						ige.emit('block collected', [ship, block.classId()]);
+						drop.destroy();
+						break;
+					default:
+						this.log('GameInit#initPhysics: preSolve bad identifier', 'warning');
+						break;
+				}
 			},
 
-			postSolve: function(body1_id, body2_id, identifier) {
+			postSolve: function(entity1, entity2, identifier) {
 			}
 		});
 		// Gets entity by category. Assumes each entity maps to either category1
 		// or the other category.
-		function entityByCategory(body1_id, body2_id, category1) {
-			var entity1 = ige.$(body1_id);
-			var entity2 = ige.$(body2_id);
+		function entityByCategory(entity1, entity2, category1) {
 			var category1Entity;
 			var category2Entity;
 

@@ -29,23 +29,32 @@ var Drop = BlockGrid.extend({
 	 */
 	_attractedTo: undefined,
 
-	init: function(data) {
+	init: function(opts) {
+		var self = this;
 		// Set category because BlockGrid superclass will initialize physics body
 		this.category(Drop.BOX2D_CATEGORY);
+		// Box2d body gets initialized with the _owner. To change owner after
+		// initialization, use setOwner()
+		this._owner = opts.owner;
 
-		BlockGrid.prototype.init.call(this, data);
+		BlockGrid.prototype.init.call(this, opts);
 
 		this.depth(Drop.DEPTH);
 
 		this.height(Block.HEIGHT);
 		this.width(Block.WIDTH);
 
-		if (!ige.isServer) {
+		if (ige.isClient) {
 			this.texture(ige.client.textures.drop);
 			var effect = NetworkUtils.effect('glow', this.block());
 			effect.height = this.block().height();
 			effect.width = this.block().width();
 			this.block().addEffect(effect);
+		}
+		else {
+			setTimeout(function() {
+				self.setOwner(undefined);
+			}, Drop.OWNERSHIP_PERIOD)
 		}
 	},
 
@@ -72,27 +81,13 @@ var Drop = BlockGrid.extend({
 		return this;
 	},
 
-	/**
-	 * Getter/setter for the {@link Drop#_owner|_owner} property.
-	 * @param newOwner {IgeEntityBox2d?} Optional parameter. If supplied, the new value for the
-	 * {@link Drop#_owner|_owner} property to set. Otherwise, the getter has been called.
-	 * @returns {IgeEntityBox2d|Drop} If the newBlock parameter is not supplied, returns the current owner of this
-	 * {@link Drop}. Otherwise, returns this {@link Drop} to make setter chaining convenient.
-	 * @memberof Drop
-	 * @instance
-	 */
-	owner: function(newOwner) {
-		var self = this;
-		if (newOwner === undefined) {
-			return this._owner;
-		}
+	getOwner: function() {
+		return this._owner;
+	},
 
+	setOwner: function (newOwner) {
 		this._owner = newOwner;
-		if (ige.isServer) {
-			setTimeout(function() {
-				self._owner = undefined;
-			}, Drop.OWNERSHIP_PERIOD)
-		}
+		this.physicsBody.setLinkedId(newOwner);
 		return this;
 	},
 
@@ -152,6 +147,7 @@ var Drop = BlockGrid.extend({
 				// Attract the block grid to another body. For example, small asteroids
 				// are attracted to player ships.
 				var attractor = this.attractedTo();
+				console.log('Attraction message sent');
 				this.physicsBody.attractTo(attractor, attractor.attractionStrength());
 		}
 
