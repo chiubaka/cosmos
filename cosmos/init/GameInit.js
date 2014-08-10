@@ -158,11 +158,26 @@ var GameInit = {
 				.layer(client.LAYER_BACKGROUND)
 				.mount(client.spaceScene);
 
-		new Background()
-			.id('helix_nebula_background')
-			.depth(0)
-			.parallaxLag(2)
-			.mount(client.spaceBackgroundScene);
+		gridSquareSize = 1024;
+		for (var gridX = 0; gridX < 5; gridX++) {
+			for (var gridY = 0; gridY < 5; gridY++) {
+				console.log("about to create a background:");
+
+				var data = {
+					'gridX': gridX,
+					'gridY': gridY
+				}
+
+				// Instantiate the background
+				new Background(data)
+					.id('background' + gridX + "-" + gridY)
+					.depth(0)
+					.parallaxLag(2)
+					.mount(client.spaceBackgroundScene)
+					.streamMode(1)
+					.translateTo(gridSquareSize*gridY, gridSquareSize*gridY, 0);
+			}
+		}
 
 		new StarfieldBackground()
 			.id('starfield_background')

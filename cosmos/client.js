@@ -35,10 +35,21 @@ var Client = IgeClass.extend({
 		ige.addSystem(IgeRenderingSystem, {autoSize: true});
 
 		ige.addSystem(PixiRenderingSystem, {autoSize: true});
-		ige.rendering.loadTextures({
-			background_helix_nebula: gameRoot + 'assets/backgrounds/helix_nebula.jpg',
-			background_starfield: gameRoot + 'assets/backgrounds/starfield.png'
-		});
+
+		// Load textures
+		var textures = {};
+		textures.background_starfield = gameRoot + 'assets/backgrounds/starfield.png'
+
+		for (x = 0; x < 5; x++) {
+			for (y = 0; y < 5; y++) {
+				textures['background' + x + '-' + y] = gameRoot + 'assets/backgrounds/backgroundImg' + x + '-' + y + '.jpg';
+			}
+		}
+
+		console.log("here are the textures:");
+		console.log(textures);
+
+		ige.rendering.loadTextures(textures);
 		ige.rendering.loadSpriteSheets([gameRoot + 'assets/blocks/spritesheet.json']);
 		ige.rendering.start();
 
@@ -47,7 +58,7 @@ var Client = IgeClass.extend({
 			ige.rendering.log('Finished Pixi loading textures.');
 
 			// Load the textures we want to use
-			self.textures = {
+			var textures = {
 				block: new IgeTexture(gameRoot + 'assets/BlockTexture.js'),
 				glow: new IgeTexture(gameRoot + 'assets/GlowEffectTexture.js'),
 				background_helix_nebula: new IgeTexture(gameRoot +
@@ -91,7 +102,15 @@ var Client = IgeClass.extend({
 					'assets/blocks/laser/laser.svg'),
 				plating: new IgeTexture(gameRoot +
 					'assets/blocks/armor/plating.svg')
-			};
+			}
+
+			for (x = 0; x < 5; x++) {
+				for (y = 0; y < 5; y++) {
+					textures['background' + x + '-' + y] = new IgeTexture(gameRoot + 'assets/backgrounds/backgroundImg' + x + '-' + y + '.jpg');
+				}
+			}
+
+			self.textures = textures;
 
 			ige.on('texturesLoaded', function () {
 				// Ask the engine to start
