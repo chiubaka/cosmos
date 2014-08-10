@@ -44,6 +44,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 			if (data !== undefined) {
 				this.fromJSON(Block, data);
 			}
+
+			this.mouseDown(this._mouseDownHandler);
 		}
 		// #else
 		else {
@@ -247,6 +249,74 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// #endif
 	},
 
+	/**
+	 * Given a click event, locates the {@link Block} in this {@link BlockGrid} that was clicked by:
+	 * 1. Unrotating the click coordinate
+	 * 2. Comparing the unrotated click coordinate to where the blocks would be if the BlockGrid were not rotated
+	 * @param event {Object} The event data for the click event.
+	 * @param control {Object} The control data for the click event.
+	 * @returns {Block|undefined} The {@link Block} that was clicked or undefined if no {@link Block} exists at the
+	 * clicked location.
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
+	_blockForClick: function(event, control) {
+		// event.igeBaseX and event.igeBaseY give coordinates relative to the clicked entity's origin (center)
+
+		// The position of the click in world coordinates
+		var mousePosWorld = this.mousePosWorld();
+		var worldX = mousePosWorld.x;
+		var worldY = mousePosWorld.y;
+
+		// The coordinates of the center of the axis-aligned bounding box of the render container in
+		// world coordinates
+		var aabb = this.aabb();
+		var aabbX = aabb.x + aabb.width / 2;
+		var aabbY = aabb.y + aabb.height / 2;
+
+		// Translate the mouse position to a reference system where the center of the axis-aligned
+		// bounding box is the center
+		var aabbRelativeX = worldX - aabbX;
+		var aabbRelativeY = worldY - aabbY;
+
+		// This is the BlockGrid's rotation, not the render container's, since the render container does
+		// not rotate with respect to its parent.
+		// Negative because we want to reverse the rotation.
+		var theta = -this._rotate.z;
+
+		// The unrotated coordinates for comparison against an unrotated grid with respect to the center of the
+		// entity
+		// This uses basic trigonometry. See http://en.wikipedia.org/wiki/Rotation_matrix.
+		var unrotatedX = aabbRelativeX * Math.cos(theta) - aabbRelativeY * Math.sin(theta);
+		var unrotatedY = aabbRelativeX * Math.sin(theta) + aabbRelativeY * Math.cos(theta);
+
+		// Height and width of the grid area
+		var width = this.width();
+		var height = this.height();
+
+		// Check if the click was out of the grid area (happens because axis-aligned bounding boxes are larger
+		// than the non-axis-aligned grid area)
+		if (Math.abs(unrotatedX) > width / 2
+			|| Math.abs(unrotatedY) > height / 2) {
+			return;
+		}
+
+		// Coordinates for the top left corner of the grid area
+		var topLeftCornerX = -width / 2;
+		var topLeftCornerY = -height / 2;
+
+		// Coordinates of the unrotated clicked point with respect to the top left of the grid area
+		// This is just so calculations are a little bit easier
+		var gridX = unrotatedX - topLeftCornerX;
+		var gridY = unrotatedY - topLeftCornerY;
+
+		var x = Math.floor(gridX / Block.WIDTH) + this.lowerBound().x;
+		var y = Math.floor(gridY / Block.HEIGHT) + this.lowerBound().y;
+
+		return this.get(new IgePoint2d(x, y))[0];
+	},
+
 	_counteractTranslation: function(translation) {
 		// No need to counteract translation for the first block added to the grid!
 		// Also, since BlockGrids are streamd to the clients, no reason to translate on the client
@@ -295,6 +365,32 @@ var BlockGrid = IgeEntityBox2d.extend({
 		block.mount(this._renderContainer);
 		// Move the block within the render container to the right location.
 		block.translateTo(coordinates.x, coordinates.y, 0);
+	},
+
+	/**
+	 * Determines which {@link Block} in the {@link BlockGrid} was clicked and then passes the clicked {@link Block} to
+	 * the {@link BlockGrid#_blockClickHandler}, which can be overriden by subclasses.
+	 * @param event {Object} Information about the event that was fired.
+	 * @param control {Object} Information about the control that was used when the event was fired. (Not really sure
+	 * what this is.)
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
+	_mouseDownHandler: function(event, control) {
+		var block = this._blockForClick(event, control);
+
+		// Check if we have clicked on a valid block, if so we want to stop the
+		// click propagation so we don't construct a block at this location
+		if (block === undefined) {
+			return;
+		}
+		else {
+			control.stopPropagation();
+		}
+
+		ige.emit('cosmos:block.mousedown', block);
+		this._blockClickHandler(block, event, control);
 	},
 
 	_translateContainers: function() {
