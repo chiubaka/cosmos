@@ -212,7 +212,8 @@ var Ship = BlockStructure.extend({
 		this
 			.addSensor(300)
 			.attractionStrength(1)
-			.relocate();
+			.translateTo(0, 0, 0);
+			//.relocate();
 			//.debugFixtures(false);//change to true for debugging*/
 	},
 
@@ -262,7 +263,7 @@ var Ship = BlockStructure.extend({
 
 		tempFixture.shape = tempShape;
 
-		this.box2dBody().CreateFixture(tempFixture);
+		this._box2dBody.CreateFixture(tempFixture);
 
 		return this;
 	},
@@ -377,16 +378,16 @@ var Ship = BlockStructure.extend({
 				this._prevMovementBlocks.thrusters = this.thrusters().length;
 
 				if (this.controls().left) {
-					this.box2dBody().ApplyTorque(angularImpulse);
+					this._box2dBody.ApplyTorque(angularImpulse);
 				}
 				if (this.controls().right) {
-					this.box2dBody().ApplyTorque(-angularImpulse);
+					this._box2dBody.ApplyTorque(-angularImpulse);
 				}
 			}
 
 			if (this.controls().up || this.controls().down) {
 				// the "- Math.PI/2" below makes the ship move forward and backwards, instead of side to side.
-				var angle = this.box2dBody().GetAngle() - Math.PI/2;
+				var angle = this._box2dBody.GetAngle() - Math.PI/2;
 				var scaleRatio = ige.box2d.scaleRatio();
 				var thisX = this.translate().x();
 				var thisY = this.translate().y();
@@ -411,7 +412,7 @@ var Ship = BlockStructure.extend({
 				}
 
 				// the "- Math.PI/2" below makes the ship move forward and backwards, instead of side to side.
-				var angle = this.box2dBody().GetAngle() - Math.PI/2;
+				var angle = this._box2dBody.GetAngle() - Math.PI/2;
 
 				var x_comp = Math.cos(angle) * linearImpulse;
 				var y_comp = Math.sin(angle) * linearImpulse;
@@ -452,19 +453,19 @@ var Ship = BlockStructure.extend({
 					enginePosition.x = enginePosition.x / scaleRatio;
 					enginePosition.y = -enginePosition.y / scaleRatio;
 
-					var bodyPosition = this.box2dBody().GetPosition();
+					var bodyPosition = this._box2dBody.GetPosition();
 					bodyPosition.x = bodyPosition.x * scaleRatio;
 					bodyPosition.y = -bodyPosition.y * scaleRatio;
 					console.log("Body position: ");
 					console.log(bodyPosition);
 
-					var engineWorldPosition = this.box2dBody().GetWorldPoint(enginePosition);
+					var engineWorldPosition = this._box2dBody.GetWorldPoint(enginePosition);
 					console.log("Engine world position: ");
 					console.log(engineWorldPosition);
 					console.log("Impulse: ");
 					console.log(impulse);
 					console.log();
-					this.box2dBody().ApplyImpulse(impulse, engineWorldPosition);
+					this._box2dBody.ApplyImpulse(impulse, engineWorldPosition);
 				}
 			}
 

@@ -1,4 +1,4 @@
-var BlockGrid = IgeEntity.extend({
+var BlockGrid = IgeEntityBox2d.extend({
 	classId: "BlockGrid",
 
 	_physicsContainer: undefined,
@@ -6,7 +6,7 @@ var BlockGrid = IgeEntity.extend({
 	_renderContainer: undefined,
 
 	init: function(data) {
-		IgeEntity.prototype.init.call(this, data);
+		IgeEntityBox2d.prototype.init.call(this, data);
 
 		this.implement(SparseGrid);
 		SparseGrid.prototype.init.call(this, data);
@@ -26,24 +26,31 @@ var BlockGrid = IgeEntity.extend({
 			this._renderContainer.mount(this);
 
 			if (data !== undefined) {
-				console.log("Parsing grid from JSON.");
 				this.fromJSON(Block, data);
-			}
-			else {
-				console.log("Stream create data was undefined.");
 			}
 		}
 		// #else
 		else {
-			this._physicsContainer = new BlockGridPhysicsContainer();
-			this._physicsContainer.blockGrid(this);
-			this._physicsContainer.mount(this);
+			this.box2dBody({
+				type: 'dynamic',
+				linearDamping: 0.4,
+				angularDamping: 1.5,
+				allowSleep: true,
+				bullet: false,
+				gravitic: false,
+				fixedRotation: false
+			});
+
+			this._physicsOffset = {x: 0, y: 0};
+
+			this._debug = true;
+			if (this._debug) {
+				this._debugContainer = new BlockGridFixtureDebugContainer()
+					.streamMode(1)
+					.mount(this);
+			}
 		}
 		// #endif
-	},
-
-	box2dBody: function() {
-		return this._physicsContainer._box2dBody;
 	},
 
 	/**
@@ -140,7 +147,7 @@ var BlockGrid = IgeEntity.extend({
 
 		var translation = this._translateContainers();
 
-		this._counteractTranslation(translation);
+		//this._counteractTranslation(translation);
 
 		return previousBlocks;
 	},
@@ -162,30 +169,46 @@ var BlockGrid = IgeEntity.extend({
 	},
 
 	update: function(ctx, tickDelta) {
-		IgeEntity.prototype.update.call(this, ctx, tickDelta);
-		if (ige.isServer && this._physicsContainer.translate().x() !== this._physicsOffset.x
-			&& this._physicsContainer.translate().y() !== this._physicsOffset.y) {
-			console.log("Need to reconcile block grid with physics container!");
-			console.log("Physics container: x: " + this._physicsContainer.translate().x() + ", y: "
-				+ this._physicsContainer.translate().y());
-			console.log("Physics offset: x: " + this._physicsOffset.x + ", y: " +
-				this._physicsOffset.y);
+		IgeEntityBox2d.prototype.update.call(this, ctx, tickDelta);
 
-			var correction = {
-				x: this._physicsContainer.translate().x() - this._physicsOffset.x,
-				y: this._physicsContainer.translate().y() - this._physicsOffset.y
-			}
-
-			this._physicsContainer.translateTo(this._physicsOffset.x, this._physicsOffset.y, 0);
-
-			this._counteractTranslation(correction);
+		if (this._debug && ige.isServer) {
+			this._debugContainer.translateTo(this._physicsOffset.x, this._physicsOffset.y, 0);
+			this._debugContainer.rotateTo(this.rotate().x(), this.rotate().y(), this.rotate().z());
 		}
 	},
 
 	_addFixture: function(block) {
 		// #ifdef SERVER
 		if (ige.isServer) {
-			this._physicsContainer.addFixture(block);
+			var fixtureDef = this._createFixtureDef(block);
+
+			block.fixtureDef(fixtureDef);
+
+			if (block.fixture() !== undefined) {
+				this._box2dBody.DestroyFixture(block.fixture());
+			}
+
+			// Add a new fixture based on the new fixture def.
+			block.fixture(ige.box2d.addFixture(this._box2dBody, fixtureDef));
+
+			if (this._debug) {
+				if (block.fixtureDebuggingEntity() !== undefined) {
+					block.fixtureDebuggingEntity().destroy();
+				}
+
+				console.log(fixtureDef.shape.data.x);
+				console.log(fixtureDef.shape.data.y);
+
+				var fixtureDebuggingEntity = new FixtureDebuggingEntity()
+					.depth(this._debugContainer.depth() + 1)
+					.translateTo(fixtureDef.shape.data.x, fixtureDef.shape.data.y, 0)
+					.width(fixtureDef.shape.data.width * 2)
+					.height(fixtureDef.shape.data.height * 2)
+					.streamMode(1)
+					.mount(this._debugContainer);
+
+				block.fixtureDebuggingEntity(fixtureDebuggingEntity);
+			}
 		}
 		// #endif
 	},
@@ -212,6 +235,26 @@ var BlockGrid = IgeEntity.extend({
 		this.translateBy(gridTranslation.x, gridTranslation.y, 0);
 	},
 
+	_createFixtureDef: function(block) {
+		var coordinates = BlockGrid.coordinatesForBlock(block);
+		var width = block.width();
+		var height = block.height();
+		return {
+			density: BlockGrid.BLOCK_FIXTURE_DENSITY,
+			friction: BlockGrid.BLOCK_FIXTURE_FRICTION,
+			restitution: BlockGrid.BLOCK_FIXTURE_RESTITUTION,
+			shape: {
+				type: 'rectangle',
+				data: {
+					x: coordinates.x,
+					y: coordinates.y,
+					width: width / 2 - BlockGrid.BLOCK_FIXTURE_PADDING,
+					height: height / 2 - BlockGrid.BLOCK_FIXTURE_PADDING
+				}
+			}
+		}
+	},
+
 	_mountToRenderContainer: function(block) {
 		var coordinates = BlockGrid.coordinatesForBlock(block);
 		// Attach the block to the render container.
@@ -230,26 +273,25 @@ var BlockGrid = IgeEntity.extend({
 		var translateTo = {
 			x: -gridCenter.x,
 			y: -gridCenter.y
-		}
+		};
 
-		var container;
+		var oldTranslate;
 
 		// #ifdef SERVER
 		if (ige.isServer) {
-			container = this._physicsContainer;
-			this._physicsOffset = translateTo;
+			this._physicsOffset = oldTranslate = translateTo;
+			console.log(this._physicsOffset);
 		}
 		// #else
 		else {
-			container = this._renderContainer;
+			var container = this._renderContainer;
+			oldTranslate = {
+				x: container.translate().x(),
+				y: container.translate().y()
+			};
+			container.translateTo(translateTo.x, translateTo.y, 0);
 		}
 		// #endif
-
-		var oldTranslate = {
-			x: container.translate().x(),
-			y: container.translate().y()
-		};
-		container.translateTo(translateTo.x, translateTo.y, 0);
 
 		// Return the amount the render container was translated by. These equations amount to
 		// new render container translate minus old render container translate.

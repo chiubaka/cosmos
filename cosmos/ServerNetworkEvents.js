@@ -180,7 +180,7 @@ var ServerNetworkEvents = {
 
 		var sendData = {
 			shipId: player.currentShip().id()
-		}
+		};
 
 		ige.network.send('shipEntity', sendData, clientId);
 	},

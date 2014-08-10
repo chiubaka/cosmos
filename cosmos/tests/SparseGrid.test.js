@@ -214,11 +214,11 @@ describe("A SparseGrid", function() {
 	)
 
 	it("should always have a width of 0 if there are no objects inside of it.", function() {
-		expect(this.grid.width()).toBe(0);
+		expect(this.grid.gridWidth()).toBe(0);
 	});
 
 	it("should always have a height of 0 if there are no objects inside of it.", function() {
-		expect(this.grid.height()).toBe(0);
+		expect(this.grid.gridHeight()).toBe(0);
 	});
 
 	it("should be serializable to JSON and deserialized back to an equivalent object.",
@@ -273,8 +273,8 @@ describe("A SparseGrid", function() {
 			expect(this.grid._upperBound.x).toBe(101);
 			expect(this.grid._upperBound.y).toBe(51);
 
-			expect(this.grid.width()).toBe(2);
-			expect(this.grid.height()).toBe(2);
+			expect(this.grid.gridWidth()).toBe(2);
+			expect(this.grid.gridHeight()).toBe(2);
 		});
 
 		it("when multiple objects are added.", function() {
@@ -284,8 +284,8 @@ describe("A SparseGrid", function() {
 			expect(this.grid._upperBound.x).toBe(101);
 			expect(this.grid._upperBound.y).toBe(51);
 
-			expect(this.grid.width()).toBe(2);
-			expect(this.grid.height()).toBe(2);
+			expect(this.grid.gridWidth()).toBe(2);
+			expect(this.grid.gridHeight()).toBe(2);
 
 			this.grid.put(this.testObjects["3x3"][0], new IgePoint2d(-100, -22), true);
 			expect(this.grid._lowerBound.x).toBe(-100);
@@ -293,8 +293,8 @@ describe("A SparseGrid", function() {
 			expect(this.grid._upperBound.x).toBe(101);
 			expect(this.grid._upperBound.y).toBe(51);
 
-			expect(this.grid.width()).toBe(202);
-			expect(this.grid.height()).toBe(74)
+			expect(this.grid.gridWidth()).toBe(202);
+			expect(this.grid.gridHeight()).toBe(74)
 
 			this.grid.put(this.testObjects["1x1"][0], new IgePoint2d(-200, 300), true);
 			expect(this.grid._lowerBound.x).toBe(-200);
@@ -302,8 +302,8 @@ describe("A SparseGrid", function() {
 			expect(this.grid._upperBound.x).toBe(101);
 			expect(this.grid._upperBound.y).toBe(300);
 
-			expect(this.grid.width()).toBe(302);
-			expect(this.grid.height()).toBe(323);
+			expect(this.grid.gridWidth()).toBe(302);
+			expect(this.grid.gridHeight()).toBe(323);
 		});
 
 		it("when an object is removed.", function() {
@@ -313,13 +313,13 @@ describe("A SparseGrid", function() {
 			expect(this.grid._upperBound.x).toBe(101);
 			expect(this.grid._upperBound.y).toBe(51);
 
-			expect(this.grid.width()).toBe(2);
-			expect(this.grid.height()).toBe(2);
+			expect(this.grid.gridWidth()).toBe(2);
+			expect(this.grid.gridHeight()).toBe(2);
 
 			this.grid.remove(new IgePoint2d(100, 50));
 			expect(this.grid.count()).toBe(0);
-			expect(this.grid.width()).toBe(0);
-			expect(this.grid.height()).toBe(0);
+			expect(this.grid.gridWidth()).toBe(0);
+			expect(this.grid.gridHeight()).toBe(0);
 		});
 
 		it("when multiple objects are removed.", function() {
@@ -329,8 +329,8 @@ describe("A SparseGrid", function() {
 			expect(this.grid._upperBound.x).toBe(101);
 			expect(this.grid._upperBound.y).toBe(51);
 
-			expect(this.grid.width()).toBe(2);
-			expect(this.grid.height()).toBe(2);
+			expect(this.grid.gridWidth()).toBe(2);
+			expect(this.grid.gridHeight()).toBe(2);
 
 			this.grid.put(this.testObjects["3x3"][0], new IgePoint2d(-100, -22), true);
 			expect(this.grid._lowerBound.x).toBe(-100);
@@ -338,8 +338,8 @@ describe("A SparseGrid", function() {
 			expect(this.grid._upperBound.x).toBe(101);
 			expect(this.grid._upperBound.y).toBe(51);
 
-			expect(this.grid.width()).toBe(202);
-			expect(this.grid.height()).toBe(74)
+			expect(this.grid.gridWidth()).toBe(202);
+			expect(this.grid.gridHeight()).toBe(74)
 
 			this.grid.put(this.testObjects["1x1"][0], new IgePoint2d(-200, 300), true);
 			expect(this.grid._lowerBound.x).toBe(-200);
@@ -347,8 +347,8 @@ describe("A SparseGrid", function() {
 			expect(this.grid._upperBound.x).toBe(101);
 			expect(this.grid._upperBound.y).toBe(300);
 
-			expect(this.grid.width()).toBe(302);
-			expect(this.grid.height()).toBe(323);
+			expect(this.grid.gridWidth()).toBe(302);
+			expect(this.grid.gridHeight()).toBe(323);
 
 			this.grid.remove(new IgePoint2d(-100, -22));
 			expect(this.grid._lowerBound.x).toBe(-200);
@@ -356,8 +356,8 @@ describe("A SparseGrid", function() {
 			expect(this.grid._upperBound.x).toBe(101);
 			expect(this.grid._upperBound.y).toBe(300);
 
-			expect(this.grid.width()).toBe(302);
-			expect(this.grid.height()).toBe(251);
+			expect(this.grid.gridWidth()).toBe(302);
+			expect(this.grid.gridHeight()).toBe(251);
 
 			this.grid.remove(new IgePoint2d(-200, 300));
 			expect(this.grid._lowerBound.x).toBe(100);
@@ -365,13 +365,13 @@ describe("A SparseGrid", function() {
 			expect(this.grid._upperBound.x).toBe(101);
 			expect(this.grid._upperBound.y).toBe(51);
 
-			expect(this.grid.width()).toBe(2);
-			expect(this.grid.height()).toBe(2);
+			expect(this.grid.gridWidth()).toBe(2);
+			expect(this.grid.gridHeight()).toBe(2);
 
 			this.grid.remove(new IgePoint2d(100, 50));
 
-			expect(this.grid.width()).toBe(0);
-			expect(this.grid.height()).toBe(0);
+			expect(this.grid.gridWidth()).toBe(0);
+			expect(this.grid.gridHeight()).toBe(0);
 		});
 	});
 });

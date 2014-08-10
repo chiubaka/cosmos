@@ -94,7 +94,6 @@ var SparseGrid = IgeClass.extend({
 
 	fromJSON: function(ObjectClass, json) {
 		var self = this;
-		console.log(json);
 		_.forOwn(json, function(row, x) {
 			_.forOwn(row, function(objectJSON, y) {
 				var object = ObjectClass.fromJSON(objectJSON);
