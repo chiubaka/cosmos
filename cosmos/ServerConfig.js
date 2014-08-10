@@ -18,7 +18,6 @@ var config = {
 		{ name: 'GeneratedBlockStructure', path: './entities/GeneratedBlockStructure' },
 		{ name: 'ConstructionZoneBlock', path: 'entities/blocks/ConstructionZoneBlock' },
 		{ name: 'Drop', path: 'entities/Drop' },
-		{ name: 'HaxBlock', path: 'entities/HaxBlock' },
 
 		/* Ship part blocks */
 		{ name: 'Part', path: './entities/blocks/Part' },

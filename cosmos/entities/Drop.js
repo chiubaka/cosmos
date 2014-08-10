@@ -111,22 +111,13 @@ var Drop = BlockGrid.extend({
 		return this._owner === entity;
 	},
 
-	/**
-	 * Getter/setter for the {@link Drop#_attractedTo|_attractedTo} property.
-	 * @param newAttraction {IgeEntityBox2d?} Optional parameter. If supplied, the new value for the
-	 * {@link Drop#_attractedTo|_attractedTo} property to set. Otherwise, the getter has been called.
-	 * @returns {IgeEntityBox2d|Drop} If the newBlock parameter is not supplied, returns the current attraction
-	 * target of this {@link Drop}. Otherwise, returns this {@link Drop} to make setter chaining convenient.
-	 * @memberof Drop
-	 * @instance
-	 */
-	attractedTo: function(newAttraction) {
-		if (newAttraction === undefined) {
-			return this._attractedTo;
-		}
+	getAttractedTo: function() {
+		return this._attractedTo;
+	},
 
+	setAttractedTo: function(newAttraction) {
 		this._attractedTo = newAttraction;
-		return this;
+		return;
 	},
 
 	/**
@@ -137,17 +128,16 @@ var Drop = BlockGrid.extend({
 	 */
 	update: function(ctx) {
 		if (ige.isServer) {
-			if (this.attractedTo() !== undefined) {
+			if (this.getAttractedTo() !== undefined) {
 				// If the attractedTo entity is destroyed, remove the reference
-				if (ige.$(this.attractedTo().id()) === undefined) {
-					this._attractedTo = undefined;
+				if (ige.$(this.getAttractedTo().id()) === undefined) {
+					this.setAttractedTo(undefined);
 					return;
 				}
 
 				// Attract the block grid to another body. For example, small asteroids
 				// are attracted to player ships.
-				var attractor = this.attractedTo();
-				console.log('Attraction message sent');
+				var attractor = this.getAttractedTo();
 				this.physicsBody.attractTo(attractor, attractor.attractionStrength());
 		}
 

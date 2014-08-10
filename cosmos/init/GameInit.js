@@ -183,7 +183,7 @@ var GameInit = {
 	initEnvironment: function() {
 		var server = ige.server;
 
-		var NUM_NORMAL_ASTEROIDS = 100;
+		var NUM_NORMAL_ASTEROIDS = 1;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
 			this.spawnStructure(5, BlockStructureGenerator.elementDistributions.randomDistribution());
 		}
@@ -201,7 +201,7 @@ return;
 			.genProceduralAsteroid(maxNumBlocks, blockDistribution, symmetric)
 			.streamMode(1)
 			.mount(ige.server.spaceGameScene);
-		this.moveRandomly(structure);
+		//this.moveRandomly(structure);
 	},
 
 	/**
@@ -218,7 +218,7 @@ return;
 
 		var beginContacts = [{
 			a_body_category: Ship.BOX2D_CATEGORY,
-			a_fixture_category: '',
+			a_fixture_category: Ship.ATTRACTOR_BOX2D_CATEGORY,
 			b_body_category: Drop.BOX2D_CATEGORY,
 			b_fixture_category: '',
 			disable_contact: true,
@@ -227,7 +227,7 @@ return;
 
 		var endContacts = [{
 			a_body_category: Ship.BOX2D_CATEGORY,
-			a_fixture_category: '',
+			a_fixture_category: Ship.ATTRACTOR_BOX2D_CATEGORY,
 			b_body_category: Drop.BOX2D_CATEGORY,
 			b_fixture_category: '',
 			disable_contact:false,
@@ -235,6 +235,10 @@ return;
 		}];
 
 		var preSolveContacts = [{
+			a_body_category: Ship.BOX2D_CATEGORY,
+			a_fixture_category: '',
+			b_body_category: Drop.BOX2D_CATEGORY,
+			b_fixture_category: '',
 			disable_contact: true,
 			identifier: contactIdentifiers['shipDropPreSolve']
 		}];
@@ -243,8 +247,8 @@ return;
 			'BEGIN_CONTACT'});
 		ige.physicsSystem.newCustomContacts({contacts: endContacts, contactType:
 			'END_CONTACT'});
-		//ige.physicsSystem.newCustomContacts({contacts: preSolveContacts, contactType:
-			//'PRE_SOLVE'});
+		ige.physicsSystem.newCustomContacts({contacts: preSolveContacts, contactType:
+			'PRE_SOLVE'});
 
 		// Set up collision callbacks
 		ige.physicsSystem.registerCollisionCallbacks({
@@ -256,7 +260,7 @@ return;
 						var drop = entities[0];
 						var ship = entities[1];
 						console.log('attr ship');
-						drop.attractedTo(ship);
+						drop.setAttractedTo(ship);
 						break;
 					default:
 						this.log('GameInit#initPhysics: beginContact bad identifier', 'warning');
@@ -265,14 +269,14 @@ return;
 			},
 
 			endContact: function(entity1, entity2, identifier) {
-				console.log('End contact');
 				switch (identifier) {
 					case contactIdentifiers.shipDropEnd:
 						var entities = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY);
 						var drop = entities[0];
 						var ship = entities[1];
+						console.log('End contact');
 						if (drop.isOwner(ship)) {
-							drop.attractedTo(undefined);
+							drop.setAttractedTo(undefined);
 						}
 						break;
 					default:
@@ -338,8 +342,8 @@ return;
 					contact.SetEnabled(false);
 
 					// TODO: Make it so blocks are attracted to multiple players
-					if (drop.attractedTo() === undefined && drop.isOwner(ship)) {
-						drop.attractedTo(ship);
+					if (drop.getAttractedTo() === undefined && drop.isOwner(ship)) {
+						drop.setAttractedTo(ship);
 					}
 				}
 			},
@@ -351,7 +355,7 @@ return;
 					var ship = contact.igeEntityByCategory(Ship.BOX2D_CATEGORY);
 					var drop = contact.igeEntityByCategory(Drop.BOX2D_CATEGORY);
 					if (drop.isOwner(ship)) {
-						drop.attractedTo(undefined);
+						drop.setAttractedTo(undefined);
 					}
 				}
 			},
