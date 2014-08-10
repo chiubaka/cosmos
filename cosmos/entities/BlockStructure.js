@@ -138,7 +138,7 @@ var BlockStructure = BlockGrid.extend({
 						ige.network.stream.queueCommand('cosmos:BlockStructure.processBlockActionServer.minedBlock',
 							true, player.clientId());
 					}
-				}, Block.MINING_INTERVAL / player.currentShip().weapons().length)
+				}, Block.MINING_INTERVAL / player.currentShip().weapons().length);
 				return true;
 			default:
 				return false;

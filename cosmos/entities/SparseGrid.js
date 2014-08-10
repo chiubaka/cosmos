@@ -109,8 +109,8 @@ var SparseGrid = IgeClass.extend({
 		}
 
 		// If no width and height are provided, just get the location provided.
-		width = (width === undefined) ? 1 : width;
-		height = (height === undefined) ? 1 : height;
+		width = width || 1;
+		height = height || 1;
 
 		var objects = [];
 		var objectsSet = {};
@@ -132,8 +132,8 @@ var SparseGrid = IgeClass.extend({
 		}
 
 		// If no width and height are provided, just check the location provided.
-		width = (width === undefined) ? 1 : width;
-		height = (height === undefined) ? 1 : height;
+		width = width || 1;
+		height = height || 1;
 
 		// The each function will return true to indicate that it looped through everything and
 		// false to indicate that it finished early (due to our stopping it).
@@ -167,23 +167,22 @@ var SparseGrid = IgeClass.extend({
 		// TODO: Validate the location, width, and height.
 		var neighboringLocations = [];
 
-		var x = loc.x;
-		var y = loc.y;
+		width = width || 1;
+		height = height || 1;
 
-		var topY = y - 1;
-		var bottomY = y + height;
+		var topY = loc.y - 1;
+		var bottomY = loc.y + height;
+		var leftX = loc.x - 1;
+		var rightX = loc.x + width;
 
-		for (var dx = 0; dx < width; dx++) {
-			neighboringLocations.push(new IgePoint2d(topY, x + dx));
-			neighboringLocations.push(new IgePoint2d(bottomY, x + dx));
+		for (var x = leftX; x <= rightX; x++) {
+			neighboringLocations.push(new IgePoint2d(x, topY));
+			neighboringLocations.push(new IgePoint2d(x, bottomY));
 		}
 
-		var leftX = x - 1;
-		var rightX = x + width;
-
-		for (var dy = 0; dy < height; dy++) {
-			neighboringLocations.push(new IgePoint2d(y + dy, leftX));
-			neighboringLocations.push(new IgePoint2d(y + dy, rightX));
+		for (var y = topY + 1; y <= bottomY - 1; y++) {
+			neighboringLocations.push(new IgePoint2d(leftX, y));
+			neighboringLocations.push(new IgePoint2d(rightX, y));
 		}
 
 		return neighboringLocations;
@@ -288,8 +287,8 @@ var SparseGrid = IgeClass.extend({
 		}
 
 		// If no width and height are provided, just remove the location provided.
-		width = (width === undefined) ? 1 : width;
-		height = (height === undefined) ? 1 : height;
+		width = width || 1;
+		height = height || 1;
 
 		var previousObjects = this.get(loc, width, height);
 
