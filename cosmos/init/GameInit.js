@@ -260,7 +260,9 @@ return;
 						var drop = entities[0];
 						var ship = entities[1];
 						console.log('attr ship');
-						drop.setAttractedTo(ship);
+						if (drop.getAttractedTo() === undefined && drop.isOwner(ship)) {
+							drop.setAttractedTo(ship);
+						}
 						break;
 					default:
 						this.log('GameInit#initPhysics: beginContact bad identifier', 'warning');
