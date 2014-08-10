@@ -361,7 +361,7 @@ var Ship = BlockStructure.extend({
 			/* Angular motion */
 			// Angular rotation speed depends on number of thrusters
 			if (this.controls().left || this.controls().right) {
-				var angularImpulse = 0;
+				var angularImpulse = 60; // 0; TODO: Change this back
 				for (var i = 0; i < this.thrusters().length; i++) {
 					angularImpulse += this.thrusters()[i].thrust.value;
 				}
