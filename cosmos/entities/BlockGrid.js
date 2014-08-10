@@ -66,6 +66,47 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	/**
+	 * Removes the {@link Block} at the specified row and column from the grid and creates a {@link Drop} for the
+	 * removed {@link Block}.
+	 * @param row {number} The row of the {@link Block} to drop.
+	 * @param col {number} The col of the {@link Block} to drop.
+	 * @param player {IgeEntityBox2d} The {@link Player} that caused this {@link Block} to be dropped. Used to constrain
+	 * who can pick up the {@link Drop}. If undefined, all players will be able to pick up the {@link Drop}.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	drop: function(player, loc) {
+		// TODO: Validate location.
+		// TODO: Validate player.
+
+		// TODO: Rewrite this function.
+
+		var blocks = this.get(loc);
+		if (!blocks || blocks.length === 0) {
+			return;
+		}
+
+		// Calculate position of new Drop, taking into account rotation
+		var gridX = this.translate().x();
+		var gridY = this.translate().y();
+		var fixtureX = blocks[0].fixtureDef().shape.data.x;
+		var fixtureY = blocks[0].fixtureDef().shape.data.y;
+		var theta = this.rotate().z();
+
+		var finalX = Math.cos(theta) * fixtureX - Math.sin(theta) * fixtureY + gridX;
+		var finalY = Math.sin(theta) * fixtureX + Math.cos(theta) * fixtureY + gridY;
+
+		this.remove(loc);
+
+		new Drop().mount(ige.server.spaceGameScene)
+			.block(blocks[0])
+			.owner(player.currentShip())
+			.translateTo(finalX, finalY, 0)
+			.rotate().z(theta)
+			.streamMode(1);
+	},
+
+	/**
 	 * Resets this BlockGrid's internal state to represent the grid that is represented by the provided {@link Block}
 	 * matrix, which is a matrix of {@link Block}s. undefined is used to indicate that a space in the matrix is empty.
 	 * @param blockMatrix {Array} An array of arrays that holds {@link Block objects}. undefined is used to indicate
@@ -124,6 +165,38 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return this;
 	},
 
+	/**
+	 * Process actions on {@link Block}s server-side.
+	 * @param data {Object} An object representing the action sent from the client.
+	 * @param player {Player} The player that triggered the block action.
+	 * @returns {boolean} True if the action was successfully processed. False otherwise.
+	 * @memberof BlockGrid
+	 * @instance
+	 */
+	processBlockActionServer: function(data, player) {
+		var self = this;
+
+		switch (data.action) {
+			case 'remove':
+				this.remove(data.row, data.col);
+				return true;
+
+			// TODO: Vary mining speed based on block material
+			case 'add':
+				// Add block server side, then send add msg to client
+				if(!self.add(data.row, data.col, Block.blockFromClassId(data.selectedType))) {
+					return false;
+				}
+				else {
+					data.action = 'add';
+					ige.network.send('blockAction', data);
+					return true;
+				}
+			default:
+				return false;
+		}
+	},
+
 	put: function(block, location, replace) {
 		// Validate parameters
 		if (!block) {
@@ -173,60 +246,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		return SparseGrid.prototype.remove.call(this, location, width, height);
 	},
-
-	// #ifdef SERVER
-	/**
-	 * Controls whether or not this entity is streamed to a particular client.
-	 * @param clientId {String} The client in question.
-	 * @return {Boolean} True if the entity should be streamed to the client
-	 * associated with the clientId.
-	 * {@link BlockGrid}.
-	 * @memberof BlockGrid
-	 * @private
-	 * @instance
-	 */
-	_streamControlFunc: function(clientId) {
-		var player = ige.server.players[clientId];
-
-		// TODO: Make createConstructionZone and fromBlockTypeMatrix faster.
-		// TODO: Make a proper entity preloader to stop jittering when BlockGrids
-		// are created on screen
-		if (player === undefined || player.currentShip() === undefined) {
-			this._previouslyStreamed[clientId] = false;
-			return false;
-		}
-
-		// Checks if the entity is visible to the player. This means that the
-		// player's visible rectangle intersects with this entity's aabb rectangle.
-		var playerWorldPosition = player.currentShip().worldPosition();
-		var width = Constants.minimapArea.MAXIMUM_WIDTH;
-		var height = Constants.minimapArea.MAXIMUM_HEIGHT;
-		var viewableRect = new IgeRect(
-				playerWorldPosition.x - width / 2,
-				playerWorldPosition.y - height / 2,
-			width,
-			height);
-		if (viewableRect.intersects(this.aabb())) {
-			this._previouslyStreamed[clientId] = true;
-			return true;
-		}
-		else {
-			if (this._previouslyStreamed[clientId] === true) {
-				this._previouslyStreamed[clientId] = false;
-				// Invalidate the stream data for this entity. The server has an
-				// optimization where it doesn't send a streamData update to the client
-				// if the previous streamData is the same. This is problematic because
-				// when this entity is in view again, we want the server to send an
-				// streamData update to the client.
-				// We can force the server to update by invalidating the cached
-				// streamData.
-				ige.network.stream._streamClientData[this.id()][clientId] = 'INVALID';
-				ige.network.stream.queueCommand('_entityInvalid', this.id(), clientId);
-			}
-			return false;
-		}
-	},
-	// #endif
 
 	streamCreateData: function() {
 		return this.toJSON();
@@ -392,6 +411,61 @@ var BlockGrid = IgeEntityBox2d.extend({
 		ige.emit('cosmos:block.mousedown', block);
 		this._blockClickHandler(block, event, control);
 	},
+
+
+	// #ifdef SERVER
+	/**
+	 * Controls whether or not this entity is streamed to a particular client.
+	 * @param clientId {String} The client in question.
+	 * @return {Boolean} True if the entity should be streamed to the client
+	 * associated with the clientId.
+	 * {@link BlockGrid}.
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
+	_streamControlFunc: function(clientId) {
+		var player = ige.server.players[clientId];
+
+		// TODO: Make createConstructionZone and fromBlockTypeMatrix faster.
+		// TODO: Make a proper entity preloader to stop jittering when BlockGrids
+		// are created on screen
+		if (player === undefined || player.currentShip() === undefined) {
+			this._previouslyStreamed[clientId] = false;
+			return false;
+		}
+
+		// Checks if the entity is visible to the player. This means that the
+		// player's visible rectangle intersects with this entity's aabb rectangle.
+		var playerWorldPosition = player.currentShip().worldPosition();
+		var width = Constants.minimapArea.MAXIMUM_WIDTH;
+		var height = Constants.minimapArea.MAXIMUM_HEIGHT;
+		var viewableRect = new IgeRect(
+				playerWorldPosition.x - width / 2,
+				playerWorldPosition.y - height / 2,
+			width,
+			height);
+		if (viewableRect.intersects(this.aabb())) {
+			this._previouslyStreamed[clientId] = true;
+			return true;
+		}
+		else {
+			if (this._previouslyStreamed[clientId] === true) {
+				this._previouslyStreamed[clientId] = false;
+				// Invalidate the stream data for this entity. The server has an
+				// optimization where it doesn't send a streamData update to the client
+				// if the previous streamData is the same. This is problematic because
+				// when this entity is in view again, we want the server to send an
+				// streamData update to the client.
+				// We can force the server to update by invalidating the cached
+				// streamData.
+				ige.network.stream._streamClientData[this.id()][clientId] = 'INVALID';
+				ige.network.stream.queueCommand('_entityInvalid', this.id(), clientId);
+			}
+			return false;
+		}
+	},
+	// #endif
 
 	_translateContainers: function() {
 		var topLeftCoordinates = BlockGrid.coordinatesForLocation(this.lowerBound());

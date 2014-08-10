@@ -81,10 +81,13 @@ var Ship = BlockStructure.extend({
 	*/
 	_thrusters: undefined,
 
+	_weapons: undefined,
+
 	init: function(data) {
 		// Note that these variables must be initialized before the superclass constructor can be called, because it will add things to them by calling add().
 		this._engines = [];
 		this._thrusters = [];
+		this._weapons = [];
 
 		BlockStructure.prototype.init.call(this, data);
 
@@ -143,6 +146,10 @@ var Ship = BlockStructure.extend({
 		return this._thrusters;
 	},
 
+	weapons: function() {
+		return this._weapons;
+	},
+
 	put: function(block, loc, replace) {
 		var result = BlockStructure.prototype.put.call(this, block, loc, replace);
 		if (result !== null && ige.isServer) {
@@ -152,9 +159,11 @@ var Ship = BlockStructure.extend({
 		if (block instanceof EngineBlock) {
 			this.engines().push(block);
 		}
-
-		if (block instanceof ThrusterBlock) {
+		else if (block instanceof ThrusterBlock) {
 			this.thrusters().push(block);
+		}
+		else if (block instanceof Weapon) {
+			this.weapons().push(block);
 		}
 
 		return result;
@@ -179,9 +188,11 @@ var Ship = BlockStructure.extend({
 			if (removedBlock instanceof EngineBlock) {
 				this.engines().splice(this.engines().indexOf(block), 1);
 			}
-
-			if (block instanceof ThursterBlock) {
+			else if (block instanceof ThursterBlock) {
 				this.thrusters().splice(this.thrusters().indexOf(block), 1);
+			}
+			else if (block instanceof Weapon) {
+				this.weapons().splice(this.thrusters().indexOf(block), 1);
 			}
 		});
 
@@ -312,7 +323,7 @@ var Ship = BlockStructure.extend({
 		}
 
 		// Do not start mining if ship has no mining lasers
-		return this.numBlocksOfType(MiningLaserBlock.prototype.classId()) !== 0;
+		return this.weapons().length > 0;
 	},
 
 	/**
@@ -322,7 +333,8 @@ var Ship = BlockStructure.extend({
 	 * @instance
 	 */
 	fireMiningLasers: function(targetBlock) {
-		var miningLasers = this.blocksOfType(MiningLaserBlock.prototype.classId());
+		// TODO: Change this when there are more weapons than just mining lasers.
+		var miningLasers = this.weapons();
 		for (var i = 0; i < miningLasers.length; i++) {
 			var miningLaser = miningLasers[i];
 			ige.network.send('addEffect', NetworkUtils.effect('miningLaser', miningLaser, targetBlock));
@@ -336,7 +348,8 @@ var Ship = BlockStructure.extend({
 	 * @instance
 	 */
 	turnOffMiningLasers: function(targetBlock) {
-		var miningLasers = this.blocksOfType('MiningLaserBlock');
+		// TODO: Change this when there are more weapons than just mining lasers.
+		var miningLasers = this.weapons();
 		for (var i = 0; i < miningLasers.length; i++) {
 			var miningLaser = miningLasers[i];
 			ige.network.send('removeEffect', NetworkUtils.effect('miningLaser', miningLaser, targetBlock));

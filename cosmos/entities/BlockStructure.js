@@ -95,7 +95,7 @@ var BlockStructure = BlockGrid.extend({
 
 		switch (data.action) {
 			case 'mine':
-				var block = self.get(data.row, data.col);
+				var block = self.get(new IgePoint2d(data.col, data.row))[0];
 				if (block === undefined) {
 					console.log("Request to mine undefined block. row: " + data.row + ", col: " + data.col);
 					return false;
@@ -132,13 +132,13 @@ var BlockStructure = BlockGrid.extend({
 						player.currentShip().turnOffMiningLasers(block);
 
 						// Drop block server side, then send drop msg to client
-						self.drop(data.row, data.col, player);
+						self.drop(player, new IgePoint2d(data.col, data.row));
 						data.action = 'remove';
 						ige.network.send('blockAction', data);
 						ige.network.stream.queueCommand('cosmos:BlockStructure.processBlockActionServer.minedBlock',
 							true, player.clientId());
 					}
-				}, Block.MINING_INTERVAL / player.currentShip().numBlocksOfType(MiningLaserBlock.prototype.classId()));
+				}, Block.MINING_INTERVAL / player.currentShip().weapons().length)
 				return true;
 			default:
 				return false;

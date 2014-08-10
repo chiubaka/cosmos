@@ -57,15 +57,15 @@ var Drop = BlockGrid.extend({
 	 */
 	block: function(newBlock) {
 		if (newBlock === undefined) {
-			return this.get(0, 0);
+			return this.get(new IgePoint2d(0, 0));
 		}
 
-		if (this.get(0, 0) !== undefined) {
-			console.error("Tried to replace the existing block in a Drop.");
+		if (this.get(new IgePoint2d(0, 0)).length > 0) {
+			this.log("Tried to replace the existing block in a Drop.", "error");
 			return;
 		}
 
-		this.add(0, 0, newBlock);
+		this.put(newBlock, new IgePoint2d(0, 0), true);
 		return this;
 	},
 
