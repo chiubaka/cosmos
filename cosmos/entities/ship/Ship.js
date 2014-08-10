@@ -184,15 +184,16 @@ var Ship = BlockStructure.extend({
 
 	remove: function(loc, width, height) {
 		var removed = BlockStructure.prototype.remove.call(this, loc, width, height);
+		var self = this;
 		_.forEach(removed, function(removedBlock) {
 			if (removedBlock instanceof EngineBlock) {
-				this.engines().splice(this.engines().indexOf(block), 1);
+				self.engines().splice(self.engines().indexOf(removedBlock), 1);
 			}
-			else if (block instanceof ThursterBlock) {
-				this.thrusters().splice(this.thrusters().indexOf(block), 1);
+			else if (removedBlock instanceof ThrusterBlock) {
+				self.thrusters().splice(self.thrusters().indexOf(removedBlock), 1);
 			}
-			else if (block instanceof Weapon) {
-				this.weapons().splice(this.thrusters().indexOf(block), 1);
+			else if (removedBlock instanceof Weapon) {
+				self.weapons().splice(self.thrusters().indexOf(removedBlock), 1);
 			}
 		});
 
