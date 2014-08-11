@@ -144,21 +144,11 @@ var BlockGrid = IgeEntity.extend({
 		this.addComponent(PixiRenderableComponent);
 
 		if (ige.isServer) {
-			// Add default physics body if it doesn't exist
+			// Add physics body w/ default properties if it doesn't exist
 			if (this.physicsBody === undefined) {
 				this.addComponent(TLPhysicsBodyComponent);
-				this.physicsBody.newBody({
-					bodyType: 'DYNAMIC',
-					bodyCategory: '',
-					linkedId: '',
-					x: 0.0,
-					y: 0.0,
-					angle: 0.0,
-					linearDamping: 0.4,
-					angularDamping: 1.0,
-					bullet: false
-				});
 			}
+			this.physicsBody.newBody();
 
 			this.streamControl(this._streamControlFunc.bind(this))
 		}

@@ -183,9 +183,9 @@ var GameInit = {
 	initEnvironment: function() {
 		var server = ige.server;
 
-		var NUM_NORMAL_ASTEROIDS = 20;
+		var NUM_NORMAL_ASTEROIDS = 10;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
-			this.spawnStructure(200, BlockStructureGenerator.elementDistributions.randomDistribution());
+			this.spawnStructure(20, BlockStructureGenerator.elementDistributions.randomDistribution());
 		}
 		// TODO: The procedural generation algorithm is causing strange problems with the new BlockGrid system. Leave
 		// this stuff commented out until it is figured out.

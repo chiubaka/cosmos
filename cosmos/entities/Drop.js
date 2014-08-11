@@ -37,17 +37,8 @@ var Drop = BlockGrid.extend({
 
 		if (ige.isServer) {
 			this.addComponent(TLPhysicsBodyComponent);
-			this.physicsBody.newBody({
-				bodyType: 'DYNAMIC',
-				bodyCategory: Drop.BOX2D_CATEGORY,
-				linkedId: this._owner.id(),
-				x: 0.0,
-				y: 0.0,
-				angle: 0.0,
-				linearDamping: 0.4,
-				angularDamping: 1.0,
-				bullet: false
-			});
+			this.physicsBody.bodyDef['bodyCategory'] = Drop.BOX2D_CATEGORY;
+			this.physicsBody.bodyDef['linkedId'] = opts.owner.id();
 		}
 
 		BlockGrid.prototype.init.call(this, opts);

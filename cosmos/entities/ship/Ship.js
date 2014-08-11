@@ -90,17 +90,7 @@ var Ship = BlockStructure.extend({
 
 		if (ige.isServer) {
 			this.addComponent(TLPhysicsBodyComponent);
-			this.physicsBody.newBody({
-				bodyType: 'DYNAMIC',
-				bodyCategory: Ship.BOX2D_CATEGORY,
-				linkedId: '',
-				x: 0.0,
-				y: 0.0,
-				angle: 0.0,
-				linearDamping: 0.4,
-				angularDamping: 1.0,
-				bullet: false
-			});
+			this.physicsBody.bodyDef['bodyCategory'] = Ship.BOX2D_CATEGORY;
 		}
 
 		BlockStructure.prototype.init.call(this, data);
