@@ -16,6 +16,10 @@ var igeClientConfig = {
 
 		/* Blocks */
 		'./entities/Block.js',
+		'./components/GridData.js',
+		'./entities/SparseGrid.js',
+		'./entities/BlockGridFixtureDebugContainer.js',
+		'./entities/BlockGridPhysicsContainer.js',
 		'./entities/BlockGrid.js',
 		'./entities/BlockStructure.js',
 		'./entities/GeneratedBlockStructure.js',
@@ -179,6 +183,7 @@ var igeClientConfig = {
 		/* Helper utilities */
 		'./utils/BlockGridPadding.js',
 		'./utils/DeploymentUtils.js',
+		'./utils/MathUtils.js',
 		'./utils/NetworkUtils.js',
 		'./utils/RandomInterval.js',
 		'./utils/PrototypeMixins.js',

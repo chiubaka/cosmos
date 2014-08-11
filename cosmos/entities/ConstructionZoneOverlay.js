@@ -80,17 +80,18 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 	 */
 	_createConstructionZones: function() {
 		// We want a buffer of size 1 on the top, bottom, right, and left. Hence the +2s everywhere.
-		var overlayNumRows = this._blockGrid.numRows() + 2;
-		var overlayNumCols = this._blockGrid.numCols() + 2;
+		var overlayNumRows = this._blockGrid.gridWidth() + 2;
+		var overlayNumCols = this._blockGrid.gridHeight() + 2;
 
-		this._overlayGrid = Array.prototype.new2DArray(overlayNumRows, overlayNumCols);
+		this._overlayGrid = Array.prototype.new2DArray(overlayNumCols, overlayNumRows);
 
 		var constructionZoneLocations = this._blockGrid.constructionZoneLocations();
 		for (var i = 0; i < constructionZoneLocations.length; i++) {
 			var location = constructionZoneLocations[i];
-			var row = location.row - this._blockGrid.startRow() + 1;
-			var col = location.col - this._blockGrid.startCol() + 1;
-			this._overlayGrid[row][col] = new ConstructionZoneBlock();
+			var lowerBound = this._blockGrid.lowerBound();
+			var row = location.y - lowerBound.y + 1;
+			var col = location.x - lowerBound.x + 1;
+			this._overlayGrid[col][row] = new ConstructionZoneBlock();
 		}
 	},
 
@@ -109,7 +110,23 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		this._renderContainer.height(this.height());
 		this._renderContainer.width(this.width());
 
-		for (var row = 0; row < this._overlayGrid.length; row++) {
+		for (var col = 0; col < this._overlayGrid.length; col++) {
+			for (var row = 0; row < this._overlayGrid[col].length; row++) {
+				var block = this._overlayGrid[col][row];
+
+				if (block === undefined) {
+					continue;
+				}
+
+				var x = Block.WIDTH * col - this._bounds2d.x2 + block._bounds2d.x2;
+				var y = Block.HEIGHT * row - this._bounds2d.y2 + block._bounds2d.y2;
+
+				block.translateTo(x, y, 0)
+					.mount(this._renderContainer);
+			}
+		}
+
+		/*for (var row = 0; row < this._overlayGrid.length; row++) {
 			for (var col = 0; col < this._overlayGrid[row].length; col++) {
 				var block = this._overlayGrid[row][col];
 
@@ -123,7 +140,7 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 				block.translateTo(x, y, 0)
 					.mount(this._renderContainer);
 			}
-		}
+		}*/
 		this._renderContainer.refresh();
 	},
 

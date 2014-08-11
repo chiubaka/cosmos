@@ -26,7 +26,7 @@ var FixtureDebuggingBlock = IgeEntity.extend({
 
 				return graphic;
 			},
-			anchor: new IgePoint2d(-Block.WIDTH / 2, -Block.HEIGHT / 2)
+			anchor: new IgePoint2d(-self.width() / 2, -self.height() / 2)
 		});
 
 		if (!ige.isServer) {

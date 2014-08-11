@@ -27,8 +27,8 @@ var BlockStructure = BlockGrid.extend({
 			// TODO: Examine ConstructionZoneOverlay to make sure it is compatible with new BlockGrid backing.
 			// TODO: Uncomment this. Commented out so I can test the new BlockGrid class without getting errors from
 			// the ConstructionZoneOverlay class.
-			this._constructionZoneOverlay = new ConstructionZoneOverlay(this)
-				.mount(this);
+			//this._constructionZoneOverlay = new ConstructionZoneOverlay(this)
+			//	.mount(this);
 		}
 	},
 
@@ -43,13 +43,10 @@ var BlockStructure = BlockGrid.extend({
 	 */
 	constructionZoneLocations: function() {
 		var constructionZoneLocations = [];
-		var iterator = this.iterator();
-		while (iterator.hasNext()) {
-			var block = iterator.next();
-			// Fancy way of concatenating two arrays. Referenced from here:
-			// http://stackoverflow.com/questions/4156101/javascript-push-array-values-into-another-array
-			constructionZoneLocations.push.apply(constructionZoneLocations, this._emptyNeighboringLocations(block));
-		}
+		var self = this;
+		this.each(function(block) {
+			constructionZoneLocations.push.apply(constructionZoneLocations, self.emptyNeighboringLocations(block));
+		});
 		return constructionZoneLocations;
 	},
 
@@ -69,7 +66,7 @@ var BlockStructure = BlockGrid.extend({
 		if (ige.client.state.currentCapability().classId() !== MineCapability.prototype.classId()) {
 			return;
 		}
-		if (this._hasNeighboringOpenLocations(block.row(), block.col(), block)) {
+		if (this.objectHasNeighboringOpenLocations(block)) {
 			// TODO: This might be dangerous, since some of the event properties should be changed so that they are
 			// relative to the child's bounding box, but since we don't use any of those properties for the moment,
 			// ignore that.
@@ -98,7 +95,7 @@ var BlockStructure = BlockGrid.extend({
 
 		switch (data.action) {
 			case 'mine':
-				var block = self.get(data.row, data.col);
+				var block = self.get(new IgePoint2d(data.col, data.row))[0];
 				if (block === undefined) {
 					console.log("Request to mine undefined block. row: " + data.row + ", col: " + data.col);
 					return false;
@@ -135,13 +132,13 @@ var BlockStructure = BlockGrid.extend({
 						player.currentShip().turnOffMiningLasers(block);
 
 						// Drop block server side, then send drop msg to client
-						self.drop(data.row, data.col, player);
+						self.drop(player, new IgePoint2d(data.col, data.row));
 						data.action = 'remove';
 						ige.network.send('blockAction', data);
 						ige.network.stream.queueCommand('cosmos:BlockStructure.processBlockActionServer.minedBlock',
 							true, player.clientId());
 					}
-				}, Block.MINING_INTERVAL / player.currentShip().numBlocksOfType(MiningLaserBlock.prototype.classId()));
+				}, Block.MINING_INTERVAL / player.currentShip().weapons().length);
 				return true;
 			default:
 				return false;
@@ -160,10 +157,10 @@ var BlockStructure = BlockGrid.extend({
 
 		switch (data.action) {
 			case 'remove':
-				this._constructionZoneOverlay.refresh();
+				//this._constructionZoneOverlay.refresh();
 				break;
 			case 'add':
-				this._constructionZoneOverlay.refresh();
+				//this._constructionZoneOverlay.refresh();
 				break;
 		}
 	}

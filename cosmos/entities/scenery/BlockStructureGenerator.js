@@ -56,7 +56,7 @@ var BlockStructureGenerator = {
 				continue;
 			}
 			*/
-			if (blockStructure.get(block.row, block.col) !== undefined) {
+			if (blockStructure.get(new IgePoint2d(block.col, block.row)).length > 0) {
 				blocksToPlace.remove(blockIndex);
 				continue;
 			}
@@ -68,21 +68,20 @@ var BlockStructureGenerator = {
 				var newBlock = this._getBlockType(blockStructure, block.row, block.col, blockDistribution);
 			}
 
-			{
-				blockStructure.add(block.row, block.col, newBlock, false);
+			blockStructure.put(newBlock, new IgePoint2d(block.col, block.row), newBlock, false);
+			blocksRemaining--;
+
+			if (symmetric) {
+				blockStructure.put(Block.blockFromClassId(newBlock.classId()),
+					new IgePoint2d(-block.col, -block.row), false);
 				blocksRemaining--;
-
-				if (symmetric) {
-					blockStructure.add(block.row, -block.col, Block.blockFromClassId(newBlock.classId()), false);
-					blocksRemaining--;
-				}
-
-				// Push cardinal neighbors into block bag.
-				blocksToPlace.push({ row: block.row - 1, col: block.col });
-				blocksToPlace.push({ row: block.row + 1, col: block.col });
-				blocksToPlace.push({ row: block.row, col: block.col - 1 });
-				blocksToPlace.push({ row: block.row, col: block.col + 1 });
 			}
+
+			// Push cardinal neighbors into block bag.
+			blocksToPlace.push({ row: block.row - 1, col: block.col });
+			blocksToPlace.push({ row: block.row + 1, col: block.col });
+			blocksToPlace.push({ row: block.row, col: block.col - 1 });
+			blocksToPlace.push({ row: block.row, col: block.col + 1 });
 
 			// Remove the block
 			blocksToPlace.remove(blockIndex);
@@ -114,10 +113,10 @@ var BlockStructureGenerator = {
 					continue;
 				}
 
-				if (blockStructure.get(curRow, curCol) == undefined) {
+				if (blockStructure.get(new IgePoint2d(curCol, curRow)).length === 0) {
 					continue;
 				}
-				var blockType = blockStructure.get(curRow, curCol).classId()
+				var blockType = blockStructure.get(new IgePoint2d(curCol, curRow))[0].classId()
 
 				if (neighborCounts[blockType] === undefined) {
 					neighborCounts[blockType] = 0;
@@ -184,7 +183,7 @@ var BlockStructureGenerator = {
 		var blockStructure = new GeneratedBlockStructure({
 			blockDistribution: distribution
 		});
-		blockStructure.add(0, 0, this._drawFromDistribution(distribution));
+		blockStructure.put(this._drawFromDistribution(distribution), new IgePoint2d(0, 0), false);
 
 		return blockStructure;
 	},
