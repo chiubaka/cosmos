@@ -200,6 +200,7 @@ var Ship = BlockStructure.extend({
 		if (ige.isServer) {
 			DbPlayer.update(this.player().id(), this.player(), function() {});
 		}
+		return removed;
 	},
 
 	/**

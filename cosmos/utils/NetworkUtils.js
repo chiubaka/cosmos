@@ -26,7 +26,7 @@ NetworkUtils.block = function(block) {
 		blockGridId: block.blockGrid() !== undefined ? block.blockGrid().id() : undefined,
 		row: block.gridData.loc.y,
 		col: block.gridData.loc.x
-	};sa
+	};
 };
 
 /**

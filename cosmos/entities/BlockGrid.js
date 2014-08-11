@@ -307,6 +307,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		var removedBlocks = SparseGrid.prototype.remove.call(this, location, width, height);
 
+		this.width(this.gridWidth() * Block.WIDTH);
+		this.height(this.gridHeight() * Block.HEIGHT);
+
+		this._translateContainers();
+
 		var self = this;
 		_.forEach(removedBlocks, function(block) {
 			// #ifdef SERVER
@@ -363,9 +368,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		var rotatedWorldCoordinates =  {
 			x: lowerBoundWorldCoordinates.x + coordinateDistanceFromLowerBound.x
-				+ block.gridData.width * Block.WIDTH / 2,
+				+ (block.gridData.width - 1)* Block.WIDTH / 2,
 			y: lowerBoundWorldCoordinates.y + coordinateDistanceFromLowerBound.y
-				+ block.gridData.height * Block.HEIGHT / 2
+				+ (block.gridData.height - 1) * Block.HEIGHT / 2
 		};
 
 		var theta = this.rotate().z();
@@ -574,20 +579,53 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	_translateContainers: function() {
 		var topLeftCoordinates = BlockGrid.coordinatesForLocation(this.lowerBound());
-		var gridCenter = {
+		this._oldGridCenter = this._gridCenter;
+		this._gridCenter = {
 			x: topLeftCoordinates.x - Block.WIDTH / 2 + (this.gridWidth() * Block.WIDTH) / 2,
 			y: topLeftCoordinates.y - Block.HEIGHT / 2 + (this.gridHeight() * Block.HEIGHT) / 2
 		};
 
+		// Do nothing if nothing has changed.
+		if (this._oldGridCenter && this._oldGridCenter.x === this._gridCenter.x
+			&& this._oldGridCenter.y === this._gridCenter.y) {
+			return;
+		}
+
 		// #ifdef SERVER
 		if (ige.isServer) {
-			this._physicsOffset = gridCenter;
+			this._physicsOffset = this._gridCenter;
 		}
 		// #else
 		else {
-			this._effectsAboveContainer.translateTo(-gridCenter.x, -gridCenter.y, 0);
-			this._effectsBelowContainer.translateTo(-gridCenter.x, -gridCenter.y, 0);
-			this._renderContainer.translateTo(-gridCenter.x, -gridCenter.y, 0);
+			this._effectsAboveContainer.translateTo(-this._gridCenter.x, -this._gridCenter.y, 0);
+			this._effectsBelowContainer.translateTo(-this._gridCenter.x, -this._gridCenter.y, 0);
+			this._renderContainer.translateTo(-this._gridCenter.x, -this._gridCenter.y, 0);
+		}
+
+		if (this._oldGridCenter && ige.isClient) {
+			var counterTranslation = {
+				x: this._gridCenter.x - this._oldGridCenter.x,
+				y: this._gridCenter.y - this._oldGridCenter.y
+			};
+
+			console.log("Inverse of rendering translation: ");
+			console.log(counterTranslation);
+
+			var theta = this.rotate().z();
+
+			var rotatedCounterTranslation = {
+				x: Math.cos(theta) * counterTranslation.x - Math.sin(theta) * counterTranslation.y,
+				y: Math.sin(theta) * counterTranslation.x + Math.cos(theta) * counterTranslation.y
+			};
+
+			console.log("Counter translating...");
+			console.log(rotatedCounterTranslation);
+
+			this.translateBy(
+				rotatedCounterTranslation.x,
+				rotatedCounterTranslation.y,
+				0
+			);
 		}
 		// #endif
 	}
