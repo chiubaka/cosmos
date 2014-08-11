@@ -593,10 +593,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 				var theta = this.rotate().z();
 
-				var rotatedEntityTranslation = {
-					x: physicsTranslation.x * Math.cos(theta) - physicsTranslation.y * Math.sin(theta),
-					y: physicsTranslation.x * Math.sin(theta) + physicsTranslation.y * Math.cos(theta)
-				};
+				var rotatedEntityTranslation = MathUtils.rotate(physicsTranslation, theta);
 
 				this.translate().x(this.translate().x() + rotatedEntityTranslation.x);
 				this.translate().y(this.translate().y() + rotatedEntityTranslation.y);
@@ -622,10 +619,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 			var theta = this.rotate().z();
 
-			var rotatedEntityTranslation = {
-				x: entityTranslation.x * Math.cos(theta) - entityTranslation.y * Math.sin(theta),
-				y: entityTranslation.x * Math.sin(theta) + entityTranslation.y * Math.cos(theta)
-			};
+			var rotatedEntityTranslation = MathUtils.rotate(entityTranslation, theta);
 
 			this.translateBy(rotatedEntityTranslation.x, rotatedEntityTranslation.y, 0);
 		}
