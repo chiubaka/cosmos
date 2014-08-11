@@ -346,7 +346,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	worldCoordinatesForBlock: function(block) {
-		var theta = -this.rotate().z();
+		var theta = this.rotate().z();
 
 		var entityCenter = {
 			x: this.translate().x(),
@@ -594,7 +594,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 					y: this._gridCenter.y - this._oldGridCenter.y
 				};
 
-				var theta = -this.rotate().z();
+				var theta = this.rotate().z();
 
 				var rotatedEntityTranslation = {
 					x: physicsTranslation.x * Math.cos(theta) - physicsTranslation.y * Math.sin(theta),
@@ -623,7 +623,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 				y: -renderTranslation.y
 			};
 
-			var theta = -this.rotate().z();
+			var theta = this.rotate().z();
 
 			var rotatedEntityTranslation = {
 				x: entityTranslation.x * Math.cos(theta) - entityTranslation.y * Math.sin(theta),
