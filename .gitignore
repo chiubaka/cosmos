@@ -333,3 +333,5 @@ TODO.md
 
 # ack config files
 *.ackrc
+
+cosmos/tests/game.js

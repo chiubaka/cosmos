@@ -16,7 +16,7 @@ var MetricsHandler = IgeEventingClass.extend({
 
 		this.validStrings = {
 			/* Tutorial Quest */
-			"cosmos:quest.tutorialQuest.clicked": true,
+			"cosmos:quest.tutorialQuest.clicked": true, // This is fired when you click "ok", I will take the tutorial. The alternative is to cancel the tutorial.
 			"cosmos:quest.tutorialQuest.skipped": true,
 			"cosmos:quest.tutorialQuest.welcome.completed": true,
 			"cosmos:quest.tutorialQuest.moveForward.completed": true,
@@ -34,7 +34,7 @@ var MetricsHandler = IgeEventingClass.extend({
 			"cosmos:quest.tutorialQuest.completed": true,
 
 			/* player */
-			"cosmos:player.connect": true,
+			"cosmos:player.connect": true, // This is fired when the game has been loaded and _onPlayerEntity is called on the client
 			"cosmos:player.attack": true,
 
 			/* engine */
