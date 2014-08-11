@@ -23,10 +23,6 @@ var ExampleShips = {
 		]
 	},
 	
-	one: function () {
-		return [[new IronEngineBlock()]];
-	},
-
 	/**
 	 * This is the ship in the middle of the video. It has two engines, but one of them is misplaced and unbalanced.
 	 * @returns {Array} A {@link Block} matrix that represents the starter ship with two, unbalanced engines.

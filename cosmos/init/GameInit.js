@@ -21,8 +21,6 @@ var GameInit = {
 		this.initBlocks();
 
 		if (ige.isServer) {
-
-			var server = ige.server;
 			this.initEnvironment();
 			this.initPhysics();
 			this.initServerEvents();
@@ -262,13 +260,11 @@ var GameInit = {
 		// Set up collision callbacks
 		ige.physicsSystem.registerCollisionCallbacks({
 			beginContact: function(entity1, entity2, identifier) {
-				console.log('Begin contact. :' + identifier);
 				switch (identifier) {
 					case contactIdentifiers.shipDropBegin:
 						var entities = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY);
 						var drop = entities[0];
 						var ship = entities[1];
-						console.log('attr ship');
 						if (drop.getAttractedTo() === undefined && drop.isOwner(ship)) {
 							drop.setAttractedTo(ship);
 						}
@@ -285,7 +281,6 @@ var GameInit = {
 						var entities = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY);
 						var drop = entities[0];
 						var ship = entities[1];
-						console.log('End contact');
 						if (drop.isOwner(ship)) {
 							drop.setAttractedTo(undefined);
 						}
