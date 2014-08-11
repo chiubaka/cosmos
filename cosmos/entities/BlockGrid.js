@@ -587,6 +587,23 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// #ifdef SERVER
 		if (ige.isServer) {
 			this._physicsOffset = this._gridCenter;
+
+			if (this._oldGridCenter) {
+				var physicsTranslation = {
+					x: this._gridCenter.x - this._oldGridCenter.x,
+					y: this._gridCenter.y - this._oldGridCenter.y
+				};
+
+				var theta = this.rotate().z();
+
+				var rotatedEntityTranslation = {
+					x: physicsTranslation.x * Math.cos(theta) - physicsTranslation.y * Math.sin(theta),
+					y: physicsTranslation.x * Math.sin(theta) + physicsTranslation.y * Math.cos(theta)
+				};
+
+				this.translate().x(this.translate().x() + rotatedEntityTranslation.x);
+				this.translate().y(this.translate().y() + rotatedEntityTranslation.y);
+			}
 		}
 		// #else
 		else {
@@ -595,7 +612,28 @@ var BlockGrid = IgeEntityBox2d.extend({
 			this._renderContainer.translateTo(-this._gridCenter.x, -this._gridCenter.y, 0);
 		}
 
-		if (this._oldGridCenter && ige.isClient) {
+		/*if (this._oldGridCenter && ige.isClient) {
+			var renderTranslation = {
+				x: -this._gridCenter.x - (-this._oldGridCenter.x),
+				y: -this._gridCenter.y - (-this._oldGridCenter.y)
+			};
+
+			var entityTranslation = {
+				x: -renderTranslation.x,
+				y: -renderTranslation.y
+			};
+
+			var theta = this.rotate().z();
+
+			var rotatedEntityTranslation = {
+				x: entityTranslation.x * Math.cos(theta) - entityTranslation.y * Math.sin(theta),
+				y: entityTranslation.x * Math.sin(theta) + entityTranslation.y * Math.cos(theta)
+			};
+
+			this.translateBy(rotatedEntityTranslation.x, rotatedEntityTranslation.y, 0);
+		}*/
+
+		/*if (this._oldGridCenter && ige.isClient) {
 			var counterTranslation = {
 				x: this._gridCenter.x - this._oldGridCenter.x,
 				y: this._gridCenter.y - this._oldGridCenter.y
@@ -619,7 +657,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 				rotatedCounterTranslation.y,
 				0
 			);
-		}
+		}*/
 		// #endif
 	}
 });
