@@ -346,41 +346,34 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	worldCoordinatesForBlock: function(block) {
-		var loc = block.gridData.loc;
-		var lowerBound = this.lowerBound();
-
-		// Coordinates for the lower bound (top left) with respect to the BlockGrid.
-		var lowerBoundCoordinates = {
-			x: -this.gridWidth() / 2 * Block.WIDTH + Block.WIDTH / 2,
-			y: -this.gridHeight() / 2 * Block.HEIGHT + Block.HEIGHT / 2
-		};
-
-		var lowerBoundWorldCoordinates = {
-			x: this.translate().x() + lowerBoundCoordinates.x,
-			y: this.translate().y() + lowerBoundCoordinates.y
-		};
-
-		var distanceFromLowerBound = loc.minusPoint(lowerBound);
-		var coordinateDistanceFromLowerBound = {
-			x: distanceFromLowerBound.x * Block.WIDTH,
-			y: distanceFromLowerBound.y * Block.HEIGHT
-		};
-
-		var rotatedWorldCoordinates =  {
-			x: lowerBoundWorldCoordinates.x + coordinateDistanceFromLowerBound.x
-				+ (block.gridData.width - 1)* Block.WIDTH / 2,
-			y: lowerBoundWorldCoordinates.y + coordinateDistanceFromLowerBound.y
-				+ (block.gridData.height - 1) * Block.HEIGHT / 2
-		};
-
 		var theta = this.rotate().z();
 
+		var entityCenter = {
+			x: this.translate().x(),
+			y: this.translate().y()
+		};
+
+		var relBlockLoc = {
+			x: block.gridData.loc.x - this.lowerBound().x,
+			y: block.gridData.loc.y - this.lowerBound().y
+		};
+
+		var localCoordinates = {
+			x: -(this._bounds2d.x2 - Block.WIDTH / 2 - relBlockLoc.x * Block.WIDTH)
+				+ block._bounds2d.x2,
+			y: -(this._bounds2d.y2 - Block.HEIGHT / 2 - relBlockLoc.y * Block.HEIGHT)
+				+ block._bounds2d.y2
+		};
+
+		var rotatedLocalCoordinates = {
+			x: localCoordinates.x * Math.cos(theta) - localCoordinates.y * Math.sin(theta),
+			y: localCoordinates.x * Math.sin(theta) + localCoordinates.y * Math.cos(theta)
+		};
+
 		return {
-			x: Math.cos(theta) * rotatedWorldCoordinates.x
-				- Math.sin(theta) * rotatedWorldCoordinates.y,
-			y: Math.sin(theta) * rotatedWorldCoordinates.x
-				+ Math.cos(theta) * rotatedWorldCoordinates.y
-		}
+			x: rotatedLocalCoordinates.x + entityCenter.x,
+			y: rotatedLocalCoordinates.y + entityCenter.y
+		};
 	},
 
 	_addFixture: function(block) {
