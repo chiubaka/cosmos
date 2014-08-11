@@ -90,6 +90,7 @@ var Ship = BlockStructure.extend({
 
 		if (ige.isServer) {
 			this.addComponent(TLPhysicsBodyComponent);
+			// Override default bodyDef properties
 			this.physicsBody.bodyDef['bodyCategory'] = Ship.BOX2D_CATEGORY;
 		}
 

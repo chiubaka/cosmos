@@ -37,6 +37,7 @@ var Drop = BlockGrid.extend({
 
 		if (ige.isServer) {
 			this.addComponent(TLPhysicsBodyComponent);
+			// Override default bodyDef properties
 			this.physicsBody.bodyDef['bodyCategory'] = Drop.BOX2D_CATEGORY;
 			this.physicsBody.bodyDef['linkedId'] = opts.owner.id();
 		}

@@ -297,11 +297,6 @@ var BlockGrid = IgeEntity.extend({
 			return false;
 		}
 
-		if(ige.isServer) {
-			// Add physics fixture component
-			block.addComponent(TLPhysicsFixtureComponent);
-		}
-
 		// Store the row and col in the block so that we can figure out where we are from the block.
 		block.row(row).col(col);
 
@@ -1304,20 +1299,21 @@ var BlockGrid = IgeEntity.extend({
 	 */
 	_createFixtureDef: function(block) {
 		var drawLocation = this._drawLocationForBlock(block);
+		var fixtureDef = block.physicsFixture.fixtureDef;
 		return {
-			fixtureCategory: block.category(),
-			friction: BlockGrid.BLOCK_FIXTURE_FRICTION,
-			restitution: BlockGrid.BLOCK_FIXTURE_RESTITUTION,
-			density: BlockGrid.BLOCK_FIXTURE_DENSITY,
-			isSensor: false,
-			shapeType: 'BOX',
-			hwidth: (block.numCols() * Block.WIDTH) / 2 -
+			fixtureCategory: fixtureDef.fixtureCategory || '',
+			friction: fixtureDef.fixtureCategory || BlockGrid.BLOCK_FIXTURE_FRICTION,
+			restitution: fixtureDef.restitution || BlockGrid.BLOCK_FIXTURE_RESTITUTION,
+			density: fixtureDef.density || BlockGrid.BLOCK_FIXTURE_DENSITY,
+			isSensor: fixtureDef.isSensor || false,
+			shapeType: fixtureDef.shapeType || 'BOX',
+			hwidth: fixtureDef.hwidth || (block.numCols() * Block.WIDTH) / 2 -
 				(2 * BlockGrid.BLOCK_FIXTURE_PADDING),
-			hheight: (block.numRows() * Block.HEIGHT) / 2 -
+			hheight: fixtureDef.hheight || (block.numRows() * Block.HEIGHT) / 2 -
 				(2 * BlockGrid.BLOCK_FIXTURE_PADDING),
-			x: drawLocation.x + BlockGrid.BLOCK_FIXTURE_PADDING,
-			y: drawLocation.y + BlockGrid.BLOCK_FIXTURE_PADDING,
-			angle: 0.0
+			x: fixtureDef.x || drawLocation.x + BlockGrid.BLOCK_FIXTURE_PADDING,
+			y: fixtureDef.y || drawLocation.y + BlockGrid.BLOCK_FIXTURE_PADDING,
+			angle: fixtureDef.angle || 0.0
 		}
 	},
 

@@ -185,7 +185,10 @@ var Block = IgeEntity.extend({
 			return displayObject;
 		}});
 
-		if (!ige.isServer) {
+		if (ige.isServer) {
+			this.addComponent(TLPhysicsFixtureComponent);
+		}
+		else {
 			this.texture(ige.client.textures.block);
 
 			this._effects = {};

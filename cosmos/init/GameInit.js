@@ -212,7 +212,8 @@ var GameInit = {
 		var contactIdentifiers = {
 			'shipDropBegin': 1,
 			'shipDropEnd': 2,
-			'shipDropPreSolve': 3
+			'shipDropPreSolve': 3,
+			'dropPreSolve': 4
 		}
 
 		var beginContacts = [{
@@ -240,6 +241,15 @@ var GameInit = {
 			b_fixture_category: '',
 			disable_contact: true,
 			identifier: contactIdentifiers['shipDropPreSolve']
+		},
+		// TODO: Make drops not collide with anything (this doesn't work yet)
+		{
+			a_body_category: Drop.BOX2D_CATEGORY,
+			a_fixture_category: '',
+			b_body_category: '',
+			b_fixture_category: '',
+			disable_contact: true,
+			identifier: contactIdentifiers['dropPreSolve']
 		}];
 
 		ige.physicsSystem.newCustomContacts({contacts: beginContacts, contactType:
@@ -300,6 +310,9 @@ var GameInit = {
 						var block = drop.block();
 						ige.emit('block collected', [ship, block.classId()]);
 						drop.destroy();
+						break;
+					case contactIdentifiers.dropPreSolve:
+						// TODO: Make drops not collide (this needs physics server support)
 						break;
 					default:
 						this.log('GameInit#initPhysics: preSolve bad identifier', 'warning');
