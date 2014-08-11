@@ -8,6 +8,24 @@ MathUtils.round = function(value) {
 	return MathUtils.roundToDecimals(value, MathUtils.EPSILON);
 };
 
+
+MathUtils.worldVectorToLocalVector = function(vector, entity) {
+	var translatedVector = vector.minusPoint(new IgePoint2d(entity.translate().x(), entity.translate().y()));
+	return translatedVector.rotate(entity.rotate().z());
+};
+
+MathUtils.localVectorToWorldVector = function(vector, entity) {
+	var rotatedVector = vector.rotate(-entity.rotate().z());
+	return rotatedVector.addPoint(new IgePoint2d(entity.translate().x(), entity.translate().y()));
+};
+
+MathUtils.rotate = function(vector, theta) {
+	return {
+		x: vector.x * Math.cos(theta) - vector.y * Math.sin(theta),
+		y: vector.x * Math.sin(theta) + vector.y * Math.cos(theta)
+	};
+};
+
 // By default, round to 10 decimal places.
 MathUtils.EPSILON = 10;
 

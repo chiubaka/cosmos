@@ -107,7 +107,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		height = height || 1;
 
 		var owner = (player !== undefined) ? player.currentShip() : undefined;
-		var theta = this.rotate().z();
+		var theta = -this.rotate().z();
 		var dropped = this.remove(loc, width, height);
 
 		this.log("BlockGrid#drop: " + dropped.length + " drops.");
@@ -346,7 +346,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	worldCoordinatesForBlock: function(block) {
-		var theta = this.rotate().z();
+		var theta = -this.rotate().z();
 
 		var entityCenter = {
 			x: this.translate().x(),
@@ -410,6 +410,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		// The position of the click in world coordinates
 		var mousePosWorld = this.mousePosWorld();
+		
 		var worldX = mousePosWorld.x;
 		var worldY = mousePosWorld.y;
 
@@ -594,7 +595,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 					y: this._gridCenter.y - this._oldGridCenter.y
 				};
 
-				var theta = this.rotate().z();
+				var theta = -this.rotate().z();
 
 				var rotatedEntityTranslation = {
 					x: physicsTranslation.x * Math.cos(theta) - physicsTranslation.y * Math.sin(theta),
@@ -612,7 +613,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			this._renderContainer.translateTo(-this._gridCenter.x, -this._gridCenter.y, 0);
 		}
 
-		/*if (this._oldGridCenter && ige.isClient) {
+		if (this._oldGridCenter && ige.isClient) {
 			var renderTranslation = {
 				x: -this._gridCenter.x - (-this._oldGridCenter.x),
 				y: -this._gridCenter.y - (-this._oldGridCenter.y)
@@ -623,7 +624,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 				y: -renderTranslation.y
 			};
 
-			var theta = this.rotate().z();
+			var theta = -this.rotate().z();
 
 			var rotatedEntityTranslation = {
 				x: entityTranslation.x * Math.cos(theta) - entityTranslation.y * Math.sin(theta),
@@ -631,7 +632,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 			};
 
 			this.translateBy(rotatedEntityTranslation.x, rotatedEntityTranslation.y, 0);
-		}*/
+		}
 
 		/*if (this._oldGridCenter && ige.isClient) {
 			var counterTranslation = {
