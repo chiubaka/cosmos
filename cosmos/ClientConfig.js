@@ -182,6 +182,7 @@ var igeClientConfig = {
 		'./utils/NetworkUtils.js',
 		'./utils/RandomInterval.js',
 		'./utils/PrototypeMixins.js',
+		'./utils/MathUtils.js',
 
 		/* === GAME SETUP === */
 		/* Configuration */

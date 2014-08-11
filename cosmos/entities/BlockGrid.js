@@ -1645,6 +1645,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		// The position of the click in world coordinates
 		var mousePosWorld = this.mousePosWorld();
+		
 		var worldX = mousePosWorld.x;
 		var worldY = mousePosWorld.y;
 
@@ -1667,8 +1668,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// The unrotated coordinates for comparison against an unrotated grid with respect to the center of the
 		// entity
 		// This uses basic trigonometry. See http://en.wikipedia.org/wiki/Rotation_matrix.
-		var unrotatedX = aabbRelativeX * Math.cos(theta) - aabbRelativeY * Math.sin(theta);
-		var unrotatedY = aabbRelativeX * Math.sin(theta) + aabbRelativeY * Math.cos(theta);
+		unrotated = MathUtils.rotate(new IgePoint2d(aabbRelativeX, aabbRelativeY), theta);
 
 		// Height and width of the grid area
 		var width = this.width();
@@ -1676,8 +1676,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		// Check if the click was out of the grid area (happens because axis-aligned bounding boxes are larger
 		// than the non-axis-aligned grid area)
-		if (Math.abs(unrotatedX) > width / 2
-			|| Math.abs(unrotatedY) > height / 2) {
+		if (Math.abs(unrotated.x) > width / 2
+			|| Math.abs(unrotated.y) > height / 2) {
 			return;
 		}
 
@@ -1687,8 +1687,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		// Coordinates of the unrotated clicked point with respect to the top left of the grid area
 		// This is just so calculations are a little bit easier
-		var gridX = unrotatedX - topLeftCornerX;
-		var gridY = unrotatedY - topLeftCornerY;
+		var gridX = unrotated.x - topLeftCornerX;
+		var gridY = unrotated.y - topLeftCornerY;
 
 		var row = Math.floor(gridY / Block.HEIGHT) + this.startRow();
 		var col = Math.floor(gridX / Block.WIDTH) + this.startCol();
