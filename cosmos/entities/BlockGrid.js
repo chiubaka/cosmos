@@ -365,10 +365,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 				+ block._bounds2d.y2
 		};
 
-		var rotatedLocalCoordinates = {
-			x: localCoordinates.x * Math.cos(theta) - localCoordinates.y * Math.sin(theta),
-			y: localCoordinates.x * Math.sin(theta) + localCoordinates.y * Math.cos(theta)
-		};
+		var rotatedLocalCoordinates = MathUtils.rotate(localCoordinates, theta);
 
 		return {
 			x: rotatedLocalCoordinates.x + entityCenter.x,
@@ -410,7 +407,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		// The position of the click in world coordinates
 		var mousePosWorld = this.mousePosWorld();
-		
+
 		var worldX = mousePosWorld.x;
 		var worldY = mousePosWorld.y;
 
