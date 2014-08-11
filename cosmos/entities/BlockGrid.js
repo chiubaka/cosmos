@@ -379,8 +379,8 @@ var BlockGrid = IgeEntity.extend({
 		// Calculate position of new Drop, taking into account rotation
 		var gridX = this.translate().x();
 		var gridY = this.translate().y();
-		var fixtureX = block.physicsFixture.fixtureDef().x;
-		var fixtureY = block.physicsFixture.fixtureDef().y;
+		var fixtureX = block.physicsFixture.fixtureDef.x;
+		var fixtureY = block.physicsFixture.fixtureDef.y;
 		var theta = this.rotate().z();
 
 		var finalX = Math.cos(theta) * fixtureX - Math.sin(theta) * fixtureY + gridX;
@@ -1276,20 +1276,19 @@ var BlockGrid = IgeEntity.extend({
 		}
 
 		// Destroy the existing fixture
-		if (block.physicsFixture.fixtureDef() !== undefined) {
+		if (block.physicsFixture.getCreated() === true) {
 			this.physicsBody.destroyFixture(block);
 		}
 
-		// Update the fixture def
-		var fixtureDef = this._createFixtureDef(block);
-		block.physicsFixture.fixtureDef(fixtureDef);
+		// Update the block's physicsFixture component's fixtureDef
+		this._updateFixtureDef(block);
 
 		// Add a new fixture based on the new fixture def
-		this.physicsBody.newFixture(block, fixtureDef);
+		this.physicsBody.newFixture(block);
 	},
 
 	/**
-	 * Creates and returns a fixture def object for the given {@link Block} by computing the fixture's x, y, width,
+	 * Updates a fixture def object for the given {@link Block} by computing the fixture's x, y, width,
 	 * and height based on the {@link Block}'s properties.
 	 * @param block {Block} The {@link Block} to make a fixture def for.
 	 * @returns {Object} A object containing a fixture definition
@@ -1297,10 +1296,10 @@ var BlockGrid = IgeEntity.extend({
 	 * @private
 	 * @instance
 	 */
-	_createFixtureDef: function(block) {
+	_updateFixtureDef: function(block) {
 		var drawLocation = this._drawLocationForBlock(block);
 		var fixtureDef = block.physicsFixture.fixtureDef;
-		return {
+		 block.physicsFixture.fixtureDef = {
 			fixtureCategory: fixtureDef.fixtureCategory || '',
 			friction: fixtureDef.fixtureCategory || BlockGrid.BLOCK_FIXTURE_FRICTION,
 			restitution: fixtureDef.restitution || BlockGrid.BLOCK_FIXTURE_RESTITUTION,

@@ -243,8 +243,12 @@ var Ship = BlockStructure.extend({
 	 * @memberof Ship
 	 * @instance
 	 */
+	// @server-side
+	// TODO: Make the sensor a separate entity, so we can have multiple sensors
+	// attached to the ship
 	addSensor: function(radius) {
-		var fixtureDef = {
+		this.addComponent(TLPhysicsFixtureComponent);
+		this.physicsFixture.fixtureDef = {
 			fixtureCategory: Ship.ATTRACTOR_BOX2D_CATEGORY,
 			friction: 0.0,
 			restitution: 0.0,
@@ -254,9 +258,8 @@ var Ship = BlockStructure.extend({
 			radius: radius,
 			x: 0.0,
 			y: 0.0
-		};
-
-		this.physicsBody.newFixture(this, fixtureDef);
+		}
+		this.physicsBody.newFixture(this);
 
 		return this;
 	},
