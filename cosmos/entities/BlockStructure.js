@@ -27,8 +27,8 @@ var BlockStructure = BlockGrid.extend({
 			// TODO: Examine ConstructionZoneOverlay to make sure it is compatible with new BlockGrid backing.
 			// TODO: Uncomment this. Commented out so I can test the new BlockGrid class without getting errors from
 			// the ConstructionZoneOverlay class.
-			this._constructionZoneOverlay = new ConstructionZoneOverlay(this)
-				.mount(this);
+			//this._constructionZoneOverlay = new ConstructionZoneOverlay(this)
+			//	.mount(this);
 		}
 	},
 
@@ -157,10 +157,10 @@ var BlockStructure = BlockGrid.extend({
 
 		switch (data.action) {
 			case 'remove':
-				this._constructionZoneOverlay.refresh();
+				//this._constructionZoneOverlay.refresh();
 				break;
 			case 'add':
-				this._constructionZoneOverlay.refresh();
+				//this._constructionZoneOverlay.refresh();
 				break;
 		}
 	}

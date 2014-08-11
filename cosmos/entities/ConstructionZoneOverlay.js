@@ -86,14 +86,11 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		this._overlayGrid = Array.prototype.new2DArray(overlayNumCols, overlayNumRows);
 
 		var constructionZoneLocations = this._blockGrid.constructionZoneLocations();
-		console.log(overlayNumCols, overlayNumRows);
-		console.log(constructionZoneLocations.length);
 		for (var i = 0; i < constructionZoneLocations.length; i++) {
 			var location = constructionZoneLocations[i];
 			var lowerBound = this._blockGrid.lowerBound();
 			var row = location.y - lowerBound.y + 1;
 			var col = location.x - lowerBound.x + 1;
-			console.log("col: " + col + ", row: " + row);
 			this._overlayGrid[col][row] = new ConstructionZoneBlock();
 		}
 	},
@@ -245,8 +242,6 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		this._createConstructionZones();
 		this._mountOverlayGrid();
 	}
-
-	update: function() 
 
 });
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {

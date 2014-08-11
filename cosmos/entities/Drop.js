@@ -57,7 +57,7 @@ var Drop = BlockGrid.extend({
 	 */
 	block: function(newBlock) {
 		if (newBlock === undefined) {
-			return this.get(new IgePoint2d(0, 0));
+			return this.get(new IgePoint2d(0, 0))[0];
 		}
 
 		if (this.get(new IgePoint2d(0, 0)).length > 0) {

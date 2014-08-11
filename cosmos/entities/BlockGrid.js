@@ -97,45 +97,34 @@ var BlockGrid = IgeEntityBox2d.extend({
 	// #endif
 
 	// #ifdef SERVER
-	/**
-	 * Removes the {@link Block} at the specified row and column from the grid and creates a {@link Drop} for the
-	 * removed {@link Block}.
-	 * @param row {number} The row of the {@link Block} to drop.
-	 * @param col {number} The col of the {@link Block} to drop.
-	 * @param player {IgeEntityBox2d} The {@link Player} that caused this {@link Block} to be dropped. Used to constrain
-	 * who can pick up the {@link Drop}. If undefined, all players will be able to pick up the {@link Drop}.
-	 * @memberof BlockGrid
-	 * @instance
-	 */
-	drop: function(player, loc) {
-		// TODO: Validate location.
-		// TODO: Validate player.
-
-		// TODO: Rewrite this function.
-
-		var blocks = this.get(loc);
-		if (!blocks || blocks.length === 0) {
-			return;
+	drop: function(player, loc, width, height) {
+		if (!IgePoint2d.validatePoint(loc)) {
+			this.log("BlockGrid#drop: invalid location parameter.", "warning");
+			return null;
 		}
 
-		// Calculate position of new Drop, taking into account rotation
-		var gridX = this.translate().x();
-		var gridY = this.translate().y();
-		var fixtureX = blocks[0].fixtureDef().shape.data.x;
-		var fixtureY = blocks[0].fixtureDef().shape.data.y;
+		width = width || 1;
+		height = height || 1;
+
+		var owner = (player !== undefined) ? player.currentShip() : undefined;
 		var theta = this.rotate().z();
+		var dropped = this.remove(loc, width, height);
 
-		var finalX = Math.cos(theta) * fixtureX - Math.sin(theta) * fixtureY + gridX;
-		var finalY = Math.sin(theta) * fixtureX + Math.cos(theta) * fixtureY + gridY;
+		this.log("BlockGrid#drop: " + dropped.length + " drops.");
+		var self = this;
+		_.forEach(dropped, function(drop) {
+			console.log(drop.classId());
+			var dropCoordinates = self.worldCoordinatesForBlock(drop);
+			var newDrop = new Drop()
+				.block(drop)
+				.owner(owner)
+				.translateTo(dropCoordinates.x, dropCoordinates.y, 0)
+				.rotateTo(0, 0, theta)
+				.streamMode(1)
+				.mount(ige.server.spaceGameScene);
 
-		this.remove(loc);
-
-		/*new Drop().mount(ige.server.spaceGameScene)
-			.block(blocks[0])
-			.owner(player.currentShip())
-			.translateTo(finalX, finalY, 0)
-			.rotate().z(theta)
-			.streamMode(1);*/
+			self.log("BlockGrid#drop: dropping " + newDrop.id() +": " + newDrop.block().classId());
+		});
 	},
 	// #endif
 
@@ -313,12 +302,25 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// Validate parameters
 		if (!IgePoint2d.validatePoint(location)) {
 			this.log("Invalid location passed to BlockGrid#remove.", "warning");
-			return;
+			return null;
 		}
 
-		// TODO: Remove fixture for the block.
+		var removedBlocks = SparseGrid.prototype.remove.call(this, location, width, height);
 
-		return SparseGrid.prototype.remove.call(this, location, width, height);
+		var self = this;
+		_.forEach(removedBlocks, function(block) {
+			// #ifdef SERVER
+			if (ige.isServer) {
+				self._box2dBody.DestroyFixture(block.fixture());
+			}
+			// #else
+			else {
+				block.unMount();
+			}
+			// #endif
+		});
+
+		return removedBlocks;
 	},
 
 	/**
@@ -336,6 +338,44 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 	streamCreateData: function() {
 		return this.toJSON();
+	},
+
+	worldCoordinatesForBlock: function(block) {
+		var loc = block.gridData.loc;
+		var lowerBound = this.lowerBound();
+
+		// Coordinates for the lower bound (top left) with respect to the BlockGrid.
+		var lowerBoundCoordinates = {
+			x: -this.gridWidth() / 2 * Block.WIDTH + Block.WIDTH / 2,
+			y: -this.gridHeight() / 2 * Block.HEIGHT + Block.HEIGHT / 2
+		};
+
+		var lowerBoundWorldCoordinates = {
+			x: this.translate().x() + lowerBoundCoordinates.x,
+			y: this.translate().y() + lowerBoundCoordinates.y
+		};
+
+		var distanceFromLowerBound = loc.minusPoint(lowerBound);
+		var coordinateDistanceFromLowerBound = {
+			x: distanceFromLowerBound.x * Block.WIDTH,
+			y: distanceFromLowerBound.y * Block.HEIGHT
+		};
+
+		var rotatedWorldCoordinates =  {
+			x: lowerBoundWorldCoordinates.x + coordinateDistanceFromLowerBound.x
+				+ block.gridData.width * Block.WIDTH / 2,
+			y: lowerBoundWorldCoordinates.y + coordinateDistanceFromLowerBound.y
+				+ block.gridData.height * Block.HEIGHT / 2
+		};
+
+		var theta = this.rotate().z();
+
+		return {
+			x: Math.cos(theta) * rotatedWorldCoordinates.x
+				- Math.sin(theta) * rotatedWorldCoordinates.y,
+			y: Math.sin(theta) * rotatedWorldCoordinates.x
+				+ Math.cos(theta) * rotatedWorldCoordinates.y
+		}
 	},
 
 	_addFixture: function(block) {
