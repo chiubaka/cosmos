@@ -86,8 +86,22 @@ var Ship = BlockStructure.extend({
 		this._engines = [];
 		this._thrusters = [];
 
-		// Set category because BlockGrid superclass will initialize physics body
 		this.category(Ship.BOX2D_CATEGORY);
+
+		if (ige.isServer) {
+			this.addComponent(TLPhysicsBodyComponent);
+			this.physicsBody.newBody({
+				bodyType: 'DYNAMIC',
+				bodyCategory: Ship.BOX2D_CATEGORY,
+				linkedId: '',
+				x: 0.0,
+				y: 0.0,
+				angle: 0.0,
+				linearDamping: 0.4,
+				angularDamping: 1.0,
+				bullet: false
+			});
+		}
 
 		BlockStructure.prototype.init.call(this, data);
 

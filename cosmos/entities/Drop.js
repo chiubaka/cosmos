@@ -31,16 +31,28 @@ var Drop = BlockGrid.extend({
 
 	init: function(opts) {
 		var self = this;
-		// Set category because BlockGrid superclass will initialize physics body
-		this.category(Drop.BOX2D_CATEGORY);
-		// Box2d body gets initialized with the _owner. To change owner after
-		// initialization, use setOwner()
+		// To change owner after initialization, use setOwner()
 		this._owner = opts.owner;
+		this.category(Drop.BOX2D_CATEGORY);
+
+		if (ige.isServer) {
+			this.addComponent(TLPhysicsBodyComponent);
+			this.physicsBody.newBody({
+				bodyType: 'DYNAMIC',
+				bodyCategory: Drop.BOX2D_CATEGORY,
+				linkedId: this._owner.id(),
+				x: 0.0,
+				y: 0.0,
+				angle: 0.0,
+				linearDamping: 0.4,
+				angularDamping: 1.0,
+				bullet: false
+			});
+		}
 
 		BlockGrid.prototype.init.call(this, opts);
 
 		this.depth(Drop.DEPTH);
-
 		this.height(Block.HEIGHT);
 		this.width(Block.WIDTH);
 

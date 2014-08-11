@@ -144,18 +144,21 @@ var BlockGrid = IgeEntity.extend({
 		this.addComponent(PixiRenderableComponent);
 
 		if (ige.isServer) {
-			this.addComponent(TLPhysicsBodyComponent);
-			this.physicsBody.newBody({
-				bodyType: 'DYNAMIC',
-				bodyCategory: this.category(),
-				linkedId: this instanceof Drop ? this.getOwner().id() : undefined,
-				x: 0.0,
-				y: 0.0,
-				angle: 0.0,
-				linearDamping: 0.4,
-				angularDamping: 1.0,
-				bullet: false
-			});
+			// Add default physics body if it doesn't exist
+			if (this.physicsBody === undefined) {
+				this.addComponent(TLPhysicsBodyComponent);
+				this.physicsBody.newBody({
+					bodyType: 'DYNAMIC',
+					bodyCategory: '',
+					linkedId: '',
+					x: 0.0,
+					y: 0.0,
+					angle: 0.0,
+					linearDamping: 0.4,
+					angularDamping: 1.0,
+					bullet: false
+				});
+			}
 
 			this.streamControl(this._streamControlFunc.bind(this))
 		}
