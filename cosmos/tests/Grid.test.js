@@ -378,29 +378,21 @@ var testGrid = function(GridClass, TestGridObject) {
 				var neighboringLocations = this.grid.neighboringLocations(new IgePoint2d(0, 0));
 
 				expectPoints(neighboringLocations, [
-					new IgePoint2d(-1, -1),
 					new IgePoint2d(-1, 0),
-					new IgePoint2d(-1, 1),
 					new IgePoint2d(0, -1),
 					new IgePoint2d(0, 1),
-					new IgePoint2d(1, -1),
-					new IgePoint2d(1, 0),
-					new IgePoint2d(1, 1)
+					new IgePoint2d(1, 0)
 				]);
 
 				neighboringLocations = this.grid.neighboringLocations(new IgePoint2d(2, 2), 2, 2);
 
 				expectPoints(neighboringLocations, [
-					new IgePoint2d(1, 1),
 					new IgePoint2d(2, 1),
 					new IgePoint2d(3, 1),
-					new IgePoint2d(4, 1),
 					new IgePoint2d(1, 2),
 					new IgePoint2d(1, 3),
-					new IgePoint2d(1, 4),
 					new IgePoint2d(2, 4),
 					new IgePoint2d(3, 4),
-					new IgePoint2d(4, 4),
 					new IgePoint2d(4, 3),
 					new IgePoint2d(4, 2)
 				]);
@@ -408,20 +400,16 @@ var testGrid = function(GridClass, TestGridObject) {
 				neighboringLocations = this.grid.neighboringLocations(new IgePoint2d(-5, -5), 3, 4);
 
 				var expectedPoints = [
-					new IgePoint2d(-6, -6),
 					new IgePoint2d(-5, -6),
 					new IgePoint2d(-4, -6),
 					new IgePoint2d(-3, -6),
-					new IgePoint2d(-2, -6),
 					new IgePoint2d(-2, -5),
 					new IgePoint2d(-2, -4),
 					new IgePoint2d(-2, -3),
 					new IgePoint2d(-2, -2),
-					new IgePoint2d(-2, -1),
 					new IgePoint2d(-3, -1),
 					new IgePoint2d(-4, -1),
 					new IgePoint2d(-5, -1),
-					new IgePoint2d(-6, -1),
 					new IgePoint2d(-6, -2),
 					new IgePoint2d(-6, -3),
 					new IgePoint2d(-6, -4),

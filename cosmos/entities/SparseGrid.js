@@ -80,7 +80,7 @@ var SparseGrid = IgeClass.extend({
 	 */
 	emptyNeighboringLocations: function(object) {
 		var emptyNeighboringLocations = [];
-		var neighboringLocations = this.neighboringLocations(object);
+		var neighboringLocations = this.neighboringLocationsForObject(object);
 
 		var self = this;
 		_.forEach(neighboringLocations, function(loc) {
@@ -175,7 +175,7 @@ var SparseGrid = IgeClass.extend({
 		var leftX = loc.x - 1;
 		var rightX = loc.x + width;
 
-		for (var x = leftX; x <= rightX; x++) {
+		for (var x = leftX + 1; x <= rightX - 1; x++) {
 			neighboringLocations.push(new IgePoint2d(x, topY));
 			neighboringLocations.push(new IgePoint2d(x, bottomY));
 		}
