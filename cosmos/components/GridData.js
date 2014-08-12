@@ -17,8 +17,8 @@ var GridData = IgeClass.extend({
 		var bounds = {};
 		bounds.left = this.loc.x;
 		bounds.top = this.loc.y;
-		bounds.right = bounds.left + this.width;
-		bounds.bottom = bounds.top + this.height;
+		bounds.right = bounds.left + this.width - 1;
+		bounds.bottom = bounds.top + this.height - 1;
 
 		return bounds;
 	},

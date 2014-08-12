@@ -585,7 +585,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		if (ige.isServer) {
 			this._physicsOffset = this._gridCenter;
 
-			if (this._oldGridCenter) {
+			/*if (this._oldGridCenter) {
 				var physicsTranslation = {
 					x: this._gridCenter.x - this._oldGridCenter.x,
 					y: this._gridCenter.y - this._oldGridCenter.y
@@ -597,58 +597,32 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 				this.translate().x(this.translate().x() + rotatedEntityTranslation.x);
 				this.translate().y(this.translate().y() + rotatedEntityTranslation.y);
-			}
+			}*/
 		}
 		// #else
 		else {
 			this._effectsAboveContainer.translateTo(-this._gridCenter.x, -this._gridCenter.y, 0);
 			this._effectsBelowContainer.translateTo(-this._gridCenter.x, -this._gridCenter.y, 0);
 			this._renderContainer.translateTo(-this._gridCenter.x, -this._gridCenter.y, 0);
+
+			/*if (this._oldGridCenter) {
+			 var renderTranslation = {
+			 x: -this._gridCenter.x - (-this._oldGridCenter.x),
+			 y: -this._gridCenter.y - (-this._oldGridCenter.y)
+			 };
+
+			 var entityTranslation = {
+			 x: -renderTranslation.x,
+			 y: -renderTranslation.y
+			 };
+
+			 var theta = this.rotate().z();
+
+			 var rotatedEntityTranslation = MathUtils.rotate(entityTranslation, theta);
+
+			 this.translateBy(rotatedEntityTranslation.x, rotatedEntityTranslation.y, 0);
+			 }*/
 		}
-
-		if (this._oldGridCenter && ige.isClient) {
-			var renderTranslation = {
-				x: -this._gridCenter.x - (-this._oldGridCenter.x),
-				y: -this._gridCenter.y - (-this._oldGridCenter.y)
-			};
-
-			var entityTranslation = {
-				x: -renderTranslation.x,
-				y: -renderTranslation.y
-			};
-
-			var theta = this.rotate().z();
-
-			var rotatedEntityTranslation = MathUtils.rotate(entityTranslation, theta);
-
-			this.translateBy(rotatedEntityTranslation.x, rotatedEntityTranslation.y, 0);
-		}
-
-		/*if (this._oldGridCenter && ige.isClient) {
-			var counterTranslation = {
-				x: this._gridCenter.x - this._oldGridCenter.x,
-				y: this._gridCenter.y - this._oldGridCenter.y
-			};
-
-			console.log("Inverse of rendering translation: ");
-			console.log(counterTranslation);
-
-			var theta = this.rotate().z();
-
-			var rotatedCounterTranslation = {
-				x: Math.cos(theta) * counterTranslation.x - Math.sin(theta) * counterTranslation.y,
-				y: Math.sin(theta) * counterTranslation.x + Math.cos(theta) * counterTranslation.y
-			};
-
-			console.log("Counter translating...");
-			console.log(rotatedCounterTranslation);
-
-			this.translateBy(
-				rotatedCounterTranslation.x,
-				rotatedCounterTranslation.y,
-				0
-			);
-		}*/
 		// #endif
 	}
 });
