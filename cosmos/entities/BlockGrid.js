@@ -359,9 +359,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 		};
 
 		var localCoordinates = {
-			x: -(this._bounds2d.x2 - Block.WIDTH / 2 - relBlockLoc.x * Block.WIDTH)
+			x: -(this._bounds2d.x2 - relBlockLoc.x * Block.WIDTH)
 				+ block._bounds2d.x2,
-			y: -(this._bounds2d.y2 - Block.HEIGHT / 2 - relBlockLoc.y * Block.HEIGHT)
+			y: -(this._bounds2d.y2 - relBlockLoc.y * Block.HEIGHT)
 				+ block._bounds2d.y2
 		};
 
