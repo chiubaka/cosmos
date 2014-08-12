@@ -107,7 +107,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		height = height || 1;
 
 		var owner = (player !== undefined) ? player.currentShip() : undefined;
-		var theta = -this.rotate().z();
+		var theta = this.rotate().z();
 		var dropped = this.remove(loc, width, height);
 
 		this.log("BlockGrid#drop: " + dropped.length + " drops.");
