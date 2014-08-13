@@ -345,6 +345,32 @@ var BlockGrid = IgeEntityBox2d.extend({
 		return this.toJSON();
 	},
 
+	streamSectionData: function(sectionId, data, bypassTimeStream) {
+		switch (sectionId) {
+			case 'transform':
+				if (data) {
+					IgeEntityBox2d.prototype.streamSectionData
+						.call(this, sectionId, data, bypassTimeStream);
+				}
+				else {
+					var translate = new IgePoint3d(
+						this._box2dBody.m_xf.position.x * this._b2dRef._scaleRatio,
+						this._box2dBody.m_xf.position.y * this._b2dRef._scaleRatio,
+						this._translate.z
+					);
+
+					return translate.toString(this._streamFloatPrecision) + ',' +
+						this._scale.toString(this._streamFloatPrecision) + ',' +
+						this._rotate.toString(this._streamFloatPrecision) + ',';
+				}
+				break;
+			default:
+				IgeEntityBox2d.prototype.streamSectionData
+					.call(this, sectionId, data, bypassTimeStream);
+				break;
+		}
+	},
+
 	worldCoordinatesForBlock: function(block) {
 		var theta = this.rotate().z();
 
@@ -512,6 +538,20 @@ var BlockGrid = IgeEntityBox2d.extend({
 		this._blockClickHandler(block, event, control);
 	},
 
+	_setTransformFromStreamData: function(dataArr) {
+		// This will set our location to the physics location that is being streamed.
+		IgeEntityBox2d.prototype._setTransformFromStreamData.call(this, dataArr);
+
+		var theta = this.rotate().z();
+
+		var physicsOffset = {
+			x: this._physicsOffset.x * Math.cos(theta) - this._physicsOffset.y * Math.sin(theta),
+			y: this._physicsOffset.x * Math.sin(theta) + this._physicsOffset.y * Math.cos(theta)
+		};
+
+		// This will translate the entity to the computed physics offset on the client.
+		this.translateBy(physicsOffset.x, physicsOffset.y, 0);
+	},
 
 	// #ifdef SERVER
 	/**
@@ -581,10 +621,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 			return;
 		}
 
+		this._physicsOffset = this._gridCenter;
+
 		// #ifdef SERVER
 		if (ige.isServer) {
-			this._physicsOffset = this._gridCenter;
-
 			if (this._oldGridCenter) {
 				var physicsTranslation = {
 					x: this._gridCenter.x - this._oldGridCenter.x,
