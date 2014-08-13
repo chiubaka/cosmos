@@ -168,6 +168,12 @@ var GameInit = {
 					'gridY': gridY
 				}
 
+				//this is a constant offset that we apply to the whole background
+				var backgroundOffset = {
+					x: -3000,
+					y: -3000
+				};
+
 				// Instantiate the background
 				new Background(data)
 					.id('background' + gridX + "-" + gridY)
@@ -175,7 +181,7 @@ var GameInit = {
 					.parallaxLag(2)
 					.mount(client.spaceBackgroundScene)
 					.streamMode(1)
-					.translateTo(gridSquareSize*gridY, gridSquareSize*gridY, 0);
+					.translateTo(gridSquareSize*gridX + backgroundOffset.x, gridSquareSize*gridY + backgroundOffset.y, 0);
 			}
 		}
 

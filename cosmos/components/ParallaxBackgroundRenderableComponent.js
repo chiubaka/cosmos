@@ -27,8 +27,8 @@ var ParallaxBackgroundRenderableComponent = PixiRenderableComponent.extend({
 	update: function() {
 		var camera = ige._currentCamera;
 
-		this._displayObject.position.x = camera._translate.x / this._parallaxLag - this._entity.width() / 2;
-		this._displayObject.position.y = camera._translate.y / this._parallaxLag - this._entity.height() / 2;
+		this._displayObject.position.x = this._entity.translate().x() + (camera._translate.x / this._parallaxLag - this._entity.width() / 2);
+		this._displayObject.position.y = this._entity.translate().y() + (camera._translate.y / this._parallaxLag - this._entity.height() / 2);
 	}
 });
 
