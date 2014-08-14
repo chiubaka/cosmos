@@ -50,6 +50,9 @@ var MetricsHandler = IgeEventingClass.extend({
 			"cosmos:construct.attempt.existing": true,
 			"cosmos:construct.existing": true,
 
+			/* crafting */
+			"cosmos:CraftingSystem.craft.success": true,
+
 			/* misc */
 			"cosmos:block.mine": true,
 			"cosmos:block.attack": true//note that this includes when you mine yourself as well as when you mine other players
