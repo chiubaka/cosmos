@@ -655,6 +655,14 @@ var Block = IgeEntity.extend({
 			type: this.classId(),
 			gridData: this.gridData.toJSON()
 		}
+	},
+
+	worldCoordinates: function() {
+		if (this.gridData.grid) {
+			return this.gridData.grid.worldCoordinatesForBlock(this);
+		}
+
+		return null;
 	}
 });
 

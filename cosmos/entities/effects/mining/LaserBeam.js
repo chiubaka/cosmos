@@ -8,20 +8,20 @@
 var LaserBeam = IgeEntity.extend({
 	classId: 'LaserBeam',
 
+	_source: undefined,
+	_target: undefined,
+
 	init: function (createData) {
 		IgeEntity.prototype.init.call(this);
 
 		this.addComponent(LaserBeamRenderableComponent, {createDisplayObject: function () {
 			var sprite = PIXI.Sprite.fromFrame('laserbeam');
 			sprite.width = 10;
-			sprite.position.x = -sprite.width / 2;
+			sprite.anchor.set(0.5);
 			return sprite;
 		}});
 
 		if (!ige.isServer) {
-			this.texture(ige.client.textures.laserBeamTexture)
-				.width(10)
-
 			// Fade in the laser beam
 			this.opacity(0);
 			this._fadeInTween();
@@ -51,6 +51,11 @@ var LaserBeam = IgeEntity.extend({
 		return this;
 	},
 
+	setSource: function(block) {
+		this._source = block;
+		return this;
+	},
+
 	/**
 	 * Sets the location of the targeted block.
 	 * @param blockGridId {string} The IGE ID of the {@link BlockGrid} we are targeting
@@ -59,10 +64,8 @@ var LaserBeam = IgeEntity.extend({
 	 * @memberof LaserBeam
 	 * @instance
  	 */
-	setTarget: function(blockGridId, row, col) {
-		this._targetId = blockGridId;
-		this._targetRow = row;
-		this._targetCol = col;
+	setTarget: function(block) {
+		this._target = block;
 		return this;
 	}
 });

@@ -89,7 +89,8 @@ var MiningLaserBlock = Weapon.extend({
 		}
 
 		this.laserBeam = new LaserBeam()
-			.setTarget(effect.targetBlock.blockGridId, effect.targetBlock.row, effect.targetBlock.col)
+			.setSource(this)
+			.setTarget(targetBlock);
 
 		this._mountEffect(this.laserBeam, true);
 
