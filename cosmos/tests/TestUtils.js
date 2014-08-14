@@ -32,3 +32,12 @@ TestUtils.enableLogging = function() {
 	console.warn = TestUtils.defaultLogFunctions.warn;
 	console.error = TestUtils.defaultLogFunctions.error;
 };
+
+TestUtils.testBlock = function(width, height) {
+	var testBlock = new IronBlock();
+	width = width || 1;
+	height = height || 1;
+	testBlock.gridData.width = width;
+	testBlock.gridData.height = height;
+	return testBlock;
+};

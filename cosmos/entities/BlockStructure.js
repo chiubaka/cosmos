@@ -41,7 +41,8 @@ var BlockStructure = BlockGrid.extend({
 	 * @todo Modify this to support taking a block size and returning only the locations that can support a block of
 	 * that size
 	 */
-	constructionZoneLocations: function() {
+	constructionZoneLocations: function(block) {
+
 		var constructionZoneLocations = [];
 		var self = this;
 		this.each(function(block) {
@@ -166,4 +167,43 @@ var BlockStructure = BlockGrid.extend({
 	}
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = BlockStructure; }
+BlockStructure.constructionFilterForBlock = function(block) {
+	var blockWidth = block.gridData.width;
+	var blockHeight = block.gridData.height;
+	var width = blockWidth + 2;
+	var height = blockHeight + 2;
+	var filter = Array.prototype.new2DArray(width, height);
+
+	// Set the corners to 0.
+	filter[0][0] = 0;
+	filter[0][height - 1] = 0;
+	filter[width - 1][0] = 0;
+	filter[width - 1][height - 1] = 0;
+
+	// Set the top and bottom sides to 1.
+	for (var col = 1; col < width - 1; col++) {
+		filter[col][0] = 1;
+		filter[col][height - 1] = 1;
+	}
+
+	// Set the left and right sides to 1.
+	for (var row = 1; row < height - 1; row++) {
+		filter[0][row] = 1;
+		filter[width - 1][row] = 1;
+	}
+
+	// The value we place at the locations that the block would occupy.
+	var negationValue = -(blockWidth * 2 + blockHeight * 2 + 1);
+
+	for (var col = 1; col < width - 1; col++) {
+		for (var row = 1; row < height - 1; row++) {
+			filter[col][row] = negationValue;
+		}
+	}
+
+	return filter;
+};
+
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
+	module.exports = BlockStructure;
+}

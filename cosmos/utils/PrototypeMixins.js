@@ -79,13 +79,15 @@ Array.prototype.is2DInBounds = function (row, col) {
  * @memberof Array
  */
 
-Array.prototype.new2DArray = function(numRows, numCols, data) {
+Array.prototype.new2DArray = function(numCols, numRows, data) {
 	var grid = [];
 
-	for (x = 0; x < numRows; x++) {
+	for (var x = 0; x < numCols; x++) {
 		var gridCol = [];
-		for (y = 0; y < numCols; y++) {
-			gridCol.push(data);
+		for (var y = 0; y < numRows; y++) {
+			if (data) {
+				gridCol.push(data);
+			}
 		}
 		grid.push(gridCol);
 	}
