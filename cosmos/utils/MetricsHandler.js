@@ -36,6 +36,8 @@ var MetricsHandler = IgeEventingClass.extend({
 			/* player */
 			"cosmos:player.connect": true, // This is fired when the game has been loaded and _onPlayerEntity is called on the client
 			"cosmos:player.attack": true,
+			'cosmos:player.relocate.mouseDown': true,
+			'cosmos:player.newShip.mouseDown': true,
 
 			/* engine */
 			"cosmos:engine.performance": true,
@@ -49,6 +51,9 @@ var MetricsHandler = IgeEventingClass.extend({
 
 			"cosmos:construct.attempt.existing": true,
 			"cosmos:construct.existing": true,
+
+			/* crafting */
+			"cosmos:CraftingSystem.craft.success": true,
 
 			/* misc */
 			"cosmos:block.mine": true,
