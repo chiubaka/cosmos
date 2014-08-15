@@ -7,30 +7,23 @@
 var Background = ParallaxBackground.extend({
 	classId: 'Background',
 
-	gridX: undefined,
-
-	gridY: undefined,
+	textureName: undefined,
 
 	init: function (data) {
-		if (data.gridX !== undefined) {
-			this.gridX = data.gridX;
-		}
-
-		if (data.gridY !== undefined) {
-			this.gridY = data.gridY;
+		if (data.texture !== undefined) {
+			this.textureName = data.textureName;
 		}
 
 		if (ige.isClient) {
-			this.backgroundTexture = PIXI.TextureCache['background' + this.gridX + '-' + this.gridY];
-			this.backgroundHeight = this.backgroundWidth = 1024;
+			this.backgroundTexture = PIXI.TextureCache[data.textureName];
+			this.backgroundHeight = this.backgroundWidth = 1024;//TODO use the constant for this
 		}
 
 		ParallaxBackground.prototype.init.call(this);
 
 		if (ige.isClient) {
 			this
-				.texture(ige.client.textures['background' + this.gridX + '-' + this.gridY])
-				//.texture(ige.client.textures.background_starfield)
+				.texture(ige.client.textures[data.textureName])
 				.width(1024)
 				.height(1024);
 		}
@@ -39,8 +32,7 @@ var Background = ParallaxBackground.extend({
 	streamCreateData: function() {
 		var data = ParallaxBackground.prototype.streamCreateData.call(this);
 
-		data.gridX = this.gridX;
-		data.gridY = this.gridY;
+		data.textureName = this.textureName;
 
 		return data;
 	}

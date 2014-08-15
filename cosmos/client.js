@@ -45,7 +45,7 @@ var Client = IgeClass.extend({
 				textures['background' + gridX + '-' + gridY] = gameRoot + 'assets/backgrounds/background' + gridX + '-' + gridY + '.jpg';
 			}
 		}
-		textures['backgroundOverlay'] = gameRoot + 'assets/backgrounds/backgroundOverlay.jpg';
+		textures['backgroundOverlay'] = gameRoot + 'assets/backgrounds/backgroundOverlay.png';
 
 		ige.rendering.loadTextures(textures);
 		ige.rendering.loadSpriteSheets([gameRoot + 'assets/blocks/spritesheet.json']);
@@ -107,7 +107,7 @@ var Client = IgeClass.extend({
 					textures['background' + gridX + '-' + gridY] = new IgeTexture(gameRoot + 'assets/backgrounds/background' + gridX + '-' + gridY + '.jpg');
 				}
 			}
-			textures['backgroundOverlay'] = new IgeTexture(gameRoot + 'assets/backgrounds/backgroundOverlay.jpg');
+			textures['backgroundOverlay'] = new IgeTexture(gameRoot + 'assets/backgrounds/backgroundOverlay.png');
 
 			self.textures = textures;
 
