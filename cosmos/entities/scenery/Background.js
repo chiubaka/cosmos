@@ -27,12 +27,7 @@ var Background = ParallaxBackground.extend({
 
 		ParallaxBackground.prototype.init.call(this);
 
-		console.log("This is the Background class being init!");
-		console.log('background' + this.gridX + '-' + this.gridY);
-
 		if (ige.isClient) {
-			console.log(ige.client.textures['background' + this.gridX + '-' + this.gridY]);
-			console.log(ige.client.textures);
 			this
 				.texture(ige.client.textures['background' + this.gridX + '-' + this.gridY])
 				//.texture(ige.client.textures.background_starfield)
