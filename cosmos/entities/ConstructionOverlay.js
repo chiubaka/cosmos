@@ -43,7 +43,7 @@ var ConstructionOverlay = IgeEntity.extend({
 
 		// If construct capability enabled, show the construction zones
 		if (ige.client.state.selectedCap() === 'construct') {
-			self.refresh();
+			this.refresh();
 			this.show();
 		}
 		else {
@@ -161,7 +161,6 @@ var ConstructionOverlay = IgeEntity.extend({
 	 * @param control {Object} The control object associated with the click.
 	 * @memberof ConstructionOverlay
 	 * @private
-	 * @todo Consolidate this function with its {@link BlockGrid} counterpart.
 	 */
 	_mouseDownHandler: function(event, control) {
 		if (this.renderable._hidden) {
@@ -169,10 +168,6 @@ var ConstructionOverlay = IgeEntity.extend({
 		}
 
 		var clickLocation = this._structure.locationForClick(event, control);
-
-		// TODO: Check constructionLocations for a 1
-		// TODO: Don't send a message to the server unless we know that constructing a block at the
-		// specified location will work.
 
 		var location = {
 			x: clickLocation.x - this.lowerBound().x,
@@ -208,7 +203,6 @@ var ConstructionOverlay = IgeEntity.extend({
 		}
 	}
 });
-
 
 ConstructionOverlay.constructionFilter = function(blockWidth, blockHeight) {
 	var width = blockWidth + 2;

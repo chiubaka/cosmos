@@ -9,7 +9,6 @@ var ConstructionOverlayRenderableComponent = PixiRenderableComponent.extend({
 		// TODO: Clearing the children could probably be optimized to not create and destroy so
 		// so many things so often.
 		// Clear all children
-
 		while (this._displayObject.children.length > 0) {
 			this._displayObject.removeChildAt(0);
 		}
@@ -23,18 +22,12 @@ var ConstructionOverlayRenderableComponent = PixiRenderableComponent.extend({
 
 					sprite.width = Block.WIDTH;
 					sprite.height = Block.HEIGHT;
-					//sprite.anchor.set(0.5);
 
 					// TODO: Position the sprite based on location in the Grid.
 					sprite.position.x = Block.WIDTH * x - this._entity.width() / 2;
 					sprite.position.y = Block.HEIGHT * y - this._entity.height() / 2;
 
 					this._displayObject.addChild(sprite);
-					/*for (var blockX = 0; blockX < this._entity._blockWidth; blockX++) {
-						for (var blockY = 0; blockY < this._entity._blockHeight; blockY++) {
-
-						}
-					}*/
 				}
 			}
 		}
