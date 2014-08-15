@@ -85,7 +85,7 @@ Array.prototype.new2DArray = function(numCols, numRows, data) {
 	for (var x = 0; x < numCols; x++) {
 		var gridCol = [];
 		for (var y = 0; y < numRows; y++) {
-			if (data) {
+			if (data !== undefined) {
 				gridCol.push(data);
 			}
 		}

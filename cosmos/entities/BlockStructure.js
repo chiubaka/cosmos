@@ -41,14 +41,52 @@ var BlockStructure = BlockGrid.extend({
 	 * @todo Modify this to support taking a block size and returning only the locations that can support a block of
 	 * that size
 	 */
-	constructionZoneLocations: function(block) {
+	constructionLocations: function(block) {
+		var filter = BlockStructure.constructionFilterForBlock(block);
 
-		var constructionZoneLocations = [];
-		var self = this;
-		this.each(function(block) {
-			constructionZoneLocations.push.apply(constructionZoneLocations, self.emptyNeighboringLocations(block));
-		});
-		return constructionZoneLocations;
+		var blockWidth = block.gridData.width;
+		var blockHeight = block.gridData.height;
+		var filterWidth = blockWidth + 2;
+		var filterHeight = blockHeight + 2;
+		var width = this.gridWidth() + 2 * (blockWidth);
+		var height = this.gridHeight() + 2 * (blockHeight);
+		var result = Array.prototype.new2DArray(width, height, 0);
+
+		var lowerBound = this.lowerBound();
+		var resultLowerBound = {
+			x: lowerBound.x - blockWidth,
+			y: lowerBound.y - blockHeight
+		};
+
+		for (var x = 0; x < width; x++) {
+			for (var y = 0; y < height; y++) {
+				// The corners will never work, so don't bother checking them.
+				if ((x === 0 && y === 0)
+					|| (x === 0 && y === height - 1)
+					|| (x === width - 1 && y === 0)
+					|| (x === width - 1 && y === height - 1))
+				{
+					continue;
+				}
+
+				var sum = 0;
+				for (var filterX = 0; filterX < filterWidth; filterX++) {
+					for (var filterY = 0; filterY < filterHeight; filterY++) {
+						var value = this.has(
+							new IgePoint2d(
+								resultLowerBound.x + x + filterX - 1,
+								resultLowerBound.y + y + filterY - 1
+							)
+						) ? 1 : 0;
+						sum += filter[filterX][filterY] * value;
+					}
+				}
+
+				result[x][y] = sum;
+			}
+		}
+
+		return result;
 	},
 
 	/**
