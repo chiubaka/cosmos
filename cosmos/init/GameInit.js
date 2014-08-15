@@ -264,13 +264,8 @@ var GameInit = {
 					case contactIdentifiers.shipDropBegin:
 						var results = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY,
 							Ship.BOX2D_CATEGORY);
-						var error = results.error;
 						var drop = results.category1Entity;
 						var ship = results.category2Entity;
-						if (error) {
-							this.log('error1');
-							return;
-						}
 
 						if (drop.getAttractedTo() === undefined && drop.isOwner(ship)) {
 							drop.setAttractedTo(ship);
@@ -287,13 +282,8 @@ var GameInit = {
 					case contactIdentifiers.shipDropEnd:
 						var results = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY,
 							Ship.BOX2D_CATEGORY);
-						var error = results.error;
 						var drop = results.category1Entity;
 						var ship = results.category2Entity;
-						if (error) {
-							this.log('error2');
-							return;
-						}
 
 						if (drop.isOwner(ship)) {
 							drop.setAttractedTo(undefined);
@@ -310,13 +300,8 @@ var GameInit = {
 					case contactIdentifiers.shipDropPreSolve:
 						var results = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY,
 							Ship.BOX2D_CATEGORY);
-						var error = results.error;
 						var drop = results.category1Entity;
 						var ship = results.category2Entity;
-						if (error) {
-							this.log('error3');
-							return;
-						}
 
 						// Ignore multiple collision points
 						if (drop === undefined || !drop.alive()) {
@@ -343,7 +328,6 @@ var GameInit = {
 		function entityByCategory(entity1, entity2, category1, category2) {
 			var category1Entity;
 			var category2Entity;
-			var error = false;
 
 			if ((entity1.category() === category1) &&
 				(entity2.category() === category2)) {
@@ -356,22 +340,10 @@ var GameInit = {
 				category2Entity = entity1; 
 			}
 			else {
-				error = true;
+				this.log('GameInit#entityByCategory: Entities do not match categories!', 'error');
 			}
 
-			console.log('Err: ' + error);
-			console.log('Real cat 1: ' + category1);
-			console.log('Real cat 2: ' + category2);
-			console.log('ent1id: ' + entity1.id());
-			console.log('ent2id: ' + entity2.id());
-			console.log('cat1: ' + entity1.category());
-			console.log('cat2: ' + entity2.category());
-			console.log('cat1 class: ' + entity1.classId());
-			console.log('cat2 class: ' + entity2.classId());
-
-
 			return {
-				error: error,
 				category1Entity: category1Entity,
 				category2Entity: category2Entity,
 			};
