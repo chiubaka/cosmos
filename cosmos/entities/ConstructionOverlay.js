@@ -50,6 +50,14 @@ var ConstructionOverlay = IgeEntity.extend({
 		}
 	},
 
+	gridHeight: function() {
+		return this._structure.gridHeight() + 2 * this._blockHeight;
+	},
+
+	gridWidth: function() {
+		return this._structure.gridWidth() + 2 * this._blockWidth;
+	},
+
 	lowerBound: function() {
 		var structureLowerBound = this._structure.lowerBound();
 		return {
@@ -78,6 +86,14 @@ var ConstructionOverlay = IgeEntity.extend({
 		this.overlayForBlock(
 			cosmos.blocks.instances[ige.hud.leftToolbar.windows.cargo.selectedType]
 		);
+	},
+
+	upperBound: function() {
+		var structureUpperBound = this._structure.upperBound();
+		return {
+			x: structureUpperBound.x + this._blockWidth,
+			y: structureUpperBound.y + this._blockHeight
+		}
 	},
 
 	_computeConstructionLocations: function(blockWidth, blockHeight) {
@@ -139,79 +155,6 @@ var ConstructionOverlay = IgeEntity.extend({
 	},
 
 	/**
-	 * Processes the associated {@link BlockGrid} to figure out where to place {@link ConstructionZoneBlock}s to add
-	 * to the {@link ConstructionOverlay#_overlayGrid|_overlayGrid}.
-	 * @memberof ConstructionOverlay
-	 * @private
-	 * @instance
-	 */
-	_createConstructionZones: function() {
-		// We want a buffer of size 1 on the top, bottom, right, and left. Hence the +2s everywhere.
-		var overlayNumRows = this._blockGrid.gridWidth() + 2;
-		var overlayNumCols = this._blockGrid.gridHeight() + 2;
-
-		this._overlayGrid = Array.prototype.new2DArray(overlayNumCols, overlayNumRows);
-
-		var constructionZoneLocations = this._blockGrid.constructionZoneLocations();
-		for (var i = 0; i < constructionZoneLocations.length; i++) {
-			var location = constructionZoneLocations[i];
-			var lowerBound = this._blockGrid.lowerBound();
-			var row = location.y - lowerBound.y + 1;
-			var col = location.x - lowerBound.x + 1;
-			this._overlayGrid[col][row] = new ConstructionZoneBlock();
-		}
-	},
-
-	/**
-	 * Mounts the overlay grid and {@link ConstructionZoneBlock}s.
-	 * @memberof ConstructionOverlay
-	 * @private
-	 * @instance
-	 * @todo Consolidate this function with its {@link BlockGrid} counterpart.
-	 */
-	_mountOverlayGrid: function() {
-		var maxRowLength = this._overlayGrid.get2DMaxRowLength();
-
-		this.height(Block.HEIGHT * this._overlayGrid.length);
-		this.width(Block.WIDTH * maxRowLength);
-		this._renderContainer.height(this.height());
-		this._renderContainer.width(this.width());
-
-		for (var col = 0; col < this._overlayGrid.length; col++) {
-			for (var row = 0; row < this._overlayGrid[col].length; row++) {
-				var block = this._overlayGrid[col][row];
-
-				if (block === undefined) {
-					continue;
-				}
-
-				var x = Block.WIDTH * col - this._bounds2d.x2 + block._bounds2d.x2;
-				var y = Block.HEIGHT * row - this._bounds2d.y2 + block._bounds2d.y2;
-
-				block.translateTo(x, y, 0)
-					.mount(this._renderContainer);
-			}
-		}
-
-		/*for (var row = 0; row < this._overlayGrid.length; row++) {
-			for (var col = 0; col < this._overlayGrid[row].length; col++) {
-				var block = this._overlayGrid[row][col];
-
-				if (block === undefined) {
-					continue;
-				}
-
-				var x = Block.WIDTH * col - this._bounds2d.x2 + block._bounds2d.x2;
-				var y = Block.HEIGHT * row - this._bounds2d.y2 + block._bounds2d.y2;
-
-				block.translateTo(x, y, 0)
-					.mount(this._renderContainer);
-			}
-		}*/
-		this._renderContainer.refresh();
-	},
-
-	/**
 	 * Handles clicks on this object.
 	 * @param event {Object} The event object associated with the click.
 	 * @param control {Object} The control object associated with the click.
@@ -220,6 +163,10 @@ var ConstructionOverlay = IgeEntity.extend({
 	 * @todo Consolidate this function with its {@link BlockGrid} counterpart.
 	 */
 	_mouseDownHandler: function(event, control) {
+		if (this.renderable._hidden) {
+			return;
+		}
+
 		var clickLocation = this._structure.locationForClick(event, control);
 
 		// TODO: Check constructionLocations for a 1
@@ -231,7 +178,16 @@ var ConstructionOverlay = IgeEntity.extend({
 			y: clickLocation.y - this.lowerBound().y
 		};
 
+		// Don't continue if the location is out of our acceptable bounds.
+		if (location.x < 0 || location.y < 0
+			|| location.x >= this.gridWidth() || location.y >= this.gridHeight())
+		{
+			return;
+		}
+
+		// A 1 in a construction location means it was a valid location.
 		if (this._constructionLocations && this._constructionLocations[location.x][location.y]) {
+			// Don't let this mouse click bubble down.
 			control.stopPropagation();
 		}
 		else {

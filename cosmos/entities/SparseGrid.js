@@ -159,6 +159,13 @@ var SparseGrid = IgeClass.extend({
 		return this._upperBound.y - this._lowerBound.y + 1;
 	},
 
+	gridWidth: function() {
+		if (this.count() === 0) {
+			return 0;
+		}
+		return this._upperBound.x - this._lowerBound.x + 1;
+	},
+
 	lowerBound: function() {
 		return this._lowerBound.clone();
 	},
@@ -334,11 +341,8 @@ var SparseGrid = IgeClass.extend({
 		return json;
 	},
 
-	gridWidth: function() {
-		if (this.count() === 0) {
-			return 0;
-		}
-		return this._upperBound.x - this._lowerBound.x + 1;
+	upperBound: function() {
+		return this._upperBound.clone();
 	},
 
 	_createX: function(x) {
