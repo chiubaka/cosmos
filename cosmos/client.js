@@ -40,8 +40,8 @@ var Client = IgeClass.extend({
 		var textures = {};
 		textures.background_starfield = gameRoot + 'assets/backgrounds/starfield.png'
 
-		for (var gridX = 0; gridX < Constants.NUM_GRID_SQUARES.X; gridX++) {
-			for (var gridY = 0; gridY < Constants.NUM_GRID_SQUARES.Y; gridY++) {
+		for (var gridX = 0; gridX < Constants.NUM_BACKGROUND_SQUARES.X; gridX++) {
+			for (var gridY = 0; gridY < Constants.NUM_BACKGROUND_SQUARES.Y; gridY++) {
 				textures['background' + gridX + '-' + gridY] = gameRoot + 'assets/backgrounds/background' + gridX + '-' + gridY + '.jpg';
 			}
 		}
@@ -102,8 +102,8 @@ var Client = IgeClass.extend({
 					'assets/blocks/armor/plating.svg')
 			}
 
-			for (var gridX = 0; gridX < Constants.NUM_GRID_SQUARES.X; gridX++) {
-				for (var gridY = 0; gridY < Constants.NUM_GRID_SQUARES.Y; gridY++) {
+			for (var gridX = 0; gridX < Constants.NUM_BACKGROUND_SQUARES.X; gridX++) {
+				for (var gridY = 0; gridY < Constants.NUM_BACKGROUND_SQUARES.Y; gridY++) {
 					textures['background' + gridX + '-' + gridY] = new IgeTexture(gameRoot + 'assets/backgrounds/background' + gridX + '-' + gridY + '.jpg');
 				}
 			}

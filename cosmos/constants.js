@@ -23,7 +23,7 @@ var Constants = {
 		Y: 1024
 	},
 
-	NUM_GRID_SQUARES: {
+	NUM_BACKGROUND_SQUARES: {
 		X: 7,
 		Y: 7
 	},
@@ -32,7 +32,14 @@ var Constants = {
 	BACKGROUND_OFFSET: {
 		X: -3000,
 		Y: -3000
-	}
+	},
+
+	NUM_BACKGROUND_OVERLAY_SQUARES: {
+		X: 50,
+		Y: 50
+	},
+
+	SECOND_OVERLAY_ROTATION: Math.PI / 4
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Constants; }
