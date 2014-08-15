@@ -147,6 +147,19 @@ var SparseGrid = IgeClass.extend({
 		return brokeEarly;
 	},
 
+	hasNeighbors: function(loc, width, height) {
+		var neighboringLocations = this.neighboringLocations(loc, width, height);
+
+		var ret = false;
+		var self = this;
+		_.forEach(neighboringLocations, function(neighboringLocation) {
+			if (self.has(neighboringLocation)) {
+				ret = true;
+			}
+		});
+		return ret;
+	},
+
 	hasNeighboringOpenLocations: function(loc, width, height) {
 		var neighboringOpenLocations = this.neighboringOpenLocations(loc, width, height);
 		return neighboringOpenLocations.length > 0;

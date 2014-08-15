@@ -248,12 +248,16 @@ var BlockGrid = IgeEntityBox2d.extend({
 			case 'add':
 				// Add block server side, then send add msg to client
 				// TODO: Check if the proposed location has neighbors
-				//else {
+				var location = new IgePoint2d(data.col, data.row);
+				if (this.hasNeighbors(location)) {
 					self.put(Block.blockFromClassId(data.selectedType), new IgePoint2d(data.col, data.row), false);
 					data.action = 'add';
 					ige.network.send('blockAction', data);
 					return true;
-				//}
+				}
+				else {
+					return false;
+				}
 			default:
 				return false;
 		}
