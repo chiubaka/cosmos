@@ -171,8 +171,8 @@ var GameInit = {
 
 				new Background({textureName: 'backgroundOverlay'})
 					.id('backgroundOverlay' + gridX + "-" + gridY)
-					.depth(0)
-					.parallaxLag(2)
+					.depth(1)
+					.parallaxLag(4)
 					.mount(client.spaceBackgroundScene)
 					.streamMode(1)
 					.translateTo(Constants.GRID_SQUARE_SIZE.X*gridX + Constants.BACKGROUND_OFFSET.Y, Constants.GRID_SQUARE_SIZE.Y*gridY + Constants.BACKGROUND_OFFSET.Y, 0);
@@ -182,8 +182,8 @@ var GameInit = {
 
 		new StarfieldBackground()
 			.id('starfield_background')
-			.depth(1)
-			.parallaxLag(4)
+			.depth(2)
+			.parallaxLag(6)
 			.mount(client.spaceBackgroundScene);
 	},
 
