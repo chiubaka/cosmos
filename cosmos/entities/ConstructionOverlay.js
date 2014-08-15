@@ -43,6 +43,7 @@ var ConstructionOverlay = IgeEntity.extend({
 
 		// If construct capability enabled, show the construction zones
 		if (ige.client.state.selectedCap() === 'construct') {
+			self.refresh();
 			this.show();
 		}
 		else {
