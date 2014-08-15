@@ -161,11 +161,7 @@ var GameInit = {
 		for (var gridX = 0; gridX < Constants.NUM_GRID_SQUARES.X; gridX++) {
 			for (var gridY = 0; gridY < Constants.NUM_GRID_SQUARES.Y; gridY++) {
 				// Instantiate the background
-				var data = {
-					textureName: 'background' + gridX + "-" + gridY
-				}
-
-				new Background(data)
+				new Background({textureName: 'background' + gridX + "-" + gridY})
 					.id('background' + gridX + "-" + gridY)
 					.depth(0)
 					.parallaxLag(2)
@@ -173,12 +169,7 @@ var GameInit = {
 					.streamMode(1)
 					.translateTo(Constants.GRID_SQUARE_SIZE.X*gridX + Constants.BACKGROUND_OFFSET.Y, Constants.GRID_SQUARE_SIZE.Y*gridY + Constants.BACKGROUND_OFFSET.Y, 0);
 
-				// Instantiate the overlay
-				data = {
-					textureName: 'backgroundOverlay'
-				}
-
-				new Background(data)
+				new Background({textureName: 'backgroundOverlay'})
 					.id('backgroundOverlay' + gridX + "-" + gridY)
 					.depth(0)
 					.parallaxLag(2)
