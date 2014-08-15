@@ -1,55 +1,38 @@
 /**
  * An {@link IgeEntity} which helps to display the construction hints to users when they click on the construct button.
  * @class
- * @typedef {ConstructionZoneOverlay}
+ * @typedef {ConstructionOverlay}
  * @namespace
  */
-var ConstructionZoneOverlay = IgeEntity.extend({
-	classId: 'ConstructionZoneOverlay',
+var ConstructionOverlay = IgeEntity.extend({
+	classId: 'ConstructionOverlay',
 
+	_dirty: undefined,
 	/**
-	 * A matrix that stores the {@link ConstructionZoneBlock}s in the locations where they should be overlayed on top
-	 * of the associated {@link BlockGrid}.
-	 * @type {Array}
-	 * @memberof ConstructionZoneOverlay
-	 * @private
-	 * @instance
-	 */
-	_overlayGrid: undefined,
-	/**
-	 * A reference to the {@link BlockGrid} object that this {@link ConstructionZoneOverlay} is displaying an overlay
+	 * A reference to the {@link BlockStructure} object that this {@link ConstructionOverlay} is displaying an overlay
 	 * for.
-	 * @type {BlockGrid}
-	 * @memberof ConstructionZoneOverlay
+	 * @type {BlockStructure}
+	 * @memberof ConstructionOverlay
 	 * @private
 	 * @instance
 	 */
-	_blockGrid: undefined,
-	/**
-	 * A {@link RenderContainer} for this {@link ConstructionZoneOverlay} so we can performantly draw and cache the
-	 * {@link ConstructionZoneBlock}s for this overlay.
-	 * @type {RenderContainer}
-	 * @memberof ConstructionZoneOverlay
-	 * @private
-	 * @instance
-	 */
-	_renderContainer: undefined,
+	_structure: undefined,
 
-	init: function (blockGrid) {
+	init: function(structure) {
 		IgeEntity.prototype.init.call(this);
-		this._blockGrid = blockGrid;
+		this._structure = structure;
+		this._dirty = false;
 
-		this.addComponent(PixiRenderableComponent);
+		this.addComponent(ConstructionOverlayRenderableComponent);
 
-		this._renderContainer = new RenderContainer()
-			.mount(this);
-		this._createConstructionZones();
-		this._mountOverlayGrid();
 		this.mouseDown(this._mouseDownHandler);
 
 		var self = this;
 		ige.on('capbar cap selected', function(classId) {
 			if (classId === 'ConstructCap') {
+				self.overlayForBlock(
+					cosmos.blocks.instances[ige.hud.leftToolbar.windows.cargo.selectedType]
+				);
 				self.show();
 			} else {
 				self.hide();
@@ -71,10 +54,74 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		}
 	},
 
+	overlayForBlock: function(block) {
+		var blockWidth = 1;
+		var blockHeight = 1;
+
+		if (block) {
+			blockWidth = block.gridData.width;
+			blockHeight = block.gridData.height;
+		}
+
+		this._blockWidth = blockWidth;
+		this._blockHeight = blockHeight;
+
+		this._computeConstructionLocations(blockWidth, blockHeight);
+		this.renderable.renderConstructionLocations();
+	},
+
+	_computeConstructionLocations: function(blockWidth, blockHeight) {
+		var filter = ConstructionOverlay.constructionFilter(blockWidth, blockHeight);
+
+		var filterWidth = blockWidth + 2;
+		var filterHeight = blockHeight + 2;
+		var width = this._structure.gridWidth() + 2 * (blockWidth);
+		var height = this._structure.gridHeight() + 2 * (blockHeight);
+		var result = Array.prototype.new2DArray(width, height, 0);
+
+		var lowerBound = this._structure.lowerBound();
+		var resultLowerBound = {
+			x: lowerBound.x - blockWidth,
+			y: lowerBound.y - blockHeight
+		};
+
+		for (var x = 0; x < width; x++) {
+			for (var y = 0; y < height; y++) {
+				// The corners will never work, so don't bother checking them.
+				if ((x === 0 && y === 0)
+					|| (x === 0 && y === height - 1)
+					|| (x === width - 1 && y === 0)
+					|| (x === width - 1 && y === height - 1))
+				{
+					continue;
+				}
+
+				var sum = 0;
+				for (var filterX = 0; filterX < filterWidth; filterX++) {
+					for (var filterY = 0; filterY < filterHeight; filterY++) {
+						var value = this._structure.has(
+							new IgePoint2d(
+									resultLowerBound.x + x + filterX - 1,
+									resultLowerBound.y + y + filterY - 1
+							)
+						) ? 1 : 0;
+						sum += filter[filterX][filterY] * value;
+					}
+				}
+
+				result[x][y] = sum;
+			}
+		}
+
+		this.width(width * Block.WIDTH);
+		this.height(height * Block.HEIGHT);
+		this._constructionLocations = result;
+	},
+
 	/**
 	 * Processes the associated {@link BlockGrid} to figure out where to place {@link ConstructionZoneBlock}s to add
-	 * to the {@link ConstructionZoneOverlay#_overlayGrid|_overlayGrid}.
-	 * @memberof ConstructionZoneOverlay
+	 * to the {@link ConstructionOverlay#_overlayGrid|_overlayGrid}.
+	 * @memberof ConstructionOverlay
 	 * @private
 	 * @instance
 	 */
@@ -97,7 +144,7 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 
 	/**
 	 * Mounts the overlay grid and {@link ConstructionZoneBlock}s.
-	 * @memberof ConstructionZoneOverlay
+	 * @memberof ConstructionOverlay
 	 * @private
 	 * @instance
 	 * @todo Consolidate this function with its {@link BlockGrid} counterpart.
@@ -148,7 +195,7 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 	 * Handles clicks on this object.
 	 * @param event {Object} The event object associated with the click.
 	 * @param control {Object} The control object associated with the click.
-	 * @memberof ConstructionZoneOverlay
+	 * @memberof ConstructionOverlay
 	 * @private
 	 * @todo Consolidate this function with its {@link BlockGrid} counterpart.
 	 */
@@ -232,7 +279,7 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 
 	/**
 	 * Recalculate construction zones. Called upon removal or addition of {@link Block}s to the {@link BlockGrid}.
-	 * @memberof ConstructionZoneOverlay
+	 * @memberof ConstructionOverlay
 	 * @instance
 	 */
 	refresh: function () {
@@ -242,7 +289,43 @@ var ConstructionZoneOverlay = IgeEntity.extend({
 		this._createConstructionZones();
 		this._mountOverlayGrid();
 	}
-
 });
+
+
+ConstructionOverlay.constructionFilter = function(blockWidth, blockHeight) {
+	var width = blockWidth + 2;
+	var height = blockHeight + 2;
+	var filter = Array.prototype.new2DArray(width, height);
+
+	// Set the corners to 0.
+	filter[0][0] = 0;
+	filter[0][height - 1] = 0;
+	filter[width - 1][0] = 0;
+	filter[width - 1][height - 1] = 0;
+
+	// Set the top and bottom sides to 1.
+	for (var col = 1; col < width - 1; col++) {
+		filter[col][0] = 1;
+		filter[col][height - 1] = 1;
+	}
+
+	// Set the left and right sides to 1.
+	for (var row = 1; row < height - 1; row++) {
+		filter[0][row] = 1;
+		filter[width - 1][row] = 1;
+	}
+
+	// The value we place at the locations that the block would occupy.
+	var negationValue = -(blockWidth * 2 + blockHeight * 2 + 1);
+
+	for (var col = 1; col < width - 1; col++) {
+		for (var row = 1; row < height - 1; row++) {
+			filter[col][row] = negationValue;
+		}
+	}
+
+	return filter;
+};
+
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
-	module.exports = ConstructionZoneOverlay; }
+	module.exports = ConstructionOverlay; }

@@ -12,7 +12,7 @@ var igeClientConfig = {
 		'./entities/RenderContainer.js',
 
 		/* Construction zone overlay */
-		'./entities/ConstructionZoneOverlay.js',
+		'./entities/ConstructionOverlay.js',
 
 		/* Blocks */
 		'./entities/Block.js',
@@ -117,6 +117,7 @@ var igeClientConfig = {
 		'./components/Health.js',
 		'./components/Recipe.js',
 		'./components/Thrust.js',
+		'./components/ConstructionOverlayRenderableComponent.js',
 		'./components/ParallaxBackgroundRenderableComponent.js',
 		'./components/LaserBeamRenderableComponent.js',
 		'./components/ParticleRenderableComponent.js',
