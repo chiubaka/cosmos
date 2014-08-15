@@ -118,9 +118,6 @@ var Ship = BlockStructure.extend({
 			engines: this._engines.length,
 			thrusters: this._thrusters.length
 		};
-
-		// Define the data sections that will be included in the stream
-		this.streamSections(['transform']);
 	},
 
 	streamCreateData: function() {
