@@ -84,6 +84,8 @@ var ConstructionOverlay = IgeEntity.extend({
 	},
 
 	refresh: function() {
+		// TODO: This doesn't work consistently because cargo is written in a bit of a funny way.
+		// Will need to play with this to get larger blocks working in construction mode.
 		this.overlayForBlock(
 			cosmos.blocks.instances[ige.hud.leftToolbar.windows.cargo.selectedType]
 		);
@@ -97,6 +99,13 @@ var ConstructionOverlay = IgeEntity.extend({
 		}
 	},
 
+	/**
+	 * Convolves a filter with the BlockStructure to produce a matrix of locations where
+	 * construction zones should be placed.
+	 * @param blockWidth
+	 * @param blockHeight
+	 * @private
+	 */
 	_computeConstructionLocations: function(blockWidth, blockHeight) {
 		var filter = ConstructionOverlay.constructionFilter(blockWidth, blockHeight);
 
@@ -204,6 +213,13 @@ var ConstructionOverlay = IgeEntity.extend({
 	}
 });
 
+/**
+ * Generates a filter matrix that has values to be convolved with a matrix representing whether or
+ * not blocks exist in a BlockStructure.
+ * @param blockWidth
+ * @param blockHeight
+ * @returns {Array}
+ */
 ConstructionOverlay.constructionFilter = function(blockWidth, blockHeight) {
 	var width = blockWidth + 2;
 	var height = blockHeight + 2;
