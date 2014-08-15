@@ -109,7 +109,17 @@ var ConstructionOverlay = IgeEntity.extend({
 					}
 				}
 
-				result[x][y] = sum;
+				if (sum > 0) {
+					for (var blockX = 0; blockX < blockWidth; blockX++) {
+						for (var blockY = 0; blockY < blockHeight; blockY++) {
+							var indexX = x + blockX;
+							var indexY = y + blockY;
+							if (indexX < width && indexY < height) {
+								result[indexX][indexY] = 1;
+							}
+						}
+					}
+				}
 			}
 		}
 
