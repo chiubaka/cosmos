@@ -364,6 +364,7 @@ var Ship = BlockStructure.extend({
 					angularImpulse += this.thrusters()[i].thrust.value;
 				}
 				angularImpulse = -angularImpulse * ige._tickDelta;
+				nonPhysicalRotation = 0.0015 * ige._tickDelta;
 
 				if (this.thrusters().length < 1) {
 					if (JSON.stringify(this.controls()) !== JSON.stringify(this._prev_controls) ||
@@ -377,9 +378,11 @@ var Ship = BlockStructure.extend({
 
 				if (this.controls().left) {
 					this._box2dBody.ApplyTorque(angularImpulse);
+					this.rotateBy(0, 0, -nonPhysicalRotation);
 				}
 				if (this.controls().right) {
 					this._box2dBody.ApplyTorque(-angularImpulse);
+					this.rotateBy(0, 0, nonPhysicalRotation);
 				}
 			}
 
