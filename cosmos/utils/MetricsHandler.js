@@ -15,9 +15,9 @@ var MetricsHandler = IgeEventingClass.extend({
 		console.info("Metrics: Initializing...");
 
 		this.validStrings = {
-			/* Tutorial Quest */
+			/* Tutorial Quest. Each of these metrics corresponds to completing a stage of the tutorial */
 			"cosmos:quest.tutorialQuest.clicked": true, // This is fired when you click "ok", I will take the tutorial. The alternative is to cancel the tutorial.
-			"cosmos:quest.tutorialQuest.skipped": true,
+			"cosmos:quest.tutorialQuest.skipped": true, // This is fired when you click "cancel" and decline to take the tutorial.
 			"cosmos:quest.tutorialQuest.welcome.completed": true,
 			"cosmos:quest.tutorialQuest.moveForward.completed": true,
 			"cosmos:quest.tutorialQuest.moveBackwards.completed": true,
@@ -31,11 +31,13 @@ var MetricsHandler = IgeEventingClass.extend({
 			"cosmos:quest.tutorialQuest.construct.completed": true,
 			"cosmos:quest.tutorialQuest.chat.completed": true,
 			"cosmos:quest.tutorialQuest.newShip.completed": true,
-			"cosmos:quest.tutorialQuest.completed": true,
+			"cosmos:quest.tutorialQuest.completed": true, // This is fired when you finish the entire tutorial.
 
 			/* player */
-			"cosmos:player.connect": true, // This is fired when the game has been loaded and _onPlayerEntity is called on the client
+			"cosmos:player.connect": true, // This is fired when the game has finished loaded and _onPlayerEntity is called on the client
 			"cosmos:player.attack": true,
+			'cosmos:player.relocate.mouseDown': true, // This is fired whenever the player presses the relocate button in the bottom right
+			'cosmos:player.newShip.mouseDown': true, // This is fired whenever the player pushed the new ship button in the bottom right
 
 			/* engine */
 			"cosmos:engine.performance": true,
@@ -50,9 +52,12 @@ var MetricsHandler = IgeEventingClass.extend({
 			"cosmos:construct.attempt.existing": true,
 			"cosmos:construct.existing": true,
 
+			/* crafting */
+			"cosmos:CraftingSystem.craft.success": true, // This is fired whenever a player successfully crafts something. The name of the recipe is passed to the analytics server.
+
 			/* misc */
 			"cosmos:block.mine": true,
-			"cosmos:block.attack": true//note that this includes when you mine yourself as well as when you mine other players
+			"cosmos:block.attack": true // Note that this includes when you mine yourself as well as when you mine other players
 		}
 	},
 
