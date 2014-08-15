@@ -125,6 +125,19 @@ var BlockGrid = IgeEntity.extend({
 	 */
 	_previouslyStreamed: undefined,
 
+	// Default body definition. Should not be written to!
+	_defaultBodyDef: {
+		bodyType: 'DYNAMIC',
+		bodyCategory: '',
+		linkedId: '',
+		x: 0.0,
+		y: 0.0,
+		angle: 0.0,
+		linearDamping: 0.4,
+		angularDamping: 1.0,
+		bullet: false
+	},
+
 	init: function(data) {
 		var self = this;
 
@@ -144,10 +157,13 @@ var BlockGrid = IgeEntity.extend({
 		this.addComponent(PixiRenderableComponent);
 
 		if (ige.isServer) {
-			// Add physics body w/ default properties if it doesn't exist
+			// Add physics body component if it doesn't exist
 			if (this.physicsBody === undefined) {
 				this.addComponent(TLPhysicsBodyComponent);
 			}
+			// Add the BlockGrid's default body properties without overwriting
+			// existing properties
+			this.physicsBody.registerDefaultBodyDef(this._defaultBodyDef);
 			this.physicsBody.newBody();
 
 			this.streamControl(this._streamControlFunc.bind(this))

@@ -181,7 +181,7 @@ var GameInit = {
 	initEnvironment: function() {
 		var server = ige.server;
 
-		var NUM_NORMAL_ASTEROIDS = 10;
+		var NUM_NORMAL_ASTEROIDS = 40;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
 			this.spawnStructure(20, BlockStructureGenerator.elementDistributions.randomDistribution());
 		}
@@ -262,9 +262,16 @@ var GameInit = {
 			beginContact: function(entity1, entity2, identifier) {
 				switch (identifier) {
 					case contactIdentifiers.shipDropBegin:
-						var entities = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY);
-						var drop = entities[0];
-						var ship = entities[1];
+						var results = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY,
+							Ship.BOX2D_CATEGORY);
+						var error = results.error;
+						var drop = results.category1Entity;
+						var ship = results.category2Entity;
+						if (error) {
+							this.log('error1');
+							return;
+						}
+
 						if (drop.getAttractedTo() === undefined && drop.isOwner(ship)) {
 							drop.setAttractedTo(ship);
 						}
@@ -278,9 +285,16 @@ var GameInit = {
 			endContact: function(entity1, entity2, identifier) {
 				switch (identifier) {
 					case contactIdentifiers.shipDropEnd:
-						var entities = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY);
-						var drop = entities[0];
-						var ship = entities[1];
+						var results = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY,
+							Ship.BOX2D_CATEGORY);
+						var error = results.error;
+						var drop = results.category1Entity;
+						var ship = results.category2Entity;
+						if (error) {
+							this.log('error2');
+							return;
+						}
+
 						if (drop.isOwner(ship)) {
 							drop.setAttractedTo(undefined);
 						}
@@ -294,9 +308,15 @@ var GameInit = {
 			preSolve: function(entity1, entity2, identifier) {
 				switch (identifier) {
 					case contactIdentifiers.shipDropPreSolve:
-						var entities = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY);
-						var drop = entities[0];
-						var ship = entities[1];
+						var results = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY,
+							Ship.BOX2D_CATEGORY);
+						var error = results.error;
+						var drop = results.category1Entity;
+						var ship = results.category2Entity;
+						if (error) {
+							this.log('error3');
+							return;
+						}
 
 						// Ignore multiple collision points
 						if (drop === undefined || !drop.alive()) {
@@ -320,20 +340,41 @@ var GameInit = {
 		});
 		// Gets entity by category. Assumes each entity maps to either category1
 		// or the other category.
-		function entityByCategory(entity1, entity2, category1) {
+		function entityByCategory(entity1, entity2, category1, category2) {
 			var category1Entity;
 			var category2Entity;
+			var error = false;
 
-			if (entity1.category() === category1) {
+			if ((entity1.category() === category1) &&
+				(entity2.category() === category2)) {
 				category1Entity = entity1;
 				category2Entity = entity2; 
 			}
-			else {
+			else if ((entity1.category() === category2) &&
+				(entity2.category() === category1)) {
 				category1Entity = entity2;
 				category2Entity = entity1; 
 			}
+			else {
+				error = true;
+			}
 
-			return [category1Entity, category2Entity];
+			console.log('Err: ' + error);
+			console.log('Real cat 1: ' + category1);
+			console.log('Real cat 2: ' + category2);
+			console.log('ent1id: ' + entity1.id());
+			console.log('ent2id: ' + entity2.id());
+			console.log('cat1: ' + entity1.category());
+			console.log('cat2: ' + entity2.category());
+			console.log('cat1 class: ' + entity1.classId());
+			console.log('cat2 class: ' + entity2.classId());
+
+
+			return {
+				error: error,
+				category1Entity: category1Entity,
+				category2Entity: category2Entity,
+			};
 		}
 	},
 
