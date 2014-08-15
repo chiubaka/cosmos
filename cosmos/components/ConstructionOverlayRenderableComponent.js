@@ -9,10 +9,10 @@ var ConstructionOverlayRenderableComponent = PixiRenderableComponent.extend({
 		// TODO: Clearing the children could probably be optimized to not create and destroy so
 		// so many things so often.
 		// Clear all children
-		var parent = this._displayObject.parent;
-		parent.removeChild(this._displayObject);
-		this._displayObject = new PIXI.DisplayObjectContainer();
-		parent.addChild(this._displayObject);
+
+		while (this._displayObject.children.length > 0) {
+			this._displayObject.removeChildAt(0);
+		}
 
 		var constructionLocations = this._entity._constructionLocations;
 
