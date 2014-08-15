@@ -198,7 +198,7 @@ var GameInit = {
 				new Background({textureName: 'backgroundOverlay'})
 					.id('backgroundOverlayTheSecond' + gridX + "-" + gridY)
 					.depth(1)
-					.parallaxLag(4)
+					.parallaxLag(5)
 					.mount(client.spaceBackgroundScene)
 					.streamMode(1)
 					.translateTo(x * Math.cos(Constants.SECOND_OVERLAY_ROTATION) - y * Math.sin(Constants.SECOND_OVERLAY_ROTATION),
@@ -208,45 +208,15 @@ var GameInit = {
 			}
 		}
 
-		this.moveRandomly(
-			new StarfieldBackground()
-				.id('starfield_background')
-				.depth(2)
-				.parallaxLag(6)
-				.mount(client.spaceBackgroundScene)
-		);
-
-		this.moveRandomly(
-			new StarfieldBackground()
-				.id('starfield_background2')
-				.depth(2)
-				.parallaxLag(7)
-				.mount(client.spaceBackgroundScene)
-		);
-
-		this.moveRandomly(
-			new StarfieldBackground()
-				.id('starfield_background3')
-				.depth(2)
-				.parallaxLag(8)
-				.mount(client.spaceBackgroundScene)
-		);
-
-		this.moveRandomly(
-			new StarfieldBackground()
-				.id('starfield_background4')
-				.depth(2)
-				.parallaxLag(9)
-				.mount(client.spaceBackgroundScene)
-		);
-
-		this.moveRandomly(
-			new StarfieldBackground()
-				.id('starfield_background5')
-				.depth(2)
-				.parallaxLag(10)
-				.mount(client.spaceBackgroundScene)
-		);
+		for (var starfieldNumber = 0; starfieldNumber < 5; starfieldNumber++) {
+			this.moveRandomly(
+				new StarfieldBackground()
+					.id('starfield_background' + starfieldNumber)
+					.depth(2)
+					.parallaxLag(6 + starfieldNumber)
+					.mount(client.spaceBackgroundScene)
+			);
+		}
 	},
 
 	initDebugDisplay: function() {
