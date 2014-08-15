@@ -126,7 +126,9 @@ var ClientNetworkEvents = {
 
 	_onBlockAction: function(data) {
 		var blockGrid = ige.$(data.blockGridId);
-		blockGrid.processBlockActionClient(data);
+		if (blockGrid) {
+			blockGrid.processBlockActionClient(data);
+		}
 	},
 
 	_onMinedBlock: function(data) {
@@ -155,7 +157,7 @@ var ClientNetworkEvents = {
 
 	_onConfirm: function(confirmData) {
 		ige.client.metrics.track(confirmData.event, confirmData.data);
-	},
+	}
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = ClientNetworkEvents; }

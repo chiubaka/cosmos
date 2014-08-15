@@ -235,7 +235,9 @@ var BlockGrid = IgeEntityBox2d.extend({
 		switch (data.action) {
 			case 'remove':
 				this.remove(new IgePoint2d(data.col, data.row));
-				this._renderContainer.refresh();
+				if (this.count() === 0) {
+					this.destroy();
+				}
 				break;
 			case 'damage':
 				var block = this.get(new IgePoint2d(data.col, data.row))[0];
@@ -247,7 +249,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 					{'type': data.selectedType});
 				this.put(Block.blockFromClassId(data.selectedType), new IgePoint2d(data.col, data.row), true);
 				ige.emit('cosmos:BlockGrid.processBlockActionClient.add', [data.selectedType, this]);
-				this._renderContainer.refresh();
 				break;
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
@@ -267,7 +268,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		switch (data.action) {
 			case 'remove':
-				this.remove(data.row, data.col);
+				this.remove(new IgePoint2d(data.col, data.row));
+				if (this.count() === 0) {
+					this.destroy();
+				}
 				return true;
 			case 'add':
 				var location = new IgePoint2d(data.col, data.row);

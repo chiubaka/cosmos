@@ -23,7 +23,6 @@ var ConstructionOverlayRenderableComponent = PixiRenderableComponent.extend({
 					sprite.width = Block.WIDTH;
 					sprite.height = Block.HEIGHT;
 
-					// TODO: Position the sprite based on location in the Grid.
 					sprite.position.x = Block.WIDTH * x - this._entity.width() / 2;
 					sprite.position.y = Block.HEIGHT * y - this._entity.height() / 2;
 
