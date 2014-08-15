@@ -110,7 +110,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 		var theta = this.rotate().z();
 		var dropped = this.remove(loc, width, height);
 
-		this.log("BlockGrid#drop: " + dropped.length + " drops.");
 		var self = this;
 		_.forEach(dropped, function(drop) {
 			console.log(drop.classId());
@@ -122,8 +121,6 @@ var BlockGrid = IgeEntityBox2d.extend({
 				.rotateTo(0, 0, theta)
 				.streamMode(1)
 				.mount(ige.server.spaceGameScene);
-
-			self.log("BlockGrid#drop: dropping " + newDrop.id() +": " + newDrop.block().classId());
 		});
 	},
 	// #endif
