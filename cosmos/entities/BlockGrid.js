@@ -360,7 +360,7 @@ var BlockGrid = IgeEntity.extend({
 		switch (sectionId) {
 			case 'transform':
 				if (data) {
-					IgeEntityBox2d.prototype.streamSectionData
+					IgeEntity.prototype.streamSectionData
 						.call(this, sectionId, data, bypassTimeStream);
 				}
 				else {
@@ -552,7 +552,7 @@ var BlockGrid = IgeEntity.extend({
 
 	_setTransformFromStreamData: function(dataArr) {
 		// This will set our location to the physics location that is being streamed.
-		IgeEntityBox2d.prototype._setTransformFromStreamData.call(this, dataArr);
+		IgeEntity.prototype._setTransformFromStreamData.call(this, dataArr);
 
 		var theta = this.rotate().z();
 

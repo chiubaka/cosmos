@@ -1,4 +1,4 @@
-var BlockGridPhysicsContainer = IgeEntityBox2d.extend({
+var BlockGridPhysicsContainer = IgeEntity.extend({
 	classId: "BlockGridPhysicsContainer",
 
 	_debug: undefined,
@@ -6,7 +6,7 @@ var BlockGridPhysicsContainer = IgeEntityBox2d.extend({
 	_blockGrid: undefined,
 
 	init: function(data) {
-		IgeEntityBox2d.prototype.init.call(this, data);
+		IgeEntity.prototype.init.call(this, data);
 	},
 
 	addFixture: function(block) {
@@ -27,7 +27,7 @@ var BlockGridPhysicsContainer = IgeEntityBox2d.extend({
 	},
 
 	_debugUpdate: function(ctx, tickDelta) {
-		IgeEntityBox2d.prototype.update.call(this, ctx, tickDelta);
+		IgeEntity.prototype.update.call(this, ctx, tickDelta);
 		//this._blockGrid.rotate().z(this.rotate().z());
 
 
