@@ -187,6 +187,14 @@ var Ship = BlockStructure.extend({
 		if (ige.isServer) {
 			DbPlayer.update(this.player().id(), this.player(), function() {});
 		}
+
+		// If the ship has no longer controllable
+		if (!this.controllable()) {
+			// Then it is dead
+			this.log("Ship death");
+			data = {};
+			ige.network.stream.queueCommand('cosmos:ship.death', data, this.player().clientId());
+		}
 	},
 
 	/**
@@ -346,8 +354,15 @@ var Ship = BlockStructure.extend({
 			return this._controls;
 		}
 
-		this._controls = newControls;
+		if (this.controllable()) {
+			this._controls = newControls;
+		}
+
 		return this;
+	},
+
+	controllable: function() {
+		return this.numBlocksOfType(ControlBlock.prototype.classId()) > 0;
 	},
 
 	update: function(ctx) {

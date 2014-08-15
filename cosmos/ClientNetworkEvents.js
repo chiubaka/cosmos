@@ -156,6 +156,17 @@ var ClientNetworkEvents = {
 	_onConfirm: function(confirmData) {
 		ige.client.metrics.track(confirmData.event, confirmData.data);
 	},
+
+	_onShipDeath: function(data) {
+		ige.client.metrics.track('cosmos:ship.death');
+		var message = "You've lost your control block. You can no longer control this ship. Would you like a new ship?";
+
+		alertify.alert(message, function (e) {
+			if (e) {
+				ige.network.send('new ship');
+			}
+		});
+	}
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = ClientNetworkEvents; }
