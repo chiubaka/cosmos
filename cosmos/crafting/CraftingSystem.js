@@ -145,7 +145,6 @@ var CraftingSystem = IgeEventingClass.extend({
 		var recipeName = data;
 		ige.notification.emit('notificationSuccess', NotificationDefinitions.successKeys.crafting_success);
 		ige.craftingSystem.emit('cosmos:CraftingSystem.craft.success', recipeName);
-
 	},
 
 	// Add a recipe to a player

@@ -158,21 +158,12 @@ var GameInit = {
 				.layer(client.LAYER_BACKGROUND)
 				.mount(client.spaceScene);
 
-		gridSquareSize = 1024;
-		for (var gridX = 0; gridX < 5; gridX++) {
-			for (var gridY = 0; gridY < 5; gridY++) {
-				console.log("about to create a background:");
-
+		for (var gridX = 0; gridX < Constants.NUM_GRID_SQUARES.X; gridX++) {
+			for (var gridY = 0; gridY < Constants.NUM_GRID_SQUARES.Y; gridY++) {
 				var data = {
 					'gridX': gridX,
 					'gridY': gridY
 				}
-
-				//this is a constant offset that we apply to the whole background
-				var backgroundOffset = {
-					x: -3000,
-					y: -3000
-				};
 
 				// Instantiate the background
 				new Background(data)
@@ -181,7 +172,7 @@ var GameInit = {
 					.parallaxLag(2)
 					.mount(client.spaceBackgroundScene)
 					.streamMode(1)
-					.translateTo(gridSquareSize*gridX + backgroundOffset.x, gridSquareSize*gridY + backgroundOffset.y, 0);
+					.translateTo(Constants.GRID_SQUARE_SIZE.X*gridX + Constants.BACKGROUND_OFFSET.Y, Constants.GRID_SQUARE_SIZE.Y*gridY + Constants.BACKGROUND_OFFSET.Y, 0);
 			}
 		}
 

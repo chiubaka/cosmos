@@ -17,6 +17,22 @@ var Constants = {
 		MAXIMUM_HEIGHT: 1200 * 2
 	},
 
+	//constant properties of the background tiles
+	GRID_SQUARE_SIZE: {
+		X: 1024,
+		Y: 1024
+	},
+
+	NUM_GRID_SQUARES: {
+		X: 7,
+		Y: 7
+	},
+
+	//this is a constant offset that we apply to the whole background
+	BACKGROUND_OFFSET: {
+		X: -3000,
+		Y: -3000
+	}
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Constants; }
