@@ -174,20 +174,19 @@ var Block = IgeEntity.extend({
 			this.borderAlpha = 0;
 		}
 
-		this.borderWidth = 2;
-		this.iconScale = this.iconScale || (Block.WIDTH - 3 * this.borderWidth) / Block.WIDTH;
+		this.iconScale = this.iconScale || (Block.WIDTH - 3 * Block.BORDER_WIDTH) / Block.WIDTH;
 
 		this.addComponent(PixiRenderableComponent, {createDisplayObject: function() {
 			var displayObject = new PIXI.DisplayObjectContainer();
 
 			var graphic = new PIXI.Graphics();
 			graphic.beginFill(self.backgroundColor, self.backgroundAlpha);
-			graphic.lineStyle(self.borderWidth, self.borderColor, self.borderAlpha);
+			graphic.lineStyle(Block.BORDER_WIDTH, self.borderColor, self.borderAlpha);
 			graphic.drawRect(
-					self.borderWidth / 2,
-					self.borderWidth / 2,
-					self.width() - self.borderWidth,
-					self.height() - self.borderWidth
+					Block.BORDER_WIDTH / 2,
+					Block.BORDER_WIDTH / 2,
+					self.width() - Block.BORDER_WIDTH,
+					self.height() - Block.BORDER_WIDTH
 			);
 			graphic.endFill();
 
@@ -646,6 +645,8 @@ var Block = IgeEntity.extend({
 		return this._isBeingMined;
 	}
 });
+
+Block.BORDER_WIDTH = 2;
 
 /**
  * Constant for the width of a {@link Block} as drawn in the world.
