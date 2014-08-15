@@ -247,14 +247,13 @@ var BlockGrid = IgeEntityBox2d.extend({
 			// TODO: Vary mining speed based on block material
 			case 'add':
 				// Add block server side, then send add msg to client
-				if(!self.add(data.row, data.col, Block.blockFromClassId(data.selectedType))) {
-					return false;
-				}
-				else {
+				// TODO: Check if the proposed location has neighbors
+				//else {
+					self.put(Block.blockFromClassId(data.selectedType), new IgePoint2d(data.col, data.row), false);
 					data.action = 'add';
 					ige.network.send('blockAction', data);
 					return true;
-				}
+				//}
 			default:
 				return false;
 		}
@@ -416,19 +415,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// #endif
 	},
 
-	/**
-	 * Given a click event, locates the {@link Block} in this {@link BlockGrid} that was clicked by:
-	 * 1. Unrotating the click coordinate
-	 * 2. Comparing the unrotated click coordinate to where the blocks would be if the BlockGrid were not rotated
-	 * @param event {Object} The event data for the click event.
-	 * @param control {Object} The control data for the click event.
-	 * @returns {Block|undefined} The {@link Block} that was clicked or undefined if no {@link Block} exists at the
-	 * clicked location.
-	 * @memberof BlockGrid
-	 * @private
-	 * @instance
-	 */
-	_blockForClick: function(event, control) {
+	locationForClick: function(event, control) {
 		// event.igeBaseX and event.igeBaseY give coordinates relative to the clicked entity's origin (center)
 
 		// The position of the click in world coordinates
@@ -456,18 +443,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// The unrotated coordinates for comparison against an unrotated grid with respect to the center of the
 		// entity
 		// This uses basic trigonometry. See http://en.wikipedia.org/wiki/Rotation_matrix.
-		unrotated = MathUtils.rotate(new IgePoint2d(aabbRelativeX, aabbRelativeY), theta);
+		var unrotated = MathUtils.rotate(new IgePoint2d(aabbRelativeX, aabbRelativeY), theta);
 
 		// Height and width of the grid area
 		var width = this.width();
 		var height = this.height();
-
-		// Check if the click was out of the grid area (happens because axis-aligned bounding boxes are larger
-		// than the non-axis-aligned grid area)
-		if (Math.abs(unrotated.x) > width / 2
-			|| Math.abs(unrotated.y) > height / 2) {
-			return;
-		}
 
 		// Coordinates for the top left corner of the grid area
 		var topLeftCornerX = -width / 2;
@@ -481,7 +461,25 @@ var BlockGrid = IgeEntityBox2d.extend({
 		var x = Math.floor(gridX / Block.WIDTH) + this.lowerBound().x;
 		var y = Math.floor(gridY / Block.HEIGHT) + this.lowerBound().y;
 
-		return this.get(new IgePoint2d(x, y))[0];
+		return new IgePoint2d(x, y);
+	},
+
+	/**
+	 * Given a click event, locates the {@link Block} in this {@link BlockGrid} that was clicked by:
+	 * 1. Unrotating the click coordinate
+	 * 2. Comparing the unrotated click coordinate to where the blocks would be if the BlockGrid were not rotated
+	 * @param event {Object} The event data for the click event.
+	 * @param control {Object} The control data for the click event.
+	 * @returns {Block|undefined} The {@link Block} that was clicked or undefined if no {@link Block} exists at the
+	 * clicked location.
+	 * @memberof BlockGrid
+	 * @private
+	 * @instance
+	 */
+	_blockForClick: function(event, control) {
+		var location = this.locationForClick(event, control);
+
+		return this.get(location)[0];
 	},
 
 	_createFixtureDef: function(block) {

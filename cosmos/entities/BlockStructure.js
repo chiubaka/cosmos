@@ -22,11 +22,8 @@ var BlockStructure = BlockGrid.extend({
 
 	init: function(data) {
 		BlockGrid.prototype.init.call(this, data);
-		if (!ige.isServer) {
-			// TODO: Lazily create when needed to speed up load time.
-			// TODO: Examine ConstructionOverlay to make sure it is compatible with new BlockGrid backing.
-			// TODO: Uncomment this. Commented out so I can test the new BlockGrid class without getting errors from
-			// the ConstructionOverlay class.
+
+		if (ige.isClient) {
 			this._constructionOverlay = new ConstructionOverlay(this)
 				.mount(this);
 		}
@@ -59,6 +56,16 @@ var BlockStructure = BlockGrid.extend({
 			ige.notification.emit('notificationError',
 				NotificationDefinitions.errorKeys.notMinable);
 		}
+	},
+
+	put: function(block, location, replace) {
+		var result = BlockGrid.prototype.put.call(this, block, location, replace);
+
+		if (ige.isClient && this._constructionOverlay) {
+			this._constructionOverlay.refresh();
+		}
+
+		return result;
 	},
 
 	/**
@@ -127,24 +134,14 @@ var BlockStructure = BlockGrid.extend({
 		}
 	},
 
-	/**
-	 * Extends the {@link BlockGrid#processBlockActionClient} function to provide additional functionality for
-	 * structure-specific actions. Process actions client-side.
-	 * @param data {Object} An object representing the action sent from the server.
-	 * @memberof BlockStructure
-	 * @instance
-	 */
-	processBlockActionClient: function(data) {
-		BlockGrid.prototype.processBlockActionClient.call(this, data);
+	remove: function(location, width, height) {
+		var result = BlockGrid.prototype.remove.call(this, location, width, height);
 
-		switch (data.action) {
-			case 'remove':
-				//this._constructionOverlay.refresh();
-				break;
-			case 'add':
-				//this._constructionOverlay.refresh();
-				break;
+		if (ige.isClient && this._constructionOverlay) {
+			this._constructionOverlay.refresh();
 		}
+
+		return result;
 	}
 });
 

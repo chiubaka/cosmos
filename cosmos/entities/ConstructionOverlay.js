@@ -7,7 +7,6 @@
 var ConstructionOverlay = IgeEntity.extend({
 	classId: 'ConstructionOverlay',
 
-	_dirty: undefined,
 	/**
 	 * A reference to the {@link BlockStructure} object that this {@link ConstructionOverlay} is displaying an overlay
 	 * for.
@@ -21,7 +20,6 @@ var ConstructionOverlay = IgeEntity.extend({
 	init: function(structure) {
 		IgeEntity.prototype.init.call(this);
 		this._structure = structure;
-		this._dirty = false;
 
 		this.addComponent(ConstructionOverlayRenderableComponent);
 
@@ -30,9 +28,7 @@ var ConstructionOverlay = IgeEntity.extend({
 		var self = this;
 		ige.on('capbar cap selected', function(classId) {
 			if (classId === 'ConstructCap') {
-				self.overlayForBlock(
-					cosmos.blocks.instances[ige.hud.leftToolbar.windows.cargo.selectedType]
-				);
+				self.refresh();
 				self.show();
 			} else {
 				self.hide();
@@ -54,6 +50,14 @@ var ConstructionOverlay = IgeEntity.extend({
 		}
 	},
 
+	lowerBound: function() {
+		var structureLowerBound = this._structure.lowerBound();
+		return {
+			x: structureLowerBound.x - this._blockWidth,
+			y: structureLowerBound.y - this._blockHeight
+		};
+	},
+
 	overlayForBlock: function(block) {
 		var blockWidth = 1;
 		var blockHeight = 1;
@@ -68,6 +72,12 @@ var ConstructionOverlay = IgeEntity.extend({
 
 		this._computeConstructionLocations(blockWidth, blockHeight);
 		this.renderable.renderConstructionLocations();
+	},
+
+	refresh: function() {
+		this.overlayForBlock(
+			cosmos.blocks.instances[ige.hud.leftToolbar.windows.cargo.selectedType]
+		);
 	},
 
 	_computeConstructionLocations: function(blockWidth, blockHeight) {
@@ -210,94 +220,35 @@ var ConstructionOverlay = IgeEntity.extend({
 	 * @todo Consolidate this function with its {@link BlockGrid} counterpart.
 	 */
 	_mouseDownHandler: function(event, control) {
-		// event.igeBaseX and event.igeBaseY give coordinates relative to the clicked entity's origin (center)
+		var clickLocation = this._structure.locationForClick(event, control);
 
-		// The position of the click in world coordinates
-		var mousePosWorld = this.mousePosWorld();
-		var worldX = mousePosWorld.x;
-		var worldY = mousePosWorld.y;
+		// TODO: Check constructionLocations for a 1
+		// TODO: Don't send a message to the server unless we know that constructing a block at the
+		// specified location will work.
 
-		// The coordinates of the center of the axis-aligned bounding box of the render container in
-		// world coordinates
-		var aabb = this.aabb();
-		var aabbX = aabb.x + aabb.width / 2;
-		var aabbY = aabb.y + aabb.height / 2;
+		var location = {
+			x: clickLocation.x - this.lowerBound().x,
+			y: clickLocation.y - this.lowerBound().y
+		};
 
-		// Translate the mouse position to a reference system where the center of the axis-aligned
-		// bounding box is the center
-		var aabbRelativeX = worldX - aabbX;
-		var aabbRelativeY = worldY - aabbY;
-
-		// This is the overlay's parent's rotation, since the overlay has no
-		// no rotation with respect to the BlockGrid.
-		// Negative because we want to reverse the rotation.
-
-		// Negative because we want to reverse the rotation.
-		var theta = -this._parent._rotate.z;
-
-		// The unrotated coordinates for comparison against an unrotated grid with respect to the center of the
-		// entity
-		// This uses basic trigonometry. See http://en.wikipedia.org/wiki/Rotation_matrix.
-		var unrotatedX = aabbRelativeX * Math.cos(theta) - aabbRelativeY * Math.sin(theta);
-		var unrotatedY = aabbRelativeX * Math.sin(theta) + aabbRelativeY * Math.cos(theta);
-
-		// Height and width of the grid area
-		var width = this.width();
-		var height = this.height();
-
-		// Check if the click was out of the grid area (happens because axis-aligned bounding boxes are larger
-		// than the non-axis-aligned grid area)
-		if (Math.abs(unrotatedX) > width / 2
-			|| Math.abs(unrotatedY) > height / 2) {
-			return;
-		}
-
-		// Coordinates for the top left corner of the grid area
-		var topLeftCornerX = -width / 2;
-		var topLeftCornerY = -height / 2;
-
-		// Coordinates of the unrotated clicked point with respect to the top left of the grid area
-		// This is just so calculations are a little bit easier
-		var gridX = unrotatedX - topLeftCornerX;
-		var gridY = unrotatedY - topLeftCornerY;
-
-		var row = Math.floor(gridY / Block.HEIGHT);
-		var col = Math.floor(gridX / Block.WIDTH);
-
-		var block = this._overlayGrid[row][col];
-
-		// Check if we have clicked on a valid construction zone.
-		// If so, stop click propogation so we don't hit the ClickScene
-		if (block === undefined) {
-			return;
-		} else {
+		if (this._constructionLocations && this._constructionLocations[location.x][location.y]) {
 			control.stopPropagation();
+		}
+		else {
+			return;
 		}
 
 		// Send constructionZoneClicked message to server
 		var data = {
 			blockGridId: this._parent.id(),
 			// Translate overlay coordinates into BlockGrid coordinates
-			row: row + this._blockGrid.startRow() - 1,
-			col: col + this._blockGrid.startCol() - 1,
+			row: location.y + this._structure.lowerBound().y - 1,
+			col: location.x + this._structure.lowerBound().x - 1
 		};
 
 		if (ige.isClient && ige.client !== undefined && ige.client.state !== undefined) {
 			ige.client.state.currentCapability().tryPerformAction(this, event, data);
 		}
-	},
-
-	/**
-	 * Recalculate construction zones. Called upon removal or addition of {@link Block}s to the {@link BlockGrid}.
-	 * @memberof ConstructionOverlay
-	 * @instance
-	 */
-	refresh: function () {
-		this._renderContainer.destroy();
-		this._renderContainer = new RenderContainer()
-			.mount(this)
-		this._createConstructionZones();
-		this._mountOverlayGrid();
 	}
 });
 
