@@ -35,10 +35,19 @@ var Client = IgeClass.extend({
 		ige.addSystem(IgeRenderingSystem, {autoSize: true});
 
 		ige.addSystem(PixiRenderingSystem, {autoSize: true});
-		ige.rendering.loadTextures({
-			background_helix_nebula: gameRoot + 'assets/backgrounds/helix_nebula.jpg',
-			background_starfield: gameRoot + 'assets/backgrounds/starfield.png'
-		});
+
+		// Load textures
+		var textures = {};
+		textures.background_starfield = gameRoot + 'assets/backgrounds/starfield.png'
+
+		for (var gridX = 0; gridX < Constants.NUM_BACKGROUND_SQUARES.X; gridX++) {
+			for (var gridY = 0; gridY < Constants.NUM_BACKGROUND_SQUARES.Y; gridY++) {
+				textures['background' + gridX + '-' + gridY] = gameRoot + 'assets/backgrounds/background' + gridX + '-' + gridY + '.jpg';
+			}
+		}
+		textures['backgroundOverlay'] = gameRoot + 'assets/backgrounds/backgroundOverlay.png';
+
+		ige.rendering.loadTextures(textures);
 		ige.rendering.loadSpriteSheets([gameRoot + 'assets/blocks/spritesheet.json']);
 		ige.rendering.start();
 
@@ -47,7 +56,7 @@ var Client = IgeClass.extend({
 			ige.rendering.log('Finished Pixi loading textures.');
 
 			// Load the textures we want to use
-			self.textures = {
+			var textures = {
 				block: new IgeTexture(gameRoot + 'assets/BlockTexture.js'),
 				glow: new IgeTexture(gameRoot + 'assets/GlowEffectTexture.js'),
 				background_helix_nebula: new IgeTexture(gameRoot +
@@ -91,7 +100,16 @@ var Client = IgeClass.extend({
 					'assets/blocks/laser/laser.svg'),
 				plating: new IgeTexture(gameRoot +
 					'assets/blocks/armor/plating.svg')
-			};
+			}
+
+			for (var gridX = 0; gridX < Constants.NUM_BACKGROUND_SQUARES.X; gridX++) {
+				for (var gridY = 0; gridY < Constants.NUM_BACKGROUND_SQUARES.Y; gridY++) {
+					textures['background' + gridX + '-' + gridY] = new IgeTexture(gameRoot + 'assets/backgrounds/background' + gridX + '-' + gridY + '.jpg');
+				}
+			}
+			textures['backgroundOverlay'] = new IgeTexture(gameRoot + 'assets/backgrounds/backgroundOverlay.png');
+
+			self.textures = textures;
 
 			ige.on('texturesLoaded', function () {
 				// Ask the engine to start
