@@ -173,58 +173,6 @@ var BlockStructureGenerator = {
 	},
 
 	/**
-	 * Creates and returns a {@link BlockStructure} with a single {@link Block}.
-	 * @param distribution {Object} The distribution object to draw the {@link Block} from. The default is a standard
-	 * elemental distribution.
-	 * @returns {BlockStructure} The newly created 1x1 {@link BlockStructure}.
-	 * @memberof BlockStructureGenerator
-	 */
-	singleBlock: function(distribution) {
-		distribution = distribution || this.elementDistributions.STANDARD;
-		var blockStructure = new GeneratedBlockStructure({
-			blockDistribution: distribution
-		});
-		blockStructure.add(0, 0, this._drawFromDistribution(distribution));
-
-		return blockStructure;
-	},
-
-	/**
-	 * Creates and returns a 2x2 asteroid as a {@link BlockStructure}.
-	 * @param distribution {Object} The distribution object to draw the {@link Block}s from. The default is a standard
-	 * elemental distribution.
-	 * @returns {BlockStructure} The newly created 2x2 {@link BlockStructure}.
-	 * @memberof BlockStructureGenerator
-	 * @todo Edit this function so that it creates and returns an actual {@link BlockStructure} object.
-	 * As it is written now, this won't work.
-	 */
-	littleAsteroid: function(distribution) {
-		distribution = distribution || this.elementDistributions.STANDARD;
-		return [
-			[this._drawFromDistribution(distribution), this._drawFromDistribution(distribution)],
-			[this._drawFromDistribution(distribution), this._drawFromDistribution(distribution)]
-		];
-	},
-
-	/**
-	 * Creates and returns a 3x3 asteroid with a missing center {@link Block} as a {@link BlockStructure.}
-	 * @param distribution {Object} The distribution object to draw the {@link Block}s from. The default is a standard
-	 * elemental distribution.
-	 * @returns {BlockStructure} The newly created hollow, 3x3 asteroid with a missing center.
-	 * @memberof BlockStructureGenerator
-	 * @todo Edit this function so that it creates and returns an actual {@link BlockStructure} object. As it is written
-	 * now, this won't work.
-	 */
-	hollowAsteroid: function(distribution) {
-		distribution = distribution || this.elementDistributions.STANDARD;
-		return [
-			[this._drawFromDistribution(distribution), this._drawFromDistribution(distribution), this._drawFromDistribution(distribution)],
-			[this._drawFromDistribution(distribution), undefined, this._drawFromDistribution(distribution)],
-			[this._drawFromDistribution(distribution), this._drawFromDistribution(distribution), this._drawFromDistribution(distribution)],
-		];
-	},
-
-	/**
 	 * Selects a random {@link Block} from the given distribution.
 	 * @param distribution {Object} A distribution object which defines relative weights of different {@link Block}
 	 * types.
