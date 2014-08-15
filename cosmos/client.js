@@ -46,9 +46,6 @@ var Client = IgeClass.extend({
 			}
 		}
 
-		console.log("here are the textures:");
-		console.log(textures);
-
 		ige.rendering.loadTextures(textures);
 		ige.rendering.loadSpriteSheets([gameRoot + 'assets/blocks/spritesheet.json']);
 		ige.rendering.start();
