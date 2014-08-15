@@ -158,9 +158,10 @@ var GameInit = {
 				.layer(client.LAYER_BACKGROUND)
 				.mount(client.spaceScene);
 
+
+		// Instantiate the background tiles
 		for (var gridX = 0; gridX < Constants.NUM_GRID_SQUARES.X; gridX++) {
 			for (var gridY = 0; gridY < Constants.NUM_GRID_SQUARES.Y; gridY++) {
-				// Instantiate the background
 				new Background({textureName: 'background' + gridX + "-" + gridY})
 					.id('background' + gridX + "-" + gridY)
 					.depth(0)
@@ -168,7 +169,12 @@ var GameInit = {
 					.mount(client.spaceBackgroundScene)
 					.streamMode(1)
 					.translateTo(Constants.GRID_SQUARE_SIZE.X*gridX + Constants.BACKGROUND_OFFSET.Y, Constants.GRID_SQUARE_SIZE.Y*gridY + Constants.BACKGROUND_OFFSET.Y, 0);
+			}
+		}
 
+		//Instantiate the background overlay
+		for (var gridX = -20; gridX < Constants.NUM_GRID_SQUARES.X + 20; gridX++) {
+			for (var gridY = -20; gridY < Constants.NUM_GRID_SQUARES.Y + 20; gridY++) {
 				new Background({textureName: 'backgroundOverlay'})
 					.id('backgroundOverlay' + gridX + "-" + gridY)
 					.depth(1)
@@ -176,10 +182,22 @@ var GameInit = {
 					.mount(client.spaceBackgroundScene)
 					.streamMode(1)
 					.translateTo(Constants.GRID_SQUARE_SIZE.X*gridX + Constants.BACKGROUND_OFFSET.Y, Constants.GRID_SQUARE_SIZE.Y*gridY + Constants.BACKGROUND_OFFSET.Y, 0);
-
 			}
 		}
-
+		/*
+		//Instantiate the second background overlay
+		for (var gridX = 0; gridX < Constants.NUM_GRID_SQUARES.X; gridX++) {
+			for (var gridY = 0; gridY < Constants.NUM_GRID_SQUARES.Y; gridY++) {
+				new Background({textureName: 'backgroundOverlay'})
+					.id('backgroundOverlay' + gridX + "-" + gridY)
+					.depth(1)
+					.parallaxLag(4)
+					.mount(client.spaceBackgroundScene)
+					.streamMode(1)
+					.translateTo(Constants.GRID_SQUARE_SIZE.X*gridX + Constants.BACKGROUND_OFFSET.Y, Constants.GRID_SQUARE_SIZE.Y*gridY + Constants.BACKGROUND_OFFSET.Y, 0);
+			}
+		}
+		*/
 		new StarfieldBackground()
 			.id('starfield_background')
 			.depth(2)
