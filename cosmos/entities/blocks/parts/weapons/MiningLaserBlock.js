@@ -82,15 +82,17 @@ var MiningLaserBlock = Weapon.extend({
 	 */
 	_addMiningLaserEffect: function(effect) {
 		var targetBlockGrid = ige.$(effect.targetBlock.blockGridId);
-		var targetBlock = targetBlockGrid.get(effect.targetBlock.row, effect.targetBlock.col);
+		var targetBlock = targetBlockGrid.get(new IgePoint2d(effect.targetBlock.col, effect.targetBlock.row))[0];
 
 		if (this.laserBeam !== undefined) {
 			this.laserBeam.destroy();
 		}
 
 		this.laserBeam = new LaserBeam()
-			.setTarget(effect.targetBlock.blockGridId, effect.targetBlock.row, effect.targetBlock.col)
-			.mount(this.effectsMountAbove());
+			.setSource(this)
+			.setTarget(targetBlock);
+
+		this._mountEffect(this.laserBeam, true);
 
 		var targetEffect = NetworkUtils.effect('miningParticles');
 		targetEffect.sourceBlock = effect.targetBlock;
@@ -120,7 +122,7 @@ var MiningLaserBlock = Weapon.extend({
 			return;
 		}
 
-		var targetBlock = targetBlockGrid.get(effect.targetBlock.row, effect.targetBlock.col);
+		var targetBlock = targetBlockGrid.get(new IgePoint2d(effect.targetBlock.col, effect.targetBlock.row))[0];
 
 		// targetBlock could be undefined if it has already been removed from the BlockGrid, in which case the
 		// mining particle effects have been destroyed anyway!

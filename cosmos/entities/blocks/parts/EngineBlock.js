@@ -79,11 +79,8 @@ var EngineBlock = Part.extend({
 			.translateVarianceX(-10, 10)
 			// Mount new particles to the object scene
 			.particleMountTarget(ige.client.spaceGameScene)
-			// Move the particle emitter to the bottom of the ship
-			.translateTo(0, Block.HEIGHT * this.numRows(), 0)
-			.mount(this.effectsMountBelow())
-			// Mount the emitter to the ship
 			.start();
+		this._mountEffect(this._effects['engineParticles'], false);
 	},
 
 	/**

@@ -183,13 +183,13 @@ var GameInit = {
 
 		var NUM_NORMAL_ASTEROIDS = 40;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
-			this.spawnStructure(20, BlockStructureGenerator.elementDistributions.randomDistribution());
+			this.spawnStructure(200, BlockStructureGenerator.elementDistributions.randomDistribution());
 		}
 		// TODO: The procedural generation algorithm is causing strange problems with the new BlockGrid system. Leave
 		// this stuff commented out until it is figured out.
 		var NUM_DERELICT_SPACESHIPS = 10;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_DERELICT_SPACESHIPS; asteroidNumber++) {
-			this.spawnStructure(10, BlockStructureGenerator.partDistributions.randomDistribution(), true);
+			this.spawnStructure(60, BlockStructureGenerator.partDistributions.randomDistribution(), true);
 		}
 	},
 

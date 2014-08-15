@@ -81,10 +81,13 @@ var Ship = BlockStructure.extend({
 	*/
 	_thrusters: undefined,
 
+	_weapons: undefined,
+
 	init: function(data) {
 		// Note that these variables must be initialized before the superclass constructor can be called, because it will add things to them by calling add().
 		this._engines = [];
 		this._thrusters = [];
+		this._weapons = [];
 
 		this.category(Ship.BOX2D_CATEGORY);
 
@@ -119,7 +122,6 @@ var Ship = BlockStructure.extend({
 			thrusters: this._thrusters.length
 		};
 	},
-
 	streamCreateData: function() {
 		var data = BlockStructure.prototype.streamCreateData.call(this);
 		if (this.player()) {
@@ -146,22 +148,27 @@ var Ship = BlockStructure.extend({
 		return this._thrusters;
 	},
 
-	/*
-	Overrides the superclass's add function
-	Updates the engines and thrusters lists on each add
-	*/
-	add: function(row, col, block, checkForNeighbors) {
-		var blockAdded = BlockStructure.prototype.add.call(this, row, col, block, checkForNeighbors);
-		if (blockAdded && ige.isServer) {
+	weapons: function() {
+		return this._weapons;
+	},
+
+	put: function(block, loc, replace) {
+		var result = BlockStructure.prototype.put.call(this, block, loc, replace);
+		if (result !== null && ige.isServer) {
 			DbPlayer.update(this.player().id(), this.player(), function() {});
 		}
+
 		if (block instanceof EngineBlock) {
 			this.engines().push(block);
 		}
-		if (block instanceof ThrusterBlock) {
+		else if (block instanceof ThrusterBlock) {
 			this.thrusters().push(block);
 		}
-		return blockAdded;
+		else if (block instanceof Weapon) {
+			this.weapons().push(block);
+		}
+
+		return result;
 	},
 
 	streamEntityValid: function(val) {
@@ -177,22 +184,25 @@ var Ship = BlockStructure.extend({
 		return BlockStructure.prototype.streamEntityValid.call(this, val);
 	},
 
-	/*
-	Overrides the superclass's remove function
-	Updates the engines and thrusters lists on each remove
-	*/
-	remove: function(row, col) {
-		var block = this.get(row, col);
-		if (block instanceof EngineBlock) {
-			this.engines().splice(this.engines().indexOf(block), 1);
-		}
-		if (block instanceof ThrusterBlock) {
-			this.thrusters().splice(this.thrusters().indexOf(block), 1);
-		}
-		BlockStructure.prototype.remove.call(this, row, col);
+	remove: function(loc, width, height) {
+		var removed = BlockStructure.prototype.remove.call(this, loc, width, height);
+		var self = this;
+		_.forEach(removed, function(removedBlock) {
+			if (removedBlock instanceof EngineBlock) {
+				self.engines().splice(self.engines().indexOf(removedBlock), 1);
+			}
+			else if (removedBlock instanceof ThrusterBlock) {
+				self.thrusters().splice(self.thrusters().indexOf(removedBlock), 1);
+			}
+			else if (removedBlock instanceof Weapon) {
+				self.weapons().splice(self.thrusters().indexOf(removedBlock), 1);
+			}
+		});
+
 		if (ige.isServer) {
 			DbPlayer.update(this.player().id(), this.player(), function() {});
 		}
+		return removed;
 	},
 
 	/**
@@ -305,7 +315,7 @@ var Ship = BlockStructure.extend({
 		}
 
 		// Do not start mining if ship has no mining lasers
-		return this.numBlocksOfType(MiningLaserBlock.prototype.classId()) !== 0;
+		return this.weapons().length > 0;
 	},
 
 	/**
@@ -315,7 +325,8 @@ var Ship = BlockStructure.extend({
 	 * @instance
 	 */
 	fireMiningLasers: function(targetBlock) {
-		var miningLasers = this.blocksOfType(MiningLaserBlock.prototype.classId());
+		// TODO: Change this when there are more weapons than just mining lasers.
+		var miningLasers = this.weapons();
 		for (var i = 0; i < miningLasers.length; i++) {
 			var miningLaser = miningLasers[i];
 			ige.network.send('addEffect', NetworkUtils.effect('miningLaser', miningLaser, targetBlock));
@@ -329,7 +340,8 @@ var Ship = BlockStructure.extend({
 	 * @instance
 	 */
 	turnOffMiningLasers: function(targetBlock) {
-		var miningLasers = this.blocksOfType('MiningLaserBlock');
+		// TODO: Change this when there are more weapons than just mining lasers.
+		var miningLasers = this.weapons();
 		for (var i = 0; i < miningLasers.length; i++) {
 			var miningLaser = miningLasers[i];
 			ige.network.send('removeEffect', NetworkUtils.effect('miningLaser', miningLaser, targetBlock));
@@ -408,12 +420,11 @@ var Ship = BlockStructure.extend({
 						linearImpulse = -linearImpulse;
 					}
 
-					var impulseX = Math.cos(angle) * linearImpulse;
-					var impulseY = Math.sin(angle) * linearImpulse;
+					var impulseX = MathUtils.round(Math.cos(angle) * linearImpulse);
+					var impulseY = MathUtils.round(Math.sin(angle) * linearImpulse);
 
-					var enginePosition = this._drawLocationForBlock(engine);
+					var enginePosition = BlockGrid.coordinatesForBlock(engine);
 
-					var opts = {impulseX: impulseX, impulseY: impulseY, posX: 0, posY: 0};
 					var opts = {impulseX: impulseX, impulseY: impulseY,
 						posX: enginePosition.x, posY: -enginePosition.y};
 					this.physicsBody.applyLinearImpulseLocal(opts);
@@ -426,7 +437,7 @@ var Ship = BlockStructure.extend({
 			// update
 			this._prev_controls = JSON.parse(JSON.stringify(this.controls()));
 		}
-	},
+	}
 });
 
 /**

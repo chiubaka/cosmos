@@ -23,9 +23,9 @@ NetworkUtils.block = function(block) {
 	}
 
 	return {
-		blockGridId: block.blockGrid() !== undefined? block.blockGrid().id() : undefined,
-		row: block.row(),
-		col: block.col()
+		blockGridId: block.blockGrid() !== undefined ? block.blockGrid().id() : undefined,
+		row: block.gridData.loc.y,
+		col: block.gridData.loc.x
 	};
 };
 
