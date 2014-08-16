@@ -158,17 +158,65 @@ var GameInit = {
 				.layer(client.LAYER_BACKGROUND)
 				.mount(client.spaceScene);
 
-		new Background()
-			.id('helix_nebula_background')
-			.depth(0)
-			.parallaxLag(2)
-			.mount(client.spaceBackgroundScene);
 
-		new StarfieldBackground()
-			.id('starfield_background')
-			.depth(1)
-			.parallaxLag(4)
-			.mount(client.spaceBackgroundScene);
+		// Instantiate the background tiles
+		for (var gridX = 0; gridX < Constants.NUM_BACKGROUND_SQUARES.X; gridX++) {
+			for (var gridY = 0; gridY < Constants.NUM_BACKGROUND_SQUARES.Y; gridY++) {
+				new Background({textureName: 'background' + gridX + "-" + gridY})
+					.id('background' + gridX + "-" + gridY)
+					.depth(0)
+					.parallaxLag(2)
+					.mount(client.spaceBackgroundScene)
+					.streamMode(1)
+					.translateTo(Constants.GRID_SQUARE_SIZE.X*gridX + Constants.BACKGROUND_OFFSET.X,
+						Constants.GRID_SQUARE_SIZE.Y*gridY + Constants.BACKGROUND_OFFSET.Y,
+						0);
+			}
+		}
+
+		//Instantiate the background overlay
+		for (var gridX = -Constants.NUM_BACKGROUND_OVERLAY_SQUARES.X/2; gridX < Constants.NUM_BACKGROUND_OVERLAY_SQUARES.X/2; gridX++) {
+			for (var gridY = -Constants.NUM_BACKGROUND_OVERLAY_SQUARES.Y/2; gridY < Constants.NUM_BACKGROUND_OVERLAY_SQUARES.Y/2; gridY++) {
+				new Background({textureName: 'backgroundOverlay'})
+					.id('backgroundOverlay' + gridX + "-" + gridY)
+					.depth(1)
+					.parallaxLag(4)
+					.mount(client.spaceBackgroundScene)
+					.streamMode(1)
+					.translateTo(Constants.GRID_SQUARE_SIZE.X*gridX,
+						Constants.GRID_SQUARE_SIZE.Y*gridY,
+						0);
+			}
+		}
+
+		//Instantiate the second background overlay
+		for (var gridX = -Constants.NUM_BACKGROUND_OVERLAY_SQUARES.X/2; gridX < Constants.NUM_BACKGROUND_OVERLAY_SQUARES.X/2; gridX++) {
+			for (var gridY = -Constants.NUM_BACKGROUND_OVERLAY_SQUARES.Y/2; gridY < Constants.NUM_BACKGROUND_OVERLAY_SQUARES.Y/2; gridY++) {
+				var x = Constants.GRID_SQUARE_SIZE.X*gridX;
+				var y = Constants.GRID_SQUARE_SIZE.Y*gridY;
+
+				new Background({textureName: 'backgroundOverlay'})
+					.id('backgroundOverlayTheSecond' + gridX + "-" + gridY)
+					.depth(1)
+					.parallaxLag(5)
+					.mount(client.spaceBackgroundScene)
+					.streamMode(1)
+					.translateTo(x * Math.cos(Constants.SECOND_OVERLAY_ROTATION) - y * Math.sin(Constants.SECOND_OVERLAY_ROTATION),
+						x * Math.sin(Constants.SECOND_OVERLAY_ROTATION) + y * Math.cos(Constants.SECOND_OVERLAY_ROTATION),
+						0)
+					.rotate().z(Constants.SECOND_OVERLAY_ROTATION);
+			}
+		}
+
+		/*for (var starfieldNumber = 0; starfieldNumber < 5; starfieldNumber++) {
+			this.moveRandomly(
+				new StarfieldBackground()
+					.id('starfield_background' + starfieldNumber)
+					.depth(2)
+					.parallaxLag(6 + starfieldNumber)
+					.mount(client.spaceBackgroundScene)
+			);
+		}*/
 	},
 
 	initDebugDisplay: function() {

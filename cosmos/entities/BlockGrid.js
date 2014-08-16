@@ -139,6 +139,11 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		var self = this;
 		_.forEach(dropped, function(drop) {
+			// Don't drop control blocks!
+			if (drop instanceof ControlBlock) {
+				return;
+			}
+
 			var dropCoordinates = self.worldCoordinatesForBlock(drop);
 			var newDrop = new Drop()
 				.block(drop)

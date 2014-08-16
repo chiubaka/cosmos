@@ -298,10 +298,13 @@ var Player = IgeEntity.extend({
 		if (newControls) {
 			this._controls = newControls;
 
-			this.currentShip().controls().up = this._controls.key.up;
-			this.currentShip().controls().down = this._controls.key.down;
-			this.currentShip().controls().left = this._controls.key.left;
-			this.currentShip().controls().right = this._controls.key.right;
+			newShipControls = {};
+			newShipControls.up = this._controls.key.up;
+			newShipControls.down = this._controls.key.down;
+			newShipControls.left = this._controls.key.left;
+			newShipControls.right = this._controls.key.right;
+
+			this.currentShip().controls(newShipControls);
 
 			return this;
 		}

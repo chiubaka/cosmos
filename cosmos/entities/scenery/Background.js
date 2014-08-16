@@ -7,23 +7,34 @@
 var Background = ParallaxBackground.extend({
 	classId: 'Background',
 
-	init: function () {
-		if (ige.isClient) {
+	textureName: undefined,
 
-			this.backgroundTexture = PIXI.TextureCache.background_helix_nebula;
-			this.backgroundWidth = 6145;
-			this.backgroundHeight = 6623;
-			//this should make the background pattern repeat. I haven't gotten this to work yet.
-			//this.backgroundPattern(ige.client.textures.background_helix_nebula, 'repeat', true, false);
+	init: function (data) {
+		if (data.texture !== undefined) {
+			this.textureName = data.textureName;
+		}
+
+		if (ige.isClient) {
+			this.backgroundTexture = PIXI.TextureCache[data.textureName];
+			this.backgroundHeight = this.backgroundWidth = 1024;//TODO use the constant for this
 		}
 
 		ParallaxBackground.prototype.init.call(this);
 
 		if (ige.isClient) {
-			this.texture(ige.client.textures.background_helix_nebula)
-				.width(6145)
-				.height(6623);
+			this
+				.texture(ige.client.textures[data.textureName])
+				.width(1024)
+				.height(1024);
 		}
+	},
+
+	streamCreateData: function() {
+		var data = ParallaxBackground.prototype.streamCreateData.call(this);
+
+		data.textureName = this.textureName;
+
+		return data;
 	}
 });
 

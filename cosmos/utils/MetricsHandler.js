@@ -52,6 +52,9 @@ var MetricsHandler = IgeEventingClass.extend({
 			"cosmos:construct.attempt.existing": true,
 			"cosmos:construct.existing": true,
 
+			/* ship */
+			"cosmos:ship.death": true,
+
 			/* crafting */
 			"cosmos:CraftingSystem.craft.success": true, // This is fired whenever a player successfully crafts something. The name of the recipe is passed to the analytics server.
 
