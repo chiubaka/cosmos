@@ -13,7 +13,7 @@ var ConstructionOverlayRenderableComponent = PixiRenderableComponent.extend({
 			this._displayObject.removeChildAt(0);
 		}
 
-		var constructionLocations = this._entity._constructionLocations;
+		var constructionLocations = this._entity._constructionLocations; // TODO This should be this._entity.constructionLocations()
 
 		for (var x = 0; x < constructionLocations.length; x++) {
 			for (var y = 0; y < constructionLocations[0].length; y++) {
