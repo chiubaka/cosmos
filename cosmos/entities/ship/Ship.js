@@ -244,8 +244,7 @@ var Ship = BlockStructure.extend({
 		this
 			.addSensor(300)
 			.attractionStrength(1)
-			.translateTo(0, 0, 0);
-			//.relocate();
+			.relocate();
 			//.debugFixtures(false);//change to true for debugging*/
 	},
 
