@@ -62,7 +62,7 @@ var BlockStructureGenerator = {
 			}
 
 			if (first) {
-				var newBlock = new IceBlock();
+				var newBlock = this._drawFromDistribution(blockDistribution);
 				first = false;
 			} else {
 				var newBlock = this._getBlockType(blockStructure, block.row, block.col, blockDistribution);
