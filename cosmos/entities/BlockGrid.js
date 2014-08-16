@@ -401,12 +401,14 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		this.remove(row, col);
 
-		new Drop().mount(ige.server.spaceGameScene)
-			.block(block)
-			.owner(player.currentShip())
-			.translateTo(finalX, finalY, 0)
-			.rotate().z(theta)
-			.streamMode(1);
+		if (!(block instanceof BridgeBlock)) {
+			new Drop().mount(ige.server.spaceGameScene)
+				.block(block)
+				.owner(player.currentShip())
+				.translateTo(finalX, finalY, 0)
+				.rotate().z(theta)
+				.streamMode(1);
+		}
 	},
 
 	/**
