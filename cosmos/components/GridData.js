@@ -14,13 +14,12 @@ var GridData = IgeClass.extend({
 	},
 
 	bounds: function() {
-		var bounds = {};
-		bounds.left = this.loc.x;
-		bounds.top = this.loc.y;
-		bounds.right = bounds.left + this.width - 1;
-		bounds.bottom = bounds.top + this.height - 1;
-
-		return bounds;
+		return {
+			left: this.loc.x,
+			top: this.loc.y,
+			right: this.loc.x + this.width - 1,
+			bottom: this.loc.y + this.height - 1
+		};
 	},
 
 	toJSON: function() {
