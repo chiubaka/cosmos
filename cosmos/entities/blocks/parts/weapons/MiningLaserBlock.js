@@ -48,6 +48,12 @@ var MiningLaserBlock = Weapon.extend({
 		}
 	},
 
+	onRemove: function() {
+		if (ige.client && this._effects["miningLaser"]) {
+			this._removeMiningLaserEffect(this._effects["miningLaser"]);
+		}
+	},
+
 	/**
 	 * Overrides superclass removeEffect function. Removes effects from the {@link MiningLaserBlock}.
 	 * @param effect {Object} An effect object, which stores the effect type and two
@@ -88,6 +94,8 @@ var MiningLaserBlock = Weapon.extend({
 			this.laserBeam.destroy();
 		}
 
+		this._effects['miningLaser'] = effect;
+
 		this.laserBeam = new LaserBeam()
 			.setSource(this)
 			.setTarget(targetBlock);
@@ -121,6 +129,8 @@ var MiningLaserBlock = Weapon.extend({
 		if (targetBlockGrid === undefined) {
 			return;
 		}
+
+		delete this._effects['miningLaser'];
 
 		var targetBlock = targetBlockGrid.get(new IgePoint2d(effect.targetBlock.col, effect.targetBlock.row))[0];
 
