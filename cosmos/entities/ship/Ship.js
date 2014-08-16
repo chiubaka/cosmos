@@ -145,7 +145,8 @@ var Ship = BlockStructure.extend({
 	Updates the engines and thrusters lists on each add
 	*/
 	add: function(row, col, block, checkForNeighbors) {
-		if (block instanceof ControlBlock) {
+		// You can't add a second Bridge to a ship.
+		if (block instanceof BridgeBlock && this.controllable()) {
 			return false;
 		}
 
@@ -365,7 +366,7 @@ var Ship = BlockStructure.extend({
 	},
 
 	controllable: function() {
-		return this.numBlocksOfType(ControlBlock.prototype.classId()) > 0;
+		return this.numBlocksOfType(BridgeBlock.prototype.classId()) > 0;
 	},
 
 	update: function(ctx) {
