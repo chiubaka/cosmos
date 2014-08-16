@@ -9,10 +9,18 @@ var LaserBeamRenderableComponent = PixiRenderableComponent.extend({
 	update: function() {
 		PixiRenderableComponent.prototype.update.call(this);
 
+		if (!this._entity._target || !this._entity._source) {
+			return;
+		}
+
 		var sourceCoordinates = this._entity._source.worldCoordinates();
 		var targetCoordinates = this._entity._target.worldCoordinates();
-		var delta = targetCoordinates.minusPoint(sourceCoordinates);
 
+		if (!sourceCoordinates || !targetCoordinates) {
+			return;
+		}
+
+		var delta = targetCoordinates.minusPoint(sourceCoordinates);
 		var distance = MathUtils.magnitude(delta);
 		var angle = Math.atan2(delta.y, delta.x);
 

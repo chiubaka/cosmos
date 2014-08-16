@@ -376,6 +376,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 				block.unMount();
 			}
 			// #endif
+			block.onRemove();
 		});
 
 		return removedBlocks;
