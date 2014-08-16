@@ -26,7 +26,12 @@ MathUtils.rotate = function(vector, theta) {
 	);
 };
 
+MathUtils.magnitude = function(vector) {
+	return Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
+};
+
 // By default, round to 10 decimal places.
+// Maybe this should go in the constants file
 MathUtils.EPSILON = 10;
 
 if (typeof (module) !== 'undefined' && typeof (module.exports) !== 'undefined') {

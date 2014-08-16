@@ -465,10 +465,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		var rotatedLocalCoordinates = MathUtils.rotate(localCoordinates, theta);
 
-		return {
-			x: rotatedLocalCoordinates.x + entityCenter.x,
-			y: rotatedLocalCoordinates.y + entityCenter.y
-		};
+		return new IgePoint2d(
+			rotatedLocalCoordinates.x + entityCenter.x,
+			rotatedLocalCoordinates.y + entityCenter.y
+		);
 	},
 
 	_addFixture: function(block) {
