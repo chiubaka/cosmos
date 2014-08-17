@@ -63,7 +63,7 @@ var Ship = BlockStructure.extend({
 	 */
 	_player: undefined,
 
-	_controlBlocks: undefined,
+	_bridgeBlocks: undefined,
 
 	/**
 	 * A list that stores references to all of the engines in this ship
@@ -87,7 +87,7 @@ var Ship = BlockStructure.extend({
 
 	init: function(data) {
 		// Note that these variables must be initialized before the superclass constructor can be called, because it will add things to them by calling add().
-		this._controlBlocks = [];
+		this._bridgeBlocks = [];
 		this._engines = [];
 		this._thrusters = [];
 		this._weapons = [];
@@ -125,6 +125,7 @@ var Ship = BlockStructure.extend({
 			thrusters: this._thrusters.length
 		};
 	},
+
 	streamCreateData: function() {
 		var data = BlockStructure.prototype.streamCreateData.call(this);
 
@@ -142,8 +143,8 @@ var Ship = BlockStructure.extend({
 		BlockStructure.prototype.destroy.call(this);
 	},
 
-	controlBlocks: function() {
-		return this._controlBlocks;
+	bridgeBlocks: function() {
+		return this._bridgeBlocks;
 	},
 
 	// Getter for the _engines property
@@ -160,12 +161,20 @@ var Ship = BlockStructure.extend({
 		return this._weapons;
 	},
 
-	put: function(block, loc, replace) {
-		var result = BlockStructure.prototype.put.call(this, block, loc, replace);
-		if (result !== null && ige.isServer) {
-			DbPlayer.update(this.player().id(), this.player(), function() {});
+	/*
+	Overrides the superclass's add function
+	Updates the engines and thrusters lists on each add
+	*/
+	add: function(row, col, block, checkForNeighbors) {
+		// You can't add a second Bridge to a ship.
+		if (block instanceof BridgeBlock && this.controllable()) {
+			return false;
 		}
 
+		var blockAdded = BlockStructure.prototype.add.call(this, row, col, block, checkForNeighbors);
+		if (blockAdded && ige.isServer) {
+			DbPlayer.update(this.player().id(), this.player(), function() {});
+		}
 		if (block instanceof EngineBlock) {
 			this.engines().push(block);
 		}
@@ -175,11 +184,7 @@ var Ship = BlockStructure.extend({
 		else if (block instanceof Weapon) {
 			this.weapons().push(block);
 		}
-		else if (block instanceof ControlBlock) {
-			this.controlBlocks().push(block);
-		}
-
-		return result;
+		return blockAdded;
 	},
 
 	streamEntityValid: function(val) {
@@ -209,8 +214,8 @@ var Ship = BlockStructure.extend({
 			else if (removedBlock instanceof Weapon) {
 				self.weapons().splice(self.weapons().indexOf(removedBlock), 1);
 			}
-			else if (removedBlock instanceof ControlBlock) {
-				self.controlBlocks().splice(self.controlBlocks().indexOf(removedBlock), 1);
+			else if (removedBlock instanceof BridgeBlock) {
+				self.bridgeBlocks().splice(self.bridgeBlocks().indexOf(removedBlock), 1);
 			}
 		});
 
@@ -385,7 +390,7 @@ var Ship = BlockStructure.extend({
 	},
 
 	controllable: function() {
-		return this.controlBlocks().length > 0;
+		return this.bridgeBlocks().length > 0;
 	},
 
 	update: function(ctx) {

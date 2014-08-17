@@ -165,7 +165,7 @@ var ClientNetworkEvents = {
 
 	_onShipDeath: function(data) {
 		ige.client.metrics.track('cosmos:ship.death');
-		var message = "You've lost your control block. You can no longer control this ship. Would you like a new ship?";
+		var message = "Your bridge has been destroyed. You can no longer pilot this ship. Would you like a new ship?";
 
 		alertify.alert(message, function (e) {
 			if (e) {

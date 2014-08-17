@@ -1,12 +1,12 @@
 /**
- * Subclass of the {@link Part} class. The ControlBlock allows you to control your ship.
+ * Subclass of the {@link Part} class. The BridgeBlock allows you to control your ship.
  * @class
- * @typedef {ControlBlock}
+ * @typedef {BridgeBlock}
  * @namespace
  * @todo When you lose your control block you should lose control of your ship.
  */
-var ControlBlock = Part.extend({
-	classId: 'ControlBlock',
+var BridgeBlock = Part.extend({
+	classId: 'BridgeBlock',
 
 	init: function(data) {
 		if (!ige.isServer) {
@@ -22,4 +22,4 @@ var ControlBlock = Part.extend({
 	}
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = ControlBlock; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = BridgeBlock; }

@@ -38,7 +38,7 @@ var igeClientConfig = {
 		'./entities/blocks/parts/PowerBlock.js',
 		'./entities/blocks/parts/FuelBlock.js',
 		'./entities/blocks/parts/CargoBlock.js',
-		'./entities/blocks/parts/ControlBlock.js',
+		'./entities/blocks/parts/BridgeBlock.js',
 
 		/* Thrusters */
 		'./entities/blocks/parts/ThrusterBlock.js',
