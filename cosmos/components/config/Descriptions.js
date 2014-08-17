@@ -163,9 +163,9 @@ Descriptions[CargoBlock.prototype.classId()] =
 	text: "Cargo doesn't currently do anything."
 };
 
-Descriptions[ControlBlock.prototype.classId()] =
+Descriptions[BridgeBlock.prototype.classId()] =
 {
-	text: "Control doesn't currently do anything."
+	text: "The Bridge is the most important block in your ship. If you lose your bridge you'll have to get a new ship."
 };
 
 /* Engines */

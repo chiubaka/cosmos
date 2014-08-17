@@ -29,7 +29,7 @@ var config = {
 		{ name: 'DragonBreathEngineBlock', path: './entities/blocks/parts/engines/DragonBreathEngineBlock' },
 		{ name: 'FuelBlock', path: './entities/blocks/parts/FuelBlock' },
 		{ name: 'CargoBlock', path: './entities/blocks/parts/CargoBlock' },
-		{ name: 'ControlBlock', path: './entities/blocks/parts/ControlBlock' },
+		{ name: 'BridgeBlock', path: './entities/blocks/parts/BridgeBlock' },
 		/* Thrusters */
 		{ name: 'ThrusterBlock', path: './entities/blocks/parts/ThrusterBlock' },
 		{ name: 'IronThrusterBlock', path: './entities/blocks/parts/thrusters/IronThrusterBlock' },
