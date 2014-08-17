@@ -532,7 +532,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// This uses basic trigonometry. See http://en.wikipedia.org/wiki/Rotation_matrix.
 		var unrotated = MathUtils.rotate(new IgePoint2d(aabbRelativeX, aabbRelativeY), theta);
 
-		// Height and width of the grid area
+		// Height and width of the grid area //TODO refactor all of these operations to be vector operations
 		var width = this.width();
 		var height = this.height();
 
