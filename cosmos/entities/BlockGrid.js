@@ -622,15 +622,10 @@ var BlockGrid = IgeEntityBox2d.extend({
 		// This will set our location to the physics location that is being streamed.
 		IgeEntityBox2d.prototype._setTransformFromStreamData.call(this, dataArr);
 
-		var theta = this.rotate().z();
-
-		var physicsOffset = {
-			x: this._physicsOffset.x * Math.cos(theta) - this._physicsOffset.y * Math.sin(theta),
-			y: this._physicsOffset.x * Math.sin(theta) + this._physicsOffset.y * Math.cos(theta)
-		};
+		var rotatedPhysicsOffset = MathUtils.rotate(this._physicsOffset, this.rotate().z());
 
 		// This will translate the entity to the computed physics offset on the client.
-		this.translateBy(physicsOffset.x, physicsOffset.y, 0);
+		this.translateBy(rotatedPhysicsOffset.x, rotatedPhysicsOffset.y, 0);
 	},
 
 	// #ifdef SERVER
