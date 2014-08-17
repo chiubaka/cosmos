@@ -126,7 +126,9 @@ var ClientNetworkEvents = {
 
 	_onBlockAction: function(data) {
 		var blockGrid = ige.$(data.blockGridId);
-		blockGrid.processBlockActionClient(data);
+		if (blockGrid) {
+			blockGrid.processBlockActionClient(data);
+		}
 	},
 
 	_onMinedBlock: function(data) {
@@ -135,12 +137,16 @@ var ClientNetworkEvents = {
 
 	_onAddEffect: function(effect) {
 		var blockGrid = ige.$(effect.sourceBlock.blockGridId);
-		blockGrid.addEffect(effect);
+		if (blockGrid) {
+			blockGrid.addEffect(effect);
+		}
 	},
 
 	_onRemoveEffect: function(effect) {
 		var blockGrid = ige.$(effect.sourceBlock.blockGridId);
-		blockGrid.removeEffect(effect);
+		if (blockGrid) {
+			blockGrid.removeEffect(effect);
+		}
 	},
 
 	_onCargoResponse: function(cargoList) {

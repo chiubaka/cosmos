@@ -63,6 +63,8 @@ var Ship = BlockStructure.extend({
 	 */
 	_player: undefined,
 
+	_bridgeBlocks: undefined,
+
 	/**
 	 * A list that stores references to all of the engines in this ship
 	 * //TODO shouldn't the engines be kept track of by some component? Like a engines component?
@@ -81,14 +83,24 @@ var Ship = BlockStructure.extend({
 	*/
 	_thrusters: undefined,
 
+	_weapons: undefined,
+
 	init: function(data) {
 		// Note that these variables must be initialized before the superclass constructor can be called, because it will add things to them by calling add().
+		this._bridgeBlocks = [];
 		this._engines = [];
 		this._thrusters = [];
-
-		BlockStructure.prototype.init.call(this, data);
+		this._weapons = [];
 
 		this.category(Ship.BOX2D_CATEGORY);
+
+		if (ige.isServer) {
+			this.addComponent(TLPhysicsBodyComponent);
+			// Override default bodyDef properties
+			this.physicsBody.bodyDef['bodyCategory'] = Ship.BOX2D_CATEGORY;
+		}
+
+		BlockStructure.prototype.init.call(this, data);
 
 		this._controls = {
 			left: false,
@@ -116,6 +128,7 @@ var Ship = BlockStructure.extend({
 
 	streamCreateData: function() {
 		var data = BlockStructure.prototype.streamCreateData.call(this);
+
 		if (this.player()) {
 			data.playerId = this.player().id();
 		}
@@ -130,6 +143,10 @@ var Ship = BlockStructure.extend({
 		BlockStructure.prototype.destroy.call(this);
 	},
 
+	bridgeBlocks: function() {
+		return this._bridgeBlocks;
+	},
+
 	// Getter for the _engines property
 	engines: function() {
 		return this._engines;
@@ -140,25 +157,36 @@ var Ship = BlockStructure.extend({
 		return this._thrusters;
 	},
 
+	weapons: function() {
+		return this._weapons;
+	},
+
 	/*
-	Overrides the superclass's add function
+	Overrides the superclass's put function
 	Updates the engines and thrusters lists on each add
 	*/
-	add: function(row, col, block, checkForNeighbors) {
+	put: function(block, loc, replace) {
 		// You can't add a second Bridge to a ship.
 		if (block instanceof BridgeBlock && this.controllable()) {
 			return false;
 		}
 
-		var blockAdded = BlockStructure.prototype.add.call(this, row, col, block, checkForNeighbors);
+		var blockAdded = BlockStructure.prototype.put.call(this, block, loc,
+			replace);
 		if (blockAdded && ige.isServer) {
 			DbPlayer.update(this.player().id(), this.player(), function() {});
 		}
 		if (block instanceof EngineBlock) {
 			this.engines().push(block);
 		}
-		if (block instanceof ThrusterBlock) {
+		else if (block instanceof ThrusterBlock) {
 			this.thrusters().push(block);
+		}
+		else if (block instanceof Weapon) {
+			this.weapons().push(block);
+		}
+		else if (block instanceof BridgeBlock) {
+			this.bridgeBlocks().push(block);
 		}
 		return blockAdded;
 	},
@@ -176,19 +204,25 @@ var Ship = BlockStructure.extend({
 		return BlockStructure.prototype.streamEntityValid.call(this, val);
 	},
 
-	/*
-	Overrides the superclass's remove function
-	Updates the engines and thrusters lists on each remove
-	*/
-	remove: function(row, col) {
-		var block = this.get(row, col);
-		if (block instanceof EngineBlock) {
-			this.engines().splice(this.engines().indexOf(block), 1);
-		}
-		if (block instanceof ThrusterBlock) {
-			this.thrusters().splice(this.thrusters().indexOf(block), 1);
-		}
-		BlockStructure.prototype.remove.call(this, row, col);
+	remove: function(loc, width, height) {
+		var removed = BlockStructure.prototype.remove.call(this, loc, width, height);
+		var self = this;
+		_.forEach(removed, function(removedBlock) {
+			// These are specific types of blocks that we're interested in keeping track of.
+			if (removedBlock instanceof EngineBlock) {
+				self.engines().splice(self.engines().indexOf(removedBlock), 1);
+			}
+			else if (removedBlock instanceof ThrusterBlock) {
+				self.thrusters().splice(self.thrusters().indexOf(removedBlock), 1);
+			}
+			else if (removedBlock instanceof Weapon) {
+				self.weapons().splice(self.weapons().indexOf(removedBlock), 1);
+			}
+			else if (removedBlock instanceof BridgeBlock) {
+				self.bridgeBlocks().splice(self.bridgeBlocks().indexOf(removedBlock), 1);
+			}
+		});
+
 		if (ige.isServer) {
 			DbPlayer.update(this.player().id(), this.player(), function() {});
 		}
@@ -196,9 +230,12 @@ var Ship = BlockStructure.extend({
 		// If the ship has no longer controllable
 		if (!this.controllable()) {
 			// Then it is dead
+			this.log("Ship death");
 			data = {};
 			ige.network.stream.queueCommand('cosmos:ship.death', data, this.player().clientId());
 		}
+
+		return removed;
 	},
 
 	/**
@@ -221,10 +258,9 @@ var Ship = BlockStructure.extend({
 		this.cargo = new Cargo();
 
 		this
-			.addSensor(300)
-			.attractionStrength(1)
+			.addSensor(500)
+			.attractionStrength(0.01)
 			.relocate();
-			//.debugFixtures(false);//change to true for debugging*/
 	},
 
 	player: function(newPlayer) {
@@ -247,33 +283,23 @@ var Ship = BlockStructure.extend({
 	 * @memberof Ship
 	 * @instance
 	 */
+	// @server-side
+	// TODO: Make the sensor a separate entity, so we can have multiple sensors
+	// attached to the ship
 	addSensor: function(radius) {
-		// Create the fixture
-		var fixtureDef = {
-			density: 0.0,
+		this.addComponent(TLPhysicsFixtureComponent);
+		this.physicsFixture.fixtureDef = {
+			fixtureCategory: Ship.ATTRACTOR_BOX2D_CATEGORY,
 			friction: 0.0,
 			restitution: 0.0,
+			density: 0.0,
 			isSensor: true,
-			shape: {
-				type: 'circle',
-				data: {
-					radius: radius,
-					x: 0,
-					y: 0
-				}
-			}
-		};
-
-		var tempFixture = ige.box2d.createFixture(fixtureDef);
-		var tempShape = new ige.box2d.b2CircleShape();
-
-		tempShape.SetRadius(fixtureDef.shape.data.radius / ige.box2d._scaleRatio);
-		tempShape.SetLocalPosition(new ige.box2d.b2Vec2(fixtureDef.shape.data.x /
-			ige.box2d._scaleRatio, fixtureDef.shape.data.y / ige.box2d._scaleRatio));
-
-		tempFixture.shape = tempShape;
-
-		this._box2dBody.CreateFixture(tempFixture);
+			shapeType: 'CIRCLE',
+			radius: radius,
+			x: 0.0,
+			y: 0.0
+		}
+		this.physicsBody.newFixture(this);
 
 		return this;
 	},
@@ -322,7 +348,7 @@ var Ship = BlockStructure.extend({
 		}
 
 		// Do not start mining if ship has no mining lasers
-		return this.numBlocksOfType(MiningLaserBlock.prototype.classId()) !== 0;
+		return this.weapons().length > 0;
 	},
 
 	/**
@@ -332,7 +358,8 @@ var Ship = BlockStructure.extend({
 	 * @instance
 	 */
 	fireMiningLasers: function(targetBlock) {
-		var miningLasers = this.blocksOfType(MiningLaserBlock.prototype.classId());
+		// TODO: Change this when there are more weapons than just mining lasers.
+		var miningLasers = this.weapons();
 		for (var i = 0; i < miningLasers.length; i++) {
 			var miningLaser = miningLasers[i];
 			ige.network.send('addEffect', NetworkUtils.effect('miningLaser', miningLaser, targetBlock));
@@ -346,7 +373,8 @@ var Ship = BlockStructure.extend({
 	 * @instance
 	 */
 	turnOffMiningLasers: function(targetBlock) {
-		var miningLasers = this.blocksOfType('MiningLaserBlock');
+		// TODO: Change this when there are more weapons than just mining lasers.
+		var miningLasers = this.weapons();
 		for (var i = 0; i < miningLasers.length; i++) {
 			var miningLaser = miningLasers[i];
 			ige.network.send('removeEffect', NetworkUtils.effect('miningLaser', miningLaser, targetBlock));
@@ -366,14 +394,12 @@ var Ship = BlockStructure.extend({
 	},
 
 	controllable: function() {
-		return this.numBlocksOfType(BridgeBlock.prototype.classId()) > 0;
+		return this.bridgeBlocks().length > 0;
 	},
 
 	update: function(ctx) {
 		BlockStructure.prototype.update.call(this, ctx);
 
-		// TODO: Do not spam the player with notifications if engines/thruster
-		// are removed
 		if (ige.isServer) {
 			/* Angular motion */
 			// Angular rotation speed depends on number of thrusters
@@ -383,7 +409,6 @@ var Ship = BlockStructure.extend({
 					angularImpulse += this.thrusters()[i].thrust.value;
 				}
 				angularImpulse = -angularImpulse * ige._tickDelta;
-				nonPhysicalRotation = 0.0015 * ige._tickDelta;
 
 				if (this.thrusters().length < 1) {
 					if (JSON.stringify(this.controls()) !== JSON.stringify(this._prev_controls) ||
@@ -396,22 +421,14 @@ var Ship = BlockStructure.extend({
 				this._prevMovementBlocks.thrusters = this.thrusters().length;
 
 				if (this.controls().left) {
-					this._box2dBody.ApplyTorque(angularImpulse);
-					this.rotateBy(0, 0, -nonPhysicalRotation);
+					this.physicsBody.applyAngularImpulse(angularImpulse);
 				}
 				if (this.controls().right) {
-					this._box2dBody.ApplyTorque(-angularImpulse);
-					this.rotateBy(0, 0, nonPhysicalRotation);
+					this.physicsBody.applyAngularImpulse(-angularImpulse);
 				}
 			}
 
 			if (this.controls().up || this.controls().down) {
-				// the "- Math.PI/2" below makes the ship move forward and backwards, instead of side to side.
-				var angle = this._box2dBody.GetAngle() - Math.PI/2;
-				var scaleRatio = ige.box2d.scaleRatio();
-				var thisX = this.translate().x();
-				var thisY = this.translate().y();
-
 				// Notify player that they cannot fly without an engine
 				if (this.engines().length < 1) {
 					if (JSON.stringify(this.controls()) !== JSON.stringify(this._prev_controls) ||
@@ -422,7 +439,6 @@ var Ship = BlockStructure.extend({
 				}
 				this._prevMovementBlocks.engines = this.engines().length;
 
-
 				var linearImpulse = 3 * ige._tickDelta;
 				if (this._controls.up) {
 					linearImpulse = linearImpulse;
@@ -431,13 +447,9 @@ var Ship = BlockStructure.extend({
 					linearImpulse = -linearImpulse;
 				}
 
-				// the "- Math.PI/2" below makes the ship move forward and backwards, instead of side to side.
-				var angle = this._box2dBody.GetAngle() - Math.PI/2;
-
-				var x_comp = Math.cos(angle) * linearImpulse;
-				var y_comp = Math.sin(angle) * linearImpulse;
-
-				var impulse = new ige.box2d.b2Vec2(x_comp, y_comp)
+				// The "- Math.PI/2" below makes the ship move forward and backwards,
+				// instead of side to side.
+				var angle = this._rotate.z - Math.PI/2;
 
 				// Notify player that they cannot fly without an engine
 				if (this.engines().length < 1) {
@@ -450,6 +462,7 @@ var Ship = BlockStructure.extend({
 
 				this._prevMovementBlocks.engines = this.engines().length;
 
+				// Apply impulse at all engine locations
 				for (var i = 0; i < this.engines().length; i++) {
 					var engine = this.engines()[i];
 
@@ -458,17 +471,15 @@ var Ship = BlockStructure.extend({
 						linearImpulse = -linearImpulse;
 					}
 
-					var impulseX = Math.cos(angle) * linearImpulse;
-					var impulseY = Math.sin(angle) * linearImpulse;
+					var impulseX = MathUtils.round(Math.cos(angle) * linearImpulse);
+					var impulseY = MathUtils.round(Math.sin(angle) * linearImpulse);
 
-					var impulse = new ige.box2d.b2Vec2(impulseX, impulseY);
+					var enginePosition = BlockGrid.coordinatesForBlock(engine);
 
-					var enginePosition = this._drawLocationForBlock(engine);
-					enginePosition.x = enginePosition.x / scaleRatio;
-					enginePosition.y = -enginePosition.y / scaleRatio;
+					var opts = {impulseX: impulseX, impulseY: impulseY,
+						posX: enginePosition.x, posY: -enginePosition.y};
+					this.physicsBody.applyLinearImpulseLocal(opts);
 
-					var engineWorldPosition = this._box2dBody.GetWorldPoint(enginePosition);
-					this._box2dBody.ApplyImpulse(impulse, engineWorldPosition);
 				}
 			}
 
@@ -477,7 +488,7 @@ var Ship = BlockStructure.extend({
 			// update
 			this._prev_controls = JSON.parse(JSON.stringify(this.controls()));
 		}
-	},
+	}
 });
 
 /**
@@ -495,7 +506,7 @@ Ship.SHIP_START_RADIUS = 4000;
 * @memberof Ship
 */
 Ship.BOX2D_CATEGORY = 'ship';
-
+Ship.ATTRACTOR_BOX2D_CATEGORY = 'attractor';
 /**
 * The default depth layer for {@link Ship}s when rendered to the screen. Should be rendered above other
 * {@link BlockGrid}s.

@@ -29,20 +29,38 @@ var Drop = BlockGrid.extend({
 	 */
 	_attractedTo: undefined,
 
-	init: function(data) {
-		BlockGrid.prototype.init.call(this, data);
+	init: function(opts) {
+		var self = this;
+		// To change owner after initialization, use setOwner()
+		this._owner = opts.owner;
 		this.category(Drop.BOX2D_CATEGORY);
-		this.depth(Drop.DEPTH);
 
+		if (ige.isServer) {
+			this.addComponent(TLPhysicsBodyComponent);
+			// Override default bodyDef properties
+			this.physicsBody.bodyDef['bodyCategory'] = Drop.BOX2D_CATEGORY;
+			this.physicsBody.bodyDef['linkedId'] = opts.owner.id();
+		}
+
+		BlockGrid.prototype.init.call(this, opts);
+
+		this.depth(Drop.DEPTH);
 		this.height(Block.HEIGHT);
 		this.width(Block.WIDTH);
 
-		if (!ige.isServer) {
+		if (ige.isClient) {
 			this.texture(ige.client.textures.drop);
 			var effect = NetworkUtils.effect('glow', this.block());
 			effect.height = this.block().height();
 			effect.width = this.block().width();
 			this.block().addEffect(effect);
+		}
+		else {
+			setTimeout(function() {
+				if (self.alive()) {
+					self.setOwner(undefined);
+				}
+			}, Drop.OWNERSHIP_PERIOD)
 		}
 	},
 
@@ -57,39 +75,25 @@ var Drop = BlockGrid.extend({
 	 */
 	block: function(newBlock) {
 		if (newBlock === undefined) {
-			return this.get(0, 0);
+			return this.get(new IgePoint2d(0, 0))[0];
 		}
 
-		if (this.get(0, 0) !== undefined) {
-			console.error("Tried to replace the existing block in a Drop.");
+		if (this.get(new IgePoint2d(0, 0)).length > 0) {
+			this.log("Tried to replace the existing block in a Drop.", "error");
 			return;
 		}
 
-		this.add(0, 0, newBlock);
+		this.put(newBlock, new IgePoint2d(0, 0), true);
 		return this;
 	},
 
-	/**
-	 * Getter/setter for the {@link Drop#_owner|_owner} property.
-	 * @param newOwner {IgeEntityBox2d?} Optional parameter. If supplied, the new value for the
-	 * {@link Drop#_owner|_owner} property to set. Otherwise, the getter has been called.
-	 * @returns {IgeEntityBox2d|Drop} If the newBlock parameter is not supplied, returns the current owner of this
-	 * {@link Drop}. Otherwise, returns this {@link Drop} to make setter chaining convenient.
-	 * @memberof Drop
-	 * @instance
-	 */
-	owner: function(newOwner) {
-		var self = this;
-		if (newOwner === undefined) {
-			return this._owner;
-		}
+	getOwner: function() {
+		return this._owner;
+	},
 
+	setOwner: function (newOwner) {
 		this._owner = newOwner;
-		if (ige.isServer) {
-			setTimeout(function() {
-				self._owner = undefined;
-			}, Drop.OWNERSHIP_PERIOD)
-		}
+		this.physicsBody.setLinkedId(newOwner);
 		return this;
 	},
 
@@ -113,22 +117,13 @@ var Drop = BlockGrid.extend({
 		return this._owner === entity;
 	},
 
-	/**
-	 * Getter/setter for the {@link Drop#_attractedTo|_attractedTo} property.
-	 * @param newAttraction {IgeEntityBox2d?} Optional parameter. If supplied, the new value for the
-	 * {@link Drop#_attractedTo|_attractedTo} property to set. Otherwise, the getter has been called.
-	 * @returns {IgeEntityBox2d|Drop} If the newBlock parameter is not supplied, returns the current attraction
-	 * target of this {@link Drop}. Otherwise, returns this {@link Drop} to make setter chaining convenient.
-	 * @memberof Drop
-	 * @instance
-	 */
-	attractedTo: function(newAttraction) {
-		if (newAttraction === undefined) {
-			return this._attractedTo;
-		}
+	getAttractedTo: function() {
+		return this._attractedTo;
+	},
 
+	setAttractedTo: function(newAttraction) {
 		this._attractedTo = newAttraction;
-		return this;
+		return;
 	},
 
 	/**
@@ -139,18 +134,18 @@ var Drop = BlockGrid.extend({
 	 */
 	update: function(ctx) {
 		if (ige.isServer) {
+			if (this.getAttractedTo() !== undefined) {
+				// If the attractedTo entity is destroyed, remove the reference
+				if (ige.$(this.getAttractedTo().id()) === undefined) {
+					this.setAttractedTo(undefined);
+					return;
+				}
 
-			// Attract the block grid to another body. For example, small asteroids
-			// are attracted to player ships.
-			if (this.attractedTo() !== undefined) {
-				var attractedToBody = this.attractedTo()._box2dBody;
-				var thisBody = this._box2dBody;
-				var impulse = new ige.box2d.b2Vec2(0, 0);
-				impulse.Add(attractedToBody.GetWorldCenter());
-				impulse.Subtract(thisBody.GetWorldCenter());
-				impulse.Multiply(this.attractedTo().attractionStrength());
-				thisBody.ApplyImpulse(impulse, thisBody.GetWorldCenter());
-			}
+				// Attract the block grid to another body. For example, small asteroids
+				// are attracted to player ships.
+				var attractor = this.getAttractedTo();
+				this.physicsBody.attractTo(attractor, attractor.attractionStrength());
+		}
 
 
 			//This is just a little bit larger than the background image. That's why I chose this size.

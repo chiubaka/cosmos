@@ -32,6 +32,7 @@ module.exports = function(grunt) {
 						'cosmos/tests/config.js',
 						'cosmos/tests/game.js',
 						'cosmos/tests/igeSetup.js',
+						'cosmos/tests/Grid.test.js',
 						'cosmos/tests/**/*.js'
 					],
 					plugins: [
@@ -46,10 +47,7 @@ module.exports = function(grunt) {
 						'jasmine'
 					],
 					browsers: [
-						'PhantomJS',
-						'Chrome',
-						'Safari',
-						'Firefox'
+						'PhantomJS'
 					]
 				}
 			}

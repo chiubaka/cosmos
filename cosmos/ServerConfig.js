@@ -13,6 +13,9 @@ var config = {
 		/* === ENVIRONMENT STATE === */
 		/* Blocks */
 		{ name: 'Block', path: './entities/Block' },
+		{ name: 'GridData', path: './components/GridData' },
+		{ name: 'SparseGrid', path: './entities/SparseGrid' },
+		{ name: 'BlockGridFixtureDebugContainer', path: './entities/BlockGridFixtureDebugContainer' },
 		{ name: 'BlockGrid', path: './entities/BlockGrid' },
 		{ name: 'BlockStructure', path: './entities/BlockStructure' },
 		{ name: 'GeneratedBlockStructure', path: './entities/GeneratedBlockStructure' },
@@ -63,7 +66,6 @@ var config = {
 		{ name: 'CobaltBlock', path: './entities/blocks/elements/CobaltBlock' },
 		{ name: 'IceBlock', path: './entities/blocks/elements/IceBlock' },//not really an element
 		{ name: 'MythrilBlock', path: './entities/blocks/elements/MythrilBlock' },
-
 
 		{ name: 'AdamantiumBlock', path: './entities/blocks/elements/AdamantiumBlock' },
 		{ name: 'DragonBlock', path: './entities/blocks/elements/DragonBlock' },
@@ -133,13 +135,13 @@ var config = {
 
 		/* Helper Utilities */
 		{ name: 'BlockGridPadding', path: './utils/BlockGridPadding' },
+		{ name: 'MathUtils', path: './utils/MathUtils' },
 		{ name: 'NetworkUtils', path: './utils/NetworkUtils' },
 		{ name: 'PrototypeMixins', path: './utils/PrototypeMixins' },
 		{ name: 'RandomInterval', path: './utils/RandomInterval' },
 
 		/* === EXTERNAL LIBRARIES === */
 		{ name: 'WeightedSelection', path: './lib/weighted' },
-		{ name: 'UuidGenerator', path: './lib/UuidGenerator' },
 	]
 };
 

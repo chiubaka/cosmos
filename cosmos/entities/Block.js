@@ -80,33 +80,7 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	_effects: undefined,
-	/**
-	 * The Box2D fixture associated with this {@link Block}. Only valid if this {@link Block}'s
-	 * {@link Block#_blockGrid|_blockGrid} property is set.
-	 * @type {Object}
-	 * @memberof Block
-	 * @private
-	 * @instance
-	 */
-	_fixture: undefined,
-	/**
-	 * The Box2D fixture definition associated with this {@link Block}. Only valid if this {@link Block}'s
-	 * {@link Block#_blockGrid|_blockGrid} property is set.
-	 * @type {Object}
-	 * @memberof Block
-	 * @private
-	 * @instance
-	 */
-	_fixtureDef: undefined,
-	/**
-	 * An entity associated with this {@link Block} which is used to visualize a {@link BlockGrid}'s fixtures. Only
-	 * used if this {@link Block} is in a {@link BlockGrid} that has debugFixtures set to true.
-	 * @type {Object}
-	 * @memberof Block
-	 * @private
-	 * @instance
-	 */
-	_fixtureDebuggingEntity: undefined,
+
 	/**
 	 * A flag that determines whether or not this {@link Block} is currently being mined or not. The default value is
 	 * false, and when the value is false this {@link Block} is not currently being mined.
@@ -209,8 +183,13 @@ var Block = IgeEntity.extend({
 
 			return displayObject;
 		}});
+		// TODO: Modify this so that blocks can have different sizes.
+		this.addComponent(GridData, {width: 1, height: 1});
 
-		if (!ige.isServer) {
+		if (ige.isServer) {
+			this.addComponent(TLPhysicsFixtureComponent);
+		}
+		else {
 			this.texture(ige.client.textures.block);
 
 			this._effects = {};
@@ -266,10 +245,12 @@ var Block = IgeEntity.extend({
 	 */
 	mouseDown: function(event, control) {
 		var self = this;
+		// TOOD: Synchronize block ID's between server and client so that we can uniquely identify
+		// a block without referring to its block grid, row, and col.
 		var data = {
 			blockGridId: this.blockGrid().id(),
-			row: this._row,
-			col: this._col
+			row: this.gridData.loc.y,
+			col: this.gridData.loc.x
 		};
 
 		// TODO: Expand when clientState supports multiple current capabilities
@@ -358,13 +339,6 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	addEffect: function(effect) {
-		if (this._effectsMountAbove === undefined) {
-			this.blockGrid().createAboveEffectsMount(this);
-		}
-		if (this._effectsMountBelow === undefined) {
-			this.blockGrid().createBelowEffectsMount(this);
-		}
-
 		switch (effect.type) {
 			case 'glow':
 				this._addGlowEffect(effect);
@@ -398,15 +372,6 @@ var Block = IgeEntity.extend({
 				this._removeHealthBar();
 				break;
 		}
-
-		if (!this._hasEffects()) {
-			if (this._effectsMountAbove !== undefined) {
-				this._effectsMountAbove.destroy();
-			}
-			if (this._effectsMountBelow !== undefined) {
-				this._effectsMountBelow.destroy();
-			}
-		}
 	},
 
 	/**
@@ -434,9 +399,30 @@ var Block = IgeEntity.extend({
 			this._effects['glow'].destroy();
 		}
 
-		this._effects['glow'] = new GlowEffect(effect)
-			.depth(this.depth() - 1)
-			.mount(this._effectsMountBelow);
+		var effectsCenter = this._effectsCenter();
+
+		this._effects['glow'] = new GlowEffect(effect);
+		this._mountEffect(this._effects['glow'], false);
+	},
+
+	_effectsAboveContainer: function() {
+		return this.gridData.grid.effectsAboveContainer();
+	},
+
+	_effectsBelowContainer: function() {
+		return this.gridData.grid.effectsBelowContainer();
+	},
+
+	_effectsCenter: function() {
+		return BlockGrid.coordinatesForBlock(this);
+	},
+
+	_mountEffect: function(effect, above) {
+		var effectsCenter = this._effectsCenter();
+
+		var container = above ? this._effectsAboveContainer() : this._effectsBelowContainer();
+
+		effect.translateTo(effectsCenter.x, effectsCenter.y, 0).mount(container);
 	},
 
 	/**
@@ -470,16 +456,16 @@ var Block = IgeEntity.extend({
 
 		this._effects['miningParticles'].counter++;
 		if (!this._effects['miningParticles'].particleEmitter) {
-			this._effects['miningParticles'].particleEmitter = new BlockParticleEmitter().mount(this._effectsMountAbove);
+			this._effects['miningParticles'].particleEmitter = new BlockParticleEmitter();
+			this._mountEffect(this._effects['miningParticles'].particleEmitter, true);
 		}
 	},
 
 	_addHealthBar: function() {
 		if (this._effects['healthBar'] === undefined) {
-			this._effects['healthBar'] = new HealthBar(this)
-				.mount(this._effectsMountAbove);
+			this._effects['healthBar'] = new HealthBar(this);
+			this._mountEffect(this._effects['healthBar'], true);
 		}
-
 	},
 
 	/**
@@ -520,13 +506,8 @@ var Block = IgeEntity.extend({
 	 * @memberof Block
 	 * @instance
 	 */
-	blockGrid: function(newBlockGrid) {
-		if (newBlockGrid === undefined) {
-			return this._blockGrid;
-		}
-
-		this._blockGrid = newBlockGrid;
-		return this;
+	blockGrid: function() {
+		return this.gridData.grid;
 	},
 
 	/**
@@ -561,54 +542,6 @@ var Block = IgeEntity.extend({
 		return this._col;
 	},
 
-	/**
-	 * Getter/setter for the {@link Block#_fixture|_fixture} property.
-	 * @param newFixture {number} Optional parameter. If set, this is the new fixture for this {@link Block}.
-	 * @returns {*} The current fixture if no parameter is passed or this object if a parameter is passed to make setter
-	 * chaining convenient.
-	 * @memberof Block
-	 * @instance
-	 */
-	fixture: function(newFixture) {
-		if (newFixture !== undefined) {
-			this._fixture = newFixture;
-			return this;
-		}
-		return this._fixture;
-	},
-
-	/**
-	 * Getter/setter for the {@link Block#_fixtureDef|_fixtureDef} property.
-	 * @param newFixtureDef {number} Optional parameter. If set, this is the new fixture for this {@link Block}.
-	 * @returns {*} The current fixture definition if no parameter is passed or this object if a parameter is passed to
-	 * make setter chaining convenient.
-	 * @memberof Block
-	 * @instance
-	 */
-	fixtureDef: function(newFixtureDef) {
-		if (newFixtureDef !== undefined) {
-			this._fixtureDef = newFixtureDef;
-			return this;
-		}
-		return this._fixtureDef;
-	},
-
-	/**
-	 * Getter/setter for the {@link Block#_fixtureDebuggingEntity|_fixtureDebuggingEntity} property.
-	 * @param fixtureDebuggingEntity {FixtureDebuggingEntity} Optional parameter. If provided, this is the new
-	 * {@link FixtureDebuggingEntity} for this {@link Block}.
-	 * @returns {*} The existing {@link FixtureDebuggingEntity} if no argument is provided, or this object if an
-	 * argument is provided in order to make function call chaining convenient.
-	 * @memberof Block
-	 * @instance
-	 */
-	fixtureDebuggingEntity: function(fixtureDebuggingEntity) {
-		if (fixtureDebuggingEntity !== undefined) {
-			this._fixtureDebuggingEntity = fixtureDebuggingEntity;
-			return this;
-		}
-		return this._fixtureDebuggingEntity;
-	},
 
 	/**
 	 * Decreases the block's health by the amount passed.
@@ -643,6 +576,21 @@ var Block = IgeEntity.extend({
 			return this;
 		}
 		return this._isBeingMined;
+	},
+
+	toJSON: function() {
+		return {
+			type: this.classId(),
+			gridData: this.gridData.toJSON()
+		}
+	},
+
+	worldCoordinates: function() {
+		if (this.gridData.grid) {
+			return this.gridData.grid.worldCoordinatesForBlock(this);
+		}
+
+		return null;
 	}
 });
 
@@ -706,6 +654,12 @@ Block.blockFromClassId = function(classId) {
 		return undefined;
 	}
 	return new cosmos.blocks.constructors[classId]();
+};
+
+Block.fromJSON = function(json) {
+	var block = Block.blockFromClassId(json.type);
+	block.gridData.loc = new IgePoint2d(json.gridData.loc.x, json.gridData.loc.y);
+	return block;
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Block; }

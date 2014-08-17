@@ -30,11 +30,11 @@ var GeneratedBlockStructure = BlockStructure.extend({
 		}
 	},
 
-	remove: function(row, col) {
-		BlockStructure.prototype.remove.call(this, row, col);
+	remove: function(loc, width, height) {
 		if (ige.isServer) {
 			this.respawn.resetTimeout();
 		}
+		return BlockStructure.prototype.remove.call(this, loc, width, height);
 	}
 });
 

@@ -22,7 +22,7 @@ var ExampleShips = {
 			[undefined,           new SteelPlatingBlock(), new IronEngineBlock(),      new SteelPlatingBlock(), undefined]
 		]
 	},
-
+	
 	/**
 	 * This is the ship in the middle of the video. It has two engines, but one of them is misplaced and unbalanced.
 	 * @returns {Array} A {@link Block} matrix that represents the starter ship with two, unbalanced engines.
