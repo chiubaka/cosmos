@@ -123,7 +123,7 @@ var Block = IgeEntity.extend({
 		if (Types[this.classId()] !== undefined) {
 			this.addComponent(Type, Types[this.classId()]);
 		} else if(!(this instanceof ConstructionZoneBlock || isAbstractClass)) {
-			this.log("No type found for " + this.classId() + ". The health component is mandatory for all blocks", 'error');
+			this.log("No type found for " + this.classId() + ". The type component is mandatory for all blocks", 'error');
 		}
 
 		// Check if a description has been provided for this block. If so, this block is describable. Otherwise, it is not.
