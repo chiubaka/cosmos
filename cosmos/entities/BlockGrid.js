@@ -444,6 +444,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 				}
 				break;
 			// We don't care about any other stream sections.
+			// We'll let IgeEntityBox2d handle them.
 			default:
 				IgeEntityBox2d.prototype.streamSectionData
 					.call(this, sectionId, data, bypassTimeStream);
