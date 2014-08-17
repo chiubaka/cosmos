@@ -53,17 +53,6 @@ var ParallaxBackground = IgeEntity.extend({
 			return this;
 		}
 		return this._parallaxLag;
-	},
-
-	update: function(ctx) {
-		var camera = ige._currentCamera;
-
-		this.translateTo(
-			camera._translate.x / this.renderable._parallaxLag,
-			camera._translate.y / this.renderable._parallaxLag,
-			camera._translate.z / this.renderable._parallaxLag);
-
-		IgeEntity.prototype.update.call(this, ctx);
 	}
 });
 
