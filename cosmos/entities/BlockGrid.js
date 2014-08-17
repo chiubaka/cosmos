@@ -39,6 +39,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 		SparseGrid.prototype.init.call(this, data);
 		//this._grid = new SparseGrid();
 
+		// TODO why should this entity have width and height of 0?
 		this.width(0);
 		this.height(0);
 
@@ -53,6 +54,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 			this._effectsAboveContainer = new IgeEntity()
 				.addComponent(PixiRenderableComponent)
 				.depth(this.depth() + 1)
+				// The _effectsAboveContainer can have width and height of 0 because it doesn't need to intercept any clicks
+				// The BlockGrid intercepts all clicks.
 				.width(0)
 				.height(0)
 				.mount(this);
@@ -60,6 +63,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 			this._effectsBelowContainer = new IgeEntity()
 				.addComponent(PixiRenderableComponent)
 				.depth(this.depth() - 1)
+				// The _effectsBelowContainer can have width and height of 0 because it doesn't need to intercept any clicks
+				// The BlockGrid intercepts all clicks.
 				.width(0)
 				.height(0)
 				.mount(this);
@@ -67,6 +72,8 @@ var BlockGrid = IgeEntityBox2d.extend({
 			// Create the render container and mount it to this entity.
 			this._renderContainer = new RenderContainer()
 				.depth(this.depth())
+				// The renderContainer can have width and height of 0 because it doesn't need to intercept any clicks
+				// The BlockGrid intercepts all clicks.
 				.width(0)
 				.height(0)
 				.mount(this);
