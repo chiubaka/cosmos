@@ -145,6 +145,11 @@ var Ship = BlockStructure.extend({
 	Updates the engines and thrusters lists on each add
 	*/
 	add: function(row, col, block, checkForNeighbors) {
+		// You can't add a second Bridge to a ship.
+		if (block instanceof BridgeBlock && this.controllable()) {
+			return false;
+		}
+
 		var blockAdded = BlockStructure.prototype.add.call(this, row, col, block, checkForNeighbors);
 		if (blockAdded && ige.isServer) {
 			DbPlayer.update(this.player().id(), this.player(), function() {});
@@ -191,7 +196,6 @@ var Ship = BlockStructure.extend({
 		// If the ship has no longer controllable
 		if (!this.controllable()) {
 			// Then it is dead
-			this.log("Ship death");
 			data = {};
 			ige.network.stream.queueCommand('cosmos:ship.death', data, this.player().clientId());
 		}
@@ -362,7 +366,7 @@ var Ship = BlockStructure.extend({
 	},
 
 	controllable: function() {
-		return this.numBlocksOfType(ControlBlock.prototype.classId()) > 0;
+		return this.numBlocksOfType(BridgeBlock.prototype.classId()) > 0;
 	},
 
 	update: function(ctx) {

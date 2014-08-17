@@ -401,7 +401,7 @@ var BlockGrid = IgeEntityBox2d.extend({
 
 		this.remove(row, col);
 
-		if (!(block instanceof ControlBlock)) {
+		if (!(block instanceof BridgeBlock)) {
 			new Drop().mount(ige.server.spaceGameScene)
 				.block(block)
 				.owner(player.currentShip())
