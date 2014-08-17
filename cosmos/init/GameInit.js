@@ -194,11 +194,12 @@ var GameInit = {
 	},
 
 	spawnStructure: function(maxNumBlocks, blockDistribution, symmetric) {
+		var translate = this.getRandomLocation();
 		var structure = BlockStructureGenerator
-			.genProceduralAsteroid(maxNumBlocks, blockDistribution, symmetric)
+			.genProceduralAsteroid(maxNumBlocks, blockDistribution, symmetric,
+				translate)
 			.streamMode(1)
 			.mount(ige.server.spaceGameScene);
-		this.moveRandomly(structure);
 	},
 
 	/**
@@ -424,12 +425,13 @@ var GameInit = {
 		ige.watchStart(client.custom4);
 	},
 
-	// TODO: Move this to a helper function that operates on IgeEntities
-	moveRandomly: function(entity) {
-		//this is the maximum distance that we will translate entities to
+	getRandomLocation: function () {
+		// The maximum distance that we will translate entities to
 		var MAX_DISTANCE = 9000;
-		entity.translateTo((Math.random() - .5) * MAX_DISTANCE, (Math.random() - .5) * MAX_DISTANCE, 0);
-	}
+		return new IgePoint2d((Math.random() - 0.5) * MAX_DISTANCE,
+			(Math.random() - 0.5) * MAX_DISTANCE);
+	},
+
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = GameInit; }

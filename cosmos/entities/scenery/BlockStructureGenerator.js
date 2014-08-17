@@ -17,7 +17,8 @@ var BlockStructureGenerator = {
 	 * @return {BlockStructure} The procedurally generated asteroid.
 	 * @memberof BlockStructureGenerator
 	 */
-	genProceduralAsteroid: function(maxNumBlocks, blockDistribution, symmetric) {
+	genProceduralAsteroid: function(maxNumBlocks, blockDistribution, symmetric,
+		translate) {
 		// Whether or not to generate a symmetric asteroid
 		symmetric = symmetric || false;
 
@@ -29,7 +30,8 @@ var BlockStructureGenerator = {
 		var blockStructure = new GeneratedBlockStructure({
 			maxNumBlocks: maxNumBlocks,
 			blockDistribution: blockDistribution,
-			symmetric: symmetric
+			symmetric: symmetric,
+			translate: translate
 		});
 
 		// Number of blocks that can be contained in this asteroid.
