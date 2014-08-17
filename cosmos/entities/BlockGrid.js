@@ -165,8 +165,8 @@ var BlockGrid = IgeEntity.extend({
 
 		var self = this;
 		_.forEach(dropped, function(drop) {
-			// Don't drop control blocks!
-			if (drop instanceof ControlBlock) {
+			// Don't drop bridge blocks!
+			if (drop instanceof BridgeBlock) {
 				return;
 			}
 

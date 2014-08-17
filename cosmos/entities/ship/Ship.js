@@ -162,16 +162,17 @@ var Ship = BlockStructure.extend({
 	},
 
 	/*
-	Overrides the superclass's add function
+	Overrides the superclass's put function
 	Updates the engines and thrusters lists on each add
 	*/
-	add: function(row, col, block, checkForNeighbors) {
+	put: function(block, loc, replace) {
 		// You can't add a second Bridge to a ship.
 		if (block instanceof BridgeBlock && this.controllable()) {
 			return false;
 		}
 
-		var blockAdded = BlockStructure.prototype.add.call(this, row, col, block, checkForNeighbors);
+		var blockAdded = BlockStructure.prototype.put.call(this, block, loc,
+			replace);
 		if (blockAdded && ige.isServer) {
 			DbPlayer.update(this.player().id(), this.player(), function() {});
 		}
@@ -183,6 +184,9 @@ var Ship = BlockStructure.extend({
 		}
 		else if (block instanceof Weapon) {
 			this.weapons().push(block);
+		}
+		else if (block instanceof BridgeBlock) {
+			this.bridgeBlocks().push(block);
 		}
 		return blockAdded;
 	},
