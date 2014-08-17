@@ -453,31 +453,27 @@ var BlockGrid = IgeEntityBox2d.extend({
 	},
 
 	worldCoordinatesForBlock: function(block) {
-		var theta = this.rotate().z();
-
-		var entityCenter = {
-			x: this.translate().x(),
-			y: this.translate().y()
-		};
-
-		var relBlockLoc = {
-			x: block.gridData.loc.x - this.lowerBound().x,
-			y: block.gridData.loc.y - this.lowerBound().y
-		};
-
-		var localCoordinates = {
-			x: -(this._bounds2d.x2 - relBlockLoc.x * Block.WIDTH)
-				+ block._bounds2d.x2,
-			y: -(this._bounds2d.y2 - relBlockLoc.y * Block.HEIGHT)
-				+ block._bounds2d.y2
-		};
-
-		var rotatedLocalCoordinates = MathUtils.rotate(localCoordinates, theta);
-
-		return new IgePoint2d(
-			rotatedLocalCoordinates.x + entityCenter.x,
-			rotatedLocalCoordinates.y + entityCenter.y
+		var relBlockLoc = new IgePoint2d(
+			block.gridData.loc.x,
+			block.gridData.loc.y
 		);
+
+		relBlockLoc.thisMinusPoint(this.lowerBound());
+
+		// Scale up by the width and height of a 1x1 block
+		relBlockLoc.thisMultiply(Block.WIDTH, Block.HEIGHT);
+
+		relBlockLoc.thisAddPoint(new IgePoint2d(block._bounds2d.x2, block._bounds2d.y2));
+		relBlockLoc.thisMinusPoint(new IgePoint2d(this._bounds2d.x2, this._bounds2d.y2));
+
+		var rotatedLocalCoordinates = MathUtils.rotate(relBlockLoc, this.rotate().z());
+
+		var entityCenter = new IgePoint2d(
+			this.translate().x(),
+			this.translate().y()
+		);
+
+		return entityCenter.addPoint(rotatedLocalCoordinates);
 	},
 
 	_addFixture: function(block) {
