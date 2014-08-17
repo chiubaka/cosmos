@@ -199,6 +199,7 @@ var Ship = BlockStructure.extend({
 		var removed = BlockStructure.prototype.remove.call(this, loc, width, height);
 		var self = this;
 		_.forEach(removed, function(removedBlock) {
+			// These are specific types of blocks that we're interested in keeping track of.
 			if (removedBlock instanceof EngineBlock) {
 				self.engines().splice(self.engines().indexOf(removedBlock), 1);
 			}

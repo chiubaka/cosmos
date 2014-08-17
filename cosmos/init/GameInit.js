@@ -207,8 +207,9 @@ var GameInit = {
 					.rotate().z(Constants.SECOND_OVERLAY_ROTATION);
 			}
 		}
-
-		/*for (var starfieldNumber = 0; starfieldNumber < 5; starfieldNumber++) {
+		/*
+		var NUM_STAR_FIELDS = 5;
+		for (var starfieldNumber = 0; starfieldNumber < NUM_STAR_FIELDS; starfieldNumber++) {
 			this.moveRandomly(
 				new StarfieldBackground()
 					.id('starfield_background' + starfieldNumber)
@@ -216,7 +217,8 @@ var GameInit = {
 					.parallaxLag(6 + starfieldNumber)
 					.mount(client.spaceBackgroundScene)
 			);
-		}*/
+		}
+		*/
 	},
 
 	initDebugDisplay: function() {
