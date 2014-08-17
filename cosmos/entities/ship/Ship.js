@@ -63,6 +63,8 @@ var Ship = BlockStructure.extend({
 	 */
 	_player: undefined,
 
+	_controlBlocks: undefined,
+
 	/**
 	 * A list that stores references to all of the engines in this ship
 	 * //TODO shouldn't the engines be kept track of by some component? Like a engines component?
@@ -85,6 +87,7 @@ var Ship = BlockStructure.extend({
 
 	init: function(data) {
 		// Note that these variables must be initialized before the superclass constructor can be called, because it will add things to them by calling add().
+		this._controlBlocks = [];
 		this._engines = [];
 		this._thrusters = [];
 		this._weapons = [];
@@ -124,6 +127,7 @@ var Ship = BlockStructure.extend({
 	},
 	streamCreateData: function() {
 		var data = BlockStructure.prototype.streamCreateData.call(this);
+
 		if (this.player()) {
 			data.playerId = this.player().id();
 		}
@@ -136,6 +140,10 @@ var Ship = BlockStructure.extend({
 		}
 
 		BlockStructure.prototype.destroy.call(this);
+	},
+
+	controlBlocks: function() {
+		return this._controlBlocks;
 	},
 
 	// Getter for the _engines property
@@ -167,6 +175,9 @@ var Ship = BlockStructure.extend({
 		else if (block instanceof Weapon) {
 			this.weapons().push(block);
 		}
+		else if (block instanceof ControlBlock) {
+			this.controlBlocks().push(block);
+		}
 
 		return result;
 	},
@@ -195,13 +206,25 @@ var Ship = BlockStructure.extend({
 				self.thrusters().splice(self.thrusters().indexOf(removedBlock), 1);
 			}
 			else if (removedBlock instanceof Weapon) {
-				self.weapons().splice(self.thrusters().indexOf(removedBlock), 1);
+				self.weapons().splice(self.weapons().indexOf(removedBlock), 1);
+			}
+			else if (removedBlock instanceof ControlBlock) {
+				self.controlBlocks().splice(self.controlBlocks().indexOf(removedBlock), 1);
 			}
 		});
 
 		if (ige.isServer) {
 			DbPlayer.update(this.player().id(), this.player(), function() {});
 		}
+
+		// If the ship has no longer controllable
+		if (!this.controllable()) {
+			// Then it is dead
+			this.log("Ship death");
+			data = {};
+			ige.network.stream.queueCommand('cosmos:ship.death', data, this.player().clientId());
+		}
+
 		return removed;
 	},
 
@@ -353,8 +376,15 @@ var Ship = BlockStructure.extend({
 			return this._controls;
 		}
 
-		this._controls = newControls;
+		if (this.controllable()) {
+			this._controls = newControls;
+		}
+
 		return this;
+	},
+
+	controllable: function() {
+		return this.controlBlocks().length > 0;
 	},
 
 	update: function(ctx) {
@@ -410,6 +440,17 @@ var Ship = BlockStructure.extend({
 				// The "- Math.PI/2" below makes the ship move forward and backwards,
 				// instead of side to side.
 				var angle = this._rotate.z - Math.PI/2;
+
+				// Notify player that they cannot fly without an engine
+				if (this.engines().length < 1) {
+					if (JSON.stringify(this._controls) !== JSON.stringify(this._prev_controls) ||
+						this._prevMovementBlocks.engines > 0) {
+						ige.network.stream.queueCommand('notificationError',
+							NotificationDefinitions.errorKeys.noEngine, this.player().clientId());
+					}
+				}
+
+				this._prevMovementBlocks.engines = this.engines().length;
 
 				// Apply impulse at all engine locations
 				for (var i = 0; i < this.engines().length; i++) {

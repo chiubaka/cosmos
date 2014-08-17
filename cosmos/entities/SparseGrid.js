@@ -147,6 +147,19 @@ var SparseGrid = IgeClass.extend({
 		return brokeEarly;
 	},
 
+	hasNeighbors: function(loc, width, height) {
+		var neighboringLocations = this.neighboringLocations(loc, width, height);
+
+		var ret = false;
+		var self = this;
+		_.forEach(neighboringLocations, function(neighboringLocation) {
+			if (self.has(neighboringLocation)) {
+				ret = true;
+			}
+		});
+		return ret;
+	},
+
 	hasNeighboringOpenLocations: function(loc, width, height) {
 		var neighboringOpenLocations = this.neighboringOpenLocations(loc, width, height);
 		return neighboringOpenLocations.length > 0;
@@ -157,6 +170,13 @@ var SparseGrid = IgeClass.extend({
 			return 0;
 		}
 		return this._upperBound.y - this._lowerBound.y + 1;
+	},
+
+	gridWidth: function() {
+		if (this.count() === 0) {
+			return 0;
+		}
+		return this._upperBound.x - this._lowerBound.x + 1;
 	},
 
 	lowerBound: function() {
@@ -334,11 +354,8 @@ var SparseGrid = IgeClass.extend({
 		return json;
 	},
 
-	gridWidth: function() {
-		if (this.count() === 0) {
-			return 0;
-		}
-		return this._upperBound.x - this._lowerBound.x + 1;
+	upperBound: function() {
+		return this._upperBound.clone();
 	},
 
 	_createX: function(x) {

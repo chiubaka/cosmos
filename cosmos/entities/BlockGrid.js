@@ -31,8 +31,17 @@ var BlockGrid = IgeEntity.extend({
 		bullet: false
 	},
 	// #else
+	/**
+	 * Container for effects that need to appear above this BlockGrid.
+	 */
 	_effectsAboveContainer: undefined,
+	/**
+	 * Container for effects that need to appear below this BlockGrid.
+	 */
 	_effectsBelowContainer: undefined,
+	/**
+	 * Container for rendering child entities (i.e. Blocks).
+	 */
 	_renderContainer: undefined,
 	// #endif
 
@@ -43,6 +52,7 @@ var BlockGrid = IgeEntity.extend({
 		SparseGrid.prototype.init.call(this, data);
 		//this._grid = new SparseGrid();
 
+		// TODO why should this entity have width and height of 0?
 		this.width(0);
 		this.height(0);
 
@@ -50,9 +60,15 @@ var BlockGrid = IgeEntity.extend({
 
 		// #ifdef CLIENT
 		if (ige.isClient) {
+			// All containers have height and width 0, since their heights and widths do not need
+			// to be kept up to date. Keeping the height and width 0 makes things slightly easier
+			// to reason about because translating a container now feels more like translating a
+			// point.
 			this._effectsAboveContainer = new IgeEntity()
 				.addComponent(PixiRenderableComponent)
 				.depth(this.depth() + 1)
+				// The _effectsAboveContainer can have width and height of 0 because it doesn't need to intercept any clicks
+				// The BlockGrid intercepts all clicks.
 				.width(0)
 				.height(0)
 				.mount(this);
@@ -60,6 +76,8 @@ var BlockGrid = IgeEntity.extend({
 			this._effectsBelowContainer = new IgeEntity()
 				.addComponent(PixiRenderableComponent)
 				.depth(this.depth() - 1)
+				// The _effectsBelowContainer can have width and height of 0 because it doesn't need to intercept any clicks
+				// The BlockGrid intercepts all clicks.
 				.width(0)
 				.height(0)
 				.mount(this);
@@ -67,11 +85,14 @@ var BlockGrid = IgeEntity.extend({
 			// Create the render container and mount it to this entity.
 			this._renderContainer = new RenderContainer()
 				.depth(this.depth())
+				// The renderContainer can have width and height of 0 because it doesn't need to intercept any clicks
+				// The BlockGrid intercepts all clicks.
 				.width(0)
 				.height(0)
 				.mount(this);
 
 			if (data !== undefined) {
+				// Hydrate this BlockGrid from JSON sent from the server.
 				this.fromJSON(Block, data);
 			}
 
@@ -95,6 +116,7 @@ var BlockGrid = IgeEntity.extend({
 			this.physicsBody.registerDefaultBodyDef(this._defaultBodyDef);
 			this.physicsBody.newBody();
 
+			// Used by streamControlFunc to help determine when to stream this entity to a client.
 			this._previouslyStreamed = {};
 			this.streamControl(this._streamControlFunc.bind(this))
 		}
@@ -116,6 +138,18 @@ var BlockGrid = IgeEntity.extend({
 	// #endif
 
 	// #ifdef SERVER
+	/**
+	 * Removes a block or area of blocks from a BlockGrid and places it in a new drop at its current
+	 * location.
+	 * @param player The player who owns this drop. Undefined here means that anyone can pick up
+	 * the drop.
+	 * @param loc The location in the grid that should be dropped.
+	 * @param width The width of the area that should be dropped. Defaults to 1 if no value is
+	 * provided.
+	 * @param height The height of the area that should be dropped. Defaults to 1 if no value is
+	 * provided.
+	 * @returns {null}
+	 */
 	drop: function(player, loc, width, height) {
 		if (!IgePoint2d.validatePoint(loc)) {
 			this.log("BlockGrid#drop: invalid location parameter.", "warning");
@@ -129,10 +163,13 @@ var BlockGrid = IgeEntity.extend({
 		var theta = this.rotate().z();
 		var dropped = this.remove(loc, width, height);
 
-		this.log("BlockGrid#drop: " + dropped.length + " drops.");
 		var self = this;
 		_.forEach(dropped, function(drop) {
-			console.log(drop.classId());
+			// Don't drop control blocks!
+			if (drop instanceof ControlBlock) {
+				return;
+			}
+
 			var dropCoordinates = self.worldCoordinatesForBlock(drop);
 			var newDrop = new Drop({owner: player.currentShip()})
 				.block(drop)
@@ -140,8 +177,6 @@ var BlockGrid = IgeEntity.extend({
 				.rotateTo(0, 0, theta)
 				.streamMode(1)
 				.mount(ige.server.spaceGameScene);
-
-			self.log("BlockGrid#drop: dropping " + newDrop.id() +": " + newDrop.block().classId());
 		});
 	},
 	// #endif
@@ -159,6 +194,7 @@ var BlockGrid = IgeEntity.extend({
 	// #endif
 
 	/**
+	 * DON'T USE THIS FOR ANYTHING WHERE PERFORMANCE IS CRITICAL.
 	 * Resets this BlockGrid's internal state to represent the grid that is represented by the provided {@link Block}
 	 * matrix, which is a matrix of {@link Block}s. undefined is used to indicate that a space in the matrix is empty.
 	 * @param blockMatrix {Array} An array of arrays that holds {@link Block objects}. undefined is used to indicate
@@ -184,6 +220,7 @@ var BlockGrid = IgeEntity.extend({
 	},
 
 	/**
+	 * DON'T USE THIS FOR ANYTHING WHERE PERFORMANCE IS CRITICAL.
 	 * Resets this BlockGrid's internal state to represent the grid that is represented by the provided block type
 	 * matrix, which is a matrix of class ID's where each class ID represents a block type in the grid.
 	 * This is used for de-serializing a BlockGrid object.
@@ -227,7 +264,9 @@ var BlockGrid = IgeEntity.extend({
 		switch (data.action) {
 			case 'remove':
 				this.remove(new IgePoint2d(data.col, data.row));
-				this._renderContainer.refresh();
+				if (this.count() === 0) {
+					this.destroy();
+				}
 				break;
 			case 'damage':
 				var block = this.get(new IgePoint2d(data.col, data.row))[0];
@@ -239,7 +278,6 @@ var BlockGrid = IgeEntity.extend({
 					{'type': data.selectedType});
 				this.put(Block.blockFromClassId(data.selectedType), new IgePoint2d(data.col, data.row), true);
 				ige.emit('cosmos:BlockGrid.processBlockActionClient.add', [data.selectedType, this]);
-				this._renderContainer.refresh();
 				break;
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
@@ -259,35 +297,49 @@ var BlockGrid = IgeEntity.extend({
 
 		switch (data.action) {
 			case 'remove':
-				this.remove(data.row, data.col);
-				return true;
-
-			// TODO: Vary mining speed based on block material
-			case 'add':
-				// Add block server side, then send add msg to client
-				if(!self.add(data.row, data.col, Block.blockFromClassId(data.selectedType))) {
-					return false;
+				this.remove(new IgePoint2d(data.col, data.row));
+				if (this.count() === 0) {
+					this.destroy();
 				}
-				else {
+				return true;
+			case 'add':
+				var location = new IgePoint2d(data.col, data.row);
+
+				// Blocks added as the result of a query from a client must be added to an existing
+				// contiguous structure.
+				if (this.hasNeighbors(location)) {
+					self.put(Block.blockFromClassId(data.selectedType), new IgePoint2d(data.col, data.row), false);
 					data.action = 'add';
 					ige.network.send('blockAction', data);
 					return true;
+				}
+				else {
+					return false;
 				}
 			default:
 				return false;
 		}
 	},
 
+	/**
+	 * Places a block in the BlockGrid at the specified location.
+	 * @param block The block to place.
+	 * @param location The location to place the block at.
+	 * @param replace If true, then the BlockGrid will replace any existing Blocks. If false, the
+	 * BlockGrid will not replace existing blocks.
+	 * @returns {*} A list of blocks that were replaced if replacement is on. An empty list if
+	 * replacement is not. Returns null in the event of an error.
+	 */
 	put: function(block, location, replace) {
 		// Validate parameters
 		if (!block) {
 			this.log("Invalid block passed to BlockGrid#put.", "warning");
-			return;
+			return null;
 		}
 
 		if (!IgePoint2d.validatePoint(location)) {
 			this.log("Invalid location passed to BlockGrid#put.", "warning");
-			return;
+			return null;
 		}
 
 		var previousBlocks = SparseGrid.prototype.put.call(this, block, location, replace);
@@ -316,6 +368,14 @@ var BlockGrid = IgeEntity.extend({
 		return previousBlocks;
 	},
 
+	/**
+	 * Removes the object the specified location or the objects in the specified area.
+	 * @param location The top left corner of the area to remove blocks from.
+	 * @param width The width of the area to remove from. Defaults to 1 if no parameter is passed.
+	 * @param height The height of the area to remove from. Defaults to 1 if no parameter is passed.
+	 * @returns {*} A list of the blocks that were removed. May return null to indicate an error
+	 * has occurred.
+	 */
 	remove: function(location, width, height) {
 		// Validate parameters
 		if (!IgePoint2d.validatePoint(location)) {
@@ -341,6 +401,7 @@ var BlockGrid = IgeEntity.extend({
 				block.unMount();
 			}
 			// #endif
+			block.onRemoved();
 		});
 
 		return removedBlocks;
@@ -363,13 +424,31 @@ var BlockGrid = IgeEntity.extend({
 		return this.toJSON();
 	},
 
+	/**
+	 * Overrides the IgeEntityBox2d default streamSectionData function. This has been done to
+	 * provide support for streaming a custom point and have the client interpolate that point.
+	 * @param sectionId
+	 * @param data
+	 * @param bypassTimeStream
+	 * @returns {string}
+	 */
 	streamSectionData: function(sectionId, data, bypassTimeStream) {
 		switch (sectionId) {
 			case 'transform':
+				// If data has been provided, then we are on the client and need to handle values
+				// passed to us by the server. In this case, the IgeEntityBox2d already knows what
+				// to do and does some complex things to make interpolation work. Don't want to get
+				// into that, so just let it do the work.
 				if (data) {
 					IgeEntity.prototype.streamSectionData
 						.call(this, sectionId, data, bypassTimeStream);
 				}
+				// Otherwise, we are on the server and are being asked to produce values to pass
+				// to the client. We want to send the physics position of this entity to the client.
+				// That way the client can independently compute where things should go. This was
+				// necessary to solve a problem where stream data from the server with old values
+				// would render any attempt to translate the entity on the client completely
+				// useless.
 				else {
 					var translate = new IgePoint3d(
 						this.physicsBody.x,
@@ -382,6 +461,8 @@ var BlockGrid = IgeEntity.extend({
 						this._rotate.toString(this._streamFloatPrecision) + ',';
 				}
 				break;
+			// We don't care about any other stream sections.
+			// We'll let IgeEntityBox2d handle them.
 			default:
 				IgeEntity.prototype.streamSectionData
 					.call(this, sectionId, data, bypassTimeStream);
@@ -390,31 +471,27 @@ var BlockGrid = IgeEntity.extend({
 	},
 
 	worldCoordinatesForBlock: function(block) {
-		var theta = this.rotate().z();
+		var relBlockLoc = new IgePoint2d(
+			block.gridData.loc.x,
+			block.gridData.loc.y
+		);
 
-		var entityCenter = {
-			x: this.translate().x(),
-			y: this.translate().y()
-		};
+		relBlockLoc.thisMinusPoint(this.lowerBound());
 
-		var relBlockLoc = {
-			x: block.gridData.loc.x - this.lowerBound().x,
-			y: block.gridData.loc.y - this.lowerBound().y
-		};
+		// Scale up by the width and height of a 1x1 block
+		relBlockLoc.thisMultiply(Block.WIDTH, Block.HEIGHT);
 
-		var localCoordinates = {
-			x: -(this._bounds2d.x2 - relBlockLoc.x * Block.WIDTH)
-				+ block._bounds2d.x2,
-			y: -(this._bounds2d.y2 - relBlockLoc.y * Block.HEIGHT)
-				+ block._bounds2d.y2
-		};
+		relBlockLoc.thisAddPoint(new IgePoint2d(block._bounds2d.x2, block._bounds2d.y2));
+		relBlockLoc.thisMinusPoint(new IgePoint2d(this._bounds2d.x2, this._bounds2d.y2));
 
-		var rotatedLocalCoordinates = MathUtils.rotate(localCoordinates, theta);
+		var rotatedLocalCoordinates = MathUtils.rotate(relBlockLoc, this.rotate().z());
 
-		return {
-			x: rotatedLocalCoordinates.x + entityCenter.x,
-			y: rotatedLocalCoordinates.y + entityCenter.y
-		};
+		var entityCenter = new IgePoint2d(
+			this.translate().x(),
+			this.translate().y()
+		);
+
+		return entityCenter.addPoint(rotatedLocalCoordinates);
 	},
 
 	_addFixture: function(block) {
@@ -456,18 +533,19 @@ var BlockGrid = IgeEntity.extend({
 	},
 
 	/**
-	 * Given a click event, locates the {@link Block} in this {@link BlockGrid} that was clicked by:
+	 * Given a mouse click, determines what location in the grid has been pressed in grid-relative
+	 * coordinates.
+	 * Does this by:
 	 * 1. Unrotating the click coordinate
 	 * 2. Comparing the unrotated click coordinate to where the blocks would be if the BlockGrid were not rotated
 	 * @param event {Object} The event data for the click event.
 	 * @param control {Object} The control data for the click event.
-	 * @returns {Block|undefined} The {@link Block} that was clicked or undefined if no {@link Block} exists at the
-	 * clicked location.
+	 * @returns {IgePoint2d} The location that was clicked.
 	 * @memberof BlockGrid
 	 * @private
 	 * @instance
 	 */
-	_blockForClick: function(event, control) {
+	locationForClick: function(event, control) {
 		// event.igeBaseX and event.igeBaseY give coordinates relative to the clicked entity's origin (center)
 
 		// The position of the click in world coordinates
@@ -495,18 +573,11 @@ var BlockGrid = IgeEntity.extend({
 		// The unrotated coordinates for comparison against an unrotated grid with respect to the center of the
 		// entity
 		// This uses basic trigonometry. See http://en.wikipedia.org/wiki/Rotation_matrix.
-		unrotated = MathUtils.rotate(new IgePoint2d(aabbRelativeX, aabbRelativeY), theta);
+		var unrotated = MathUtils.rotate(new IgePoint2d(aabbRelativeX, aabbRelativeY), theta);
 
-		// Height and width of the grid area
+		// Height and width of the grid area //TODO refactor all of these operations to be vector operations
 		var width = this.width();
 		var height = this.height();
-
-		// Check if the click was out of the grid area (happens because axis-aligned bounding boxes are larger
-		// than the non-axis-aligned grid area)
-		if (Math.abs(unrotated.x) > width / 2
-			|| Math.abs(unrotated.y) > height / 2) {
-			return;
-		}
 
 		// Coordinates for the top left corner of the grid area
 		var topLeftCornerX = -width / 2;
@@ -520,7 +591,13 @@ var BlockGrid = IgeEntity.extend({
 		var x = Math.floor(gridX / Block.WIDTH) + this.lowerBound().x;
 		var y = Math.floor(gridY / Block.HEIGHT) + this.lowerBound().y;
 
-		return this.get(new IgePoint2d(x, y))[0];
+		return new IgePoint2d(x, y);
+	},
+
+	_blockForClick: function(event, control) {
+		var location = this.locationForClick(event, control);
+
+		return this.get(location)[0];
 	},
 
 	_mountToRenderContainer: function(block) {
@@ -557,19 +634,21 @@ var BlockGrid = IgeEntity.extend({
 		this._blockClickHandler(block, event, control);
 	},
 
+	/**
+	 * Overrides superclass function. This function makes it possible for the client to mirror the
+	 * calculations done on the server so that the two stay in sync all the time and no jumping
+	 * occurs.
+	 * @param dataArr
+	 * @private
+	 */
 	_setTransformFromStreamData: function(dataArr) {
 		// This will set our location to the physics location that is being streamed.
 		IgeEntity.prototype._setTransformFromStreamData.call(this, dataArr);
 
-		var theta = this.rotate().z();
-
-		var physicsOffset = {
-			x: this._physicsOffset.x * Math.cos(theta) - this._physicsOffset.y * Math.sin(theta),
-			y: this._physicsOffset.x * Math.sin(theta) + this._physicsOffset.y * Math.cos(theta)
-		};
+		var rotatedPhysicsOffset = MathUtils.rotate(this._physicsOffset, this.rotate().z());
 
 		// This will translate the entity to the computed physics offset on the client.
-		this.translateBy(physicsOffset.x, physicsOffset.y, 0);
+		this.translateBy(rotatedPhysicsOffset.x, rotatedPhysicsOffset.y, 0);
 	},
 
 	// #ifdef SERVER
@@ -586,7 +665,6 @@ var BlockGrid = IgeEntity.extend({
 	_streamControlFunc: function(clientId) {
 		var player = ige.server.players[clientId];
 
-		// TODO: Make createConstructionZone and fromBlockTypeMatrix faster.
 		// TODO: Make a proper entity preloader to stop jittering when BlockGrids
 		// are created on screen
 		if (player === undefined || player.currentShip() === undefined) {
@@ -626,9 +704,21 @@ var BlockGrid = IgeEntity.extend({
 	},
 	// #endif
 
+	/**
+	 * When a BlockGrid's bounds grow or shrink, we must translate the containers inside of it and
+	 * the physics offset so that things look like they didn't move to users. This is because height
+	 * and width changes to an entity increase the bounds of the entity on all sides, and those
+	 * bounds must be accurate and tight in order to efficiently capture mouse clicks.
+	 * @private
+	 */
 	_translateContainers: function() {
 		var topLeftCoordinates = BlockGrid.coordinatesForLocation(this.lowerBound());
 		this._oldGridCenter = this._gridCenter;
+
+		// This is the center of the tight bounding box around the blocks in the grid in a
+		// coordinate system where (0, 0) is the origin. For convenience, blocks are placed where
+		// you would expect them to be based on their coordinates, and then the entire coordinate
+		// frame is shifted to match where the BlockGrid is located.
 		this._gridCenter = {
 			x: topLeftCoordinates.x - Block.WIDTH / 2 + (this.gridWidth() * Block.WIDTH) / 2,
 			y: topLeftCoordinates.y - Block.HEIGHT / 2 + (this.gridHeight() * Block.HEIGHT) / 2

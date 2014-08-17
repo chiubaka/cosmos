@@ -16,7 +16,6 @@ var config = {
 		{ name: 'GridData', path: './components/GridData' },
 		{ name: 'SparseGrid', path: './entities/SparseGrid' },
 		{ name: 'BlockGridFixtureDebugContainer', path: './entities/BlockGridFixtureDebugContainer' },
-		{ name: 'BlockGridPhysicsContainer', path: './entities/BlockGridPhysicsContainer' },
 		{ name: 'BlockGrid', path: './entities/BlockGrid' },
 		{ name: 'BlockStructure', path: './entities/BlockStructure' },
 		{ name: 'GeneratedBlockStructure', path: './entities/GeneratedBlockStructure' },
@@ -25,25 +24,19 @@ var config = {
 
 		/* Ship part blocks */
 		{ name: 'Part', path: './entities/blocks/Part' },
-		{ name: 'PowerBlock', path: './entities/blocks/parts/PowerBlock' },
 		/* Engines */
 		{ name: 'EngineBlock', path: './entities/blocks/parts/EngineBlock' },
 		{ name: 'IronEngineBlock', path: './entities/blocks/parts/engines/IronEngineBlock' },
 		{ name: 'SteelEngineBlock', path: './entities/blocks/parts/engines/SteelEngineBlock' },
 		{ name: 'DragonBreathEngineBlock', path: './entities/blocks/parts/engines/DragonBreathEngineBlock' },
-		{ name: 'FuelBlock', path: './entities/blocks/parts/FuelBlock' },
-		{ name: 'CargoBlock', path: './entities/blocks/parts/CargoBlock' },
-		{ name: 'ControlBlock', path: './entities/blocks/parts/ControlBlock' },
 		/* Thrusters */
 		{ name: 'ThrusterBlock', path: './entities/blocks/parts/ThrusterBlock' },
 		{ name: 'IronThrusterBlock', path: './entities/blocks/parts/thrusters/IronThrusterBlock' },
 		{ name: 'SteelThrusterBlock', path: './entities/blocks/parts/thrusters/SteelThrusterBlock' },
 		{ name: 'KryptoniteThrusterBlock', path: './entities/blocks/parts/thrusters/KryptoniteThrusterBlock' },
-
 		/* Weapons */
 		{ name: 'Weapon', path: './entities/blocks/parts/Weapon' },
 		{ name: 'MiningLaserBlock', path: './entities/blocks/parts/weapons/MiningLaserBlock' },
-
 		/* Ship armor blocks */
 		{ name: 'Armor', path: './entities/blocks/parts/Armor' },
 		{ name: 'IronPlatingBlock', path: './entities/blocks/parts/armor/IronPlatingBlock' },
@@ -57,6 +50,11 @@ var config = {
 		{ name: 'DragonPlatingBlock', path: './entities/blocks/parts/armor/DragonPlatingBlock' },
 		{ name: 'TitaniumPlatingBlock', path: './entities/blocks/parts/armor/TitaniumPlatingBlock' },
 		{ name: 'SteelPlatingBlock', path: './entities/blocks/parts/armor/SteelPlatingBlock' },
+		/* Random ship parts that don't do anything */
+		{ name: 'FuelBlock', path: './entities/blocks/parts/FuelBlock' },
+		{ name: 'CargoBlock', path: './entities/blocks/parts/CargoBlock' },
+		{ name: 'ControlBlock', path: './entities/blocks/parts/ControlBlock' },
+		{ name: 'PowerBlock', path: './entities/blocks/parts/PowerBlock' },
 
 		/* Element blocks */
 		{ name: 'Element', path: './entities/blocks/Element' },
@@ -67,7 +65,6 @@ var config = {
 		{ name: 'CobaltBlock', path: './entities/blocks/elements/CobaltBlock' },
 		{ name: 'IceBlock', path: './entities/blocks/elements/IceBlock' },//not really an element
 		{ name: 'MythrilBlock', path: './entities/blocks/elements/MythrilBlock' },
-
 
 		{ name: 'AdamantiumBlock', path: './entities/blocks/elements/AdamantiumBlock' },
 		{ name: 'DragonBlock', path: './entities/blocks/elements/DragonBlock' },

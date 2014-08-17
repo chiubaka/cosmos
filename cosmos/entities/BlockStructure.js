@@ -13,80 +13,20 @@ var BlockStructure = BlockGrid.extend({
 	/**
 	 * Construction zone overlay for showing and hiding locations that players can click on in order to place a block
 	 * on an existing structure.
-	 * @type {ConstructionZoneOverlay}
+	 * @type {ConstructionOverlay}
 	 * @memberof BlockStructure
 	 * @private
 	 * @instance
 	 */
-	_constructionZoneOverlay: undefined,
+	_constructionOverlay: undefined,
 
 	init: function(data) {
 		BlockGrid.prototype.init.call(this, data);
-		if (!ige.isServer) {
-			// TODO: Lazily create when needed to speed up load time.
-			// TODO: Examine ConstructionZoneOverlay to make sure it is compatible with new BlockGrid backing.
-			// TODO: Uncomment this. Commented out so I can test the new BlockGrid class without getting errors from
-			// the ConstructionZoneOverlay class.
-			//this._constructionZoneOverlay = new ConstructionZoneOverlay(this)
-			//	.mount(this);
+
+		if (ige.isClient) {
+			this._constructionOverlay = new ConstructionOverlay(this)
+				.mount(this);
 		}
-	},
-
-	/**
-	 * Creates a list of all locations around this {@link BlockGrid} where a new {@link Block} could be placed.
-	 * @returns {Array} A list of all locations around this {@link BlockGrid} where a new {@link Block} can be placed.
-	 * Location objects are in the format {row: number, col: number}.
-	 * @memberof BlockStructure
-	 * @instance
-	 * @todo Modify this to support taking a block size and returning only the locations that can support a block of
-	 * that size
-	 */
-	constructionLocations: function(block) {
-		var filter = BlockStructure.constructionFilterForBlock(block);
-
-		var blockWidth = block.gridData.width;
-		var blockHeight = block.gridData.height;
-		var filterWidth = blockWidth + 2;
-		var filterHeight = blockHeight + 2;
-		var width = this.gridWidth() + 2 * (blockWidth);
-		var height = this.gridHeight() + 2 * (blockHeight);
-		var result = Array.prototype.new2DArray(width, height, 0);
-
-		var lowerBound = this.lowerBound();
-		var resultLowerBound = {
-			x: lowerBound.x - blockWidth,
-			y: lowerBound.y - blockHeight
-		};
-
-		for (var x = 0; x < width; x++) {
-			for (var y = 0; y < height; y++) {
-				// The corners will never work, so don't bother checking them.
-				if ((x === 0 && y === 0)
-					|| (x === 0 && y === height - 1)
-					|| (x === width - 1 && y === 0)
-					|| (x === width - 1 && y === height - 1))
-				{
-					continue;
-				}
-
-				var sum = 0;
-				for (var filterX = 0; filterX < filterWidth; filterX++) {
-					for (var filterY = 0; filterY < filterHeight; filterY++) {
-						var value = this.has(
-							new IgePoint2d(
-								resultLowerBound.x + x + filterX - 1,
-								resultLowerBound.y + y + filterY - 1
-							)
-						) ? 1 : 0;
-						sum += filter[filterX][filterY] * value;
-					}
-				}
-
-				result[x][y] = sum;
-			}
-		}
-
-		return result;
 	},
 
 	/**
@@ -116,6 +56,16 @@ var BlockStructure = BlockGrid.extend({
 			ige.notification.emit('notificationError',
 				NotificationDefinitions.errorKeys.notMinable);
 		}
+	},
+
+	put: function(block, location, replace) {
+		var result = BlockGrid.prototype.put.call(this, block, location, replace);
+
+		if (ige.isClient && this._constructionOverlay) {
+			this._constructionOverlay.refresh();
+		}
+
+		return result;
 	},
 
 	/**
@@ -172,6 +122,9 @@ var BlockStructure = BlockGrid.extend({
 
 						// Drop block server side, then send drop msg to client
 						self.drop(player, new IgePoint2d(data.col, data.row));
+						if (self.count() === 0) {
+							self.destroy();
+						}
 						data.action = 'remove';
 						ige.network.send('blockAction', data);
 						ige.network.stream.queueCommand('cosmos:BlockStructure.processBlockActionServer.minedBlock',
@@ -184,63 +137,16 @@ var BlockStructure = BlockGrid.extend({
 		}
 	},
 
-	/**
-	 * Extends the {@link BlockGrid#processBlockActionClient} function to provide additional functionality for
-	 * structure-specific actions. Process actions client-side.
-	 * @param data {Object} An object representing the action sent from the server.
-	 * @memberof BlockStructure
-	 * @instance
-	 */
-	processBlockActionClient: function(data) {
-		BlockGrid.prototype.processBlockActionClient.call(this, data);
+	remove: function(location, width, height) {
+		var result = BlockGrid.prototype.remove.call(this, location, width, height);
 
-		switch (data.action) {
-			case 'remove':
-				//this._constructionZoneOverlay.refresh();
-				break;
-			case 'add':
-				//this._constructionZoneOverlay.refresh();
-				break;
+		if (ige.isClient && this._constructionOverlay) {
+			this._constructionOverlay.refresh();
 		}
+
+		return result;
 	}
 });
-
-BlockStructure.constructionFilterForBlock = function(block) {
-	var blockWidth = block.gridData.width;
-	var blockHeight = block.gridData.height;
-	var width = blockWidth + 2;
-	var height = blockHeight + 2;
-	var filter = Array.prototype.new2DArray(width, height);
-
-	// Set the corners to 0.
-	filter[0][0] = 0;
-	filter[0][height - 1] = 0;
-	filter[width - 1][0] = 0;
-	filter[width - 1][height - 1] = 0;
-
-	// Set the top and bottom sides to 1.
-	for (var col = 1; col < width - 1; col++) {
-		filter[col][0] = 1;
-		filter[col][height - 1] = 1;
-	}
-
-	// Set the left and right sides to 1.
-	for (var row = 1; row < height - 1; row++) {
-		filter[0][row] = 1;
-		filter[width - 1][row] = 1;
-	}
-
-	// The value we place at the locations that the block would occupy.
-	var negationValue = -(blockWidth * 2 + blockHeight * 2 + 1);
-
-	for (var col = 1; col < width - 1; col++) {
-		for (var row = 1; row < height - 1; row++) {
-			filter[col][row] = negationValue;
-		}
-	}
-
-	return filter;
-};
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
 	module.exports = BlockStructure;
