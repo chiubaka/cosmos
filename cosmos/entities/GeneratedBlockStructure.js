@@ -6,13 +6,6 @@ var GeneratedBlockStructure = BlockStructure.extend({
 	_symmetric: undefined,
 
 	init: function(data) {
-		if (ige.isServer) {
-			this.addComponent(TLPhysicsBodyComponent);
-			// Override default bodyDef properties
-			this.physicsBody.bodyDef['x'] = data.translate.x;
-			this.physicsBody.bodyDef['y'] = data.translate.y;
-		}
-
 		BlockStructure.prototype.init.call(this, data);
 
 		if (data === undefined) {

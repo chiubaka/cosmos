@@ -83,6 +83,13 @@ var BlockGrid = IgeEntity.extend({
 			if (this.physicsBody === undefined) {
 				this.addComponent(TLPhysicsBodyComponent);
 			}
+
+			// Specify initial starting location of physics body
+			if (data && data.translate) {
+				this.physicsBody.bodyDef['x'] = data.translate.x;
+				this.physicsBody.bodyDef['y'] = data.translate.y;
+			}
+
 			// Add the BlockGrid's default body properties without overwriting
 			// existing properties
 			this.physicsBody.registerDefaultBodyDef(this._defaultBodyDef);
