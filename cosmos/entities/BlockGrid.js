@@ -244,7 +244,7 @@ var BlockGrid = IgeEntity.extend({
 					// The add() function knows how to deal with receiving undefined
 					this.put(
 						Block.blockFromClassId(blockTypeMatrix[row][col]),
-						new IgePoint2d(startCol + col, startRol + row),
+						new IgePoint2d(startCol + col, startRow + row),
 						false
 					);
 				}
