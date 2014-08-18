@@ -167,7 +167,6 @@ var GameInit = {
 					.depth(0)
 					.parallaxLag(2)
 					.mount(client.spaceBackgroundScene)
-					.streamMode(1)
 					.translateTo(Constants.GRID_SQUARE_SIZE.X*gridX + Constants.BACKGROUND_OFFSET.X,
 						Constants.GRID_SQUARE_SIZE.Y*gridY + Constants.BACKGROUND_OFFSET.Y,
 						0);
@@ -182,7 +181,6 @@ var GameInit = {
 					.depth(1)
 					.parallaxLag(4)
 					.mount(client.spaceBackgroundScene)
-					.streamMode(1)
 					.translateTo(Constants.GRID_SQUARE_SIZE.X*gridX,
 						Constants.GRID_SQUARE_SIZE.Y*gridY,
 						0);
@@ -200,7 +198,6 @@ var GameInit = {
 					.depth(1)
 					.parallaxLag(5)
 					.mount(client.spaceBackgroundScene)
-					.streamMode(1)
 					.translateTo(x * Math.cos(Constants.SECOND_OVERLAY_ROTATION) - y * Math.sin(Constants.SECOND_OVERLAY_ROTATION),
 						x * Math.sin(Constants.SECOND_OVERLAY_ROTATION) + y * Math.cos(Constants.SECOND_OVERLAY_ROTATION),
 						0)
