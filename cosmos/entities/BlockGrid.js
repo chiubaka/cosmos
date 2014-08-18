@@ -470,6 +470,28 @@ var BlockGrid = IgeEntity.extend({
 		}
 	},
 
+	toBlockTypeMatrix: function() {
+		var blockTypeMatrix = [];
+		var upperBound = this.upperBound();
+		var lowerBound = this.lowerBound();
+
+		for (var x = lowerBound.x; x <= upperBound.x; x++) {
+			var column = [];
+			for (var y = lowerBound.y; y <= upperBound.y; y++) {
+				var blocks = this.get(new IgePoint2d(x, y));
+				if (blocks.length === 0) {
+					column.push(undefined);
+				}
+				else {
+					column.push(blocks[0].classId());
+				}
+			}
+			blockTypeMatrix.push(column);
+		}
+
+		return blockTypeMatrix;
+	},
+
 	worldCoordinatesForBlock: function(block) {
 		var relBlockLoc = new IgePoint2d(
 			block.gridData.loc.x,
