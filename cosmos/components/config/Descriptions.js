@@ -39,7 +39,7 @@ Descriptions[CloakBlockVioletLight.prototype.classId()] =
 
 Descriptions[DragonPlatingBlock.prototype.classId()] =
 {
-	text: Descriptions[Armor.prototype.classId()].text + " Provides extra defense against fire."
+	text: Descriptions[Armor.prototype.classId()].text + " Forged from the hide of a space-dragon. Provides extra defense against fire."
 };
 
 Descriptions[IronPlatingBlock.prototype.classId()] =
@@ -113,7 +113,7 @@ Descriptions[IronBlock.prototype.classId()] =
 
 Descriptions[DragonBlock.prototype.classId()] =
 {
-	text: "The essential remains of space dragons. Dragon can be used to craft advanced engines."
+	text: "The essential remains of space dragons. Dragon can be used to craft advanced engines and armor."
 };
 
 Descriptions[AdamantiumBlock.prototype.classId()] =
@@ -139,7 +139,7 @@ Descriptions[TitaniumBlock.prototype.classId()] =
 
 Descriptions[MythrilBlock.prototype.classId()] =
 {
-	text: "Mythril is a rare and strong metal. Refine Mythril before using it to make ship-parts."
+	text: "Mythril is a rare and strong metal."
 };
 
 Descriptions[RefinedMythrilBlock.prototype.classId()] =

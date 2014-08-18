@@ -150,7 +150,7 @@ Recipes[KryptonitePlatingBlock.prototype.classId()] =
 	equipment: []
 };
 
-Recipes[DragonPlatingBlock.prototype.classId()] =
+Recipes[MythrilPlatingBlock.prototype.classId()] =
 {
 	reactants: [
 		{
@@ -158,7 +158,7 @@ Recipes[DragonPlatingBlock.prototype.classId()] =
 			quantity: 1
 		},
 		{
-			blockType: DragonBlock.prototype.classId(),
+			blockType: MythrilBlock.prototype.classId(),
 			quantity: 1
 		}
 	],
@@ -169,7 +169,7 @@ Recipes[AdamantiumPlatingBlock.prototype.classId()] =
 {
 	reactants: [
 		{
-			blockType: DragonPlatingBlock.prototype.classId(),
+			blockType: KryptonitePlatingBlock.prototype.classId(),
 			quantity: 1
 		},
 		{
@@ -180,7 +180,7 @@ Recipes[AdamantiumPlatingBlock.prototype.classId()] =
 	equipment: []
 };
 
-Recipes[MythrilPlatingBlock.prototype.classId()] =
+Recipes[DragonPlatingBlock.prototype.classId()] =
 {
 	reactants: [
 		{
@@ -192,7 +192,7 @@ Recipes[MythrilPlatingBlock.prototype.classId()] =
 			quantity: 10
 		},
 		{
-			blockType: MythrilBlock.prototype.classId(),
+			blockType: DragonBlock.prototype.classId(),
 			quantity: 3
 		}
 	],
