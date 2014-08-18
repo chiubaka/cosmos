@@ -12,10 +12,13 @@ var igeClientConfig = {
 		'./entities/RenderContainer.js',
 
 		/* Construction zone overlay */
-		'./entities/ConstructionZoneOverlay.js',
+		'./entities/ConstructionOverlay.js',
 
 		/* Blocks */
 		'./entities/Block.js',
+		'./components/GridData.js',
+		'./entities/SparseGrid.js',
+		'./entities/BlockGridFixtureDebugContainer.js',
 		'./entities/BlockGrid.js',
 		'./entities/BlockStructure.js',
 		'./entities/GeneratedBlockStructure.js',
@@ -35,7 +38,7 @@ var igeClientConfig = {
 		'./entities/blocks/parts/PowerBlock.js',
 		'./entities/blocks/parts/FuelBlock.js',
 		'./entities/blocks/parts/CargoBlock.js',
-		'./entities/blocks/parts/ControlBlock.js',
+		'./entities/blocks/parts/BridgeBlock.js',
 
 		/* Thrusters */
 		'./entities/blocks/parts/ThrusterBlock.js',
@@ -113,6 +116,7 @@ var igeClientConfig = {
 		'./components/Health.js',
 		'./components/Recipe.js',
 		'./components/Thrust.js',
+		'./components/ConstructionOverlayRenderableComponent.js',
 		'./components/ParallaxBackgroundRenderableComponent.js',
 		'./components/LaserBeamRenderableComponent.js',
 		'./components/ParticleRenderableComponent.js',
@@ -179,9 +183,11 @@ var igeClientConfig = {
 		/* Helper utilities */
 		'./utils/BlockGridPadding.js',
 		'./utils/DeploymentUtils.js',
+		'./utils/MathUtils.js',
 		'./utils/NetworkUtils.js',
 		'./utils/RandomInterval.js',
 		'./utils/PrototypeMixins.js',
+		'./utils/MathUtils.js',
 
 		/* === GAME SETUP === */
 		/* Configuration */

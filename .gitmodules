@@ -2,3 +2,7 @@
 	path = ige
 	url = https://chiubaka:6e584b2ca4e3b71cc5412d6a65b2223efbaecff7@github.com/teamleonine/ige.git
 	branch = master
+[submodule "physics"]
+	path = physics
+	url = https://chiubaka:6e584b2ca4e3b71cc5412d6a65b2223efbaecff7@github.com/teamleonine/physics.git
+	branch = master

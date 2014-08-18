@@ -165,9 +165,18 @@ IF EXIST "%DEPLOYMENT_TARGET%\client\package.json" (
   popd
 )
 
+:: Install more NPM packages for client
+echo Installing client NPM packages.
+IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
+  pushd "%DEPLOYMENT_TARGET%\"
+  call :ExecuteCmd !NPM_CMD! install --production
+  IF !ERRORLEVEL! NEQ 0 goto error
+  popd
+)
+
 echo Installing grunt CLI globally
-IF EXIST "%DEPLOYMENT_TARGET%\client\package.json" (
-  pushd "%DEPLOYMENT_TARGET%\client"
+IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
+  pushd "%DEPLOYMENT_TARGET%\"
   call :ExecuteCmd !NPM_CMD! install -g grunt-cli
   if !ERRORLEVEL! NEQ 0 goto error
   echo Running grunt deploy task

@@ -12,11 +12,6 @@ Types[Armor.prototype.classId()] =
 	text: 'Armor'
 };
 
-Types[AdamantiumPlatingBlock.prototype.classId()] =
-{
-	text: "Advanced Armor"
-};
-
 Types[CloakBlock.prototype.classId()] =
 {
 	text: "Cloaking Armor"
@@ -37,11 +32,6 @@ Types[CloakBlockVioletLight.prototype.classId()] =
 	text: "Cloaking Armor"
 };
 
-Types[DragonPlatingBlock.prototype.classId()] =
-{
-	text: "Advanced Armor"
-};
-
 Types[IronPlatingBlock.prototype.classId()] =
 {
 	text: "Level 1 Armor"
@@ -59,7 +49,17 @@ Types[KryptonitePlatingBlock.prototype.classId()] =
 
 Types[MythrilPlatingBlock.prototype.classId()] =
 {
-	text: "Advanced Armor"
+	text: "Level 4 Armor"
+};
+
+Types[AdamantiumPlatingBlock.prototype.classId()] =
+{
+	text: "Level 5 Armor"
+};
+
+Types[DragonPlatingBlock.prototype.classId()] =
+{
+	text: "Level 6 Armor"
 };
 
 Types[TitaniumPlatingBlock.prototype.classId()] =
@@ -160,9 +160,9 @@ Types[CargoBlock.prototype.classId()] =
 	text: "Cargo Hold"
 };
 
-Types[ControlBlock.prototype.classId()] =
+Types[BridgeBlock.prototype.classId()] =
 {
-	text: "Control"
+	text: "Command Center"
 };
 
 /* Engines */

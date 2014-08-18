@@ -8,20 +8,20 @@
 var LaserBeam = IgeEntity.extend({
 	classId: 'LaserBeam',
 
+	_source: undefined,
+	_target: undefined,
+
 	init: function (createData) {
 		IgeEntity.prototype.init.call(this);
 
 		this.addComponent(LaserBeamRenderableComponent, {createDisplayObject: function () {
 			var sprite = PIXI.Sprite.fromFrame('laserbeam');
 			sprite.width = 10;
-			sprite.position.x = -sprite.width / 2;
+			sprite.anchor.set(0.5);
 			return sprite;
 		}});
 
 		if (!ige.isServer) {
-			this.texture(ige.client.textures.laserBeamTexture)
-				.width(10)
-
 			// Fade in the laser beam
 			this.opacity(0);
 			this._fadeInTween();
@@ -51,6 +51,11 @@ var LaserBeam = IgeEntity.extend({
 		return this;
 	},
 
+	setSource: function(block) {
+		this._source = block;
+		return this;
+	},
+
 	/**
 	 * Sets the location of the targeted block.
 	 * @param blockGridId {string} The IGE ID of the {@link BlockGrid} we are targeting
@@ -59,53 +64,9 @@ var LaserBeam = IgeEntity.extend({
 	 * @memberof LaserBeam
 	 * @instance
  	 */
-	setTarget: function(blockGridId, row, col) {
-		this._targetId = blockGridId;
-		this._targetRow = row;
-		this._targetCol = col;
+	setTarget: function(block) {
+		this._target = block;
 		return this;
-	},
-
-	/**
-	 * Override the {@link IgeEntity#update} function to move the laser beam appropriately when either the target block
-	 * or the source block is moved.
-	 * @param ctx {Object} The rendering context.
-	 * @memberof LaserBeam
-	 * @instance
-	 */
-	update: function(ctx) {
-		if (!ige.isServer) {
-			var laserMount = this.parent();
-			var blockGrid = ige.$(this._targetId);
-			var block = undefined;
-			if (blockGrid !== undefined) {
-				block = blockGrid.get(this._targetRow, this._targetCol);
-			}
-
-			// Check if the block is undefined. This happens in the update() ticks
-			// where the block has been broken off the BlockGrid, but the laser
-			// hasn't been destroyed yet.
-			if(block === undefined) {
-				IgeEntity.prototype.update.call(this, ctx);
-				return;
-			}
-
-			// We need the current world matrix of the block for correct
-			// worldPosition. Since the renderContainer's children do not
-			// get automatically updated, we have to manually update the
-			// block's tranform.
-			block.updateTransform();
-			// Calculate length and angle of laser
-			var deltaX = block.worldPosition().x - laserMount.worldPosition().x;
-			var deltaY = block.worldPosition().y - laserMount.worldPosition().y;
-			var distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
-			var angle = Math.atan2(deltaY,deltaX);
-
-			this.rotate().z(angle - laserMount.parent().rotate().z() - Math.radians(270));
-			// Distance * 2 because image is half blank
-			this.height(distance * 2);
-		}
-		IgeEntity.prototype.update.call(this, ctx);
 	}
 });
 

@@ -15,13 +15,8 @@ var Server = IgeClass.extend({
 		// set the framerate
 		ige.setFps(Constants.fps.SERVER_FPS);
 
-		// Add physics and setup physics world
-		ige.addComponent(IgeBox2dComponent)
-			.box2d.sleep(true)
-			.box2d.createWorld()
-			.box2d.scaleRatio(10)
-			.box2d.mode(0)//Sets the world interval mode. In mode 0 (zero) the box2d simulation is synced to the framerate of the engine's renderer. In mode 1 the box2d simulation is stepped at a constant speed regardless of the engine's renderer. This must be set *before* calling the start() method in order for the setting to take effect.
-			.box2d.start();// this should be the last thing called
+		// Add physics system
+		ige.addComponent(TLPhysicsSystem, {scaleFactor: 100});
 
 		ige.addComponent(IgeMongoDbComponent, DbConfig.config);
 		ige.addComponent(IgeNetIoComponent);
@@ -80,6 +75,8 @@ var Server = IgeClass.extend({
 						ige.network.define('cosmos:player.username.set.request', Player.onUsernameRequested);
 						ige.network.define('cosmos:player.username.set.approve');
 						ige.network.define('cosmos:player.username.set.error');
+
+						ige.network.define('cosmos:ship.death');
 
 						/* When a client connects or disconnects */
 						ige.network.on('connect', self._onPlayerConnect); // Defined in ./gameClasses/ServerNetworkEvents.js

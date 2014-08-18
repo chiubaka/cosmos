@@ -14,7 +14,7 @@ var ExampleShips = {
 		return [
 			[undefined,           undefined,   new MiningLaserBlock(), undefined,   undefined],
 			[undefined,           new SteelPlatingBlock(), new SteelPlatingBlock(),            new SteelPlatingBlock(), undefined],
-			[undefined,           new SteelPlatingBlock(), new ControlBlock(),     new SteelPlatingBlock(), undefined],
+			[undefined,           new SteelPlatingBlock(), new BridgeBlock(),     new SteelPlatingBlock(), undefined],
 			[undefined,           new SteelPlatingBlock(), new PowerBlock(),       new SteelPlatingBlock(), undefined],
 			[new IronThrusterBlock(), new SteelPlatingBlock(), new CargoBlock,         new SteelPlatingBlock(), new IronThrusterBlock()],
 			[undefined,           new SteelPlatingBlock(), new CargoBlock,         new SteelPlatingBlock(), undefined],
@@ -22,7 +22,7 @@ var ExampleShips = {
 			[undefined,           new SteelPlatingBlock(), new IronEngineBlock(),      new SteelPlatingBlock(), undefined]
 		]
 	},
-
+	
 	/**
 	 * This is the ship in the middle of the video. It has two engines, but one of them is misplaced and unbalanced.
 	 * @returns {Array} A {@link Block} matrix that represents the starter ship with two, unbalanced engines.
@@ -32,7 +32,7 @@ var ExampleShips = {
 		return [
 			[undefined,           undefined,         new MiningLaserBlock(), undefined,         undefined],
 			[undefined,           new SteelPlatingBlock(),       new SteelPlatingBlock(),            new SteelPlatingBlock(),       undefined],
-			[undefined,           new SteelPlatingBlock(),       new ControlBlock(),     new SteelPlatingBlock(),       undefined],
+			[undefined,           new SteelPlatingBlock(),       new BridgeBlock(),     new SteelPlatingBlock(),       undefined],
 			[undefined,           new SteelPlatingBlock(),       new PowerBlock(),       new SteelPlatingBlock(),       undefined],
 			[new IronThrusterBlock(), new SteelPlatingBlock(),       new CargoBlock,         new SteelPlatingBlock(),       new IronThrusterBlock()],
 			[undefined,           new SteelPlatingBlock(),       new CargoBlock,         new SteelPlatingBlock(),       undefined],
@@ -51,7 +51,7 @@ var ExampleShips = {
 		return [
 			[undefined,           undefined,         new MiningLaserBlock(), undefined,         undefined],
 			[undefined,           new SteelPlatingBlock(),       new SteelPlatingBlock(),            new SteelPlatingBlock(),       undefined],
-			[undefined,           new SteelPlatingBlock(),       new ControlBlock(),     new SteelPlatingBlock(),       undefined],
+			[undefined,           new SteelPlatingBlock(),       new BridgeBlock(),     new SteelPlatingBlock(),       undefined],
 			[undefined,           new SteelPlatingBlock(),       new PowerBlock(),       new SteelPlatingBlock(),       undefined],
 			[new IronThrusterBlock(), new SteelPlatingBlock(),       new CargoBlock,         new SteelPlatingBlock(),       new IronThrusterBlock()],
 			[undefined,           new SteelPlatingBlock(),       new CargoBlock,         new SteelPlatingBlock(),       undefined],

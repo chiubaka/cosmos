@@ -29,11 +29,11 @@ var ConstructCapability = Capability.extend({
 					actionFunc: this.ClickScene_mouseDown
 				}
 			},
-			'ConstructionZoneOverlay': {
+			'ConstructionOverlay': {
 				'mousedown': {
 					capability: this,
-					conditionFunc: this.ConstructionZoneOverlay_canMouseDown,
-					actionFunc: this.ConstructionZoneOverlay_mouseDown
+					conditionFunc: this.ConstructionOverlay_canMouseDown,
+					actionFunc: this.ConstructionOverlay_mouseDown
 				}
 			}
 			// TODO: Implement construction on existing block grids here.
@@ -107,7 +107,7 @@ var ConstructCapability = Capability.extend({
 	 * @memberof ConstructCapability
 	 * @instance
 	 */
-	ConstructionZoneOverlay_canMouseDown: function(sender, event, data) {
+	ConstructionOverlay_canMouseDown: function(sender, event, data) {
 		// Notify player that no block type is selected
 		if (ige.hud.leftToolbar.windows.cargo.selectedType === undefined) {
 			ige.notification.emit('notificationError',
@@ -125,10 +125,10 @@ var ConstructCapability = Capability.extend({
 	 * @memberof ConstructCapability
 	 * @instance
 	 */
-	ConstructionZoneOverlay_mouseDown: function(sender, event, data) {
+	ConstructionOverlay_mouseDown: function(sender, event, data) {
 		data.selectedType = ige.hud.leftToolbar.windows.cargo.selectedType;
 		ige.client.metrics.track('cosmos:construct.attempt.existing',
 			{'type': ige.hud.leftToolbar.windows.cargo.selectedType});
 		ige.network.send('constructionZoneClicked', data);
-	},
+	}
 });

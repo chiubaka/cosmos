@@ -158,17 +158,64 @@ var GameInit = {
 				.layer(client.LAYER_BACKGROUND)
 				.mount(client.spaceScene);
 
-		new Background()
-			.id('helix_nebula_background')
-			.depth(0)
-			.parallaxLag(2)
-			.mount(client.spaceBackgroundScene);
 
-		new StarfieldBackground()
-			.id('starfield_background')
-			.depth(1)
-			.parallaxLag(4)
-			.mount(client.spaceBackgroundScene);
+		// Instantiate the background tiles
+		for (var gridX = 0; gridX < Constants.NUM_BACKGROUND_SQUARES.X; gridX++) {
+			for (var gridY = 0; gridY < Constants.NUM_BACKGROUND_SQUARES.Y; gridY++) {
+				new Background({textureName: 'background' + gridX + "-" + gridY})
+					.id('background' + gridX + "-" + gridY)
+					.depth(0)
+					.parallaxLag(2)
+					.mount(client.spaceBackgroundScene)
+					.translateTo(Constants.GRID_SQUARE_SIZE.X*gridX + Constants.BACKGROUND_OFFSET.X,
+						Constants.GRID_SQUARE_SIZE.Y*gridY + Constants.BACKGROUND_OFFSET.Y,
+						0);
+			}
+		}
+
+		//Instantiate the background overlay
+		for (var gridX = -Constants.NUM_BACKGROUND_OVERLAY_SQUARES.X/2; gridX < Constants.NUM_BACKGROUND_OVERLAY_SQUARES.X/2; gridX++) {
+			for (var gridY = -Constants.NUM_BACKGROUND_OVERLAY_SQUARES.Y/2; gridY < Constants.NUM_BACKGROUND_OVERLAY_SQUARES.Y/2; gridY++) {
+				new Background({textureName: 'backgroundOverlay'})
+					.id('backgroundOverlay' + gridX + "-" + gridY)
+					.depth(1)
+					.parallaxLag(4)
+					.mount(client.spaceBackgroundScene)
+					.translateTo(Constants.GRID_SQUARE_SIZE.X*gridX,
+						Constants.GRID_SQUARE_SIZE.Y*gridY,
+						0);
+			}
+		}
+
+		//Instantiate the second background overlay
+		for (var gridX = -Constants.NUM_BACKGROUND_OVERLAY_SQUARES.X/2; gridX < Constants.NUM_BACKGROUND_OVERLAY_SQUARES.X/2; gridX++) {
+			for (var gridY = -Constants.NUM_BACKGROUND_OVERLAY_SQUARES.Y/2; gridY < Constants.NUM_BACKGROUND_OVERLAY_SQUARES.Y/2; gridY++) {
+				var x = Constants.GRID_SQUARE_SIZE.X*gridX;
+				var y = Constants.GRID_SQUARE_SIZE.Y*gridY;
+
+				new Background({textureName: 'backgroundOverlay'})
+					.id('backgroundOverlayTheSecond' + gridX + "-" + gridY)
+					.depth(1)
+					.parallaxLag(5)
+					.mount(client.spaceBackgroundScene)
+					.translateTo(x * Math.cos(Constants.SECOND_OVERLAY_ROTATION) - y * Math.sin(Constants.SECOND_OVERLAY_ROTATION),
+						x * Math.sin(Constants.SECOND_OVERLAY_ROTATION) + y * Math.cos(Constants.SECOND_OVERLAY_ROTATION),
+						0)
+					.rotate().z(Constants.SECOND_OVERLAY_ROTATION);
+			}
+		}
+		/*
+		var NUM_STAR_FIELDS = 5;
+		for (var starfieldNumber = 0; starfieldNumber < NUM_STAR_FIELDS; starfieldNumber++) {
+			this.moveRandomly(
+				new StarfieldBackground()
+					.id('starfield_background' + starfieldNumber)
+					.depth(2)
+					.parallaxLag(6 + starfieldNumber)
+					.mount(client.spaceBackgroundScene)
+			);
+		}
+		*/
 	},
 
 	initDebugDisplay: function() {
@@ -185,7 +232,6 @@ var GameInit = {
 		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
 			this.spawnStructure(200, BlockStructureGenerator.elementDistributions.randomDistribution());
 		}
-
 		// TODO: The procedural generation algorithm is causing strange problems with the new BlockGrid system. Leave
 		// this stuff commented out until it is figured out.
 		var NUM_DERELICT_SPACESHIPS = 10;
@@ -195,11 +241,12 @@ var GameInit = {
 	},
 
 	spawnStructure: function(maxNumBlocks, blockDistribution, symmetric) {
+		var translate = this.getRandomLocation();
 		var structure = BlockStructureGenerator
-			.genProceduralAsteroid(maxNumBlocks, blockDistribution, symmetric)
+			.genProceduralAsteroid(maxNumBlocks, blockDistribution, symmetric,
+				translate)
 			.streamMode(1)
 			.mount(ige.server.spaceGameScene);
-		this.moveRandomly(structure);
 	},
 
 	/**
@@ -207,64 +254,148 @@ var GameInit = {
 	 * TODO: Running physics on the client may improve performance.
 	 */
 	initPhysics: function() {
-		// Set the contact listener methods to detect when
-		// contacts (collisions) begin and end
-		ige.box2d.contactListener(
-			// Listen for when contact's begin
-			function(contact) {
-				// If player ship is near small asteroids, attract them
-				if (contact.igeEitherCategory(Ship.BOX2D_CATEGORY) &&
-					contact.igeEitherCategory(Drop.BOX2D_CATEGORY)) {
-					var drop = contact.igeEntityByCategory(Drop.BOX2D_CATEGORY);
-					var ship = contact.igeEntityByCategory(Ship.BOX2D_CATEGORY);
+		// Set up custom contacts
+		var contactIdentifiers = {
+			'shipDropBegin': 1,
+			'shipDropEnd': 2,
+			'shipDropPreSolve': 3,
+			'dropPreSolve': 4
+		}
 
-					contact.SetEnabled(false);
+		var beginContacts = [{
+			a_body_category: Ship.BOX2D_CATEGORY,
+			a_fixture_category: Ship.ATTRACTOR_BOX2D_CATEGORY,
+			b_body_category: Drop.BOX2D_CATEGORY,
+			b_fixture_category: '',
+			disable_contact: true,
+			identifier: contactIdentifiers['shipDropBegin']
+		}];
 
-					// TODO: Make it so blocks are attracted to multiple players
-					if (drop.attractedTo() === undefined && drop.isOwner(ship)) {
-						drop.attractedTo(ship);
-					}
-				}
-			},
+		var endContacts = [{
+			a_body_category: Ship.BOX2D_CATEGORY,
+			a_fixture_category: Ship.ATTRACTOR_BOX2D_CATEGORY,
+			b_body_category: Drop.BOX2D_CATEGORY,
+			b_fixture_category: '',
+			disable_contact:false,
+			identifier: contactIdentifiers['shipDropEnd']
+		}];
 
-			// Listen for when contacts end
-			function(contact) {
-				if (contact.igeEitherCategory(Ship.BOX2D_CATEGORY) &&
-					contact.igeEitherCategory(Drop.BOX2D_CATEGORY)) {
-					var ship = contact.igeEntityByCategory(Ship.BOX2D_CATEGORY);
-					var drop = contact.igeEntityByCategory(Drop.BOX2D_CATEGORY);
-					if (drop.isOwner(ship)) {
-						drop.attractedTo(undefined);
-					}
-				}
-			},
+		var preSolveContacts = [{
+			a_body_category: Ship.BOX2D_CATEGORY,
+			a_fixture_category: '',
+			b_body_category: Drop.BOX2D_CATEGORY,
+			b_fixture_category: '',
+			disable_contact: true,
+			identifier: contactIdentifiers['shipDropPreSolve']
+		},
+		// TODO: Make drops not collide with anything (this doesn't work yet)
+		{
+			a_body_category: Drop.BOX2D_CATEGORY,
+			a_fixture_category: '',
+			b_body_category: '',
+			b_fixture_category: '',
+			disable_contact: true,
+			identifier: contactIdentifiers['dropPreSolve']
+		}];
 
-			// Presolve events. This is called after collision is detected, but
-			// before collision repsonse is calculated.
-			function(contact) {
-				if (contact.igeEitherCategory(Drop.BOX2D_CATEGORY)) {
-					contact.SetEnabled(false);
-					if (contact.igeEitherCategory(Ship.BOX2D_CATEGORY)) {
-						var drop = contact.igeEntityByCategory(Drop.BOX2D_CATEGORY);
-						var ship = contact.igeEntityByCategory(Ship.BOX2D_CATEGORY);
-						var shipFixture = contact.fixtureByCategory(Ship.BOX2D_CATEGORY);
+		ige.physicsSystem.newCustomContacts({contacts: beginContacts, contactType:
+			'BEGIN_CONTACT'});
+		ige.physicsSystem.newCustomContacts({contacts: endContacts, contactType:
+			'END_CONTACT'});
+		ige.physicsSystem.newCustomContacts({contacts: preSolveContacts, contactType:
+			'PRE_SOLVE'});
 
-						// Asteroid has hit ship blocks, destroy the asteroid
-						if (!shipFixture.m_isSensor && drop.isOwner(ship)) {
-							// Disable contact so player doesn't move due to collision
-							contact.SetEnabled(false);
-							// Ignore multiple collision points
-							if (drop === undefined || !drop.alive()) {
-								return;
-							}
-							var block = drop.block();
-							ige.emit('block collected',
-								[ship, block.classId()]);
-							drop.destroy();
+		// Set up collision callbacks
+		ige.physicsSystem.registerCollisionCallbacks({
+			beginContact: function(entity1, entity2, identifier) {
+				switch (identifier) {
+					case contactIdentifiers.shipDropBegin:
+						var results = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY,
+							Ship.BOX2D_CATEGORY);
+						var drop = results.category1Entity;
+						var ship = results.category2Entity;
+
+						if (drop.getAttractedTo() === undefined && drop.isOwner(ship)) {
+							drop.setAttractedTo(ship);
 						}
-					}
+						break;
+					default:
+						this.log('GameInit#initPhysics: beginContact bad identifier', 'warning');
+						break;
 				}
-			});
+			},
+
+			endContact: function(entity1, entity2, identifier) {
+				switch (identifier) {
+					case contactIdentifiers.shipDropEnd:
+						var results = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY,
+							Ship.BOX2D_CATEGORY);
+						var drop = results.category1Entity;
+						var ship = results.category2Entity;
+
+						if (drop.isOwner(ship)) {
+							drop.setAttractedTo(undefined);
+						}
+						break;
+					default:
+						this.log('GameInit#initPhysics: endContact bad identifier', 'warning');
+						break;
+				}
+			},
+
+			preSolve: function(entity1, entity2, identifier) {
+				switch (identifier) {
+					case contactIdentifiers.shipDropPreSolve:
+						var results = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY,
+							Ship.BOX2D_CATEGORY);
+						var drop = results.category1Entity;
+						var ship = results.category2Entity;
+
+						// Ignore multiple collision points
+						if (drop === undefined || !drop.alive()) {
+							return;
+						}
+						var block = drop.block();
+						ige.emit('block collected', [ship, block.classId()]);
+						drop.destroy();
+						break;
+					case contactIdentifiers.dropPreSolve:
+						// TODO: Make drops not collide (this needs physics server support)
+						break;
+					default:
+						this.log('GameInit#initPhysics: preSolve bad identifier', 'warning');
+						break;
+				}
+			},
+
+			postSolve: function(entity1, entity2, identifier) {
+			}
+		});
+		// Gets entity by category. Assumes each entity maps to either category1
+		// or the other category.
+		function entityByCategory(entity1, entity2, category1, category2) {
+			var category1Entity;
+			var category2Entity;
+
+			if ((entity1.category() === category1) &&
+				(entity2.category() === category2)) {
+				category1Entity = entity1;
+				category2Entity = entity2; 
+			}
+			else if ((entity1.category() === category2) &&
+				(entity2.category() === category1)) {
+				category1Entity = entity2;
+				category2Entity = entity1; 
+			}
+			else {
+				this.log('GameInit#entityByCategory: Entities do not match categories!', 'error');
+			}
+
+			return {
+				category1Entity: category1Entity,
+				category2Entity: category2Entity,
+			};
+		}
 	},
 
 	initServerEvents: function() {
@@ -341,12 +472,13 @@ var GameInit = {
 		ige.watchStart(client.custom4);
 	},
 
-	// TODO: Move this to a helper function that operates on IgeEntities
-	moveRandomly: function(entity) {
-		//this is the maximum distance that we will translate entities to
+	getRandomLocation: function () {
+		// The maximum distance that we will translate entities to
 		var MAX_DISTANCE = 9000;
-		entity.translateTo((Math.random() - .5) * MAX_DISTANCE, (Math.random() - .5) * MAX_DISTANCE, 0);
-	}
+		return new IgePoint2d((Math.random() - 0.5) * MAX_DISTANCE,
+			(Math.random() - 0.5) * MAX_DISTANCE);
+	},
+
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = GameInit; }

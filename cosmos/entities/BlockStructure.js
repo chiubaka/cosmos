@@ -13,44 +13,20 @@ var BlockStructure = BlockGrid.extend({
 	/**
 	 * Construction zone overlay for showing and hiding locations that players can click on in order to place a block
 	 * on an existing structure.
-	 * @type {ConstructionZoneOverlay}
+	 * @type {ConstructionOverlay}
 	 * @memberof BlockStructure
 	 * @private
 	 * @instance
 	 */
-	_constructionZoneOverlay: undefined,
+	_constructionOverlay: undefined,
 
 	init: function(data) {
 		BlockGrid.prototype.init.call(this, data);
-		if (!ige.isServer) {
-			// TODO: Lazily create when needed to speed up load time.
-			// TODO: Examine ConstructionZoneOverlay to make sure it is compatible with new BlockGrid backing.
-			// TODO: Uncomment this. Commented out so I can test the new BlockGrid class without getting errors from
-			// the ConstructionZoneOverlay class.
-			this._constructionZoneOverlay = new ConstructionZoneOverlay(this)
+
+		if (ige.isClient) {
+			this._constructionOverlay = new ConstructionOverlay(this)
 				.mount(this);
 		}
-	},
-
-	/**
-	 * Creates a list of all locations around this {@link BlockGrid} where a new {@link Block} could be placed.
-	 * @returns {Array} A list of all locations around this {@link BlockGrid} where a new {@link Block} can be placed.
-	 * Location objects are in the format {row: number, col: number}.
-	 * @memberof BlockStructure
-	 * @instance
-	 * @todo Modify this to support taking a block size and returning only the locations that can support a block of
-	 * that size
-	 */
-	constructionZoneLocations: function() {
-		var constructionZoneLocations = [];
-		var iterator = this.iterator();
-		while (iterator.hasNext()) {
-			var block = iterator.next();
-			// Fancy way of concatenating two arrays. Referenced from here:
-			// http://stackoverflow.com/questions/4156101/javascript-push-array-values-into-another-array
-			constructionZoneLocations.push.apply(constructionZoneLocations, this._emptyNeighboringLocations(block));
-		}
-		return constructionZoneLocations;
 	},
 
 	/**
@@ -69,7 +45,7 @@ var BlockStructure = BlockGrid.extend({
 		if (ige.client.state.currentCapability().classId() !== MineCapability.prototype.classId()) {
 			return;
 		}
-		if (this._hasNeighboringOpenLocations(block.row(), block.col(), block)) {
+		if (this.objectHasNeighboringOpenLocations(block)) {
 			// TODO: This might be dangerous, since some of the event properties should be changed so that they are
 			// relative to the child's bounding box, but since we don't use any of those properties for the moment,
 			// ignore that.
@@ -80,6 +56,16 @@ var BlockStructure = BlockGrid.extend({
 			ige.notification.emit('notificationError',
 				NotificationDefinitions.errorKeys.notMinable);
 		}
+	},
+
+	put: function(block, location, replace) {
+		var result = BlockGrid.prototype.put.call(this, block, location, replace);
+
+		if (ige.isClient && this._constructionOverlay) {
+			this._constructionOverlay.refresh();
+		}
+
+		return result;
 	},
 
 	/**
@@ -98,7 +84,7 @@ var BlockStructure = BlockGrid.extend({
 
 		switch (data.action) {
 			case 'mine':
-				var block = self.get(data.row, data.col);
+				var block = self.get(new IgePoint2d(data.col, data.row))[0];
 				if (block === undefined) {
 					console.log("Request to mine undefined block. row: " + data.row + ", col: " + data.col);
 					return false;
@@ -135,38 +121,33 @@ var BlockStructure = BlockGrid.extend({
 						player.currentShip().turnOffMiningLasers(block);
 
 						// Drop block server side, then send drop msg to client
-						self.drop(data.row, data.col, player);
+						self.drop(player, new IgePoint2d(data.col, data.row));
+						if (self.count() === 0) {
+							self.destroy();
+						}
 						data.action = 'remove';
 						ige.network.send('blockAction', data);
 						ige.network.stream.queueCommand('cosmos:BlockStructure.processBlockActionServer.minedBlock',
 							true, player.clientId());
 					}
-				}, Block.MINING_INTERVAL / player.currentShip().numBlocksOfType(MiningLaserBlock.prototype.classId()));
+				}, Block.MINING_INTERVAL / player.currentShip().weapons().length);
 				return true;
 			default:
 				return false;
 		}
 	},
 
-	/**
-	 * Extends the {@link BlockGrid#processBlockActionClient} function to provide additional functionality for
-	 * structure-specific actions. Process actions client-side.
-	 * @param data {Object} An object representing the action sent from the server.
-	 * @memberof BlockStructure
-	 * @instance
-	 */
-	processBlockActionClient: function(data) {
-		BlockGrid.prototype.processBlockActionClient.call(this, data);
+	remove: function(location, width, height) {
+		var result = BlockGrid.prototype.remove.call(this, location, width, height);
 
-		switch (data.action) {
-			case 'remove':
-				this._constructionZoneOverlay.refresh();
-				break;
-			case 'add':
-				this._constructionZoneOverlay.refresh();
-				break;
+		if (ige.isClient && this._constructionOverlay) {
+			this._constructionOverlay.refresh();
 		}
+
+		return result;
 	}
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = BlockStructure; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
+	module.exports = BlockStructure;
+}

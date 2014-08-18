@@ -180,7 +180,7 @@ var ServerNetworkEvents = {
 
 		var sendData = {
 			shipId: player.currentShip().id()
-		}
+		};
 
 		ige.network.send('shipEntity', sendData, clientId);
 	},
@@ -259,7 +259,7 @@ var ServerNetworkEvents = {
 		if(blockGrid.processBlockActionServer(data, player)) {
 			player.currentShip().mining = true;
 
-			var targetBlock = blockGrid.get(data.row, data.col);
+			var targetBlock = blockGrid.get(new IgePoint2d(data.col, data.row))[0];
 			// Activate mining lasers
 			player.currentShip().fireMiningLasers(targetBlock);
 		}

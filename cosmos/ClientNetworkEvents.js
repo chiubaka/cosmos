@@ -126,7 +126,9 @@ var ClientNetworkEvents = {
 
 	_onBlockAction: function(data) {
 		var blockGrid = ige.$(data.blockGridId);
-		blockGrid.processBlockActionClient(data);
+		if (blockGrid) {
+			blockGrid.processBlockActionClient(data);
+		}
 	},
 
 	_onMinedBlock: function(data) {
@@ -135,12 +137,16 @@ var ClientNetworkEvents = {
 
 	_onAddEffect: function(effect) {
 		var blockGrid = ige.$(effect.sourceBlock.blockGridId);
-		blockGrid.addEffect(effect);
+		if (blockGrid) {
+			blockGrid.addEffect(effect);
+		}
 	},
 
 	_onRemoveEffect: function(effect) {
 		var blockGrid = ige.$(effect.sourceBlock.blockGridId);
-		blockGrid.removeEffect(effect);
+		if (blockGrid) {
+			blockGrid.removeEffect(effect);
+		}
 	},
 
 	_onCargoResponse: function(cargoList) {
@@ -156,6 +162,17 @@ var ClientNetworkEvents = {
 	_onConfirm: function(confirmData) {
 		ige.client.metrics.track(confirmData.event, confirmData.data);
 	},
+
+	_onShipDeath: function(data) {
+		ige.client.metrics.track('cosmos:ship.death');
+		var message = "Your bridge has been destroyed. You can no longer pilot this ship. Would you like a new ship?";
+
+		alertify.alert(message, function (e) {
+			if (e) {
+				ige.network.send('new ship');
+			}
+		});
+	}
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = ClientNetworkEvents; }

@@ -17,7 +17,8 @@ var BlockStructureGenerator = {
 	 * @return {BlockStructure} The procedurally generated asteroid.
 	 * @memberof BlockStructureGenerator
 	 */
-	genProceduralAsteroid: function(maxNumBlocks, blockDistribution, symmetric) {
+	genProceduralAsteroid: function(maxNumBlocks, blockDistribution, symmetric,
+		translate) {
 		// Whether or not to generate a symmetric asteroid
 		symmetric = symmetric || false;
 
@@ -29,7 +30,8 @@ var BlockStructureGenerator = {
 		var blockStructure = new GeneratedBlockStructure({
 			maxNumBlocks: maxNumBlocks,
 			blockDistribution: blockDistribution,
-			symmetric: symmetric
+			symmetric: symmetric,
+			translate: translate
 		});
 
 		// Number of blocks that can be contained in this asteroid.
@@ -56,33 +58,32 @@ var BlockStructureGenerator = {
 				continue;
 			}
 			*/
-			if (blockStructure.get(block.row, block.col) !== undefined) {
+			if (blockStructure.get(new IgePoint2d(block.col, block.row)).length > 0) {
 				blocksToPlace.remove(blockIndex);
 				continue;
 			}
 
 			if (first) {
-				var newBlock = new IceBlock();
+				var newBlock = this._drawFromDistribution(blockDistribution);
 				first = false;
 			} else {
 				var newBlock = this._getBlockType(blockStructure, block.row, block.col, blockDistribution);
 			}
 
-			{
-				blockStructure.add(block.row, block.col, newBlock, false);
+			blockStructure.put(newBlock, new IgePoint2d(block.col, block.row), newBlock, false);
+			blocksRemaining--;
+
+			if (symmetric) {
+				blockStructure.put(Block.blockFromClassId(newBlock.classId()),
+					new IgePoint2d(-block.col, -block.row), false);
 				blocksRemaining--;
-
-				if (symmetric) {
-					blockStructure.add(block.row, -block.col, Block.blockFromClassId(newBlock.classId()), false);
-					blocksRemaining--;
-				}
-
-				// Push cardinal neighbors into block bag.
-				blocksToPlace.push({ row: block.row - 1, col: block.col });
-				blocksToPlace.push({ row: block.row + 1, col: block.col });
-				blocksToPlace.push({ row: block.row, col: block.col - 1 });
-				blocksToPlace.push({ row: block.row, col: block.col + 1 });
 			}
+
+			// Push cardinal neighbors into block bag.
+			blocksToPlace.push({ row: block.row - 1, col: block.col });
+			blocksToPlace.push({ row: block.row + 1, col: block.col });
+			blocksToPlace.push({ row: block.row, col: block.col - 1 });
+			blocksToPlace.push({ row: block.row, col: block.col + 1 });
 
 			// Remove the block
 			blocksToPlace.remove(blockIndex);
@@ -114,10 +115,10 @@ var BlockStructureGenerator = {
 					continue;
 				}
 
-				if (blockStructure.get(curRow, curCol) == undefined) {
+				if (blockStructure.get(new IgePoint2d(curCol, curRow)).length === 0) {
 					continue;
 				}
-				var blockType = blockStructure.get(curRow, curCol).classId()
+				var blockType = blockStructure.get(new IgePoint2d(curCol, curRow))[0].classId()
 
 				if (neighborCounts[blockType] === undefined) {
 					neighborCounts[blockType] = 0;
@@ -170,58 +171,6 @@ var BlockStructureGenerator = {
 	 */
 	weightedRandom: function(value, upperBound, weight) {
 		return (Math.random() * (value)) * weight + (upperBound * (1 - weight));
-	},
-
-	/**
-	 * Creates and returns a {@link BlockStructure} with a single {@link Block}.
-	 * @param distribution {Object} The distribution object to draw the {@link Block} from. The default is a standard
-	 * elemental distribution.
-	 * @returns {BlockStructure} The newly created 1x1 {@link BlockStructure}.
-	 * @memberof BlockStructureGenerator
-	 */
-	singleBlock: function(distribution) {
-		distribution = distribution || this.elementDistributions.STANDARD;
-		var blockStructure = new GeneratedBlockStructure({
-			blockDistribution: distribution
-		});
-		blockStructure.add(0, 0, this._drawFromDistribution(distribution));
-
-		return blockStructure;
-	},
-
-	/**
-	 * Creates and returns a 2x2 asteroid as a {@link BlockStructure}.
-	 * @param distribution {Object} The distribution object to draw the {@link Block}s from. The default is a standard
-	 * elemental distribution.
-	 * @returns {BlockStructure} The newly created 2x2 {@link BlockStructure}.
-	 * @memberof BlockStructureGenerator
-	 * @todo Edit this function so that it creates and returns an actual {@link BlockStructure} object.
-	 * As it is written now, this won't work.
-	 */
-	littleAsteroid: function(distribution) {
-		distribution = distribution || this.elementDistributions.STANDARD;
-		return [
-			[this._drawFromDistribution(distribution), this._drawFromDistribution(distribution)],
-			[this._drawFromDistribution(distribution), this._drawFromDistribution(distribution)]
-		];
-	},
-
-	/**
-	 * Creates and returns a 3x3 asteroid with a missing center {@link Block} as a {@link BlockStructure.}
-	 * @param distribution {Object} The distribution object to draw the {@link Block}s from. The default is a standard
-	 * elemental distribution.
-	 * @returns {BlockStructure} The newly created hollow, 3x3 asteroid with a missing center.
-	 * @memberof BlockStructureGenerator
-	 * @todo Edit this function so that it creates and returns an actual {@link BlockStructure} object. As it is written
-	 * now, this won't work.
-	 */
-	hollowAsteroid: function(distribution) {
-		distribution = distribution || this.elementDistributions.STANDARD;
-		return [
-			[this._drawFromDistribution(distribution), this._drawFromDistribution(distribution), this._drawFromDistribution(distribution)],
-			[this._drawFromDistribution(distribution), undefined, this._drawFromDistribution(distribution)],
-			[this._drawFromDistribution(distribution), this._drawFromDistribution(distribution), this._drawFromDistribution(distribution)],
-		];
 	},
 
 	/**

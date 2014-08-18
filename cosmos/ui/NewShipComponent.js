@@ -10,6 +10,8 @@ var NewShipComponent = ButtonComponent.extend({
 	},
 
 	mouseDown: function() {
+		ige.client.metrics.track('cosmos:player.newShip.mouseDown');
+		
 		var message = "Whoa! This will destroy your current ship and cargo." + "<br>" +
 			"Do you want to continue?";
 

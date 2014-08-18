@@ -12,15 +12,11 @@ Recipes[IronEngineBlock.prototype.classId()] =
 	reactants: [
 		{
 			blockType: IronBlock.prototype.classId(),
-			quantity: 3
-		},
-		{
-			blockType: CarbonBlock.prototype.classId(),
 			quantity: 2
 		},
 		{
 			blockType: IceBlock.prototype.classId(),
-			quantity: 1
+			quantity: 2
 		}
 	],
 	equipment: []
@@ -35,7 +31,7 @@ Recipes[SteelEngineBlock.prototype.classId()] =
 		},
 		{
 			blockType: SteelBlock.prototype.classId(),
-			quantity: 2
+			quantity: 1
 		}
 	],
 	equipment: []
@@ -107,27 +103,6 @@ Recipes[KryptoniteThrusterBlock.prototype.classId()] =
 	equipment: []
 };
 
-/* === Weapons === */
-
-Recipes[MiningLaserBlock.prototype.classId()] =
-{
-	reactants: [
-		{
-			blockType: IronBlock.prototype.classId(),
-			quantity: 3
-		},
-		{
-			blockType: CarbonBlock.prototype.classId(),
-			quantity: 1
-		},
-		{
-			blockType: GoldBlock.prototype.classId(),
-			quantity: 1
-		}
-	],
-	equipment: []
-};
-
 /* === Armor === */
 
 Recipes[IronPlatingBlock.prototype.classId()] =
@@ -174,45 +149,78 @@ Recipes[KryptonitePlatingBlock.prototype.classId()] =
 	],
 	equipment: []
 };
-/*
+
 Recipes[MythrilPlatingBlock.prototype.classId()] =
 {
 	reactants: [
 		{
-			blockType: RefinedMythrilBlock.prototype.classId(),
-			quantity: 3
+			blockType: KryptonitePlatingBlock.prototype.classId(),
+			quantity: 1
 		},
 		{
-			blockType: CarbonBlock.prototype.classId(),
-			quantity: 2
-		},
-		{
-			blockType: FluorineBlock.prototype.classId(),
+			blockType: MythrilBlock.prototype.classId(),
 			quantity: 1
 		}
 	],
 	equipment: []
 };
-*//*
+
 Recipes[AdamantiumPlatingBlock.prototype.classId()] =
 {
 	reactants: [
 		{
+			blockType: KryptonitePlatingBlock.prototype.classId(),
+			quantity: 1
+		},
+		{
 			blockType: AdamantiumBlock.prototype.classId(),
-			quantity: 3
-		},
-		{
-			blockType: CarbonBlock.prototype.classId(),
-			quantity: 2
-		},
-		{
-			blockType: IceBlock.prototype.classId(),
-			quantity: 10
+			quantity: 1
 		}
 	],
 	equipment: []
 };
-*/
+
+Recipes[DragonPlatingBlock.prototype.classId()] =
+{
+	reactants: [
+		{
+			blockType: AdamantiumPlatingBlock.prototype.classId(),
+			quantity: 1
+		},
+		{
+			blockType: GoldBlock.prototype.classId(),
+			quantity: 10
+		},
+		{
+			blockType: DragonBlock.prototype.classId(),
+			quantity: 3
+		}
+	],
+	equipment: []
+};
+
+
+
+/* === Weapons === */
+
+Recipes[MiningLaserBlock.prototype.classId()] =
+{
+	reactants: [
+		{
+			blockType: IronBlock.prototype.classId(),
+			quantity: 3
+		},
+		{
+			blockType: CarbonBlock.prototype.classId(),
+			quantity: 1
+		},
+		{
+			blockType: GoldBlock.prototype.classId(),
+			quantity: 1
+		}
+	],
+	equipment: []
+};
 
 
 

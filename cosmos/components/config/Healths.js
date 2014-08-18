@@ -10,7 +10,7 @@ Healths[CargoBlock.prototype.classId()] =
 	max: 20
 };
 
-Healths[ControlBlock.prototype.classId()] =
+Healths[BridgeBlock.prototype.classId()] =
 {
 	max: 45
 };
@@ -68,17 +68,17 @@ Healths[TitaniumPlatingBlock.prototype.classId()] =
 
 Healths[MythrilPlatingBlock.prototype.classId()] =
 {
-	max: 80
+	max: 90
 };
 
 Healths[AdamantiumPlatingBlock.prototype.classId()] =
 {
-	max: 90
+	max: 150
 };
 
 Healths[DragonPlatingBlock.prototype.classId()] =
 {
-	max: 95
+	max: 500
 };
 
 
@@ -190,7 +190,7 @@ Healths[AdamantiumBlock.prototype.classId()] =
 
 Healths[DragonBlock.prototype.classId()] =
 {
-	max: 65
+	max: 70
 };
 
 

@@ -30,11 +30,11 @@ var GeneratedBlockStructure = BlockStructure.extend({
 		}
 	},
 
-	remove: function(row, col) {
-		BlockStructure.prototype.remove.call(this, row, col);
+	remove: function(loc, width, height) {
 		if (ige.isServer) {
 			this.respawn.resetTimeout();
 		}
+		return BlockStructure.prototype.remove.call(this, loc, width, height);
 	}
 });
 
@@ -48,7 +48,7 @@ GeneratedBlockStructure.MIN_RESPAWN_TIME = 60 * 1000 * 2; // 2 minutes
  * Maximum time it takes to respawn this structure.
  * @type {number}
  */
-GeneratedBlockStructure.MAX_RESPAWN_TIME = 60 * 1000 * 15; // 15 minutes
+GeneratedBlockStructure.MAX_RESPAWN_TIME = 60 * 1000 * 52; // 52 minutes
 
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = GeneratedBlockStructure; }

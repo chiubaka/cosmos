@@ -29,7 +29,7 @@ var NotificationDefinitions = {
 	},
 
 	errors: {
-		1: 'Cannot mine this block... mining laser cannot reach!',
+		1: 'Cannot mine this block. Your mining laser cannot reach the inside of asteroids.',
 		2: 'Cannot construct here!',
 		4: 'No block type selected!',
 		5: 'Cannot mine empty space!',
