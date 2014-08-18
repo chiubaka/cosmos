@@ -35,8 +35,8 @@ var Constants = {
 	},
 
 	NUM_BACKGROUND_OVERLAY_SQUARES: {
-		X: 50,
-		Y: 50
+		X: 8,
+		Y: 8
 	},
 
 	SECOND_OVERLAY_ROTATION: Math.PI / 4
