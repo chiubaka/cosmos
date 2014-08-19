@@ -11,24 +11,6 @@ var Block = IgeEntity.extend({
 	classId: 'Block',
 
 	/**
-	 * The number of rows that this {@link Block} takes up.
-	 * @type {number}
-	 * @memberof Block
-	 * @private
-	 * @instance
-	 * @todo Add code allow the {@link Block#_numRows|_numRows} to vary.
-	 */
-	_numRows: 1,
-	/**
-	 * The number of cols that this {@link Block} takes up.
-	 * @type {number}
-	 * @memberof Block
-	 * @private
-	 * @instance
-	 * @todo Add code allow the {@link Block#_numCols|_numCols} to vary.
-	 */
-	_numCols: 1,
-	/**
 	 * The {@link BlockGrid} that this {@link Block} is a part of.
 	 * @type {BlockGrid}
 	 * @memberof Block
@@ -208,26 +190,6 @@ var Block = IgeEntity.extend({
 			displayName += token + " ";
 		}
 		return displayName;
-	},
-
-	/**
-	 * Getter for {@link Block#_numRows|_numRows}.
-	 * @returns {number}
-	 * @memberof Block
-	 * @instance
-	 */
-	numRows: function() {
-		return this._numRows;
-	},
-
-	/**
-	 * Getter for {@link Block#_numCols|_numCols}.
-	 * @returns {number}
-	 * @memberof Block
-	 * @instance
-	 */
-	numCols: function() {
-		return this._numCols;
 	},
 
 	hp: function() {
