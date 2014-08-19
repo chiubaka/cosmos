@@ -42,9 +42,6 @@ var Block = IgeEntity.extend({
 		var self = this;
 		IgeEntity.prototype.init.call(this);
 
-		// Use an even number so values don't have to become approximate when we divide by two
-		this.width(Block.WIDTH).height(Block.HEIGHT);
-
 		var isAbstractClass = this.classId() === "Part"
 			|| this.classId() === "Armor"
 			|| this.classId() === "EngineBlock"
@@ -77,6 +74,12 @@ var Block = IgeEntity.extend({
 		if (Recipes[this.classId()] !== undefined) {
 			this.addComponent(Recipe, Recipes[this.classId()]);
 		}
+
+		// TODO: Modify this so that blocks can have different sizes.
+		this.addComponent(GridData, {width: 1, height: 1});
+
+		// Use an even number so values don't have to become approximate when we divide by two
+		this.width(Block.WIDTH * this.gridData.width).height(Block.HEIGHT * this.gridData.height);
 
 		this.backgroundAlpha = this.backgroundAlpha || 1;
 		if (!this.backgroundColor) {
@@ -123,8 +126,6 @@ var Block = IgeEntity.extend({
 
 			return displayObject;
 		}});
-		// TODO: Modify this so that blocks can have different sizes.
-		this.addComponent(GridData, {width: 1, height: 1});
 
 		if (ige.isServer) {
 			this.addComponent(TLPhysicsFixtureComponent);
