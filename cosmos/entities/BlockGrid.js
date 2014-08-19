@@ -238,12 +238,11 @@ var BlockGrid = IgeEntity.extend({
 		startRow = startRow || 0;
 		startCol = startCol || 0;
 
-		for (var row = 0; row < blockTypeMatrix.length; row++) {
-			for (var col = 0; col < blockTypeMatrix[row].length; col++) {
-				if (blockTypeMatrix[row][col]) {
-					// The add() function knows how to deal with receiving undefined
+		for (var col = 0; col < blockTypeMatrix.length; col++) {
+			for (var row = 0; row < blockTypeMatrix[col].length; row++) {
+				if (blockTypeMatrix[col][row]) {
 					this.put(
-						Block.blockFromClassId(blockTypeMatrix[row][col]),
+						Block.blockFromClassId(blockTypeMatrix[col][row]),
 						new IgePoint2d(startCol + col, startRow + row),
 						false
 					);
