@@ -169,7 +169,7 @@ Recipes[AdamantiumPlatingBlock.prototype.classId()] =
 {
 	reactants: [
 		{
-			blockType: KryptonitePlatingBlock.prototype.classId(),
+			blockType: MythrilPlatingBlock.prototype.classId(),
 			quantity: 1
 		},
 		{
