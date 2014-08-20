@@ -11,66 +11,6 @@ var Block = IgeEntity.extend({
 	classId: 'Block',
 
 	/**
-	 * The number of rows that this {@link Block} takes up.
-	 * @type {number}
-	 * @memberof Block
-	 * @private
-	 * @instance
-	 * @todo Add code allow the {@link Block#_numRows|_numRows} to vary.
-	 */
-	_numRows: 1,
-	/**
-	 * The number of cols that this {@link Block} takes up.
-	 * @type {number}
-	 * @memberof Block
-	 * @private
-	 * @instance
-	 * @todo Add code allow the {@link Block#_numCols|_numCols} to vary.
-	 */
-	_numCols: 1,
-	/**
-	 * The {@link BlockGrid} that this {@link Block} is a part of.
-	 * @type {BlockGrid}
-	 * @memberof Block
-	 * @private
-	 * @instance
-	 */
-	_blockGrid: undefined,
-	/**
-	 * The row of the {@link BlockGrid} that this block inhabits if any.
-	 * The value of this instance variable is meaningless unless _blockGrid is defined.
-	 * @type {number}
-	 * @memberof Block
-	 * @private
-	 * @instance
-	 */
-	_row: undefined,
-	/**
-	 * The column of the {@link BlockGrid} that this block inhabits if any.
-	 * The value of this instance variable is meaningless unless _blockGrid is defined.
-	 * @type {number}
-	 * @memberof Block
-	 * @private
-	 * @instance
-	 */
-	_col: undefined,
-	/**
-	 * An IgeEntity that all of the foreground effects for this {@link Block} get mounted to.
-	 * @type {IgeEntity}
-	 * @memberof Block
-	 * @private
-	 * @instance
-	 */
-	_effectsMountAbove: undefined,
-	/**
-	 * An IgeEntity that all of the background effects for this {@link Block} get mounted to.
-	 * @type {IgeEntity}
-	 * @memberof Block
-	 * @private
-	 * @instance
-	 */
-	_effectsMountBelow: undefined,
-	/**
 	 * An object used as a map to store data about the various effects on a {@link Block}. The map keys are the effect
 	 * types, and the values are typically objects. Each value can be specific to the effect, since different effects
 	 * have different state needs.
@@ -210,26 +150,6 @@ var Block = IgeEntity.extend({
 		return displayName;
 	},
 
-	/**
-	 * Getter for {@link Block#_numRows|_numRows}.
-	 * @returns {number}
-	 * @memberof Block
-	 * @instance
-	 */
-	numRows: function() {
-		return this._numRows;
-	},
-
-	/**
-	 * Getter for {@link Block#_numCols|_numCols}.
-	 * @returns {number}
-	 * @memberof Block
-	 * @instance
-	 */
-	numCols: function() {
-		return this._numCols;
-	},
-
 	hp: function() {
 		return this.health.value;
 	},
@@ -279,54 +199,6 @@ var Block = IgeEntity.extend({
 	 */
 	onRemoved: function() {
 
-	},
-
-	/**
-	 * Creates the above effects mount entity for this {@link Block} and stores it in an instance variable. If the
-	 * effects mount has already been created for this {@link Block}, this function does nothing.
-	 * @memberof BlockGrid
-	 * @instance
-	 */
-	createAboveEffectsMount: function() {
-		if (this._effectsMountAbove !== undefined) {
-			return;
-		}
-
-		this._effectsMountAbove = new IgeEntity().addComponent(PixiRenderableComponent).depth(this.depth() + 1);
-	},
-
-	/**
-	 * Creates the above effects mount entity for this {@link Block} and stores it in an instance variable. If the
-	 * effects mount has already been created for this {@link Block}, this function does nothing.
-	 * @memberof BlockGrid
-	 * @instance
-	 */
-	createBelowEffectsMount: function() {
-		if (this._effectsMountBelow !== undefined) {
-			return;
-		}
-
-		this._effectsMountBelow = new IgeEntity().addComponent(PixiRenderableComponent).depth(this.depth() - 1);
-	},
-
-	/**
-	 * Getter for the {@link Block#_effectsMountAbove|_effectsMountAbove} property.
-	 * @returns {IgeEntity} the above effects mount
-	 * @memberof Block
-	 * @instance
-	 */
-	effectsMountAbove: function() {
-		return this._effectsMountAbove;
-	},
-
-	/**
-	 * Getter for the {@link Block#_effectsMountBelow|_effectsMountBelow} property.
-	 * @returns {IgeEntity} the below effects mount
-	 * @memberof Block
-	 * @instance
-	 */
-	effectsMountBelow: function() {
-		return this._effectsMountBelow;
 	},
 
 	/**

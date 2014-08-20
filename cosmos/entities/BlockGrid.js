@@ -543,9 +543,9 @@ var BlockGrid = IgeEntity.extend({
 			density: fixtureDef.density || BlockGrid.BLOCK_FIXTURE_DENSITY,
 			isSensor: fixtureDef.isSensor || false,
 			shapeType: fixtureDef.shapeType || 'BOX',
-			hwidth: fixtureDef.hwidth || (block.numCols() * Block.WIDTH) / 2 -
+			hwidth: fixtureDef.hwidth || (block.gridData.width * Block.WIDTH) / 2 -
 				(2 * BlockGrid.BLOCK_FIXTURE_PADDING),
-			hheight: fixtureDef.hheight || (block.numRows() * Block.HEIGHT) / 2 -
+			hheight: fixtureDef.hheight || (block.gridData.height * Block.HEIGHT) / 2 -
 				(2 * BlockGrid.BLOCK_FIXTURE_PADDING),
 			x: fixtureDef.x || coordinates.x + BlockGrid.BLOCK_FIXTURE_PADDING,
 			y: fixtureDef.y || coordinates.y + BlockGrid.BLOCK_FIXTURE_PADDING,
