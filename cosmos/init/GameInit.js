@@ -474,7 +474,7 @@ var GameInit = {
 
 	getRandomLocation: function () {
 		// The maximum distance that we will translate entities to
-		var MAX_DISTANCE = 9000;
+		var MAX_DISTANCE = 18000;
 		return new IgePoint2d((Math.random() - 0.5) * MAX_DISTANCE,
 			(Math.random() - 0.5) * MAX_DISTANCE);
 	},
