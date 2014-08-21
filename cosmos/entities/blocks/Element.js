@@ -79,9 +79,9 @@ Element.checkType = function(type) {
 };
 
 Element.PURITIES = {
-	PURE: 1,
-	IMPURE: 2,
-	VERY_IMPURE: 3
+	PURE: 1, // Pure means 91-100% pure
+	IMPURE: 2, // Impure means 71-90% pure
+	VERY_IMPURE: 3 // Very impure means 51-70% pure
 };
 
 Element.HEALTH_MODIFIERS = {
