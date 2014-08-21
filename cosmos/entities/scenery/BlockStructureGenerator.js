@@ -64,7 +64,7 @@ var BlockStructureGenerator = {
 			}
 
 			if (first) {
-				var newBlock = this._drawFromDistribution(blockDistribution);
+				var newBlock = this._drawFromDistribution(blockDistribution, {gridWidth: 5, gridHeight: 5});
 				first = false;
 			} else {
 				var newBlock = this._getBlockType(blockStructure, block.row, block.col, blockDistribution);
@@ -181,9 +181,14 @@ var BlockStructureGenerator = {
 	 * @memberof BlockStructureGenerator
 	 * @private
 	 */
-	_drawFromDistribution: function(distribution) {
-		var selection = WeightedSelection.select(distribution);
-		return Block.blockFromClassId(selection);
+	_drawFromDistribution: function(distribution, dimensions) {
+		var type = WeightedSelection.select(distribution);
+
+		if (cosmos.blocks.instances[type] instanceof Element) {
+			return Element.fromType(type, dimensions);
+		} else {
+			return Block.blockFromClassId(type);
+		}
 	},
 
 	/**
