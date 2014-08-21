@@ -518,12 +518,6 @@ var BlockGrid = IgeEntity.extend({
 	_addFixture: function(block) {
 		// #ifdef SERVER
 		if (ige.isServer) {
-
-			// Destroy the existing fixture
-			if (block.physicsFixture.getCreated() === true) {
-				this.physicsBody.destroyFixture(block);
-			}
-
 			// Update the block's physicsFixture component's fixtureDef
 			this._updateFixtureDef(block);
 
