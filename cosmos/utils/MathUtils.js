@@ -30,6 +30,10 @@ MathUtils.magnitude = function(vector) {
 	return Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
 };
 
+MathUtils.chooseRandomlyFromArray = function(array) {
+	return array[Math.floor(Math.random() * array.length)];
+}
+
 // By default, round to 10 decimal places.
 // Maybe this should go in the constants file
 MathUtils.EPSILON = 10;

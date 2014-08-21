@@ -20,6 +20,14 @@ var GameInit = {
 		cosmos = {};
 		this.initBlocks();
 
+		// Here is a tool for testing the results of the Element#randomChild function.
+		for (var i = 0; i < 20; i++) {
+			var childElement = Element.randomChild(new Element().purity(Element.PURITIES.VERY_IMPURE).resource('DragonBlock'));
+			console.log("Purity: " + childElement.purity());
+			console.log("Resource: " + childElement.resource());
+			console.log();
+		}
+
 		if (ige.isServer) {
 			this.initEnvironment();
 			this.initPhysics();
@@ -380,12 +388,12 @@ var GameInit = {
 			if ((entity1.category() === category1) &&
 				(entity2.category() === category2)) {
 				category1Entity = entity1;
-				category2Entity = entity2; 
+				category2Entity = entity2;
 			}
 			else if ((entity1.category() === category2) &&
 				(entity2.category() === category1)) {
 				category1Entity = entity2;
-				category2Entity = entity1; 
+				category2Entity = entity1;
 			}
 			else {
 				this.log('GameInit#entityByCategory: Entities do not match categories!', 'error');
