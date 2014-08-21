@@ -545,7 +545,13 @@ Block.blockFromClassId = function(classId) {
 };
 
 Block.fromJSON = function(json) {
-	var block = Block.blockFromClassId(json.type);
+	var block;
+	if (Element.checkType(json.type)) {
+		block = Element.fromType(json.type, {gridWidth: json.gridData.width, gridHeight: json.gridData.height});
+	}
+	else {
+		block = Block.blockFromClassId(json.type);
+	}
 	block.gridData.loc = new IgePoint2d(json.gridData.loc.x, json.gridData.loc.y);
 	return block;
 };

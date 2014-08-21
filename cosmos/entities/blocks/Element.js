@@ -27,7 +27,7 @@ Element.fromType = function(type, dimensions) {
 	if (cosmos.blocks.constructors[type] === undefined) {
 		return undefined;
 	}
-	if (!(cosmos.blocks.instances[type] instanceof Element)) {
+	if (!Element.checkType(type)) {
 		console.warn("Element#fromType: attempted to instantiated a non-element block type.");
 		return undefined;
 	}
@@ -35,6 +35,10 @@ Element.fromType = function(type, dimensions) {
 	dimensions = dimensions || {gridWidth: 1, gridHeight: 1};
 
 	return new cosmos.blocks.constructors[type](dimensions);
+};
+
+Element.checkType = function(type) {
+	return cosmos.blocks.instances[type] instanceof Element;
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Element; }
