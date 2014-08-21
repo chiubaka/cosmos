@@ -228,7 +228,7 @@ var GameInit = {
 	initEnvironment: function() {
 		var server = ige.server;
 
-		var NUM_NORMAL_ASTEROIDS = 1;
+		var NUM_NORMAL_ASTEROIDS = 40;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
 			this.spawnStructure(8000, BlockStructureGenerator.elementDistributions.randomDistribution());
 		}

@@ -30,8 +30,8 @@ var BlockStructureGenerator = {
 		var blockStructure = new GeneratedBlockStructure({
 			maxNumBlocks: maxNumBlocks,
 			blockDistribution: blockDistribution,
-			symmetric: symmetric
-			//translate: translate
+			symmetric: symmetric,
+			translate: translate
 		});
 
 		// Number of blocks that can be contained in this asteroid.
@@ -44,77 +44,83 @@ var BlockStructureGenerator = {
 		};
 
 		// Initialize the block bag.
+		var nextLocationsToFill = [];
 		var locationsToFill = [];
 		locationsToFill.push(startingCell);
 
 		var first = true;
 
-		var sizes = [12, 9, 8, 6, 4, 3, 2, 1];
-		var numBlocks = [0, 0, 0, 1, 1, 3, 50, 200];
+		//var sizes = [12, 9, 8, 6, 4, 3, 2, 1];
+		//var numBlocks = [0, 0, 0, 0, 1, 3, 100, 200];
 
+		var sizes = 		[12, 9, 8, 6, 4, 3, 2, 1];
+		var numLayers = [0, 0, 0, 0, 1, 1, 2, 2];
+		console.log("Starting a new asteroid");
 
 		for (var index = 0; index < 8; index++) {
 			currentSize = sizes[index];
-			blocksRemaining = numBlocks[index];
 
-			while (blocksRemaining > 0 && locationsToFill.length > 0) {
-				// Randomly select a block to place.
-				var blockIndex = Math.floor(Math.random() * locationsToFill.length);
-				var block = locationsToFill[blockIndex];
+			for (var layer = 0; layer < numLayers[index]; layer++) {
+				console.log("Starting a new layer!");
 
-				console.log("placing a new block:");
-				console.log(block);
-				/*
-				if (asteroidConstr[block.row] !== undefined && asteroidConstr[block.row][block.col] !== undefined) {
-					locationsToFill.remove(blockIndex);
-					continue;
-				}
-				*/
-				if (blockStructure.get(new IgePoint2d(block.col, block.row)).length > 0) {
-					locationsToFill.remove(blockIndex);
-					continue;
+				while (nextLocationsToFill.length > 0) {
+					locationsToFill.push(nextLocationsToFill.pop());
 				}
 
-				if (first) {
-					var newBlock = this._drawFromDistribution(blockDistribution, {gridWidth: currentSize, gridHeight: currentSize});
-					first = false;
-				} else {
-					var newBlock = this._getBlockType(blockStructure, block.row, block.col, blockDistribution, {gridWidth: currentSize, gridHeight: currentSize});
-				}
+				while (locationsToFill.length > 0) {
+					// Randomly select a block to place.
+					var blockIndex = Math.floor(Math.random() * locationsToFill.length);
+					var block = locationsToFill[blockIndex];
+					/*
+					if (asteroidConstr[block.row] !== undefined && asteroidConstr[block.row][block.col] !== undefined) {
+						locationsToFill.remove(blockIndex);
+						continue;
+					}
+					*/
+					if (blockStructure.get(new IgePoint2d(block.col, block.row)).length > 0) {
+						locationsToFill.remove(blockIndex);
+						continue;
+					}
 
-				// Remove the block
-				locationsToFill.remove(blockIndex);
+					if (first) {
+						var newBlock = this._drawFromDistribution(blockDistribution, {gridWidth: currentSize, gridHeight: currentSize});
+						first = false;
+					} else {
+						var newBlock = this._getBlockType(blockStructure, block.row, block.col, blockDistribution, {gridWidth: currentSize, gridHeight: currentSize});
+					}
 
-				if (Math.random() < .5) {
-					block.col -= currentSize - 1;
-				}
-				if (Math.random() < .5) {
-					block.row -= currentSize - 1;
-				}
+					actualLocation = JSON.parse(JSON.stringify(block));
+					if (Math.random() < .5) {
+						actualLocation.col -= currentSize - 1;
+					}
+					if (Math.random() < .5) {
+						actualLocation.row -= currentSize - 1;
+					}
 
-				var result = blockStructure.put(newBlock, new IgePoint2d(block.col, block.row), false);
+					var result = blockStructure.put(newBlock, new IgePoint2d(actualLocation.col, actualLocation.row), false);
 
-
-				if (result !== null)	{
-					console.log("success");
-
-					blocksRemaining -= currentSize * currentSize;
-
-					if (symmetric) {
-						blockStructure.put(Block.fromType(newBlock.classId()),
-							new IgePoint2d(-block.col, -block.row), false);
+					if (result !== null)	{
+						// Remove the location, because it is now filled
+						locationsToFill.remove(blockIndex);
 						blocksRemaining--;
+						/*
+						if (symmetric) {
+							blockStructure.put(Block.fromType(newBlock.classId()),
+								new IgePoint2d(-block.col, -block.row), false);
+							blocksRemaining--;
+						}
+						*/
+						// Push all cardinal neighbors into the locations that need to be filled
+						for (var slideOverAmount = 0; slideOverAmount < currentSize; slideOverAmount++) {
+							nextLocationsToFill.push({ row: actualLocation.row - 1,								col: actualLocation.col + slideOverAmount });
+							nextLocationsToFill.push({ row: actualLocation.row + currentSize, 		col: actualLocation.col + slideOverAmount });
+							nextLocationsToFill.push({ row: actualLocation.row + slideOverAmount, col: actualLocation.col - 1 });
+							nextLocationsToFill.push({ row: actualLocation.row + slideOverAmount, col: actualLocation.col + currentSize });
+						}
+					} else {
+						nextLocationsToFill.push(block);
+						locationsToFill.remove(blockIndex);
 					}
-
-					// Push cardinal neighbors into block bag.
-					for (var slideOverAmount = 0; slideOverAmount < currentSize; slideOverAmount++) {
-						locationsToFill.push({ row: block.row - 1, col: block.col + slideOverAmount });
-						locationsToFill.push({ row: block.row + currentSize, col: block.col + slideOverAmount });
-						locationsToFill.push({ row: block.row + slideOverAmount, col: block.col - 1 });
-						locationsToFill.push({ row: block.row + slideOverAmount, col: block.col + currentSize });
-					}
-				} else {
-					console.log("fail");
 				}
 			}
 		}
