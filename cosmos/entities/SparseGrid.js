@@ -18,6 +18,10 @@ var SparseGrid = IgeClass.extend({
 		return this._count;
 	},
 
+	/*
+	Loops through all of the blocks in a rectangle with upper left corner loc and dimensions width and height.
+	Runs func on each block in this rectangle.
+	*/
 	each: function(func, loc, width, height) {
 		if (typeof(func) !== "function") {
 			this.log("SparseGrid#each: passed func value is not a function.", "warning");
@@ -264,34 +268,44 @@ var SparseGrid = IgeClass.extend({
 				"warning");
 			return null;
 		}
-
+		console.log("OK");
 		var width = object.gridData.width;
+		console.log("OK");
 		var height = object.gridData.height;
+		console.log("OK");
 
 		var previousObjects = [];
+		console.log("OK");
 
 		// Not allowed to replace blocks
 		if (!replace) {
+		console.log("OK");
 			// If there is are any blocks in the area that we want to occupy, we cannot place
 			// because replacement is not allowed.
 			if (this.has(loc, width, height)) {
+				console.log("Collision detected!");
 				return null;
 			}
 		}
 		// Allowed to replace blocks
 		else {
+		console.log("OK");
 			// Remove all of the objects currently occupying the area that we want to place in.
 			previousObjects = this.remove(loc, width, height);
 		}
 
 		// Update the location of the object.
 		object.gridData.loc = loc;
+		console.log("OK");
 		object.gridData.grid = this;
+		console.log("OK");
 
 		this._updateBoundsPut(object);
+		console.log("OK");
 
 		// Place the object in the grid.
 		this._setObject(object);
+		console.log("OK");
 
 		return previousObjects;
 	},

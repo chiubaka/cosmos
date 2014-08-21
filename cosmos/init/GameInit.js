@@ -228,16 +228,18 @@ var GameInit = {
 	initEnvironment: function() {
 		var server = ige.server;
 
-		var NUM_NORMAL_ASTEROIDS = 40;
+		var NUM_NORMAL_ASTEROIDS = 1;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
-			this.spawnStructure(200, BlockStructureGenerator.elementDistributions.randomDistribution());
+			this.spawnStructure(8000, BlockStructureGenerator.elementDistributions.randomDistribution());
 		}
 		// TODO: The procedural generation algorithm is causing strange problems with the new BlockGrid system. Leave
 		// this stuff commented out until it is figured out.
+		/*
 		var NUM_DERELICT_SPACESHIPS = 10;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_DERELICT_SPACESHIPS; asteroidNumber++) {
 			this.spawnStructure(60, BlockStructureGenerator.partDistributions.randomDistribution(), true);
 		}
+		*/
 	},
 
 	spawnStructure: function(maxNumBlocks, blockDistribution, symmetric) {
@@ -380,12 +382,12 @@ var GameInit = {
 			if ((entity1.category() === category1) &&
 				(entity2.category() === category2)) {
 				category1Entity = entity1;
-				category2Entity = entity2; 
+				category2Entity = entity2;
 			}
 			else if ((entity1.category() === category2) &&
 				(entity2.category() === category1)) {
 				category1Entity = entity2;
-				category2Entity = entity1; 
+				category2Entity = entity1;
 			}
 			else {
 				this.log('GameInit#entityByCategory: Entities do not match categories!', 'error');

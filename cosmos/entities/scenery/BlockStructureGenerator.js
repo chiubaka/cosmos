@@ -30,8 +30,8 @@ var BlockStructureGenerator = {
 		var blockStructure = new GeneratedBlockStructure({
 			maxNumBlocks: maxNumBlocks,
 			blockDistribution: blockDistribution,
-			symmetric: symmetric,
-			translate: translate
+			symmetric: symmetric
+			//translate: translate
 		});
 
 		// Number of blocks that can be contained in this asteroid.
@@ -48,45 +48,65 @@ var BlockStructureGenerator = {
 		blocksToPlace.push(startingCell);
 
 		var first = true;
-		while (blocksRemaining > 0 && blocksToPlace.length > 0) {
-			// Randomly select a block to place.
-			var blockIndex = Math.floor(Math.random() * blocksToPlace.length);
-			var block = blocksToPlace[blockIndex];
-			/*
-			if (asteroidConstr[block.row] !== undefined && asteroidConstr[block.row][block.col] !== undefined) {
+
+		var sizes = [12, 9, 8, 6, 4, 3, 2, 1];
+		var numBlocks = [0, 0, 0, 1, 1, 3, 5, 30];
+
+
+		for (var index = 0; index < 8; index++) {
+			currentSize = sizes[index];
+			blocksRemaining = numBlocks[index];
+
+			while (blocksRemaining > 0 && blocksToPlace.length > 0) {
+				// Randomly select a block to place.
+				var blockIndex = Math.floor(Math.random() * blocksToPlace.length);
+				var block = blocksToPlace[blockIndex];
+
+				console.log("placing a new block:");
+				console.log(block);
+				/*
+				if (asteroidConstr[block.row] !== undefined && asteroidConstr[block.row][block.col] !== undefined) {
+					blocksToPlace.remove(blockIndex);
+					continue;
+				}
+				*/
+				if (blockStructure.get(new IgePoint2d(block.col, block.row)).length > 0) {
+					blocksToPlace.remove(blockIndex);
+					continue;
+				}
+
+				if (first) {
+					var newBlock = this._drawFromDistribution(blockDistribution, {gridWidth: currentSize, gridHeight: currentSize});
+					first = false;
+				} else {
+					var newBlock = this._getBlockType(blockStructure, block.row, block.col, blockDistribution, {gridWidth: currentSize, gridHeight: currentSize});
+				}
+
+				var result = blockStructure.put(newBlock, new IgePoint2d(block.col, block.row), false);
+
+				// Remove the block
 				blocksToPlace.remove(blockIndex);
-				continue;
+
+				if (result !== null)	{
+					console.log("success");
+
+					blocksRemaining -= currentSize * currentSize;
+
+					if (symmetric) {
+						blockStructure.put(Block.fromType(newBlock.classId()),
+							new IgePoint2d(-block.col, -block.row), false);
+						blocksRemaining--;
+					}
+
+					// Push cardinal neighbors into block bag.
+					blocksToPlace.push({ row: block.row - 1, col: block.col });
+					blocksToPlace.push({ row: block.row + currentSize, col: block.col });
+					blocksToPlace.push({ row: block.row, col: block.col - 1 });
+					blocksToPlace.push({ row: block.row, col: block.col + currentSize });
+				} else {
+					console.log("fail");
+				}
 			}
-			*/
-			if (blockStructure.get(new IgePoint2d(block.col, block.row)).length > 0) {
-				blocksToPlace.remove(blockIndex);
-				continue;
-			}
-
-			if (first) {
-				var newBlock = this._drawFromDistribution(blockDistribution, {gridWidth: 5, gridHeight: 5});
-				first = false;
-			} else {
-				var newBlock = this._getBlockType(blockStructure, block.row, block.col, blockDistribution);
-			}
-
-			blockStructure.put(newBlock, new IgePoint2d(block.col, block.row), newBlock, false);
-			blocksRemaining--;
-
-			if (symmetric) {
-				blockStructure.put(Block.fromType(newBlock.classId()),
-					new IgePoint2d(-block.col, -block.row), false);
-				blocksRemaining--;
-			}
-
-			// Push cardinal neighbors into block bag.
-			blocksToPlace.push({ row: block.row - 1, col: block.col });
-			blocksToPlace.push({ row: block.row + 1, col: block.col });
-			blocksToPlace.push({ row: block.row, col: block.col - 1 });
-			blocksToPlace.push({ row: block.row, col: block.col + 1 });
-
-			// Remove the block
-			blocksToPlace.remove(blockIndex);
 		}
 
 		return blockStructure;
@@ -105,7 +125,7 @@ var BlockStructureGenerator = {
 	 * @todo consider using a Perlin noise generator to generate a noise map as large as the block grid,
 	 * and sampling at the x and y to get the block type?
 	 */
-	_getBlockType: function(blockStructure, row, col, blockDistribution) {
+	_getBlockType: function(blockStructure, row, col, blockDistribution, dimensions) {
 		// Count up the neighbors
 		var valid = false;
 		var neighborCounts = [];
@@ -156,8 +176,13 @@ var BlockStructureGenerator = {
 		}
 
 		// Now, with a weighted probability, randomly select an element from the weights to be the type.
-		var selection = WeightedSelection.select(weights);
-		return Block.fromType(selection);
+		var type = WeightedSelection.select(weights);
+
+		if (cosmos.blocks.instances[type] instanceof Element) {
+			return Element.fromType(type, dimensions);
+		} else {
+			return Block.fromType(type);
+		}
 	},
 
 	/**

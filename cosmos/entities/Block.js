@@ -92,27 +92,10 @@ var Block = IgeEntity.extend({
 			myGridData = GridDimensions[this.classId()];
 		}
 
-		if (myGridData.width !== 1) {
-			console.log("inteesting block");
-			console.log(myGridData);
-		}
-
 		this.addComponent(GridData, myGridData);
-
-		if (myGridData.width !== 1) {
-			console.log(this.gridData.width);
-			console.log(this.gridData.height);
-		}
 
 		// Use an even number so values don't have to become approximate when we divide by two
 		this.width(Block.WIDTH * this.gridData.width).height(Block.HEIGHT * this.gridData.height);
-
-
-		if (myGridData.width !== 1) {
-			console.log(this.width());
-			console.log(this.height());
-			console.log(this.id());
-		}
 
 		this.backgroundAlpha = this.backgroundAlpha || 1;
 		if (!this.backgroundColor) {
