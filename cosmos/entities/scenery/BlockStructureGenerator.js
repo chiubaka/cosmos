@@ -50,7 +50,7 @@ var BlockStructureGenerator = {
 		var first = true;
 
 		var sizes = [12, 9, 8, 6, 4, 3, 2, 1];
-		var numBlocks = [0, 0, 0, 1, 1, 3, 5, 30];
+		var numBlocks = [0, 0, 0, 1, 1, 3, 50, 200];
 
 
 		for (var index = 0; index < 8; index++) {
@@ -82,10 +82,18 @@ var BlockStructureGenerator = {
 					var newBlock = this._getBlockType(blockStructure, block.row, block.col, blockDistribution, {gridWidth: currentSize, gridHeight: currentSize});
 				}
 
-				var result = blockStructure.put(newBlock, new IgePoint2d(block.col, block.row), false);
-
 				// Remove the block
 				blocksToPlace.remove(blockIndex);
+
+				if (Math.random() < .5) {
+					block.col -= currentSize - 1;
+				}
+				if (Math.random() < .5) {
+					block.row -= currentSize - 1;
+				}
+
+				var result = blockStructure.put(newBlock, new IgePoint2d(block.col, block.row), false);
+
 
 				if (result !== null)	{
 					console.log("success");
@@ -99,10 +107,12 @@ var BlockStructureGenerator = {
 					}
 
 					// Push cardinal neighbors into block bag.
-					blocksToPlace.push({ row: block.row - 1, col: block.col });
-					blocksToPlace.push({ row: block.row + currentSize, col: block.col });
-					blocksToPlace.push({ row: block.row, col: block.col - 1 });
-					blocksToPlace.push({ row: block.row, col: block.col + currentSize });
+					for (var slideOverAmount = 0; slideOverAmount < currentSize; slideOverAmount++) {
+						blocksToPlace.push({ row: block.row - 1, col: block.col + slideOverAmount });
+						blocksToPlace.push({ row: block.row + currentSize, col: block.col + slideOverAmount });
+						blocksToPlace.push({ row: block.row + slideOverAmount, col: block.col - 1 });
+						blocksToPlace.push({ row: block.row + slideOverAmount, col: block.col + currentSize });
+					}
 				} else {
 					console.log("fail");
 				}
