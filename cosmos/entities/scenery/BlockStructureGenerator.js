@@ -44,8 +44,8 @@ var BlockStructureGenerator = {
 		};
 
 		// Initialize the block bag.
-		var blocksToPlace = [];
-		blocksToPlace.push(startingCell);
+		var locationsToFill = [];
+		locationsToFill.push(startingCell);
 
 		var first = true;
 
@@ -57,21 +57,21 @@ var BlockStructureGenerator = {
 			currentSize = sizes[index];
 			blocksRemaining = numBlocks[index];
 
-			while (blocksRemaining > 0 && blocksToPlace.length > 0) {
+			while (blocksRemaining > 0 && locationsToFill.length > 0) {
 				// Randomly select a block to place.
-				var blockIndex = Math.floor(Math.random() * blocksToPlace.length);
-				var block = blocksToPlace[blockIndex];
+				var blockIndex = Math.floor(Math.random() * locationsToFill.length);
+				var block = locationsToFill[blockIndex];
 
 				console.log("placing a new block:");
 				console.log(block);
 				/*
 				if (asteroidConstr[block.row] !== undefined && asteroidConstr[block.row][block.col] !== undefined) {
-					blocksToPlace.remove(blockIndex);
+					locationsToFill.remove(blockIndex);
 					continue;
 				}
 				*/
 				if (blockStructure.get(new IgePoint2d(block.col, block.row)).length > 0) {
-					blocksToPlace.remove(blockIndex);
+					locationsToFill.remove(blockIndex);
 					continue;
 				}
 
@@ -83,7 +83,7 @@ var BlockStructureGenerator = {
 				}
 
 				// Remove the block
-				blocksToPlace.remove(blockIndex);
+				locationsToFill.remove(blockIndex);
 
 				if (Math.random() < .5) {
 					block.col -= currentSize - 1;
@@ -108,10 +108,10 @@ var BlockStructureGenerator = {
 
 					// Push cardinal neighbors into block bag.
 					for (var slideOverAmount = 0; slideOverAmount < currentSize; slideOverAmount++) {
-						blocksToPlace.push({ row: block.row - 1, col: block.col + slideOverAmount });
-						blocksToPlace.push({ row: block.row + currentSize, col: block.col + slideOverAmount });
-						blocksToPlace.push({ row: block.row + slideOverAmount, col: block.col - 1 });
-						blocksToPlace.push({ row: block.row + slideOverAmount, col: block.col + currentSize });
+						locationsToFill.push({ row: block.row - 1, col: block.col + slideOverAmount });
+						locationsToFill.push({ row: block.row + currentSize, col: block.col + slideOverAmount });
+						locationsToFill.push({ row: block.row + slideOverAmount, col: block.col - 1 });
+						locationsToFill.push({ row: block.row + slideOverAmount, col: block.col + currentSize });
 					}
 				} else {
 					console.log("fail");
