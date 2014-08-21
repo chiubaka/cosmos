@@ -80,25 +80,42 @@ var Block = IgeEntity.extend({
 			this.addComponent(Recipe, Recipes[this.classId()]);
 		}
 
-
+		/* === Grid Data === */
 		// Default value for grid height and width is 1.
-		var gridData = {width: 1, height: 1};
+		var myGridData = {width: 1, height: 1};
 
 		// If a height and width is passed for an element, that height and width will be used.
 		if (this instanceof Element) {
-			gridData.width = data.gridWidth || gridData.width;
-			gridData.height = data.gridHeight || gridData.height;
+			myGridData.width = data.gridWidth || myGridData.width;
+			myGridData.height = data.gridHeight || myGridData.height;
 		}
 		// If a height and width is defined in the configuration files for this block, that will
 		// be used.
 		else if (GridDimensions[this.classId()]) {
-			gridData = GridDimensions[this.classId()];
+			myGridData = GridDimensions[this.classId()];
 		}
 
-		this.addComponent(GridData, gridData);
+		if (myGridData.width !== 1) {
+			console.log("inteesting block");
+			console.log(myGridData);
+		}
+
+		this.addComponent(GridData, myGridData);
+
+		if (myGridData.width !== 1) {
+			console.log(this.gridData.width);
+			console.log(this.gridData.height);
+		}
 
 		// Use an even number so values don't have to become approximate when we divide by two
 		this.width(Block.WIDTH * this.gridData.width).height(Block.HEIGHT * this.gridData.height);
+
+
+		if (myGridData.width !== 1) {
+			console.log(this.width());
+			console.log(this.height());
+			console.log(this.id());
+		}
 
 		this.backgroundAlpha = this.backgroundAlpha || 1;
 		if (!this.backgroundColor) {
