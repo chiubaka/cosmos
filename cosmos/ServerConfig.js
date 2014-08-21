@@ -88,6 +88,7 @@ var config = {
 
 		/* === COMPONENT CONFIG FILES === */
 		{ name: 'Descriptions', path: './components/config/Descriptions' },
+		{ name: 'Elements', path: './components/config/Elements' },
 		{ name: 'GridDimensions', path: './components/config/GridDimensions' },
 		{ name: 'Healths', path: './components/config/Healths' },
 		{ name: 'Recipes', path: './components/config/Recipes' },

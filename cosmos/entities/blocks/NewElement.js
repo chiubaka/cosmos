@@ -29,6 +29,7 @@ var NewElement = Block.extend({
 		}
 
 		this.resource(data.resource);
+
 		data = this.dataFromConfig(data, this.resource());
 		this.initTextureValues();
 		Block.prototype.init.call(this, data);
@@ -39,10 +40,12 @@ var NewElement = Block.extend({
 	},
 
 	initTextureValues: function() {
-		this.backgroundColor = NewElement.BACKGROUND_COLOR[this.resource()];
-		this.backgroundAlpha = NewElement.BACKGROUND_ALPHA[this.resource()] || 1;
-		this.borderColor = NewElement.BORDER_COLOR[this.resource()];
-		this.borderAlpha = NewElement.BORDER_ALPHA[this.resource()] || 1;
+		this.backgroundColor = Elements[this.resource()].backgroundColor;
+		this.backgroundAlpha = Elements[this.resource()].backgroundAlpha || 1;
+		this.borderColor = Elements[this.resource()].borderColor;
+		this.borderAlpha = Elements[this.resource()].borderAlpha || 1;
+		this.textureBackground = Elements[this.resource()].textureBackground;
+		this.textureOutline = Elements[this.resource()].textureOutline;
 	},
 
 	/**
@@ -90,17 +93,6 @@ NewElement.HEALTH_MODIFIERS = {
 	IMPURE:.8,
 	VERY_IMPURE:.6
 };
-
-NewElement.BACKGROUND_COLOR = {};
-NewElement.BACKGROUND_COLOR[IceBlock.prototype.classId()] = 0x3FAFDD;
-
-NewElement.BACKGROUND_ALPHA = {};
-NewElement.BACKGROUND_ALPHA[IceBlock.prototype.classId()] = 0.3;
-
-NewElement.BORDER_COLOR = {};
-NewElement.BORDER_COLOR[IceBlock.prototype.classId()] = 0x81CEE2;
-
-NewElement.BORDER_ALPHA = {};
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
 	module.exports = NewElement;

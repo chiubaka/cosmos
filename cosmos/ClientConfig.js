@@ -105,6 +105,7 @@ var igeClientConfig = {
 
 		/* === COMPONENT CONFIG FILES === */
 		'./components/config/Descriptions.js',
+		'./components/config/Elements.js',
 		'./components/config/GridDimensions.js',
 		'./components/config/Healths.js',
 		'./components/config/Recipes.js',
