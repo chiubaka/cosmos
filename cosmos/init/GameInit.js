@@ -48,7 +48,7 @@ var GameInit = {
 				&& globalContext[key]
 				&& globalContext[key].prototype
 				&& globalContext[key].prototype instanceof Block
-				&& !(globalContext[key].prototype.classId() === "NewElement"))
+				&& !(globalContext[key].prototype.classId() === "Element"))
 			{
 				cosmos.blocks.constructors[key] = globalContext[key];
 				var block = new globalContext[key]();
@@ -231,10 +231,10 @@ var GameInit = {
 		var testAsteroid = new BlockStructure()
 			.streamMode(1)
 			.mount(ige.server.spaceGameScene);
-		var iceElement = new NewElement({resource: "IceBlock", purity: NewElement.PURITIES.PURE});
-		var dragonElement = new NewElement({
+		var iceElement = new Element({resource: "IceBlock", purity: Element.PURITIES.PURE});
+		var dragonElement = new Element({
 			resource: "DragonBlock",
-			purity: NewElement.PURITIES.IMPURE,
+			purity: Element.PURITIES.IMPURE,
 			gridWidth: 5,
 			gridHeight: 5
 		});

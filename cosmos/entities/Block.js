@@ -51,8 +51,7 @@ var Block = IgeEntity.extend({
 			|| this.classId() === "Weapon"
 			|| this.classId() === "Resource"
 			// TODO: The Element class won't be abstract soon!
-			|| this.classId() === "Element"
-			|| this.classId() === "NewElement";
+			|| this.classId() === "Element";
 
 		var isConstructionZone = this instanceof ConstructionZoneBlock;
 
@@ -89,7 +88,7 @@ var Block = IgeEntity.extend({
 		var gridData = {width: 1, height: 1};
 
 		// If a height and width is passed for an element, that height and width will be used.
-		if (this.classId() === "NewElement") {
+		if (this.classId() === "Element") {
 			gridData.width = data.gridWidth || gridData.width;
 			gridData.height = data.gridHeight || gridData.height;
 		}
@@ -576,12 +575,8 @@ Block.fromType = function(type) {
 
 Block.fromJSON = function(json) {
 	var block;
-	console.log("Block#fromJSON: " + json.type);
-	if (Element.checkType(json.type)) {
-		block = Element.fromType(json.type, {gridWidth: json.gridData.width, gridHeight: json.gridData.height});
-	}
-	else if (json.type === "NewElement") {
-		block = new NewElement({
+	if (json.type === "Element") {
+		block = new Element({
 			resource: json.resource,
 			purity: json.purity,
 			gridWidth: json.gridData.width,

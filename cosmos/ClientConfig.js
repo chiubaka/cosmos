@@ -82,7 +82,6 @@ var igeClientConfig = {
 		'./entities/blocks/resources/SteelBlock.js',
 		'./entities/blocks/resources/TitaniumBlock.js',
 
-		'./entities/blocks/NewElement.js',
 		'./entities/blocks/Element.js',
 
 		/* Effects */
