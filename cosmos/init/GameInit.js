@@ -231,8 +231,11 @@ var GameInit = {
 		var testAsteroid = new BlockStructure()
 			.streamMode(1)
 			.mount(ige.server.spaceGameScene);
-		var iceElement = new NewElement({resource: "IceBlock"});
-		var dragonElement = new NewElement({resource: "DragonBlock"});
+		var iceElement = new NewElement({resource: "IceBlock", purity: NewElement.PURITIES.PURE});
+		var dragonElement = new NewElement({
+			resource: "DragonBlock",
+			purity: NewElement.PURITIES.IMPURE
+		});
 		testAsteroid.put(iceElement, new IgePoint2d(0, 0), false);
 		testAsteroid.put(dragonElement, new IgePoint2d(0, 1), false);
 

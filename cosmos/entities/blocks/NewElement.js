@@ -30,7 +30,15 @@ var NewElement = Block.extend({
 
 		this.resource(data.resource);
 
+		if (!data.purity) {
+			this.log("NewElement#init: No purity data passed to constructor.", "error");
+		}
+
+		this.purity(data.purity);
+
 		data = this.dataFromConfig(data, this.resource());
+		data.health.max = Math.ceil(data.health.max * NewElement.HEALTH_MODIFIERS[this.purity()]);
+
 		this.initTextureValues();
 		Block.prototype.init.call(this, data);
 	},
@@ -77,6 +85,7 @@ var NewElement = Block.extend({
 	toJSON: function() {
 		var json = Block.prototype.toJSON.call(this);
 		json.resource = this.resource();
+		json.purity = this.purity();
 
 		return json;
 	}
@@ -88,11 +97,10 @@ NewElement.PURITIES = {
 	VERY_IMPURE: 3
 };
 
-NewElement.HEALTH_MODIFIERS = {
-	PURE: 1,
-	IMPURE:.8,
-	VERY_IMPURE:.6
-};
+NewElement.HEALTH_MODIFIERS = {};
+NewElement.HEALTH_MODIFIERS[NewElement.PURITIES.PURE] = 1;
+NewElement.HEALTH_MODIFIERS[NewElement.PURITIES.IMPURE] = .8;
+NewElement.HEALTH_MODIFIERS[NewElement.PURITIES.VERY_IMPURE] = .6;
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
 	module.exports = NewElement;

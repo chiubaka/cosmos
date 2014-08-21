@@ -580,8 +580,7 @@ Block.fromJSON = function(json) {
 		block = Element.fromType(json.type, {gridWidth: json.gridData.width, gridHeight: json.gridData.height});
 	}
 	else if (json.type === "NewElement") {
-		block = new NewElement({resource: json.resource});
-		console.log("NewElement from JSON!");
+		block = new NewElement({resource: json.resource, purity: json.purity});
 	}
 	else {
 		block = Block.fromType(json.type);
