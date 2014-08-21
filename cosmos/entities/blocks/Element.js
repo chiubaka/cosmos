@@ -9,8 +9,18 @@
 var Element = Block.extend({
 	classId: 'Element',
 
+	_purity: undefined,
+
 	init: function(data) {
 		Block.prototype.init.call(this, data);
+	},
+
+	purity: function(newPurity) {
+		if (newPurity !== undefined) {
+			this._purity = newPurity;
+			return this;
+		}
+		return this._purity;
 	}
 });
 
@@ -40,5 +50,9 @@ Element.fromType = function(type, dimensions) {
 Element.checkType = function(type) {
 	return cosmos.blocks.instances[type] instanceof Element;
 };
+
+Element.PURE = 1;
+Element.IMPURE = 2;
+Element.VERY_IMPURE = 3;
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Element; }
