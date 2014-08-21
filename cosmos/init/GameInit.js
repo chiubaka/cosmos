@@ -395,12 +395,12 @@ var GameInit = {
 			if ((entity1.category() === category1) &&
 				(entity2.category() === category2)) {
 				category1Entity = entity1;
-				category2Entity = entity2; 
+				category2Entity = entity2;
 			}
 			else if ((entity1.category() === category2) &&
 				(entity2.category() === category1)) {
 				category1Entity = entity2;
-				category2Entity = entity1; 
+				category2Entity = entity1;
 			}
 			else {
 				this.log('GameInit#entityByCategory: Entities do not match categories!', 'error');
