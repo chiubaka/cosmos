@@ -20,6 +20,7 @@ var Element = Block.extend({
 	_purity: undefined,
 
 	init: function(data) {
+		data = this.dataFromConfig(data);
 		Block.prototype.init.call(this, data);
 	},
 
