@@ -10,6 +10,7 @@ var Element = Block.extend({
 	classId: 'Element',
 
 	init: function(data) {
+		data = this.dataFromConfig(data);
 		Block.prototype.init.call(this, data);
 	}
 });
