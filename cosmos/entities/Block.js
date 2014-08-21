@@ -89,7 +89,7 @@ var Block = IgeEntity.extend({
 		var gridData = {width: 1, height: 1};
 
 		// If a height and width is passed for an element, that height and width will be used.
-		if (this instanceof Element) {
+		if (this.classId() === "NewElement") {
 			gridData.width = data.gridWidth || gridData.width;
 			gridData.height = data.gridHeight || gridData.height;
 		}
@@ -581,7 +581,12 @@ Block.fromJSON = function(json) {
 		block = Element.fromType(json.type, {gridWidth: json.gridData.width, gridHeight: json.gridData.height});
 	}
 	else if (json.type === "NewElement") {
-		block = new NewElement({resource: json.resource, purity: json.purity});
+		block = new NewElement({
+			resource: json.resource,
+			purity: json.purity,
+			gridWidth: json.gridData.width,
+			gridHeight: json.gridData.height
+		});
 	}
 	else {
 		block = Block.fromType(json.type);

@@ -234,7 +234,9 @@ var GameInit = {
 		var iceElement = new NewElement({resource: "IceBlock", purity: NewElement.PURITIES.PURE});
 		var dragonElement = new NewElement({
 			resource: "DragonBlock",
-			purity: NewElement.PURITIES.IMPURE
+			purity: NewElement.PURITIES.IMPURE,
+			gridWidth: 5,
+			gridHeight: 5
 		});
 		testAsteroid.put(iceElement, new IgePoint2d(0, 0), false);
 		testAsteroid.put(dragonElement, new IgePoint2d(0, 1), false);
