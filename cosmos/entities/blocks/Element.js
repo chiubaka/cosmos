@@ -86,8 +86,8 @@ Element.PURITIES = {
 
 Element.HEALTH_MODIFIERS = {
 	PURE: 1,
-	IMPURE:.8,
-	VERY_IMPURE:.6
+	IMPURE: .8, // We have some notion that impurities weaken an element
+	VERY_IMPURE: .6
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Element; }
