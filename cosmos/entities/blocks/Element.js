@@ -9,18 +9,44 @@
 var Element = Block.extend({
 	classId: 'Element',
 
+	/**
+	 * The type of the resource that dominates this element. Also defines what the element looks
+	 * like.
+	 */
+	_resource: undefined,
+	/**
+	 * The purity level of this element. Defines distributions and probability of drops.
+	 */
 	_purity: undefined,
 
 	init: function(data) {
 		Block.prototype.init.call(this, data);
 	},
 
+	/**
+	 * Getter/setter for purity value.
+	 * @param newPurity
+	 * @returns {*}
+	 */
 	purity: function(newPurity) {
 		if (newPurity !== undefined) {
 			this._purity = newPurity;
 			return this;
 		}
 		return this._purity;
+	},
+
+	/**
+	 * Getter/setter for resource value.
+	 * @param newResource
+	 * @returns {*}
+	 */
+	resource: function(newResource) {
+		if (newResource !== undefined) {
+			this._resource = resource;
+			return this;
+		}
+		return this._resource;
 	}
 });
 
