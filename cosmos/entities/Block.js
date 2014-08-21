@@ -140,8 +140,8 @@ var Block = IgeEntity.extend({
 			);
 			graphic.endFill();
 
-			graphic.position.x = -Block.WIDTH / 2;
-			graphic.position.y = -Block.HEIGHT / 2;
+			graphic.position.x = -self.width() / 2;
+			graphic.position.y = -self.height() / 2;
 
 			displayObject.addChild(graphic);
 
