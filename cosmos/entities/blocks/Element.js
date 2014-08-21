@@ -43,7 +43,7 @@ var Element = Block.extend({
 	 */
 	resource: function(newResource) {
 		if (newResource !== undefined) {
-			this._resource = resource;
+			this._resource = newResource;
 			return this;
 		}
 		return this._resource;
@@ -77,8 +77,16 @@ Element.checkType = function(type) {
 	return cosmos.blocks.instances[type] instanceof Element;
 };
 
-Element.PURE = 1;
-Element.IMPURE = 2;
-Element.VERY_IMPURE = 3;
+Element.PURITIES = {
+	PURE: 1,
+	IMPURE: 2,
+	VERY_IMPURE: 3
+};
+
+Element.HEALTH_MODIFIERS = {
+	PURE: 1,
+	IMPURE:.8,
+	VERY_IMPURE:.6
+};
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Element; }
