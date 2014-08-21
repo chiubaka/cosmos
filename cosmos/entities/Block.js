@@ -42,6 +42,11 @@ var Block = IgeEntity.extend({
 		var self = this;
 		IgeEntity.prototype.init.call(this);
 
+		data = data || {};
+
+		// Use an even number so values don't have to become approximate when we divide by two
+		this.width(Block.WIDTH).height(Block.HEIGHT);
+
 		var isAbstractClass = this.classId() === "Part"
 			|| this.classId() === "Armor"
 			|| this.classId() === "EngineBlock"
@@ -75,8 +80,22 @@ var Block = IgeEntity.extend({
 			this.addComponent(Recipe, Recipes[this.classId()]);
 		}
 
-		// TODO: Modify this so that blocks can have different sizes.
-		this.addComponent(GridData, {width: 1, height: 1});
+
+		// Default value for grid height and width is 1.
+		var gridData = {width: 1, height: 1};
+
+		// If a height and width is passed for an element, that height and width will be used.
+		if (this instanceof Element) {
+			gridData.width = data.gridWidth || gridData.width;
+			gridData.height = data.gridHeight || gridData.height;
+		}
+		// If a height and width is defined in the configuration files for this block, that will
+		// be used.
+		else if (GridDimensions[this.classId()]) {
+			gridData = GridDimensions[this.classId()];
+		}
+
+		this.addComponent(GridData, gridData);
 
 		// Use an even number so values don't have to become approximate when we divide by two
 		this.width(Block.WIDTH * this.gridData.width).height(Block.HEIGHT * this.gridData.height);
