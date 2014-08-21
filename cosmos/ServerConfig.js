@@ -73,6 +73,8 @@ var config = {
 		{ name: 'SteelBlock', path: './entities/blocks/elements/SteelBlock' },
 		{ name: 'TitaniumBlock', path: './entities/blocks/elements/TitaniumBlock' },
 
+		{ name: 'NewElement', path: './entities/blocks/NewElement' },
+
 		/* Refined element blocks */
 		{ name: 'RefinedMythrilBlock', path: './entities/blocks/elements/RefinedMythrilBlock' },
 

@@ -49,7 +49,9 @@ var Block = IgeEntity.extend({
 			|| this.classId() === "EngineBlock"
 			|| this.classId() === "ThrusterBlock"
 			|| this.classId() === "Weapon"
-			|| this.classId() === "Element";
+			// TODO: The Element class won't be abstract soon!
+			|| this.classId() === "Element"
+			|| this.classId() === "NewElement";
 
 		var isConstructionZone = this instanceof ConstructionZoneBlock;
 
@@ -161,22 +163,23 @@ var Block = IgeEntity.extend({
 		}
 	},
 
-	dataFromConfig: function(data) {
+	dataFromConfig: function(data, classId) {
 		data = data || {};
-		if (Healths[this.classId()] !== undefined) {
-			data.health = Healths[this.classId()];
+		classId = classId || this.classId();
+		if (Healths[classId] !== undefined) {
+			data.health = Healths[classId];
 		}
 
-		if (Types[this.classId()] !== undefined) {
-			data.type = Types[this.classId()];
+		if (Types[classId] !== undefined) {
+			data.type = Types[classId];
 		}
 
-		if (Descriptions[this.classId()] !== undefined) {
-			data.description = Descriptions[this.classId()];
+		if (Descriptions[classId] !== undefined) {
+			data.description = Descriptions[classId];
 		}
 
-		if (Recipes[this.classId()] !== undefined) {
-			data.recipe = Recipes[this.classId()];
+		if (Recipes[classId] !== undefined) {
+			data.recipe = Recipes[classId];
 		}
 
 		return data;
@@ -572,8 +575,13 @@ Block.fromType = function(type) {
 
 Block.fromJSON = function(json) {
 	var block;
+	console.log("Block#fromJSON: " + json.type);
 	if (Element.checkType(json.type)) {
 		block = Element.fromType(json.type, {gridWidth: json.gridData.width, gridHeight: json.gridData.height});
+	}
+	else if (json.type === "NewElement") {
+		block = new NewElement({resource: json.resource});
+		console.log("NewElement from JSON!");
 	}
 	else {
 		block = Block.fromType(json.type);

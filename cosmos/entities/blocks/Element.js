@@ -9,45 +9,9 @@
 var Element = Block.extend({
 	classId: 'Element',
 
-	/**
-	 * The type of the resource that dominates this element. Also defines what the element looks
-	 * like.
-	 */
-	_resource: undefined,
-	/**
-	 * The purity level of this element. Defines distributions and probability of drops.
-	 */
-	_purity: undefined,
-
 	init: function(data) {
 		data = this.dataFromConfig(data);
 		Block.prototype.init.call(this, data);
-	},
-
-	/**
-	 * Getter/setter for purity value.
-	 * @param newPurity
-	 * @returns {*}
-	 */
-	purity: function(newPurity) {
-		if (newPurity !== undefined) {
-			this._purity = newPurity;
-			return this;
-		}
-		return this._purity;
-	},
-
-	/**
-	 * Getter/setter for resource value.
-	 * @param newResource
-	 * @returns {*}
-	 */
-	resource: function(newResource) {
-		if (newResource !== undefined) {
-			this._resource = newResource;
-			return this;
-		}
-		return this._resource;
 	}
 });
 
@@ -78,16 +42,6 @@ Element.checkType = function(type) {
 	return cosmos.blocks.instances[type] instanceof Element;
 };
 
-Element.PURITIES = {
-	PURE: 1,
-	IMPURE: 2,
-	VERY_IMPURE: 3
-};
-
-Element.HEALTH_MODIFIERS = {
-	PURE: 1,
-	IMPURE:.8,
-	VERY_IMPURE:.6
-};
-
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Element; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
+	module.exports = Element;
+}

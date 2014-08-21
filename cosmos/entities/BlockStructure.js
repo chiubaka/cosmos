@@ -23,6 +23,8 @@ var BlockStructure = BlockGrid.extend({
 	init: function(data) {
 		BlockGrid.prototype.init.call(this, data);
 
+		console.log("BlockStructure#init" + this.id());
+
 		if (ige.isClient) {
 			this._constructionOverlay = new ConstructionOverlay(this)
 				.mount(this);
