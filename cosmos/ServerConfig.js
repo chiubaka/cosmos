@@ -86,10 +86,11 @@ var config = {
 
 		/* === COMPONENT CONFIG FILES === */
 		{ name: 'Descriptions', path: './components/config/Descriptions' },
-		{ name: 'Types', path: './components/config/Types' },
+		{ name: 'GridDimensions', path: './components/config/GridDimensions' },
 		{ name: 'Healths', path: './components/config/Healths' },
 		{ name: 'Recipes', path: './components/config/Recipes' },
 		{ name: 'Thrusts', path: './components/config/Thrusts' },
+		{ name: 'Types', path: './components/config/Types' },
 
 		/* === COMPONENTS === */
 		{ name: 'DamageSource', path: './components/DamageSource' },
