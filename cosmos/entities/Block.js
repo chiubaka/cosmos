@@ -551,15 +551,15 @@ Block.displayNameFromClassId = function(classId) {
 
 /**
  * Given a class ID, returns a new instance of the {@link Block} type associated with that class ID.
- * @param classId {string} The class ID of the type of {@link Block} we want created.
+ * @param type {string} The class ID of the type of {@link Block} we want created.
  * @returns {Block} An instance of the {@link Block} type requested through classId.
  * @memberof Block
  */
-Block.blockFromClassId = function(classId) {
-	if (cosmos.blocks.constructors[classId] === undefined) {
+Block.fromType = function(type) {
+	if (cosmos.blocks.constructors[type] === undefined) {
 		return undefined;
 	}
-	return new cosmos.blocks.constructors[classId]();
+	return new cosmos.blocks.constructors[type]();
 };
 
 Block.fromJSON = function(json) {
@@ -568,8 +568,9 @@ Block.fromJSON = function(json) {
 		block = Element.fromType(json.type, {gridWidth: json.gridData.width, gridHeight: json.gridData.height});
 	}
 	else {
-		block = Block.blockFromClassId(json.type);
+		block = Block.fromType(json.type);
 	}
+
 	block.gridData.loc = new IgePoint2d(json.gridData.loc.x, json.gridData.loc.y);
 	return block;
 };

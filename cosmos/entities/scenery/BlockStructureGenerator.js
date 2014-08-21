@@ -74,7 +74,7 @@ var BlockStructureGenerator = {
 			blocksRemaining--;
 
 			if (symmetric) {
-				blockStructure.put(Block.blockFromClassId(newBlock.classId()),
+				blockStructure.put(Block.fromType(newBlock.classId()),
 					new IgePoint2d(-block.col, -block.row), false);
 				blocksRemaining--;
 			}
@@ -157,7 +157,7 @@ var BlockStructureGenerator = {
 
 		// Now, with a weighted probability, randomly select an element from the weights to be the type.
 		var selection = WeightedSelection.select(weights);
-		return Block.blockFromClassId(selection);
+		return Block.fromType(selection);
 	},
 
 	/**
@@ -187,7 +187,7 @@ var BlockStructureGenerator = {
 		if (cosmos.blocks.instances[type] instanceof Element) {
 			return Element.fromType(type, dimensions);
 		} else {
-			return Block.blockFromClassId(type);
+			return Block.fromType(type);
 		}
 	},
 
