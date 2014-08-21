@@ -44,9 +44,6 @@ var Block = IgeEntity.extend({
 
 		data = data || {};
 
-		// Use an even number so values don't have to become approximate when we divide by two
-		this.width(Block.WIDTH).height(Block.HEIGHT);
-
 		var isAbstractClass = this.classId() === "Part"
 			|| this.classId() === "Armor"
 			|| this.classId() === "EngineBlock"
