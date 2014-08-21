@@ -65,24 +65,25 @@ var igeClientConfig = {
 		'./entities/blocks/parts/armor/TitaniumPlatingBlock.js',
 		'./entities/blocks/parts/armor/SteelPlatingBlock.js',
 
-		/* Element blocks */
-		'./entities/blocks/Element.js',
-		'./entities/blocks/elements/IronBlock.js',
-		'./entities/blocks/elements/CarbonBlock.js',
-		'./entities/blocks/elements/FluorineBlock.js',
-		'./entities/blocks/elements/CobaltBlock.js',
-		'./entities/blocks/elements/GoldBlock.js',
-		'./entities/blocks/elements/IceBlock.js',//not really an element
-		'./entities/blocks/elements/MythrilBlock.js',
-		'./entities/blocks/elements/RefinedMythrilBlock.js',
+		/* Resource blocks */
+		'./entities/blocks/Resource.js',
+		'./entities/blocks/resources/IronBlock.js',
+		'./entities/blocks/resources/CarbonBlock.js',
+		'./entities/blocks/resources/FluorineBlock.js',
+		'./entities/blocks/resources/CobaltBlock.js',
+		'./entities/blocks/resources/GoldBlock.js',
+		'./entities/blocks/resources/IceBlock.js',//not really an element
+		'./entities/blocks/resources/MythrilBlock.js',
+		'./entities/blocks/resources/RefinedMythrilBlock.js',
 
-		'./entities/blocks/elements/AdamantiumBlock.js',
-		'./entities/blocks/elements/DragonBlock.js',
-		'./entities/blocks/elements/KryptoniteBlock.js',
-		'./entities/blocks/elements/SteelBlock.js',
-		'./entities/blocks/elements/TitaniumBlock.js',
+		'./entities/blocks/resources/AdamantiumBlock.js',
+		'./entities/blocks/resources/DragonBlock.js',
+		'./entities/blocks/resources/KryptoniteBlock.js',
+		'./entities/blocks/resources/SteelBlock.js',
+		'./entities/blocks/resources/TitaniumBlock.js',
 
 		'./entities/blocks/NewElement.js',
+		'./entities/blocks/Element.js',
 
 		/* Effects */
 		'./entities/effects/mining/LaserBeam.js',

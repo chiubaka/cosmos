@@ -5,7 +5,7 @@
 * @namespace
 * @todo Use this to craft things.
 */
-var RefinedMythrilBlock = Element.extend({
+var RefinedMythrilBlock = Resource.extend({
 	classId: 'RefinedMythrilBlock',
 
 	init: function(data) {
@@ -16,8 +16,10 @@ var RefinedMythrilBlock = Element.extend({
 			this.textureOutline = "rgb(50, 50, 255)";
 		}
 
-		Element.prototype.init.call(this, data);
+		Resource.prototype.init.call(this, data);
 	}
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = RefinedMythrilBlock; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
+	module.exports = RefinedMythrilBlock;
+}

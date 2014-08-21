@@ -49,6 +49,7 @@ var Block = IgeEntity.extend({
 			|| this.classId() === "EngineBlock"
 			|| this.classId() === "ThrusterBlock"
 			|| this.classId() === "Weapon"
+			|| this.classId() === "Resource"
 			// TODO: The Element class won't be abstract soon!
 			|| this.classId() === "Element"
 			|| this.classId() === "NewElement";
