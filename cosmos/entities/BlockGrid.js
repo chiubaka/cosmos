@@ -242,7 +242,7 @@ var BlockGrid = IgeEntity.extend({
 			for (var row = 0; row < blockTypeMatrix[col].length; row++) {
 				if (blockTypeMatrix[col][row]) {
 					this.put(
-						Block.blockFromClassId(blockTypeMatrix[col][row]),
+						Block.fromType(blockTypeMatrix[col][row]),
 						new IgePoint2d(startCol + col, startRow + row),
 						false
 					);
@@ -275,7 +275,7 @@ var BlockGrid = IgeEntity.extend({
 				ige.client.metrics.track(
 					'cosmos:construct.existing',
 					{'type': data.selectedType});
-				this.put(Block.blockFromClassId(data.selectedType), new IgePoint2d(data.col, data.row), true);
+				this.put(Block.fromType(data.selectedType), new IgePoint2d(data.col, data.row), true);
 				ige.emit('cosmos:BlockGrid.processBlockActionClient.add', [data.selectedType, this]);
 				break;
 			default:
@@ -307,7 +307,7 @@ var BlockGrid = IgeEntity.extend({
 				// Blocks added as the result of a query from a client must be added to an existing
 				// contiguous structure.
 				if (this.hasNeighbors(location)) {
-					self.put(Block.blockFromClassId(data.selectedType), new IgePoint2d(data.col, data.row), false);
+					self.put(Block.fromType(data.selectedType), new IgePoint2d(data.col, data.row), false);
 					data.action = 'add';
 					ige.network.send('blockAction', data);
 					return true;
