@@ -44,7 +44,19 @@ var NewElement = Block.extend({
 	},
 
 	displayName: function() {
-		return cosmos.blocks.instances[this.resource()].displayName();
+		var displayName = cosmos.blocks.instances[this.resource()].displayName();
+
+		if (this.purity() === NewElement.PURITIES.PURE) {
+			displayName = "Pure " + displayName;
+		}
+		else if (this.purity() === NewElement.PURITIES.IMPURE) {
+			displayName = "Impure " + displayName;
+		}
+		else {
+			displayName = "Very Impure " + displayName;
+		}
+
+		return displayName;
 	},
 
 	initTextureValues: function() {
