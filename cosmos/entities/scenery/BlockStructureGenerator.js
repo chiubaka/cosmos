@@ -74,7 +74,7 @@ var BlockStructureGenerator = {
 			blocksRemaining--;
 
 			if (symmetric) {
-				blockStructure.put(Block.blockFromClassId(newBlock.classId()),
+				blockStructure.put(Block.fromType(newBlock.classId()),
 					new IgePoint2d(-block.col, -block.row), false);
 				blocksRemaining--;
 			}
@@ -157,7 +157,7 @@ var BlockStructureGenerator = {
 
 		// Now, with a weighted probability, randomly select an element from the weights to be the type.
 		var selection = WeightedSelection.select(weights);
-		return Block.blockFromClassId(selection);
+		return Block.fromType(selection);
 	},
 
 	/**
@@ -183,7 +183,7 @@ var BlockStructureGenerator = {
 	 */
 	_drawFromDistribution: function(distribution) {
 		var selection = WeightedSelection.select(distribution);
-		return Block.blockFromClassId(selection);
+		return Block.fromType(selection);
 	},
 
 	/**
