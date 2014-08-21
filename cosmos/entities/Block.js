@@ -44,9 +44,6 @@ var Block = IgeEntity.extend({
 
 		data = data || {};
 
-		// Use an even number so values don't have to become approximate when we divide by two
-		this.width(Block.WIDTH).height(Block.HEIGHT);
-
 		var isAbstractClass = this.classId() === "Part"
 			|| this.classId() === "Armor"
 			|| this.classId() === "EngineBlock"
@@ -566,7 +563,13 @@ Block.blockFromClassId = function(classId) {
 };
 
 Block.fromJSON = function(json) {
-	var block = Block.blockFromClassId(json.type);
+	var block;
+	if (Element.checkType(json.type)) {
+		block = Element.fromType(json.type, {gridWidth: json.gridData.width, gridHeight: json.gridData.height});
+	}
+	else {
+		block = Block.blockFromClassId(json.type);
+	}
 	block.gridData.loc = new IgePoint2d(json.gridData.loc.x, json.gridData.loc.y);
 	return block;
 };
