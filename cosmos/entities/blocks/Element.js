@@ -36,7 +36,14 @@ var Element = Block.extend({
 		this.purity(data.purity);
 
 		data = this.dataFromConfig(data, this.resource());
-		data.health.max = Math.ceil(data.health.max * Element.HEALTH_MODIFIERS[this.purity()]);
+		console.log("Resource: " + this.resource());
+		console.log("Healths value: " + Healths[this.resource()].max);
+		console.log("Before modification: " + data.health.max);
+		data.health = {
+			max: Math.ceil(data.health.max * Element.HEALTH_MODIFIERS[this.purity()])
+		};
+		//data.health.max = Math.ceil(data.health.max * Element.HEALTH_MODIFIERS[this.purity()]);
+		//console.log("After modification: " + data.health.max);
 
 		this.initTextureValues();
 		Block.prototype.init.call(this, data);
@@ -306,9 +313,9 @@ Element.PURITY_RELATIONSHIPS_FOR_DIFFERENT_ELEMENT[Element.PURITIES.VERY_IMPURE]
 	[Element.PURITIES.VERY_IMPURE];
 
 Element.HEALTH_MODIFIERS = {};
-Element.HEALTH_MODIFIERS[Element.PURITIES.PURE] = 1;
-Element.HEALTH_MODIFIERS[Element.PURITIES.IMPURE] = .8;
-Element.HEALTH_MODIFIERS[Element.PURITIES.VERY_IMPURE] = .6;
+Element.HEALTH_MODIFIERS[Element.PURITIES.PURE] = 2;
+Element.HEALTH_MODIFIERS[Element.PURITIES.IMPURE] = 1.5;
+Element.HEALTH_MODIFIERS[Element.PURITIES.VERY_IMPURE] = 1;
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
 	module.exports = Element;
