@@ -143,9 +143,8 @@ body {
 #ready {
     display: none;
     position: absolute;
-    bottom: 0;
+    bottom: 12.5%;
     width: 100%;
-    margin-bottom: 10%;
 }
 
 #ready button {
@@ -160,6 +159,13 @@ body {
     font-size: 125%;
     color: inherit;
     cursor: pointer;
+}
+
+#last-updated {
+    position: absolute;
+    font-size: 75%;
+    left: 2.5%;
+    bottom: 2.5%;
 }
 
 .news {
