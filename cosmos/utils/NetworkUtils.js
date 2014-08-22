@@ -18,7 +18,7 @@ var NetworkUtils = {
  * @static
  */
 NetworkUtils.block = function(block) {
-	if (block === undefined) {
+	if (block === undefined || block.gridData === undefined || block.gridData.loc === undefined) {
 		return undefined;
 	}
 
