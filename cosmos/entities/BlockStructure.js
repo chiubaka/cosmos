@@ -122,13 +122,8 @@ var BlockStructure = BlockGrid.extend({
 						player.currentShip().mining = false;
 						player.currentShip().turnOffMiningLasers(block);
 
-						// Drop block server side, then send drop msg to client
-						self.drop(player, new IgePoint2d(data.col, data.row));
-						if (self.count() === 0) {
-							self.destroy();
-						}
-						data.action = 'remove';
-						ige.network.send('blockAction', data);
+						block.onDeath();
+
 						ige.network.stream.queueCommand('cosmos:BlockStructure.processBlockActionServer.minedBlock',
 							true, player.clientId());
 					}

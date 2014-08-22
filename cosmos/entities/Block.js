@@ -268,6 +268,26 @@ var Block = IgeEntity.extend({
 		}
 	},
 
+	onDeath: function() {
+		var loc = this.gridData.loc;
+		var grid = this.gridData.grid;
+
+		var data = {
+			blockGridId: grid.id(),
+			action: 'remove',
+			col: loc.x,
+			row: loc.y
+		};
+
+		// Drop block server side, then send drop msg to client
+		grid.drop(player, new IgePoint2d(loc.x, loc.y));
+		if (grid.count() === 0) {
+			grid.destroy();
+		}
+
+		ige.network.send('blockAction', data);
+	},
+
 	/**
 	 * Removes an effect from this {@link Block}. Also takes care of making sure that the effects mount is destroyed
 	 * if there are no more effects on this {@link Block}. It is expected that all subclasses call this function at
