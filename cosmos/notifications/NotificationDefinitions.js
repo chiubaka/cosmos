@@ -26,6 +26,7 @@ var NotificationDefinitions = {
 		crafting_insufficientReactants: 10,
 		crafting_insufficientEquipment: 11,
 		crafting_insufficientCargoSpace: 12,
+		alreadyLoggedIn: 13
 	},
 
 	errors: {
@@ -40,6 +41,7 @@ var NotificationDefinitions = {
 		10: 'Insufficient reactants!',
 		11: 'Insufficient ship equipment!',
 		12: 'Insufficient cargo space!',
+		13: 'This account is already playing the game elsewhere!'
 	},
 
 	successKeys: {
