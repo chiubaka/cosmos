@@ -228,19 +228,6 @@ var GameInit = {
 	initEnvironment: function() {
 		var server = ige.server;
 
-		var testAsteroid = new BlockStructure()
-			.streamMode(1)
-			.mount(ige.server.spaceGameScene);
-		var iceElement = new Element({resource: "IceBlock", purity: Element.PURITIES.PURE});
-		var dragonElement = new Element({
-			resource: "DragonBlock",
-			purity: Element.PURITIES.IMPURE,
-			gridWidth: 5,
-			gridHeight: 5
-		});
-		testAsteroid.put(iceElement, new IgePoint2d(0, 0), false);
-		testAsteroid.put(dragonElement, new IgePoint2d(0, 1), false);
-
 		var NUM_NORMAL_ASTEROIDS = 40;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
 			this.spawnStructure(8000, BlockStructureGenerator.elementDistributions.randomDistribution());
