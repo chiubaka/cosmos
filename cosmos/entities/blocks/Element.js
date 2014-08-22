@@ -227,7 +227,7 @@ Element.randomChild = function(parentElement) {
 			rarityLevel = Element.RARITIES.UNCOMMON;
 		} else if (randomFloat < Element.RARITIES_PROBABILITY[Element.RARITIES.COMMON]
 			+ Element.RARITIES_PROBABILITY[Element.RARITIES.UNCOMMON]
-			+ Element.RARITIES_PROBABILITY[Element.RARITIES.RARE])
+			+ Element.RARITIES_PROBABILITY[Element.RARITIES.RARE]) //TODO: this repeated addition is pretty inelegant. Find a better way to do this.
 		{
 			rarityLevel = Element.RARITIES.RARE;
 		} else {
