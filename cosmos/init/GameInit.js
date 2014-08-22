@@ -167,8 +167,9 @@ var GameInit = {
 					.depth(0)
 					.parallaxLag(2)
 					.mount(client.spaceBackgroundScene)
-					.translateTo(Constants.GRID_SQUARE_SIZE.X*gridX + Constants.BACKGROUND_OFFSET.X,
-						Constants.GRID_SQUARE_SIZE.Y*gridY + Constants.BACKGROUND_OFFSET.Y,
+					.translateTo(
+						(Constants.GRID_SQUARE_SIZE.X - Constants.GRID_SQUARE_OVERLAP)*gridX + Constants.BACKGROUND_OFFSET.X,
+						(Constants.GRID_SQUARE_SIZE.Y - Constants.GRID_SQUARE_OVERLAP)*gridY + Constants.BACKGROUND_OFFSET.Y,
 						0);
 			}
 		}
@@ -181,8 +182,9 @@ var GameInit = {
 					.depth(1)
 					.parallaxLag(4)
 					.mount(client.spaceBackgroundScene)
-					.translateTo(Constants.GRID_SQUARE_SIZE.X*gridX,
-						Constants.GRID_SQUARE_SIZE.Y*gridY,
+					.translateTo(
+						Constants.GRID_SQUARE_SIZE.X * gridX,
+						Constants.GRID_SQUARE_SIZE.Y * gridY,
 						0);
 			}
 		}
@@ -190,15 +192,16 @@ var GameInit = {
 		//Instantiate the second background overlay
 		for (var gridX = -Constants.NUM_BACKGROUND_OVERLAY_SQUARES.X/2; gridX < Constants.NUM_BACKGROUND_OVERLAY_SQUARES.X/2; gridX++) {
 			for (var gridY = -Constants.NUM_BACKGROUND_OVERLAY_SQUARES.Y/2; gridY < Constants.NUM_BACKGROUND_OVERLAY_SQUARES.Y/2; gridY++) {
-				var x = Constants.GRID_SQUARE_SIZE.X*gridX;
-				var y = Constants.GRID_SQUARE_SIZE.Y*gridY;
+				var x = Constants.GRID_SQUARE_SIZE.X * gridX;
+				var y = Constants.GRID_SQUARE_SIZE.Y * gridY;
 
 				new Background({textureName: 'backgroundOverlay'})
 					.id('backgroundOverlayTheSecond' + gridX + "-" + gridY)
 					.depth(1)
 					.parallaxLag(5)
 					.mount(client.spaceBackgroundScene)
-					.translateTo(x * Math.cos(Constants.SECOND_OVERLAY_ROTATION) - y * Math.sin(Constants.SECOND_OVERLAY_ROTATION),
+					.translateTo(
+						x * Math.cos(Constants.SECOND_OVERLAY_ROTATION) - y * Math.sin(Constants.SECOND_OVERLAY_ROTATION),
 						x * Math.sin(Constants.SECOND_OVERLAY_ROTATION) + y * Math.cos(Constants.SECOND_OVERLAY_ROTATION),
 						0)
 					.rotate().z(Constants.SECOND_OVERLAY_ROTATION);
@@ -243,12 +246,24 @@ var GameInit = {
 	},
 
 	spawnStructure: function(maxNumBlocks, blockDistribution, symmetric) {
-		var translate = this.getRandomLocation();
+		// TODO: @Eric Remove support for initial translate because this has been
+		// obsoleted by transactional fixtures.
+		var translate = new IgePoint2d(0,0);
 		var structure = BlockStructureGenerator
 			.genProceduralAsteroid(maxNumBlocks, blockDistribution, symmetric,
-				translate)
-			.streamMode(1)
-			.mount(ige.server.spaceGameScene);
+				translate, handleTransactionResult)
+
+		// TODO: @Eric Race condition where structure may not be uninitialized
+		// before this callback is called.
+		function handleTransactionResult(success) {
+			if (success) {
+				structure.streamMode(1);
+				structure.mount(ige.server.spaceGameScene);
+			}
+			else {
+				structure.destroy();
+			}
+		}
 	},
 
 	/**
@@ -474,9 +489,11 @@ var GameInit = {
 		ige.watchStart(client.custom4);
 	},
 
+	// TODO: @Eric replace this function because it has been obsolted by
+	// transactional fixtures
 	getRandomLocation: function () {
 		// The maximum distance that we will translate entities to
-		var MAX_DISTANCE = 18000;
+		var MAX_DISTANCE = 10000;
 		return new IgePoint2d((Math.random() - 0.5) * MAX_DISTANCE,
 			(Math.random() - 0.5) * MAX_DISTANCE);
 	},

@@ -39,6 +39,8 @@ var Constants = {
 		Y: 8
 	},
 
+	GRID_SQUARE_OVERLAP: 1, // I think we only need a tiny overlap to get rid of the gaps in safari
+
 	SECOND_OVERLAY_ROTATION: Math.PI / 4
 };
 

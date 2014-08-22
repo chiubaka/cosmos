@@ -118,6 +118,10 @@ body {
     color: #428bca;
 }
 
+.igeLoading.content a:hover {
+    text-decoration: underline;
+}
+
 .igeLoading.loadingFloat.preview {
     z-index: 999999
 }
