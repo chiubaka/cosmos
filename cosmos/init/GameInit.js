@@ -167,8 +167,9 @@ var GameInit = {
 					.depth(0)
 					.parallaxLag(2)
 					.mount(client.spaceBackgroundScene)
-					.translateTo(Constants.GRID_SQUARE_SIZE.X*gridX + Constants.BACKGROUND_OFFSET.X,
-						Constants.GRID_SQUARE_SIZE.Y*gridY + Constants.BACKGROUND_OFFSET.Y,
+					.translateTo(
+						(Constants.GRID_SQUARE_SIZE.X - Constants.GRID_SQUARE_OVERLAP)*gridX + Constants.BACKGROUND_OFFSET.X,
+						(Constants.GRID_SQUARE_SIZE.Y - Constants.GRID_SQUARE_OVERLAP)*gridY + Constants.BACKGROUND_OFFSET.Y,
 						0);
 			}
 		}
@@ -181,8 +182,9 @@ var GameInit = {
 					.depth(1)
 					.parallaxLag(4)
 					.mount(client.spaceBackgroundScene)
-					.translateTo(Constants.GRID_SQUARE_SIZE.X*gridX,
-						Constants.GRID_SQUARE_SIZE.Y*gridY,
+					.translateTo(
+						Constants.GRID_SQUARE_SIZE.X * gridX,
+						Constants.GRID_SQUARE_SIZE.Y * gridY,
 						0);
 			}
 		}
@@ -190,15 +192,16 @@ var GameInit = {
 		//Instantiate the second background overlay
 		for (var gridX = -Constants.NUM_BACKGROUND_OVERLAY_SQUARES.X/2; gridX < Constants.NUM_BACKGROUND_OVERLAY_SQUARES.X/2; gridX++) {
 			for (var gridY = -Constants.NUM_BACKGROUND_OVERLAY_SQUARES.Y/2; gridY < Constants.NUM_BACKGROUND_OVERLAY_SQUARES.Y/2; gridY++) {
-				var x = Constants.GRID_SQUARE_SIZE.X*gridX;
-				var y = Constants.GRID_SQUARE_SIZE.Y*gridY;
+				var x = Constants.GRID_SQUARE_SIZE.X * gridX;
+				var y = Constants.GRID_SQUARE_SIZE.Y * gridY;
 
 				new Background({textureName: 'backgroundOverlay'})
 					.id('backgroundOverlayTheSecond' + gridX + "-" + gridY)
 					.depth(1)
 					.parallaxLag(5)
 					.mount(client.spaceBackgroundScene)
-					.translateTo(x * Math.cos(Constants.SECOND_OVERLAY_ROTATION) - y * Math.sin(Constants.SECOND_OVERLAY_ROTATION),
+					.translateTo(
+						x * Math.cos(Constants.SECOND_OVERLAY_ROTATION) - y * Math.sin(Constants.SECOND_OVERLAY_ROTATION),
 						x * Math.sin(Constants.SECOND_OVERLAY_ROTATION) + y * Math.cos(Constants.SECOND_OVERLAY_ROTATION),
 						0)
 					.rotate().z(Constants.SECOND_OVERLAY_ROTATION);
