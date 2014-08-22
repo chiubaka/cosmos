@@ -176,9 +176,17 @@ var Client = IgeClass.extend({
 							// Wait until the HUD finishes loading to ask for the player.
 							ige.on('cosmos:hud.loaded', function (hud) {
 								ige.hud.log('HUD Loaded.');
-								ige.hud.show();
-								// Ask the server to create an entity for us
-								ige.network.send('playerEntity', {sid: self.getSessionId()});
+
+								$('#ready').show();
+								$('.igeLoading.loadingFloat.preview').hide();
+
+								$('#ready button').click(function() {
+									$('.igeLoading').hide();
+									ige.hud.show();
+									//ige.removeLoadingScreen();
+									// Ask the server to create an entity for us
+									ige.network.send('playerEntity', {sid: self.getSessionId()});
+								});
 							});
 						});
 					}
