@@ -23,8 +23,6 @@ var BlockStructure = BlockGrid.extend({
 	init: function(data) {
 		BlockGrid.prototype.init.call(this, data);
 
-		console.log("BlockStructure#init" + this.id());
-
 		if (ige.isClient) {
 			this._constructionOverlay = new ConstructionOverlay(this)
 				.mount(this);
@@ -122,7 +120,7 @@ var BlockStructure = BlockGrid.extend({
 						player.currentShip().mining = false;
 						player.currentShip().turnOffMiningLasers(block);
 
-						block.onDeath();
+						block.onDeath(player);
 
 						ige.network.stream.queueCommand('cosmos:BlockStructure.processBlockActionServer.minedBlock',
 							true, player.clientId());

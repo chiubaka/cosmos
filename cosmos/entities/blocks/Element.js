@@ -36,14 +36,9 @@ var Element = Block.extend({
 		this.purity(data.purity);
 
 		data = this.dataFromConfig(data, this.resource());
-		console.log("Resource: " + this.resource());
-		console.log("Healths value: " + Healths[this.resource()].max);
-		console.log("Before modification: " + data.health.max);
 		data.health = {
 			max: Math.ceil(data.health.max * Element.HEALTH_MODIFIERS[this.purity()])
 		};
-		//data.health.max = Math.ceil(data.health.max * Element.HEALTH_MODIFIERS[this.purity()]);
-		//console.log("After modification: " + data.health.max);
 
 		this.initTextureValues();
 		Block.prototype.init.call(this, data);
@@ -107,7 +102,7 @@ var Element = Block.extend({
 			" a 1x1 element?", "warning");
 	},
 
-	onDeath: function() {
+	onDeath: function(player) {
 		var grid = this.gridData.grid;
 		var loc = this.gridData.loc;
 		var gridWidth = this.gridData.width;
@@ -125,8 +120,17 @@ var Element = Block.extend({
 		// If this is a 1x1 element, we call
 		if (gridWidth === 1 && gridHeight === 1) {
 			// TODO: Create the resource that matches this Element and drop it.
-			//Block.prototype.onDeath.call(this);
-			return;
+			var block = new cosmos.blocks.constructors[this.resource()]();
+			console.log(this.resource());
+			console.log(block);
+			var dropCoordinates = grid.worldCoordinatesForBlock(this);
+			var drop = new Drop({owner: player.currentShip()})
+				.block(block)
+				.translateTo(dropCoordinates.x, dropCoordinates.y, 0)
+				.rotateTo(0, 0, grid.rotate().z())
+				.streamMode(1)
+				.mount(ige.server.spaceGameScene);
+
 		}
 		else {
 			var numChildren = this._numChildren();

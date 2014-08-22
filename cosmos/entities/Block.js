@@ -269,7 +269,7 @@ var Block = IgeEntity.extend({
 		}
 	},
 
-	onDeath: function() {
+	onDeath: function(player) {
 		var loc = this.gridData.loc;
 		var grid = this.gridData.grid;
 
