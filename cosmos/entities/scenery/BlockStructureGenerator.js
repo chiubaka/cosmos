@@ -48,46 +48,49 @@ var BlockStructureGenerator = {
 		blocksToPlace.push(startingCell);
 
 		var first = true;
-		while (blocksRemaining > 0 && blocksToPlace.length > 0) {
-			// Randomly select a block to place.
-			var blockIndex = Math.floor(Math.random() * blocksToPlace.length);
-			var block = blocksToPlace[blockIndex];
-			/*
-			if (asteroidConstr[block.row] !== undefined && asteroidConstr[block.row][block.col] !== undefined) {
-				blocksToPlace.remove(blockIndex);
-				continue;
-			}
-			*/
-			if (blockStructure.get(new IgePoint2d(block.col, block.row)).length > 0) {
-				blocksToPlace.remove(blockIndex);
-				continue;
-			}
+		var self = this;
+		blockStructure.physicsBody.newTransactionalFixtures(function() {
+			while (blocksRemaining > 0 && blocksToPlace.length > 0) {
+				// Randomly select a block to place.
+				var blockIndex = Math.floor(Math.random() * blocksToPlace.length);
+				var block = blocksToPlace[blockIndex];
+				/*
+				if (asteroidConstr[block.row] !== undefined && asteroidConstr[block.row][block.col] !== undefined) {
+					blocksToPlace.remove(blockIndex);
+					continue;
+				}
+				*/
+				if (blockStructure.get(new IgePoint2d(block.col, block.row)).length > 0) {
+					blocksToPlace.remove(blockIndex);
+					continue;
+				}
 
-			if (first) {
-				var newBlock = this._drawFromDistribution(blockDistribution);
-				first = false;
-			} else {
-				var newBlock = this._getBlockType(blockStructure, block.row, block.col, blockDistribution);
-			}
+				if (first) {
+					var newBlock = self._drawFromDistribution(blockDistribution);
+					first = false;
+				} else {
+					var newBlock = self._getBlockType(blockStructure, block.row, block.col, blockDistribution);
+				}
 
-			blockStructure.put(newBlock, new IgePoint2d(block.col, block.row), newBlock, false);
-			blocksRemaining--;
-
-			if (symmetric) {
-				blockStructure.put(Block.blockFromClassId(newBlock.classId()),
-					new IgePoint2d(-block.col, -block.row), false);
+				blockStructure.put(newBlock, new IgePoint2d(block.col, block.row), newBlock, false);
 				blocksRemaining--;
+
+				if (symmetric) {
+					blockStructure.put(Block.blockFromClassId(newBlock.classId()),
+						new IgePoint2d(-block.col, -block.row), false);
+					blocksRemaining--;
+				}
+
+				// Push cardinal neighbors into block bag.
+				blocksToPlace.push({ row: block.row - 1, col: block.col });
+				blocksToPlace.push({ row: block.row + 1, col: block.col });
+				blocksToPlace.push({ row: block.row, col: block.col - 1 });
+				blocksToPlace.push({ row: block.row, col: block.col + 1 });
+
+				// Remove the block
+				blocksToPlace.remove(blockIndex);
 			}
-
-			// Push cardinal neighbors into block bag.
-			blocksToPlace.push({ row: block.row - 1, col: block.col });
-			blocksToPlace.push({ row: block.row + 1, col: block.col });
-			blocksToPlace.push({ row: block.row, col: block.col - 1 });
-			blocksToPlace.push({ row: block.row, col: block.col + 1 });
-
-			// Remove the block
-			blocksToPlace.remove(blockIndex);
-		}
+		});
 
 		return blockStructure;
 	},
