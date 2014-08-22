@@ -9,6 +9,7 @@ var Part = Block.extend({
 	classId: 'Part',
 
 	init: function(data) {
+		data = this.dataFromConfig(data);
 		Block.prototype.init.call(this, data);
 	}
 });

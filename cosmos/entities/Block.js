@@ -51,30 +51,34 @@ var Block = IgeEntity.extend({
 			|| this.classId() === "Weapon"
 			|| this.classId() === "Element";
 
-		// Check if a health has been provided for this block.
-		if (Healths[this.classId()] !== undefined) {
-			this.addComponent(Health, Healths[this.classId()]);
-		} else if(!(this instanceof ConstructionZoneBlock || isAbstractClass)) {
-			this.log("No health found for " + this.classId() + ". The health component is mandatory for all blocks", 'error');
+		var isConstructionZone = this instanceof ConstructionZoneBlock;
+
+		if (data.health) {
+			this.addComponent(Health, data.health);
+		}
+		else if (!(isConstructionZone || isAbstractClass)) {
+			this.log("No health found for " + this.classId() + ". Health component is mandatory" +
+				" for all blocks.", "error");
 		}
 
-		// Check if a type has been provided for this block.
-		if (Types[this.classId()] !== undefined) {
-			this.addComponent(Type, Types[this.classId()]);
-		} else if(!(this instanceof ConstructionZoneBlock || isAbstractClass)) {
-			this.log("No type found for " + this.classId() + ". The type component is mandatory for all blocks", 'error');
+		if (data.type) {
+			this.addComponent(Type, data.type);
+		}
+		else if (!(isConstructionZone || isAbstractClass)) {
+			this.log("No type found for " + this.classId() + ". The type component is mandatory" +
+				" for all blocks.", "error");
 		}
 
-		// Check if a description has been provided for this block. If so, this block is describable. Otherwise, it is not.
-		if (Descriptions[this.classId()] !== undefined) {
-			this.addComponent(Description, Descriptions[this.classId()]);
-		} else if(!(this instanceof ConstructionZoneBlock || isAbstractClass)) {
-			this.log("No description found for " + this.classId() + ". The descriptions component is mandatory for all blocks", 'error');
+		if (data.description) {
+			this.addComponent(Description, data.description);
+		}
+		else if (!(isConstructionZone || isAbstractClass)) {
+			this.log("No description found for " + this.classId() + ". The description component " +
+				"is mandatory for all blocks.", "error");
 		}
 
-		// Check if a recipe has been provided for this block. If so, this block is craftable. Otherwise, it is not.
-		if (Recipes[this.classId()] !== undefined) {
-			this.addComponent(Recipe, Recipes[this.classId()]);
+		if (data.recipe) {
+			this.addComponent(Recipe, data.recipe);
 		}
 
 		/* === Grid Data === */
@@ -155,6 +159,27 @@ var Block = IgeEntity.extend({
 			this.compositeCache(true);
 			this.cacheSmoothing(true);
 		}
+	},
+
+	dataFromConfig: function(data) {
+		data = data || {};
+		if (Healths[this.classId()] !== undefined) {
+			data.health = Healths[this.classId()];
+		}
+
+		if (Types[this.classId()] !== undefined) {
+			data.type = Types[this.classId()];
+		}
+
+		if (Descriptions[this.classId()] !== undefined) {
+			data.description = Descriptions[this.classId()];
+		}
+
+		if (Recipes[this.classId()] !== undefined) {
+			data.recipe = Recipes[this.classId()];
+		}
+
+		return data;
 	},
 
 	displayName: function() {
