@@ -56,7 +56,7 @@ var BlockStructureGenerator = {
 		var sizes = 		[12, 9, 8, 6, 4, 3, 2, 1];
 		var numLayers = [0, 0, 0, 0, 1, 1, 2, 2];
 
-		for (var index = 0; index < 8; index++) {
+		for (var index = 0; index < sizes.length; index++) {
 			currentSize = sizes[index];
 
 			for (var layer = 0; layer < numLayers[index]; layer++) {
