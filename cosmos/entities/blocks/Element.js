@@ -42,6 +42,24 @@ var Element = Block.extend({
 		Block.prototype.init.call(this, data);
 	},
 
+	childGridHeight: function() {
+		// Height and width are the same for now.
+		return this.childGridWidth();
+	},
+
+	childGridWidth: function() {
+		var gridWidth = this.gridData.width;
+		if (gridWidth % 2 === 0) {
+			return gridWidth / 2;
+		}
+		else if (gridWidth % 3 === 0) {
+			return gridWidth / 3;
+		}
+
+		this.log("Element#childGridWidth: Current gridWidth is not divisible by 2 or 3. Is this" +
+			" a 1x1 element?", "warning");
+	},
+
 	displayName: function() {
 		var displayName = cosmos.blocks.instances[this.resource()].displayName();
 
@@ -65,6 +83,67 @@ var Element = Block.extend({
 		this.borderAlpha = Elements[this.resource()].borderAlpha || 1;
 		this.textureBackground = Elements[this.resource()].textureBackground;
 		this.textureOutline = Elements[this.resource()].textureOutline;
+	},
+
+
+
+	_numChildren: function() {
+		var gridWidth = this.gridData.width;
+		if (gridWidth % 2 === 0) {
+			return 4;
+		}
+		else if (gridWidth % 3 === 0) {
+			return 9;
+		}
+
+		this.log("Element#_numChildren: Current gridWidth is not divisible by 2 or 3. Is this" +
+			" a 1x1 element?", "warning");
+	},
+
+	onDeath: function() {
+		var grid = this.gridData.grid;
+		var loc = this.gridData.loc;
+		var gridWidth = this.gridData.width;
+		var gridHeight = this.gridData.height;
+
+		grid.remove(new IgePoint2d(loc.x, loc.y));
+
+		ige.network.send('blockAction', {
+			blockGridId: grid.id(),
+			action: 'remove',
+			col: loc.x,
+			row: loc.y
+		});
+
+		// If this is a 1x1 element, we call
+		if (gridWidth === 1 && gridHeight === 1) {
+			// TODO: Create the resource that matches this Element and drop it.
+			//Block.prototype.onDeath.call(this);
+			return;
+		}
+		else {
+			var numChildren = this._numChildren();
+			var childGridWidth = this.childGridWidth();
+			var childGridHeight = this.childGridHeight();
+
+			for (var x = 0; x < gridWidth / childGridWidth; x++) {
+				for (var y = 0; y < gridHeight / childGridHeight; y++) {
+					var child = Element.randomChild(this);
+					grid.put(
+						child,
+						new IgePoint2d(loc.x + childGridWidth * x,
+							loc.y + childGridHeight * y),
+						true
+					);
+
+					ige.network.send('blockAction', {
+						blockGridId: grid.id(),
+						action: 'put',
+						block: child.toJSON()
+					});
+				}
+			}
+		}
 	},
 
 	/**
@@ -103,7 +182,10 @@ var Element = Block.extend({
 });
 
 Element.randomChild = function(parentElement) {
-	var childElement = new Element();
+	var resource;
+	var purity;
+	var gridWidth = parentElement.childGridWidth();
+	var gridHeight = parentElement.childGridHeight();
 
 	//First let's figure out if the child is going to have the same resource as the parent
 	var probabilityOfBeingTheSameElement;
@@ -117,14 +199,11 @@ Element.randomChild = function(parentElement) {
 
 	if (Math.random() < probabilityOfBeingTheSameElement) {
 		// We know that the child element is going to have the same resource as the parent
-		childElement.resource(parentElement.resource());
-
+		resource = parentElement.resource();
 		// We now need to figure out what the purity of the child is going to be.
-		childElement.purity(MathUtils.chooseRandomlyFromArray(
+		purity = MathUtils.chooseRandomlyFromArray(
 			Element.PURITY_RELATIONSHIPS_FOR_SAME_ELEMENT[parentElement.purity()]
-		));
-
-		return childElement;
+		);
 	} else {
 		// We know that the child element is going to have a different resource as the parent
 		var rarityLevel;
@@ -146,15 +225,21 @@ Element.randomChild = function(parentElement) {
 
 		var possibleImpurities = Element.RESOURCE_IMPURITIES[parentElement.resource()]
 			|| Element.RESOURCE_IMPURITIES['default'];
-		childElement.resource(possibleImpurities[rarityLevel]);
+
+		resource = possibleImpurities[rarityLevel];
 
 		// We also need to figure out what the purity of the child is going to be.
-		childElement.purity(MathUtils.chooseRandomlyFromArray(
+		purity = MathUtils.chooseRandomlyFromArray(
 			Element.PURITY_RELATIONSHIPS_FOR_DIFFERENT_ELEMENT[parentElement.purity()]
-		));
-
-		return childElement;
+		);
 	}
+
+	return new Element({
+		resource: resource,
+		purity: purity,
+		gridWidth: gridWidth,
+		gridHeight: gridHeight
+	});
 };
 
 // Enum for element rarities

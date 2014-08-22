@@ -273,12 +273,18 @@ var BlockGrid = IgeEntity.extend({
 				var block = this.get(new IgePoint2d(data.col, data.row))[0];
 				block.takeDamage(data.amount);
 				break;
+			// TODO: Remove this case and integrate it with 'put'
 			case 'add':
 				ige.client.metrics.track(
 					'cosmos:construct.existing',
 					{'type': data.selectedType});
 				this.put(Block.fromType(data.selectedType), new IgePoint2d(data.col, data.row), true);
 				ige.emit('cosmos:BlockGrid.processBlockActionClient.add', [data.selectedType, this]);
+				break;
+			case 'put':
+				var block = Block.fromJSON(data.block);
+				this.put(block, new IgePoint2d(block.gridData.loc.x, block.gridData.loc.y), true);
+				ige.emit('cosmos:BlockGrid.processBlockActionClient.put', [data.block.type, this]);
 				break;
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
