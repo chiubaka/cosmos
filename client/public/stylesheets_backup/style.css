@@ -1,7 +1,6 @@
 body {
     background-color: #000;
 	color: #fff;
-    padding: 50px;
 }
 
 body, body div, span, div, p {
@@ -19,23 +18,25 @@ div#container {
 
 header#cosmos-header {
 	background: url('/images/cosmos-logo.png') no-repeat;
-	height: 120px;
-	width: 300px;
-	text-indent: -9000px;
-	overflow: hidden;
-	margin-top: 100px;
+height: 120px;
+    width: 300px;
+    text-indent: -9000px;
+    overflow: hidden;
+    margin-top: 100px;
 
-	margin-left: 150px;
+    margin-left: 150px;
 }
 
 #cosmos-greeting {
-	display: none;
-	position: absolute;
-    top: 50px;
-    left: 50%;
-    width: 1000px;
-    margin-left: -500px;
-    margin-top: -50px;
+    display: none;
+    position: absolute;
+    top: 0;
+    z-index: 50000;
+}
+
+#cosmos-greeting, #cosmos-greeting .cosmos-logo, #cosmos-greeting .cosmos-logo img {
+    width: 100%;
+    height: 100%
 }
 
 #cosmos-login {
