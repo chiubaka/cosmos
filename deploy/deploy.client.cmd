@@ -175,6 +175,7 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
 )
 
 echo Installing grunt CLI globally
+echo %DEPLOYMENT_TARGET%
 IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
   pushd "%DEPLOYMENT_TARGET%\"
   call :ExecuteCmd !NPM_CMD! install -g grunt-cli
