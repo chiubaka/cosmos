@@ -25,7 +25,8 @@ var ClientNetworkEvents = {
 
 		ige.client.metrics.identify(data.username, {
 			loggedIn: data.loggedIn,
-			hasGuestUsername: data.hasGuestUsername
+			hasGuestUsername: data.hasGuestUsername,
+			username: data.username
 		});
 
 		// Set the time stream UI entity to monitor our player entity
