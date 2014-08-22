@@ -13,7 +13,7 @@ var DragonBlock = Resource.extend({
 			this.backgroundColor = 0x770000;
 			this.borderColor = 0x780000;
 			this.textureBackground = "rgb(119, 0, 0)";
-			this.textureOutline = "rgb(120, 0, 0)";
+			this.textureOutline = "rgb(140, 0, 0)";
 		}
 
 		Resource.prototype.init.call(this, data);
