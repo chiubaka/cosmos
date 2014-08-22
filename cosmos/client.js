@@ -182,7 +182,7 @@ var Client = IgeClass.extend({
 							// Wait until the HUD finishes loading to ask for the player.
 							ige.on('cosmos:hud.loaded', function (hud) {
 								ige.hud.log('HUD Loaded.');
-
+								this.takeFullscreen();
 								$('#ready').show();
 								$('.igeLoading.loadingFloat.preview').hide();
 
@@ -215,8 +215,32 @@ var Client = IgeClass.extend({
 		$('#loadingText').addClass('error');
 	},
 
+
 	promptForUsername: function() {
 		ige.addComponent(NamePrompt);
+	},
+
+	takeFullscreen: function() {
+		if ($('#fullscreen').is(':checked')
+			&& (document.fullscreenEnabled
+				|| document.webkitFullscreenEnabled
+				|| document.mozFullScreenEnabled
+				|| document.msFullscreenEnabled))
+		{
+			var body = document.body;
+			if (body.requestFullscreen) {
+				body.requestFullscreen();
+			}
+			else if (body.webkitRequestFullscreen) {
+				body.webkitRequestFullscreen();
+			}
+			else if (body.mozRequestFullScreen) {
+				body.mozRequestFullScreen();
+			}
+			else if (body.msRequestFullscreen) {
+				body.msRequestFullscreen;
+			}
+		}
 	},
 
 	getSessionId: function() {
