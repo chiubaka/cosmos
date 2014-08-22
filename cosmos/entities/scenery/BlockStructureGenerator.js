@@ -18,7 +18,7 @@ var BlockStructureGenerator = {
 	 * @memberof BlockStructureGenerator
 	 */
 	genProceduralAsteroid: function(maxNumBlocks, blockDistribution, symmetric,
-		translate) {
+		translate, callback) {
 		// Whether or not to generate a symmetric asteroid
 		symmetric = symmetric || false;
 
@@ -55,78 +55,81 @@ var BlockStructureGenerator = {
 
 		var sizes = 		[12, 9, 8, 6, 4, 3, 2, 1];
 		var numLayers = [0, 0, 0, 0, 1, 1, 2, 2];
+		// TODO: @Eric Clean this up
+		var self = this;
+		blockStructure.physicsBody.newTransactionalFixtures(function() {
+			for (var index = 0; index < sizes.length; index++) {
+				currentSize = sizes[index];
 
-		for (var index = 0; index < sizes.length; index++) {
-			currentSize = sizes[index];
+				for (var layer = 0; layer < numLayers[index]; layer++) {
 
-			for (var layer = 0; layer < numLayers[index]; layer++) {
-
-				while (nextLocationsToFill.length > 0) {
-					locationsToFill.push(nextLocationsToFill.pop());
-				}
-
-				while (locationsToFill.length > 0) {
-					// Randomly select a block to place.
-					var blockIndex = Math.floor(Math.random() * locationsToFill.length);
-					var block = locationsToFill[blockIndex];
-					/*
-					if (asteroidConstr[block.row] !== undefined && asteroidConstr[block.row][block.col] !== undefined) {
-						locationsToFill.remove(blockIndex);
-						continue;
-					}
-					*/
-					if (blockStructure.get(new IgePoint2d(block.col, block.row)).length > 0) {
-						locationsToFill.remove(blockIndex);
-						continue;
+					while (nextLocationsToFill.length > 0) {
+						locationsToFill.push(nextLocationsToFill.pop());
 					}
 
-					if (first) {
-						var newBlock = this._drawFromDistribution(blockDistribution, {gridWidth: currentSize, gridHeight: currentSize});
-						first = false;
-					} else {
-						var newBlock = this._getBlockType(blockStructure, block.row, block.col, blockDistribution, {gridWidth: currentSize, gridHeight: currentSize});
-					}
-
-					// We will have a seperate variable for the actual location of the block.
-					// The idea here is that the location that needs to be filled, called 'block',
-					// Could be filled with any of the four corners of the new block that we're going to place.
-					// These two random calls correspond to allowing the right/left and top/bottom corners to
-					// have a chance to fill the location.
-					actualLocation = JSON.parse(JSON.stringify(block));
-					if (Math.random() < .5) {
-						actualLocation.col -= currentSize - 1;
-					}
-					if (Math.random() < .5) {
-						actualLocation.row -= currentSize - 1;
-					}
-
-					var result = blockStructure.put(newBlock, new IgePoint2d(actualLocation.col, actualLocation.row), false);
-
-					if (result !== null)	{
-						// Remove the location, because it is now filled
-						locationsToFill.remove(blockIndex);
-						blocksRemaining--;
+					while (locationsToFill.length > 0) {
+						// Randomly select a block to place.
+						var blockIndex = Math.floor(Math.random() * locationsToFill.length);
+						var block = locationsToFill[blockIndex];
 						/*
-						if (symmetric) {
-							blockStructure.put(Block.fromType(newBlock.classId()),
-								new IgePoint2d(-block.col, -block.row), false);
-							blocksRemaining--;
+						if (asteroidConstr[block.row] !== undefined && asteroidConstr[block.row][block.col] !== undefined) {
+							locationsToFill.remove(blockIndex);
+							continue;
 						}
 						*/
-						// Push all cardinal neighbors into the locations that need to be filled
-						for (var slideOverAmount = 0; slideOverAmount < currentSize; slideOverAmount++) {
-							nextLocationsToFill.push({ row: actualLocation.row - 1,								col: actualLocation.col + slideOverAmount });
-							nextLocationsToFill.push({ row: actualLocation.row + currentSize, 		col: actualLocation.col + slideOverAmount });
-							nextLocationsToFill.push({ row: actualLocation.row + slideOverAmount, col: actualLocation.col - 1 });
-							nextLocationsToFill.push({ row: actualLocation.row + slideOverAmount, col: actualLocation.col + currentSize });
+						if (blockStructure.get(new IgePoint2d(block.col, block.row)).length > 0) {
+							locationsToFill.remove(blockIndex);
+							continue;
 						}
-					} else {
-						nextLocationsToFill.push(block);
-						locationsToFill.remove(blockIndex);
+
+						if (first) {
+							var newBlock = self._drawFromDistribution(blockDistribution, {gridWidth: currentSize, gridHeight: currentSize});
+							first = false;
+						} else {
+							var newBlock = self._getBlockType(blockStructure, block.row, block.col, blockDistribution, {gridWidth: currentSize, gridHeight: currentSize});
+						}
+
+						// We will have a seperate variable for the actual location of the block.
+						// The idea here is that the location that needs to be filled, called 'block',
+						// Could be filled with any of the four corners of the new block that we're going to place.
+						// These two random calls correspond to allowing the right/left and top/bottom corners to
+						// have a chance to fill the location.
+						actualLocation = JSON.parse(JSON.stringify(block));
+						if (Math.random() < .5) {
+							actualLocation.col -= currentSize - 1;
+						}
+						if (Math.random() < .5) {
+							actualLocation.row -= currentSize - 1;
+						}
+
+						var result = blockStructure.put(newBlock, new IgePoint2d(actualLocation.col, actualLocation.row), false);
+
+						if (result !== null)	{
+							// Remove the location, because it is now filled
+							locationsToFill.remove(blockIndex);
+							blocksRemaining--;
+							/*
+							if (symmetric) {
+								blockStructure.put(Block.fromType(newBlock.classId()),
+									new IgePoint2d(-block.col, -block.row), false);
+								blocksRemaining--;
+							}
+							*/
+							// Push all cardinal neighbors into the locations that need to be filled
+							for (var slideOverAmount = 0; slideOverAmount < currentSize; slideOverAmount++) {
+								nextLocationsToFill.push({ row: actualLocation.row - 1,								col: actualLocation.col + slideOverAmount });
+								nextLocationsToFill.push({ row: actualLocation.row + currentSize, 		col: actualLocation.col + slideOverAmount });
+								nextLocationsToFill.push({ row: actualLocation.row + slideOverAmount, col: actualLocation.col - 1 });
+								nextLocationsToFill.push({ row: actualLocation.row + slideOverAmount, col: actualLocation.col + currentSize });
+							}
+						} else {
+							nextLocationsToFill.push(block);
+							locationsToFill.remove(blockIndex);
+						}
 					}
 				}
 			}
-		}
+		}, callback);
 
 		return blockStructure;
 	},

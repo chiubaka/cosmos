@@ -74,8 +74,9 @@ html
 					ul
 						li
 							strong Large blocks:&nbsp;
-							| Cosmos now supports blocks of larger sizes. We now have 2x2's, 3x3's,
-							| 9x9's and more!
+							| Cosmos now supports blocks of larger sizes. We now have 2x2's and
+							| 3x3's. Asteroids are now generated with larger blocks, so they look
+							| more interesting and have more material!
 						li
 							strong Element breakdown:&nbsp;
 							| Large elemental blocks are now replaced by smaller blocks when they
@@ -84,30 +85,26 @@ html
 							| more pure are more likely to break down into the same thing!
 						li
 							strong New loading screen:&nbsp;
-							| The new loading screen tells you about what's new in Cosmos! It also
+							| The new loading screen
 							| waits for you to click the "Ready" button before asking the server to
-							| put your ship in the world. Most importantly, the new loading screen
-							| is able to determine when an error has occurred while loading the
-							| game and will display a message when this happens.
+							| put your ship in the world. It also notifies you when an error has
+							| occurred in the loading process.
 				#improvements.news.col-lg-3
 					h2 Improvements
 					ul
-						li
-							strong Larger generated asteroids:&nbsp;
-							| Using larger blocks in asteroids, we are able to create asteroids that
-							| look more interesting, and have more material!
-						li
-							strong Element distribution tweaks:&nbsp;
-							| We've tweaked the element distributions so that dragon and kryptonite
-							| blocks are no longer super common. We've also tweaked the
-							| distributions so that there are visually more types of asteroids.
-						li
-							strong Better respawn performance:&nbsp;
-							| The game should lag a little less when asteroids respawn.
+						li Asteroids no longer overlap
+						li Element distribution tweaks
+						li Better respawn performance
+						li Automatically restaring servers
 				#bug-fixes.news.col-lg-3
 					h2 Bug Fixes
 					ul
-						li None.
+						li Background tiles were slightly off in Safari and Firefox.
+						li Players who lost their Bridge could still fire on other players.
+						li Players could accidentally shoot their own Bridge.
+						li Server would crash if the same player logged on in two windows.
+						li Server would sometimes crash when players were fighting each other.
+						li Background used to smear when in contact with game objects.
 
 				#known-issues.news.col-lg-3
 					h2 Known Issues
@@ -117,6 +114,11 @@ html
 						li Drops no longer pass through asteroids and other players.
 						li Resizing the game window while playing sometimes breaks input controls.
 						li The game doesn't correctly scale for higher resolution displays.
+						li Game takes lots of memory and seems to have memory leaks.
+						li Health of the wrong block is displayed when a new block is selected while
+							| mining.
+						li Tutorial prompts users to click the mining button even when it is already
+							| selected.
 			#loading-error.error An error occurred while loading the game. Please refresh the page
 				| or try again later. If the problem persists, email us at&nbsp;
 				a(href='mailto:team@teamleonine.com') team@teamleonine.com
@@ -129,7 +131,8 @@ html
 				#fullscreen-container
 					input(type='checkbox', name='fullscreen', value='true', checked)#fullscreen
 					label(for='fullscreen') Fullscreen
-			#last-updated Last updated: 8/22/2014.
+			#last-updated Cosmos Version 0.15.1. Last updated: 8/22/2014.&nbsp;
+				a(href='http://blog.teamleonine.com/?p=381') See the full change log.
 
 		.igeLoading.loadingFloat.preview
 			include includes/progress-ring.jade
