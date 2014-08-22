@@ -18,7 +18,7 @@ var BlockStructureGenerator = {
 	 * @memberof BlockStructureGenerator
 	 */
 	genProceduralAsteroid: function(maxNumBlocks, blockDistribution, symmetric,
-		translate) {
+		translate, callback) {
 		// Whether or not to generate a symmetric asteroid
 		symmetric = symmetric || false;
 
@@ -90,7 +90,7 @@ var BlockStructureGenerator = {
 				// Remove the block
 				blocksToPlace.remove(blockIndex);
 			}
-		});
+		}, callback);
 
 		return blockStructure;
 	},
