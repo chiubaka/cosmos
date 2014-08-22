@@ -87,6 +87,11 @@ var BlockStructureGenerator = {
 						var newBlock = this._getBlockType(blockStructure, block.row, block.col, blockDistribution, {gridWidth: currentSize, gridHeight: currentSize});
 					}
 
+					// We will have a seperate variable for the actual location of the block.
+					// The idea here is that the location that needs to be filled, called 'block',
+					// Could be filled with any of the four corners of the new block that we're going to place.
+					// These two random calls correspond to allowing the right/left and top/bottom corners to
+					// have a chance to fill the location.
 					actualLocation = JSON.parse(JSON.stringify(block));
 					if (Math.random() < .5) {
 						actualLocation.col -= currentSize - 1;
