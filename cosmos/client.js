@@ -182,15 +182,13 @@ var Client = IgeClass.extend({
 							// Wait until the HUD finishes loading to ask for the player.
 							ige.on('cosmos:hud.loaded', function (hud) {
 								ige.hud.log('HUD Loaded.');
-
 								$('#ready').show();
 								$('.igeLoading.loadingFloat.preview').hide();
 
 								$('#ready button').click(function() {
+									self.takeFullscreen();
 									window.onerror = undefined;
 									$('.igeLoading').hide();
-									ige.hud.show();
-									//ige.removeLoadingScreen();
 									// Ask the server to create an entity for us
 									ige.network.send('playerEntity', {sid: self.getSessionId()});
 								});
@@ -200,6 +198,13 @@ var Client = IgeClass.extend({
 				});
 			});
 		});
+	},
+
+	onFullscreenChange: function() {
+		ige.hud.hide();
+		setTimeout(function() {
+			ige.hud.show();
+		}, 500);
 	},
 
 	onLoadError: function(message) {
@@ -215,8 +220,39 @@ var Client = IgeClass.extend({
 		$('#loadingText').addClass('error');
 	},
 
+
 	promptForUsername: function() {
 		ige.addComponent(NamePrompt);
+	},
+
+	takeFullscreen: function() {
+		if ($('#fullscreen').is(':checked')
+			&& (document.fullscreenEnabled
+				|| document.webkitFullscreenEnabled
+				|| document.mozFullScreenEnabled
+				|| document.msFullscreenEnabled))
+		{
+			var body = document.body;
+			if (body.requestFullscreen) {
+				body.requestFullscreen();
+			}
+			else if (body.webkitRequestFullscreen) {
+				body.webkitRequestFullscreen();
+			}
+			else if (body.mozRequestFullScreen) {
+				body.mozRequestFullScreen();
+			}
+			else if (body.msRequestFullscreen) {
+				body.msRequestFullscreen;
+			}
+			document.addEventListener("fullscreenchange", this.onFullscreenChange);
+			document.addEventListener("webkitfullscreenchange", this.onFullscreenChange);
+			document.addEventListener("mozfullscreenchange", this.onFullscreenChange);
+			document.addEventListener("MSFullscreenChange", this.onFullscreenChange);
+		}
+		else {
+			ige.hud.show();
+		}
 	},
 
 	getSessionId: function() {

@@ -586,8 +586,8 @@ h1, h2, h3, h4 {
   position: absolute;
   top: 0;
   left: 0;
-  bottom: 50px;
   width: 50px;
+  height: 100%;
   padding-top: 100px;
   background-color: rgba(0, 0, 0, 0.7);
 }

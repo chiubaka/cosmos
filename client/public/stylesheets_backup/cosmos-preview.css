@@ -178,6 +178,15 @@ body {
     cursor: pointer;
 }
 
+#fullscreen-container {
+    margin: 0 auto;
+    width: 150px;
+}
+#fullscreen {
+    margin-left: 25px;
+    margin-right: 10px;
+}
+
 #last-updated {
     position: absolute;
     font-size: 75%;
