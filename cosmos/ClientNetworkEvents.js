@@ -117,7 +117,6 @@ var ClientNetworkEvents = {
 						});
 
 						ige.emit('cosmos:client.ship.streamed');
-						ige.removeLoadingScreen();
 					}
 				});
 			}

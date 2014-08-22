@@ -77,19 +77,124 @@ body {
   z-index: 100;
 }
 
-.greeting {
+.veil {
     position: absolute;
     width: 100%;
     height: 100%;
     background: #000000;
+    opacity: 0.8;
+    z-index: 999998;
 }
 
-.greeting .cosmos-logo{
+.igeLoading.background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #000000;
+    z-index: 0;
+}
+
+.igeLoading.background .cosmos-logo, .background .cosmos-logo img {
     position: relative;
     top: 0px;
-    width: 1000px;
-    margin: 0 auto;
+    width: 100%;
+    height: 100%;
     z-index: 0;
+}
+
+.igeLoading.content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1000000;
+}
+
+.igeLoading.content .row {
+    width: 75%;
+    margin: 2.5% auto 0;
+}
+
+.igeLoading.content a {
+    color: #428bca;
+}
+
+.igeLoading.loadingFloat.preview {
+    z-index: 999999
+}
+
+#headline {
+    text-align: center;
+}
+
+#mail-list {
+    text-align: center;
+    font-size: 80%;
+}
+
+#news {
+    width: 90%;
+}
+
+#news h2 {
+    font-size: 125%;
+    font-weight: bold;
+}
+
+#news ul {
+    list-style: disc outside;
+    margin-left: 20px;
+}
+
+#loading-error, #ready {
+    display: none;
+    position: absolute;
+    bottom: 12.5%;
+    width: 100%;
+}
+
+#loading-error {
+    color: red;
+    text-align: center;
+}
+
+#ready {
+    display: none;
+    position: absolute;
+    bottom: 12.5%;
+    width: 100%;
+}
+
+#ready button {
+    position: relative;
+    display: block;
+    width: 150px;
+    height: 50px;
+    margin: 0 auto;
+    border: none;
+    background-color: #08ad00;
+    font: inherit;
+    font-size: 125%;
+    color: inherit;
+    cursor: pointer;
+}
+
+#last-updated {
+    position: absolute;
+    font-size: 75%;
+    left: 2.5%;
+    bottom: 2.5%;
+}
+
+.news {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.news:before, .news:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .tutorial {
@@ -151,6 +256,10 @@ body {
     -webkit-animation: fadePulse 2s infinite linear;
     animation: fadePulse 2s infinite linear;
     float: left;
+}
+
+.preview .loadingText.error {
+    color: red;
 }
 
 .preview #loadingProgress {

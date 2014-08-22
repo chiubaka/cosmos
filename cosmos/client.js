@@ -9,6 +9,12 @@ var Client = IgeClass.extend({
 			}
 		}, false);
 
+		var self = this;
+		window.onerror = function(message, url, lineNumber) {
+			self.onLoadError(message);
+			return false;
+		};
+
 		ige.setFps(Constants.fps.CLIENT_FPS);
 
 		// Load our textures
@@ -176,15 +182,37 @@ var Client = IgeClass.extend({
 							// Wait until the HUD finishes loading to ask for the player.
 							ige.on('cosmos:hud.loaded', function (hud) {
 								ige.hud.log('HUD Loaded.');
-								ige.hud.show();
-								// Ask the server to create an entity for us
-								ige.network.send('playerEntity', {sid: self.getSessionId()});
+
+								$('#ready').show();
+								$('.igeLoading.loadingFloat.preview').hide();
+
+								$('#ready button').click(function() {
+									window.onerror = undefined;
+									$('.igeLoading').hide();
+									ige.hud.show();
+									//ige.removeLoadingScreen();
+									// Ask the server to create an entity for us
+									ige.network.send('playerEntity', {sid: self.getSessionId()});
+								});
 							});
 						});
 					}
 				});
 			});
 		});
+	},
+
+	onLoadError: function(message) {
+		if (message === "Uncaught IGE *error* [IgeNetIoComponent] : Error with connection: Cannot establish connection, is server running?") {
+			message = "Could not connect to the game server. It may be offline or down for maintenance."
+		}
+
+		$('#loading-error').show();
+		$('#loading-error .message').html(message);
+		$('.igeLoading.loadingFloat.preview').hide();
+		ige._loadingPreText = "Error";
+		$('#loadingText').html('Error');
+		$('#loadingText').addClass('error');
 	},
 
 	promptForUsername: function() {

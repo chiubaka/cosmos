@@ -598,54 +598,54 @@ h1, h2, h3, h4 {
   left: 50px;
 }
 
-/* line 68, ../../sass/_window.scss */
+/* line 69, ../../sass/_window.scss */
 .window {
   float: left;
   margin-left: 10px;
   display: none;
 }
-/* line 73, ../../sass/_window.scss */
+/* line 74, ../../sass/_window.scss */
 .window .header {
   height: 37.5px;
   width: 100%;
   display: table;
 }
-/* line 78, ../../sass/_window.scss */
+/* line 79, ../../sass/_window.scss */
 .window .header .icon, .window .header .title-container {
   display: table-cell;
 }
-/* line 82, ../../sass/_window.scss */
+/* line 83, ../../sass/_window.scss */
 .window .header .icon {
   height: 37.5px;
   width: 37.5px;
   border: none;
 }
-/* line 88, ../../sass/_window.scss */
+/* line 89, ../../sass/_window.scss */
 .window .header .title-container {
   padding: 12px;
   padding-left: 0;
 }
-/* line 91, ../../sass/_window.scss */
+/* line 92, ../../sass/_window.scss */
 .window .header .title-container h2.title {
   line-height: 13.5px;
 }
-/* line 96, ../../sass/_window.scss */
+/* line 97, ../../sass/_window.scss */
 .window .tabs {
   height: 25px;
   width: 100%;
 }
-/* line 100, ../../sass/_window.scss */
+/* line 101, ../../sass/_window.scss */
 .window .body {
   width: 256px;
   padding: 12px;
 }
-/* line 103, ../../sass/_window.scss */
+/* line 104, ../../sass/_window.scss */
 .window .body table {
   width: 100%;
   border-spacing: 0;
   table-layout: fixed;
 }
-/* line 110, ../../sass/_window.scss */
+/* line 111, ../../sass/_window.scss */
 .window .body td {
   height: 25.5px;
   width: 25.5px;
@@ -653,7 +653,7 @@ h1, h2, h3, h4 {
   border-style: solid;
   padding: 6px;
 }
-/* line 117, ../../sass/_window.scss */
+/* line 118, ../../sass/_window.scss */
 .window .body td canvas {
   height: 25.5px;
   width: 25.5px;
@@ -723,6 +723,7 @@ h1, h2, h3, h4 {
 #cargo-window .body td {
   background-color: #cdcdcd;
   border-color: #a5a5a5;
+  box-sizing: content-box;
 }
 /* line 25, ../../sass/_cargo.scss */
 #cargo-window .body td.active, #cargo-window .body td:hover {
@@ -800,6 +801,7 @@ h1, h2, h3, h4 {
 #crafting-window .body td {
   background-color: #d5e9d3;
   border-color: #8ba988;
+  box-sizing: content-box;
 }
 /* line 23, ../../sass/_crafting.scss */
 #crafting-window .body td:hover {
