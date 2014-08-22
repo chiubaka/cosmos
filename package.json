@@ -15,9 +15,6 @@
     "grunt-dust": "~0.9.1"
   },
   "devDependencies": {
-    "grunt-contrib-sass": "~0.7.3",
-    "grunt-contrib-compass": "~0.8.0",
-    "grunt-contrib-watch": "~0.6.1",
     "karma": "~0.12.21",
     "grunt-karma": "~0.8.3",
     "phantomjs": "~1.9.7-15",

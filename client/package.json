@@ -32,6 +32,11 @@
     "grunt-dust": "~0.9.1",
     "dustjs-linkedin": "~2.4.0"
   },
+  "devDependencies": {
+	"grunt-contrib-sass": "~0.7.3",
+	"grunt-contrib-compass": "~0.8.0",
+	"grunt-contrib-watch": "~0.6.1"
+  },
   "noAnalyze": true,
   "license": "Apache",
   "engines": {
