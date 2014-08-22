@@ -260,9 +260,9 @@ var BlockStructureGenerator = {
 	 */
 	elementDistributions: {
 		STANDARD: {
-			"IceBlock": 40,
-			"IronBlock": 20,
-			"CarbonBlock": 10,
+			"IceBlock": 30,
+			"IronBlock": 30,
+			"CarbonBlock": 30,
 
 			//here are some rare things. These guys should look really cool.
 			"GoldBlock": 5,
@@ -274,9 +274,9 @@ var BlockStructureGenerator = {
 		},
 
 		COLD_COLOR_THEMED: {
-			"IceBlock": 40,
-			"IronBlock": 10,
-			"CarbonBlock": 20,
+			"IceBlock": 30,
+			"IronBlock": 30,
+			"CarbonBlock": 30,
 
 			"KryptoniteBlock": 2,
 			"CobaltBlock": 2,
