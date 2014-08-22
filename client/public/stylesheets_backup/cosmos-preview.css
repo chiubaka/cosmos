@@ -86,7 +86,7 @@ body {
     z-index: 1;
 }
 
-.background {
+.igeLoading.background {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -94,7 +94,7 @@ body {
     z-index: 0;
 }
 
-.background .cosmos-logo, .background .cosmos-logo img {
+.igeLoading.background .cosmos-logo, .background .cosmos-logo img {
     position: relative;
     top: 0px;
     width: 100%;
@@ -102,19 +102,19 @@ body {
     z-index: 0;
 }
 
-.content {
+.igeLoading.content {
     position: absolute;
     width: 100%;
     height: 100%;
     z-index: 2;
 }
 
-.content .row {
+.igeLoading.content .row {
     width: 75%;
     margin: 2.5% auto 0;
 }
 
-.content a {
+.igeLoading.content a {
     color: #428bca;
 }
 
@@ -134,6 +134,18 @@ body {
 #news ul {
     list-style: disc outside;
     margin-left: 20px;
+}
+
+.news {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.news:before, .news:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .tutorial {
