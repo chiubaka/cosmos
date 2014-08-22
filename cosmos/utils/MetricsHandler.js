@@ -70,6 +70,10 @@ var MetricsHandler = IgeEventingClass.extend({
 		}
 
 		analytics.track(event, data);
+	},
+
+	identify: function(userId, traits) {
+		analytics.identify(userId, traits);
 	}
 });
 
