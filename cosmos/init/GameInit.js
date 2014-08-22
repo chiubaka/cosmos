@@ -183,8 +183,8 @@ var GameInit = {
 					.parallaxLag(4)
 					.mount(client.spaceBackgroundScene)
 					.translateTo(
-						(Constants.GRID_SQUARE_SIZE.X - Constants.GRID_SQUARE_OVERLAP)*gridX,
-						(Constants.GRID_SQUARE_SIZE.Y - Constants.GRID_SQUARE_OVERLAP)*gridY,
+						Constants.GRID_SQUARE_SIZE.X * gridX,
+						Constants.GRID_SQUARE_SIZE.Y * gridY,
 						0);
 			}
 		}
@@ -192,8 +192,8 @@ var GameInit = {
 		//Instantiate the second background overlay
 		for (var gridX = -Constants.NUM_BACKGROUND_OVERLAY_SQUARES.X/2; gridX < Constants.NUM_BACKGROUND_OVERLAY_SQUARES.X/2; gridX++) {
 			for (var gridY = -Constants.NUM_BACKGROUND_OVERLAY_SQUARES.Y/2; gridY < Constants.NUM_BACKGROUND_OVERLAY_SQUARES.Y/2; gridY++) {
-				var x = (Constants.GRID_SQUARE_SIZE.X - Constants.GRID_SQUARE_OVERLAP)*gridX;
-				var y = (Constants.GRID_SQUARE_SIZE.Y - Constants.GRID_SQUARE_OVERLAP)*gridY;
+				var x = Constants.GRID_SQUARE_SIZE.X * gridX;
+				var y = Constants.GRID_SQUARE_SIZE.Y * gridY;
 
 				new Background({textureName: 'backgroundOverlay'})
 					.id('backgroundOverlayTheSecond' + gridX + "-" + gridY)
