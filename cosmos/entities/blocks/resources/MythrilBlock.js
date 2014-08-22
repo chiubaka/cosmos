@@ -5,7 +5,7 @@
 * @namespace
 * @todo Use this to craft things.
 */
-var MythrilBlock = Element.extend({
+var MythrilBlock = Resource.extend({
 	classId: 'MythrilBlock',
 
 	init: function(data) {
@@ -16,8 +16,10 @@ var MythrilBlock = Element.extend({
 			this.textureOutline = "rgb(210, 210, 255)";
 		}
 
-		Element.prototype.init.call(this, data);
+		Resource.prototype.init.call(this, data);
 	}
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = MythrilBlock; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
+	module.exports = MythrilBlock;
+}

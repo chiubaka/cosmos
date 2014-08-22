@@ -6,7 +6,7 @@
  * @namespace
  * @todo Use this to craft things.
  */
-var GoldBlock = Element.extend({
+var GoldBlock = Resource.extend({
 	classId: 'GoldBlock',
 
 	init: function(data) {
@@ -17,8 +17,10 @@ var GoldBlock = Element.extend({
 			this.textureOutline = "rgb(218,165,32)";
 		}
 
-		Element.prototype.init.call(this, data);
+		Resource.prototype.init.call(this, data);
 	}
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = GoldBlock; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
+	module.exports = GoldBlock;
+}

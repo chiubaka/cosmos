@@ -194,11 +194,18 @@ var BlockStructureGenerator = {
 		// Now, with a weighted probability, randomly select an element from the weights to be the type.
 		var type = WeightedSelection.select(weights);
 
-		if (cosmos.blocks.instances[type] instanceof Element) {
-			return Element.fromType(type, dimensions);
-		} else {
+		//if (cosmos.blocks.instances[type] instanceof Element) {
+			var purity = MathUtils.chooseRandomlyFromArray([Element.PURITIES.PURE, Element.PURITIES.IMPURE, Element.PURITIES.IMPURE, Element.PURITIES.VERY_IMPURE, Element.PURITIES.VERY_IMPURE]);
+			return new Element({
+				resource: type,
+				purity: purity,
+				gridWidth: dimensions.gridWidth,
+				gridHeight: dimensions.gridHeight
+			});
+		//}
+		/* else {
 			return Block.fromType(type);
-		}
+		}*/
 	},
 
 	/**
@@ -226,7 +233,12 @@ var BlockStructureGenerator = {
 		var type = WeightedSelection.select(distribution);
 
 		if (cosmos.blocks.instances[type] instanceof Element) {
-			return Element.fromType(type, dimensions);
+			return new Element({
+				resource: type,
+				purity: Element.PURITIES.IMPURE,
+				gridWidth: dimensions.gridWidth,
+				gridHeight: dimensions.gridHeight
+			});
 		} else {
 			return Block.fromType(type);
 		}
@@ -248,29 +260,29 @@ var BlockStructureGenerator = {
 	 */
 	elementDistributions: {
 		STANDARD: {
-			"IceBlock": 50,
-			"IronBlock": 30,
-			"CarbonBlock": 20,
+			"IceBlock": 40,
+			"IronBlock": 20,
+			"CarbonBlock": 10,
+
 			//here are some rare things. These guys should look really cool.
 			"GoldBlock": 5,
-			"CobaltBlock": 1,
-			"FluorineBlock": 1,
-			"DragonBlock": 10,
-			"KryptoniteBlock": 10,
-			"TitaniumBlock": 1,
+			"DragonBlock": 2,
+			"TitaniumBlock": 2,
 			//"CloakBlock": 1,
 			//"CloakVioletBlock": 1,
-			"MythrilBlock": 1,
-			"AdamantiumBlock": 1,
-			"SteelBlock": 1,
-			//here are some easter-egg type things, which will add up to 0.002
-			/* //I've commented this out per LEO-522
-			// The idea is to make mining more exciting by having really unusual things buried inside of asteroids.
-			"IronEngineBlock": 0.002 * .25,
-			"FuelBlock": 0.002 * .25,
-			"PowerBlock": 0.002 * .25,
-			"IronThrusterBlock": 0.002 * .25
-			*/
+			"SteelBlock": 10
+		},
+
+		COLD_COLOR_THEMED: {
+			"IceBlock": 40,
+			"IronBlock": 10,
+			"CarbonBlock": 20,
+
+			"KryptoniteBlock": 2,
+			"CobaltBlock": 2,
+			"MythrilBlock": 2,
+			"AdamantiumBlock": 2,
+			"FluorineBlock": 2,
 		},
 
 		ICY: {
@@ -292,9 +304,11 @@ var BlockStructureGenerator = {
 		randomDistribution: function() {
 			var rand = Math.random();
 
-			if (rand < .5) {
+			if (rand < .4) {
 				return BlockStructureGenerator.elementDistributions.STANDARD;
-			} else if (rand < .75) {
+			} else if (rand < .8) {
+				return BlockStructureGenerator.elementDistributions.COLD_COLOR_THEMED;
+			} else if (rand < .9) {
 				return BlockStructureGenerator.elementDistributions.ICY;
 			} else /*if (rand < 1)*/ {
 				return BlockStructureGenerator.elementDistributions.ROCKY;

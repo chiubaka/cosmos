@@ -56,6 +56,8 @@ var BlockGrid = IgeEntity.extend({
 		this.width(0);
 		this.height(0);
 
+		this._physicsOffset = {x: 0, y: 0};
+
 		this.addComponent(PixiRenderableComponent);
 
 		// #ifdef CLIENT

@@ -49,6 +49,8 @@ var Block = IgeEntity.extend({
 			|| this.classId() === "EngineBlock"
 			|| this.classId() === "ThrusterBlock"
 			|| this.classId() === "Weapon"
+			|| this.classId() === "Resource"
+			// TODO: The Element class won't be abstract soon!
 			|| this.classId() === "Element";
 
 		var isConstructionZone = this instanceof ConstructionZoneBlock;
@@ -86,10 +88,11 @@ var Block = IgeEntity.extend({
 		var myGridData = {width: 1, height: 1};
 
 		// If a height and width is passed for an element, that height and width will be used.
-		if (this instanceof Element) {
+		if (this.classId() === "Element") {
 			myGridData.width = data.gridWidth || myGridData.width;
 			myGridData.height = data.gridHeight || myGridData.height;
 		}
+
 		// If a height and width is defined in the configuration files for this block, that will
 		// be used.
 		else if (GridDimensions[this.classId()]) {
@@ -161,22 +164,23 @@ var Block = IgeEntity.extend({
 		}
 	},
 
-	dataFromConfig: function(data) {
+	dataFromConfig: function(data, classId) {
 		data = data || {};
-		if (Healths[this.classId()] !== undefined) {
-			data.health = Healths[this.classId()];
+		classId = classId || this.classId();
+		if (Healths[classId] !== undefined) {
+			data.health = Healths[classId];
 		}
 
-		if (Types[this.classId()] !== undefined) {
-			data.type = Types[this.classId()];
+		if (Types[classId] !== undefined) {
+			data.type = Types[classId];
 		}
 
-		if (Descriptions[this.classId()] !== undefined) {
-			data.description = Descriptions[this.classId()];
+		if (Descriptions[classId] !== undefined) {
+			data.description = Descriptions[classId];
 		}
 
-		if (Recipes[this.classId()] !== undefined) {
-			data.recipe = Recipes[this.classId()];
+		if (Recipes[classId] !== undefined) {
+			data.recipe = Recipes[classId];
 		}
 
 		return data;
@@ -572,8 +576,13 @@ Block.fromType = function(type) {
 
 Block.fromJSON = function(json) {
 	var block;
-	if (Element.checkType(json.type)) {
-		block = Element.fromType(json.type, {gridWidth: json.gridData.width, gridHeight: json.gridData.height});
+	if (json.type === "Element") {
+		block = new Element({
+			resource: json.resource,
+			purity: json.purity,
+			gridWidth: json.gridData.width,
+			gridHeight: json.gridData.height
+		});
 	}
 	else {
 		block = Block.fromType(json.type);
