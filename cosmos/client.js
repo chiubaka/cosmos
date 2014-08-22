@@ -182,7 +182,7 @@ var Client = IgeClass.extend({
 							// Wait until the HUD finishes loading to ask for the player.
 							ige.on('cosmos:hud.loaded', function (hud) {
 								ige.hud.log('HUD Loaded.');
-								this.takeFullscreen();
+								self.takeFullscreen();
 								$('#ready').show();
 								$('.igeLoading.loadingFloat.preview').hide();
 
