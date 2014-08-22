@@ -5,7 +5,7 @@
 * @namespace
 * @todo Use this to craft things.
 */
-var KryptoniteBlock = Element.extend({
+var KryptoniteBlock = Resource.extend({
 	classId: 'KryptoniteBlock',
 
 	init: function(data) {
@@ -17,8 +17,10 @@ var KryptoniteBlock = Element.extend({
 			this.textureOutline = "rgb(111, 167, 0)";
 		}
 
-		Element.prototype.init.call(this, data);
+		Resource.prototype.init.call(this, data);
 	}
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = KryptoniteBlock; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
+	module.exports = KryptoniteBlock;
+}

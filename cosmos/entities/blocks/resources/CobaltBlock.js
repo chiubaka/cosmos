@@ -5,7 +5,7 @@
  * @namespace
  * @todo Use this to craft things.
  */
-var CobaltBlock = Element.extend({
+var CobaltBlock = Resource.extend({
 	classId: 'CobaltBlock',
 
 	init: function(data) {
@@ -16,8 +16,10 @@ var CobaltBlock = Element.extend({
 			this.textureOutline = "rgb(0, 0, 128)";
 		}
 
-		Element.prototype.init.call(this, data);
+		Resource.prototype.init.call(this, data);
 	}
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = CobaltBlock; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
+	module.exports = CobaltBlock;
+}

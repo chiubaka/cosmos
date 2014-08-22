@@ -57,24 +57,26 @@ var config = {
 		{ name: 'TitaniumPlatingBlock', path: './entities/blocks/parts/armor/TitaniumPlatingBlock' },
 		{ name: 'SteelPlatingBlock', path: './entities/blocks/parts/armor/SteelPlatingBlock' },
 
-		/* Element blocks */
-		{ name: 'Element', path: './entities/blocks/Element' },
-		{ name: 'CarbonBlock', path: './entities/blocks/elements/CarbonBlock' },
-		{ name: 'IronBlock', path: './entities/blocks/elements/IronBlock' },
-		{ name: 'FluorineBlock', path: './entities/blocks/elements/FluorineBlock' },
-		{ name: 'GoldBlock', path: './entities/blocks/elements/GoldBlock' },
-		{ name: 'CobaltBlock', path: './entities/blocks/elements/CobaltBlock' },
-		{ name: 'IceBlock', path: './entities/blocks/elements/IceBlock' },//not really an element
-		{ name: 'MythrilBlock', path: './entities/blocks/elements/MythrilBlock' },
+		/* Resource blocks */
+		{ name: 'Resource', path: './entities/blocks/Resource' },
+		{ name: 'CarbonBlock', path: './entities/blocks/resources/CarbonBlock' },
+		{ name: 'IronBlock', path: './entities/blocks/resources/IronBlock' },
+		{ name: 'FluorineBlock', path: './entities/blocks/resources/FluorineBlock' },
+		{ name: 'GoldBlock', path: './entities/blocks/resources/GoldBlock' },
+		{ name: 'CobaltBlock', path: './entities/blocks/resources/CobaltBlock' },
+		{ name: 'IceBlock', path: './entities/blocks/resources/IceBlock' },//not really an element
+		{ name: 'MythrilBlock', path: './entities/blocks/resources/MythrilBlock' },
 
-		{ name: 'AdamantiumBlock', path: './entities/blocks/elements/AdamantiumBlock' },
-		{ name: 'DragonBlock', path: './entities/blocks/elements/DragonBlock' },
-		{ name: 'KryptoniteBlock', path: './entities/blocks/elements/KryptoniteBlock' },
-		{ name: 'SteelBlock', path: './entities/blocks/elements/SteelBlock' },
-		{ name: 'TitaniumBlock', path: './entities/blocks/elements/TitaniumBlock' },
+		{ name: 'AdamantiumBlock', path: './entities/blocks/resources/AdamantiumBlock' },
+		{ name: 'DragonBlock', path: './entities/blocks/resources/DragonBlock' },
+		{ name: 'KryptoniteBlock', path: './entities/blocks/resources/KryptoniteBlock' },
+		{ name: 'SteelBlock', path: './entities/blocks/resources/SteelBlock' },
+		{ name: 'TitaniumBlock', path: './entities/blocks/resources/TitaniumBlock' },
+
+		{ name: 'Element', path: './entities/blocks/Element' },
 
 		/* Refined element blocks */
-		{ name: 'RefinedMythrilBlock', path: './entities/blocks/elements/RefinedMythrilBlock' },
+		{ name: 'RefinedMythrilBlock', path: './entities/blocks/resources/RefinedMythrilBlock' },
 
 		/* Structures (Prefabs) */
 		{ name: 'ExampleShips', path: './entities/prefabs/ExampleShips' },
@@ -86,6 +88,7 @@ var config = {
 
 		/* === COMPONENT CONFIG FILES === */
 		{ name: 'Descriptions', path: './components/config/Descriptions' },
+		{ name: 'Elements', path: './components/config/Elements' },
 		{ name: 'GridDimensions', path: './components/config/GridDimensions' },
 		{ name: 'Healths', path: './components/config/Healths' },
 		{ name: 'Recipes', path: './components/config/Recipes' },
