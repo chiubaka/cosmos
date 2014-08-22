@@ -83,22 +83,23 @@ var Block = IgeEntity.extend({
 			this.addComponent(Recipe, data.recipe);
 		}
 
-
+		/* === Grid Data === */
 		// Default value for grid height and width is 1.
-		var gridData = {width: 1, height: 1};
+		var myGridData = {width: 1, height: 1};
 
 		// If a height and width is passed for an element, that height and width will be used.
 		if (this.classId() === "Element") {
-			gridData.width = data.gridWidth || gridData.width;
-			gridData.height = data.gridHeight || gridData.height;
+			myGridData.width = data.gridWidth || myGridData.width;
+			myGridData.height = data.gridHeight || myGridData.height;
 		}
+
 		// If a height and width is defined in the configuration files for this block, that will
 		// be used.
 		else if (GridDimensions[this.classId()]) {
-			gridData = GridDimensions[this.classId()];
+			myGridData = GridDimensions[this.classId()];
 		}
 
-		this.addComponent(GridData, gridData);
+		this.addComponent(GridData, myGridData);
 
 		// Use an even number so values don't have to become approximate when we divide by two
 		this.width(Block.WIDTH * this.gridData.width).height(Block.HEIGHT * this.gridData.height);

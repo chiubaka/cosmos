@@ -228,31 +228,18 @@ var GameInit = {
 	initEnvironment: function() {
 		var server = ige.server;
 
-		var testAsteroid = new BlockStructure()
-			.streamMode(1)
-			.mount(ige.server.spaceGameScene);
-		var iceElement = new Element({resource: "IceBlock", purity: Element.PURITIES.PURE});
-		var dragonElement = new Element({
-			resource: "DragonBlock",
-			purity: Element.PURITIES.IMPURE,
-			gridWidth: 9,
-			gridHeight: 9
-		});
-		testAsteroid.put(iceElement, new IgePoint2d(0, 0), false);
-		testAsteroid.put(dragonElement, new IgePoint2d(0, 1), false);
-
-		return;
-
 		var NUM_NORMAL_ASTEROIDS = 40;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
-			this.spawnStructure(200, BlockStructureGenerator.elementDistributions.randomDistribution());
+			this.spawnStructure(8000, BlockStructureGenerator.elementDistributions.randomDistribution());
 		}
 		// TODO: The procedural generation algorithm is causing strange problems with the new BlockGrid system. Leave
 		// this stuff commented out until it is figured out.
+		/*
 		var NUM_DERELICT_SPACESHIPS = 10;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_DERELICT_SPACESHIPS; asteroidNumber++) {
 			this.spawnStructure(60, BlockStructureGenerator.partDistributions.randomDistribution(), true);
 		}
+		*/
 	},
 
 	spawnStructure: function(maxNumBlocks, blockDistribution, symmetric) {
