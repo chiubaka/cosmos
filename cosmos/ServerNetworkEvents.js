@@ -128,6 +128,14 @@ var ServerNetworkEvents = {
 		}
 
 		var player = new Player();
+		// This player is already logged in and online!
+		if (ige.$(playerId)) {
+			ige.network.stream.queueCommand('notificationError',
+				NotificationDefinitions.errorKeys.alreadyLoggedIn, clientId);
+			// TODO: Close this connection.
+			return;
+		}
+
 		player.id(playerId);
 		player.clientId(clientId);
 		player.loggedIn(loggedIn);
