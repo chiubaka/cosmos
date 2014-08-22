@@ -1,74 +1,117 @@
 doctype html
 html
-  head
-    meta(http-equiv='Content-Type', content='text/html; charset=utf-8')
-    meta(name='apple-mobile-web-app-capable', content='yes')
-    meta(name='viewport', content='user-scalable=no, width=device-width, initial-scale=1.0')
-    meta(name='apple-mobile-web-app-status-bar-style', content='black')
-    meta(name='game-engine-origin', content='http://www.isogenicengine.com')
-    meta(http-equiv='X-UA-Compatible', content='IE=Edge')
-    title Cosmos Private Preview
-    // STYLES
-    link(href='/vendor/candy/res/default.css', rel='stylesheet', type='text/css')
-    link(href='/vendor/tooltipster/css/tooltipster.css', rel='stylesheet', type='text/css')
-    link(href='/stylesheets/cosmos.css', rel='stylesheet', type='text/css')
-    link(href='/stylesheets_backup/cosmos-preview.css', rel='stylesheet', type='text/css')
+	head
+		meta(http-equiv='Content-Type', content='text/html; charset=utf-8')
+		meta(name='apple-mobile-web-app-capable', content='yes')
+		meta(name='viewport', content='user-scalable=no, width=device-width, initial-scale=1.0')
+		meta(name='apple-mobile-web-app-status-bar-style', content='black')
+		meta(name='game-engine-origin', content='http://www.isogenicengine.com')
+		meta(http-equiv='X-UA-Compatible', content='IE=Edge')
+		title Cosmos Private Preview
+		// STYLES
+		link(href='http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css', rel='stylesheet', type='text/css')
+		link(href='/vendor/candy/res/default.css', rel='stylesheet', type='text/css')
+		link(href='/vendor/tooltipster/css/tooltipster.css', rel='stylesheet', type='text/css')
+		link(href='/stylesheets/cosmos.css', rel='stylesheet', type='text/css')
+		link(href='/stylesheets_backup/cosmos-preview.css', rel='stylesheet', type='text/css')
+		// js
+		script(src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js')
+		script(src='/js/jquery.steps.min.js')
+		script(src='/vendor/lodash/lodash.min.js')
+		script(src='/vendor/tooltipster/jquery.tooltipster.js')
+		script(src='/vendor/dustjs-linkedin/dust-core.min.js')
+		script(src='/js/templates.dust.js')
+		//Isogenic Loader
+		if process.env.NODE_ENV === 'production'
+			script(type='text/javascript').
+				var igeRoot = './';
+				var gameRoot = './';
+		else
+			script(type='text/javascript').
+				var igeRoot = '/ige/engine/';
+				var gameRoot = '/cosmos/';
+		// Application Insights
+		script(type='text/javascript').
+			window.appInsights={queue:[],applicationInsightsId:null,accountId:null,appUserId:null,configUrl:null,start:function(n){function u(n,t){n[t]=function(){var i=arguments;n.queue.push(function(){n[t].apply(n,i)})}}function f(n){var t=document.createElement("script");return t.type="text/javascript",t.src=n,t.async=!0,t}function r(){i.appendChild(f("//az416426.vo.msecnd.net/scripts/ai.0.js"))}var i,t;this.applicationInsightsId=n;u(this,"logEvent");u(this,"logPageView");i=document.getElementsByTagName("script")[0].parentNode;this.configUrl===null?r():(t=f(this.configUrl),t.onload=r,t.onerror=r,i.appendChild(t));this.start=function(){}}};
+			appInsights.start("0ffd4afb-c64a-4b6a-80b5-54e6103955c4");
+			appInsights.logPageView();
+		// Segment.io script
+		script(type='text/javascript').
+			window.analytics=window.analytics||[],window.analytics.methods=["identify","group","track","page","pageview","alias","ready","on","once","off","trackLink","trackForm","trackClick","trackSubmit"],window.analytics.factory=function(t){return function(){var a=Array.prototype.slice.call(arguments);return a.unshift(t),window.analytics.push(a),window.analytics}};for(var i=0;i<window.analytics.methods.length;i++){var key=window.analytics.methods[i];window.analytics[key]=window.analytics.factory(key)}window.analytics.load=function(t){if(!document.getElementById("analytics-js")){var a=document.createElement("script");a.type="text/javascript",a.id="analytics-js",a.async=!0,a.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.io/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(a,n)}},window.analytics.SNIPPET_VERSION="2.0.9", window.analytics.load("sxucdidih4");window.analytics.page();
+	body
+		//.cosmos-tutorial-veil#cosmos-tutorial-veil
+		//  .cosmos-tutorial#cosmos-tutorial-container
+		//    include includes/cosmosTutorial.jade
+		#name-prompt
+			.prompt-veil
+			.prompt-box
+				.play-icon
+				h1 Welcome to Cosmos!
+				p Before we set off, let's name some things.
+				//input#ship-name-input(type='text', placeholder='Name your ship something awesome')
+				//br
+				input#username-input(type='text', placeholder='Give your account a cool username')
+				div.buttons
+					button#name-prompt-go(type='submit') Let's go!
+					button#name-prompt-skip Not now
+		.igeLoading.background
+			.cosmos-logo
+				img(src='/images/cosmos-splash.png')
+		.igeLoading.veil
+		.igeLoading.content
+			#mail-list.row
+				.col-lg-12
+					p
+						| Stay in the loop! Subscribe to the&nbsp;
+						a(href='http://eepurl.com/VwFT5') Cosmos email list
+						| &nbsp;to hear about game updates and events.
+			#news.row
+				#new-features.news.col-lg-3
+					h2 New Features
+					ul
+						li
+							strong Large blocks:&nbsp;
+							| Cosmos now supports blocks of larger sizes. We now have 2x2's, 3x3's,
+							| 9x9's and more!
+						li
+							strong Element breakdown:&nbsp;
+							| Large elemental blocks are now replaced by smaller blocks when they
+							| are destroyed. Smaller blocks are chosen
+				#improvements.news.col-lg-3
+					h2 Improvements
+					ul
+						li
+							strong Larger generated asteroids:&nbsp;
+							| Using larger blocks in asteroids, we are able to create asteroids that
+							| look more interesting, and have more material!
+						li
+							strong Element distribution tweaks:&nbsp;
+							| We've tweaked the element distributions so that dragon and kryptonite
+							| blocks are no longer super common. We've also tweaked the
+							| distributions so that there are visually more types of asteroids.
+						li
+							strong Better respawn performance:&nbsp;
+							| The game should lag a little less when asteroids respawn.
+				#bug-fixes.news.col-lg-3
+					h2 Bug Fixes
 
-    // js
-    script(src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js')
-    script(src='/js/jquery.steps.min.js')
-    script(src='/vendor/lodash/lodash.min.js')
-    script(src='/vendor/tooltipster/jquery.tooltipster.js')
-    script(src='/vendor/dustjs-linkedin/dust-core.min.js')
-    script(src='/js/templates.dust.js')
-
-    //Isogenic Loader
-    if process.env.NODE_ENV === 'production'
-      script(type='text/javascript').
-        var igeRoot = './';
-        var gameRoot = './';
-    else
-      script(type='text/javascript').
-        var igeRoot = '/ige/engine/';
-        var gameRoot = '/cosmos/';
+				#known-issues.news.col-lg-3
+					h2 Known Issues
+					ul
+						li Mining laser is positioned slightly incorrectly when players move while
+							| mining.
+						li Drops no longer pass through asteroids and other players.
+						li Resizing the game window while playing sometimes breaks input controls.
+						li The game doesn't correctly scale for higher resolution displays.
 
 
-    // Application Insights
-    script(type='text/javascript').
-      window.appInsights={queue:[],applicationInsightsId:null,accountId:null,appUserId:null,configUrl:null,start:function(n){function u(n,t){n[t]=function(){var i=arguments;n.queue.push(function(){n[t].apply(n,i)})}}function f(n){var t=document.createElement("script");return t.type="text/javascript",t.src=n,t.async=!0,t}function r(){i.appendChild(f("//az416426.vo.msecnd.net/scripts/ai.0.js"))}var i,t;this.applicationInsightsId=n;u(this,"logEvent");u(this,"logPageView");i=document.getElementsByTagName("script")[0].parentNode;this.configUrl===null?r():(t=f(this.configUrl),t.onload=r,t.onerror=r,i.appendChild(t));this.start=function(){}}};
-      appInsights.start("0ffd4afb-c64a-4b6a-80b5-54e6103955c4");
-      appInsights.logPageView();
-
-    // Segment.io script
-    script(type='text/javascript').
-        window.analytics=window.analytics||[],window.analytics.methods=["identify","group","track","page","pageview","alias","ready","on","once","off","trackLink","trackForm","trackClick","trackSubmit"],window.analytics.factory=function(t){return function(){var a=Array.prototype.slice.call(arguments);return a.unshift(t),window.analytics.push(a),window.analytics}};for(var i=0;i<window.analytics.methods.length;i++){var key=window.analytics.methods[i];window.analytics[key]=window.analytics.factory(key)}window.analytics.load=function(t){if(!document.getElementById("analytics-js")){var a=document.createElement("script");a.type="text/javascript",a.id="analytics-js",a.async=!0,a.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.io/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(a,n)}},window.analytics.SNIPPET_VERSION="2.0.9", window.analytics.load("sxucdidih4");window.analytics.page();
-
-  body
-    //.cosmos-tutorial-veil#cosmos-tutorial-veil
-    //  .cosmos-tutorial#cosmos-tutorial-container
-    //    include includes/cosmosTutorial.jade
-    #name-prompt
-      .prompt-veil
-      .prompt-box
-        .play-icon
-        h1 Welcome to Cosmos!
-        p Before we set off, let's name some things.
-        //input#ship-name-input(type='text', placeholder='Name your ship something awesome')
-        //br
-        input#username-input(type='text', placeholder='Give your account a cool username')
-        div.buttons
-          button#name-prompt-go(type='submit') Let's go!
-          button#name-prompt-skip Not now
-    .igeLoading.greeting
-      .cosmos-logo
-        img(src='/images/cosmos-splash.png')
-    .igeLoading.loadingFloat.preview
-      include includes/progress-ring.jade
-      #loadingText.loadingText
-        | Loading...
-      #loadingProgress
-        #loadingProgressBar
-    if process.env.NODE_ENV === 'production'
-      script(type="text/javascript", src="/js/cosmos/game.js")
-    else
-      script(type='text/javascript', src='/ige/engine/loader.js')
+		.igeLoading.loadingFloat.preview
+			include includes/progress-ring.jade
+			#loadingText.loadingText
+				| Loading...
+			#loadingProgress
+				#loadingProgressBar
+		if process.env.NODE_ENV === 'production'
+			script(type="text/javascript", src="/js/cosmos/game.js")
+		else
+			script(type='text/javascript', src='/ige/engine/loader.js')
