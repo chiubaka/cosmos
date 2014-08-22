@@ -189,8 +189,6 @@ var Client = IgeClass.extend({
 									self.takeFullscreen();
 									window.onerror = undefined;
 									$('.igeLoading').hide();
-									ige.hud.show();
-									//ige.removeLoadingScreen();
 									// Ask the server to create an entity for us
 									ige.network.send('playerEntity', {sid: self.getSessionId()});
 								});
@@ -200,6 +198,13 @@ var Client = IgeClass.extend({
 				});
 			});
 		});
+	},
+
+	onFullscreenChange: function() {
+		ige.hud.hide();
+		setTimeout(function() {
+			ige.hud.show();
+		}, 500);
 	},
 
 	onLoadError: function(message) {
@@ -240,6 +245,13 @@ var Client = IgeClass.extend({
 			else if (body.msRequestFullscreen) {
 				body.msRequestFullscreen;
 			}
+			document.addEventListener("fullscreenchange", this.onFullscreenChange);
+			document.addEventListener("webkitfullscreenchange", this.onFullscreenChange);
+			document.addEventListener("mozfullscreenchange", this.onFullscreenChange);
+			document.addEventListener("MSFullscreenChange", this.onFullscreenChange);
+		}
+		else {
+			ige.hud.show();
 		}
 	},
 
