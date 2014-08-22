@@ -17,7 +17,7 @@ var BlockStructureGenerator = {
 	 * @return {BlockStructure} The procedurally generated asteroid.
 	 * @memberof BlockStructureGenerator
 	 */
-	genProceduralAsteroid: function(maxNumBlocks, blockDistribution, symmetric,
+	genProceduralAsteroid: function(numLayers, blockDistribution, symmetric,
 		translate, callback) {
 		// Whether or not to generate a symmetric asteroid
 		symmetric = symmetric || false;
@@ -25,17 +25,14 @@ var BlockStructureGenerator = {
 		// The block distribution to seed the procedural block type generator with
 		blockDistribution = blockDistribution || this.elementDistributions.STANDARD;
 
-		maxNumBlocks = maxNumBlocks || 100;
+		numLayers = numLayers || [0, 0, 0, 1, 1, 1, 2, 2];
 
 		var blockStructure = new GeneratedBlockStructure({
-			maxNumBlocks: maxNumBlocks,
+			numLayers: numLayers,
 			blockDistribution: blockDistribution,
 			symmetric: symmetric,
 			translate: translate
 		});
-
-		// Number of blocks that can be contained in this asteroid.
-		var blocksRemaining = Math.floor(this.weightedRandom(maxNumBlocks, maxNumBlocks * 0.75, 0.25));
 
 		// Start the generation algorithm at a specific cell in the asteroid.
 		var startingCell = {
@@ -54,7 +51,6 @@ var BlockStructureGenerator = {
 		//var numBlocks = [0, 0, 0, 0, 1, 3, 100, 200];
 
 		var sizes = 		[12, 9, 8, 6, 4, 3, 2, 1];
-		var numLayers = [0, 0, 0, 0, 1, 1, 2, 2];
 		// TODO: @Eric Clean this up
 		var self = this;
 		blockStructure.physicsBody.newTransactionalFixtures(function() {
@@ -107,14 +103,7 @@ var BlockStructureGenerator = {
 						if (result !== null)	{
 							// Remove the location, because it is now filled
 							locationsToFill.remove(blockIndex);
-							blocksRemaining--;
-							/*
-							if (symmetric) {
-								blockStructure.put(Block.fromType(newBlock.classId()),
-									new IgePoint2d(-block.col, -block.row), false);
-								blocksRemaining--;
-							}
-							*/
+
 							// Push all cardinal neighbors into the locations that need to be filled
 							for (var slideOverAmount = 0; slideOverAmount < currentSize; slideOverAmount++) {
 								nextLocationsToFill.push({ row: actualLocation.row - 1,								col: actualLocation.col + slideOverAmount });
