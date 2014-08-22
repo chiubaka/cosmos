@@ -59,9 +59,12 @@ html
 				img(src='/images/cosmos-splash.png')
 		.igeLoading.veil
 		.igeLoading.content
+			#headline.row
+				.col-lg-12
+					h2 We're throwing a party! Log onto Cosmos at 6PM PST on 8/22 to participate!
 			#mail-list.row
 				.col-lg-12
-					p
+					h2
 						| Stay in the loop! Subscribe to the&nbsp;
 						a(href='http://eepurl.com/VwFT5', target='_blank') Cosmos email list
 						| &nbsp;to hear about game updates and events.
@@ -76,7 +79,14 @@ html
 						li
 							strong Element breakdown:&nbsp;
 							| Large elemental blocks are now replaced by smaller blocks when they
-							| are destroyed. Smaller blocks are chosen
+							| are destroyed. Smaller blocks are chosen from a distribution based on
+							| the type of the original block and its purity level. Blocks that are
+							| more pure are more likely to drop the same thing!
+						li
+							strong New loading screen:&nbsp;
+							| The new loading screen tells you about what's new in Cosmos! It also
+							| waits for you to click the "Ready" button before asking the server to
+							| put your ship in the world.
 				#improvements.news.col-lg-3
 					h2 Improvements
 					ul
@@ -92,11 +102,6 @@ html
 						li
 							strong Better respawn performance:&nbsp;
 							| The game should lag a little less when asteroids respawn.
-						li
-							strong New loading screen:&nbsp;
-							| The new loading screen tells you about what's new in Cosmos! It also
-							| waits for you to click the "Ready" button before asking the server to
-							| put your ship in the world.
 				#bug-fixes.news.col-lg-3
 					h2 Bug Fixes
 					ul
@@ -110,6 +115,13 @@ html
 						li Drops no longer pass through asteroids and other players.
 						li Resizing the game window while playing sometimes breaks input controls.
 						li The game doesn't correctly scale for higher resolution displays.
+			#loading-error.error An error occurred while loading the game. Please refresh the page
+				| or try again later. If the problem persists, email us at&nbsp;
+				a(href='mailto:team@teamleonine.com') team@teamleonine.com
+				| &nbsp; and we'll do our best to assist you!
+				br
+				| Error:&nbsp
+				span.message
 			#ready
 				button Ready
 			#last-updated Last updated: 8/22/2014.

@@ -9,6 +9,12 @@ var Client = IgeClass.extend({
 			}
 		}, false);
 
+		var self = this;
+		window.onerror = function(message, url, lineNumber) {
+			self.onLoadError(message);
+			return false;
+		};
+
 		ige.setFps(Constants.fps.CLIENT_FPS);
 
 		// Load our textures
@@ -181,6 +187,7 @@ var Client = IgeClass.extend({
 								$('.igeLoading.loadingFloat.preview').hide();
 
 								$('#ready button').click(function() {
+									window.onerror = undefined;
 									$('.igeLoading').hide();
 									ige.hud.show();
 									//ige.removeLoadingScreen();
@@ -193,6 +200,19 @@ var Client = IgeClass.extend({
 				});
 			});
 		});
+	},
+
+	onLoadError: function(message) {
+		if (message === "Uncaught IGE *error* [IgeNetIoComponent] : Error with connection: Cannot establish connection, is server running?") {
+			message = "Could not connect to the game server. It may be offline or down for maintenance."
+		}
+
+		$('#loading-error').show();
+		$('#loading-error .message').html(message);
+		$('.igeLoading.loadingFloat.preview').hide();
+		ige._loadingPreText = "Error";
+		$('#loadingText').html('Error');
+		$('#loadingText').addClass('error');
 	},
 
 	promptForUsername: function() {

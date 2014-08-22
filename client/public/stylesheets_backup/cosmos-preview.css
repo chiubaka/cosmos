@@ -122,8 +122,13 @@ body {
     z-index: 999999
 }
 
+#headline {
+    text-align: center;
+}
+
 #mail-list {
     text-align: center;
+    font-size: 80%;
 }
 
 #news {
@@ -138,6 +143,18 @@ body {
 #news ul {
     list-style: disc outside;
     margin-left: 20px;
+}
+
+#loading-error, #ready {
+    display: none;
+    position: absolute;
+    bottom: 12.5%;
+    width: 100%;
+}
+
+#loading-error {
+    color: red;
+    text-align: center;
 }
 
 #ready {
@@ -239,6 +256,10 @@ body {
     -webkit-animation: fadePulse 2s infinite linear;
     animation: fadePulse 2s infinite linear;
     float: left;
+}
+
+.preview .loadingText.error {
+    color: red;
 }
 
 .preview #loadingProgress {
