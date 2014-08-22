@@ -128,6 +128,14 @@ var ServerNetworkEvents = {
 		}
 
 		var player = new Player();
+		// This player is already logged in and online!
+		if (ige.$(playerId)) {
+			ige.network.stream.queueCommand('notificationError',
+				NotificationDefinitions.errorKeys.alreadyLoggedIn, clientId);
+			// TODO: Close this connection.
+			return;
+		}
+
 		player.id(playerId);
 		player.clientId(clientId);
 		player.loggedIn(loggedIn);
@@ -245,13 +253,21 @@ var ServerNetworkEvents = {
 			return;
 		}
 
+		if (!player.currentShip().canMine()) {
+			return;
+		}
+
 		// TODO: Guard against bogus blockGridId from client
 		var blockGrid = ige.$(data.blockGridId);
 		if (blockGrid === undefined) {
 			return;
 		}
 
-		if (!player.currentShip().canMine()) {
+		var targetBlock = blockGrid.get(new IgePoint2d(data.col, data.row))[0];
+
+		// don't let players mine their own bridge block
+		if (targetBlock === player.currentShip().bridgeBlocks()[0]) {
+			//TODO tell the player that they shouldn't mine their own bridge block
 			return;
 		}
 
@@ -259,7 +275,6 @@ var ServerNetworkEvents = {
 		if(blockGrid.processBlockActionServer(data, player)) {
 			player.currentShip().mining = true;
 
-			var targetBlock = blockGrid.get(new IgePoint2d(data.col, data.row))[0];
 			// Activate mining lasers
 			player.currentShip().fireMiningLasers(targetBlock);
 		}

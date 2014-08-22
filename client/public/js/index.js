@@ -19,7 +19,7 @@ function signInGoBack() {
 }
 
 function gameTransitionIn() {
-    WinJS.UI.Animation.continuumForwardOut($("#cosmos-landing").get(0), null).done(function () {
+	WinJS.UI.Animation.continuumForwardOut($("#cosmos-landing").get(0), null).done(function () {
         $("#cosmos-greeting").css('display', 'block');
         return WinJS.UI.Animation.continuumForwardIn($("#cosmos-greeting").get(0), null).done(function () {
             window.location.href = "/cosmos";
@@ -36,7 +36,10 @@ $(document).ready(function() {
     }
 
     $("#option-play").first().click(function() {
-        gameTransitionIn();
+		//$("#container").hide();
+		//$("#cosmos-greeting").show();
+		window.location.href = "/cosmos";
+		//gameTransitionIn();
     });
 
     $("#option-signin").click(function() {

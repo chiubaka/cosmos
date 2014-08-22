@@ -1,7 +1,7 @@
 var GeneratedBlockStructure = BlockStructure.extend({
 	classId: 'GeneratedBlockStructure',
 
-	_maxNumBlocks: undefined,
+	_numLayers: undefined,
 	_blockDistribution: undefined,
 	_symmetric: undefined,
 
@@ -12,7 +12,7 @@ var GeneratedBlockStructure = BlockStructure.extend({
 			data = {};
 		}
 
-		this._maxNumBlocks = data.maxNumBlocks;
+		this._numLayers = data.numLayers;
 		this._blockDistribution = data.blockDistribution;
 		this._symmetric = data.symmetric;
 
@@ -22,7 +22,7 @@ var GeneratedBlockStructure = BlockStructure.extend({
 				maxRespawnTime: GeneratedBlockStructure.MAX_RESPAWN_TIME,
 				respawnAction: GameInit.spawnStructure.bind(
 					GameInit,
-					this._maxNumBlocks,
+					this._numLayers,
 					this._blockDistribution,
 					this._symmetric
 				)

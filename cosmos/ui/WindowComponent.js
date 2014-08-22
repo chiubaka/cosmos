@@ -102,7 +102,7 @@ var WindowComponent = ButtonComponent.extend({
 		blockCanvasContainerDiv.append(containerCanvas);
 		container.append(blockCanvasContainerDiv);
 
-		var block = Block.blockFromClassId(blockType);
+		var block = Block.fromType(blockType);
 
 		containerCanvas.width = $(containerCanvas).width();
 		containerCanvas.height = $(containerCanvas).height();

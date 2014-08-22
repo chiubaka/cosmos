@@ -5,7 +5,7 @@
 * @namespace
 * @todo Use this to craft things.
 */
-var DragonBlock = Element.extend({
+var DragonBlock = Resource.extend({
 	classId: 'DragonBlock',
 
 	init: function(data) {
@@ -13,11 +13,13 @@ var DragonBlock = Element.extend({
 			this.backgroundColor = 0x770000;
 			this.borderColor = 0x780000;
 			this.textureBackground = "rgb(119, 0, 0)";
-			this.textureOutline = "rgb(120, 0, 0)";
+			this.textureOutline = "rgb(140, 0, 0)";
 		}
 
-		Element.prototype.init.call(this, data);
+		Resource.prototype.init.call(this, data);
 	}
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = DragonBlock; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
+	module.exports = DragonBlock;
+}

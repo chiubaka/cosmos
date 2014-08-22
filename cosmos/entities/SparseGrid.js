@@ -18,6 +18,10 @@ var SparseGrid = IgeClass.extend({
 		return this._count;
 	},
 
+	/*
+	Loops through all of the blocks in a rectangle with upper left corner loc and dimensions width and height.
+	Runs func on each block in this rectangle.
+	*/
 	each: function(func, loc, width, height) {
 		if (typeof(func) !== "function") {
 			this.log("SparseGrid#each: passed func value is not a function.", "warning");

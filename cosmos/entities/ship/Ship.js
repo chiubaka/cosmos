@@ -161,21 +161,7 @@ var Ship = BlockStructure.extend({
 		return this._weapons;
 	},
 
-	/*
-	Overrides the superclass's put function
-	Updates the engines and thrusters lists on each add
-	*/
-	put: function(block, loc, replace) {
-		// You can't add a second Bridge to a ship.
-		if (block instanceof BridgeBlock && this.controllable()) {
-			return false;
-		}
-
-		var blockAdded = BlockStructure.prototype.put.call(this, block, loc,
-			replace);
-		if (blockAdded && ige.isServer) {
-			DbPlayer.update(this.player().id(), this.player(), function() {});
-		}
+	_addToPartsLists: function(block) {
 		if (block instanceof EngineBlock) {
 			this.engines().push(block);
 		}
@@ -188,7 +174,34 @@ var Ship = BlockStructure.extend({
 		else if (block instanceof BridgeBlock) {
 			this.bridgeBlocks().push(block);
 		}
-		return blockAdded;
+	},
+
+	/*
+	Overrides the superclass's put function
+	Updates the engines and thrusters lists on each add
+	*/
+	put: function(block, loc, replace) {
+		// You can't add a second Bridge to a ship.
+		if (block instanceof BridgeBlock && this.controllable()) {
+			return false;
+		}
+
+		var result = BlockStructure.prototype.put.call(this, block, loc,
+			replace);
+		if (result !== null && ige.isServer) {
+			DbPlayer.update(this.player().id(), this.player(), function() {});
+		}
+
+		if (result !== null) {
+			this._addToPartsLists(block);
+		}
+
+		var self = this;
+		_.forEach(result, function(removedBlock) {
+			self._removeFromPartsLists(removedBlock);
+		});
+
+		return result;
 	},
 
 	streamEntityValid: function(val) {
@@ -204,35 +217,36 @@ var Ship = BlockStructure.extend({
 		return BlockStructure.prototype.streamEntityValid.call(this, val);
 	},
 
+	_removeFromPartsLists: function(block) {
+		if (block instanceof EngineBlock) {
+			this.engines().splice(this.engines().indexOf(block), 1);
+		}
+		else if (block instanceof ThrusterBlock) {
+			this.thrusters().splice(this.thrusters().indexOf(block), 1);
+		}
+		else if (block instanceof Weapon) {
+			this.weapons().splice(this.weapons().indexOf(block), 1);
+		}
+		else if (block instanceof BridgeBlock) {
+			this.bridgeBlocks().splice(this.bridgeBlocks().indexOf(block), 1);
+		}
+	},
+
 	remove: function(loc, width, height) {
 		var removed = BlockStructure.prototype.remove.call(this, loc, width, height);
 		var self = this;
 		_.forEach(removed, function(removedBlock) {
-			// These are specific types of blocks that we're interested in keeping track of.
-			if (removedBlock instanceof EngineBlock) {
-				self.engines().splice(self.engines().indexOf(removedBlock), 1);
-			}
-			else if (removedBlock instanceof ThrusterBlock) {
-				self.thrusters().splice(self.thrusters().indexOf(removedBlock), 1);
-			}
-			else if (removedBlock instanceof Weapon) {
-				self.weapons().splice(self.weapons().indexOf(removedBlock), 1);
-			}
-			else if (removedBlock instanceof BridgeBlock) {
-				self.bridgeBlocks().splice(self.bridgeBlocks().indexOf(removedBlock), 1);
-			}
+			self._removeFromPartsLists(removedBlock);
 		});
 
 		if (ige.isServer) {
 			DbPlayer.update(this.player().id(), this.player(), function() {});
-		}
-
-		// If the ship has no longer controllable
-		if (!this.controllable()) {
-			// Then it is dead
-			this.log("Ship death");
-			data = {};
-			ige.network.stream.queueCommand('cosmos:ship.death', data, this.player().clientId());
+			// If the ship has no longer controllable
+			if (!this.controllable()) {
+				// Then it is dead
+				var data = {};
+				ige.network.stream.queueCommand('cosmos:ship.death', data, this.player().clientId());
+			}
 		}
 
 		return removed;
@@ -344,6 +358,11 @@ var Ship = BlockStructure.extend({
 	canMine: function () {
 		// Do not start mining if we are already mining
 		if (this.mining) {
+			return false;
+		}
+
+		// We can't mine if we're dead
+		if (!this.controllable()) {
 			return false;
 		}
 

@@ -4,7 +4,7 @@
 * @typedef {AdamantiumBlock}
 * @namespace
 */
-var AdamantiumBlock = Element.extend({
+var AdamantiumBlock = Resource.extend({
 	classId: 'AdamantiumBlock',
 
 	init: function(data) {
@@ -15,8 +15,10 @@ var AdamantiumBlock = Element.extend({
 			this.textureOutline = "rgb(20, 100, 20)";
 		}
 
-		Element.prototype.init.call(this, data);
+		Resource.prototype.init.call(this, data);
 	}
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = AdamantiumBlock; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
+	module.exports = AdamantiumBlock;
+}

@@ -56,6 +56,8 @@ var BlockGrid = IgeEntity.extend({
 		this.width(0);
 		this.height(0);
 
+		this._physicsOffset = {x: 0, y: 0};
+
 		this.addComponent(PixiRenderableComponent);
 
 		// #ifdef CLIENT
@@ -242,7 +244,7 @@ var BlockGrid = IgeEntity.extend({
 			for (var row = 0; row < blockTypeMatrix[col].length; row++) {
 				if (blockTypeMatrix[col][row]) {
 					this.put(
-						Block.blockFromClassId(blockTypeMatrix[col][row]),
+						Block.fromType(blockTypeMatrix[col][row]),
 						new IgePoint2d(startCol + col, startRow + row),
 						false
 					);
@@ -271,12 +273,18 @@ var BlockGrid = IgeEntity.extend({
 				var block = this.get(new IgePoint2d(data.col, data.row))[0];
 				block.takeDamage(data.amount);
 				break;
+			// TODO: Remove this case and integrate it with 'put'
 			case 'add':
 				ige.client.metrics.track(
 					'cosmos:construct.existing',
 					{'type': data.selectedType});
-				this.put(Block.blockFromClassId(data.selectedType), new IgePoint2d(data.col, data.row), true);
+				this.put(Block.fromType(data.selectedType), new IgePoint2d(data.col, data.row), true);
 				ige.emit('cosmos:BlockGrid.processBlockActionClient.add', [data.selectedType, this]);
+				break;
+			case 'put':
+				var block = Block.fromJSON(data.block);
+				this.put(block, new IgePoint2d(block.gridData.loc.x, block.gridData.loc.y), true);
+				ige.emit('cosmos:BlockGrid.processBlockActionClient.put', [data.block.type, this]);
 				break;
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
@@ -307,7 +315,7 @@ var BlockGrid = IgeEntity.extend({
 				// Blocks added as the result of a query from a client must be added to an existing
 				// contiguous structure.
 				if (this.hasNeighbors(location)) {
-					self.put(Block.blockFromClassId(data.selectedType), new IgePoint2d(data.col, data.row), false);
+					self.put(Block.fromType(data.selectedType), new IgePoint2d(data.col, data.row), false);
 					data.action = 'add';
 					ige.network.send('blockAction', data);
 					return true;
@@ -518,12 +526,6 @@ var BlockGrid = IgeEntity.extend({
 	_addFixture: function(block) {
 		// #ifdef SERVER
 		if (ige.isServer) {
-
-			// Destroy the existing fixture
-			if (block.physicsFixture.getCreated() === true) {
-				this.physicsBody.destroyFixture(block);
-			}
-
 			// Update the block's physicsFixture component's fixtureDef
 			this._updateFixtureDef(block);
 
@@ -543,9 +545,9 @@ var BlockGrid = IgeEntity.extend({
 			density: fixtureDef.density || BlockGrid.BLOCK_FIXTURE_DENSITY,
 			isSensor: fixtureDef.isSensor || false,
 			shapeType: fixtureDef.shapeType || 'BOX',
-			hwidth: fixtureDef.hwidth || (block.numCols() * Block.WIDTH) / 2 -
+			hwidth: fixtureDef.hwidth || (block.gridData.width * Block.WIDTH) / 2 -
 				(2 * BlockGrid.BLOCK_FIXTURE_PADDING),
-			hheight: fixtureDef.hheight || (block.numRows() * Block.HEIGHT) / 2 -
+			hheight: fixtureDef.hheight || (block.gridData.height * Block.HEIGHT) / 2 -
 				(2 * BlockGrid.BLOCK_FIXTURE_PADDING),
 			x: fixtureDef.x || coordinates.x + BlockGrid.BLOCK_FIXTURE_PADDING,
 			y: fixtureDef.y || coordinates.y + BlockGrid.BLOCK_FIXTURE_PADDING,

@@ -61,6 +61,7 @@ $window-height: $window-header-height + $window-tabs-height +
 		td {
 			background-color: $header-background-color;
 			border-color: $body-background-color;
+			box-sizing: content-box;
 		}
 	}
 }

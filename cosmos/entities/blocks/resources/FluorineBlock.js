@@ -5,7 +5,7 @@
  * @namespace
  * @todo Use this to craft things.
  */
-var FluorineBlock = Element.extend({
+var FluorineBlock = Resource.extend({
 	classId: 'FluorineBlock',
 
 	init: function(data) {
@@ -16,8 +16,10 @@ var FluorineBlock = Element.extend({
 			this.textureOutline = "rgb(38, 38, 38)";
 		}
 
-		Element.prototype.init.call(this, data);
+		Resource.prototype.init.call(this, data);
 	}
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = FluorineBlock; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
+	module.exports = FluorineBlock;
+}

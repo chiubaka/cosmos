@@ -11,66 +11,6 @@ var Block = IgeEntity.extend({
 	classId: 'Block',
 
 	/**
-	 * The number of rows that this {@link Block} takes up.
-	 * @type {number}
-	 * @memberof Block
-	 * @private
-	 * @instance
-	 * @todo Add code allow the {@link Block#_numRows|_numRows} to vary.
-	 */
-	_numRows: 1,
-	/**
-	 * The number of cols that this {@link Block} takes up.
-	 * @type {number}
-	 * @memberof Block
-	 * @private
-	 * @instance
-	 * @todo Add code allow the {@link Block#_numCols|_numCols} to vary.
-	 */
-	_numCols: 1,
-	/**
-	 * The {@link BlockGrid} that this {@link Block} is a part of.
-	 * @type {BlockGrid}
-	 * @memberof Block
-	 * @private
-	 * @instance
-	 */
-	_blockGrid: undefined,
-	/**
-	 * The row of the {@link BlockGrid} that this block inhabits if any.
-	 * The value of this instance variable is meaningless unless _blockGrid is defined.
-	 * @type {number}
-	 * @memberof Block
-	 * @private
-	 * @instance
-	 */
-	_row: undefined,
-	/**
-	 * The column of the {@link BlockGrid} that this block inhabits if any.
-	 * The value of this instance variable is meaningless unless _blockGrid is defined.
-	 * @type {number}
-	 * @memberof Block
-	 * @private
-	 * @instance
-	 */
-	_col: undefined,
-	/**
-	 * An IgeEntity that all of the foreground effects for this {@link Block} get mounted to.
-	 * @type {IgeEntity}
-	 * @memberof Block
-	 * @private
-	 * @instance
-	 */
-	_effectsMountAbove: undefined,
-	/**
-	 * An IgeEntity that all of the background effects for this {@link Block} get mounted to.
-	 * @type {IgeEntity}
-	 * @memberof Block
-	 * @private
-	 * @instance
-	 */
-	_effectsMountBelow: undefined,
-	/**
 	 * An object used as a map to store data about the various effects on a {@link Block}. The map keys are the effect
 	 * types, and the values are typically objects. Each value can be specific to the effect, since different effects
 	 * have different state needs.
@@ -102,41 +42,67 @@ var Block = IgeEntity.extend({
 		var self = this;
 		IgeEntity.prototype.init.call(this);
 
-		// Use an even number so values don't have to become approximate when we divide by two
-		this.width(Block.WIDTH).height(Block.HEIGHT);
+		data = data || {};
 
 		var isAbstractClass = this.classId() === "Part"
 			|| this.classId() === "Armor"
 			|| this.classId() === "EngineBlock"
 			|| this.classId() === "ThrusterBlock"
 			|| this.classId() === "Weapon"
+			|| this.classId() === "Resource"
+			// TODO: The Element class won't be abstract soon!
 			|| this.classId() === "Element";
 
-		// Check if a health has been provided for this block.
-		if (Healths[this.classId()] !== undefined) {
-			this.addComponent(Health, Healths[this.classId()]);
-		} else if(!(this instanceof ConstructionZoneBlock || isAbstractClass)) {
-			this.log("No health found for " + this.classId() + ". The health component is mandatory for all blocks", 'error');
+		var isConstructionZone = this instanceof ConstructionZoneBlock;
+
+		if (data.health) {
+			this.addComponent(Health, data.health);
+		}
+		else if (!(isConstructionZone || isAbstractClass)) {
+			this.log("No health found for " + this.classId() + ". Health component is mandatory" +
+				" for all blocks.", "error");
 		}
 
-		// Check if a type has been provided for this block.
-		if (Types[this.classId()] !== undefined) {
-			this.addComponent(Type, Types[this.classId()]);
-		} else if(!(this instanceof ConstructionZoneBlock || isAbstractClass)) {
-			this.log("No type found for " + this.classId() + ". The type component is mandatory for all blocks", 'error');
+		if (data.type) {
+			this.addComponent(Type, data.type);
+		}
+		else if (!(isConstructionZone || isAbstractClass)) {
+			this.log("No type found for " + this.classId() + ". The type component is mandatory" +
+				" for all blocks.", "error");
 		}
 
-		// Check if a description has been provided for this block. If so, this block is describable. Otherwise, it is not.
-		if (Descriptions[this.classId()] !== undefined) {
-			this.addComponent(Description, Descriptions[this.classId()]);
-		} else if(!(this instanceof ConstructionZoneBlock || isAbstractClass)) {
-			this.log("No description found for " + this.classId() + ". The descriptions component is mandatory for all blocks", 'error');
+		if (data.description) {
+			this.addComponent(Description, data.description);
+		}
+		else if (!(isConstructionZone || isAbstractClass)) {
+			this.log("No description found for " + this.classId() + ". The description component " +
+				"is mandatory for all blocks.", "error");
 		}
 
-		// Check if a recipe has been provided for this block. If so, this block is craftable. Otherwise, it is not.
-		if (Recipes[this.classId()] !== undefined) {
-			this.addComponent(Recipe, Recipes[this.classId()]);
+		if (data.recipe) {
+			this.addComponent(Recipe, data.recipe);
 		}
+
+		/* === Grid Data === */
+		// Default value for grid height and width is 1.
+		var myGridData = {width: 1, height: 1};
+
+		// If a height and width is passed for an element, that height and width will be used.
+		if (this.classId() === "Element") {
+			myGridData.width = data.gridWidth || myGridData.width;
+			myGridData.height = data.gridHeight || myGridData.height;
+		}
+
+		// If a height and width is defined in the configuration files for this block, that will
+		// be used.
+		else if (GridDimensions[this.classId()]) {
+			myGridData = GridDimensions[this.classId()];
+		}
+
+		this.addComponent(GridData, myGridData);
+
+		// Use an even number so values don't have to become approximate when we divide by two
+		this.width(Block.WIDTH * this.gridData.width).height(Block.HEIGHT * this.gridData.height);
 
 		this.backgroundAlpha = this.backgroundAlpha || 1;
 		if (!this.backgroundColor) {
@@ -164,8 +130,8 @@ var Block = IgeEntity.extend({
 			);
 			graphic.endFill();
 
-			graphic.position.x = -Block.WIDTH / 2;
-			graphic.position.y = -Block.HEIGHT / 2;
+			graphic.position.x = -self.width() / 2;
+			graphic.position.y = -self.height() / 2;
 
 			displayObject.addChild(graphic);
 
@@ -183,8 +149,6 @@ var Block = IgeEntity.extend({
 
 			return displayObject;
 		}});
-		// TODO: Modify this so that blocks can have different sizes.
-		this.addComponent(GridData, {width: 1, height: 1});
 
 		if (ige.isServer) {
 			this.addComponent(TLPhysicsFixtureComponent);
@@ -200,6 +164,28 @@ var Block = IgeEntity.extend({
 		}
 	},
 
+	dataFromConfig: function(data, classId) {
+		data = data || {};
+		classId = classId || this.classId();
+		if (Healths[classId] !== undefined) {
+			data.health = Healths[classId];
+		}
+
+		if (Types[classId] !== undefined) {
+			data.type = Types[classId];
+		}
+
+		if (Descriptions[classId] !== undefined) {
+			data.description = Descriptions[classId];
+		}
+
+		if (Recipes[classId] !== undefined) {
+			data.recipe = Recipes[classId];
+		}
+
+		return data;
+	},
+
 	displayName: function() {
 		var tokens = this.classId().match(/([A-Z]?[^A-Z]*)/g).slice(0, -1);
 		var displayName = "";
@@ -208,26 +194,6 @@ var Block = IgeEntity.extend({
 			displayName += token + " ";
 		}
 		return displayName;
-	},
-
-	/**
-	 * Getter for {@link Block#_numRows|_numRows}.
-	 * @returns {number}
-	 * @memberof Block
-	 * @instance
-	 */
-	numRows: function() {
-		return this._numRows;
-	},
-
-	/**
-	 * Getter for {@link Block#_numCols|_numCols}.
-	 * @returns {number}
-	 * @memberof Block
-	 * @instance
-	 */
-	numCols: function() {
-		return this._numCols;
 	},
 
 	hp: function() {
@@ -282,54 +248,6 @@ var Block = IgeEntity.extend({
 	},
 
 	/**
-	 * Creates the above effects mount entity for this {@link Block} and stores it in an instance variable. If the
-	 * effects mount has already been created for this {@link Block}, this function does nothing.
-	 * @memberof BlockGrid
-	 * @instance
-	 */
-	createAboveEffectsMount: function() {
-		if (this._effectsMountAbove !== undefined) {
-			return;
-		}
-
-		this._effectsMountAbove = new IgeEntity().addComponent(PixiRenderableComponent).depth(this.depth() + 1);
-	},
-
-	/**
-	 * Creates the above effects mount entity for this {@link Block} and stores it in an instance variable. If the
-	 * effects mount has already been created for this {@link Block}, this function does nothing.
-	 * @memberof BlockGrid
-	 * @instance
-	 */
-	createBelowEffectsMount: function() {
-		if (this._effectsMountBelow !== undefined) {
-			return;
-		}
-
-		this._effectsMountBelow = new IgeEntity().addComponent(PixiRenderableComponent).depth(this.depth() - 1);
-	},
-
-	/**
-	 * Getter for the {@link Block#_effectsMountAbove|_effectsMountAbove} property.
-	 * @returns {IgeEntity} the above effects mount
-	 * @memberof Block
-	 * @instance
-	 */
-	effectsMountAbove: function() {
-		return this._effectsMountAbove;
-	},
-
-	/**
-	 * Getter for the {@link Block#_effectsMountBelow|_effectsMountBelow} property.
-	 * @returns {IgeEntity} the below effects mount
-	 * @memberof Block
-	 * @instance
-	 */
-	effectsMountBelow: function() {
-		return this._effectsMountBelow;
-	},
-
-	/**
 	 * Adds an effect to this {@link Block}. Also takes care of making sure that an effects mount is created for this
 	 * {@link Block} if one does not already exist. It is expected that all subclasses call this function at the
 	 * beginning of their own addEffect function.
@@ -349,6 +267,26 @@ var Block = IgeEntity.extend({
 			case 'healthBar':
 				this._addHealthBar();
 		}
+	},
+
+	onDeath: function(player) {
+		var loc = this.gridData.loc;
+		var grid = this.gridData.grid;
+
+		var data = {
+			blockGridId: grid.id(),
+			action: 'remove',
+			col: loc.x,
+			row: loc.y
+		};
+
+		// Drop block server side, then send drop msg to client
+		grid.drop(player, new IgePoint2d(loc.x, loc.y));
+		if (grid.count() === 0) {
+			grid.destroy();
+		}
+
+		ige.network.send('blockAction', data);
 	},
 
 	/**
@@ -645,19 +583,31 @@ Block.displayNameFromClassId = function(classId) {
 
 /**
  * Given a class ID, returns a new instance of the {@link Block} type associated with that class ID.
- * @param classId {string} The class ID of the type of {@link Block} we want created.
+ * @param type {string} The class ID of the type of {@link Block} we want created.
  * @returns {Block} An instance of the {@link Block} type requested through classId.
  * @memberof Block
  */
-Block.blockFromClassId = function(classId) {
-	if (cosmos.blocks.constructors[classId] === undefined) {
+Block.fromType = function(type) {
+	if (cosmos.blocks.constructors[type] === undefined) {
 		return undefined;
 	}
-	return new cosmos.blocks.constructors[classId]();
+	return new cosmos.blocks.constructors[type]();
 };
 
 Block.fromJSON = function(json) {
-	var block = Block.blockFromClassId(json.type);
+	var block;
+	if (json.type === "Element") {
+		block = new Element({
+			resource: json.resource,
+			purity: json.purity,
+			gridWidth: json.gridData.width,
+			gridHeight: json.gridData.height
+		});
+	}
+	else {
+		block = Block.fromType(json.type);
+	}
+
 	block.gridData.loc = new IgePoint2d(json.gridData.loc.x, json.gridData.loc.y);
 	return block;
 };
