@@ -6,7 +6,7 @@
  * @namespace
  * @todo Use this to craft things.
  */
-var IceBlock = Element.extend({
+var IceBlock = Resource.extend({
 	classId: 'IceBlock',
 
 	init: function(data) {
@@ -17,8 +17,10 @@ var IceBlock = Element.extend({
 			this.textureBackground = "rgba(63, 175, 221, 0.3)";
 			this.textureOutline = "rgb(129, 206, 226)";
 		}
-		Element.prototype.init.call(this, data);
+		Resource.prototype.init.call(this, data);
 	}
 });
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = IceBlock; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
+	module.exports = IceBlock;
+}

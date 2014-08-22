@@ -56,6 +56,8 @@ var BlockGrid = IgeEntity.extend({
 		this.width(0);
 		this.height(0);
 
+		this._physicsOffset = {x: 0, y: 0};
+
 		this.addComponent(PixiRenderableComponent);
 
 		// #ifdef CLIENT
@@ -242,7 +244,7 @@ var BlockGrid = IgeEntity.extend({
 			for (var row = 0; row < blockTypeMatrix[col].length; row++) {
 				if (blockTypeMatrix[col][row]) {
 					this.put(
-						Block.blockFromClassId(blockTypeMatrix[col][row]),
+						Block.fromType(blockTypeMatrix[col][row]),
 						new IgePoint2d(startCol + col, startRow + row),
 						false
 					);
@@ -271,12 +273,18 @@ var BlockGrid = IgeEntity.extend({
 				var block = this.get(new IgePoint2d(data.col, data.row))[0];
 				block.takeDamage(data.amount);
 				break;
+			// TODO: Remove this case and integrate it with 'put'
 			case 'add':
 				ige.client.metrics.track(
 					'cosmos:construct.existing',
 					{'type': data.selectedType});
-				this.put(Block.blockFromClassId(data.selectedType), new IgePoint2d(data.col, data.row), true);
+				this.put(Block.fromType(data.selectedType), new IgePoint2d(data.col, data.row), true);
 				ige.emit('cosmos:BlockGrid.processBlockActionClient.add', [data.selectedType, this]);
+				break;
+			case 'put':
+				var block = Block.fromJSON(data.block);
+				this.put(block, new IgePoint2d(block.gridData.loc.x, block.gridData.loc.y), true);
+				ige.emit('cosmos:BlockGrid.processBlockActionClient.put', [data.block.type, this]);
 				break;
 			default:
 				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
@@ -307,7 +315,7 @@ var BlockGrid = IgeEntity.extend({
 				// Blocks added as the result of a query from a client must be added to an existing
 				// contiguous structure.
 				if (this.hasNeighbors(location)) {
-					self.put(Block.blockFromClassId(data.selectedType), new IgePoint2d(data.col, data.row), false);
+					self.put(Block.fromType(data.selectedType), new IgePoint2d(data.col, data.row), false);
 					data.action = 'add';
 					ige.network.send('blockAction', data);
 					return true;

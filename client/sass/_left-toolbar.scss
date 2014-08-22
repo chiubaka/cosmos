@@ -12,42 +12,42 @@ $left-toolbar-highlight-color: #f57a03;
 $left-toolbar-tooltip-width: $left-toolbar-item-width * 1.5;
 
 #hud>.left-toolbar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: $hud-button-height;
-  width: $left-toolbar-width;
-  padding-top: $hud-margin-top;
-  background-color: $left-toolbar-background-color;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: $left-toolbar-width;
+	height: 100%;
+	padding-top: $hud-margin-top;
+	background-color: $left-toolbar-background-color;
 }
 
 @mixin left-toolbar-item($background-color: $left-toolbar-item-background-color) {
-  height: $left-toolbar-item-height;
-  width: $left-toolbar-item-width;
-  position: relative;
-  cursor: pointer;
-  background-color: $background-color;
-  margin-top: $left-toolbar-spacing-between-items;
+	height: $left-toolbar-item-height;
+	width: $left-toolbar-item-width;
+	position: relative;
+	cursor: pointer;
+	background-color: $background-color;
+	margin-top: $left-toolbar-spacing-between-items;
 
-  .tooltip {
-    bottom: $left-toolbar-item-height + $left-toolbar-item-padding;
-    width: $left-toolbar-tooltip-width;
-    text-align: center;
-    margin-left: -$left-toolbar-tooltip-width / 2 - $tooltip-padding;
-    left: 50%;
-  }
+	.tooltip {
+		bottom: $left-toolbar-item-height + $left-toolbar-item-padding;
+		width: $left-toolbar-tooltip-width;
+		text-align: center;
+		margin-left: -$left-toolbar-tooltip-width / 2 - $tooltip-padding;
+		left: 50%;
+	}
 
-  &:hover {
-    background-color: $left-toolbar-item-hover-background-color;
-    .tooltip {
-      display: block;
-    }
-  }
+	&:hover {
+		background-color: $left-toolbar-item-hover-background-color;
+		.tooltip {
+			display: block;
+		}
+	}
 }
 
 @mixin left-toolbar-item-with-icon($icon, $background-color: $left-toolbar-item-background-color) {
-  @include left-toolbar-item($background-color);
-  @include hud-icon-button($icon);
+	@include left-toolbar-item($background-color);
+	@include hud-icon-button($icon);
 }
 
 @import 'windows';

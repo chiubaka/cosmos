@@ -47,10 +47,10 @@ var GameInit = {
 			if (globalContext.hasOwnProperty(key)
 				&& globalContext[key]
 				&& globalContext[key].prototype
-				&& globalContext[key].prototype instanceof Block)
+				&& globalContext[key].prototype instanceof Block
+				&& !(globalContext[key].prototype.classId() === "Element"))
 			{
 				cosmos.blocks.constructors[key] = globalContext[key];
-
 				var block = new globalContext[key]();
 				cosmos.blocks.instances[key] = block;
 			}
@@ -167,8 +167,9 @@ var GameInit = {
 					.depth(0)
 					.parallaxLag(2)
 					.mount(client.spaceBackgroundScene)
-					.translateTo(Constants.GRID_SQUARE_SIZE.X*gridX + Constants.BACKGROUND_OFFSET.X,
-						Constants.GRID_SQUARE_SIZE.Y*gridY + Constants.BACKGROUND_OFFSET.Y,
+					.translateTo(
+						(Constants.GRID_SQUARE_SIZE.X - Constants.GRID_SQUARE_OVERLAP)*gridX + Constants.BACKGROUND_OFFSET.X,
+						(Constants.GRID_SQUARE_SIZE.Y - Constants.GRID_SQUARE_OVERLAP)*gridY + Constants.BACKGROUND_OFFSET.Y,
 						0);
 			}
 		}
@@ -181,8 +182,9 @@ var GameInit = {
 					.depth(1)
 					.parallaxLag(4)
 					.mount(client.spaceBackgroundScene)
-					.translateTo(Constants.GRID_SQUARE_SIZE.X*gridX,
-						Constants.GRID_SQUARE_SIZE.Y*gridY,
+					.translateTo(
+						Constants.GRID_SQUARE_SIZE.X * gridX,
+						Constants.GRID_SQUARE_SIZE.Y * gridY,
 						0);
 			}
 		}
@@ -190,15 +192,16 @@ var GameInit = {
 		//Instantiate the second background overlay
 		for (var gridX = -Constants.NUM_BACKGROUND_OVERLAY_SQUARES.X/2; gridX < Constants.NUM_BACKGROUND_OVERLAY_SQUARES.X/2; gridX++) {
 			for (var gridY = -Constants.NUM_BACKGROUND_OVERLAY_SQUARES.Y/2; gridY < Constants.NUM_BACKGROUND_OVERLAY_SQUARES.Y/2; gridY++) {
-				var x = Constants.GRID_SQUARE_SIZE.X*gridX;
-				var y = Constants.GRID_SQUARE_SIZE.Y*gridY;
+				var x = Constants.GRID_SQUARE_SIZE.X * gridX;
+				var y = Constants.GRID_SQUARE_SIZE.Y * gridY;
 
 				new Background({textureName: 'backgroundOverlay'})
 					.id('backgroundOverlayTheSecond' + gridX + "-" + gridY)
 					.depth(1)
 					.parallaxLag(5)
 					.mount(client.spaceBackgroundScene)
-					.translateTo(x * Math.cos(Constants.SECOND_OVERLAY_ROTATION) - y * Math.sin(Constants.SECOND_OVERLAY_ROTATION),
+					.translateTo(
+						x * Math.cos(Constants.SECOND_OVERLAY_ROTATION) - y * Math.sin(Constants.SECOND_OVERLAY_ROTATION),
 						x * Math.sin(Constants.SECOND_OVERLAY_ROTATION) + y * Math.cos(Constants.SECOND_OVERLAY_ROTATION),
 						0)
 					.rotate().z(Constants.SECOND_OVERLAY_ROTATION);
@@ -230,14 +233,16 @@ var GameInit = {
 
 		var NUM_NORMAL_ASTEROIDS = 40;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
-			this.spawnStructure(200, BlockStructureGenerator.elementDistributions.randomDistribution());
+			this.spawnStructure(8000, BlockStructureGenerator.elementDistributions.randomDistribution());// Note that 8000 here doens't do anything. To modify the sizes of the asteroids, go to the asteroid generator.
 		}
 		// TODO: The procedural generation algorithm is causing strange problems with the new BlockGrid system. Leave
 		// this stuff commented out until it is figured out.
+		/*
 		var NUM_DERELICT_SPACESHIPS = 10;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_DERELICT_SPACESHIPS; asteroidNumber++) {
 			this.spawnStructure(60, BlockStructureGenerator.partDistributions.randomDistribution(), true);
 		}
+		*/
 	},
 
 	spawnStructure: function(maxNumBlocks, blockDistribution, symmetric) {
@@ -392,12 +397,12 @@ var GameInit = {
 			if ((entity1.category() === category1) &&
 				(entity2.category() === category2)) {
 				category1Entity = entity1;
-				category2Entity = entity2; 
+				category2Entity = entity2;
 			}
 			else if ((entity1.category() === category2) &&
 				(entity2.category() === category1)) {
 				category1Entity = entity2;
-				category2Entity = entity1; 
+				category2Entity = entity1;
 			}
 			else {
 				this.log('GameInit#entityByCategory: Entities do not match categories!', 'error');

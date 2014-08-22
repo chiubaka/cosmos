@@ -363,6 +363,11 @@ var Ship = BlockStructure.extend({
 			return false;
 		}
 
+		// We can't mine if we're dead
+		if (!this.controllable()) {
+			return false;
+		}
+
 		// Do not start mining if ship has no mining lasers
 		return this.weapons().length > 0;
 	},
