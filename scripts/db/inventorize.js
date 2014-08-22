@@ -1,5 +1,6 @@
 /**
  * Move blocks from ship to cargo blocks
+ * TODO: makes this use the starter ship in ExampleShips.js.
  */
 
 var starterShipTemplate = 
