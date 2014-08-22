@@ -276,22 +276,76 @@ Element.RARITIES_PROBABILITY[Element.RARITIES.VERY_RARE] = .02;
 
 Element.RESOURCE_IMPURITIES = {};
 Element.RESOURCE_IMPURITIES['default'] = {};
-Element.RESOURCE_IMPURITIES['default'][Element.RARITIES.COMMON] = 'IceBlock';
+Element.RESOURCE_IMPURITIES['default'][Element.RARITIES.COMMON] = 'IronBlock';
 Element.RESOURCE_IMPURITIES['default'][Element.RARITIES.UNCOMMON] = 'CarbonBlock';
 Element.RESOURCE_IMPURITIES['default'][Element.RARITIES.RARE] = 'GoldBlock';
 Element.RESOURCE_IMPURITIES['default'][Element.RARITIES.VERY_RARE] = 'DragonBlock';
 
+Element.RESOURCE_IMPURITIES['CarbonBlock'] = {};
+Element.RESOURCE_IMPURITIES['CarbonBlock'][Element.RARITIES.COMMON] = 'IronBlock';
+Element.RESOURCE_IMPURITIES['CarbonBlock'][Element.RARITIES.UNCOMMON] = 'FluorineBlock';
+Element.RESOURCE_IMPURITIES['CarbonBlock'][Element.RARITIES.RARE] = 'MythrilBlock';
+Element.RESOURCE_IMPURITIES['CarbonBlock'][Element.RARITIES.VERY_RARE] = 'AdamantiumBlock';
+
+Element.RESOURCE_IMPURITIES['DragonBlock'] = {};
+Element.RESOURCE_IMPURITIES['DragonBlock'][Element.RARITIES.COMMON] = 'GoldBlock';
+Element.RESOURCE_IMPURITIES['DragonBlock'][Element.RARITIES.UNCOMMON] = 'AdamantiumBlock';
+Element.RESOURCE_IMPURITIES['DragonBlock'][Element.RARITIES.RARE] = 'MythrilBlock';
+Element.RESOURCE_IMPURITIES['DragonBlock'][Element.RARITIES.VERY_RARE] = 'KryptoniteBlock';
+
+Element.RESOURCE_IMPURITIES['AdamantiumBlock'] = {};
+Element.RESOURCE_IMPURITIES['AdamantiumBlock'][Element.RARITIES.COMMON] = 'MythrilBlock';
+Element.RESOURCE_IMPURITIES['AdamantiumBlock'][Element.RARITIES.UNCOMMON] = 'DragonBlock';
+Element.RESOURCE_IMPURITIES['AdamantiumBlock'][Element.RARITIES.RARE] = 'KryptoniteBlock';
+Element.RESOURCE_IMPURITIES['AdamantiumBlock'][Element.RARITIES.VERY_RARE] = 'TitaniumBlock';
+
+Element.RESOURCE_IMPURITIES['CobaltBlock'] = {};
+Element.RESOURCE_IMPURITIES['CobaltBlock'][Element.RARITIES.COMMON] = 'SteelBlock';
+Element.RESOURCE_IMPURITIES['CobaltBlock'][Element.RARITIES.UNCOMMON] = 'IronBlock';
+Element.RESOURCE_IMPURITIES['CobaltBlock'][Element.RARITIES.RARE] = 'MythrilBlock';
+Element.RESOURCE_IMPURITIES['CobaltBlock'][Element.RARITIES.VERY_RARE] = 'TitaniumBlock';
+
+Element.RESOURCE_IMPURITIES['FluorineBlock'] = {};
+Element.RESOURCE_IMPURITIES['FluorineBlock'][Element.RARITIES.COMMON] = 'AdamantiumBlock';
+Element.RESOURCE_IMPURITIES['FluorineBlock'][Element.RARITIES.UNCOMMON] = 'IronBlock';
+Element.RESOURCE_IMPURITIES['FluorineBlock'][Element.RARITIES.RARE] = 'SteelBlock';
+Element.RESOURCE_IMPURITIES['FluorineBlock'][Element.RARITIES.VERY_RARE] = 'TitaniumBlock';
+
+Element.RESOURCE_IMPURITIES['GoldBlock'] = {};
+Element.RESOURCE_IMPURITIES['GoldBlock'][Element.RARITIES.COMMON] = 'SteelBlock';
+Element.RESOURCE_IMPURITIES['GoldBlock'][Element.RARITIES.UNCOMMON] = 'CarbonBlock';
+Element.RESOURCE_IMPURITIES['GoldBlock'][Element.RARITIES.RARE] = 'DragonBlock';
+Element.RESOURCE_IMPURITIES['GoldBlock'][Element.RARITIES.VERY_RARE] = 'IronBlock';
+
 Element.RESOURCE_IMPURITIES['IronBlock'] = {};
-Element.RESOURCE_IMPURITIES['IronBlock'][Element.RARITIES.COMMON] = 'IceBlock';
+Element.RESOURCE_IMPURITIES['IronBlock'][Element.RARITIES.COMMON] = 'SteelBlock';
 Element.RESOURCE_IMPURITIES['IronBlock'][Element.RARITIES.UNCOMMON] = 'CarbonBlock';
 Element.RESOURCE_IMPURITIES['IronBlock'][Element.RARITIES.RARE] = 'GoldBlock';
 Element.RESOURCE_IMPURITIES['IronBlock'][Element.RARITIES.VERY_RARE] = 'DragonBlock';
 
-Element.RESOURCE_IMPURITIES['CarbonBlock'] = {};
-Element.RESOURCE_IMPURITIES['CarbonBlock'][Element.RARITIES.COMMON] = 'IceBlock';
-Element.RESOURCE_IMPURITIES['CarbonBlock'][Element.RARITIES.UNCOMMON] = 'CarbonBlock';
-Element.RESOURCE_IMPURITIES['CarbonBlock'][Element.RARITIES.RARE] = 'GoldBlock';
-Element.RESOURCE_IMPURITIES['CarbonBlock'][Element.RARITIES.VERY_RARE] = 'MythrilBlock';
+Element.RESOURCE_IMPURITIES['KryptoniteBlock'] = {};
+Element.RESOURCE_IMPURITIES['KryptoniteBlock'][Element.RARITIES.COMMON] = 'AdamantiumBlock';
+Element.RESOURCE_IMPURITIES['KryptoniteBlock'][Element.RARITIES.UNCOMMON] = 'FluorineBlock';
+Element.RESOURCE_IMPURITIES['KryptoniteBlock'][Element.RARITIES.RARE] = 'GoldBlock';
+Element.RESOURCE_IMPURITIES['KryptoniteBlock'][Element.RARITIES.VERY_RARE] = 'DragonBlock';
+
+Element.RESOURCE_IMPURITIES['MythrilBlock'] = {};
+Element.RESOURCE_IMPURITIES['MythrilBlock'][Element.RARITIES.COMMON] = 'CobaltBlock';
+Element.RESOURCE_IMPURITIES['MythrilBlock'][Element.RARITIES.UNCOMMON] = 'AdamantiumBlock';
+Element.RESOURCE_IMPURITIES['MythrilBlock'][Element.RARITIES.RARE] = 'GoldBlock';
+Element.RESOURCE_IMPURITIES['MythrilBlock'][Element.RARITIES.VERY_RARE] = 'DragonBlock';
+
+Element.RESOURCE_IMPURITIES['SteelBlock'] = {};
+Element.RESOURCE_IMPURITIES['SteelBlock'][Element.RARITIES.COMMON] = 'IronBlock';
+Element.RESOURCE_IMPURITIES['SteelBlock'][Element.RARITIES.UNCOMMON] = 'CarbonBlock';
+Element.RESOURCE_IMPURITIES['SteelBlock'][Element.RARITIES.RARE] = 'GoldBlock';
+Element.RESOURCE_IMPURITIES['SteelBlock'][Element.RARITIES.VERY_RARE] = 'CobaltBlock';
+
+Element.RESOURCE_IMPURITIES['TitaniumBlock'] = {};
+Element.RESOURCE_IMPURITIES['TitaniumBlock'][Element.RARITIES.COMMON] = 'IronBlock';
+Element.RESOURCE_IMPURITIES['TitaniumBlock'][Element.RARITIES.UNCOMMON] = 'CarbonBlock';
+Element.RESOURCE_IMPURITIES['TitaniumBlock'][Element.RARITIES.RARE] = 'SteelBlock';
+Element.RESOURCE_IMPURITIES['TitaniumBlock'][Element.RARITIES.VERY_RARE] = 'CobaltBlock';
 
 // PURITY_RELATIONSHIPS tells you what each purity can turn into
 Element.PURITY_RELATIONSHIPS_FOR_SAME_ELEMENT = {};
