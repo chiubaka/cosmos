@@ -233,17 +233,17 @@ var GameInit = {
 
 		var NUM_SMALL_ASTEROIDS = 20;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_SMALL_ASTEROIDS; asteroidNumber++) {
-			this.spawnStructure([0, 0, 0, 0, 0, 1, 1, 1], BlockStructureGenerator.elementDistributions.randomDistribution());// Note that 8000 here doens't do anything. To modify the sizes of the asteroids, go to the asteroid generator.
+			this.spawnStructure([0, 0, 0, 0, 1, 1, 1, 1], BlockStructureGenerator.elementDistributions.randomDistribution());// Note that 8000 here doens't do anything. To modify the sizes of the asteroids, go to the asteroid generator.
 		}
 
 		var NUM_NORMAL_ASTEROIDS = 10;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
-			this.spawnStructure([0, 0, 0, 1, 1, 1, 2, 2], BlockStructureGenerator.elementDistributions.randomDistribution());// Note that 8000 here doens't do anything. To modify the sizes of the asteroids, go to the asteroid generator.
+			this.spawnStructure([0, 0, 0, 1, 1, 1, 1, 1], BlockStructureGenerator.elementDistributions.randomDistribution());// Note that 8000 here doens't do anything. To modify the sizes of the asteroids, go to the asteroid generator.
 		}
 
 		var NUM_HUGE_ASTEROIDS = 5;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_HUGE_ASTEROIDS; asteroidNumber++) {
-			this.spawnStructure([0, 1, 0, 1, 1, 2, 2, 2], BlockStructureGenerator.elementDistributions.randomDistribution());// Note that 8000 here doens't do anything. To modify the sizes of the asteroids, go to the asteroid generator.
+			this.spawnStructure([0, 0, 1, 1, 1, 1, 1, 1], BlockStructureGenerator.elementDistributions.randomDistribution());// Note that 8000 here doens't do anything. To modify the sizes of the asteroids, go to the asteroid generator.
 		}
 		// TODO: The procedural generation algorithm is causing strange problems with the new BlockGrid system. Leave
 		// this stuff commented out until it is figured out.
