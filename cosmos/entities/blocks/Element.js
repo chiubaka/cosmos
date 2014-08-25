@@ -121,8 +121,6 @@ var Element = Block.extend({
 		if (gridWidth === 1 && gridHeight === 1) {
 			// TODO: Create the resource that matches this Element and drop it.
 			var block = new cosmos.blocks.constructors[this.resource()]();
-			console.log(this.resource());
-			console.log(block);
 			var dropCoordinates = grid.worldCoordinatesForBlock(this);
 			var drop = new Drop({owner: player.currentShip()})
 				.block(block)
