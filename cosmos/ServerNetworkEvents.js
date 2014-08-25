@@ -356,13 +356,6 @@ var ServerNetworkEvents = {
 		if (blockGrid === player.currentShip()) {
 			data.action = 'remove';
 			var blocksRemoved = blockGrid.processBlockActionServer(data, player);
-			console.log("blocksRemoved:");
-			console.log(blocksRemoved);
-			console.log("[0]");
-			console.log(blocksRemoved[0]);
-			console.log("[0].classId()");
-			console.log(blocksRemoved[0].classId());
-			console.log("done");
 
 			DbPlayer.update(player.id(), player, function() {});
 

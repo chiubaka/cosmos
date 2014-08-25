@@ -269,10 +269,7 @@ var BlockGrid = IgeEntity.extend({
 					this.destroy();
 				}
 
-				console.log("result");
-				console.log(result);
 				return result;
-
 				break;
 			case 'damage':
 				var block = this.get(new IgePoint2d(data.col, data.row))[0];
@@ -315,9 +312,6 @@ var BlockGrid = IgeEntity.extend({
 				}
 
 				ige.network.send('blockAction', data);
-
-				console.log("result::");
-				console.log(result);
 				return result;
 			case 'add':
 				var location = new IgePoint2d(data.col, data.row);
