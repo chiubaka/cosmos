@@ -363,10 +363,13 @@ var ServerNetworkEvents = {
 
 				var extractedBlocks = player.currentShip().cargo.addBlock(blocksRemoved[0].classId());
 			} else {
-				//TODO make an appropriate alertify error
+				//TODO make an appropriate alertify error.
+				// Let the user know that they can't deconstruct their own bridge
 			}
 		} else {
 			//TODO make an appropriate alertify error
+			// Let the user know they they can't deconstruct other players or asteroids.
+			// They have to mine them.
 		}
 	}
 };
