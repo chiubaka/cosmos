@@ -21,6 +21,20 @@ var GameInit = {
 		this.initBlocks();
 
 		if (ige.isServer) {
+			var opts = {
+				point1X: 1,
+				point1Y: 2,
+				point2X: 3,
+				point2Y: 4,
+				ignoreBodyIds: ['a', 'b', 'c'],
+				ignoreBodyCategories: ['c_1', 'c_2'],
+				callback: testCallback
+			}
+			function testCallback (data) {
+				console.log(data);
+			}
+			ige.physicsSystem.newRayCast(opts);
+
 			this.initEnvironment();
 			this.initPhysics();
 			this.initServerEvents();
