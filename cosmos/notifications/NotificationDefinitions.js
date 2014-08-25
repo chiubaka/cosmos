@@ -26,7 +26,9 @@ var NotificationDefinitions = {
 		crafting_insufficientReactants: 10,
 		crafting_insufficientEquipment: 11,
 		crafting_insufficientCargoSpace: 12,
-		alreadyLoggedIn: 13
+		alreadyLoggedIn: 13,
+		constructing_deconstructing_bridge: 14,
+		constructing_deconstructing_otherBlockGrid: 15
 	},
 
 	errors: {
@@ -41,7 +43,9 @@ var NotificationDefinitions = {
 		10: 'Insufficient reactants!',
 		11: 'Insufficient ship equipment!',
 		12: 'Insufficient cargo space!',
-		13: 'This account is already playing the game elsewhere!'
+		13: 'This account is already playing the game elsewhere!',
+		14: 'Cannot deconstruct your own bridge. This would result in death.',
+		15: 'Cannot deconstruct other ships or asteroids. You have to mine them.'
 	},
 
 	successKeys: {
