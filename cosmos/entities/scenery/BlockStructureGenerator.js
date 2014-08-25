@@ -18,7 +18,7 @@ var BlockStructureGenerator = {
 	 * @memberof BlockStructureGenerator
 	 */
 	genProceduralAsteroid: function(numLayers, blockDistribution, symmetric,
-		translate, callback) {
+		 callback) {
 		// Whether or not to generate a symmetric asteroid
 		symmetric = symmetric || false;
 
@@ -30,8 +30,7 @@ var BlockStructureGenerator = {
 		var blockStructure = new GeneratedBlockStructure({
 			numLayers: numLayers,
 			blockDistribution: blockDistribution,
-			symmetric: symmetric,
-			translate: translate
+			symmetric: symmetric
 		});
 
 		// Start the generation algorithm at a specific cell in the asteroid.
