@@ -354,12 +354,17 @@ var ServerNetworkEvents = {
 
 		var blockGrid = ige.$(data.blockGridId);
 		if (blockGrid === player.currentShip()) {
-			data.action = 'remove';
-			var blocksRemoved = blockGrid.processBlockActionServer(data, player);
+			if (blockGrid.get(new IgePoint2d(data.col, data.row))[0].classId() !== "BridgeBlock") {
 
-			DbPlayer.update(player.id(), player, function() {});
+				data.action = 'remove';
+				var blocksRemoved = blockGrid.processBlockActionServer(data, player);
 
-			var extractedBlocks = player.currentShip().cargo.addBlock(blocksRemoved[0].classId());
+				DbPlayer.update(player.id(), player, function() {});
+
+				var extractedBlocks = player.currentShip().cargo.addBlock(blocksRemoved[0].classId());
+			} else {
+				//TODO make an appropriate alertify error
+			}
 		} else {
 			//TODO make an appropriate alertify error
 		}
