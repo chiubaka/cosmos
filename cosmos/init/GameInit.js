@@ -256,9 +256,19 @@ var GameInit = {
 	},
 
 	spawnStructure: function(numLayers, blockDistribution, symmetric) {
+		// Create a structure within a 10,000 x 10,000 box centered at (0,0)
+		var transactionalOpts = {
+			viableAabbWidth: 10000,
+			viableAabbHeight: 10000,
+			viableX: 0,
+			viableY: 0,
+			numRetries: 10,
+			callback: handleTransactionResult
+		}
+
 		var structure = BlockStructureGenerator
 			.genProceduralAsteroid(numLayers, blockDistribution, symmetric,
-				handleTransactionResult);
+				transactionalOpts);
 
 		// TODO: @Eric Race condition where structure may not be uninitialized
 		// before this callback is called.
