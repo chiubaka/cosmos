@@ -113,6 +113,7 @@ var ConstructCapability = Capability.extend({
 			ige.notification.emit('notificationError',
 				NotificationDefinitions.errorKeys.noItemTypeSelected);
 		}
+
 		return (ige.client.state.selectedCap() === 'construct' &&
 			ige.hud.leftToolbar.windows.cargo.selectedType !== undefined);
 	},
