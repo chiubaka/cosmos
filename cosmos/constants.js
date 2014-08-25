@@ -2,6 +2,8 @@
  * Cosmos game constants should be stored in this central location
  */
 var Constants = {
+	RATIO_BETWEEN_GAME_THRUST_AND_DISPLAYED_THRUST: 10000,
+
 	fps: {
 		CLIENT_FPS: 30,
 		SERVER_FPS: 20

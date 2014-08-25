@@ -90,7 +90,7 @@ var Inspector = IgeEventingClass.extend({
 
 		if (block.thrust instanceof Thrust) {
 			this.blockInspector.find('#block-stat-thrust').show();
-			this.blockInspectorThrust.text(block.thrust.value);
+			this.blockInspectorThrust.text(Constants.RATIO_BETWEEN_GAME_THRUST_AND_DISPLAYED_THRUST * block.thrust.value);
 		}
 
 		var canvas = this.blockInspectorTexture[0];
