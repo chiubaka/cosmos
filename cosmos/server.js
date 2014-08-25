@@ -57,6 +57,8 @@ var Server = IgeClass.extend({
 						ige.network.define('constructNew', self._onConstructNew);
 						/* Called when player clicks on a construction zone */
 						ige.network.define('constructionZoneClicked', self._onConstructionZoneClicked);
+						/* Called when player clicks on a deconstruction zone */
+						ige.network.define('deconstructionZoneClicked', self._onDeconstructionZoneClicked);
 
 						/* Define these commands so that we can use them on the client */
 						ige.network.define('blockAction');

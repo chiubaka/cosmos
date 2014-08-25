@@ -42,20 +42,20 @@ var BlockStructure = BlockGrid.extend({
 	 * @todo Don't make the assumption that mouseDown on a {@link BlockStructure} means mining a {@link Block}.
 	 */
 	_blockClickHandler: function(block, event, control) {
-		if (ige.client.state.currentCapability().classId() !== MineCapability.prototype.classId()) {
-			return;
-		}
-		if (this.objectHasNeighboringOpenLocations(block)) {
-			// TODO: This might be dangerous, since some of the event properties should be changed so that they are
-			// relative to the child's bounding box, but since we don't use any of those properties for the moment,
-			// ignore that.
+		if (ige.client.state.currentCapability().classId() === MineCapability.prototype.classId()) {
+			if (this.objectHasNeighboringOpenLocations(block)) {
+				// TODO: This might be dangerous, since some of the event properties should be changed so that they are
+				// relative to the child's bounding box, but since we don't use any of those properties for the moment,
+				// ignore that.
+				block.mouseDown(event, control);
+			} else {
+				// Notify player that block is not minable
+				ige.notification.emit('notificationError',
+					NotificationDefinitions.errorKeys.notMinable);
+			}
+		} else if (ige.client.state.currentCapability().classId() === ConstructCapability.prototype.classId()) {
 			block.mouseDown(event, control);
-		}
-		else {
-			// Notify player that block is not minable
-			ige.notification.emit('notificationError',
-				NotificationDefinitions.errorKeys.notMinable);
-		}
+		} // there are no other capabilities that we have to handle
 	},
 
 	put: function(block, location, replace) {
@@ -79,7 +79,7 @@ var BlockStructure = BlockGrid.extend({
 	 */
 	processBlockActionServer: function(data, player) {
 		// TODO: Handle parent's return.
-		BlockGrid.prototype.processBlockActionServer.call(this, data, player);
+		var result = BlockGrid.prototype.processBlockActionServer.call(this, data, player);
 		var self = this;
 
 		switch (data.action) {
@@ -128,7 +128,7 @@ var BlockStructure = BlockGrid.extend({
 				}, Block.MINING_INTERVAL / player.currentShip().weapons().length);
 				return true;
 			default:
-				return false;
+				return result;
 		}
 	},
 

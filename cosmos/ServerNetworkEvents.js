@@ -343,8 +343,34 @@ var ServerNetworkEvents = {
 
 			DbPlayer.update(player.id(), player, function() {});
 		}
-	}
+	},
 
+	_onDeconstructionZoneClicked: function(data, clientId) {
+		var player = ige.server.players[clientId];
+		if (player === undefined) {
+			console.log("Cannot deconstruct, player is undefined");
+			return;
+		}
+
+		var blockGrid = ige.$(data.blockGridId);
+		if (blockGrid === player.currentShip()) {
+			data.action = 'remove';
+			var blocksRemoved = blockGrid.processBlockActionServer(data, player);
+			console.log("blocksRemoved:");
+			console.log(blocksRemoved);
+			console.log("[0]");
+			console.log(blocksRemoved[0]);
+			console.log("[0].classId()");
+			console.log(blocksRemoved[0].classId());
+			console.log("done");
+
+			DbPlayer.update(player.id(), player, function() {});
+
+			var extractedBlocks = player.currentShip().cargo.addBlock(blocksRemoved[0].classId());
+		} else {
+			//TODO make an appropriate alertify error
+		}
+	}
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = ServerNetworkEvents; }

@@ -35,8 +35,14 @@ var ConstructCapability = Capability.extend({
 					conditionFunc: this.ConstructionOverlay_canMouseDown,
 					actionFunc: this.ConstructionOverlay_mouseDown
 				}
+			},
+			'Block': {
+				'mousedown': {
+					capability: this,
+					conditionFunc: this.Block_canMouseDown,
+					actionFunc: this.Block_mouseDown
+				}
 			}
-			// TODO: Implement construction on existing block grids here.
 		};
 	},
 
@@ -100,6 +106,31 @@ var ConstructCapability = Capability.extend({
 	},
 
 	/**
+	* Checks to see if the player has the construct cap selected
+	* @param sender {Object} an entity upon which an event was triggered
+	* @param event {Object} the triggering event
+	* @param data {Object} provided data that can be used in conditionFunc
+	* @memberof ConstructCapability
+	* @instance
+	*/
+	Block_canMouseDown: function(sender, event, data) {
+		return (ige.client.state.selectedCap() === 'construct');
+	},
+
+	/**
+	* Sends a command to the server to collect the block at the point clicked into the cargo.
+	* @param sender {Object} an entity upon which an event was triggered
+	* @param event {Object} the triggering event
+	* @param data {Object} provided data that can be used in actionFunc
+	* @memberof ConstructCapability
+	* @instance
+	*/
+	Block_mouseDown: function(sender, event, data) {
+		ige.client.metrics.track('cosmos:construct.attempt.deconstruct');
+		ige.network.send('deconstructionZoneClicked', data);
+	},
+
+	/**
 	 * Checks to see if the player has the construct cap selected and an itemType selected.
 	 * @param sender {Object} an entity upon which an event was triggered
 	 * @param event {Object} the triggering event
@@ -113,6 +144,7 @@ var ConstructCapability = Capability.extend({
 			ige.notification.emit('notificationError',
 				NotificationDefinitions.errorKeys.noItemTypeSelected);
 		}
+
 		return (ige.client.state.selectedCap() === 'construct' &&
 			ige.hud.leftToolbar.windows.cargo.selectedType !== undefined);
 	},
@@ -129,6 +161,7 @@ var ConstructCapability = Capability.extend({
 		data.selectedType = ige.hud.leftToolbar.windows.cargo.selectedType;
 		ige.client.metrics.track('cosmos:construct.attempt.existing',
 			{'type': ige.hud.leftToolbar.windows.cargo.selectedType});
+
 		ige.network.send('constructionZoneClicked', data);
 	}
 });
