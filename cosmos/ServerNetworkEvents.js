@@ -205,6 +205,11 @@ var ServerNetworkEvents = {
 			return;
 		}
 
+		// Don't let players relocate if their ship is dead.
+		if (!(player.currentShip().controllable())) {
+			return;
+		}
+
 		player.currentShip().relocate();
 		ige.network.stream.queueCommand('notificationSuccess',
 			NotificationDefinitions.successKeys.relocateShip, clientId);
