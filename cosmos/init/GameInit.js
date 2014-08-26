@@ -24,21 +24,6 @@ var GameInit = {
 			this.initEnvironment();
 			this.initPhysics();
 			this.initServerEvents();
-			/* Example ray cast usage
-			var opts = {
-				point1X: -9000,
-				point1Y: -9000,
-				point2X: 9000,
-				point2Y: 9000,
-				ignoreBodyIds: ['a', 'b', 'c'],
-				ignoreBodyCategories: ['c_1', 'c_2'],
-				callback: testCallback
-			}
-			function testCallback (data) {
-				console.log(data);
-			}
-			ige.physicsSystem.newRayCast(opts);
-			*/
 		} else {
 			this.initPlayerState();
 			this.initPlayerControls();
