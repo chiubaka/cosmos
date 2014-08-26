@@ -24,6 +24,7 @@ var GameInit = {
 			this.initEnvironment();
 			this.initPhysics();
 			this.initServerEvents();
+			/* Example ray cast usage
 			var opts = {
 				point1X: -9000,
 				point1Y: -9000,
@@ -37,7 +38,7 @@ var GameInit = {
 				console.log(data);
 			}
 			ige.physicsSystem.newRayCast(opts);
-
+			*/
 		} else {
 			this.initPlayerState();
 			this.initPlayerControls();
