@@ -19,7 +19,7 @@ var BlockStructureGenerator = {
 	 * @memberof BlockStructureGenerator
 	 */
 	genProceduralAsteroid: function(numLayers, blockDistribution, symmetric,
-			transactionalOpts) {
+		transactionalOpts) {
 		// Whether or not to generate a symmetric asteroid
 		symmetric = symmetric || false;
 
