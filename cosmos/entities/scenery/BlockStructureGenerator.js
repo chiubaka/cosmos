@@ -5,6 +5,7 @@
  * @typedef {Object} BlockStructureGenerator
  * @namespace
  */
+
 var BlockStructureGenerator = {
 
 	/**
