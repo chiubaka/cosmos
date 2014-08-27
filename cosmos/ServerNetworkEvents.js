@@ -205,6 +205,11 @@ var ServerNetworkEvents = {
 			return;
 		}
 
+		// Don't let players relocate if their ship is dead.
+		if (!(player.currentShip().controllable())) {
+			return;
+		}
+
 		player.currentShip().relocate();
 		ige.network.stream.queueCommand('notificationSuccess',
 			NotificationDefinitions.successKeys.relocateShip, clientId);
@@ -343,11 +348,17 @@ var ServerNetworkEvents = {
 			return;
 		}
 
+		var blockGrid = ige.$(data.blockGridId);
+
+		// Prevent construction of other people's ships
+		if ((blockGrid instanceof Ship) && (blockGrid !== player.currentShip())) {
+			return;
+		}
+
 		// TODO: This extracts a block from the cargo and throws it away. Should use the result of this in the future!
 		var extractedBlocks = player.currentShip().cargo.extractType(data.selectedType);
 
 		if (extractedBlocks.length > 0) {
-			var blockGrid = ige.$(data.blockGridId);
 			data.action = 'add';
 			blockGrid.processBlockActionServer(data, player);
 
