@@ -6,8 +6,6 @@ var Laser = Weapon.extend({
 	},
 
 	firingUpdate: function() {
-		console.log("Laser#firingUpdate");
-
 		if (!this.damageSource.isFiring) {
 			this.log("Laser#firingUpdate: called on a non-firing weapon.", "error");
 		}
@@ -21,22 +19,14 @@ var Laser = Weapon.extend({
 		var targetLoc = this.damageSource.target;
 
 		var delta = {x: targetLoc.x - laserLoc.x, y: targetLoc.y - laserLoc.y};
-		var distance = Math.sqrt(delta.x * delta.x + delta.y * delta.y);
 		var theta = Math.atan2(delta.y, delta.x);
 
-		console.log("Laser loc: ");
-		console.log(laserLoc);
+		var inRangeLoc = targetLoc;
 
-		console.log("Target loc:");
-		console.log(targetLoc);
-
-		var inRangeLoc = {
+		/*var inRangeLoc = {
 			x: this.damageSource.range * Math.acos(theta) + laserLoc.x,
 			y: this.damageSource.range * Math.asin(theta) + laserLoc.y
-		};
-
-		console.log("In range loc: ");
-		console.log(inRangeLoc);
+		};*/
 
 		var opts = {
 			point1X: laserLoc.x,
@@ -49,7 +39,7 @@ var Laser = Weapon.extend({
 
 		var self = this;
 		ige.physicsSystem.newRayCast(opts, function(data) {
-			var intersectionPoint = inRangeLoc;
+			var intersectionPoint = {x: inRangeLoc.x, y: inRangeLoc.y};
 			var hitBlock = null;
 
 			_.forEach(data, function(intersected) {
@@ -59,10 +49,11 @@ var Laser = Weapon.extend({
 						hitBlock.classId(), "error");
 				}
 
-				if (hitBlock.health.value > 0) {
+				console.log("Laser#firingUpdate: hit " + hitBlock.classId() + ": " + hitBlock.health.value);
+				/*if (hitBlock.health.value <= 0) {
 					// Continue
 					return;
-				}
+				}*/
 
 				intersectionPoint.x = intersected.pointX;
 				intersectionPoint.y = intersected.pointY;
@@ -74,7 +65,7 @@ var Laser = Weapon.extend({
 			if (hitBlock) {
 				// TODO: Change health on client
 				hitBlock.takeDamage(self.damageSource.damage
-					* Constants.UPDATE_TIME.SERVER / self.damageSource.duration,
+					/** Constants.UPDATE_TIME.SERVER / self.damageSource.duration*/,
 					self.gridData.grid.player());
 			}
 
@@ -82,7 +73,7 @@ var Laser = Weapon.extend({
 			self.damageSource.durationFired += Constants.UPDATE_TIME.SERVER;
 
 			/* If we have fired for as long as we were supposed to, shut off the weapon. */
-			if (self.damageSource.durationFired > self.damageSource.duration) {
+			/*if (self.damageSource.durationFired > self.damageSource.duration) {
 				self.damageSource.isFiring = false;
 				//self.damageSource.onCooldown = true;
 				// TODO: Start cooldown timer.
@@ -101,7 +92,7 @@ var Laser = Weapon.extend({
 				};
 
 				ige.network.send("cosmos:Laser.render", renderData);
-			}
+			}*/
 		});
 	},
 
