@@ -499,7 +499,7 @@ var Block = IgeEntity.extend({
 
 		this.emit('cosmos:block.hp.changed', this.hp());
 
-		if (this.health.value < 0) {
+		if (this.health.value <= 0) {
 			this.onDeath(player);
 		}
 	},

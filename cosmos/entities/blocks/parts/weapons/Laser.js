@@ -49,11 +49,10 @@ var Laser = Weapon.extend({
 						hitBlock.classId(), "error");
 				}
 
-				console.log("Laser#firingUpdate: hit " + hitBlock.classId() + ": " + hitBlock.health.value);
-				/*if (hitBlock.health.value <= 0) {
+				if (hitBlock.health.value <= 0) {
 					// Continue
 					return;
-				}*/
+				}
 
 				intersectionPoint.x = intersected.pointX;
 				intersectionPoint.y = intersected.pointY;
