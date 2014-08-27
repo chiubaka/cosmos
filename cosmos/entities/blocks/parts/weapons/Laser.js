@@ -15,7 +15,6 @@ var Laser = Weapon.extend({
 			this.log("Laser#firingUpdate: error getting world coordinates of laser.", "error");
 		}
 
-		// TODO: Constrain ray cast to a point inside the range of the laser.
 		var targetLoc = this.damageSource.target;
 
 		var delta = {x: targetLoc.x - laserLoc.x, y: targetLoc.y - laserLoc.y};
@@ -23,6 +22,7 @@ var Laser = Weapon.extend({
 
 		var inRangeLoc = targetLoc;
 
+		// TODO: Compute the point on the edge of the range that is inline with the target
 		/*var inRangeLoc = {
 			x: this.damageSource.range * Math.acos(theta) + laserLoc.x,
 			y: this.damageSource.range * Math.asin(theta) + laserLoc.y
@@ -62,17 +62,25 @@ var Laser = Weapon.extend({
 			});
 
 			if (hitBlock) {
-				// TODO: Change health on client
-				hitBlock.takeDamage(self.damageSource.damage
-					* Constants.UPDATE_TIME.SERVER / self.damageSource.duration,
-					self.gridData.grid.player());
+				var damage = self.damageSource.damage * Constants.UPDATE_TIME.SERVER
+					/ self.damageSource.duration;
+
+				ige.network.send("blockAction", {
+					action: "damage",
+					blockGridId: hitBlock.gridData.grid.id(),
+					col: hitBlock.gridData.loc.x,
+					row: hitBlock.gridData.loc.y,
+					amount: damage
+				});
+
+				hitBlock.takeDamage(damage, self.gridData.grid.player());
 			}
 
 			/* Increment duration fired/ */
 			self.damageSource.durationFired += Constants.UPDATE_TIME.SERVER;
 
 			/* If we have fired for as long as we were supposed to, shut off the weapon. */
-			/*if (self.damageSource.durationFired > self.damageSource.duration) {
+			if (self.damageSource.durationFired > self.damageSource.duration) {
 				self.damageSource.isFiring = false;
 				//self.damageSource.onCooldown = true;
 				// TODO: Start cooldown timer.
@@ -91,7 +99,7 @@ var Laser = Weapon.extend({
 				};
 
 				ige.network.send("cosmos:Laser.render", renderData);
-			}*/
+			}
 		});
 	},
 
