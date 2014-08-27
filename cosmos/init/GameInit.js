@@ -256,12 +256,19 @@ var GameInit = {
 	},
 
 	spawnStructure: function(numLayers, blockDistribution, symmetric) {
-		// TODO: @Eric Remove support for initial translate because this has been
-		// obsoleted by transactional fixtures.
-		var translate = new IgePoint2d(0,0);
+		// Create a structure within a 10,000 x 10,000 box centered at (0,0)
+		var transactionalOpts = {
+			viableAabbWidth: 10000,
+			viableAabbHeight: 10000,
+			viableX: 0,
+			viableY: 0,
+			numRetries: 10,
+			callback: handleTransactionResult
+		}
+
 		var structure = BlockStructureGenerator
 			.genProceduralAsteroid(numLayers, blockDistribution, symmetric,
-				translate, handleTransactionResult);
+				transactionalOpts);
 
 		// TODO: @Eric Race condition where structure may not be uninitialized
 		// before this callback is called.
@@ -497,15 +504,6 @@ var GameInit = {
 		ige.watchStart(client.custom2);
 		ige.watchStart(client.custom3);
 		ige.watchStart(client.custom4);
-	},
-
-	// TODO: @Eric replace this function because it has been obsolted by
-	// transactional fixtures
-	getRandomLocation: function () {
-		// The maximum distance that we will translate entities to
-		var MAX_DISTANCE = 10000;
-		return new IgePoint2d((Math.random() - 0.5) * MAX_DISTANCE,
-			(Math.random() - 0.5) * MAX_DISTANCE);
 	},
 
 };

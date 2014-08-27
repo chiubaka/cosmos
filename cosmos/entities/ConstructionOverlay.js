@@ -28,13 +28,15 @@ var ConstructionOverlay = IgeEntity.extend({
 		var self = this;
 		ige.on('capbar cap selected', function(classId) {
 			if (classId === 'ConstructCap') {
-				self.refresh();
-				self.show();
+				if (self._structure === ige.client.player.currentShip() || !(self._structure instanceof Ship)) {
+					self.refresh();
+					self.show();
+				}
 			} else {
 				self.hide();
 			}
 		});
-		
+
 		ige.on('capbar cap cleared', function(classId) {
 			if (classId === 'ConstructCap') {
 				self.hide();
