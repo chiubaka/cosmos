@@ -372,6 +372,8 @@ var BlockGrid = IgeEntity.extend({
 
 		this._translateContainers();
 
+		block.onPut();
+
 		return previousBlocks;
 	},
 

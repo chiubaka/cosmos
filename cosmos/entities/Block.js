@@ -225,14 +225,14 @@ var Block = IgeEntity.extend({
 	},
 
 	/**
-	 * Called just after this {@link Block} has been added to a {@link BlockGrid}. Default is just a stub since the
-	 * basic {@link Block} does nothing when added to a {@link BlockGrid}. Override this function in subclasses of
-	 * the {@link Block} to do things like add effects to all {@link Block}s of a certain type.
+	 * Called just after this {@link Block} has been placed in a {@link BlockGrid}.
 	 * @memberof BlockGrid
 	 * @instance
 	 */
-	onAdded: function() {
-
+	onPut: function() {
+		if (ige.isClient) {
+			this.addEffect({type: 'healthBar'});
+		}
 	},
 
 	/**
@@ -243,7 +243,9 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	onRemoved: function() {
-
+		if (ige.isClient) {
+			this.removeEffect({type: 'healthBar'});
+		}
 	},
 
 	/**
@@ -488,12 +490,6 @@ var Block = IgeEntity.extend({
 	 */
 	takeDamage: function(amount, player) {
 		this.health.decrease(amount);
-
-		if (!ige.isServer) {
-			if (this._healthBar === undefined) {
-				this.addEffect({type: 'healthBar'});
-			}
-		}
 
 		this.emit('cosmos:block.hp.changed', this.hp());
 

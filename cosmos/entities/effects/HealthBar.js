@@ -20,7 +20,17 @@ var HealthBar = IgeEntity.extend({
 		this._block = block;
 
 		//this.texture(ige.client.textures.healthBar);
-		// TODO: Add PixiRenderableComponent for health bars
+		this.addComponent(HealthBarRenderableComponent, {
+			createDisplayObject: function() {
+				var graphic = new PIXI.Graphics();
+
+				console.log("Block width: " + block.width());
+				console.log("Graphic width: " + graphic.width);
+				//graphic.width = block.width();
+
+				return graphic;
+			}
+		});
 	}
 
 });

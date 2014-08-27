@@ -122,6 +122,7 @@ var igeClientConfig = {
 		'./components/Recipe.js',
 		'./components/Thrust.js',
 		'./components/ConstructionOverlayRenderableComponent.js',
+		'./components/HealthBarRenderableComponent.js',
 		'./components/ParallaxBackgroundRenderableComponent.js',
 		'./components/LaserBeamRenderableComponent.js',
 		'./components/ParticleRenderableComponent.js',
