@@ -23,11 +23,14 @@ var ClientNetworkEvents = {
 
 		ige.client.player.hasGuestUsername = data.hasGuestUsername;
 
-		ige.client.metrics.identify(data.username, {
-			loggedIn: data.loggedIn,
-			hasGuestUsername: data.hasGuestUsername,
-			username: data.username
-		});
+		// We can't afford to create Mixpanel profiles for guest users.
+		if (!data.hasGuestUsername) {
+			ige.client.metrics.identify(data.username, {
+				loggedIn: data.loggedIn,
+				hasGuestUsername: data.hasGuestUsername,
+				username: data.username
+			});
+		}
 
 		// Set the time stream UI entity to monitor our player entity
 		// time stream data
