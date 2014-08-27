@@ -65,7 +65,7 @@ var Laser = Weapon.extend({
 			if (hitBlock) {
 				// TODO: Change health on client
 				hitBlock.takeDamage(self.damageSource.damage
-					/** Constants.UPDATE_TIME.SERVER / self.damageSource.duration*/,
+					* Constants.UPDATE_TIME.SERVER / self.damageSource.duration,
 					self.gridData.grid.player());
 			}
 
