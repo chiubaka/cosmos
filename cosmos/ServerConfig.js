@@ -41,7 +41,8 @@ var config = {
 
 		/* Weapons */
 		{ name: 'Weapon', path: './entities/blocks/parts/Weapon' },
-		{ name: 'MiningLaserBlock', path: './entities/blocks/parts/weapons/MiningLaserBlock' },
+		{ name: 'Laser', path: './entities/blocks/parts/weapons/Laser' },
+		{ name: 'MiningLaserBlock', path: './entities/blocks/parts/weapons/lasers/MiningLaserBlock' },
 
 		/* Ship armor blocks */
 		{ name: 'Armor', path: './entities/blocks/parts/Armor' },

@@ -3,6 +3,7 @@ var DamageSource = IgeClass.extend({
 	componentId: 'damageSource',
 
 	dps: undefined,
+	target: undefined,
 
 	init: function(entity, data) {
 		if (data === undefined || data.dps === undefined) {

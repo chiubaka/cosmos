@@ -78,9 +78,11 @@ var MineCapability = Capability.extend({
 	 * @instance
 	 */
 	ClickScene_canMouseDown: function(sender, event, data) {
-		ige.notification.emit('notificationError',
-			NotificationDefinitions.errorKeys.noMineEmptySpace);
-		return false;
-	},
+		// TODO: Fire lasers individually-- understand which laser is selected. For now, all lasers
+		// are fired together.
 
+		_.forEach(ige.client.player.currentShip().weapons(), function(weapon) {
+			weapon.fireClient(data);
+		});
+	}
 });

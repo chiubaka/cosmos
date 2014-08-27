@@ -245,6 +245,16 @@ var ServerNetworkEvents = {
 		player.controls(data);
 	},
 
+	_fire: function(data, clientId) {
+		var weapon = ige.$(data.id);
+		if (!weapon) {
+			console.log('ServerNetworkEvents#_fire: undefined weapon id: ' + data.id);
+			return;
+		}
+
+		weapon.fireServer(data);
+	},
+
 	// TODO: User access control. Restrict what players can do based on clientId
 	// TODO: Guard against undefined blocks (do not trust client) so server doesn't crash
 	_onMineBlock: function(data, clientId) {

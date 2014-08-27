@@ -49,7 +49,8 @@ var igeClientConfig = {
 
 		/* Weapons */
 		'./entities/blocks/parts/Weapon.js',
-		'./entities/blocks/parts/weapons/MiningLaserBlock.js',
+		'./entities/blocks/parts/weapons/Laser.js',
+		'./entities/blocks/parts/weapons/lasers/MiningLaserBlock.js',
 
 		/* Ship armor blocks */
 		'./entities/blocks/parts/Armor.js',

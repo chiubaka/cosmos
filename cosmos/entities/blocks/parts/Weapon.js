@@ -14,6 +14,14 @@ var Weapon = Part.extend({
 		Part.prototype.init.call(this, data);
 		// TODO: Determine dps value based on subclass
 		this.addComponent(DamageSource, {dps: 10});
+	},
+
+	fireClient: function(targetLoc) {
+		IgeClass.abstractMethodError('fireClient');
+	},
+
+	fireServer: function(data) {
+		IgeClass.abstractMethodError('fireServer');
 	}
 });
 

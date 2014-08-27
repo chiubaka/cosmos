@@ -49,6 +49,7 @@ var Block = IgeEntity.extend({
 			|| this.classId() === "EngineBlock"
 			|| this.classId() === "ThrusterBlock"
 			|| this.classId() === "Weapon"
+			|| this.classId() === "Laser"
 			|| this.classId() === "Resource"
 			// TODO: The Element class won't be abstract soon!
 			|| this.classId() === "Element";
@@ -518,6 +519,7 @@ var Block = IgeEntity.extend({
 
 	toJSON: function() {
 		return {
+			id: this.id(),
 			type: this.classId(),
 			gridData: this.gridData.toJSON()
 		}
@@ -608,6 +610,7 @@ Block.fromJSON = function(json) {
 		block = Block.fromType(json.type);
 	}
 
+	block.id(json.id);
 	block.gridData.loc = new IgePoint2d(json.gridData.loc.x, json.gridData.loc.y);
 	return block;
 };
