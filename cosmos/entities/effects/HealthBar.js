@@ -19,14 +19,12 @@ var HealthBar = IgeEntity.extend({
 		IgeEntity.prototype.init.call(this);
 		this._block = block;
 
-		//this.texture(ige.client.textures.healthBar);
 		this.addComponent(HealthBarRenderableComponent, {
 			createDisplayObject: function() {
 				var graphic = new PIXI.Graphics();
 
 				console.log("Block width: " + block.width());
 				console.log("Graphic width: " + graphic.width);
-				//graphic.width = block.width();
 
 				return graphic;
 			}
