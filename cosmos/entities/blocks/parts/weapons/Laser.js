@@ -3,8 +3,6 @@ var Laser = Weapon.extend({
 
 	init: function(data) {
 		Weapon.prototype.init.call(this, data);
-		// TODO: Determine dps value based on subclass
-		this.addComponent(DamageSource, {dps: 10});
 	},
 
 	fireClient: function(targetLoc) {
@@ -18,6 +16,7 @@ var Laser = Weapon.extend({
 
 	fireServer: function(data) {
 		console.log('Laser#fireServer');
+
 	}
 });
 

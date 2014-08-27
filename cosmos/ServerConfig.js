@@ -88,6 +88,7 @@ var config = {
 		{ name: 'BlockStructureGenerator', path: './entities/scenery/BlockStructureGenerator' },
 
 		/* === COMPONENT CONFIG FILES === */
+		{ name: 'DamageSources', path: './components/config/DamageSources' },
 		{ name: 'Descriptions', path: './components/config/Descriptions' },
 		{ name: 'Elements', path: './components/config/Elements' },
 		{ name: 'GridDimensions', path: './components/config/GridDimensions' },

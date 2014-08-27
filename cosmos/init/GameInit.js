@@ -48,7 +48,8 @@ var GameInit = {
 				&& globalContext[key]
 				&& globalContext[key].prototype
 				&& globalContext[key].prototype instanceof Block
-				&& !(globalContext[key].prototype.classId() === "Element"))
+				&& globalContext[key].prototype.classId() !== "Element"
+				&& globalContext[key].prototype.classId() !== "Laser")
 			{
 				cosmos.blocks.constructors[key] = globalContext[key];
 				var block = new globalContext[key]();
