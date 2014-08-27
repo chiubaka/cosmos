@@ -5,6 +5,7 @@ var DamageSource = IgeClass.extend({
 	cooldown: undefined,
 	damage: undefined,
 	duration: undefined,
+	durationFired: undefined,
 	isFiring: undefined,
 	onCooldown: undefined,
 	range: undefined,
@@ -21,6 +22,10 @@ var DamageSource = IgeClass.extend({
 		this.damage = data.damage;
 		this.duration = data.duration;
 		this.range = data.range;
+
+		this.durationFired = 0;
+		this.isFiring = false;
+		this.onCooldown = false;
 	}
 });
 

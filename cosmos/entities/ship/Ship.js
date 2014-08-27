@@ -83,6 +83,7 @@ var Ship = BlockStructure.extend({
 	*/
 	_thrusters: undefined,
 
+	_firingWeapons: undefined,
 	_weapons: undefined,
 
 	init: function(data) {
@@ -90,6 +91,7 @@ var Ship = BlockStructure.extend({
 		this._bridgeBlocks = [];
 		this._engines = [];
 		this._thrusters = [];
+		this._firingWeapons = [];
 		this._weapons = [];
 
 		this.category(Ship.BOX2D_CATEGORY);
@@ -155,6 +157,10 @@ var Ship = BlockStructure.extend({
 	// Getter for the _thrusters property
 	thrusters: function() {
 		return this._thrusters;
+	},
+
+	firingWeapons: function() {
+		return this._firingWeapons;
 	},
 
 	weapons: function() {
@@ -229,6 +235,12 @@ var Ship = BlockStructure.extend({
 		}
 		else if (block instanceof BridgeBlock) {
 			this.bridgeBlocks().splice(this.bridgeBlocks().indexOf(block), 1);
+		}
+
+		var index = this.firingWeapons().indexOf(block);
+		if (index !== -1) {
+			this.firingWeapons()[index].damageSource.isFiring = false;
+			this.firingWeapons().splice(index, 1);
 		}
 	},
 
@@ -420,6 +432,9 @@ var Ship = BlockStructure.extend({
 		BlockStructure.prototype.update.call(this, ctx);
 
 		if (ige.isServer) {
+			/* Process Firing Weapons */
+			this.updateFiringWeapons();
+
 			/* Angular motion */
 			// Angular rotation speed depends on number of thrusters
 			if (this.controls().left || this.controls().right) {
@@ -507,6 +522,12 @@ var Ship = BlockStructure.extend({
 			// update
 			this._prev_controls = JSON.parse(JSON.stringify(this.controls()));
 		}
+	},
+
+	updateFiringWeapons: function() {
+		_.forEach(this.firingWeapons(), function(weapon) {
+			weapon.firingUpdate();
+		});
 	}
 });
 

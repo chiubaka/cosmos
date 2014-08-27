@@ -281,13 +281,13 @@ var Block = IgeEntity.extend({
 			row: loc.y
 		};
 
+		ige.network.send('blockAction', data);
+
 		// Drop block server side, then send drop msg to client
 		grid.drop(player, new IgePoint2d(loc.x, loc.y));
 		if (grid.count() === 0) {
 			grid.destroy();
 		}
-
-		ige.network.send('blockAction', data);
 	},
 
 	/**
@@ -488,7 +488,7 @@ var Block = IgeEntity.extend({
 	 * @memberof Block
 	 * @instance
 	 */
-	takeDamage: function(amount) {
+	takeDamage: function(amount, player) {
 		this.health.decrease(amount);
 
 		if (!ige.isServer) {
@@ -498,6 +498,10 @@ var Block = IgeEntity.extend({
 		}
 
 		this.emit('cosmos:block.hp.changed', this.hp());
+
+		if (this.health.value < 0) {
+			this.onDeath(player);
+		}
 	},
 
 	/**
@@ -598,7 +602,10 @@ Block.fromType = function(type) {
 
 Block.fromJSON = function(json) {
 	var block;
-	if (json.type === "Element") {
+	if (ige.$(json.id) instanceof Block) {
+		block = ige.$(json.id);
+	}
+	else if (json.type === "Element") {
 		block = new Element({
 			resource: json.resource,
 			purity: json.purity,
