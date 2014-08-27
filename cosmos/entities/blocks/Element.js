@@ -122,10 +122,11 @@ var Element = Block.extend({
 			// TODO: Create the resource that matches this Element and drop it.
 			var block = new cosmos.blocks.constructors[this.resource()]();
 			var dropCoordinates = grid.worldCoordinatesForBlock(this);
-			var drop = new Drop({owner: player.currentShip()})
+			var newDrop = new Drop({
+				owner: player.currentShip(),
+				translate: {x: dropCoordinates.x, y: dropCoordinates.y}
+			})
 				.block(block)
-				.translateTo(dropCoordinates.x, dropCoordinates.y, 0)
-				.rotateTo(0, 0, grid.rotate().z())
 				.streamMode(1)
 				.mount(ige.server.spaceGameScene);
 
