@@ -22,7 +22,8 @@ var HealthBar = IgeEntity.extend({
 		this.addComponent(HealthBarRenderableComponent, {
 			createDisplayObject: function() {
 				return new PIXI.Graphics();
-			}
+			},
+			anchor: new IgePoint2d(-block.width() / 2, -block.height() / 2)
 		});
 	}
 
