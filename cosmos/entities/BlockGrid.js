@@ -657,6 +657,10 @@ var BlockGrid = IgeEntity.extend({
 		this._blockClickHandler(block, event, control);
 	},
 
+	_blockClickHandler: function(block, event, control) {
+
+	},
+
 	/**
 	 * Overrides superclass function. This function makes it possible for the client to mirror the
 	 * calculations done on the server so that the two stay in sync all the time and no jumping

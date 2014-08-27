@@ -211,18 +211,16 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	mouseDown: function(event, control) {
-		var self = this;
 		// TOOD: Synchronize block ID's between server and client so that we can uniquely identify
 		// a block without referring to its block grid, row, and col.
 		var data = {
-			blockGridId: this.blockGrid().id(),
-			row: this.gridData.loc.y,
-			col: this.gridData.loc.x
+			x: this.mousePosWorld().x,
+			y: this.mousePosWorld().y
 		};
 
-		// TODO: Expand when clientState supports multiple current capabilities
-		if (ige.isClient && ige.client !== undefined && ige.client.state !== undefined) {
-			ige.client.state.currentCapability().tryPerformAction(self, event, data);
+		// TODO: Extend when clientState supports multiple current capabilities
+		if (ige.client.state !== undefined) {
+			ige.client.state.currentCapability().tryPerformAction(this, event, data);
 		}
 	},
 
@@ -499,7 +497,7 @@ var Block = IgeEntity.extend({
 
 		this.emit('cosmos:block.hp.changed', this.hp());
 
-		if (this.health.value <= 0) {
+		if (this.health.value <= 0 && ige.isServer) {
 			this.onDeath(player);
 		}
 	},
