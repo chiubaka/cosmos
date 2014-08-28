@@ -46,7 +46,12 @@ var Laser = Weapon.extend({
 						hitBlock.classId(), "error");
 				}
 
-				if (hitBlock.health.value <= 0) {
+				// Must check if grid is defined here. Theory is that the game server removes the
+				// block from the grid then makes a request to the Physics Server to destroy the
+				// associated fixture. Before the physics server destroys the fixture, it returns
+				// that fixture as a raycast intersection resulting in a block here that is not
+				// actually in a grid anymore.
+				if (hitBlock.health.value <= 0 || !hitBlock.gridData.grid) {
 					// Continue
 					return;
 				}
@@ -58,9 +63,13 @@ var Laser = Weapon.extend({
 				return false;
 			});
 
-			if (hitBlock) {
+			if (hitBlock && hitBlock.gridData.grid) {
 				var damage = self.damageSource.damage * Constants.UPDATE_TIME.SERVER
 					/ self.damageSource.duration;
+
+				if (!hitBlock.gridData.grid) {
+					console.log("Laser#firingUpdate: grid undefined for block: " + hitBlock.displayName());
+				}
 
 				ige.network.send("blockAction", {
 					action: "damage",
