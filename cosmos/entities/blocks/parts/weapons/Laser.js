@@ -34,7 +34,9 @@ var Laser = Weapon.extend({
 			point2X: inRangeLoc.x,
 			point2Y: inRangeLoc.y,
 			ignoreBodyIds: [this.gridData.grid.id()],
-			ignoreBodyCategories: [Drop.BOX2D_CATEGORY]
+			ignoreBodyCategories: [Drop.BOX2D_CATEGORY],
+			ignoreFixtureIds: [],
+			ignoreFixtureCategories: [Ship.ATTRACTOR_BOX2D_CATEGORY]
 		};
 
 		var self = this;
