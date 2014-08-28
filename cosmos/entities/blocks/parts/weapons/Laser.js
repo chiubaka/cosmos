@@ -81,6 +81,12 @@ var Laser = Weapon.extend({
 				self.damageSource.isFiring = false;
 				//self.damageSource.onCooldown = true;
 				// TODO: Start cooldown timer.
+				ige.network.send("cosmos:Weapon.cooldown.start", {id: self.id()});
+				self.damageSource.onCooldown = true;
+				setTimeout(function() {
+					ige.network.send("cosmos:Weapon.cooldown.end", {id: self.id()});
+					self.damageSource.onCooldown = false;
+				}, self.damageSource.cooldown);
 
 				self.gridData.grid.firingWeapons()
 					.splice(self.gridData.grid.firingWeapons().indexOf(this), 1);

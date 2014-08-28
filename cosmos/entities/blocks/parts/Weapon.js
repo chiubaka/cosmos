@@ -28,4 +28,24 @@ var Weapon = Part.extend({
 	}
 });
 
+Weapon.startCooldown = function(data) {
+	var weapon = ige.$(data.id);
+	if (!weapon) {
+		console.warn("Weapon#startCooldown: called with invalid weapon id: " + data.id);
+		return;
+	}
+
+	console.log("Weapon#startCooldown: " + weapon.classId());
+};
+
+Weapon.endCooldown = function(data) {
+	var weapon = ige.$(data.id);
+	if (!weapon) {
+		console.warn("Weapon#endCooldown: called with invalid weapon id: " + data.id);
+		return;
+	}
+
+	console.log("Weapon#endCooldown: " + weapon.classId());
+};
+
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Weapon; }
