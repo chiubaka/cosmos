@@ -79,18 +79,16 @@ var Laser = Weapon.extend({
 			/* If we have fired for as long as we were supposed to, shut off the weapon. */
 			if (self.damageSource.durationFired > self.damageSource.duration) {
 				self.damageSource.isFiring = false;
-				//self.damageSource.onCooldown = true;
-				// TODO: Start cooldown timer.
+				self.gridData.grid.firingWeapons()
+					.splice(self.gridData.grid.firingWeapons().indexOf(this), 1);
+
+				ige.network.send("cosmos:Laser.render.stop", {id: self.id()});
+
 				ige.network.send("cosmos:Weapon.cooldown.start", {id: self.id()});
 				self.damageSource.onCooldown = true;
 				setTimeout(function() {
 					self.damageSource.onCooldown = false;
 				}, self.damageSource.cooldown);
-
-				self.gridData.grid.firingWeapons()
-					.splice(self.gridData.grid.firingWeapons().indexOf(this), 1);
-
-				ige.network.send("cosmos:Laser.render.stop", {id: self.id()});
 			}
 			else {
 				var renderData = {
