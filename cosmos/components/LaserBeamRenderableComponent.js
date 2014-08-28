@@ -26,7 +26,8 @@ var LaserBeamRenderableComponent = PixiRenderableComponent.extend({
 
 		this._displayObject.height = distance * 2;
 		this._displayObject.blendMode = PIXI.blendModes.ADD;
-		this._displayObject.rotation = angle - this._entity._source.gridData.grid.rotate().z() + Math.radians(90);
+		this._displayObject.rotation = angle - this._entity._source.gridData.grid.
+			renderable._displayObject.rotation + Math.radians(90);
 	}
 });
 
