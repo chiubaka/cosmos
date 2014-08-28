@@ -7,7 +7,10 @@ var Laser = Weapon.extend({
 
 	firingUpdate: function() {
 		if (!this.damageSource.isFiring) {
-			this.log("Laser#firingUpdate: called on a non-firing weapon.", "error");
+			// TOOD: This case is being hit. Figure out why and fix it, because this should never
+			// happen.
+			this.log("Laser#firingUpdate: called on a non-firing weapon.", "warning");
+			return
 		}
 
 		var laserLoc = this.worldCoordinates();
