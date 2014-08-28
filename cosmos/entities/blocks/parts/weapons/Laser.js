@@ -20,13 +20,10 @@ var Laser = Weapon.extend({
 		var delta = {x: targetLoc.x - laserLoc.x, y: targetLoc.y - laserLoc.y};
 		var theta = Math.atan2(delta.y, delta.x);
 
-		var inRangeLoc = targetLoc;
-
-		// TODO: Compute the point on the edge of the range that is inline with the target
-		/*var inRangeLoc = {
-			x: this.damageSource.range * Math.acos(theta) + laserLoc.x,
-			y: this.damageSource.range * Math.asin(theta) + laserLoc.y
-		};*/
+		var inRangeLoc = {
+			x: this.damageSource.range * Math.cos(theta) + laserLoc.x,
+			y: this.damageSource.range * Math.sin(theta) + laserLoc.y
+		};
 
 		var opts = {
 			point1X: laserLoc.x,
@@ -91,7 +88,6 @@ var Laser = Weapon.extend({
 				ige.network.send("cosmos:Laser.render.stop", {id: self.id()});
 			}
 			else {
-				// TODO: Send the client information about how to render the laser
 				var renderData = {
 					id: self.id(),
 					targetLoc: intersectionPoint,
@@ -150,9 +146,6 @@ Laser.onRender = function(data) {
 	else {
 		this.laserBeam.setTarget(data.targetLoc.x, data.targetLoc.y);
 	}
-
-
-	console.log("Laser#onRender");
 };
 
 Laser.onRenderStop = function(data) {
@@ -162,8 +155,6 @@ Laser.onRenderStop = function(data) {
 	}
 	this.laserBeam.destroy();
 	delete this.laserBeam;
-
-	console.log("Laser#onRenderStop");
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
