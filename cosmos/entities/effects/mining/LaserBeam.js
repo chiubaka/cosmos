@@ -9,7 +9,8 @@ var LaserBeam = IgeEntity.extend({
 	classId: 'LaserBeam',
 
 	_source: undefined,
-	_target: undefined,
+	_targetX: undefined,
+	_targetY: undefined,
 
 	init: function (createData) {
 		IgeEntity.prototype.init.call(this);
@@ -64,8 +65,9 @@ var LaserBeam = IgeEntity.extend({
 	 * @memberof LaserBeam
 	 * @instance
  	 */
-	setTarget: function(block) {
-		this._target = block;
+	setTarget: function(x, y) {
+		this._targetX = x;
+		this._targetY = y;
 		return this;
 	}
 });

@@ -141,6 +141,17 @@ Laser.onRender = function(data) {
 		console.error("Laser#onRender: invalid laser id: " + data.id);
 	}
 
+	if (this.laserBeam === undefined) {
+		this.laserBeam = new LaserBeam()
+			.setSource(laser)
+			.setTarget(data.targetLoc.x, data.targetLoc.y)
+		laser._mountEffect(this.laserBeam, true);
+	}
+	else {
+		this.laserBeam.setTarget(data.targetLoc.x, data.targetLoc.y);
+	}
+
+
 	console.log("Laser#onRender");
 };
 
@@ -149,6 +160,8 @@ Laser.onRenderStop = function(data) {
 	if (!laser) {
 		console.error("Laser#onRenderStop: invalid laser id: " + data.id);
 	}
+	this.laserBeam.destroy();
+	delete this.laserBeam;
 
 	console.log("Laser#onRenderStop");
 };
