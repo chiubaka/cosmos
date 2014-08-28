@@ -35,7 +35,6 @@ Weapon.startCooldown = function(data) {
 		return;
 	}
 
-	console.log("Weapon#startCooldown: " + weapon.classId());
 	ige.hud.bottomToolbar.capBar.mineCap.startCooldown(weapon);
 };
 
