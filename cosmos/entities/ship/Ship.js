@@ -527,7 +527,9 @@ var Ship = BlockStructure.extend({
 	},
 
 	updateFiringWeapons: function() {
-		_.forEach(this.firingWeapons(), function(weapon) {
+		//console.log("Ship#updateFiringWeapons: " + this.firingWeapons().length);
+		var firingWeapons = this.firingWeapons().slice(0);
+		_.forEach(firingWeapons, function(weapon) {
 			weapon.firingUpdate();
 		});
 	}

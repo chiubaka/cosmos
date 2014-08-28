@@ -70,10 +70,6 @@ var Laser = Weapon.extend({
 				var damage = self.damageSource.damage * Constants.UPDATE_TIME.SERVER
 					/ self.damageSource.duration;
 
-				if (!hitBlock.gridData.grid) {
-					console.log("Laser#firingUpdate: grid undefined for block: " + hitBlock.displayName());
-				}
-
 				ige.network.send("blockAction", {
 					action: "damage",
 					blockGridId: hitBlock.gridData.grid.id(),
@@ -89,7 +85,7 @@ var Laser = Weapon.extend({
 			self.damageSource.durationFired += Constants.UPDATE_TIME.SERVER;
 
 			/* If we have fired for as long as we were supposed to, shut off the weapon. */
-			if (self.damageSource.durationFired > self.damageSource.duration) {
+			if (self.damageSource.durationFired >= self.damageSource.duration) {
 				self.gridData.grid.firingWeapons()
 					.splice(self.gridData.grid.firingWeapons().indexOf(this), 1);
 				self.damageSource.isFiring = false;
@@ -134,8 +130,8 @@ var Laser = Weapon.extend({
 		// laser's duration, but can retarget during that duration.
 		if (!this.damageSource.isFiring) {
 			this.damageSource.durationFired = 0;
-			this.gridData.grid.firingWeapons().push(this);
 			this.damageSource.isFiring = true;
+			this.gridData.grid.firingWeapons().push(this);
 		}
 
 		this.damageSource.target = data.targetLoc;
