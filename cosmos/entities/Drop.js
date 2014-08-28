@@ -84,6 +84,7 @@ var Drop = BlockGrid.extend({
 		}
 
 		this.put(newBlock, new IgePoint2d(0, 0), true);
+		newBlock.health.value = newBlock.health.max;
 		return this;
 	},
 
