@@ -173,10 +173,11 @@ var BlockGrid = IgeEntity.extend({
 			}
 
 			var dropCoordinates = self.worldCoordinatesForBlock(drop);
-			var newDrop = new Drop({owner: player.currentShip()})
+			var newDrop = new Drop({
+				owner: player.currentShip(),
+				translate: {x: dropCoordinates.x, y: dropCoordinates.y}
+			})
 				.block(drop)
-				.translateTo(dropCoordinates.x, dropCoordinates.y, 0)
-				.rotateTo(0, 0, theta)
 				.streamMode(1)
 				.mount(ige.server.spaceGameScene);
 		});

@@ -283,10 +283,8 @@ var Ship = BlockStructure.extend({
 	_initServer: function() {
 		this.cargo = new Cargo();
 
-		this
-			.addSensor(500)
+		this.addSensor(500)
 			.attractionStrength(0.01)
-			.relocate();
 	},
 
 	player: function(newPlayer) {
@@ -354,11 +352,15 @@ var Ship = BlockStructure.extend({
 	 * @instance
 	 */
 	relocate: function() {
-		return this.translateTo(
-			(Math.random() - .5) * Ship.SHIP_START_RADIUS,
-			(Math.random() - .5) * Ship.SHIP_START_RADIUS,
-			0
-		);
+		var coordinates = this.getRelocateCoordinates();
+		return this.translateTo(coordinates.x, coordinates.y, 0);
+	},
+
+	getRelocateCoordinates: function() {
+		return {
+			x: (Math.random() - .5) * Ship.SHIP_START_RADIUS,
+			y: (Math.random() - .5) * Ship.SHIP_START_RADIUS
+		};
 	},
 
 	/**

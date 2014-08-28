@@ -171,8 +171,10 @@ var ServerNetworkEvents = {
 	_createShip: function(clientId, playerId, ship, cargo) {
 		player = ige.server.players[clientId];
 
+		// Get initial starting coordinates for the ship
+		var coordinates = Ship.prototype.getRelocateCoordinates();
 		player.currentShip(
-			new Ship()
+			new Ship({translate: {x: coordinates.x, y: coordinates.y}})
 				.streamMode(1)
 				.mount(ige.$("spaceGameScene"))
 		);
