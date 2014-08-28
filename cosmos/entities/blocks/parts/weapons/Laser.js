@@ -110,29 +110,25 @@ var Laser = Weapon.extend({
 			targetLoc: targetLoc
 		};
 
-		console.log("Laser#fireClient");
-
 		ige.network.send('cosmos:Weapon.fire', data);
 	},
 
 	fireServer: function(data) {
 		/* Validate whether or not this weapon can fire */
-		// Cannot fire if already firing
-		if (this.damageSource.isFiring) {
-			return;
-		}
-
 		// Cannot fire while on cooldown
 		if (this.damageSource.onCooldown) {
 			return;
 		}
 
-		this.damageSource.durationFired = 0;
-		this.damageSource.isFiring = true;
-		this.damageSource.target = data.targetLoc;
-		this.gridData.grid.firingWeapons().push(this);
+		// If already firing, duration will not reset. This way a player can only fire for the
+		// laser's duration, but can retarget during that duration.
+		if (!this.damageSource.isFiring) {
+			this.damageSource.durationFired = 0;
+			this.gridData.grid.firingWeapons().push(this);
+			this.damageSource.isFiring = true;
+		}
 
-		console.log("Laser#fireServer: end");
+		this.damageSource.target = data.targetLoc;
 	}
 });
 
