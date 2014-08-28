@@ -36,16 +36,7 @@ Weapon.startCooldown = function(data) {
 	}
 
 	console.log("Weapon#startCooldown: " + weapon.classId());
-};
-
-Weapon.endCooldown = function(data) {
-	var weapon = ige.$(data.id);
-	if (!weapon) {
-		console.warn("Weapon#endCooldown: called with invalid weapon id: " + data.id);
-		return;
-	}
-
-	console.log("Weapon#endCooldown: " + weapon.classId());
+	ige.hud.bottomToolbar.capBar.mineCap.startCooldown(weapon);
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Weapon; }

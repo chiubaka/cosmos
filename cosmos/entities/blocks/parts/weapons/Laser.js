@@ -84,7 +84,6 @@ var Laser = Weapon.extend({
 				ige.network.send("cosmos:Weapon.cooldown.start", {id: self.id()});
 				self.damageSource.onCooldown = true;
 				setTimeout(function() {
-					ige.network.send("cosmos:Weapon.cooldown.end", {id: self.id()});
 					self.damageSource.onCooldown = false;
 				}, self.damageSource.cooldown);
 

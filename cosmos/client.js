@@ -157,7 +157,6 @@ var Client = IgeClass.extend({
 
 							ige.network.define('cosmos:Weapon.cooldown.start',
 								Weapon.startCooldown);
-							ige.network.define('cosmos:Weapon.cooldown.end', Weapon.endCooldown);
 
 							ige.network.define('cosmos:Laser.render', Laser.onRender);
 							ige.network.define('cosmos:Laser.render.stop', Laser.onRenderStop);
