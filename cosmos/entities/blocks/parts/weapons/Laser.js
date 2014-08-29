@@ -143,13 +143,17 @@ var Laser = Weapon.extend({
 Laser.onRender = function(data) {
 	var laser = ige.$(data.id);
 	if (!laser) {
-		console.error("Laser#onRender: invalid laser id: " + data.id);
+		// TODO: For now, messages can be received for lasers that don't exist because messages are
+		// sent from the server to all clients. Uncomment this when there is some sort of stream
+		// control in place.
+		//console.error("Laser#onRender: invalid laser id: " + data.id);
+		return;
 	}
 
 	if (laser.laserBeam === undefined) {
 		laser.laserBeam = new LaserBeam()
 			.setSource(laser)
-			.setTarget(data.targetLoc.x, data.targetLoc.y)
+			.setTarget(data.targetLoc.x, data.targetLoc.y);
 		laser._mountEffect(laser.laserBeam, true);
 	}
 	else {
@@ -160,7 +164,11 @@ Laser.onRender = function(data) {
 Laser.onRenderStop = function(data) {
 	var laser = ige.$(data.id);
 	if (!laser) {
-		console.error("Laser#onRenderStop: invalid laser id: " + data.id);
+		// TODO: For now, messages can be received for lasers that don't exist because messages are
+		// sent from the server to all clients. Uncomment this when there is some sort of stream
+		// control in place.
+		//console.error("Laser#onRenderStop: invalid laser id: " + data.id);
+		return;
 	}
 	laser.laserBeam.destroy();
 	delete laser.laserBeam;
