@@ -19,11 +19,15 @@ var BlockStructure = BlockGrid.extend({
 	 * @instance
 	 */
 	_constructionOverlay: undefined,
+	/**
+	 * Controls whether or not the Construction Overlay should be refreshed.
+	 */
+	_enableRefresh: undefined,
 
 	init: function(data) {
 		BlockGrid.prototype.init.call(this, data);
 
-		this._refreshConstructionOverlay = true;
+		this._enableRefresh = true;
 
 		if (ige.isClient) {
 			this._constructionOverlay = new ConstructionOverlay(this)
@@ -60,16 +64,19 @@ var BlockStructure = BlockGrid.extend({
 		}
 	},
 
-	put: function(block, location, replace) {
-		var refresh = this._refreshConstructionOverlay;
-		this._refreshConstructionOverlay = false;
-		var result = BlockGrid.prototype.put.call(this, block, location, replace);
-		this._refreshConstructionOverlay = refresh;
-
-		if (ige.isClient && this._constructionOverlay && this._refreshConstructionOverlay) {
+	_refreshConstructionOverlay: function() {
+		if (ige.isClient && this._constructionOverlay && this._enableRefresh) {
 			this._constructionOverlay.refresh();
 		}
+	},
 
+	put: function(block, location, replace) {
+		var refresh = this._enableRefresh;
+		this._enableRefresh = false;
+		var result = BlockGrid.prototype.put.call(this, block, location, replace);
+		this._enableRefresh = refresh;
+
+		this._refreshConstructionOverlay();
 		return result;
 	},
 
@@ -140,9 +147,7 @@ var BlockStructure = BlockGrid.extend({
 	remove: function(location, width, height) {
 		var result = BlockGrid.prototype.remove.call(this, location, width, height);
 
-		if (ige.isClient && this._constructionOverlay && this._refreshConstructionOverlay) {
-			this._constructionOverlay.refresh();
-		}
+		this._refreshConstructionOverlay();
 
 		return result;
 	}
