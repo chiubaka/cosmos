@@ -13,6 +13,7 @@ var GameInit = {
 
 		// Disable debug features for more performance
 		ige.debugTiming(false);
+		ige.debugEnabled(true);
 
 		this.initScenes(game);
 
