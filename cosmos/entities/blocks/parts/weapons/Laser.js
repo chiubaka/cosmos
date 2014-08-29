@@ -94,7 +94,8 @@ var Laser = Weapon.extend({
 
 				ige.network.send("cosmos:Laser.render.stop", {id: self.id()});
 
-				ige.network.send("cosmos:Weapon.cooldown.start", {id: self.id()});
+				ige.network.send("cosmos:Weapon.cooldown.start", {id: self.id()},
+					self.gridData.grid.player().clientId());
 				self.damageSource.onCooldown = true;
 				setTimeout(function() {
 					self.damageSource.onCooldown = false;
