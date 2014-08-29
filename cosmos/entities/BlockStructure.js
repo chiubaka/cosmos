@@ -23,6 +23,8 @@ var BlockStructure = BlockGrid.extend({
 	init: function(data) {
 		BlockGrid.prototype.init.call(this, data);
 
+		this._refreshConstructionOverlay = true;
+
 		if (ige.isClient) {
 			this._constructionOverlay = new ConstructionOverlay(this)
 				.mount(this);
@@ -59,9 +61,12 @@ var BlockStructure = BlockGrid.extend({
 	},
 
 	put: function(block, location, replace) {
+		var refresh = this._refreshConstructionOverlay;
+		this._refreshConstructionOverlay = false;
 		var result = BlockGrid.prototype.put.call(this, block, location, replace);
+		this._refreshConstructionOverlay = refresh;
 
-		if (ige.isClient && this._constructionOverlay) {
+		if (ige.isClient && this._constructionOverlay && this._refreshConstructionOverlay) {
 			this._constructionOverlay.refresh();
 		}
 
@@ -135,7 +140,7 @@ var BlockStructure = BlockGrid.extend({
 	remove: function(location, width, height) {
 		var result = BlockGrid.prototype.remove.call(this, location, width, height);
 
-		if (ige.isClient && this._constructionOverlay) {
+		if (ige.isClient && this._constructionOverlay && this._refreshConstructionOverlay) {
 			this._constructionOverlay.refresh();
 		}
 
