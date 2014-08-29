@@ -89,7 +89,7 @@ var Laser = Weapon.extend({
 			/* If we have fired for as long as we were supposed to, shut off the weapon. */
 			if (self.damageSource.durationFired >= self.damageSource.duration) {
 				self.gridData.grid.firingWeapons()
-					.splice(self.gridData.grid.firingWeapons().indexOf(this), 1);
+					.splice(self.gridData.grid.firingWeapons().indexOf(self), 1);
 				self.damageSource.isFiring = false;
 
 				ige.network.send("cosmos:Laser.render.stop", {id: self.id()});
