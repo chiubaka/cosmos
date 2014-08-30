@@ -298,9 +298,10 @@ var BlockGrid = IgeEntity.extend({
 					break;
 				case 'put':
 					var block = Block.fromJSON(data.block);
-					ige.client.metrics.track(
+					// TODO: Move this metrics tracking code elsewhere
+					/*ige.client.metrics.track(
 						'cosmos:construct.existing',
-						{'type': block.classId()});
+						{'type': block.classId()});*/
 					this.put(block, new IgePoint2d(block.gridData.loc.x, block.gridData.loc.y), true);
 					// TODO: Get rid of this event emission.
 					ige.emit('cosmos:BlockGrid.processBlockActionClient.add', [block.classId(), this]);
