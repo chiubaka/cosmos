@@ -303,9 +303,7 @@ var BlockGrid = IgeEntity.extend({
 						'cosmos:construct.existing',
 						{'type': block.classId()});*/
 					this.put(block, new IgePoint2d(block.gridData.loc.x, block.gridData.loc.y), true);
-					// TODO: Get rid of this event emission.
-					ige.emit('cosmos:BlockGrid.processBlockActionClient.add', [block.classId(), this]);
-					ige.emit('cosmos:BlockGrid.processBlockActionClient.put', [block.classId(), this]);
+					ige.emit('cosmos:BlockGrid.processActionClient.put', [block.classId(), this]);
 					break;
 				default:
 					this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
@@ -487,10 +485,6 @@ var BlockGrid = IgeEntity.extend({
 				// would render any attempt to translate the entity on the client completely
 				// useless.
 				else {
-					if (ige.isClient) {
-						this.log("Client accessed server-side portion of transform streamSectionData!");
-					}
-
 					var translate = new IgePoint3d(
 						this.physicsBody.x,
 						this.physicsBody.y,
