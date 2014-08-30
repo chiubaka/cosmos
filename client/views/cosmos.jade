@@ -61,7 +61,11 @@ html
 		.igeLoading.content
 			#headline.row
 				.col-lg-12
-					h2 We're throwing a party! Log onto Cosmos at 6PM PST on 8/22 to participate!
+					h2 Please note: ships and asteroids that are not connected will split apart
+						| in the next week!
+						br
+						| Ships that are not entirely connected at that
+						| time may experience issues.
 			#mail-list.row
 				.col-lg-12
 					h2
@@ -72,39 +76,20 @@ html
 				#new-features.news.col-lg-3
 					h2 New Features
 					ul
-						li
-							strong Large blocks:&nbsp;
-							| Cosmos now supports blocks of larger sizes. We now have 2x2's and
-							| 3x3's. Asteroids are now generated with larger blocks, so they look
-							| more interesting and have more material!
-						li
-							strong Element breakdown:&nbsp;
-							| Large elemental blocks are now replaced by smaller blocks when they
-							| are destroyed. Smaller blocks are chosen from a distribution based on
-							| the type of the original block and its purity level. Blocks that are
-							| more pure are more likely to break down into the same thing!
-						li
-							strong New loading screen:&nbsp;
-							| The new loading screen
-							| waits for you to click the "Ready" button before asking the server to
-							| put your ship in the world. It also notifies you when an error has
-							| occurred in the loading process.
+						li None.
 				#improvements.news.col-lg-3
 					h2 Improvements
 					ul
-						li Asteroids no longer overlap
-						li Element distribution tweaks
-						li Better respawn performance
-						li Automatically restaring servers
+						li Reduced the size of asteroids such that they still have large blocks, but
+							| are generally smaller. This should alleviate most of the lag issues
+							| players experienced in&nbsp;
+							a(href='http://blog.teamleonine.com/?p=381', target='_blank') version
+								| 0.15.1
+							| .
 				#bug-fixes.news.col-lg-3
 					h2 Bug Fixes
 					ul
-						li Background tiles were slightly off in Safari and Firefox.
-						li Players who lost their Bridge could still fire on other players.
-						li Players could accidentally shoot their own Bridge.
-						li Server would crash if the same player logged on in two windows.
-						li Server would sometimes crash when players were fighting each other.
-						li Background used to smear when in contact with game objects.
+						li None.
 
 				#known-issues.news.col-lg-3
 					h2 Known Issues
@@ -121,7 +106,7 @@ html
 							| selected.
 			#loading-error.error An error occurred while loading the game. Please refresh the page
 				| or try again later. If the problem persists, email us at&nbsp;
-				a(href='mailto:team@teamleonine.com') team@teamleonine.com
+				a(href='mailto:team@teamleonine.com', target='_blank') team@teamleonine.com
 				| &nbsp; and we'll do our best to assist you!
 				br
 				| Error:&nbsp
@@ -131,8 +116,9 @@ html
 				#fullscreen-container
 					input(type='checkbox', name='fullscreen', value='true', checked)#fullscreen
 					label(for='fullscreen') Fullscreen
-			#last-updated Cosmos Version 0.15.1. Last updated: 8/22/2014.&nbsp;
-				a(href='http://blog.teamleonine.com/?p=381') See the full change log.
+			#last-updated Cosmos Version 0.15.2. Last updated: 8/22/2014, 9:40pm PST.&nbsp;
+				a(href='http://blog.teamleonine.com/?cat=31', target='_blank') See the full change
+					| log history.
 
 		.igeLoading.loadingFloat.preview
 			include includes/progress-ring.jade

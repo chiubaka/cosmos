@@ -13,8 +13,29 @@ var Weapon = Part.extend({
 	init: function(data) {
 		Part.prototype.init.call(this, data);
 		// TODO: Determine dps value based on subclass
-		this.addComponent(DamageSource, {dps: 10});
+
+		if (DamageSources[this.classId()]) {
+			this.addComponent(DamageSource, DamageSources[this.classId()]);
+		}
+	},
+
+	fireClient: function(targetLoc) {
+		IgeClass.abstractMethodError('fireClient');
+	},
+
+	fireServer: function(data) {
+		IgeClass.abstractMethodError('fireServer');
 	}
 });
+
+Weapon.startCooldown = function(data) {
+	var weapon = ige.$(data.id);
+	if (!weapon) {
+		console.warn("Weapon#startCooldown: called with invalid weapon id: " + data.id);
+		return;
+	}
+
+	ige.hud.bottomToolbar.capBar.mineCap.startCooldown(weapon);
+};
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Weapon; }

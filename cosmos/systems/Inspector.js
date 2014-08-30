@@ -52,9 +52,9 @@ var Inspector = IgeEventingClass.extend({
 				self.inspect(block);
 			});
 
-			ige.on('cosmos:background.mousedown', function() {
+			/*ige.on('cosmos:background.mousedown', function() {
 				self.hide();
-			});
+			});*/
 
 			ige.emit('cosmos:hud.subcomponent.loaded', self);
 		});
@@ -62,8 +62,10 @@ var Inspector = IgeEventingClass.extend({
 
 	inspect: function(block) {
 		var self = this;
+		if (this.block && this.healthChangeListener) {
+			this.block.off('cosmos:block.hp.changed', this.healthChangeListener);
+		}
 		this.block = block;
-		this.blockInspector.show();
 		this.blockInspectorName.text(block.displayName());
 		this.blockInspectorType.text(block.type.text);
 		this.blockInspectorDescription.text(block.description.text);
@@ -74,7 +76,7 @@ var Inspector = IgeEventingClass.extend({
 			this.blockInspectorCurrentHealth.text(block.health.value);
 			this.blockInspectorMaxHealth.text(block.health.max);
 
-			block.on('cosmos:block.hp.changed', function(hp) {
+			this.healthChangeListener = block.on('cosmos:block.hp.changed', function(hp) {
 				// TODO: Change the color of the health text based on the percentage of health that is left
 				self.blockInspectorCurrentHealth.text(Math.round(hp));
 				if (hp <= 0) {
@@ -102,6 +104,8 @@ var Inspector = IgeEventingClass.extend({
 		ctx.scale(scaleWidth, scaleHeight);
 		ctx.translate(block._bounds2d.x2, block._bounds2d.y2);
 		block.texture().render(ctx, block);
+
+		this.blockInspector.show();
 	},
 
 	hide: function() {

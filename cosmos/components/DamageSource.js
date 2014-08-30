@@ -2,16 +2,30 @@ var DamageSource = IgeClass.extend({
 	classId: 'DamageSource',
 	componentId: 'damageSource',
 
-	dps: undefined,
+	cooldown: undefined,
+	damage: undefined,
+	duration: undefined,
+	durationFired: undefined,
+	isFiring: undefined,
+	onCooldown: undefined,
+	range: undefined,
+	target: undefined,
 
 	init: function(entity, data) {
-		if (data === undefined || data.dps === undefined) {
+		if (data === undefined || data.cooldown === undefined || data.damage === undefined
+			|| data.duration === undefined || data.range === undefined ) {
 			this.log('Init parameters not provided for DamageSource.', 'error');
 			return;
 		}
 
-		// Take the dps as a parameter
-		this.dps = data.dps;
+		this.cooldown = data.cooldown;
+		this.damage = data.damage;
+		this.duration = data.duration;
+		this.range = data.range;
+
+		this.durationFired = 0;
+		this.isFiring = false;
+		this.onCooldown = false;
 	}
 });
 

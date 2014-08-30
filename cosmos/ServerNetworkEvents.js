@@ -171,8 +171,10 @@ var ServerNetworkEvents = {
 	_createShip: function(clientId, playerId, ship, cargo) {
 		player = ige.server.players[clientId];
 
+		// Get initial starting coordinates for the ship
+		var coordinates = Ship.prototype.getRelocateCoordinates();
 		player.currentShip(
-			new Ship()
+			new Ship({translate: {x: coordinates.x, y: coordinates.y}})
 				.streamMode(1)
 				.mount(ige.$("spaceGameScene"))
 		);
@@ -202,6 +204,11 @@ var ServerNetworkEvents = {
 	_onRelocateRequest: function(data, clientId) {
 		var player = ige.server.players[clientId];
 		if (player === undefined) {
+			return;
+		}
+
+		// Don't let players relocate if their ship is dead.
+		if (!(player.currentShip().controllable())) {
 			return;
 		}
 
@@ -243,6 +250,16 @@ var ServerNetworkEvents = {
 		}
 
 		player.controls(data);
+	},
+
+	_fire: function(data, clientId) {
+		var weapon = ige.$(data.id);
+		if (!weapon) {
+			console.log('ServerNetworkEvents#_fire: undefined weapon id: ' + data.id);
+			return;
+		}
+
+		weapon.fireServer(data);
 	},
 
 	// TODO: User access control. Restrict what players can do based on clientId
@@ -333,11 +350,17 @@ var ServerNetworkEvents = {
 			return;
 		}
 
+		var blockGrid = ige.$(data.blockGridId);
+
+		// Prevent construction of other people's ships
+		if ((blockGrid instanceof Ship) && (blockGrid !== player.currentShip())) {
+			return;
+		}
+
 		// TODO: This extracts a block from the cargo and throws it away. Should use the result of this in the future!
 		var extractedBlocks = player.currentShip().cargo.extractType(data.selectedType);
 
 		if (extractedBlocks.length > 0) {
-			var blockGrid = ige.$(data.blockGridId);
 			data.action = 'add';
 			blockGrid.processBlockActionServer(data, player);
 
@@ -346,6 +369,9 @@ var ServerNetworkEvents = {
 	},
 
 	_onDeconstructionZoneClicked: function(data, clientId) {
+		console.log("Data");
+		console.log(data);
+
 		var player = ige.server.players[clientId];
 		if (player === undefined) {
 			console.log("Cannot deconstruct, player is undefined");
@@ -354,8 +380,12 @@ var ServerNetworkEvents = {
 
 		var blockGrid = ige.$(data.blockGridId);
 		if (blockGrid === player.currentShip()) {
-			if (blockGrid.get(new IgePoint2d(data.col, data.row))[0].classId() !== "BridgeBlock") {
+			console.log("Data");
+			console.log(data);
+			if (blockGrid.get(data.loc)[0].classId() !== "BridgeBlock") {
 
+	console.log("Data");
+	console.log(data);
 				data.action = 'remove';
 				var blocksRemoved = blockGrid.processBlockActionServer(data, player);
 

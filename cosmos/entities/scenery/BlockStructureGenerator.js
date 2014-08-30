@@ -5,6 +5,7 @@
  * @typedef {Object} BlockStructureGenerator
  * @namespace
  */
+
 var BlockStructureGenerator = {
 
 	/**
@@ -18,7 +19,7 @@ var BlockStructureGenerator = {
 	 * @memberof BlockStructureGenerator
 	 */
 	genProceduralAsteroid: function(numLayers, blockDistribution, symmetric,
-		translate, callback) {
+		transactionalOpts) {
 		// Whether or not to generate a symmetric asteroid
 		symmetric = symmetric || false;
 
@@ -30,8 +31,7 @@ var BlockStructureGenerator = {
 		var blockStructure = new GeneratedBlockStructure({
 			numLayers: numLayers,
 			blockDistribution: blockDistribution,
-			symmetric: symmetric,
-			translate: translate
+			symmetric: symmetric
 		});
 
 		// Start the generation algorithm at a specific cell in the asteroid.
@@ -84,6 +84,7 @@ var BlockStructureGenerator = {
 						} else {
 							var newBlock = self._getBlockType(blockStructure, block.row, block.col, blockDistribution, {gridWidth: currentSize, gridHeight: currentSize});
 						}
+						newBlock.physicsFixture.fixtureDef['groupIndex'] = -1;
 
 						// We will have a seperate variable for the actual location of the block.
 						// The idea here is that the location that needs to be filled, called 'block',
@@ -118,7 +119,7 @@ var BlockStructureGenerator = {
 					}
 				}
 			}
-		}, callback);
+		}, transactionalOpts);
 
 		return blockStructure;
 	},

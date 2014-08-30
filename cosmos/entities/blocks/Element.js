@@ -110,24 +110,24 @@ var Element = Block.extend({
 
 		grid.remove(new IgePoint2d(loc.x, loc.y));
 
-		ige.network.send('blockAction', {
-			blockGridId: grid.id(),
-			action: 'remove',
-			col: loc.x,
-			row: loc.y
+		grid.actions().push({
+			action: "remove",
+			loc: {
+				x: loc.x,
+				y: loc.y
+			}
 		});
 
 		// If this is a 1x1 element, we call
 		if (gridWidth === 1 && gridHeight === 1) {
 			// TODO: Create the resource that matches this Element and drop it.
 			var block = new cosmos.blocks.constructors[this.resource()]();
-			console.log(this.resource());
-			console.log(block);
 			var dropCoordinates = grid.worldCoordinatesForBlock(this);
-			var drop = new Drop({owner: player.currentShip()})
+			var newDrop = new Drop({
+				owner: player.currentShip(),
+				translate: {x: dropCoordinates.x, y: dropCoordinates.y}
+			})
 				.block(block)
-				.translateTo(dropCoordinates.x, dropCoordinates.y, 0)
-				.rotateTo(0, 0, grid.rotate().z())
 				.streamMode(1)
 				.mount(ige.server.spaceGameScene);
 
@@ -147,9 +147,8 @@ var Element = Block.extend({
 						true
 					);
 
-					ige.network.send('blockAction', {
-						blockGridId: grid.id(),
-						action: 'put',
+					grid.actions().push({
+						action: "put",
 						block: child.toJSON()
 					});
 				}

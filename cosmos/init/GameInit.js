@@ -13,6 +13,7 @@ var GameInit = {
 
 		// Disable debug features for more performance
 		ige.debugTiming(false);
+		ige.debugEnabled(true);
 
 		this.initScenes(game);
 
@@ -48,7 +49,8 @@ var GameInit = {
 				&& globalContext[key]
 				&& globalContext[key].prototype
 				&& globalContext[key].prototype instanceof Block
-				&& !(globalContext[key].prototype.classId() === "Element"))
+				&& globalContext[key].prototype.classId() !== "Element"
+				&& globalContext[key].prototype.classId() !== "Laser")
 			{
 				cosmos.blocks.constructors[key] = globalContext[key];
 				var block = new globalContext[key]();
@@ -233,17 +235,17 @@ var GameInit = {
 
 		var NUM_SMALL_ASTEROIDS = 20;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_SMALL_ASTEROIDS; asteroidNumber++) {
-			this.spawnStructure([0, 0, 0, 0, 0, 1, 1, 1], BlockStructureGenerator.elementDistributions.randomDistribution());// Note that 8000 here doens't do anything. To modify the sizes of the asteroids, go to the asteroid generator.
+			this.spawnStructure([0, 0, 0, 0, 1, 1, 1, 1], BlockStructureGenerator.elementDistributions.randomDistribution());// Note that 8000 here doens't do anything. To modify the sizes of the asteroids, go to the asteroid generator.
 		}
 
 		var NUM_NORMAL_ASTEROIDS = 10;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
-			this.spawnStructure([0, 0, 0, 1, 1, 1, 2, 2], BlockStructureGenerator.elementDistributions.randomDistribution());// Note that 8000 here doens't do anything. To modify the sizes of the asteroids, go to the asteroid generator.
+			this.spawnStructure([0, 0, 0, 1, 1, 1, 1, 1], BlockStructureGenerator.elementDistributions.randomDistribution());// Note that 8000 here doens't do anything. To modify the sizes of the asteroids, go to the asteroid generator.
 		}
 
 		var NUM_HUGE_ASTEROIDS = 5;
 		for (var asteroidNumber = 0; asteroidNumber < NUM_HUGE_ASTEROIDS; asteroidNumber++) {
-			this.spawnStructure([0, 1, 0, 1, 1, 2, 2, 2], BlockStructureGenerator.elementDistributions.randomDistribution());// Note that 8000 here doens't do anything. To modify the sizes of the asteroids, go to the asteroid generator.
+			this.spawnStructure([0, 0, 1, 1, 1, 1, 1, 1], BlockStructureGenerator.elementDistributions.randomDistribution());// Note that 8000 here doens't do anything. To modify the sizes of the asteroids, go to the asteroid generator.
 		}
 		// TODO: The procedural generation algorithm is causing strange problems with the new BlockGrid system. Leave
 		// this stuff commented out until it is figured out.
@@ -256,12 +258,19 @@ var GameInit = {
 	},
 
 	spawnStructure: function(numLayers, blockDistribution, symmetric) {
-		// TODO: @Eric Remove support for initial translate because this has been
-		// obsoleted by transactional fixtures.
-		var translate = new IgePoint2d(0,0);
+		// Create a structure within a 10,000 x 10,000 box centered at (0,0)
+		var transactionalOpts = {
+			viableAabbWidth: 10000,
+			viableAabbHeight: 10000,
+			viableX: 0,
+			viableY: 0,
+			numRetries: 10,
+			callback: handleTransactionResult
+		}
+
 		var structure = BlockStructureGenerator
 			.genProceduralAsteroid(numLayers, blockDistribution, symmetric,
-				translate, handleTransactionResult);
+				transactionalOpts);
 
 		// TODO: @Eric Race condition where structure may not be uninitialized
 		// before this callback is called.
@@ -290,39 +299,24 @@ var GameInit = {
 		}
 
 		var beginContacts = [{
-			a_body_category: Ship.BOX2D_CATEGORY,
-			a_fixture_category: Ship.ATTRACTOR_BOX2D_CATEGORY,
-			b_body_category: Drop.BOX2D_CATEGORY,
-			b_fixture_category: '',
+			a_fixture_category: Ship.ATTRACTOR_BOX2D_CATEGORY_BITS,
+			b_fixture_category: Drop.BOX2D_CATEGORY_BITS,
 			disable_contact: true,
 			identifier: contactIdentifiers['shipDropBegin']
 		}];
 
 		var endContacts = [{
-			a_body_category: Ship.BOX2D_CATEGORY,
-			a_fixture_category: Ship.ATTRACTOR_BOX2D_CATEGORY,
-			b_body_category: Drop.BOX2D_CATEGORY,
-			b_fixture_category: '',
+			a_fixture_category: Ship.ATTRACTOR_BOX2D_CATEGORY_BITS,
+			b_fixture_category: Drop.BOX2D_CATEGORY_BITS,
 			disable_contact:false,
 			identifier: contactIdentifiers['shipDropEnd']
 		}];
 
 		var preSolveContacts = [{
-			a_body_category: Ship.BOX2D_CATEGORY,
-			a_fixture_category: '',
-			b_body_category: Drop.BOX2D_CATEGORY,
-			b_fixture_category: '',
+			a_fixture_category: Ship.BOX2D_CATEGORY_BITS,
+			b_fixture_category: Drop.BOX2D_CATEGORY_BITS,
 			disable_contact: true,
 			identifier: contactIdentifiers['shipDropPreSolve']
-		},
-		// TODO: Make drops not collide with anything (this doesn't work yet)
-		{
-			a_body_category: Drop.BOX2D_CATEGORY,
-			a_fixture_category: '',
-			b_body_category: '',
-			b_fixture_category: '',
-			disable_contact: true,
-			identifier: contactIdentifiers['dropPreSolve']
 		}];
 
 		ige.physicsSystem.newCustomContacts({contacts: beginContacts, contactType:
@@ -337,8 +331,8 @@ var GameInit = {
 			beginContact: function(entity1, entity2, identifier) {
 				switch (identifier) {
 					case contactIdentifiers.shipDropBegin:
-						var results = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY,
-							Ship.BOX2D_CATEGORY);
+						var results = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY_BITS,
+							Ship.BOX2D_CATEGORY_BITS);
 						var drop = results.category1Entity;
 						var ship = results.category2Entity;
 
@@ -355,8 +349,8 @@ var GameInit = {
 			endContact: function(entity1, entity2, identifier) {
 				switch (identifier) {
 					case contactIdentifiers.shipDropEnd:
-						var results = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY,
-							Ship.BOX2D_CATEGORY);
+						var results = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY_BITS,
+							Ship.BOX2D_CATEGORY_BITS);
 						var drop = results.category1Entity;
 						var ship = results.category2Entity;
 
@@ -373,8 +367,8 @@ var GameInit = {
 			preSolve: function(entity1, entity2, identifier) {
 				switch (identifier) {
 					case contactIdentifiers.shipDropPreSolve:
-						var results = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY,
-							Ship.BOX2D_CATEGORY);
+						var results = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY_BITS,
+							Ship.BOX2D_CATEGORY_BITS);
 						var drop = results.category1Entity;
 						var ship = results.category2Entity;
 
@@ -497,15 +491,6 @@ var GameInit = {
 		ige.watchStart(client.custom2);
 		ige.watchStart(client.custom3);
 		ige.watchStart(client.custom4);
-	},
-
-	// TODO: @Eric replace this function because it has been obsolted by
-	// transactional fixtures
-	getRandomLocation: function () {
-		// The maximum distance that we will translate entities to
-		var MAX_DISTANCE = 10000;
-		return new IgePoint2d((Math.random() - 0.5) * MAX_DISTANCE,
-			(Math.random() - 0.5) * MAX_DISTANCE);
 	},
 
 };

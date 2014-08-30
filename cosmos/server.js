@@ -53,6 +53,10 @@ var Server = IgeClass.extend({
 
 						/* This is called when a player clicks on a block */
 						ige.network.define('mineBlock', self._onMineBlock);
+						ige.network.define('cosmos:Weapon.fire', self._fire);
+						ige.network.define('cosmos:Weapon.cooldown.start');
+						ige.network.define('cosmos:Laser.render');
+						ige.network.define('cosmos:Laser.render.stop');
 						/* This is called when a player clicks on the background. */
 						ige.network.define('constructNew', self._onConstructNew);
 						/* Called when player clicks on a construction zone */
@@ -61,7 +65,6 @@ var Server = IgeClass.extend({
 						ige.network.define('deconstructionZoneClicked', self._onDeconstructionZoneClicked);
 
 						/* Define these commands so that we can use them on the client */
-						ige.network.define('blockAction');
 						ige.network.define('addEffect');
 						ige.network.define('removeEffect');
 

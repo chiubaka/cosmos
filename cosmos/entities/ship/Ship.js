@@ -83,6 +83,7 @@ var Ship = BlockStructure.extend({
 	*/
 	_thrusters: undefined,
 
+	_firingWeapons: undefined,
 	_weapons: undefined,
 
 	init: function(data) {
@@ -90,14 +91,17 @@ var Ship = BlockStructure.extend({
 		this._bridgeBlocks = [];
 		this._engines = [];
 		this._thrusters = [];
+		this._firingWeapons = [];
 		this._weapons = [];
 
-		this.category(Ship.BOX2D_CATEGORY);
+		this.category(Ship.BOX2D_CATEGORY_BITS);
 
 		if (ige.isServer) {
 			this.addComponent(TLPhysicsBodyComponent);
 			// Override default bodyDef properties
 			this.physicsBody.bodyDef['bodyCategory'] = Ship.BOX2D_CATEGORY;
+			this.physicsBody.fixtureFilter['categoryBits'] = Ship.BOX2D_CATEGORY_BITS;
+			this.physicsBody.fixtureFilter['maskBits'] = 0xffff;
 		}
 
 		BlockStructure.prototype.init.call(this, data);
@@ -155,6 +159,10 @@ var Ship = BlockStructure.extend({
 	// Getter for the _thrusters property
 	thrusters: function() {
 		return this._thrusters;
+	},
+
+	firingWeapons: function() {
+		return this._firingWeapons;
 	},
 
 	weapons: function() {
@@ -230,6 +238,12 @@ var Ship = BlockStructure.extend({
 		else if (block instanceof BridgeBlock) {
 			this.bridgeBlocks().splice(this.bridgeBlocks().indexOf(block), 1);
 		}
+
+		var index = this.firingWeapons().indexOf(block);
+		if (index !== -1) {
+			this.firingWeapons()[index].damageSource.isFiring = false;
+			this.firingWeapons().splice(index, 1);
+		}
 	},
 
 	remove: function(loc, width, height) {
@@ -271,10 +285,8 @@ var Ship = BlockStructure.extend({
 	_initServer: function() {
 		this.cargo = new Cargo();
 
-		this
-			.addSensor(500)
+		this.addSensor(500)
 			.attractionStrength(0.01)
-			.relocate();
 	},
 
 	player: function(newPlayer) {
@@ -308,6 +320,9 @@ var Ship = BlockStructure.extend({
 			restitution: 0.0,
 			density: 0.0,
 			isSensor: true,
+			categoryBits: Ship.ATTRACTOR_BOX2D_CATEGORY_BITS,
+			maskBits: 0xffff,
+
 			shapeType: 'CIRCLE',
 			radius: radius,
 			x: 0.0,
@@ -342,11 +357,15 @@ var Ship = BlockStructure.extend({
 	 * @instance
 	 */
 	relocate: function() {
-		return this.translateTo(
-			(Math.random() - .5) * Ship.SHIP_START_RADIUS,
-			(Math.random() - .5) * Ship.SHIP_START_RADIUS,
-			0
-		);
+		var coordinates = this.getRelocateCoordinates();
+		return this.translateTo(coordinates.x, coordinates.y, 0);
+	},
+
+	getRelocateCoordinates: function() {
+		return {
+			x: (Math.random() - .5) * Ship.SHIP_START_RADIUS,
+			y: (Math.random() - .5) * Ship.SHIP_START_RADIUS
+		};
 	},
 
 	/**
@@ -420,6 +439,9 @@ var Ship = BlockStructure.extend({
 		BlockStructure.prototype.update.call(this, ctx);
 
 		if (ige.isServer) {
+			/* Process Firing Weapons */
+			this.updateFiringWeapons();
+
 			/* Angular motion */
 			// Angular rotation speed depends on number of thrusters
 			if (this.controls().left || this.controls().right) {
@@ -507,6 +529,14 @@ var Ship = BlockStructure.extend({
 			// update
 			this._prev_controls = JSON.parse(JSON.stringify(this.controls()));
 		}
+	},
+
+	updateFiringWeapons: function() {
+		//console.log("Ship#updateFiringWeapons: " + this.firingWeapons().length);
+		var firingWeapons = this.firingWeapons().slice(0);
+		_.forEach(firingWeapons, function(weapon) {
+			weapon.firingUpdate();
+		});
 	}
 });
 
@@ -524,8 +554,8 @@ Ship.SHIP_START_RADIUS = 4000;
 * @default
 * @memberof Ship
 */
-Ship.BOX2D_CATEGORY = 'ship';
-Ship.ATTRACTOR_BOX2D_CATEGORY = 'attractor';
+Ship.BOX2D_CATEGORY_BITS = 0x0001;
+Ship.ATTRACTOR_BOX2D_CATEGORY_BITS = 0x0002;
 /**
 * The default depth layer for {@link Ship}s when rendered to the screen. Should be rendered above other
 * {@link BlockGrid}s.

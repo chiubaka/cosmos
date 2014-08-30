@@ -28,13 +28,15 @@ var ConstructionOverlay = IgeEntity.extend({
 		var self = this;
 		ige.on('capbar cap selected', function(classId) {
 			if (classId === 'ConstructCap') {
-				self.refresh();
-				self.show();
+				if (self._structure === ige.client.player.currentShip() || !(self._structure instanceof Ship)) {
+					self.refresh();
+					self.show();
+				}
 			} else {
 				self.hide();
 			}
 		});
-		
+
 		ige.on('capbar cap cleared', function(classId) {
 			if (classId === 'ConstructCap') {
 				self.hide();
@@ -84,6 +86,11 @@ var ConstructionOverlay = IgeEntity.extend({
 	},
 
 	refresh: function() {
+		// Don't even bother refreshing if we're not even displaying the construction zones.
+		if (ige.client.state.selectedCap() !== 'construct') {
+			return;
+		}
+
 		// TODO: This doesn't work consistently because cargo is written in a bit of a funny way.
 		// Will need to play with this to get larger blocks working in construction mode.
 		this.overlayForBlock(
