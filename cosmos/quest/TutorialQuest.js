@@ -273,12 +273,18 @@ var TutorialQuest = Quest.extend({
 
 			function mineBlock() {
 				var questLog = alertify.questLog("Now, click on the edges of an asteroid and mine it");
+				setTimeout(keepMining, msgTimeout/2);
+
 				var listener = ige.on("cosmos:BlockStructure.processBlockActionServer.minedBlock", function () {
 					questLog.close();
 					ige.off("cosmos:BlockStructure.processBlockActionServer.minedBlock", listener);
 					alertify.questLog("Magnificent! You've mined a block!", 'success', msgTimeout);
 					setTimeout(collectionMessage, msgTimeout / 2);
 				});
+			}
+
+			function keepMining() {
+				alertify.questLog("Keep mining the block until it drops.");
 			}
 
 			function collectionMessage() {
