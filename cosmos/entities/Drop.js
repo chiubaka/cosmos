@@ -33,7 +33,7 @@ var Drop = BlockGrid.extend({
 		var self = this;
 		// To change owner after initialization, use setOwner()
 		this._owner = opts.owner;
-		this.category(Drop.BOX2D_CATEGORY);
+		this.category(Drop.BOX2D_CATEGORY_BITS);
 
 		if (ige.isServer) {
 			this.addComponent(TLPhysicsBodyComponent);
@@ -176,7 +176,6 @@ var Drop = BlockGrid.extend({
  * @default
  * @memberof Drop
  */
-Drop.BOX2D_CATEGORY = 'drop';
 Drop.BOX2D_CATEGORY_BITS = 0x0004;
 
 /**

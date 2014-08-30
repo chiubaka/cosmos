@@ -94,7 +94,7 @@ var Ship = BlockStructure.extend({
 		this._firingWeapons = [];
 		this._weapons = [];
 
-		this.category(Ship.BOX2D_CATEGORY);
+		this.category(Ship.BOX2D_CATEGORY_BITS);
 
 		if (ige.isServer) {
 			this.addComponent(TLPhysicsBodyComponent);
@@ -554,9 +554,7 @@ Ship.SHIP_START_RADIUS = 4000;
 * @default
 * @memberof Ship
 */
-Ship.BOX2D_CATEGORY = 'ship';
 Ship.BOX2D_CATEGORY_BITS = 0x0001;
-Ship.ATTRACTOR_BOX2D_CATEGORY = 'attractor';
 Ship.ATTRACTOR_BOX2D_CATEGORY_BITS = 0x0002;
 /**
 * The default depth layer for {@link Ship}s when rendered to the screen. Should be rendered above other

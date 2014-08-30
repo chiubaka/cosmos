@@ -298,28 +298,22 @@ var GameInit = {
 		}
 
 		var beginContacts = [{
-			a_body_category: Ship.BOX2D_CATEGORY,
-			a_fixture_category: Ship.ATTRACTOR_BOX2D_CATEGORY,
-			b_body_category: Drop.BOX2D_CATEGORY,
-			b_fixture_category: '',
+			a_fixture_category: Ship.ATTRACTOR_BOX2D_CATEGORY_BITS,
+			b_fixture_category: Drop.BOX2D_CATEGORY_BITS,
 			disable_contact: true,
 			identifier: contactIdentifiers['shipDropBegin']
 		}];
 
 		var endContacts = [{
-			a_body_category: Ship.BOX2D_CATEGORY,
-			a_fixture_category: Ship.ATTRACTOR_BOX2D_CATEGORY,
-			b_body_category: Drop.BOX2D_CATEGORY,
-			b_fixture_category: '',
+			a_fixture_category: Ship.ATTRACTOR_BOX2D_CATEGORY_BITS,
+			b_fixture_category: Drop.BOX2D_CATEGORY_BITS,
 			disable_contact:false,
 			identifier: contactIdentifiers['shipDropEnd']
 		}];
 
 		var preSolveContacts = [{
-			a_body_category: Ship.BOX2D_CATEGORY,
-			a_fixture_category: '',
-			b_body_category: Drop.BOX2D_CATEGORY,
-			b_fixture_category: '',
+			a_fixture_category: Ship.BOX2D_CATEGORY_BITS,
+			b_fixture_category: Drop.BOX2D_CATEGORY_BITS,
 			disable_contact: true,
 			identifier: contactIdentifiers['shipDropPreSolve']
 		}];
@@ -336,8 +330,8 @@ var GameInit = {
 			beginContact: function(entity1, entity2, identifier) {
 				switch (identifier) {
 					case contactIdentifiers.shipDropBegin:
-						var results = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY,
-							Ship.BOX2D_CATEGORY);
+						var results = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY_BITS,
+							Ship.BOX2D_CATEGORY_BITS);
 						var drop = results.category1Entity;
 						var ship = results.category2Entity;
 
@@ -354,8 +348,8 @@ var GameInit = {
 			endContact: function(entity1, entity2, identifier) {
 				switch (identifier) {
 					case contactIdentifiers.shipDropEnd:
-						var results = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY,
-							Ship.BOX2D_CATEGORY);
+						var results = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY_BITS,
+							Ship.BOX2D_CATEGORY_BITS);
 						var drop = results.category1Entity;
 						var ship = results.category2Entity;
 
@@ -372,8 +366,8 @@ var GameInit = {
 			preSolve: function(entity1, entity2, identifier) {
 				switch (identifier) {
 					case contactIdentifiers.shipDropPreSolve:
-						var results = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY,
-							Ship.BOX2D_CATEGORY);
+						var results = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY_BITS,
+							Ship.BOX2D_CATEGORY_BITS);
 						var drop = results.category1Entity;
 						var ship = results.category2Entity;
 
