@@ -369,9 +369,6 @@ var ServerNetworkEvents = {
 	},
 
 	_onDeconstructionZoneClicked: function(data, clientId) {
-		console.log("Data");
-		console.log(data);
-
 		var player = ige.server.players[clientId];
 		if (player === undefined) {
 			console.log("Cannot deconstruct, player is undefined");
@@ -380,12 +377,8 @@ var ServerNetworkEvents = {
 
 		var blockGrid = ige.$(data.blockGridId);
 		if (blockGrid === player.currentShip()) {
-			console.log("Data");
-			console.log(data);
 			if (blockGrid.get(data.loc)[0].classId() !== "BridgeBlock") {
 
-	console.log("Data");
-	console.log(data);
 				data.action = 'remove';
 				var blocksRemoved = blockGrid.processBlockActionServer(data, player);
 
