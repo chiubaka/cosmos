@@ -275,6 +275,7 @@ var TutorialQuest = Quest.extend({
 				var questLog = alertify.questLog("Now, click on the edges of an asteroid and mine it");
 				setTimeout(keepMining, msgTimeout/2);
 
+				// TODO: Remove listen on process block action server
 				var listener = ige.on("cosmos:BlockStructure.processBlockActionServer.minedBlock", function () {
 					questLog.close();
 					ige.off("cosmos:BlockStructure.processBlockActionServer.minedBlock", listener);

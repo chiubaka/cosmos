@@ -132,10 +132,6 @@ var ClientNetworkEvents = {
 		}
 	},
 
-	_onMinedBlock: function(data) {
-		ige.emit('cosmos:BlockStructure.processBlockActionServer.minedBlock');
-	},
-
 	_onAddEffect: function(effect) {
 		var blockGrid = ige.$(effect.sourceBlock.blockGridId);
 		if (blockGrid) {
