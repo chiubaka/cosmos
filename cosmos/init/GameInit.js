@@ -322,15 +322,6 @@ var GameInit = {
 			b_fixture_category: '',
 			disable_contact: true,
 			identifier: contactIdentifiers['shipDropPreSolve']
-		},
-		// TODO: Make drops not collide with anything (this doesn't work yet)
-		{
-			a_body_category: Drop.BOX2D_CATEGORY,
-			a_fixture_category: '',
-			b_body_category: '',
-			b_fixture_category: '',
-			disable_contact: true,
-			identifier: contactIdentifiers['dropPreSolve']
 		}];
 
 		ige.physicsSystem.newCustomContacts({contacts: beginContacts, contactType:
