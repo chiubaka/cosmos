@@ -141,8 +141,6 @@ var Client = IgeClass.extend({
 							ige.network.define('playerDisconnected', self._onPlayerDisconnected);
 							ige.network.define('shipEntity', self._onShipEntity);
 
-							// Called when the server needs to broadcast updates about a block
-							ige.network.define('blockAction', self._onBlockAction);
 							// Called when the server wants to add an effect to a block
 							ige.network.define('addEffect', self._onAddEffect);
 							// Called when the server wants to remove an effect from a block
