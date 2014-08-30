@@ -611,7 +611,10 @@ var BlockGrid = IgeEntity.extend({
 				(2 * BlockGrid.BLOCK_FIXTURE_PADDING),
 			x: fixtureDef.x || coordinates.x + BlockGrid.BLOCK_FIXTURE_PADDING,
 			y: fixtureDef.y || coordinates.y + BlockGrid.BLOCK_FIXTURE_PADDING,
-			angle: fixtureDef.angle || 0.0
+			angle: fixtureDef.angle || 0.0,
+			categoryBits: this.physicsBody.fixtureFilter.categoryBits,
+			maskBits: this.physicsBody.fixtureFilter.maskBits,
+			groupIndex: this.physicsBody.fixtureFilter.groupIndex
 		}
 	},
 

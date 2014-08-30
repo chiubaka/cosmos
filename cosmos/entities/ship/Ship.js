@@ -94,12 +94,14 @@ var Ship = BlockStructure.extend({
 		this._firingWeapons = [];
 		this._weapons = [];
 
-		this.category(Ship.BOX2D_CATEGORY);
+		this.category(Ship.BOX2D_CATEGORY_BITS);
 
 		if (ige.isServer) {
 			this.addComponent(TLPhysicsBodyComponent);
 			// Override default bodyDef properties
 			this.physicsBody.bodyDef['bodyCategory'] = Ship.BOX2D_CATEGORY;
+			this.physicsBody.fixtureFilter['categoryBits'] = Ship.BOX2D_CATEGORY_BITS;
+			this.physicsBody.fixtureFilter['maskBits'] = 0xffff;
 		}
 
 		BlockStructure.prototype.init.call(this, data);
@@ -318,6 +320,9 @@ var Ship = BlockStructure.extend({
 			restitution: 0.0,
 			density: 0.0,
 			isSensor: true,
+			categoryBits: Ship.ATTRACTOR_BOX2D_CATEGORY_BITS,
+			maskBits: 0xffff,
+
 			shapeType: 'CIRCLE',
 			radius: radius,
 			x: 0.0,
@@ -549,8 +554,8 @@ Ship.SHIP_START_RADIUS = 4000;
 * @default
 * @memberof Ship
 */
-Ship.BOX2D_CATEGORY = 'ship';
-Ship.ATTRACTOR_BOX2D_CATEGORY = 'attractor';
+Ship.BOX2D_CATEGORY_BITS = 0x0001;
+Ship.ATTRACTOR_BOX2D_CATEGORY_BITS = 0x0002;
 /**
 * The default depth layer for {@link Ship}s when rendered to the screen. Should be rendered above other
 * {@link BlockGrid}s.
