@@ -51,7 +51,6 @@ var Drop = BlockGrid.extend({
 		if (ige.isClient) {
 			this.texture(ige.client.textures.drop);
 			var effect = NetworkUtils.effect('glow', this.block());
-			console.log("Drop#init: " + this.count());
 			effect.height = this.block().height();
 			effect.width = this.block().width();
 			this.block().addEffect(effect);
