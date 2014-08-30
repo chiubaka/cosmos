@@ -486,6 +486,10 @@ var BlockGrid = IgeEntity.extend({
 				// would render any attempt to translate the entity on the client completely
 				// useless.
 				else {
+					if (ige.isClient) {
+						this.log("Client accessed server-side portion of transform streamSectionData!");
+					}
+
 					var translate = new IgePoint3d(
 						this.physicsBody.x,
 						this.physicsBody.y,
@@ -526,7 +530,7 @@ var BlockGrid = IgeEntity.extend({
 			// We don't care about any other stream sections.
 			// We'll let IgeEntityBox2d handle them.
 			default:
-				IgeEntity.prototype.streamSectionData
+				return IgeEntity.prototype.streamSectionData
 					.call(this, sectionId, data, bypassTimeStream);
 				break;
 		}

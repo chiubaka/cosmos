@@ -35,6 +35,46 @@ var BlockStructure = BlockGrid.extend({
 		}
 	},
 
+	put: function(block, location, replace) {
+		var refresh = this._enableRefresh;
+		this._enableRefresh = false;
+		var result = BlockGrid.prototype.put.call(this, block, location, replace);
+		this._enableRefresh = refresh;
+
+		this._refreshConstructionOverlay();
+		return result;
+	},
+
+	remove: function(location, width, height) {
+		var result = BlockGrid.prototype.remove.call(this, location, width, height);
+
+		this._refreshConstructionOverlay();
+
+		return result;
+	},
+
+	streamSectionData: function(sectionId, data, bypassTimeStream) {
+		if (data) {
+			if (sectionId === "actions") {
+				var refresh = this._enableRefresh;
+				this._enableRefresh = false;
+				BlockGrid.prototype.streamSectionData.call(this, sectionId, data, bypassTimeStream);
+				this._enableRefresh = refresh;
+
+				this._refreshConstructionOverlay();
+			}
+			else {
+				BlockGrid.prototype.streamSectionData.call(this, sectionId, data, bypassTimeStream);
+			}
+		}
+		else {
+			return BlockGrid.prototype.streamSectionData.call(this, sectionId, data,
+				bypassTimeStream);
+		}
+
+
+	},
+
 	/**
 	 * Overrides {@link BlockGrid#_blockClickHandler}. Does logical checks to make sure that a {@link Block} can be
 	 * clicked before passing the click event down to the {@link Block} itself.
@@ -55,24 +95,6 @@ var BlockStructure = BlockGrid.extend({
 		if (ige.isClient && this._constructionOverlay && this._enableRefresh) {
 			this._constructionOverlay.refresh();
 		}
-	},
-
-	put: function(block, location, replace) {
-		var refresh = this._enableRefresh;
-		this._enableRefresh = false;
-		var result = BlockGrid.prototype.put.call(this, block, location, replace);
-		this._enableRefresh = refresh;
-
-		this._refreshConstructionOverlay();
-		return result;
-	},
-
-	remove: function(location, width, height) {
-		var result = BlockGrid.prototype.remove.call(this, location, width, height);
-
-		this._refreshConstructionOverlay();
-
-		return result;
 	}
 });
 
