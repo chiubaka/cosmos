@@ -264,6 +264,12 @@ var Block = IgeEntity.extend({
 		}
 	},
 
+	remove: function() {
+		if (this.gridData.grid) {
+			this.gridData.grid.remove(this.gridData.loc);
+		}
+	},
+
 	/**
 	 * Adds an effect to this {@link Block}. Also takes care of making sure that an effects mount is created for this
 	 * {@link Block} if one does not already exist. It is expected that all subclasses call this function at the
@@ -624,8 +630,14 @@ Block.fromType = function(type) {
 
 Block.fromJSON = function(json) {
 	var block;
+	// In this case, we have received information about a block that already exists in the game.
+	// Just use that block instead, and make sure to remove it from any grid that it is currently
+	// a part of.
+	// This currently occurs frequently when blocks are moved from a BlockGrid to a Drop. The Drop
+	// will ask for a block that is already in a BlockGrid to be added to itself.
 	if (ige.$(json.id) instanceof Block) {
 		block = ige.$(json.id);
+		block.remove();
 	}
 	else if (json.type === "Element") {
 		block = new Element({
@@ -644,4 +656,6 @@ Block.fromJSON = function(json) {
 	return block;
 };
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Block; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
+	module.exports = Block;
+}

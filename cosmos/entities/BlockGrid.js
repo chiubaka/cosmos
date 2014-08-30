@@ -430,7 +430,7 @@ var BlockGrid = IgeEntity.extend({
 			// #ifdef SERVER
 			if (ige.isServer) {
 				self.physicsBody.destroyFixture(block);
-				block.actions = undefined;
+				block.actions(null);
 			}
 			// #else
 			else {
