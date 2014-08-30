@@ -87,7 +87,7 @@ var ConstructionOverlay = IgeEntity.extend({
 
 	refresh: function() {
 		// Don't even bother refreshing if we're not even displaying the construction zones.
-		if (this.isHidden()) {
+		if (ige.client.state.selectedCap() !== 'construct') {
 			return;
 		}
 
