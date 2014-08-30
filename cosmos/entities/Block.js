@@ -14,7 +14,7 @@ var Block = IgeEntity.extend({
 	/**
 	 * Queue for block actions that need to be sent to the client.
 	 */
-	actions: undefined,
+	_actions: undefined,
 	// #endif
 
 	/**
@@ -172,6 +172,15 @@ var Block = IgeEntity.extend({
 		}
 	},
 
+	actions: function(newActions) {
+		if (newActions !== undefined) {
+			this._actions = newActions;
+			return this;
+		}
+
+		return this._actions;
+	},
+
 	dataFromConfig: function(data, classId) {
 		data = data || {};
 		classId = classId || this.classId();
@@ -281,7 +290,7 @@ var Block = IgeEntity.extend({
 		var loc = this.gridData.loc;
 		var grid = this.gridData.grid;
 
-		this.actions.push({
+		this.actions().push({
 			action: "remove",
 			loc: {
 				x: loc.x,

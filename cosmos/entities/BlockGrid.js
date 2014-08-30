@@ -134,6 +134,10 @@ var BlockGrid = IgeEntity.extend({
 		// #endif
 	},
 
+	actions: function() {
+		return this._actions;
+	},
+
 	// #ifdef CLIENT
 	/**
 	 * Adds an effect to a {@link Block} in this {@link BlockGrid}
@@ -277,7 +281,8 @@ var BlockGrid = IgeEntity.extend({
 			var block = ige.$(data.id);
 
 			if (!(block instanceof Block)) {
-				this.log('BlockGrid#processActionClient: non-block entity ID received.', 'error');
+				this.log('BlockGrid#processActionClient: non-block entity ID received: '
+					+ block.classId(), 'error');
 			}
 
 			block.process(data);
@@ -333,7 +338,7 @@ var BlockGrid = IgeEntity.extend({
 				if (this.hasNeighbors(location)) {
 					var block = Block.fromType(data.selectedType);
 					self.put(block, new IgePoint2d(data.col, data.row), false);
-					self._actions.push({
+					self.actions().push({
 						action: "put",
 						block: block.toJSON()
 					});
@@ -376,7 +381,7 @@ var BlockGrid = IgeEntity.extend({
 			return null;
 		}
 
-		block.actions = this._actions;
+		block.actions(this.actions());
 
 		this.width(this.gridWidth() * Block.WIDTH);
 		this.height(this.gridHeight() * Block.HEIGHT);
