@@ -72,14 +72,6 @@ var Laser = Weapon.extend({
 				var damage = self.damageSource.damage * Constants.UPDATE_TIME.SERVER
 					/ self.damageSource.duration;
 
-				ige.network.send("blockAction", {
-					action: "damage",
-					blockGridId: hitBlock.gridData.grid.id(),
-					col: hitBlock.gridData.loc.x,
-					row: hitBlock.gridData.loc.y,
-					amount: damage
-				});
-
 				hitBlock.takeDamage(damage, self.gridData.grid.player());
 			}
 

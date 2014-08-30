@@ -10,6 +10,13 @@
 var Block = IgeEntity.extend({
 	classId: 'Block',
 
+	// #ifdef SERVER
+	/**
+	 * Queue for block actions that need to be sent to the client.
+	 */
+	actions: undefined,
+	// #endif
+
 	/**
 	 * An object used as a map to store data about the various effects on a {@link Block}. The map keys are the effect
 	 * types, and the values are typically objects. Each value can be specific to the effect, since different effects
@@ -274,19 +281,32 @@ var Block = IgeEntity.extend({
 		var loc = this.gridData.loc;
 		var grid = this.gridData.grid;
 
-		var data = {
-			blockGridId: grid.id(),
-			action: 'remove',
-			col: loc.x,
-			row: loc.y
-		};
-
-		ige.network.send('blockAction', data);
+		this.actions.push({
+			action: "remove",
+			loc: {
+				x: loc.x,
+				y: loc.y
+			}
+		});
 
 		// Drop block server side, then send drop msg to client
 		grid.drop(player, new IgePoint2d(loc.x, loc.y));
 		if (grid.count() === 0) {
 			grid.destroy();
+		}
+	},
+
+	process: function(data) {
+		if (data.component) {
+			if (this[data.component] === undefined) {
+				this.log("Block#process: received data for undefined component: " + data.component,
+					"error");
+			}
+
+			this[data.component].process(data);
+		}
+		else {
+			this.log("Block#process: received data without component.", "error");
 		}
 	},
 
@@ -480,7 +500,6 @@ var Block = IgeEntity.extend({
 		}
 		return this._col;
 	},
-
 
 	/**
 	 * Decreases the block's health by the amount passed.

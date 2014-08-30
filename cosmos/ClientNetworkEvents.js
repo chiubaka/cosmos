@@ -134,6 +134,7 @@ var ClientNetworkEvents = {
 
 	_onBlockAction: function(data) {
 		var blockGrid = ige.$(data.blockGridId);
+		console.error("_onBlockAction called: " + data.action);
 		if (blockGrid) {
 			blockGrid.processBlockActionClient(data);
 		}

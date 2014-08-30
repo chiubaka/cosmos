@@ -146,6 +146,11 @@ var Element = Block.extend({
 						true
 					);
 
+					this.actions.push({
+						action: "put",
+						block: child.fromJSON
+					});
+
 					ige.network.send('blockAction', {
 						blockGridId: grid.id(),
 						action: 'put',
