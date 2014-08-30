@@ -17,6 +17,12 @@ var GeneratedBlockStructure = BlockStructure.extend({
 		this._symmetric = data.symmetric;
 
 		if (ige.isServer) {
+			this.physicsBody.fixtureFilter['categoryBits'] =
+				GeneratedBlockStructure.BOX2D_CATEGORY_BITS;
+			// Collide with everything, except for drops
+			this.physicsBody.fixtureFilter['maskBits'] =
+				0xffff & ~(1 << Drop.BOX2D_CATEGORY_BITS);
+
 			this.addComponent(RespawnableComponent, {
 				minRespawnTime: GeneratedBlockStructure.MIN_RESPAWN_TIME,
 				maxRespawnTime: GeneratedBlockStructure.MAX_RESPAWN_TIME,
@@ -49,6 +55,8 @@ GeneratedBlockStructure.MIN_RESPAWN_TIME = 60 * 1000 * 2; // 2 minutes
  * @type {number}
  */
 GeneratedBlockStructure.MAX_RESPAWN_TIME = 60 * 1000 * 52; // 52 minutes
+
+GeneratedBlockStructure.BOX2D_CATEGORY_BITS = 0x0008;
 
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = GeneratedBlockStructure; }

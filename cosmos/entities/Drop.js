@@ -33,13 +33,16 @@ var Drop = BlockGrid.extend({
 		var self = this;
 		// To change owner after initialization, use setOwner()
 		this._owner = opts.owner;
-		this.category(Drop.BOX2D_CATEGORY);
+		this.category(Drop.BOX2D_CATEGORY_BITS);
 
 		if (ige.isServer) {
 			this.addComponent(TLPhysicsBodyComponent);
 			// Override default bodyDef properties
 			this.physicsBody.bodyDef['bodyCategory'] = Drop.BOX2D_CATEGORY;
 			this.physicsBody.bodyDef['linkedId'] = opts.owner.id();
+			this.physicsBody.fixtureFilter['categoryBits'] = Drop.BOX2D_CATEGORY_BITS;
+			this.physicsBody.fixtureFilter['maskBits'] =
+				Ship.ATTRACTOR_BOX2D_CATEGORY_BITS | Ship.BOX2D_CATEGORY_BITS;
 		}
 
 		BlockGrid.prototype.init.call(this, opts);
@@ -173,7 +176,7 @@ var Drop = BlockGrid.extend({
  * @default
  * @memberof Drop
  */
-Drop.BOX2D_CATEGORY = 'drop';
+Drop.BOX2D_CATEGORY_BITS = 0x0004;
 
 /**
  * The amount of time in milliseconds that a drop can only be picked up by its owner. After this amount of time, any
