@@ -14,6 +14,15 @@ var DeconstructionBlock = Block.extend({
 			this.backgroundAlpha = 0.3;
 			this.textureBackground = "rgb(119, 0, 0, 0.3)";
 			this.textureOutline = "rgb(140, 0, 0)";
+
+			var self = this;
+			var listener = ige.on("capbar cap selected", function (classId) {
+				if (classId === ConstructCap.prototype.classId()) {
+					self.show();
+				} else {
+					self.hide();
+				}
+			});
 		}
 
 		Resource.prototype.init.call(this, data);
