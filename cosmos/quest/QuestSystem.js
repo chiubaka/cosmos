@@ -128,7 +128,8 @@ var QuestSystem = IgeEventingClass.extend({
 	// TODO: Build more functionality as needed when quests need more server
 	// interaction
 	// @server-side
-	eventToClient: function(data, clientId) {
+	eventToClient: function(event, quest, clientId) {
+		var data = [quest.classId(), quest.instance, event];
 		ige.network.stream.queueCommand('cosmos:quest.eventToClient', data,
 			clientId);
 	},

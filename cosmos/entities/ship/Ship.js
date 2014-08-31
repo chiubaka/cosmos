@@ -572,6 +572,8 @@ Ship.DEPTH = 2;
 */
 Ship.blockCollectListener = function (ship, blockClassId) {
 	ship.cargo.addBlock(blockClassId);
+	var player = ship.player();
+	player.emit('cosmos:Ship.blockCollectListener.blockCollected', [blockClassId]);
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Ship; }
