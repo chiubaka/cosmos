@@ -5,20 +5,25 @@ var TutorialQuest = Quest.extend({
 		Quest.prototype.init.call(this, instance);
 
 		if (ige.isClient) {
-			this.questState = this.welcome;
+			this.questState = this.mine;
 		}
 
 		if (ige.isServer) {
+			this.on(this.keys['mine'], this.mine.server, this);
+			this.on(this.keys['collect'], this.collect.server, this);
 			this.on(this.keys['complete'], this.complete.server, this);
 		}
 	},
 
 	// Map messages to numbers to reduce bandwidth
 	// This is important when quests require heavy client-server interaction
+	// NOTE: values must be strings to work with IGE event system
 	keys: {
+		'mine': "1",
+		'collect': "2",
 		// The client sends a 'complete' message to the server when this quest is
 		// completed
-		'complete': "1",
+		'complete': "3",
 	},
 
 	welcome: {
@@ -273,29 +278,56 @@ var TutorialQuest = Quest.extend({
 
 			function mineBlock() {
 				var questLog = alertify.questLog("Now, click on the edges of an asteroid and mine it");
-				setTimeout(keepMining, msgTimeout/2);
-
-				// TODO: Remove listen on process block action server
-				var listener = ige.on("cosmos:BlockStructure.processBlockActionServer.minedBlock", function () {
+				// First, set up listener
+				self.on(self.keys['mine'], function() {
 					questLog.close();
-					ige.off("cosmos:BlockStructure.processBlockActionServer.minedBlock", listener);
 					alertify.questLog("Magnificent! You've mined a block!", 'success', msgTimeout);
-					setTimeout(collectionMessage, msgTimeout / 2);
-				});
+					setTimeout(done, msgTimeout / 2);
+				}, self, true);
 			}
+			// Then, ask the server if we've mined a block
+			ige.questSystem.eventToServer(self.keys['mine'], self);
 
-			function keepMining() {
-				alertify.questLog("Keep mining the block until it drops.");
-			}
-
-			function collectionMessage() {
-				var questLog = alertify.questLog("Move close to mined blocks to " +
-					"collect them", '', msgTimeout);
-				setTimeout(done, msgTimeout / 2);
-			}
 
 			function done() {
 				ige.client.metrics.track("cosmos:quest.tutorialQuest.mine.completed");
+				self.questState = self.collect;
+			}
+		},
+
+		clientStep: function() {
+		},
+
+		// @server-side
+		server: function(player) {
+			ige.on('cosmos:Element.onDeath.newDrop' + player.id(), function(player_, drop) {
+				ige.questSystem.eventToClient(this.keys['mine'], this, player.clientId());
+			}, this, true);
+		}
+	},
+
+	collect: {
+		clientOnce: function() {
+			var self = this;
+			var msgTimeout = 5000;
+
+			collectBlock();
+
+			function collectBlock() {
+				var questLog = alertify.questLog("Move you ship towards the dropped block to collect it.");
+				// First, set up listener
+				self.on(self.keys['collect'], function() {
+					questLog.close();
+					alertify.questLog("Glorious! You've collected a block!", 'success', msgTimeout);
+					setTimeout(done, msgTimeout / 2);
+				}, self, true);
+			}
+
+			// Then, ask the server if we have collected a drop
+			ige.questSystem.eventToServer(self.keys['collect'], self);
+
+			function done() {
+				ige.client.metrics.track("cosmos:quest.tutorialQuest.collect.completed");
 				self.questState = self.cargo;
 			}
 		},
@@ -303,7 +335,14 @@ var TutorialQuest = Quest.extend({
 		clientStep: function() {
 		},
 
-		server: function() {
+		// @server-side
+		server: function(player) {
+			console.log('hit1');
+			ige.on('cosmos:Ship.blockCollectListener.blockCollected' + player.id(),
+				function(player_, drop) {
+				console.log('hit2');
+				ige.questSystem.eventToClient(this.keys['collect'], this, player.clientId());
+			}, this, true);
 		}
 	},
 

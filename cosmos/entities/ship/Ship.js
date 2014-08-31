@@ -572,6 +572,9 @@ Ship.DEPTH = 2;
 */
 Ship.blockCollectListener = function (ship, blockClassId) {
 	ship.cargo.addBlock(blockClassId);
+	var player = ship.player();
+	ige.emit('cosmos:Ship.blockCollectListener.blockCollected' + player.id(),
+		[player, blockClassId]);
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Ship; }
