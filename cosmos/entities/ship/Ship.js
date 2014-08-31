@@ -87,21 +87,25 @@ var Ship = BlockStructure.extend({
 	_weapons: undefined,
 
 	init: function(data) {
-		// Note that these variables must be initialized before the superclass constructor can be called, because it will add things to them by calling add().
+		data = data || {};
+
+		// Note that these variables must be initialized before the superclass constructor can be
+		// called, because it will add things to them by calling add().
 		this._bridgeBlocks = [];
 		this._engines = [];
 		this._thrusters = [];
 		this._firingWeapons = [];
 		this._weapons = [];
 
-		this.category(Ship.BOX2D_CATEGORY_BITS);
-
 		if (ige.isServer) {
-			this.addComponent(TLPhysicsBodyComponent);
-			// Override default bodyDef properties
-			this.physicsBody.bodyDef['bodyCategory'] = Ship.BOX2D_CATEGORY;
-			this.physicsBody.fixtureFilter['categoryBits'] = Ship.BOX2D_CATEGORY_BITS;
-			this.physicsBody.fixtureFilter['maskBits'] = 0xffff;
+			this.category(Ship.BOX2D_CATEGORY_BITS);
+
+			data.physicsBody = {};
+			data.physicsBody.fixtureFilter = {
+				categoryBits: Ship.BOX2D_CATEGORY_BITS,
+				// Collide with everything, including drops.
+				maskBits: 0xffff
+			};
 		}
 
 		BlockStructure.prototype.init.call(this, data);
