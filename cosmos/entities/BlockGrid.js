@@ -53,7 +53,6 @@ var BlockGrid = IgeEntity.extend({
 
 		this.implement(SparseGrid);
 		SparseGrid.prototype.init.call(this, data);
-		//this._grid = new SparseGrid();
 
 		// TODO why should this entity have width and height of 0?
 		this.width(0);
@@ -399,6 +398,10 @@ var BlockGrid = IgeEntity.extend({
 
 		block.onPut();
 
+		if (ige.isClient) {
+			this._renderContainer.refresh(true);
+		}
+
 		return previousBlocks;
 	},
 
@@ -438,6 +441,10 @@ var BlockGrid = IgeEntity.extend({
 			// #endif
 			block.onRemoved();
 		});
+
+		if (ige.isClient && !this._putting) {
+			this._renderContainer.refresh();
+		}
 
 		return removedBlocks;
 	},

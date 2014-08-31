@@ -167,8 +167,8 @@ var Block = IgeEntity.extend({
 			this._effects = {};
 
 			// Enable caching so that the smart textures aren't reevaluated every time.
-			this.compositeCache(true);
-			this.cacheSmoothing(true);
+			//this.compositeCache(true);
+			//this.cacheSmoothing(true);
 		}
 	},
 
