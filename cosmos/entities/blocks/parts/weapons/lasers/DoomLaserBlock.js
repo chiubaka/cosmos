@@ -15,11 +15,12 @@ var DoomLaserBlock = Laser.extend({
 
     if (!ige.isServer) {
       this.backgroundColor = 0xF2F2F2;
-      this.borderColor = 0xD03F2C;
-      this.iconFrame = 'laser';
+      this.borderColor = 0x000000;
+      this.iconFrame = 'doomLaser.svg';
+      
       this.textureBackground = "rgb(242, 242, 242)";
-      this.textureOutline = "rgb(208, 63, 44)";
-      this.textureSvg = ige.client.textures.miningLaser;
+      this.textureOutline = "rgb(0, 0, 0)";
+      this.textureSvg = ige.client.textures.doomLaser;
     }
 
     Laser.prototype.init.call(this, data);

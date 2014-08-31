@@ -15,11 +15,11 @@ var PurpleLaserBlock = Laser.extend({
 
     if (!ige.isServer) {
       this.backgroundColor = 0xF2F2F2;
-      this.borderColor = 0xD03F2C;
-      this.iconFrame = 'laser';
-      this.textureBackground = "rgb(242, 142, 242)";
+      this.borderColor = 0xD00FDC;
+      this.iconFrame = 'purpleLaser.svg';
+      this.textureBackground = "rgb(242, 242, 242)";
       this.textureOutline = "rgb(208, 63, 244)";
-      this.textureSvg = ige.client.textures.miningLaser;
+      this.textureSvg = ige.client.textures.purpleLaser;
     }
 
     Laser.prototype.init.call(this, data);
