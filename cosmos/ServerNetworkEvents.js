@@ -308,7 +308,7 @@ var ServerNetworkEvents = {
 
 		if (blockToPlace !== undefined) {
 			//console.log("Placing item: " + blockToPlace.classId(), 'info');
-			new BlockStructure()
+			new UserBlockStructure()
 				.streamMode(1)
 				.mount(ige.$("spaceGameScene"))
 				.depth(100)
