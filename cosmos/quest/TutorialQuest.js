@@ -307,7 +307,7 @@ var TutorialQuest = Quest.extend({
 		// Tells the client that a block has been mined
 		// @server-side
 		server: function(player) {
-			ige.on('cosmos:Element.onDeath.newDrop' + player.id(), function(player_, drop) {
+			player.on('cosmos:Element.onDeath.newDrop', function(drop) {
 				ige.questSystem.eventToClient(this.keys['mine'], this, player.clientId());
 			}, this, true);
 		}
@@ -356,8 +356,7 @@ var TutorialQuest = Quest.extend({
 		// Tells the client that a drop has been collected
 		// @server-side
 		server: function(player) {
-			ige.on('cosmos:Ship.blockCollectListener.blockCollected' + player.id(),
-				function(player_, drop) {
+			player.on('cosmos:Ship.blockCollectListener.blockCollected', function(drop) {
 				ige.questSystem.eventToClient(this.keys['collect'], this, player.clientId());
 			}, this, true);
 		}

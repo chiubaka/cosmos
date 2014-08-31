@@ -131,7 +131,7 @@ var Element = Block.extend({
 				.streamMode(1)
 				.mount(ige.server.spaceGameScene);
 			// Emit a new drop event
-			ige.emit('cosmos:Element.onDeath.newDrop' + player.id(), [player, newDrop]);
+			player.emit('cosmos:Element.onDeath.newDrop', [newDrop]);
 		}
 		else {
 			var numChildren = this._numChildren();
