@@ -17,9 +17,12 @@ var RedLaserBlock = Laser.extend({
 			this.backgroundColor = 0xF2F2F2;
 			this.borderColor = 0xD03F2C;
 			this.iconFrame = 'redLaser.svg';
+
 			this.textureBackground = "rgb(242, 242, 242)";
 			this.textureOutline = "rgb(208, 63, 44)";
 			this.textureSvg = ige.client.textures.redLaser;
+
+			this.laserSpriteName = "redLaserBeam";
 		}
 
 		Laser.prototype.init.call(this, data);

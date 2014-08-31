@@ -17,9 +17,12 @@ var GreenLaserBlock = Laser.extend({
       this.backgroundColor = 0xF2F2F2;
       this.borderColor = 0x30FF2C;
       this.iconFrame = 'greenLaser.svg';
+
       this.textureBackground = "rgb(242, 242, 242)";
       this.textureOutline = "rgb(30, 200, 30)";
       this.textureSvg = ige.client.textures.greenLaser;
+
+      this.laserSpriteName = "greenLaserBeam";
     }
 
     Laser.prototype.init.call(this, data);

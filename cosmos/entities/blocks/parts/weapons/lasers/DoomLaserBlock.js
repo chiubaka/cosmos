@@ -17,10 +17,12 @@ var DoomLaserBlock = Laser.extend({
       this.backgroundColor = 0xF2F2F2;
       this.borderColor = 0x000000;
       this.iconFrame = 'doomLaser.svg';
-      
+
       this.textureBackground = "rgb(242, 242, 242)";
       this.textureOutline = "rgb(0, 0, 0)";
       this.textureSvg = ige.client.textures.doomLaser;
+
+      this.laserSpriteName = "doomLaserBeam";
     }
 
     Laser.prototype.init.call(this, data);

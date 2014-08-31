@@ -8,19 +8,28 @@
 var LaserBeam = IgeEntity.extend({
 	classId: 'LaserBeam',
 
+	/*
+	This is the block that's firing the laser
+	*/
 	_source: undefined,
+
 	_targetX: undefined,
 	_targetY: undefined,
 
 	init: function (createData) {
 		IgeEntity.prototype.init.call(this);
 
-		this.addComponent(LaserBeamRenderableComponent, {createDisplayObject: function () {
-			var sprite = PIXI.Sprite.fromFrame('laserbeam');
-			sprite.width = 10;
-			sprite.anchor.set(0.5);
-			return sprite;
-		}});
+		var self = this;
+		this.addComponent(LaserBeamRenderableComponent,
+			{
+				createDisplayObject: function () {
+					var sprite = PIXI.Sprite.fromFrame('redLaserBeam');//TODO this shouldn't be a constant. Maybe self._source.laserSpriteName?
+					sprite.width = 10;
+					sprite.anchor.set(0.5);
+					return sprite;
+				}
+			}
+		);
 
 		if (!ige.isServer) {
 			// Fade in the laser beam
