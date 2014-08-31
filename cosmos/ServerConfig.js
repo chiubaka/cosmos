@@ -19,8 +19,11 @@ var config = {
 		{ name: 'BlockGrid', path: './entities/BlockGrid' },
 		{ name: 'BlockStructure', path: './entities/BlockStructure' },
 		{ name: 'GeneratedBlockStructure', path: './entities/GeneratedBlockStructure' },
-		{ name: 'ConstructionZoneBlock', path: 'entities/blocks/ConstructionZoneBlock' },
 		{ name: 'Drop', path: 'entities/Drop' },
+
+		/* Construction and deconstruction */
+		{ name: 'ConstructionZoneBlock', path: 'entities/blocks/ConstructionZoneBlock' },
+		{ name: 'DeconstructionBlock', path: 'entities/blocks/DeconstructionBlock' },
 
 		/* Ship part blocks */
 		{ name: 'Part', path: './entities/blocks/Part' },

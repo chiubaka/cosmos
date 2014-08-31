@@ -59,7 +59,8 @@ var Block = IgeEntity.extend({
 			|| this.classId() === "Laser"
 			|| this.classId() === "Resource"
 			// TODO: The Element class won't be abstract soon!
-			|| this.classId() === "Element";
+			|| this.classId() === "Element"
+			|| this.classId() === "DeconstructionBlock";//TODO this isn't really an abstract class...
 
 		var isConstructionZone = this instanceof ConstructionZoneBlock;
 
@@ -169,6 +170,32 @@ var Block = IgeEntity.extend({
 			// Enable caching so that the smart textures aren't reevaluated every time.
 			this.compositeCache(true);
 			this.cacheSmoothing(true);
+		}
+
+		if (ige.client) {
+			this.mouseOver(function (event, control) {
+				if (this.gridData.grid === ige.client.player.currentShip()) {
+			    // Stop the event propagating further down the scenegraph
+			    control.stopPropagation();
+
+			    // You can ALSO stop propagation without the control object
+			    // reference via the global reference:
+			    ige.input.stopPropagation();
+
+					ige.$("deconstructionEntity")
+						.mount(this);
+				}
+			});
+			this.mouseOut(function (event, control) {
+				if (this.gridData.grid === ige.client.player.currentShip()) {
+					// You can ALSO stop propagation without the control object
+					// reference via the global reference:
+					ige.input.stopPropagation();
+
+					ige.$("deconstructionEntity")
+						.unMount(this);
+				}
+			});
 		}
 	},
 

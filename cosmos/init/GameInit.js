@@ -10,7 +10,6 @@ var GameInit = {
 	 * @param game either ige.client or ige.server
 	 */
 	init: function(game) {
-
 		// Disable debug features for more performance
 		ige.debugTiming(false);
 		ige.debugEnabled(true);
@@ -28,6 +27,7 @@ var GameInit = {
 		} else {
 			this.initPlayerState();
 			this.initPlayerControls();
+			this.initDeconstructionEntity();
 			//this.initTimeStream(game);
 		}
 	},
@@ -451,6 +451,12 @@ var GameInit = {
 
 	initPlayerState: function() {
 		ige.client.state = new ClientState();
+	},
+
+	initDeconstructionEntity: function() {
+		new DeconstructionBlock()
+			.id("deconstructionEntity")
+			.depth(1);
 	},
 
 	/**

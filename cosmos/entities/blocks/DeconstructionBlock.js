@@ -1,17 +1,18 @@
 /**
 * Subclass of the {@link Element} class.
 * @class
-* @typedef {DragonBlock}
+* @typedef {DeconstructionBlock}
 * @namespace
 */
-var DragonBlock = Resource.extend({
-	classId: 'DragonBlock',
+var DeconstructionBlock = Block.extend({
+	classId: 'DeconstructionBlock',
 
 	init: function(data) {
 		if (!ige.isServer) {
-			this.backgroundColor = 0x770000;
+			this.backgroundColor = 0x11770000;
 			this.borderColor = 0x780000;
-			this.textureBackground = "rgb(119, 0, 0)";
+			this.backgroundAlpha = 0.3;
+			this.textureBackground = "rgb(119, 0, 0, 0.3)";
 			this.textureOutline = "rgb(140, 0, 0)";
 		}
 
@@ -20,5 +21,5 @@ var DragonBlock = Resource.extend({
 });
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
-	module.exports = DragonBlock;
+	module.exports = DeconstructionBlock;
 }
