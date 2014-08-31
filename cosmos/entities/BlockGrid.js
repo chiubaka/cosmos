@@ -333,7 +333,11 @@ var BlockGrid = IgeEntity.extend({
 				// contiguous structure.
 				if (this.hasNeighbors(location)) {
 					var block = Block.fromType(data.selectedType);
-					self.put(block, new IgePoint2d(data.col, data.row), false);
+					// If put returns null, it means there was already a block at the requested
+					// location.
+					if (self.put(block, new IgePoint2d(data.col, data.row), false) === null) {
+						return false;
+					}
 					self.actions().push({
 						action: "put",
 						block: block.toJSON()
