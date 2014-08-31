@@ -214,9 +214,21 @@ Types[Weapon.prototype.classId()] =
 	text: 'Weapon'
 };
 
-Types[MiningLaserBlock.prototype.classId()] =
+Types[RedLaserBlock.prototype.classId()] =
 {
 	text: 'Level 1 Laser'
+};
+Types[GreenLaserBlock.prototype.classId()] =
+{
+	text: 'Level 2 Laser'
+};
+Types[PurpleLaserBlock.prototype.classId()] =
+{
+	text: 'Level 3 Laser'
+};
+Types[DoomLaserBlock.prototype.classId()] =
+{
+	text: 'Level 4 Laser'
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {

@@ -12,7 +12,7 @@ var ExampleShips = {
 	 */
 	starterShip: function() {
 		return [
-			[undefined,           undefined,   new MiningLaserBlock(), undefined,   undefined],
+			[undefined,           undefined,   new RedLaserBlock(), undefined,   undefined],
 			[undefined,           new SteelPlatingBlock(), new SteelPlatingBlock(),            new SteelPlatingBlock(), undefined],
 			[undefined,           new SteelPlatingBlock(), new BridgeBlock(),     new SteelPlatingBlock(), undefined],
 			[undefined,           new SteelPlatingBlock(), new PowerBlock(),       new SteelPlatingBlock(), undefined],
@@ -30,7 +30,7 @@ var ExampleShips = {
 	 */
 	starterShipSingleMisplacedEngine: function() {
 		return [
-			[undefined,           undefined,         new MiningLaserBlock(), undefined,         undefined],
+			[undefined,           undefined,         new RedLaserBlock(), undefined,         undefined],
 			[undefined,           new SteelPlatingBlock(),       new SteelPlatingBlock(),            new SteelPlatingBlock(),       undefined],
 			[undefined,           new SteelPlatingBlock(),       new BridgeBlock(),     new SteelPlatingBlock(),       undefined],
 			[undefined,           new SteelPlatingBlock(),       new PowerBlock(),       new SteelPlatingBlock(),       undefined],
@@ -49,7 +49,7 @@ var ExampleShips = {
 	 */
 	starterShipDoubleEngines: function() {
 		return [
-			[undefined,           undefined,         new MiningLaserBlock(), undefined,         undefined],
+			[undefined,           undefined,         new RedLaserBlock(), undefined,         undefined],
 			[undefined,           new SteelPlatingBlock(),       new SteelPlatingBlock(),            new SteelPlatingBlock(),       undefined],
 			[undefined,           new SteelPlatingBlock(),       new BridgeBlock(),     new SteelPlatingBlock(),       undefined],
 			[undefined,           new SteelPlatingBlock(),       new PowerBlock(),       new SteelPlatingBlock(),       undefined],

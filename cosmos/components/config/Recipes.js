@@ -202,21 +202,49 @@ Recipes[DragonPlatingBlock.prototype.classId()] =
 
 
 /* === Weapons === */
-
-Recipes[MiningLaserBlock.prototype.classId()] =
+// LVL 1 Laser
+Recipes[RedLaserBlock.prototype.classId()] =
 {
 	reactants: [
 		{
 			blockType: IronBlock.prototype.classId(),
-			quantity: 3
-		},
-		{
-			blockType: CarbonBlock.prototype.classId(),
-			quantity: 1
+			quantity: 2
 		},
 		{
 			blockType: GoldBlock.prototype.classId(),
+			quantity: 2
+		}
+	],
+	equipment: []
+};
+
+// LVL 2 laser
+Recipes[GreenLaserBlock.prototype.classId()] =
+{
+	reactants: [
+		{
+			blockType: RedLaserBlock.prototype.classId(),
 			quantity: 1
+		},
+		{
+			blockType: KryptoniteBlock.prototype.classId(),
+			quantity: 5
+		}
+	],
+	equipment: []
+};
+
+// LVL 3 Laser
+Recipes[PurpleLaserBlock.prototype.classId()] =
+{
+	reactants: [
+		{
+			blockType: GreenLaserBlock.prototype.classId(),
+			quantity: 1
+		},
+		{
+			blockType: FluorineBlock.prototype.classId(),
+			quantity: 10
 		}
 	],
 	equipment: []

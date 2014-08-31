@@ -117,9 +117,21 @@ Healths[KryptoniteThrusterBlock.prototype.classId()] =
 
 /* Weapons */
 
-Healths[MiningLaserBlock.prototype.classId()] =
+Healths[RedLaserBlock.prototype.classId()] =
 {
 	max: 50
+};
+Healths[GreenLaserBlock.prototype.classId()] =
+{
+	max: 60
+};
+Healths[PurpleLaserBlock.prototype.classId()] =
+{
+	max: 80
+};
+Healths[DoomLaserBlock.prototype.classId()] =
+{
+	max: 100
 };
 
 
