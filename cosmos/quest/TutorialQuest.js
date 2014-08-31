@@ -5,7 +5,7 @@ var TutorialQuest = Quest.extend({
 		Quest.prototype.init.call(this, instance);
 
 		if (ige.isClient) {
-			this.questState = this.mine;
+			this.questState = this.welcome;
 		}
 
 		if (ige.isServer) {
@@ -278,15 +278,21 @@ var TutorialQuest = Quest.extend({
 
 			function mineBlock() {
 				var questLog = alertify.questLog("Now, click on the edges of an asteroid and mine it");
-				// First, set up listener
-				self.on(self.keys['mine'], function() {
+				// First, set up listeners
+				self.on(self.keys['collect'], function() { // Listen for block collection
+					self.collect.collected = true;
+				}, self, true);
+
+				self.on(self.keys['mine'], function() { // Listen for block mined
 					questLog.close();
 					alertify.questLog("Magnificent! You've mined a block!", 'success', msgTimeout);
 					setTimeout(done, msgTimeout / 2);
 				}, self, true);
+
+				// Then, ask the server
+				ige.questSystem.eventToServer(self.keys['collect'], self);
+				ige.questSystem.eventToServer(self.keys['mine'], self);
 			}
-			// Then, ask the server if we've mined a block
-			ige.questSystem.eventToServer(self.keys['mine'], self);
 
 
 			function done() {
@@ -298,6 +304,7 @@ var TutorialQuest = Quest.extend({
 		clientStep: function() {
 		},
 
+		// Tells the client that a block has been mined
 		// @server-side
 		server: function(player) {
 			ige.on('cosmos:Element.onDeath.newDrop' + player.id(), function(player_, drop) {
@@ -307,24 +314,35 @@ var TutorialQuest = Quest.extend({
 	},
 
 	collect: {
+		// Indicates if a block has been collected
+		collected: false,
+
 		clientOnce: function() {
 			var self = this;
 			var msgTimeout = 5000;
 
-			collectBlock();
+			// If a block is already collected, don't tell player to collect the block
+			if (this.collect.collected) {
+				alertify.questLog("Glorious! You've collected a block! You will " +
+					"automatically collect blocks near you.", 'success', msgTimeout);
+				setTimeout(done, msgTimeout / 2);
+			}
+			else {
+				collectBlock();
+			}
 
 			function collectBlock() {
-				var questLog = alertify.questLog("Move you ship towards the dropped block to collect it.");
+				var questLog = alertify.questLog("Move your ship towards the dropped block to collect it.");
 				// First, set up listener
 				self.on(self.keys['collect'], function() {
 					questLog.close();
 					alertify.questLog("Glorious! You've collected a block!", 'success', msgTimeout);
 					setTimeout(done, msgTimeout / 2);
 				}, self, true);
+				// Then, ask the server if we have collected a drop
+				ige.questSystem.eventToServer(self.keys['collect'], self);
 			}
 
-			// Then, ask the server if we have collected a drop
-			ige.questSystem.eventToServer(self.keys['collect'], self);
 
 			function done() {
 				ige.client.metrics.track("cosmos:quest.tutorialQuest.collect.completed");
@@ -335,12 +353,11 @@ var TutorialQuest = Quest.extend({
 		clientStep: function() {
 		},
 
+		// Tells the client that a drop has been collected
 		// @server-side
 		server: function(player) {
-			console.log('hit1');
 			ige.on('cosmos:Ship.blockCollectListener.blockCollected' + player.id(),
 				function(player_, drop) {
-				console.log('hit2');
 				ige.questSystem.eventToClient(this.keys['collect'], this, player.clientId());
 			}, this, true);
 		}
