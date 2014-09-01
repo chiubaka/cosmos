@@ -35,18 +35,13 @@ var Health = TLStreamedEntityComponent.extend({
 		this.value = newValue;
 	},
 
-	setClient: function(data) {
-		this.set(data.value);
+	setClient: function(action) {
+		this.set(action.data);
 	},
 
 	setServer: function(newValue) {
 		this.set(newValue);
-		this.actions().push({
-			id: this._entity.id(),
-			component: this.componentId,
-			action: "set",
-			value: this.value
-		});
+		this.pushAction("set", this.value);
 	}
 });
 
