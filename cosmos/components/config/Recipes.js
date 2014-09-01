@@ -228,7 +228,7 @@ Recipes[GreenLaserBlock.prototype.classId()] =
 		},
 		{
 			blockType: KryptoniteBlock.prototype.classId(),
-			quantity: 5
+			quantity: 3
 		}
 	],
 	equipment: []
