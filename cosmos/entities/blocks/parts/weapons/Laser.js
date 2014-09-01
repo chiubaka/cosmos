@@ -113,8 +113,12 @@ var Laser = Weapon.extend({
 
 	fireServer: function(data) {
 		/* Validate whether or not this weapon can fire */
-		// Cannot fire while on cooldown
-		if (this.damageSource.coolingDown()) {
+		// Cannot fire while on cooldown.
+		// Must check whether or not this block is part of a Ship because there are race conditions
+		// where one client sends a message to have a laser fire, but before that message reaches
+		// the server the laser is destroyed and placed in a drop. At that point, the grid of the
+		// laser is not a ship, which would otherwise crash the server without this check.
+		if (this.damageSource.coolingDown() || this.blockGrid().classId() !== "Ship") {
 			return;
 		}
 
