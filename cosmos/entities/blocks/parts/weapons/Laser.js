@@ -144,8 +144,7 @@ Laser.onRender = function(data) {
 	}
 
 	if (laser.laserBeam === undefined) {
-		laser.laserBeam = new LaserBeam()
-			.setSource(laser)
+		laser.laserBeam = new LaserBeam({source: laser})
 			.setTarget(data.targetLoc.x, data.targetLoc.y);
 		laser._mountEffect(laser.laserBeam, true);
 	}

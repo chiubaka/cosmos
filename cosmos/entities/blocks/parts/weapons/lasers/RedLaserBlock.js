@@ -22,7 +22,7 @@ var RedLaserBlock = Laser.extend({
 			this.textureOutline = "rgb(208, 63, 44)";
 			this.textureSvg = ige.client.textures.redLaser;
 
-			this.laserSpriteName = "redLaserBeam";
+			this.laserSpriteName = "redLaserBeam.svg";
 		}
 
 		Laser.prototype.init.call(this, data);

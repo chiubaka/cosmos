@@ -22,7 +22,7 @@ var DoomLaserBlock = Laser.extend({
       this.textureOutline = "rgb(0, 0, 0)";
       this.textureSvg = ige.client.textures.doomLaser;
 
-      this.laserSpriteName = "doomLaserBeam";
+      this.laserSpriteName = "doomLaserBeam.svg";
     }
 
     Laser.prototype.init.call(this, data);
