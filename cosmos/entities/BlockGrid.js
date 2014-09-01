@@ -49,6 +49,7 @@ var BlockGrid = IgeEntity.extend({
 	// #endif
 
 	init: function(data) {
+		data = data || {};
 		IgeEntity.prototype.init.call(this, data);
 
 		this.implement(SparseGrid);
@@ -109,10 +110,7 @@ var BlockGrid = IgeEntity.extend({
 			// Initialize the actions
 			this._actions = [];
 
-			// Add physics body component if it doesn't exist
-			if (this.physicsBody === undefined) {
-				this.addComponent(TLPhysicsBodyComponent);
-			}
+			this.addComponent(TLPhysicsBodyComponent, data.physicsBody);
 
 			// Specify initial starting location of physics body
 			if (data && data.translate) {
@@ -335,7 +333,11 @@ var BlockGrid = IgeEntity.extend({
 				// contiguous structure.
 				if (this.hasNeighbors(location)) {
 					var block = Block.fromType(data.selectedType);
-					self.put(block, new IgePoint2d(data.col, data.row), false);
+					// If put returns null, it means there was already a block at the requested
+					// location.
+					if (self.put(block, new IgePoint2d(data.col, data.row), false) === null) {
+						return false;
+					}
 					self.actions().push({
 						action: "put",
 						block: block.toJSON()
