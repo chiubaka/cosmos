@@ -7,7 +7,7 @@ DamageSources[RedLaserBlock.prototype.classId()] = {
 	cooldown: 1000,
 	damage: 20,
 	duration: 2000,
-	range: 1000
+	range: 600
 };
 
 /*
@@ -18,7 +18,7 @@ DamageSources[GreenLaserBlock.prototype.classId()] = {
 	cooldown: 1000,
 	damage: 40,
 	duration: 2000,
-	range: 1500
+	range: 900
 };
 
 /*
@@ -29,7 +29,7 @@ DamageSources[PurpleLaserBlock.prototype.classId()] = {
 	cooldown: 1000,
 	damage: 60,
 	duration: 2000,
-	range: 2000
+	range: 1200
 };
 
 /*
@@ -40,7 +40,7 @@ DamageSources[DoomLaserBlock.prototype.classId()] = {
 	cooldown: 1000,
 	damage: 200,
 	duration: 2000,
-	range: 10000
+	range: 2000
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
