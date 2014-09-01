@@ -6,7 +6,7 @@ var Laser = Weapon.extend({
 	},
 
 	firingUpdate: function() {
-		if (!this.damageSource.isFiring) {
+		if (!this.damageSource.target()) {
 			// TOOD: This case is being hit. Figure out why and fix it, because this should never
 			// happen.
 			this.log("Laser#firingUpdate: called on a non-firing weapon.", "warning");
@@ -18,7 +18,7 @@ var Laser = Weapon.extend({
 			this.log("Laser#firingUpdate: error getting world coordinates of laser.", "error");
 		}
 
-		var targetLoc = this.damageSource.target;
+		var targetLoc = this.damageSource.target();
 
 		var delta = {x: targetLoc.x - laserLoc.x, y: targetLoc.y - laserLoc.y};
 		var theta = Math.atan2(delta.y, delta.x);
@@ -75,6 +75,8 @@ var Laser = Weapon.extend({
 				hitBlock.takeDamage(damage, self.gridData.grid.player());
 			}
 
+			self.damageSource.intersectionPointServer(intersectionPoint);
+
 			/* Increment duration fired/ */
 			self.damageSource.durationFired += Constants.UPDATE_TIME.SERVER;
 
@@ -82,15 +84,12 @@ var Laser = Weapon.extend({
 			if (self.damageSource.durationFired >= self.damageSource.duration) {
 				self.gridData.grid.firingWeapons()
 					.splice(self.gridData.grid.firingWeapons().indexOf(self), 1);
-				self.damageSource.isFiring = false;
+				self.damageSource.target(null);
+				self.damageSource.intersectionPointServer(null);
 
-				ige.network.send("cosmos:Laser.render.stop", {id: self.id()});
-
-				ige.network.send("cosmos:Weapon.cooldown.start", {id: self.id()},
-					self.gridData.grid.player().clientId());
-				self.damageSource.onCooldown = true;
+				self.damageSource.coolingDown(true);
 				setTimeout(function() {
-					self.damageSource.onCooldown = false;
+					self.damageSource.coolingDown(false);
 				}, self.damageSource.cooldown);
 			}
 			else {
@@ -99,8 +98,6 @@ var Laser = Weapon.extend({
 					targetLoc: intersectionPoint,
 					normal: {x: data.normalX, y: data.normalY}
 				};
-
-				ige.network.send("cosmos:Laser.render", renderData);
 			}
 		});
 	},
@@ -116,55 +113,25 @@ var Laser = Weapon.extend({
 
 	fireServer: function(data) {
 		/* Validate whether or not this weapon can fire */
-		// Cannot fire while on cooldown
-		if (this.damageSource.onCooldown) {
+		// Cannot fire while on cooldown.
+		// Must check whether or not this block is part of a Ship because there are race conditions
+		// where one client sends a message to have a laser fire, but before that message reaches
+		// the server the laser is destroyed and placed in a drop. At that point, the grid of the
+		// laser is not a ship, which would otherwise crash the server without this check.
+		if (this.damageSource.coolingDown() || !(this.blockGrid() instanceof Ship)) {
 			return;
 		}
 
 		// If already firing, duration will not reset. This way a player can only fire for the
 		// laser's duration, but can retarget during that duration.
-		if (!this.damageSource.isFiring) {
+		if (!this.damageSource.target()) {
 			this.damageSource.durationFired = 0;
-			this.damageSource.isFiring = true;
 			this.gridData.grid.firingWeapons().push(this);
 		}
 
-		this.damageSource.target = data.targetLoc;
+		this.damageSource.target(data.targetLoc);
 	}
 });
-
-Laser.onRender = function(data) {
-	var laser = ige.$(data.id);
-	if (!laser) {
-		// TODO: For now, messages can be received for lasers that don't exist because messages are
-		// sent from the server to all clients. Uncomment this when there is some sort of stream
-		// control in place.
-		//console.error("Laser#onRender: invalid laser id: " + data.id);
-		return;
-	}
-
-	if (laser.laserBeam === undefined) {
-		laser.laserBeam = new LaserBeam({source: laser})
-			.setTarget(data.targetLoc.x, data.targetLoc.y);
-		laser._mountEffect(laser.laserBeam, true);
-	}
-	else {
-		laser.laserBeam.setTarget(data.targetLoc.x, data.targetLoc.y);
-	}
-};
-
-Laser.onRenderStop = function(data) {
-	var laser = ige.$(data.id);
-	if (!laser) {
-		// TODO: For now, messages can be received for lasers that don't exist because messages are
-		// sent from the server to all clients. Uncomment this when there is some sort of stream
-		// control in place.
-		//console.error("Laser#onRenderStop: invalid laser id: " + data.id);
-		return;
-	}
-	laser.laserBeam.destroy();
-	delete laser.laserBeam;
-};
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
 	module.exports = Laser;

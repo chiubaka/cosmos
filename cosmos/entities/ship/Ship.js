@@ -143,6 +143,16 @@ var Ship = BlockStructure.extend({
 		return data;
 	},
 
+	streamSectionData: function(sectionId, data, bypassTimeStream) {
+		if (data) {
+			if (sectionId === "actions") {
+				ige.hud.bottomToolbar.capBar.mineCap.cooldownActivated = false;
+			}
+		}
+		return BlockStructure.prototype.streamSectionData.call(this, sectionId, data,
+			bypassTimeStream);
+	},
+
 	destroy: function() {
 		if (ige.isClient && this.player()) {
 			this.player()._destroyUsernameLabel();
@@ -245,7 +255,7 @@ var Ship = BlockStructure.extend({
 
 		var index = this.firingWeapons().indexOf(block);
 		if (index !== -1) {
-			this.firingWeapons()[index].damageSource.isFiring = false;
+			this.firingWeapons()[index].damageSource.target(null);
 			this.firingWeapons().splice(index, 1);
 		}
 	},
