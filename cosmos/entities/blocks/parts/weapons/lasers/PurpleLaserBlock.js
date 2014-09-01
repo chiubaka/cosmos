@@ -1,10 +1,10 @@
 /**
  * Subclass of the {@link Part} class.
- * The {@link RedLaserBlock} class represents a block that can mine blocks. Better lasers will allow you to
+ * The {@link PurpleLaserBlock} class represents a block that can mine blocks. Better lasers will allow you to
  * (1) mine better blocks and (2) mine faster. If you don't have a laser you can't mine.
- * Also, note that lasers are currently the only weapon for combat.
+ * Also, note that lasers are currently the only weapons for combat.
  * @class
- * @typedef {RedLaserBlock}
+ * @typedef {PurpleLaserBlock}
  * @namespace
  */
 var PurpleLaserBlock = Laser.extend({
