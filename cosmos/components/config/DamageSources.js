@@ -5,7 +5,7 @@ The red laser is the most basic weapon in the game right now
 */
 DamageSources[RedLaserBlock.prototype.classId()] = {
 	cooldown: 1000,
-	damage: 20,
+	damage: 40,
 	duration: 2000,
 	range: 600
 };
@@ -16,7 +16,7 @@ range than the red laser
 */
 DamageSources[GreenLaserBlock.prototype.classId()] = {
 	cooldown: 1000,
-	damage: 40,
+	damage: 60,
 	duration: 2000,
 	range: 900
 };
@@ -27,7 +27,7 @@ range than the green laser
 */
 DamageSources[PurpleLaserBlock.prototype.classId()] = {
 	cooldown: 1000,
-	damage: 60,
+	damage: 80,
 	duration: 2000,
 	range: 1200
 };
