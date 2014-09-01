@@ -118,7 +118,7 @@ var Laser = Weapon.extend({
 		// where one client sends a message to have a laser fire, but before that message reaches
 		// the server the laser is destroyed and placed in a drop. At that point, the grid of the
 		// laser is not a ship, which would otherwise crash the server without this check.
-		if (this.damageSource.coolingDown() || this.blockGrid().classId() !== "Ship") {
+		if (this.damageSource.coolingDown() || !(this.blockGrid() instanceof Ship)) {
 			return;
 		}
 
