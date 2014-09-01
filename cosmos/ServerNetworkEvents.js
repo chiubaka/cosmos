@@ -143,7 +143,7 @@ var ServerNetworkEvents = {
 		ige.server.players[clientId] = player;
 
 		// Load the player's ships
-		DbPlayer.noUpdate(ige.server._createShip, [clientId, playerId, ship, cargo], this);
+		DbPlayer.noUpdate(this, ige.server._createShip, [clientId, playerId, ship, cargo]);
 
 		var sendData = player.toJSON();
 
