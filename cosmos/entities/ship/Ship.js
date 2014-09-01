@@ -255,7 +255,7 @@ var Ship = BlockStructure.extend({
 
 		var index = this.firingWeapons().indexOf(block);
 		if (index !== -1) {
-			this.firingWeapons()[index].damageSource.isFiring = false;
+			this.firingWeapons()[index].damageSource.target(null);
 			this.firingWeapons().splice(index, 1);
 		}
 	},
