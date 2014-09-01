@@ -255,7 +255,6 @@ var Block = IgeEntity.extend({
 	 * Called just before this {@link Block} is removed from a {@link BlockGrid}. Default is just a stub since the
 	 * basic {@link Block} does nothing when removed from a {@link BlockGrid}. Override this function in subclasses of
 	 * the {@link Block} if needed.
-	 * @param grid the grid that this block was removed from
 	 * @memberof BlockGrid
 	 * @instance
 	 */
