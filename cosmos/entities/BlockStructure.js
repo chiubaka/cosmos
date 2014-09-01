@@ -29,6 +29,21 @@ var BlockStructure = BlockGrid.extend({
 	_needsRefresh: undefined,
 
 	init: function(data) {
+		data = data || {};
+
+		if (ige.isServer) {
+			data.physicsBody = data.physicsBody || {};
+
+			// These are default values for the category and mask of a BlockStructure.
+			// Subclasses can override these by setting their own.
+			data.physicsBody.fixtureFilter = data.physicsBody.fixtureFilter || {
+				categoryBits: data.physicsBody.categoryBits
+					|| BlockStructure.BOX2D_CATEGORY_BITS,
+				maskBits: data.physicsBody.maskBits
+					|| (0xffff & ~(1 << Drop.BOX2D_CATEGORY_BITS))
+			}
+		}
+
 		BlockGrid.prototype.init.call(this, data);
 
 		this._enableRefresh = true;
@@ -116,6 +131,9 @@ var BlockStructure = BlockGrid.extend({
 		}
 	}
 });
+
+BlockStructure.BOX2D_CATEGORY_BITS = 0x0008;
+
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
 	module.exports = BlockStructure;
