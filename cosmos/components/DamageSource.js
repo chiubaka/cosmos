@@ -21,7 +21,6 @@ var DamageSource = TLStreamedEntityComponent.extend({
 		TLStreamedEntityComponent.prototype.init.call(this, entity, data);
 
 		this._actionCallbacks = {
-			coolingDown: this.coolingDownClient,
 			intersectionPoint: this.intersectionPointClient
 		};
 
@@ -41,22 +40,6 @@ var DamageSource = TLStreamedEntityComponent.extend({
 			return this;
 		}
 		return this._coolingDown;
-	},
-
-	coolingDownClient: function(action) {
-		this.coolingDown(action.data);
-
-		if (this._coolingDown) {
-			var ship = this._entity.blockGrid();
-			if (ship === ige.client.player.currentShip()) {
-				ige.hud.bottomToolbar.capBar.mineCap.startCooldown(this._entity);
-			}
-		}
-	},
-
-	coolingDownServer: function(newVal) {
-		this.coolingDown(newVal);
-		this.pushAction("coolingDown", this._coolingDown);
 	},
 
 	intersectionPoint: function(newPoint) {
@@ -89,6 +72,12 @@ var DamageSource = TLStreamedEntityComponent.extend({
 		else {
 			laser.laserBeam.destroy();
 			laser.laserBeam = undefined;
+
+			// Laser stopped firing. Start cooldown timer on client.
+			var ship = this._entity.blockGrid();
+			if (ship === ige.client.player.currentShip()) {
+				ige.hud.bottomToolbar.capBar.mineCap.startCooldown(this._entity);
+			}
 		}
 	},
 

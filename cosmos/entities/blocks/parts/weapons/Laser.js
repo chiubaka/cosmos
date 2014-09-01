@@ -87,9 +87,9 @@ var Laser = Weapon.extend({
 				self.damageSource.target(null);
 				self.damageSource.intersectionPointServer(null);
 
-				self.damageSource.coolingDownServer(true);
+				self.damageSource.coolingDown(true);
 				setTimeout(function() {
-					self.damageSource.coolingDownServer(false);
+					self.damageSource.coolingDown(false);
 				}, self.damageSource.cooldown);
 			}
 			else {
