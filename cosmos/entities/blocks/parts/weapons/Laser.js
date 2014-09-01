@@ -6,7 +6,7 @@ var Laser = Weapon.extend({
 	},
 
 	firingUpdate: function() {
-		if (!this.damageSource.isFiring) {
+		if (!this.damageSource.isFiring()) {
 			// TOOD: This case is being hit. Figure out why and fix it, because this should never
 			// happen.
 			this.log("Laser#firingUpdate: called on a non-firing weapon.", "warning");
@@ -18,7 +18,7 @@ var Laser = Weapon.extend({
 			this.log("Laser#firingUpdate: error getting world coordinates of laser.", "error");
 		}
 
-		var targetLoc = this.damageSource.target;
+		var targetLoc = this.damageSource.target();
 
 		var delta = {x: targetLoc.x - laserLoc.x, y: targetLoc.y - laserLoc.y};
 		var theta = Math.atan2(delta.y, delta.x);
@@ -82,15 +82,15 @@ var Laser = Weapon.extend({
 			if (self.damageSource.durationFired >= self.damageSource.duration) {
 				self.gridData.grid.firingWeapons()
 					.splice(self.gridData.grid.firingWeapons().indexOf(self), 1);
-				self.damageSource.isFiring = false;
+				self.damageSource.isFiringServer(false);
 
 				ige.network.send("cosmos:Laser.render.stop", {id: self.id()});
 
 				ige.network.send("cosmos:Weapon.cooldown.start", {id: self.id()},
 					self.gridData.grid.player().clientId());
-				self.damageSource.onCooldown = true;
+				self.damageSource.coolingDownServer(true);
 				setTimeout(function() {
-					self.damageSource.onCooldown = false;
+					self.damageSource.coolingDownServer(false);
 				}, self.damageSource.cooldown);
 			}
 			else {
@@ -117,19 +117,19 @@ var Laser = Weapon.extend({
 	fireServer: function(data) {
 		/* Validate whether or not this weapon can fire */
 		// Cannot fire while on cooldown
-		if (this.damageSource.onCooldown) {
+		if (this.damageSource.coolingDown()) {
 			return;
 		}
 
 		// If already firing, duration will not reset. This way a player can only fire for the
 		// laser's duration, but can retarget during that duration.
-		if (!this.damageSource.isFiring) {
+		if (!this.damageSource.isFiring()) {
 			this.damageSource.durationFired = 0;
-			this.damageSource.isFiring = true;
+			this.damageSource.isFiringServer(true);
 			this.gridData.grid.firingWeapons().push(this);
 		}
 
-		this.damageSource.target = data.targetLoc;
+		this.damageSource.targetServer(data.targetLoc);
 	}
 });
 
