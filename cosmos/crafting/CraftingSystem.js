@@ -17,11 +17,10 @@ var CraftingSystem = IgeEventingClass.extend({
 		if (ige.isClient) {
 			ige.network.define('cosmos:crafting.addRecipe', this._addRecipeClient);
 			ige.network.define('cosmos:CraftingSystem._craftServer.success', this._onCraftServerSuccess);
-			// Update the crafting state so items are correctly grayed out in the UI
 
-			// TODO: Currently, capability to craft things
-			//ige.on('cargo response', this._refreshCraftingState);
-			//ige.on('cargo update', this._refreshCraftingState);
+			// Update the crafting window once
+			// TODO: Update the crafting state so items are correctly grayed out in the UI
+			ige.on('cargo response', this._refreshCraftingState, this, true);
 		}
 		this.log('Crafting system initiated!');
 	},
