@@ -92,7 +92,7 @@ var DbPlayer = {
 	// We don't want to update the DB when loading the player because if the
 	// loading is interrupted, the player's incomplete ship and cargo may be
 	// saved to the DB.
-	noUpdate: function (doWork, opts, context) {
+	noUpdate: function(context, doWork, opts) {
 		this._noUpdate = true;
 		doWork.apply(context, opts);
 		this._noUpdate = false;
