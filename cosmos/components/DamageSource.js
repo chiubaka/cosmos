@@ -3,11 +3,11 @@ var DamageSource = TLStreamedEntityComponent.extend({
 	componentId: 'damageSource',
 
 	cooldown: undefined,
+	_coolingDown: undefined,
 	damage: undefined,
 	duration: undefined,
 	durationFired: undefined,
-	_isFiring: undefined,
-	_coolingDown: undefined,
+	_intersectionPoint: undefined,
 	range: undefined,
 	_target: undefined,
 
@@ -22,8 +22,8 @@ var DamageSource = TLStreamedEntityComponent.extend({
 
 		this._actionCallbacks = {
 			coolingDown: this.coolingDownClient,
+			intersectionPoint: this.intersectionPointClient,
 			isFiring: this.isFiringClient,
-			target: this.targetClient
 		};
 
 		this.cooldown = data.cooldown;
@@ -32,12 +32,12 @@ var DamageSource = TLStreamedEntityComponent.extend({
 		this.range = data.range;
 
 		this.durationFired = 0;
-		this._isFiring = false;
+		this._intersectionPoint = null;
 		this._coolingDown = false;
 	},
 
 	coolingDown: function(newVal) {
-		if (newVal) {
+		if (newVal !== undefined) {
 			this._coolingDown = newVal;
 			return this;
 		}
@@ -53,40 +53,49 @@ var DamageSource = TLStreamedEntityComponent.extend({
 		this.pushAction("coolingDown", this._coolingDown);
 	},
 
-	isFiring: function(newVal) {
-		if (newVal) {
-			this._isFiring = newVal;
+	intersectionPoint: function(newPoint) {
+		if (newPoint !== undefined) {
+			this._intersectionPoint = newPoint;
 			return this;
 		}
 
-		return this._isFiring;
+		return this._intersectionPoint;
 	},
 
-	isFiringClient: function(action) {
-		this.isFiring(action.data);
+	intersectionPointClient: function(action) {
+		this.intersectionPoint(action.data);
+		var laser = this._entity;
+
+		if (this._intersectionPoint) {
+			if (laser.laserBeam === undefined) {
+				laser.laserBeam = new LaserBeam()
+					.setSource(laser)
+					.setTarget(action.data.x, action.data.y);
+
+				laser._mountEffect(laser.laserBeam, true);
+			}
+			else {
+				laser.laserBeam.setTarget(action.data.x, action.data.y);
+			}
+		}
+		else {
+			laser.laserBeam.destroy();
+			laser.laserBeam = undefined;
+		}
 	},
 
-	isFiringServer: function(newVal) {
-		this.isFiring(newVal);
-		this.pushAction("isFiring", this._isFiring);
+	intersectionPointServer: function(newPoint) {
+		this.intersectionPoint(newPoint);
+		this.pushAction("intersectionPoint", newPoint);
 	},
 
 	target: function(newTarget) {
-		if (newTarget) {
+		if (newTarget !== undefined) {
 			this._target = newTarget;
 			return this;
 		}
 
 		return this._target;
-	},
-
-	targetClient: function(action) {
-		this.target(action.data);
-	},
-
-	targetServer: function(newTarget) {
-		this.target(newTarget);
-		this.pushAction("target", this._target);
 	}
 });
 

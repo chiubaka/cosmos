@@ -153,9 +153,6 @@ var Client = IgeClass.extend({
 							ige.network.define('cosmos:Weapon.cooldown.start',
 								Weapon.startCooldown);
 
-							ige.network.define('cosmos:Laser.render', Laser.onRender);
-							ige.network.define('cosmos:Laser.render.stop', Laser.onRenderStop);
-
 							ige.network.define('cosmos:player.username.set.approve', Player.onUsernameRequestApproved);
 							ige.network.define('cosmos:player.username.set.error', Player.onUsernameRequestError);
 
