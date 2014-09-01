@@ -150,9 +150,6 @@ var Client = IgeClass.extend({
 							ige.network.define('cargoUpdate', self._onCargoUpdate);
 							ige.network.define('confirm', self._onConfirm);
 
-							ige.network.define('cosmos:Weapon.cooldown.start',
-								Weapon.startCooldown);
-
 							ige.network.define('cosmos:player.username.set.approve', Player.onUsernameRequestApproved);
 							ige.network.define('cosmos:player.username.set.error', Player.onUsernameRequestError);
 

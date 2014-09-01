@@ -22,8 +22,7 @@ var DamageSource = TLStreamedEntityComponent.extend({
 
 		this._actionCallbacks = {
 			coolingDown: this.coolingDownClient,
-			intersectionPoint: this.intersectionPointClient,
-			isFiring: this.isFiringClient,
+			intersectionPoint: this.intersectionPointClient
 		};
 
 		this.cooldown = data.cooldown;
@@ -46,6 +45,13 @@ var DamageSource = TLStreamedEntityComponent.extend({
 
 	coolingDownClient: function(action) {
 		this.coolingDown(action.data);
+
+		if (this._coolingDown) {
+			var ship = this._entity.blockGrid();
+			if (ship === ige.client.player.currentShip()) {
+				ige.hud.bottomToolbar.capBar.mineCap.startCooldown(this._entity);
+			}
+		}
 	},
 
 	coolingDownServer: function(newVal) {
@@ -62,6 +68,8 @@ var DamageSource = TLStreamedEntityComponent.extend({
 		return this._intersectionPoint;
 	},
 
+	// TODO: For now, the DamageSource makes assumptions about the type of weapon. This should be
+	// changed when there are multiple types of weapons in the game.
 	intersectionPointClient: function(action) {
 		this.intersectionPoint(action.data);
 		var laser = this._entity;

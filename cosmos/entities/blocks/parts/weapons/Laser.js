@@ -87,8 +87,6 @@ var Laser = Weapon.extend({
 				self.damageSource.target(null);
 				self.damageSource.intersectionPointServer(null);
 
-				ige.network.send("cosmos:Weapon.cooldown.start", {id: self.id()},
-					self.gridData.grid.player().clientId());
 				self.damageSource.coolingDownServer(true);
 				setTimeout(function() {
 					self.damageSource.coolingDownServer(false);
