@@ -170,7 +170,7 @@ var ServerNetworkEvents = {
 		);
 
 		if (ship === undefined) {
-			player.currentShip().fromBlockMatrix(ExampleShips.starterShipWithAllWeapons(), false);
+			player.currentShip().fromBlockMatrix(ExampleShips.starterShip(), false);
 		}
 		else {
 			player.currentShip().fromBlockTypeMatrix(ship, false);
