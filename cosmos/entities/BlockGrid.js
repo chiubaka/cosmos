@@ -441,7 +441,6 @@ var BlockGrid = IgeEntity.extend({
 				block.unMount();
 			}
 			// #endif
-			block.onRemoved();
 		});
 
 		if (ige.isClient && !this._putting) {

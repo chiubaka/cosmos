@@ -1,6 +1,8 @@
 var Laser = Weapon.extend({
 	classId: 'Laser',
 
+	_rayCastId: undefined,
+
 	init: function(data) {
 		Weapon.prototype.init.call(this, data);
 	},
@@ -40,7 +42,16 @@ var Laser = Weapon.extend({
 		};
 
 		var self = this;
-		ige.physicsSystem.newRayCast(opts, function(data) {
+		var rayCastId = this._rayCastId = ige.physicsSystem.newRayCast(opts, function(data) {
+			// If the stored rayCastId doesn't match the instance's rayCastId, this block was
+			// probably removed. This needs to be dealt with because the rayCast system has an
+			// asynchronous callback. Between when we ask for the rayCast and when we receive the
+			// results, the block that requested the rayCast may have been removed or modified in
+			// some meaningful way.
+			if (rayCastId !== self._rayCastId) {
+				return;
+			}
+
 			var intersectionPoint = {x: inRangeLoc.x, y: inRangeLoc.y};
 			var hitBlock = null;
 
@@ -82,10 +93,7 @@ var Laser = Weapon.extend({
 
 			/* If we have fired for as long as we were supposed to, shut off the weapon. */
 			if (self.damageSource.durationFired >= self.damageSource.duration) {
-				self.gridData.grid.firingWeapons()
-					.splice(self.gridData.grid.firingWeapons().indexOf(self), 1);
-				self.damageSource.target(null);
-				self.damageSource.intersectionPointServer(null);
+				self.stopFiring();
 
 				self.damageSource.coolingDown(true);
 				setTimeout(function() {
@@ -130,6 +138,23 @@ var Laser = Weapon.extend({
 		}
 
 		this.damageSource.target(data.targetLoc);
+	},
+
+	onRemove: function() {
+		Weapon.prototype.onRemove.call(this);
+
+		if (ige.isServer && this.damageSource.target()) {
+			this.stopFiring();
+		}
+	},
+
+	stopFiring: function() {
+		this.damageSource.target(null);
+		this.damageSource.intersectionPointServer(null);
+		this._rayCastId = undefined;
+
+		var firingWeapons = this.blockGrid().firingWeapons();
+		firingWeapons.splice(firingWeapons.indexOf(this), 1);
 	}
 });
 
