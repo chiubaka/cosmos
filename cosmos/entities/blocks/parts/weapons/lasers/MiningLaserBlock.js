@@ -1,8 +1,8 @@
 /**
  * Subclass of the {@link Part} class.
- * The {@link MiningLaserBlock} class represents a block that can mine blocks. Better mining lasers will allow you to
- * (1) mine better blocks and (2) mine faster. If you don't have a mining laser you can't mine.
- * Also, note that mining lasers are currently the only weapon for combat.
+ * The {@link MiningLaserBlock} class represents a block that can mine blocks. Better lasers will allow you to
+ * (1) mine better blocks and (2) mine faster. If you don't have a laser you can't mine.
+ * Also, note that lasers are currently the only weapon for combat.
  * @class
  * @typedef {MiningLaserBlock}
  * @namespace
@@ -26,13 +26,13 @@ var MiningLaserBlock = Laser.extend({
 	},
 
 	/**
-	 * Overrides superclass addEffect function. The mining laser supports effects for adding the mining laser graphic
+	 * Overrides superclass addEffect function. The laser supports effects for adding the laser graphic
 	 * between this {@link Block} and a target {@link Block}. This function handles adding effects to the
 	 * {@link MiningLaserBlock}
 	 * @param effect {Object} An effect object, which stores the effect type and two
 	 * network-converted {@link Block} objects as returned from {@link NetworkUtils#block}. The source block is the block
 	 * that the effect is being added to. The target block is a secondary block that is required for certain effects like
-	 * the mining laser effect.
+	 * the laser effect.
 	 * @memberof MiningLaserBlock
 	 * @instance
 	 */
@@ -61,7 +61,7 @@ var MiningLaserBlock = Laser.extend({
 	 * @param effect {Object} An effect object, which stores the effect type and two
 	 * network-converted {@link Block} objects as returned from {@link NetworkUtils#block}. The source block is the block
 	 * that the effect is being added to. The target block is a secondary block that is required for certain effects like
-	 * the mining laser effect.
+	 * the laser effect.
 	 * @memberof MiningLaserBlock
 	 * @instance
 	 */
@@ -79,11 +79,11 @@ var MiningLaserBlock = Laser.extend({
 	},
 
 	/**
-	 * Handles adding the mining laser effect to this {@link MiningLaserBlock}.
+	 * Handles adding the laser effect to this {@link MiningLaserBlock}.
 	 * @param effect {Object} An effect object, which stores the effect type and two
 	 * network-converted {@link Block} objects as returned from {@link NetworkUtils#block}. The source block is the block
 	 * that the effect is being added to. The target block is a secondary block that is required for certain effects like
-	 * the mining laser effect.
+	 * the laser effect.
 	 * @memberof MiningLaserBlock
 	 * @private
 	 * @instance
@@ -111,11 +111,11 @@ var MiningLaserBlock = Laser.extend({
 	},
 
 	/**
-	 * Removes the mining laser effect from this {@link MiningLaserBlock}.
+	 * Removes the laser effect from this {@link MiningLaserBlock}.
 	 * @param effect {Object}  An effect object, which stores the effect type and two
 	 * network-converted {@link Block} objects as returned from {@link NetworkUtils#block}. The source block is the block
 	 * that the effect is being added to. The target block is a secondary block that is required for certain effects like
-	 * the mining laser effect.
+	 * the laser effect.
 	 * @memberof MiningLaserBlock
 	 * @private
 	 * @instance

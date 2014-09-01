@@ -227,7 +227,7 @@ Descriptions[Weapon.prototype.classId()] =
 Descriptions[RedLaserBlock.prototype.classId()] =
 {
 	text: 'This laser is the most basic weapon in the game. Use it to break blocks off of structures ' +
-		'and ships. If you lose your mining laser, you will not be able to shoot.'
+		'and ships. If you lose your laser, you will not be able to shoot.'
 };
 Descriptions[GreenLaserBlock.prototype.classId()] =
 {

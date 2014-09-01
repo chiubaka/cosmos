@@ -30,13 +30,13 @@ var NotificationDefinitions = {
 	},
 
 	errors: {
-		1: 'Cannot mine this block. Your mining laser cannot reach the inside of asteroids.',
+		1: 'Cannot mine this block. Your laser cannot reach the inside of asteroids.',
 		2: 'Cannot construct here!',
 		4: 'No block type selected!',
 		5: 'Cannot mine empty space!',
 		6: 'Cannot thrust... no engine!',
 		7: 'Cannot rotate... no rotational thruster!',
-		8: 'Cannot mine... no mining laser!',
+		8: 'Cannot mine... no laser!',
 		9: 'Recipe not unlocked!',
 		10: 'Insufficient reactants!',
 		11: 'Insufficient ship equipment!',

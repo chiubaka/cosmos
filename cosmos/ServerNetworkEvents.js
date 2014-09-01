@@ -282,7 +282,7 @@ var ServerNetworkEvents = {
 		if(blockGrid.processBlockActionServer(data, player)) {
 			player.currentShip().mining = true;
 
-			// Activate mining lasers
+			// Activate lasers
 			player.currentShip().fireMiningLasers(targetBlock);
 		}
 	},

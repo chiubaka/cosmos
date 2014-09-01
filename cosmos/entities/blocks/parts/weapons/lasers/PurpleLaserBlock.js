@@ -1,8 +1,8 @@
 /**
  * Subclass of the {@link Part} class.
- * The {@link RedLaserBlock} class represents a block that can mine blocks. Better mining lasers will allow you to
- * (1) mine better blocks and (2) mine faster. If you don't have a mining laser you can't mine.
- * Also, note that mining lasers are currently the only weapon for combat.
+ * The {@link RedLaserBlock} class represents a block that can mine blocks. Better lasers will allow you to
+ * (1) mine better blocks and (2) mine faster. If you don't have a laser you can't mine.
+ * Also, note that lasers are currently the only weapon for combat.
  * @class
  * @typedef {RedLaserBlock}
  * @namespace

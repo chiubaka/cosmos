@@ -275,7 +275,7 @@ var Block = IgeEntity.extend({
 	 * {@link Block} if one does not already exist. It is expected that all subclasses call this function at the
 	 * beginning of their own addEffect function.
 	 * @param effect {Object} An effect object containing information for the type of effect, the source block
-	 * (block on which to mount the effect), and an optional target block for effects like the mining laser.
+	 * (block on which to mount the effect), and an optional target block for effects like the laser.
 	 * @memberof Block
 	 * @instance
 	 */
@@ -330,7 +330,7 @@ var Block = IgeEntity.extend({
 	 * if there are no more effects on this {@link Block}. It is expected that all subclasses call this function at
 	 * the end of their own removeEffect function.
 	 * @param effect {Object} An effect object containing information for the type of effect, the source block
-	 * (block on which to mount the effect), and an optional target block for effects like the mining laser.
+	 * (block on which to mount the effect), and an optional target block for effects like the laser.
 	 * @memberof Block
 	 * @instance
 	 */
@@ -581,7 +581,7 @@ Block.WIDTH = 26;
  */
 Block.HEIGHT = 26;
 /**
- * How long (in milliseconds) it takes for a ship with a single mining laser to decrease a block's HP by 1.
+ * How long (in milliseconds) it takes for a ship with a single laser to decrease a block's HP by 1.
  * Note that even though MINING_INTERVAL is the same for all blocks,
  * blocks take different amounts of time to completely mine because they have different amounts of HP.
  * @constant {number}

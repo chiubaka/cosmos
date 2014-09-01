@@ -139,7 +139,7 @@ var BlockGrid = IgeEntity.extend({
 	/**
 	 * Adds an effect to a {@link Block} in this {@link BlockGrid}
 	 * @param effect {Object} An effect object containing information for the type of effect, the source block
-	 * (block on which to mount the effect), and an optional target block for effects like the mining laser.
+	 * (block on which to mount the effect), and an optional target block for effects like the laser.
 	 * @memberof BlockGrid
 	 * @instance
 	 */
@@ -454,7 +454,7 @@ var BlockGrid = IgeEntity.extend({
 	/**
 	 * Removes an effect from a {@link Block} in this {@link BlockGrid}
 	 * @param effect {Object} An effect object containing information for the type of effect, the source block
-	 * (block on which to mount the effect), and an optional target block for effects like the mining laser.
+	 * (block on which to mount the effect), and an optional target block for effects like the laser.
 	 * @memberof BlockGrid
 	 * @instance
 	 */
