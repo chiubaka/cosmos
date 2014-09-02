@@ -338,6 +338,9 @@ var SparseGrid = IgeClass.extend({
 		var self = this;
 		_.forEach(previousObjects, function(previousObject) {
 			self._unsetObject(previousObject);
+			if (previousObject.onRemove) {
+				previousObject.onRemove();
+			}
 			previousObject.gridData.grid = undefined;
 
 			var bounds = previousObject.gridData.bounds();
