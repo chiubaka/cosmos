@@ -277,6 +277,10 @@ var BlockGrid = IgeEntity.extend({
 		if (data.id) {
 			var block = ige.$(data.id);
 
+			if (!block) {
+				return;
+			}
+
 			if (!(block instanceof Block)) {
 				this.log('BlockGrid#processActionClient: non-block entity ID received: '
 					+ block.classId(), 'error');
