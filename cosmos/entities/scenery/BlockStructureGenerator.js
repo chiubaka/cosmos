@@ -84,6 +84,7 @@ var BlockStructureGenerator = {
 						} else {
 							var newBlock = self._getBlockType(blockStructure, block.row, block.col, blockDistribution, {gridWidth: currentSize, gridHeight: currentSize});
 						}
+						newBlock.physicsFixture.fixtureDef['groupIndex'] = -1;
 
 						// We will have a seperate variable for the actual location of the block.
 						// The idea here is that the location that needs to be filled, called 'block',

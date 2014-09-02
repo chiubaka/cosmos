@@ -9,12 +9,12 @@ var LaserBeamRenderableComponent = PixiRenderableComponent.extend({
 	update: function() {
 		PixiRenderableComponent.prototype.update.call(this);
 
-		if (!this._entity._target || !this._entity._source) {
+		if (!this._entity._targetX || !this._entity._targetY || !this._entity._source) {
 			return;
 		}
 
 		var sourceCoordinates = this._entity._source.worldCoordinates();
-		var targetCoordinates = this._entity._target.worldCoordinates();
+		var targetCoordinates = new IgePoint2d(this._entity._targetX, this._entity._targetY);
 
 		if (!sourceCoordinates || !targetCoordinates) {
 			return;
@@ -25,8 +25,9 @@ var LaserBeamRenderableComponent = PixiRenderableComponent.extend({
 		var angle = Math.atan2(delta.y, delta.x);
 
 		this._displayObject.height = distance * 2;
-
-		this._displayObject.rotation = angle - this._entity._source.gridData.grid.rotate().z() + Math.radians(90);
+		this._displayObject.blendMode = PIXI.blendModes.ADD;
+		this._displayObject.rotation = angle - this._entity._source.gridData.grid.
+			renderable._displayObject.rotation + Math.radians(90);
 	}
 });
 

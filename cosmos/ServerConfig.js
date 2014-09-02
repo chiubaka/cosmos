@@ -41,7 +41,8 @@ var config = {
 
 		/* Weapons */
 		{ name: 'Weapon', path: './entities/blocks/parts/Weapon' },
-		{ name: 'MiningLaserBlock', path: './entities/blocks/parts/weapons/MiningLaserBlock' },
+		{ name: 'Laser', path: './entities/blocks/parts/weapons/Laser' },
+		{ name: 'MiningLaserBlock', path: './entities/blocks/parts/weapons/lasers/MiningLaserBlock' },
 
 		/* Ship armor blocks */
 		{ name: 'Armor', path: './entities/blocks/parts/Armor' },
@@ -87,6 +88,7 @@ var config = {
 		{ name: 'BlockStructureGenerator', path: './entities/scenery/BlockStructureGenerator' },
 
 		/* === COMPONENT CONFIG FILES === */
+		{ name: 'DamageSources', path: './components/config/DamageSources' },
 		{ name: 'Descriptions', path: './components/config/Descriptions' },
 		{ name: 'Elements', path: './components/config/Elements' },
 		{ name: 'GridDimensions', path: './components/config/GridDimensions' },

@@ -19,8 +19,12 @@ var HealthBar = IgeEntity.extend({
 		IgeEntity.prototype.init.call(this);
 		this._block = block;
 
-		//this.texture(ige.client.textures.healthBar);
-		// TODO: Add PixiRenderableComponent for health bars
+		this.addComponent(HealthBarRenderableComponent, {
+			createDisplayObject: function() {
+				return new PIXI.Graphics();
+			},
+			anchor: new IgePoint2d(-block.width() / 2, -block.height() / 2)
+		});
 	}
 
 });

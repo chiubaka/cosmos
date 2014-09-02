@@ -44,4 +44,9 @@ var Constants = {
 	SECOND_OVERLAY_ROTATION: Math.PI / 4
 };
 
+Constants.UPDATE_TIME = {
+	CLIENT: 1000 / Constants.fps.CLIENT_FPS,
+	SERVER: 1000 / Constants.fps.SERVER_FPS
+};
+
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Constants; }

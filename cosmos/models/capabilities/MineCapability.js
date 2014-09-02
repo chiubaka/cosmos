@@ -31,9 +31,9 @@ var MineCapability = Capability.extend({
 				'mousedown': {
 					capability: this,
 					conditionFunc: this.ClickScene_canMouseDown,
-					actionFunc: undefined
+					actionFunc: this.ClickScene_mouseDown
 				}
-			},
+			}
 		};
 
 		Capability.prototype.init.call(this);
@@ -60,13 +60,17 @@ var MineCapability = Capability.extend({
 	 * @instance
 	 */
 	Block_mouseDown: function(sender, event, data) {
-		if (sender.parent().parent() instanceof Ship) {
+		_.forEach(ige.client.player.currentShip().weapons(), function(weapon) {
+			weapon.fireClient(data);
+		});
+
+		/*if (sender.parent().parent() instanceof Ship) {
 			ige.client.metrics.track('cosmos:block.attack', {'type': sender.classId()});//note that this includes when you mine yourself
 		} else {
 			ige.client.metrics.track('cosmos:block.mine', {'type': sender.classId()});
 		}
 
-		ige.network.send('mineBlock', data);
+		ige.network.send('mineBlock', data);*/
 	},
 
 	/**
@@ -78,9 +82,15 @@ var MineCapability = Capability.extend({
 	 * @instance
 	 */
 	ClickScene_canMouseDown: function(sender, event, data) {
-		ige.notification.emit('notificationError',
-			NotificationDefinitions.errorKeys.noMineEmptySpace);
-		return false;
+		// TODO: Fire lasers individually-- understand which laser is selected. For now, all lasers
+		// are fired together.
+
+		return (ige.client.state.selectedCap() === 'mine');
 	},
 
+	ClickScene_mouseDown: function(sender, event, data) {
+		_.forEach(ige.client.player.currentShip().weapons(), function(weapon) {
+			weapon.fireClient(data);
+		});
+	}
 });

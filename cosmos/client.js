@@ -141,8 +141,6 @@ var Client = IgeClass.extend({
 							ige.network.define('playerDisconnected', self._onPlayerDisconnected);
 							ige.network.define('shipEntity', self._onShipEntity);
 
-							// Called when the server needs to broadcast updates about a block
-							ige.network.define('blockAction', self._onBlockAction);
 							// Called when the server wants to add an effect to a block
 							ige.network.define('addEffect', self._onAddEffect);
 							// Called when the server wants to remove an effect from a block
@@ -151,9 +149,6 @@ var Client = IgeClass.extend({
 							ige.network.define('cargoResponse', self._onCargoResponse);
 							ige.network.define('cargoUpdate', self._onCargoUpdate);
 							ige.network.define('confirm', self._onConfirm);
-
-							ige.network.define('cosmos:BlockStructure.processBlockActionServer.minedBlock',
-								self._onMinedBlock);
 
 							ige.network.define('cosmos:player.username.set.approve', Player.onUsernameRequestApproved);
 							ige.network.define('cosmos:player.username.set.error', Player.onUsernameRequestError);

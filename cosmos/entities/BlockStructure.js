@@ -23,8 +23,27 @@ var BlockStructure = BlockGrid.extend({
 	 * Controls whether or not the Construction Overlay should be refreshed.
 	 */
 	_enableRefresh: undefined,
+	/**
+	 * Controls whether or not Construction Overlay is refreshed during streamSectionData.
+	 */
+	_needsRefresh: undefined,
 
 	init: function(data) {
+		data = data || {};
+
+		if (ige.isServer) {
+			data.physicsBody = data.physicsBody || {};
+
+			// These are default values for the category and mask of a BlockStructure.
+			// Subclasses can override these by setting their own.
+			data.physicsBody.fixtureFilter = data.physicsBody.fixtureFilter || {
+				categoryBits: data.physicsBody.categoryBits
+					|| BlockStructure.BOX2D_CATEGORY_BITS,
+				maskBits: data.physicsBody.maskBits
+					|| (0xffff & ~(1 << Drop.BOX2D_CATEGORY_BITS))
+			}
+		}
+
 		BlockGrid.prototype.init.call(this, data);
 
 		this._enableRefresh = true;
@@ -33,6 +52,61 @@ var BlockStructure = BlockGrid.extend({
 			this._constructionOverlay = new ConstructionOverlay(this)
 				.mount(this);
 		}
+	},
+
+	processActionClient: function(data) {
+		if (data.action === "remove" || data.action === "put") {
+			this._needsRefresh = true;
+		}
+
+		BlockGrid.prototype.processActionClient.call(this, data);
+	},
+
+	put: function(block, location, replace) {
+		var refresh = this._enableRefresh;
+		this._enableRefresh = false;
+		var result = BlockGrid.prototype.put.call(this, block, location, replace);
+		this._enableRefresh = refresh;
+
+		this._refreshConstructionOverlay();
+		return result;
+	},
+
+	remove: function(location, width, height) {
+		var result = BlockGrid.prototype.remove.call(this, location, width, height);
+
+		this._refreshConstructionOverlay();
+
+		return result;
+	},
+
+	streamSectionData: function(sectionId, data, bypassTimeStream) {
+		if (data) {
+			if (sectionId === "actions") {
+				var refresh = this._enableRefresh;
+				this._enableRefresh = false;
+
+				// Reset this to false before the BlockGrid processes all of the packets.
+				this._needsRefresh = false;
+				BlockGrid.prototype.streamSectionData.call(this, sectionId, data, bypassTimeStream);
+				this._enableRefresh = refresh;
+
+				// If after processing all of the packets, needsRefresh has been set to true, then
+				// an add or remove has occurred, so we must refresh the overlay.
+				if (this._needsRefresh) {
+					this._refreshConstructionOverlay();
+				}
+			}
+			else {
+				BlockGrid.prototype.streamSectionData.call(this, sectionId, data, bypassTimeStream);
+			}
+		}
+		else {
+			return BlockGrid.prototype.streamSectionData.call(this, sectionId, data,
+				bypassTimeStream);
+		}
+
+
 	},
 
 	/**
@@ -48,110 +122,18 @@ var BlockStructure = BlockGrid.extend({
 	 * @todo Don't make the assumption that mouseDown on a {@link BlockStructure} means mining a {@link Block}.
 	 */
 	_blockClickHandler: function(block, event, control) {
-		if (ige.client.state.currentCapability().classId() !== MineCapability.prototype.classId()) {
-			return;
-		}
-		if (this.objectHasNeighboringOpenLocations(block)) {
-			// TODO: This might be dangerous, since some of the event properties should be changed so that they are
-			// relative to the child's bounding box, but since we don't use any of those properties for the moment,
-			// ignore that.
-			block.mouseDown(event, control);
-		}
-		else {
-			// Notify player that block is not minable
-			ige.notification.emit('notificationError',
-				NotificationDefinitions.errorKeys.notMinable);
-		}
+		block.mouseDown(event, control);
 	},
 
 	_refreshConstructionOverlay: function() {
 		if (ige.isClient && this._constructionOverlay && this._enableRefresh) {
 			this._constructionOverlay.refresh();
 		}
-	},
-
-	put: function(block, location, replace) {
-		var refresh = this._enableRefresh;
-		this._enableRefresh = false;
-		var result = BlockGrid.prototype.put.call(this, block, location, replace);
-		this._enableRefresh = refresh;
-
-		this._refreshConstructionOverlay();
-		return result;
-	},
-
-	/**
-	 * Extends the {@link BlockGrid#processBlockActionServer} function to provide additional functionality for
-	 * structure-specific actions. Process actions server-side.
-	 * @param data {Object} An object representing the action sent from the client.
-	 * @param player {Player} The player that triggered the block action.
-	 * @returns {boolean} True if the action was successfully processed. False otherwise.
-	 * @memberof BlockStructure
-	 * @instance
-	 */
-	processBlockActionServer: function(data, player) {
-		// TODO: Handle parent's return.
-		BlockGrid.prototype.processBlockActionServer.call(this, data, player);
-		var self = this;
-
-		switch (data.action) {
-			case 'mine':
-				var block = self.get(new IgePoint2d(data.col, data.row))[0];
-				if (block === undefined) {
-					console.log("Request to mine undefined block. row: " + data.row + ", col: " + data.col);
-					return false;
-				}
-				// Blocks should only be mined by one ship, for now. Note that there is a race condition here.
-				if((block === undefined) || block.isBeingMined()) {
-					console.log("Request to mine undefined or busy block. row: " + data.row + ", col: " + data.col);
-					return false;
-				}
-				block.isBeingMined(true);
-
-				block._decrementHealthIntervalId = setInterval(function() {
-					if (block.hp() > 0) {
-						var damageData = {
-							blockGridId: data.blockGridId,
-							action: 'damage',
-							row: data.row,
-							col: data.col,
-							amount: 1
-						};
-						block.takeDamage(1);
-						ige.network.send('blockAction', damageData);
-					}
-
-					if (block.hp() == 0) {
-						clearInterval(block._decrementHealthIntervalId);
-
-						// Emit a message saying that a block has been mined, but not
-						// necessarily collected. This is used for removing the laser.
-						var blockClassId = block.classId();
-						ige.emit('block mined', [player, blockClassId, block]);
-
-						player.currentShip().mining = false;
-						player.currentShip().turnOffMiningLasers(block);
-
-						block.onDeath(player);
-
-						ige.network.stream.queueCommand('cosmos:BlockStructure.processBlockActionServer.minedBlock',
-							true, player.clientId());
-					}
-				}, Block.MINING_INTERVAL / player.currentShip().weapons().length);
-				return true;
-			default:
-				return false;
-		}
-	},
-
-	remove: function(location, width, height) {
-		var result = BlockGrid.prototype.remove.call(this, location, width, height);
-
-		this._refreshConstructionOverlay();
-
-		return result;
 	}
 });
+
+BlockStructure.BOX2D_CATEGORY_BITS = 0x0008;
+
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
 	module.exports = BlockStructure;

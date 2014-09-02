@@ -13,6 +13,7 @@ var GameInit = {
 
 		// Disable debug features for more performance
 		ige.debugTiming(false);
+		ige.debugEnabled(true);
 
 		this.initScenes(game);
 
@@ -48,7 +49,8 @@ var GameInit = {
 				&& globalContext[key]
 				&& globalContext[key].prototype
 				&& globalContext[key].prototype instanceof Block
-				&& !(globalContext[key].prototype.classId() === "Element"))
+				&& globalContext[key].prototype.classId() !== "Element"
+				&& globalContext[key].prototype.classId() !== "Laser")
 			{
 				cosmos.blocks.constructors[key] = globalContext[key];
 				var block = new globalContext[key]();
@@ -297,39 +299,24 @@ var GameInit = {
 		}
 
 		var beginContacts = [{
-			a_body_category: Ship.BOX2D_CATEGORY,
-			a_fixture_category: Ship.ATTRACTOR_BOX2D_CATEGORY,
-			b_body_category: Drop.BOX2D_CATEGORY,
-			b_fixture_category: '',
+			a_fixture_category: Ship.ATTRACTOR_BOX2D_CATEGORY_BITS,
+			b_fixture_category: Drop.BOX2D_CATEGORY_BITS,
 			disable_contact: true,
 			identifier: contactIdentifiers['shipDropBegin']
 		}];
 
 		var endContacts = [{
-			a_body_category: Ship.BOX2D_CATEGORY,
-			a_fixture_category: Ship.ATTRACTOR_BOX2D_CATEGORY,
-			b_body_category: Drop.BOX2D_CATEGORY,
-			b_fixture_category: '',
+			a_fixture_category: Ship.ATTRACTOR_BOX2D_CATEGORY_BITS,
+			b_fixture_category: Drop.BOX2D_CATEGORY_BITS,
 			disable_contact:false,
 			identifier: contactIdentifiers['shipDropEnd']
 		}];
 
 		var preSolveContacts = [{
-			a_body_category: Ship.BOX2D_CATEGORY,
-			a_fixture_category: '',
-			b_body_category: Drop.BOX2D_CATEGORY,
-			b_fixture_category: '',
+			a_fixture_category: Ship.BOX2D_CATEGORY_BITS,
+			b_fixture_category: Drop.BOX2D_CATEGORY_BITS,
 			disable_contact: true,
 			identifier: contactIdentifiers['shipDropPreSolve']
-		},
-		// TODO: Make drops not collide with anything (this doesn't work yet)
-		{
-			a_body_category: Drop.BOX2D_CATEGORY,
-			a_fixture_category: '',
-			b_body_category: '',
-			b_fixture_category: '',
-			disable_contact: true,
-			identifier: contactIdentifiers['dropPreSolve']
 		}];
 
 		ige.physicsSystem.newCustomContacts({contacts: beginContacts, contactType:
@@ -344,8 +331,8 @@ var GameInit = {
 			beginContact: function(entity1, entity2, identifier) {
 				switch (identifier) {
 					case contactIdentifiers.shipDropBegin:
-						var results = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY,
-							Ship.BOX2D_CATEGORY);
+						var results = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY_BITS,
+							Ship.BOX2D_CATEGORY_BITS);
 						var drop = results.category1Entity;
 						var ship = results.category2Entity;
 
@@ -362,8 +349,8 @@ var GameInit = {
 			endContact: function(entity1, entity2, identifier) {
 				switch (identifier) {
 					case contactIdentifiers.shipDropEnd:
-						var results = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY,
-							Ship.BOX2D_CATEGORY);
+						var results = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY_BITS,
+							Ship.BOX2D_CATEGORY_BITS);
 						var drop = results.category1Entity;
 						var ship = results.category2Entity;
 
@@ -380,8 +367,8 @@ var GameInit = {
 			preSolve: function(entity1, entity2, identifier) {
 				switch (identifier) {
 					case contactIdentifiers.shipDropPreSolve:
-						var results = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY,
-							Ship.BOX2D_CATEGORY);
+						var results = entityByCategory(entity1, entity2, Drop.BOX2D_CATEGORY_BITS,
+							Ship.BOX2D_CATEGORY_BITS);
 						var drop = results.category1Entity;
 						var ship = results.category2Entity;
 
@@ -390,7 +377,8 @@ var GameInit = {
 							return;
 						}
 						var block = drop.block();
-						ige.emit('block collected', [ship, block.classId()]);
+						ige.emit('Cosmos:GameInit.initPhysics.dropShipCollision',
+							[ship, block.classId()]);
 						drop.destroy();
 						break;
 					case contactIdentifiers.dropPreSolve:
@@ -433,7 +421,7 @@ var GameInit = {
 	},
 
 	initServerEvents: function() {
-		ige.on('block collected', Ship.blockCollectListener);
+		ige.on('Cosmos:GameInit.initPhysics.dropShipCollision', Ship.blockCollectListener);
 	},
 
 	initClientEvents: function() {

@@ -7,7 +7,7 @@
  * @typedef {MiningLaserBlock}
  * @namespace
  */
-var MiningLaserBlock = Weapon.extend({
+var MiningLaserBlock = Laser.extend({
 	classId: 'MiningLaserBlock',
 
 	init: function(data) {
@@ -22,7 +22,7 @@ var MiningLaserBlock = Weapon.extend({
 			this.textureSvg = ige.client.textures.miningLaser;
 		}
 
-		Weapon.prototype.init.call(this, data);
+		Laser.prototype.init.call(this, data);
 	},
 
 	/**
@@ -49,6 +49,8 @@ var MiningLaserBlock = Weapon.extend({
 	},
 
 	onRemoved: function() {
+		Laser.prototype.onRemoved.call(this);
+
 		if (ige.client && this._effects["miningLaser"]) {
 			this._removeMiningLaserEffect(this._effects["miningLaser"]);
 		}

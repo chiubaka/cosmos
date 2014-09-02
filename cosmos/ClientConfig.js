@@ -49,7 +49,8 @@ var igeClientConfig = {
 
 		/* Weapons */
 		'./entities/blocks/parts/Weapon.js',
-		'./entities/blocks/parts/weapons/MiningLaserBlock.js',
+		'./entities/blocks/parts/weapons/Laser.js',
+		'./entities/blocks/parts/weapons/lasers/MiningLaserBlock.js',
 
 		/* Ship armor blocks */
 		'./entities/blocks/parts/Armor.js',
@@ -104,6 +105,7 @@ var igeClientConfig = {
 		'./entities/ClickScene.js',
 
 		/* === COMPONENT CONFIG FILES === */
+		'./components/config/DamageSources.js',
 		'./components/config/Descriptions.js',
 		'./components/config/Elements.js',
 		'./components/config/GridDimensions.js',
@@ -120,6 +122,7 @@ var igeClientConfig = {
 		'./components/Recipe.js',
 		'./components/Thrust.js',
 		'./components/ConstructionOverlayRenderableComponent.js',
+		'./components/HealthBarRenderableComponent.js',
 		'./components/ParallaxBackgroundRenderableComponent.js',
 		'./components/LaserBeamRenderableComponent.js',
 		'./components/ParticleRenderableComponent.js',

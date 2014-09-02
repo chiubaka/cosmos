@@ -43,27 +43,17 @@ var ServerNetworkEvents = {
 		player.currentShip().cargo.unsubscribeFromUpdates(clientId);
 
 		var self = this;
-		/**
-		 * @callback updatePlayerCallback
-		 * @param err {Error | null}
-		 * @param result {*}
-		 */
-		DbPlayer.update(player.id(), player, function(err, result) {
-			if (err) {
-				self.log('Cannot save player in database!', 'error')
-			}
 
-			// Remove the player from the game
-			player.destroy();
-			// Remove the player's ship from the game
-			player.currentShip().destroy();
+		// Remove the player from the game
+		player.destroy();
+		// Remove the player's ship from the game
+		player.currentShip().destroy();
 
-			ige.network.send('playerDisconnected', player.id());
+		ige.network.send('playerDisconnected', player.id());
 
-			// Remove the reference to the player entity
-			// so that we don't leak memory
-			delete ige.server.players[player];
-		});
+		// Remove the reference to the player entity
+		// so that we don't leak memory
+		delete ige.server.players[player];
 	},
 
 	/**
@@ -153,7 +143,7 @@ var ServerNetworkEvents = {
 		ige.server.players[clientId] = player;
 
 		// Load the player's ships
-		ige.server._createShip(clientId, playerId, ship, cargo);
+		DbPlayer.noUpdate(this, ige.server._createShip, [clientId, playerId, ship, cargo]);
 
 		var sendData = player.toJSON();
 
@@ -250,6 +240,16 @@ var ServerNetworkEvents = {
 		}
 
 		player.controls(data);
+	},
+
+	_fire: function(data, clientId) {
+		var weapon = ige.$(data.id);
+		if (!weapon) {
+			console.log('ServerNetworkEvents#_fire: undefined weapon id: ' + data.id);
+			return;
+		}
+
+		weapon.fireServer(data);
 	},
 
 	// TODO: User access control. Restrict what players can do based on clientId
