@@ -315,25 +315,6 @@ var ServerNetworkEvents = {
 		}
 	},
 
-	_onCargoRequest: function(data, clientId) {
-		var player = ige.server.players[clientId];
-		if (player === undefined) {
-			return;
-		}
-
-		var playerCargo = player.currentShip().cargo;
-
-		if (data !== undefined && data !== null) {
-			if (data.requestUpdates) {
-				playerCargo.subscribeToUpdates(clientId);
-			} else {
-				playerCargo.unsubscribeFromUpdates(clientId);
-			}
-		}
-
-		ige.network.send('cargoResponse', playerCargo.getItemList(true), clientId);
-	},
-
 	// TODO: Verify valid construction zone
 	_onConstructionZoneClicked: function(data, clientId) {
 		var player = ige.server.players[clientId];

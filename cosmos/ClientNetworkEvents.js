@@ -96,7 +96,6 @@ var ClientNetworkEvents = {
 		if(ige.client.player && ige.$(data.shipId)) {
 
 			ige.client.player.currentShip(ige.$(data.shipId));
-			ige.network.send('cargoRequest', { requestUpdates: true });
 		} else {
 			//adding ship to player later
 			if (!ige.client.player) {
@@ -110,7 +109,6 @@ var ClientNetworkEvents = {
 
 						if (ige.client.player) {
 							ige.client.player.currentShip(entity);
-							ige.network.send('cargoRequest', { requestUpdates: true });
 						}
 
 						// Set the time stream UI entity to monitor our player entity
@@ -144,16 +142,6 @@ var ClientNetworkEvents = {
 		if (blockGrid) {
 			blockGrid.removeEffect(effect);
 		}
-	},
-
-	_onCargoResponse: function(cargoList) {
-		//console.log("Received cargo response", 'info');
-		ige.emit('cargo response', [cargoList]);
-	},
-
-	_onCargoUpdate: function(cargoList) {
-		//console.log("Received cargo update", 'info');
-		ige.emit('cargo update', [cargoList]);
 	},
 
 	_onConfirm: function(confirmData) {

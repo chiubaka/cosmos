@@ -130,6 +130,16 @@ var Ship = BlockStructure.extend({
 
 		this.addComponent(Cargo);
 
+		var streamPrivateSections = [
+			{
+				id: "cargo",
+				// Object used here instead of an array for faster look up.
+				clients: {}
+			}
+		];
+
+		this.streamPrivateSections(streamPrivateSections);
+
 		var self = this;
 		this.cargo.on('add', function() {
 			self.player().emit('cosmos:Ship.blockCollected')
@@ -152,17 +162,12 @@ var Ship = BlockStructure.extend({
 
 	streamSectionData: function(sectionId, data, bypassTimeStream) {
 		switch (sectionId) {
-			case 'actions':
-				if (sectionId === "actions") {
-					ige.hud.bottomToolbar.capBar.mineCap.cooldownActivated = false;
-				}
-				break;
 			case 'cargo':
 				// If data has been provided, then we are on the client and need to deal with the
 				// data. For cargo, data comes in the form of an object with types of blocks as the
 				// keys and the quantity to change this entry in the cargo by as the values.
 				if (data) {
-					this.cargo.updateFromChanges(data);
+					this.cargo.updateFromChanges(JSON.parse(data));
 				}
 				else {
 					var json = JSON.stringify(this.cargo.recentChanges());
@@ -170,6 +175,10 @@ var Ship = BlockStructure.extend({
 					return json;
 				}
 				break;
+			case 'actions':
+				if (ige.isClient && sectionId === "actions") {
+					ige.hud.bottomToolbar.capBar.mineCap.cooldownActivated = false;
+				}
 			default:
 				return BlockStructure.prototype.streamSectionData
 					.call(this, sectionId, data, bypassTimeStream);
@@ -337,12 +346,7 @@ var Ship = BlockStructure.extend({
 		else {
 			// Update private stream sections so updates about the ship are sent to just the
 			// player who controls this ship.
-			var streamPrivateSections = {
-				cargo: {}
-			};
-			streamPrivateSections.cargo[newPlayer.clientId()] = true;
-
-			this.streamPrivateSections(streamPrivateSections);
+			this._streamPrivateSections[0].clients[newPlayer.clientId()] = true;
 		}
 		return this;
 	},

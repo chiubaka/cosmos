@@ -44,10 +44,8 @@ var Cargo = TLStreamedEntityComponent.extend({
 
 		this._numItems += quantity;
 
-		if (ige.isServer) {
-			this._recentChanges[type] = this._recentChanges[type] || 0;
-			this._recentChanges[type] += quantity;
-		}
+		this._recentChanges[type] = this._recentChanges[type] || 0;
+		this._recentChanges[type] += quantity;
 
 		this.emit('add');
 	},
@@ -76,10 +74,8 @@ var Cargo = TLStreamedEntityComponent.extend({
 
 		this._numItems -= quantity;
 
-		if (ige.isServer) {
-			this._recentChanges[type] = this._recentChanges[type] || 0;
-			this._recentChanges[type] -= quantity;
-		}
+		this._recentChanges[type] = this._recentChanges[type] || 0;
+		this._recentChanges[type] -= quantity;
 	},
 
 	resetRecentChanges: function() {
@@ -88,7 +84,8 @@ var Cargo = TLStreamedEntityComponent.extend({
 
 	updateFromChanges: function(changes) {
 		var self = this;
-		_.forOwn(changes, function(delta, type) {
+
+		_.forIn(changes, function(delta, type) {
 			// Branch here to avoid awkwardly passing negative numbers to the add function.
 			// Additionally, the remove function does some sanity checks.
 			if (delta >= 0) {
