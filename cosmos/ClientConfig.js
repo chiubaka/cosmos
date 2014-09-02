@@ -115,6 +115,7 @@ var igeClientConfig = {
 		'./components/config/Types.js',
 
 		/* === COMPONENTS === */
+		'./components/Cargo.js',
 		'./components/DamageSource.js',
 		'./components/Description.js',
 		'./components/Type.js',

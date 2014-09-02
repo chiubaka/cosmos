@@ -128,6 +128,13 @@ var Ship = BlockStructure.extend({
 			this._initServer();
 		}
 
+		this.addComponent(Cargo);
+
+		var self = this;
+		this.cargo.on('add', function() {
+			self.player().emit('cosmos:Ship.blockCollected')
+		});
+
 		this._prevMovementBlocks = {
 			engines: this._engines.length,
 			thrusters: this._thrusters.length
@@ -144,13 +151,30 @@ var Ship = BlockStructure.extend({
 	},
 
 	streamSectionData: function(sectionId, data, bypassTimeStream) {
-		if (data) {
-			if (sectionId === "actions") {
-				ige.hud.bottomToolbar.capBar.mineCap.cooldownActivated = false;
-			}
+		switch (sectionId) {
+			case 'actions':
+				if (sectionId === "actions") {
+					ige.hud.bottomToolbar.capBar.mineCap.cooldownActivated = false;
+				}
+				break;
+			case 'cargo':
+				// If data has been provided, then we are on the client and need to deal with the
+				// data. For cargo, data comes in the form of an object with types of blocks as the
+				// keys and the quantity to change this entry in the cargo by as the values.
+				if (data) {
+					this.cargo.updateFromChanges(data);
+				}
+				else {
+					var json = JSON.stringify(this.cargo.recentChanges());
+					this.cargo.resetRecentChanges();
+					return json;
+				}
+				break;
+			default:
+				return BlockStructure.prototype.streamSectionData
+					.call(this, sectionId, data, bypassTimeStream);
+				break;
 		}
-		return BlockStructure.prototype.streamSectionData.call(this, sectionId, data,
-			bypassTimeStream);
 	},
 
 	destroy: function() {
@@ -297,8 +321,6 @@ var Ship = BlockStructure.extend({
 	 * @instance
 	 */
 	_initServer: function() {
-		this.cargo = new Cargo();
-
 		this.addSensor(500)
 			.attractionStrength(0.01)
 	},
@@ -311,6 +333,16 @@ var Ship = BlockStructure.extend({
 		this._player = newPlayer;
 		if (ige.isClient) {
 			this._player._createUsernameLabel();
+		}
+		else {
+			// Update private stream sections so updates about the ship are sent to just the
+			// player who controls this ship.
+			var streamPrivateSections = {
+				cargo: {}
+			};
+			streamPrivateSections.cargo[newPlayer.clientId()] = true;
+
+			this.streamPrivateSections(streamPrivateSections);
 		}
 		return this;
 	},
@@ -579,15 +611,6 @@ Ship.ATTRACTOR_BOX2D_CATEGORY_BITS = 0x0002;
 */
 Ship.DEPTH = 2;
 
-/**
-* Called every time a ship collects a block.
-* @memberof Ship
-* @todo Add a cool animation or sound here, or on another listener
-*/
-Ship.blockCollectListener = function (ship, blockClassId) {
-	ship.cargo.addBlock(blockClassId);
-	var player = ship.player();
-	player.emit('cosmos:Ship.blockCollectListener.blockCollected', [blockClassId]);
-};
-
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Ship; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
+	module.exports = Ship;
+}

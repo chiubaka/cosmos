@@ -377,8 +377,8 @@ var GameInit = {
 							return;
 						}
 						var block = drop.block();
-						ige.emit('Cosmos:GameInit.initPhysics.dropShipCollision',
-							[ship, block.classId()]);
+
+						ship.cargo.add(block.classId());
 						drop.destroy();
 						break;
 					case contactIdentifiers.dropPreSolve:
@@ -421,7 +421,7 @@ var GameInit = {
 	},
 
 	initServerEvents: function() {
-		ige.on('Cosmos:GameInit.initPhysics.dropShipCollision', Ship.blockCollectListener);
+
 	},
 
 	initClientEvents: function() {

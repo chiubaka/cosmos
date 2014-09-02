@@ -176,7 +176,8 @@ var ServerNetworkEvents = {
 			player.currentShip().fromBlockTypeMatrix(ship, false);
 		}
 
-		player.currentShip().cargo.rehydrateCargo(cargo);
+		// TODO: Update the database so that we can load cargo entries into the new cargo system.
+		//player.currentShip().cargo.rehydrateCargo(cargo);
 
 		var sendData = {
 			shipId: player.currentShip().id()
