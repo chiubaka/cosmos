@@ -31,9 +31,7 @@ var Cargo = TLStreamedEntityComponent.extend({
 		this._items = {};
 		this._numItems = 0;
 
-		if (ige.isServer) {
-			this._recentChanges = {};
-		}
+		this._recentChanges = {};
 	},
 
 	add: function(type, quantity) {

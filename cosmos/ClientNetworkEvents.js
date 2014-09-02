@@ -38,6 +38,7 @@ var ClientNetworkEvents = {
 
 		if (ige.client.currentShip) {
 			ige.client.player.currentShip(ige.client.currentShip);
+			ige.emit('cosmos:client.player.currentShip.ready');
 		}
 
 		ige.client.metrics.track('cosmos:player.connect', {'playerId': data.playerId});
@@ -109,6 +110,7 @@ var ClientNetworkEvents = {
 
 						if (ige.client.player) {
 							ige.client.player.currentShip(entity);
+							ige.emit('cosmos:client.player.currentShip.ready');
 						}
 
 						// Set the time stream UI entity to monitor our player entity

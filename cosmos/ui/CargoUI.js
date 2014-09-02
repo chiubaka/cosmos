@@ -1,6 +1,8 @@
-var CargoComponent = WindowComponent.extend({
-	classId: 'CargoComponent',
+var CargoUI = WindowComponent.extend({
+	classId: 'CargoUI',
 	componentId: 'cargo',
+
+	cargo: undefined,
 
 	button: undefined,
 	pullout: undefined,
@@ -14,7 +16,7 @@ var CargoComponent = WindowComponent.extend({
 	init: function() {
 		WindowComponent.prototype.init.call(
 			this,
-			CargoComponent.UI_ROOT + 'cargo-window.html',
+			CargoUI.UI_ROOT + 'cargo-window.html',
 			'cargo-window',
 			$('#left-toolbar'),
 			'cargo-button',
@@ -26,15 +28,22 @@ var CargoComponent = WindowComponent.extend({
 
 	_onWindowLoaded: function() {
 		var self = this;
-		ige.on('cargo response', function(cargoItems) {
-			self.populateFromInventory(cargoItems);
-		});
 
-		ige.on('cargo update', function(cargoItems) {
-			self.populateFromInventory(cargoItems);
+		// TODO: At some point when the player's active ship can change, we need to switch which
+		// cargo the UI is tracking.
+		ige.on('cosmos:client.player.currentShip.ready', function() {
+			self.cargo = ige.client.player.currentShip().cargo;
+
+			self.cargo.on('add', self.refresh.bind(self));
+			self.cargo.on('remove', self.refresh.bind(self));
 		});
 
 		ige.emit('cosmos:hud.leftToolbar.windows.subcomponent.loaded', this);
+	},
+
+	refresh: function() {
+		console.log("Refreshing cargo.");
+		console.log(this.cargo.recentChanges());
 	},
 
 	select: function(container) {
@@ -129,8 +138,8 @@ var CargoComponent = WindowComponent.extend({
 	}
 });
 
-CargoComponent.UI_ROOT = '/components/cargo/';
+CargoUI.UI_ROOT = '/components/cargo/';
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
-	module.exports = CargoComponent;
+	module.exports = CargoUI;
 }

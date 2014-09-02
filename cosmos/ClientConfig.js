@@ -168,7 +168,7 @@ var igeClientConfig = {
 		'./ui/FeedbackComponent.js',
 		'./ui/NewShipComponent.js',
 		'./ui/RelocateComponent.js',
-		'./ui/CargoComponent.js',
+		'./ui/CargoUI.js',
 		'./ui/CraftingUIComponent.js',
 		'./ui/NamePrompt.js',
 
