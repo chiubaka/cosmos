@@ -4,9 +4,12 @@ var config = {
 	gameRoot: './',
 	gameJs: '/js/cosmos/game.js',
 
+	// Game server URL. This gets injected into the cosmos.jade file
+	gameServerUrl: 'http://preview.srv.cosmos.teamleonine.com:443',
+
 	// Node.js express server
-	port: 80, // Default http port
-	url: 'http://preview.cosmos.teamleonine.com',
+	expressServerPort: 80, // Default http port
+	expressServerUrl: 'http://preview.cosmos.teamleonine.com',
 	// Where to server ige/ and cosmos/ from
 	igeDirectory: '.',
 	cosmosDirectory: '.',

@@ -4,9 +4,12 @@ var config = {
 	gameRoot: '/cosmos/',
 	gameJs: '/ige/engine/loader.js',
 
+	// Game server URL. This gets injected into the cosmos.jade file
+	gameServerUrl: 'http://localhost:2000',
+
 	// Node.js express server
-	port: 2001,
-	url: 'http://tl-cosmos.localtest.me:2001',
+	expressServerPort: 2001,
+	expressServerUrl: 'http://tl-cosmos.localtest.me:2001',
 	// Where to server ige/ and cosmos/ from
 	igeDirectory: '../ige',
 	cosmosDirectory: '../cosmos',

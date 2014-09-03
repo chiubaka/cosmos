@@ -64,7 +64,7 @@ passport.deserializeUser(function (obj, done) {
 passport.use(new MicrosoftStrategy({
 		clientID: global.config.microsoftClientId,
 		clientSecret: global.config.microsoftClientSecret,
-		callbackURL: global.config.url + MICROSOFT_CALLBACK
+		callbackURL: global.config.expressServerUrl + MICROSOFT_CALLBACK
 	},
 	function (accessToken, refreshToken, profile, done) {
 		// asynchronous verification, for effect...
@@ -83,7 +83,7 @@ passport.use(new MicrosoftStrategy({
 passport.use(new FacebookStrategy({
 		clientID: global.config.facebookAppId,
 		clientSecret: global.config.facebookAppSecret,
-		callbackURL: global.config.url + FACEBOOK_CALLBACK
+		callbackURL: global.config.expressServerUrl + FACEBOOK_CALLBACK
 	},
 	function (accessToken, refreshToken, profile, done) {
 		// asynchronous verification, for effect...
@@ -102,7 +102,7 @@ passport.use(new FacebookStrategy({
 passport.use(new GoogleStrategy({
 		clientID: GOOGLE_CLIENT_ID,
 		clientSecret: GOOGLE_CLIENT_SECRET,
-		callbackURL: global.config.url + GOOGLE_CALLBACK
+		callbackURL: global.config.expressServerUrl + GOOGLE_CALLBACK
 	},
 	function(accessToken, refreshToken, profile, done) {
 		process.nextTick(function () {
@@ -119,7 +119,7 @@ passport.use(new GoogleStrategy({
 var app = express();
 
 app.configure(function () {
-	app.set('port', global.config.port);
+	app.set('port', global.config.expressServerPort);
 	app.set('views', __dirname + '/views');
 	app.set('view engine', 'jade');
 	app.use(express.favicon());

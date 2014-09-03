@@ -120,6 +120,8 @@ html
 
 		// Isogenic loader
 		script(type='text/javascript').
-			var igeRoot = '#{global.config.igeRoot}';
-			var gameRoot = '#{global.config.gameRoot}';
+			window.igeRoot = '#{global.config.igeRoot}';
+			window.gameRoot = '#{global.config.gameRoot}';
+			window.config = {};
+			window.config.gameServerUrl = '#{global.config.gameServerUrl}';
 		script(type='text/javascript', src="#{global.config.gameJs}")

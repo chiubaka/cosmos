@@ -131,8 +131,8 @@ var Client = IgeClass.extend({
 						// a splash screen or a menu first? Then connect after you've
 						// got a username or something?
 
-						// Use DeploymentUtils to get the appropriate game server to connect to.
-						ige.network.start(DeploymentUtils.getServerUrl(), function () {
+						// Read the game server url injected by the cosmos.jade file
+						ige.network.start(window.config.gameServerUrl, function () {
 							ige.client.metrics.track('cosmos:network.connect');
 
 							// Setup the network command listeners
