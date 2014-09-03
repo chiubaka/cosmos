@@ -2,12 +2,13 @@ var CargoUI = WindowComponent.extend({
 	classId: 'CargoUI',
 	componentId: 'cargo',
 
-	cargo: undefined,
+	_cargo: undefined,
+	_numCellsFilled: undefined,
+
+	itemMap: undefined,
 
 	button: undefined,
-	pullout: undefined,
 	containers: undefined,
-	cargoBlocks: undefined,
 	emptyLabel: undefined,
 
 	selectedType: undefined,
@@ -24,26 +25,85 @@ var CargoUI = WindowComponent.extend({
 			'Cargo',
 			'right'
 		);
+
+		this.itemMap = {};
+		this._numCellsFilled = 0;
 	},
 
-	_onWindowLoaded: function() {
-		var self = this;
-
-		// TODO: At some point when the player's active ship can change, we need to switch which
-		// cargo the UI is tracking.
-		ige.on('cosmos:client.player.currentShip.ready', function() {
-			self.cargo = ige.client.player.currentShip().cargo;
-
-			self.cargo.on('add', self.refresh.bind(self));
-			self.cargo.on('remove', self.refresh.bind(self));
-		});
-
-		ige.emit('cosmos:hud.leftToolbar.windows.subcomponent.loaded', this);
+	open: function() {
+		WindowComponent.prototype.open.call(this);
+		this.refresh();
 	},
 
 	refresh: function() {
+		// Don't bother spending the time to update the cargo window if the window is not visible.
+		if (!this.window.is(':visible')) {
+			return;
+		}
+
+		var changes = this._cargo.recentChanges();
+		this._cargo.resetRecentChanges();
+
+		var rowsNeeded = Math.ceil(this._cargo.numTypes() / WindowComponent.COLS_PER_ROW);
+		this.setNumRows(rowsNeeded);
+
+		/*var containers = this.table.find('td');
+		containers.removeClass('active');
+		containers.find('.tooltipstered').tooltipster('destroy');
+		containers.removeAttr('data-block-type');*/
+
+		var self = this;
+		/*_.forOwn(changes, function(delta, type) {
+			self.fillContainer(i, type, self._cargo.numItemsOfType(type));
+			i++;
+		});*/
+		var cell;
+		_.forOwn(changes, function(delta, type) {
+			cell = self.itemMap[type];
+			var quantity = self._cargo.numItemsOfType(type);
+
+			// If a container already exists for this type, just modify the quantity.
+			if (cell) {
+				// TODO: If quantity is 0 and a container exists, remove the container and shift the
+				// cells.
+				if (quantity === 0) {
+					var currRow = cell.parent();
+					cell.remove();
+					while (currRow.next().length !== 0) {
+						var cellToShift = currRow.next().children().first();
+						currRow.append(cellToShift);
+						currRow = currRow.next();
+					}
+
+					var newCell = $('<td></td>');
+					newCell.click(function() {
+						self.select($(this));
+					});
+					currRow.append('<td></td>');
+					delete self.itemMap[type];
+					self._numCellsFilled--;
+				}
+				else {
+					var quantitySpan = cell.find('.quantity').first();
+					// Don't show the number if there is just one item.
+					if (quantity === 1) {
+						quantitySpan.text('');
+					}
+					else {
+						cell.find('.quantity').first().text(quantity);
+					}
+				}
+			}
+			// No container already exists. We must find one and fill one.
+			else {
+				cell = self.table.find('td').eq(self._numCellsFilled);
+				self.fillCell(cell, type, quantity);
+				self._numCellsFilled++;
+				self.itemMap[type] = cell;
+			}
+		});
 		console.log("Refreshing cargo.");
-		console.log(this.cargo.recentChanges());
+		console.log(this._cargo.recentChanges());
 	},
 
 	select: function(container) {
@@ -60,81 +120,58 @@ var CargoUI = WindowComponent.extend({
 		ige.emit('toolbar tool selected', [this.classId(), container.attr('data-block-type')]);
 	},
 
-	populateFromInventory: function(cargoItems) {
-		// Update client-side list of cargo
-		// TODO: In the future, move this to the yet-to-be-implemented client side
-		// cargo model
-		this.cargoItems = cargoItems;
-		var numTypes = Object.keys(cargoItems).length;
-
-		var rowsNeeded = Math.ceil(numTypes / WindowComponent.COLS_PER_ROW);
-		this.setNumRows(rowsNeeded);
-
-		var containers = this.table.find('td');
-		containers.removeClass('active');
-		containers.find('.tooltipstered').tooltipster('destroy');
-		containers.removeAttr('data-block-type');
-
-		var blockCanvasContainerDivs = this.table.find('.block-canvas-container');
-		blockCanvasContainerDivs.remove();
-		// Destroy old tooltips
-		var tooltipsteredCells = this.table.find('.tooltipstered');
-		_.map(tooltipsteredCells, function(cell){$(cell).tooltipster('destroy')})
-
-		var index = 0;
-		for (var type in cargoItems) {
-			if (!cargoItems.hasOwnProperty(type)) {
-				continue;
-			}
-
-			var quantity = cargoItems[type];
-			this.fillContainer(index, type, quantity);
-
-			index++;
-		}
-
-		if ((this.selectedType === undefined || !cargoItems.hasOwnProperty(this.selectedType)) && numTypes > 0) {
-			this.select(this.table.find('td').first());
-		}
-	},
-
-	fillContainer: function(index, type, quantity) {
-		var container = this.table.find('td').eq(index);
-		var blockCanvasContainerDiv = this.drawBlockInContainer(container, type);
+	fillCell: function(cell, type, quantity) {
+		var blockCanvasContainerDiv = this.drawBlockInContainer(cell, type);
 
 		// Don't add a label if there's only one block of this type
+		var quantitySpan = $('<span></span>').addClass('quantity');
 		if (quantity > 1) {
-			var quantitySpan = $('<span></span>').addClass('quantity').text(quantity);
-			blockCanvasContainerDiv.append(quantitySpan);
+			quantitySpan.text(quantity);
 		}
+		blockCanvasContainerDiv.append(quantitySpan);
 
-		$(container).attr('data-block-type', type);
+		$(cell).attr('data-block-type', type);
 
 		if (this.selectedType === type) {
-			this.select($(container));
+			this.select($(cell));
 		}
 
-		this.fillTooltip(type, container);
+		this.fillTooltip(type, cell);
 
-		container.mouseover(function() {
+		cell.mouseover(function() {
 			ige.hud.inspector.inspect(cosmos.blocks.instances[type]);
 		});
 
-		container.mouseout(function() {
+		cell.mouseout(function() {
 			ige.hud.inspector.hide();
 		});
 	},
 
-	fillTooltip: function(type, container) {
+	fillTooltip: function(type, cell) {
 		var content = Block.displayNameFromClassId(type);
 
-		container.tooltipster({
+		cell.tooltipster({
 			content: content,
 			delay: 0,
 			position: 'bottom',
 			theme: 'tooltip cargo',
 			maxWidth: '200'
 		});
+	},
+
+	_onWindowLoaded: function() {
+		var self = this;
+
+		// TODO: At some point when the player's active ship can change, we need to switch which
+		// cargo the UI is tracking.
+		ige.on('cosmos:client.player.currentShip.ready', function() {
+			self._cargo = ige.client.player.currentShip().cargo;
+
+			self._cargo.on('add', self.refresh.bind(self));
+			self._cargo.on('remove', self.refresh.bind(self));
+		});
+
+		ige.emit('cosmos:hud.leftToolbar.windows.subcomponent.loaded', this);
 	}
 });
 

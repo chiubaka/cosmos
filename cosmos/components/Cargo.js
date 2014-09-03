@@ -18,6 +18,7 @@ var Cargo = TLStreamedEntityComponent.extend({
 
 	_items: undefined,
 	_numItems: undefined,
+	_numTypes: undefined,
 	_recentChanges: undefined,
 
 	/**
@@ -30,6 +31,7 @@ var Cargo = TLStreamedEntityComponent.extend({
 
 		this._items = {};
 		this._numItems = 0;
+		this._numTypes = 0;
 
 		this._recentChanges = {};
 	},
@@ -37,7 +39,11 @@ var Cargo = TLStreamedEntityComponent.extend({
 	add: function(type, quantity) {
 		quantity = quantity || 1;
 
-		this._items[type] = this._items[type] || 0;
+		if (!this._items[type]) {
+			this._items[type] = 0;
+			this._numTypes++;
+		}
+
 		this._items[type] += quantity;
 
 		this._numItems += quantity;
@@ -46,6 +52,21 @@ var Cargo = TLStreamedEntityComponent.extend({
 		this._recentChanges[type] += quantity;
 
 		this.emit('add');
+	},
+
+	numItems: function() {
+		return this._numItems;
+	},
+
+	numItemsOfType: function(type) {
+		if (this._items[type]) {
+			return this._items[type];
+		}
+		return 0;
+	},
+
+	numTypes: function() {
+		return this._numTypes;
 	},
 
 	recentChanges: function() {
@@ -57,16 +78,19 @@ var Cargo = TLStreamedEntityComponent.extend({
 
 		if (!this._items[type]) {
 			this.log("CargoComponent#remove: tried to remove item type that isn't in cargo: "
-				+ type, "error");
+				+ type, "warning");
+			return false;
 		}
 
 		if (this._items[type] < quantity) {
 			this.log("CargoComponent#remove: tried to remove " + quantity + " " + type + "'s when"
-				+ " only " + this._items[type] + " existed in cargo.", "error");
+				+ " only " + this._items[type] + " existed in cargo.", "warning");
+			return false;
 		}
 
 		this._items[type] -= quantity;
 		if (this._items[type] === 0) {
+			this._numTypes--;
 			delete this._items[type];
 		}
 
@@ -74,16 +98,24 @@ var Cargo = TLStreamedEntityComponent.extend({
 
 		this._recentChanges[type] = this._recentChanges[type] || 0;
 		this._recentChanges[type] -= quantity;
+
+		this.emit('remove');
+
+		return true;
 	},
 
 	resetRecentChanges: function() {
 		this._recentChanges = {};
 	},
 
+	toJSON: function() {
+		return this._items;
+	},
+
 	updateFromChanges: function(changes) {
 		var self = this;
 
-		_.forIn(changes, function(delta, type) {
+		_.forOwn(changes, function(delta, type) {
 			// Branch here to avoid awkwardly passing negative numbers to the add function.
 			// Additionally, the remove function does some sanity checks.
 			if (delta >= 0) {

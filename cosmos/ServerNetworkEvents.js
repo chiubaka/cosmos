@@ -39,9 +39,6 @@ var ServerNetworkEvents = {
 	 */
 	_destroyPlayer: function(clientId, player) {
 		// Handle destroying player state first
-		// Unsubscribe players from updates
-		player.currentShip().cargo.unsubscribeFromUpdates(clientId);
-
 		var self = this;
 
 		// Remove the player from the game
@@ -295,15 +292,13 @@ var ServerNetworkEvents = {
 		}
 
 		// TODO: Extract this into a new method and call it with an event emission!
-		var blockToPlace = player.currentShip().cargo.extractType(data.selectedType)[0];
-
-		if (blockToPlace !== undefined) {
+		if (player.currentShip().cargo.remove(data.selectedType)) {
 			//console.log("Placing item: " + blockToPlace.classId(), 'info');
 			new BlockStructure()
 				.streamMode(1)
 				.mount(ige.$("spaceGameScene"))
 				.depth(100)
-				.fromBlockMatrix([[blockToPlace]])
+				.fromBlockTypeMatrix([[data.selectedType]])
 				.translateTo(data.x, data.y, 0);
 
 			var confirmData = { event:'cosmos:construct.new', data: {'type': data.selectedType} };
@@ -329,10 +324,7 @@ var ServerNetworkEvents = {
 			return;
 		}
 
-		// TODO: This extracts a block from the cargo and throws it away. Should use the result of this in the future!
-		var extractedBlocks = player.currentShip().cargo.extractType(data.selectedType);
-
-		if (extractedBlocks.length > 0) {
+		if (player.currentShip().cargo.remove(data.selectedType)) {
 			data.action = 'add';
 			blockGrid.processBlockActionServer(data, player);
 
