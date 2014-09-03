@@ -6,8 +6,12 @@ var config = {
 
 	// Node.js express server
 	port: 2001,
-	url: "http://tl-cosmos.localtest.me:2001",
+	url: 'http://tl-cosmos.localtest.me:2001',
+	// Where to server ige/ and cosmos/ from
+	igeDirectory: '../ige',
+	cosmosDirectory: '../cosmos',
 
+	// Authentication
 	microsoftClientId: '000000004011FE88',
 	microsoftClientSecret: 'wpNliQi3hxndft-KdgzmAUrQABtJyD4r',
 

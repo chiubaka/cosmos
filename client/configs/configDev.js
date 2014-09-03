@@ -6,8 +6,12 @@ var config = {
 
 	// Node.js express server
 	port: 2001, // "Security" through obscurity
-	url: "http://dev.cosmos.teamleonine.com",
+	url: 'http://dev.cosmos.teamleonine.com',
+	// Where to server ige/ and cosmos/ from
+	igeDirectory: '.',
+	cosmosDirectory: '.',
 
+	// Authentication
 	microsoftClientId: '000000004C11BAB2',
 	microsoftClientSecret: 'I5Mts54jjXJcvVCjmSZbLFhFYyJeoOAq',
 

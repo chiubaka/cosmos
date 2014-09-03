@@ -5,6 +5,7 @@
 var express = require('express'),
 	routes = require('./routes'),
 	http = require('http'),
+	argv = require('minimist')(process.argv.slice(2));
 	path = require('path'),
 	passport = require('passport'),
 	session = require('express-session'),
@@ -13,7 +14,21 @@ var express = require('express'),
 	GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
 	FacebookStrategy = require('passport-facebook').Strategy;
 
-global.config = require('./configLocal');
+// Parse commmand line options
+if (argv.local) {
+	global.config = require('./configs/configLocal');
+}
+else if (argv.dev) {
+	global.config = require('./configs/configDev');
+}
+else if (argv.preview) {
+	global.config = require('./configs/configPreview');
+}
+else {
+	console.log('No configuration specified, defaulting to local configuration.');
+	console.log('Available configurations are: --local --dev --preview');
+	global.config = require('./configs/configLocal');
+}
 
 // Microsoft
 var MICROSOFT_SCOPE = ['wl.signin', 'wl.basic', 'wl.emails'];
@@ -134,20 +149,12 @@ app.configure(function () {
 	app.use(passport.session());
 	app.use(app.router);
 	app.use(express.static(path.join(__dirname, 'public')));
-});
-
-app.configure('development', function () {
-	console.log("Running in development mode.");
 	app.use(express.errorHandler({
 		dumpExceptions: true,
 		showStack: true,
 	}));
-	app.use('/ige', express.static('../ige'));
-	app.use('/cosmos', express.static('../cosmos'));
-});
-
-app.configure('production', function () {
-	console.log("Running in production mode.");
+	app.use('/ige', express.static(global.config.igeDirectory));
+	app.use('/cosmos', express.static(global.config.cosmosDirectory));
 });
 
 app.get('/', routes.index);
