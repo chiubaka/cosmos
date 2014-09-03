@@ -18,9 +18,13 @@ var CraftingSystem = IgeEventingClass.extend({
 			ige.network.define('cosmos:crafting.addRecipe', this._addRecipeClient);
 			ige.network.define('cosmos:CraftingSystem._craftServer.success', this._onCraftServerSuccess);
 
-			// Update the crafting window once
-			// TODO: Update the crafting state so items are correctly grayed out in the UI
-			ige.on('cargo response', this._refreshCraftingState, this, true);
+			var self = this;
+			// TODO: The crafting state should update as cargo information comes in. For now, we're
+			// just refreshing crafting state once at the beginning because crafting isn't yet
+			// smart enough to show you what you can or cannot craft.
+			ige.on('cosmos:client.player.currentShip.ready', function() {
+				self._refreshCraftingState();
+			});
 		}
 		this.log('Crafting system initiated!');
 	},
@@ -77,7 +81,7 @@ var CraftingSystem = IgeEventingClass.extend({
 	 */
 	_canCraft: function(cargo, player, recipeName) {
 		var clientId = player.clientId();
-		var cargoItems = cargo.getItemList(true);
+		var cargoItems = cargo.items();
 		// Check if the player has this recipe unlocked
 		if (!player.crafting.recipes().hasOwnProperty(recipeName)) {
 			ige.network.stream.queueCommand('notificationError',
@@ -112,7 +116,8 @@ var CraftingSystem = IgeEventingClass.extend({
 		// Check if there is enough room in the cargo for the products
 		// Net space needed = products - reactants. For now, all recipes have one product so start this variable
 		// at 1.
-		var spaceNeeded = 1;
+		// TODO: When cargo has limits, make sure to check if there is enough space.
+		/*var spaceNeeded = 1;
 		_.forEach(recipe.reactants, function(reactant) {
 			spaceNeeded -= reactant.quantity;
 		});
@@ -120,7 +125,7 @@ var CraftingSystem = IgeEventingClass.extend({
 			ige.network.stream.queueCommand('notificationError',
 				NotificationDefinitions.errorKeys.crafting_insufficientCargoSpace,
 				clientId);
-		}
+		}*/
 
 		return true;
 	},
@@ -133,10 +138,10 @@ var CraftingSystem = IgeEventingClass.extend({
 		var recipe = Recipes[recipeName];
 		// Consume reactants. Remove them from cargo
 		_.forEach(recipe.reactants, function(reactant) {
-			cargo.removeType(reactant.blockType, reactant.quantity);
+			cargo.remove(reactant.blockType, reactant.quantity);
 		});
 
-		cargo.addBlock(recipeName);
+		cargo.add(recipeName);
 
 		DbPlayer.update(player.id(), player, function() {});
 	},

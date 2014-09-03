@@ -54,6 +54,10 @@ var Cargo = TLStreamedEntityComponent.extend({
 		this.emit('add');
 	},
 
+	items: function() {
+		return this._items;
+	},
+
 	numItems: function() {
 		return this._numItems;
 	},
