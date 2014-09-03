@@ -33,6 +33,10 @@ var CargoUI = WindowComponent.extend({
 	open: function() {
 		WindowComponent.prototype.open.call(this);
 		this.refresh();
+
+		if (!this.selectedType) {
+			this.selectFirst();
+		}
 	},
 
 	refresh: function() {
@@ -47,16 +51,7 @@ var CargoUI = WindowComponent.extend({
 		var rowsNeeded = Math.ceil(this._cargo.numTypes() / WindowComponent.COLS_PER_ROW);
 		this.setNumRows(rowsNeeded);
 
-		/*var containers = this.table.find('td');
-		containers.removeClass('active');
-		containers.find('.tooltipstered').tooltipster('destroy');
-		containers.removeAttr('data-block-type');*/
-
 		var self = this;
-		/*_.forOwn(changes, function(delta, type) {
-			self.fillContainer(i, type, self._cargo.numItemsOfType(type));
-			i++;
-		});*/
 		var cell;
 		_.forOwn(changes, function(delta, type) {
 			cell = self.itemMap[type];
@@ -67,7 +62,20 @@ var CargoUI = WindowComponent.extend({
 				// TODO: If quantity is 0 and a container exists, remove the container and shift the
 				// cells.
 				if (quantity === 0) {
+					self._numCellsFilled--;
 					var currRow = cell.parent();
+
+					// If we now have no cells filled, then there is no selected type.
+					if (self._numCellsFilled === 0) {
+						self.selectedType = undefined;
+					}
+					// If this was the selected cell, try to select the next cell. If select returns
+					// false, that means the next cell was not selectable (i.e. empty), so select
+					// the first cell. There must be an item in the first cell because we know in
+					// this case that _numCellsFilled > 0.
+					else if (cell.hasClass('active') && !self.select(cell.next())) {
+						self.selectFirst();
+					}
 					cell.remove();
 					while (currRow.next().length !== 0) {
 						var cellToShift = currRow.next().children().first();
@@ -81,7 +89,6 @@ var CargoUI = WindowComponent.extend({
 					});
 					currRow.append('<td></td>');
 					delete self.itemMap[type];
-					self._numCellsFilled--;
 				}
 				else {
 					var quantitySpan = cell.find('.quantity').first();
@@ -91,6 +98,12 @@ var CargoUI = WindowComponent.extend({
 					}
 					else {
 						cell.find('.quantity').first().text(quantity);
+					}
+
+					// If something has been added and there currently isn't a selected type, we
+					// should select this.
+					if (!self.selectedType) {
+						self.select(cell);
 					}
 				}
 			}
@@ -102,22 +115,24 @@ var CargoUI = WindowComponent.extend({
 				self.itemMap[type] = cell;
 			}
 		});
-		console.log("Refreshing cargo.");
-		console.log(this._cargo.recentChanges());
 	},
 
 	select: function(container) {
 		// If the user selects an empty container, do nothing.
 		var blockType = container.attr('data-block-type');
 		if (blockType === undefined) {
-			return;
+			return false;
 		}
 
 		// Otherwise, select the container, mark it as active
 		this.table.find('td').removeClass('active');
+		this.selectedType = blockType;
 		container.addClass('active');
-		this.selectedType = container.attr('data-block-type');
-		ige.emit('toolbar tool selected', [this.classId(), container.attr('data-block-type')]);
+		return true;
+	},
+
+	selectFirst: function() {
+		this.select(this.table.find('td').first());
 	},
 
 	fillCell: function(cell, type, quantity) {
