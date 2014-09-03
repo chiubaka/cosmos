@@ -2,17 +2,12 @@ var CargoUI = WindowComponent.extend({
 	classId: 'CargoUI',
 	componentId: 'cargo',
 
-	_cargo: undefined,
-	_numCellsFilled: undefined,
-
-	itemMap: undefined,
-
 	button: undefined,
-	containers: undefined,
-	emptyLabel: undefined,
-
 	selectedType: undefined,
-	cargoItems: undefined,
+
+	_cargo: undefined,
+	_itemMap: undefined,
+	_numCellsFilled: undefined,
 
 	init: function() {
 		WindowComponent.prototype.init.call(
@@ -26,7 +21,7 @@ var CargoUI = WindowComponent.extend({
 			'right'
 		);
 
-		this.itemMap = {};
+		this._itemMap = {};
 		this._numCellsFilled = 0;
 	},
 
@@ -54,7 +49,7 @@ var CargoUI = WindowComponent.extend({
 		var self = this;
 		var cell;
 		_.forOwn(changes, function(delta, type) {
-			cell = self.itemMap[type];
+			cell = self._itemMap[type];
 			var quantity = self._cargo.numItemsOfType(type);
 
 			// If a container already exists for this type, just modify the quantity.
@@ -88,7 +83,7 @@ var CargoUI = WindowComponent.extend({
 						self.select($(this));
 					});
 					currRow.append('<td></td>');
-					delete self.itemMap[type];
+					delete self._itemMap[type];
 				}
 				else {
 					var quantitySpan = cell.find('.quantity').first();
@@ -107,27 +102,27 @@ var CargoUI = WindowComponent.extend({
 					}
 				}
 			}
-			// No container already exists. We must find one and fill one.
+			// No cell already exists. We must find one and fill one.
 			else {
 				cell = self.table.find('td').eq(self._numCellsFilled);
 				self.fillCell(cell, type, quantity);
 				self._numCellsFilled++;
-				self.itemMap[type] = cell;
+				self._itemMap[type] = cell;
 			}
 		});
 	},
 
-	select: function(container) {
-		// If the user selects an empty container, do nothing.
-		var blockType = container.attr('data-block-type');
+	select: function(cell) {
+		// If the user selects an empty cell, do nothing.
+		var blockType = cell.attr('data-block-type');
 		if (blockType === undefined) {
 			return false;
 		}
 
-		// Otherwise, select the container, mark it as active
+		// Otherwise, select the cell, mark it as active
 		this.table.find('td').removeClass('active');
 		this.selectedType = blockType;
-		container.addClass('active');
+		cell.addClass('active');
 		return true;
 	},
 
@@ -136,14 +131,14 @@ var CargoUI = WindowComponent.extend({
 	},
 
 	fillCell: function(cell, type, quantity) {
-		var blockCanvasContainerDiv = this.drawBlockInContainer(cell, type);
+		var blockCanvasCellDiv = this.drawBlockInCell(cell, type);
 
 		// Don't add a label if there's only one block of this type
 		var quantitySpan = $('<span></span>').addClass('quantity');
 		if (quantity > 1) {
 			quantitySpan.text(quantity);
 		}
-		blockCanvasContainerDiv.append(quantitySpan);
+		blockCanvasCellDiv.append(quantitySpan);
 
 		$(cell).attr('data-block-type', type);
 
