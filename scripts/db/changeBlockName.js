@@ -34,13 +34,13 @@ function main(blockName, newBlockName) {
 function changeBlockName(db, collectionName, blockName, newBlockName, callback) {
 	db.collection(collectionName, function(err, collection) {
 		if (err) {
-			console.log("Could not retrieve collection " + collectionName + ". " + err);
+			console.error("Could not retrieve collection " + collectionName + ". " + err);
 			process.exit(1);
 		}
 
 		collection.find().toArray(function(err, players) {
 			if (err) {
-				console.log("Could not retrieve documents from " + collectionName +". " + err);
+				console.log("Could not retrieve documents from " + collectionName + ". " + err);
 				process.exit(1);
 			}
 

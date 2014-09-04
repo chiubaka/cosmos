@@ -12,7 +12,7 @@
  * @typedef {Object} Cargo
  * @namespace  
  */
-var Cargo = TLStreamedEntityComponent.extend({
+var Cargo = TLEntityComponent.extend({
 	classId: 'Cargo',
 	componentId: 'cargo',
 
