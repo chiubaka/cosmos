@@ -34,8 +34,8 @@ module.exports = function(grunt) {
 		},
 		exec: {
 			ige_deploy: {
-				cmd: 'cd ige; node server/ige.js -deploy ../cosmos -to ../cosmos/tests ' +
-					'-clear true -clearClasses false'
+				cmd: 'cd ige; node server/ige.js --deploy ../cosmos --to ../cosmos/tests ' +
+					'--clear true --clearClasses false'
 			}
 		},
 		jsbeautifier: {
