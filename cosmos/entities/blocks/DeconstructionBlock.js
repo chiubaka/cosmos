@@ -11,6 +11,10 @@ var DeconstructionBlock = Block.extend({
 		if (!ige.isServer) {
 			this.backgroundColor = 0x11770000;
 			this.borderColor = 0x780000;
+			
+			this.iconFrame = 'construction_zone';
+			this.textureSvg = ige.client.textures.constructionZone;
+
 			this.backgroundAlpha = 0.3;
 			this.textureBackground = "rgb(119, 0, 0, 0.3)";
 			this.textureOutline = "rgb(140, 0, 0)";
