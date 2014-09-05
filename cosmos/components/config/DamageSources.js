@@ -1,3 +1,9 @@
+/*
+Note that all weapons have the same cooldown right now because
+the controls for firing weapons don't yet take into account weapons
+with different cooldowns in a reasonable way.
+*/
+
 var DamageSources = {};
 
 /*
@@ -11,7 +17,7 @@ DamageSources[RedLaserBlock.prototype.classId()] = {
 };
 
 /*
-The green laser does more damage and slightly greater
+The green laser does more damage and has a slightly greater
 range than the red laser
 */
 DamageSources[GreenLaserBlock.prototype.classId()] = {
@@ -22,8 +28,8 @@ DamageSources[GreenLaserBlock.prototype.classId()] = {
 };
 
 /*
-The purple laser has a faster cooldown and a slightly greater
-range than the green laser
+The purple laser does more damage
+and has a slightly greater range than the green laser
 */
 DamageSources[PurpleLaserBlock.prototype.classId()] = {
 	cooldown: 1000,
