@@ -42,11 +42,14 @@ module.exports = function(grunt) {
 
 		production: {
 			// Arguments to server/ige.js to load cosmos
+			local: {
+				gameServerArgs: ['--local' , '-g', 'cosmos']
+			},
 			dev: {
-				scriptArgs: ['--dev' , '-g', 'cosmos']
+				gameServerArgs: ['--dev' , '-g', 'cosmos']
 			},
 			preview: {
-				scriptArgs: ['--preview' , '-g', 'cosmos']
+				gameServerArgs: ['--preview' , '-g', 'cosmos']
 			}
 		},
 
@@ -73,18 +76,18 @@ module.exports = function(grunt) {
 		}
 	});
 
-	grunt.registerMultiTask('production', 'Runs the Cosmos game server in' +
+	grunt.registerMultiTask('production', 'Run the Cosmos game server in' +
 		'production (either dev or preview)', function() {
 		// call done() when async stuff is done so Grunt can move on
 		var done = this.async();
 		var self = this;
 		var pm2 = require('pm2');
+		// Start the game server
 		pm2.connect(function(err) {
-			console.dir(self);
 			var gameServerPath = 'ige/server/ige.js';
 			var gameServerOpts = {
 				name: 'cosmos_game_server',
-				scriptArgs: [self.data.scriptArgs, '-g', 'cosmos'],
+				scriptArgs: self.data.gameServerArgs,
 				error: 'logs/error.log',
 				output: 'logs/output.log'
 			};

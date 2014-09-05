@@ -1,8 +1,8 @@
 var config = {
 	// IGE configuration paths
-	igeRoot: 'ige/engine/',
-	gameRoot: '/cosmos/',
-	gameJs: '/ige/engine/loader.js',
+	igeRoot: './',
+	gameRoot: './',
+	gameJs: '/js/cosmos/game.js',
 
 	// Game server URL. This gets injected into the cosmos.jade file
 	gameServerUrl: 'http://localhost:2000',
@@ -11,8 +11,8 @@ var config = {
 	expressServerPort: 2001,
 	expressServerUrl: 'http://tl-cosmos.localtest.me:2001',
 	// Where to serve ige/ and cosmos/ from
-	igeDirectory: '../ige',
-	cosmosDirectory: '../cosmos',
+	igeDirectory: '.',
+	cosmosDirectory: '.',
 
 	// Authentication
 	microsoftClientId: '000000004011FE88',
