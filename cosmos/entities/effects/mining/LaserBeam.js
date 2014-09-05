@@ -9,8 +9,8 @@ var LaserBeam = IgeEntity.extend({
 	classId: 'LaserBeam',
 
 	/*
-	This is the block that's firing the laser
-	*/
+	 * This is the block that's firing the laser
+	 */
 	_source: undefined,
 
 	_targetX: undefined,
