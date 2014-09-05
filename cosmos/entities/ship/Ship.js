@@ -289,12 +289,6 @@ var Ship = BlockStructure.extend({
 		else if (block instanceof BridgeBlock) {
 			this.bridgeBlocks().splice(this.bridgeBlocks().indexOf(block), 1);
 		}
-
-		var index = this.firingWeapons().indexOf(block);
-		if (index !== -1) {
-			this.firingWeapons()[index].damageSource.target(null);
-			this.firingWeapons().splice(index, 1);
-		}
 	},
 
 	remove: function(loc, width, height) {
@@ -586,9 +580,7 @@ var Ship = BlockStructure.extend({
 	},
 
 	updateFiringWeapons: function() {
-		//console.log("Ship#updateFiringWeapons: " + this.firingWeapons().length);
-		var firingWeapons = this.firingWeapons().slice(0);
-		_.forEach(firingWeapons, function(weapon) {
+		_.forEach(this.firingWeapons(), function(weapon) {
 			weapon.firingUpdate();
 		});
 	}
