@@ -142,7 +142,11 @@ var Ship = BlockStructure.extend({
 
 		var self = this;
 		this.cargo.on('add', function() {
-			self.player().emit('cosmos:Ship.blockCollected')
+			var player = self.player();
+			if (player && ige.isServer) {
+				player.emit('cosmos:Ship.blockCollected')
+				DbPlayer.update(player.id(), player, function() {});
+			}
 		});
 
 		this._prevMovementBlocks = {

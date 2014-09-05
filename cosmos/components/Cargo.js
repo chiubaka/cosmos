@@ -54,6 +54,10 @@ var Cargo = TLEntityComponent.extend({
 		this.emit('add');
 	},
 
+	fromJSON: function(data) {
+		this.updateFromChanges(data);
+	},
+
 	items: function() {
 		return this._items;
 	},
