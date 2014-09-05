@@ -14,8 +14,7 @@ var RenderContainer = IgeEntity.extend({
 
 		this.addComponent(PixiRenderableComponent);
 
-		// TODO: Once Pixi has some notion of cache dirty, reenable this
-		//this.compositeCache(true);
+		this.compositeCache(true);
 	},
 
 	/**
@@ -25,7 +24,7 @@ var RenderContainer = IgeEntity.extend({
 	 * @instance
 	 */
 	refresh: function () {
-		this.updateChildrenNeeded(true);
+		//this.updateChildrenNeeded(true);
 		this.cacheDirty(true);
 	}
 

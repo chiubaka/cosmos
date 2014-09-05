@@ -25,6 +25,7 @@ var MetricsHandler = IgeEventingClass.extend({
 			"cosmos:quest.tutorialQuest.rotateRight.completed": true,
 			"cosmos:quest.tutorialQuest.moveAround.completed": true,
 			"cosmos:quest.tutorialQuest.minimap.completed": true,
+			"cosmos:quest.tutorialQuest.collect.completed": true,
 			"cosmos:quest.tutorialQuest.mine.completed": true,
 			"cosmos:quest.tutorialQuest.cargo.completed": true,
 			"cosmos:quest.tutorialQuest.craft.completed": true,

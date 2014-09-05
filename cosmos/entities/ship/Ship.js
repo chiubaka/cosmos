@@ -87,21 +87,25 @@ var Ship = BlockStructure.extend({
 	_weapons: undefined,
 
 	init: function(data) {
-		// Note that these variables must be initialized before the superclass constructor can be called, because it will add things to them by calling add().
+		data = data || {};
+
+		// Note that these variables must be initialized before the superclass constructor can be
+		// called, because it will add things to them by calling add().
 		this._bridgeBlocks = [];
 		this._engines = [];
 		this._thrusters = [];
 		this._firingWeapons = [];
 		this._weapons = [];
 
-		this.category(Ship.BOX2D_CATEGORY_BITS);
-
 		if (ige.isServer) {
-			this.addComponent(TLPhysicsBodyComponent);
-			// Override default bodyDef properties
-			this.physicsBody.bodyDef['bodyCategory'] = Ship.BOX2D_CATEGORY;
-			this.physicsBody.fixtureFilter['categoryBits'] = Ship.BOX2D_CATEGORY_BITS;
-			this.physicsBody.fixtureFilter['maskBits'] = 0xffff;
+			this.category(Ship.BOX2D_CATEGORY_BITS);
+
+			data.physicsBody = {};
+			data.physicsBody.fixtureFilter = {
+				categoryBits: Ship.BOX2D_CATEGORY_BITS,
+				// Collide with everything, including drops.
+				maskBits: 0xffff
+			};
 		}
 
 		BlockStructure.prototype.init.call(this, data);
@@ -137,6 +141,16 @@ var Ship = BlockStructure.extend({
 			data.playerId = this.player().id();
 		}
 		return data;
+	},
+
+	streamSectionData: function(sectionId, data, bypassTimeStream) {
+		if (data) {
+			if (sectionId === "actions") {
+				ige.hud.bottomToolbar.capBar.mineCap.cooldownActivated = false;
+			}
+		}
+		return BlockStructure.prototype.streamSectionData.call(this, sectionId, data,
+			bypassTimeStream);
 	},
 
 	destroy: function() {
@@ -237,12 +251,6 @@ var Ship = BlockStructure.extend({
 		}
 		else if (block instanceof BridgeBlock) {
 			this.bridgeBlocks().splice(this.bridgeBlocks().indexOf(block), 1);
-		}
-
-		var index = this.firingWeapons().indexOf(block);
-		if (index !== -1) {
-			this.firingWeapons()[index].damageSource.isFiring = false;
-			this.firingWeapons().splice(index, 1);
 		}
 	},
 
@@ -532,9 +540,7 @@ var Ship = BlockStructure.extend({
 	},
 
 	updateFiringWeapons: function() {
-		//console.log("Ship#updateFiringWeapons: " + this.firingWeapons().length);
-		var firingWeapons = this.firingWeapons().slice(0);
-		_.forEach(firingWeapons, function(weapon) {
+		_.forEach(this.firingWeapons(), function(weapon) {
 			weapon.firingUpdate();
 		});
 	}
@@ -572,6 +578,8 @@ Ship.DEPTH = 2;
 */
 Ship.blockCollectListener = function (ship, blockClassId) {
 	ship.cargo.addBlock(blockClassId);
+	var player = ship.player();
+	player.emit('cosmos:Ship.blockCollectListener.blockCollected', [blockClassId]);
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Ship; }

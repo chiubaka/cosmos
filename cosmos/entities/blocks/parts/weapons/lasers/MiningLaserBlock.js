@@ -48,7 +48,9 @@ var MiningLaserBlock = Laser.extend({
 		}
 	},
 
-	onRemoved: function() {
+	onRemove: function() {
+		Laser.prototype.onRemove.call(this);
+
 		if (ige.client && this._effects["miningLaser"]) {
 			this._removeMiningLaserEffect(this._effects["miningLaser"]);
 		}
