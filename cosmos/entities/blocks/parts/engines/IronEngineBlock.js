@@ -9,11 +9,6 @@ var IronEngineBlock = EngineBlock.extend({
 
 		if (!ige.isServer) {
 			this.iconFrame = "WallabyLightPropulsorEngine.png";
-			this.backgroundColor = 0x404040;
-			this.borderColor = 0xFF4E00;
-			this.textureBackground = "rgb(64, 64, 64)";
-			this.textureOutline = "rgb(255, 78, 0)";
-			this.textureSvg = ige.client.textures.engine;
 		}
 
 		EngineBlock.prototype.init.call(this, data);

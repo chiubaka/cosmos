@@ -4,10 +4,6 @@ var AdamantiumPlatingBlock = Armor.extend({
 	init: function(data) {
 		if (!ige.isServer) {
 			this.iconFrame = 'AdamantiumPlating.png';
-			this.backgroundColor = 0x188B22;
-			this.borderColor = 0x146414;
-			this.textureBackground = "rgb(24, 139, 34)";
-			this.textureOutline = "rgb(20, 100, 20)";
 		}
 
 		Armor.prototype.init.call(this, data);

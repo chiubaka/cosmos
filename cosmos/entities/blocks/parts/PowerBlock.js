@@ -11,12 +11,7 @@ var PowerBlock = Part.extend({
 
 	init: function(data) {
 		if (!ige.isServer) {
-			this.backgroundColor = 0xF2F2F2;
-			this.borderColor = 0xFFBE0D;
 			this.iconFrame = 'Reactor.png';
-			this.textureBackground = "rgb(242, 242, 242)";
-			this.textureOutline = "rgb(255, 190, 13)";
-			this.textureSvg = ige.client.textures.power;
 		}
 
 		Part.prototype.init.call(this, data);
