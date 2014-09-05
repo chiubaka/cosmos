@@ -23,7 +23,7 @@ var LaserBeam = IgeEntity.extend({
 			this.setSource(data.source);
 
 			var self = this;
-			this.addComponent(LaserBeamRenderableComponent,//TODO maybe this should be only added on the client?
+			this.addComponent(LaserBeamRenderableComponent,
 				{
 					createDisplayObject: function () {
 						var sprite = PIXI.Sprite.fromFrame(self._source.laserSpriteName);
