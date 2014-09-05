@@ -49,7 +49,8 @@ $block-inspector-texture-width: $block-inspector-texture-height;
 			overflow: auto;
 			background-color: $inspector-button-hover-background-color;
 
-			#block-texture {
+			.block-texture {
+				display: none;
 				height: $block-inspector-texture-height;
 				width: $block-inspector-texture-width;
 				margin-right: $inspector-padding;

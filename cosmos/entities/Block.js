@@ -122,26 +122,10 @@ var Block = IgeEntity.extend({
 			this.borderAlpha = 0;
 		}
 
-		this.iconScale = this.iconScale || (Block.WIDTH - 3 * Block.BORDER_WIDTH) / Block.WIDTH;
+		this.iconScale = this.iconScale || 1;
 
 		this.addComponent(PixiRenderableComponent, {createDisplayObject: function() {
 			var displayObject = new PIXI.DisplayObjectContainer();
-
-			var graphic = new PIXI.Graphics();
-			graphic.beginFill(self.backgroundColor, self.backgroundAlpha);
-			graphic.lineStyle(Block.BORDER_WIDTH, self.borderColor, self.borderAlpha);
-			graphic.drawRect(
-					Block.BORDER_WIDTH / 2,
-					Block.BORDER_WIDTH / 2,
-					self.width() - Block.BORDER_WIDTH,
-					self.height() - Block.BORDER_WIDTH
-			);
-			graphic.endFill();
-
-			graphic.position.x = -self.width() / 2;
-			graphic.position.y = -self.height() / 2;
-
-			displayObject.addChild(graphic);
 
 			if (self.iconFrame) {
 				var icon = PIXI.Sprite.fromFrame(self.iconFrame);
@@ -153,6 +137,23 @@ var Block = IgeEntity.extend({
 				icon.position.y = (self.height() - icon.height) / 2 - Block.HEIGHT / 2;
 
 				displayObject.addChild(icon);
+			}
+			else if (self.backgroundColor || self.borderColor) {
+				var graphic = new PIXI.Graphics();
+				graphic.beginFill(self.backgroundColor, self.backgroundAlpha);
+				graphic.lineStyle(Block.BORDER_WIDTH, self.borderColor, self.borderAlpha);
+				graphic.drawRect(
+						Block.BORDER_WIDTH / 2,
+						Block.BORDER_WIDTH / 2,
+						self.width() - Block.BORDER_WIDTH,
+						self.height() - Block.BORDER_WIDTH
+				);
+				graphic.endFill();
+
+				graphic.position.x = -self.width() / 2;
+				graphic.position.y = -self.height() / 2;
+
+				displayObject.addChild(graphic);
 			}
 
 			return displayObject;

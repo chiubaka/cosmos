@@ -9,7 +9,8 @@ var Inspector = IgeEventingClass.extend({
 	blockInspector: undefined,
 	blockInspectorName: undefined,
 	blockInspectorType: undefined,
-	blockInspectorTexture: undefined,
+	blockInspectorTextureImg: undefined,
+	blockInspectorTextureCanvas: undefined,
 	blockInspectorCurrentHealth: undefined,
 	blockInspectorMaxHealth: undefined,
 	blockInspectorEnergyUsage: undefined,
@@ -36,10 +37,11 @@ var Inspector = IgeEventingClass.extend({
 
 			self.blockInspectorType = self.blockInspector.find('#block-type');
 
-			self.blockInspectorTexture = self.blockInspector.find('#block-texture');
+			self.blockInspectorTextureImg = self.blockInspector.find('img.block-texture');
+			self.blockInspectorTextureCanvas = self.blockInspector.find('canvas.block-texture');
 			// Sets the height and width of the canvas equal to its CSS height and width
-			self.blockInspectorTexture[0].width = self.blockInspectorTexture.width();
-			self.blockInspectorTexture[0].height = self.blockInspectorTexture.height();
+			self.blockInspectorTextureCanvas[0].width = self.blockInspectorTextureCanvas.width();
+			self.blockInspectorTextureCanvas[0].height = self.blockInspectorTextureCanvas.height();
 
 			self.blockInspectorCurrentHealth = self.blockInspector.find('#block-current-health');
 			self.blockInspectorMaxHealth = self.blockInspector.find('#block-max-health');
@@ -95,15 +97,27 @@ var Inspector = IgeEventingClass.extend({
 			this.blockInspectorThrust.text(block.thrust.value);
 		}
 
-		var canvas = this.blockInspectorTexture[0];
-		// Clears the canvas
-		canvas.width = canvas.width;
-		var ctx = canvas.getContext("2d");
-		var scaleWidth = canvas.width / block._bounds2d.x;
-		var scaleHeight = canvas.height / block._bounds2d.y;
-		ctx.scale(scaleWidth, scaleHeight);
-		ctx.translate(block._bounds2d.x2, block._bounds2d.y2);
-		block.texture().render(ctx, block);
+		if (block instanceof Part) {
+			this.blockInspectorTextureImg.show();
+			this.blockInspectorTextureCanvas.hide();
+			var img = this.blockInspectorTextureImg[0];
+			img.src = window.location + "/assets/sprites/" + block.iconFrame;
+		}
+		else if (block instanceof Element) {
+			this.blockInspectorTextureCanvas.show();
+			this.blockInspectorTextureImg.hide();
+			var canvas = this.blockInspectorTextureCanvas[0];
+
+			// Clears the canvas
+			canvas.width = canvas.width;
+			var ctx = canvas.getContext("2d");
+			var scaleWidth = canvas.width / block._bounds2d.x;
+			var scaleHeight = canvas.height / block._bounds2d.y;
+			ctx.scale(scaleWidth, scaleHeight);
+			ctx.translate(block._bounds2d.x2, block._bounds2d.y2);
+			block.texture().render(ctx, block);
+		}
+
 
 		this.blockInspector.show();
 	},

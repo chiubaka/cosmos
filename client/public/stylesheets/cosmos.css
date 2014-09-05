@@ -987,23 +987,24 @@ h1, h2, h3, h4 {
   background-color: #125c00;
 }
 /* line 52, ../../sass/_inspector.scss */
-#inspector #block-inspector.pullout .middle #block-texture {
+#inspector #block-inspector.pullout .middle .block-texture {
+  display: none;
   height: 55px;
   width: 55px;
   margin-right: 10px;
   float: left;
 }
-/* line 59, ../../sass/_inspector.scss */
+/* line 60, ../../sass/_inspector.scss */
 #inspector #block-inspector.pullout .middle #block-stats {
   width: 165px;
   float: left;
 }
-/* line 65, ../../sass/_inspector.scss */
+/* line 66, ../../sass/_inspector.scss */
 #inspector #block-inspector.pullout .bottom {
   max-height: 200px;
   overflow-y: auto;
 }
-/* line 71, ../../sass/_inspector.scss */
+/* line 72, ../../sass/_inspector.scss */
 #inspector .button {
   display: none;
   height: 50px;
