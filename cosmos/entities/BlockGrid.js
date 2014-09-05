@@ -2,6 +2,22 @@ var BlockGrid = IgeEntity.extend({
 	classId: 'BlockGrid',
 
 	// #ifdef SERVER
+	/**
+	 * Actions to be streamed to the clients.
+	 */
+	_actions: undefined,
+	// Default body definition. Should not be written to!
+	_defaultBodyDef: {
+		bodyType: 'DYNAMIC',
+		bodyCategory: '',
+		linkedId: '',
+		x: 0.0,
+		y: 0.0,
+		angle: 0.0,
+		linearDamping: 0.4,
+		angularDamping: 1.0,
+		bullet: false
+	},
 	_physicsContainer: undefined,
 	_physicsOffset: undefined,
 
@@ -17,19 +33,6 @@ var BlockGrid = IgeEntity.extend({
 	 * @instance
 	 */
 	_previouslyStreamed: undefined,
-
-	// Default body definition. Should not be written to!
-	_defaultBodyDef: {
-		bodyType: 'DYNAMIC',
-		bodyCategory: '',
-		linkedId: '',
-		x: 0.0,
-		y: 0.0,
-		angle: 0.0,
-		linearDamping: 0.4,
-		angularDamping: 1.0,
-		bullet: false
-	},
 	// #else
 	/**
 	 * Container for effects that need to appear above this BlockGrid.
@@ -46,11 +49,11 @@ var BlockGrid = IgeEntity.extend({
 	// #endif
 
 	init: function(data) {
+		data = data || {};
 		IgeEntity.prototype.init.call(this, data);
 
 		this.implement(SparseGrid);
 		SparseGrid.prototype.init.call(this, data);
-		//this._grid = new SparseGrid();
 
 		// TODO why should this entity have width and height of 0?
 		this.width(0);
@@ -59,6 +62,8 @@ var BlockGrid = IgeEntity.extend({
 		this._physicsOffset = {x: 0, y: 0};
 
 		this.addComponent(PixiRenderableComponent);
+
+		this.streamSections(["transform", "actions"]);
 
 		// #ifdef CLIENT
 		if (ige.isClient) {
@@ -102,10 +107,10 @@ var BlockGrid = IgeEntity.extend({
 		}
 		// #else
 		else {
-			// Add physics body component if it doesn't exist
-			if (this.physicsBody === undefined) {
-				this.addComponent(TLPhysicsBodyComponent);
-			}
+			// Initialize the actions
+			this._actions = [];
+
+			this.addComponent(TLPhysicsBodyComponent, data.physicsBody);
 
 			// Specify initial starting location of physics body
 			if (data && data.translate) {
@@ -120,9 +125,14 @@ var BlockGrid = IgeEntity.extend({
 
 			// Used by streamControlFunc to help determine when to stream this entity to a client.
 			this._previouslyStreamed = {};
-			this.streamControl(this._streamControlFunc.bind(this))
+			this.streamControl(this._streamControlFunc.bind(this));
+
 		}
 		// #endif
+	},
+
+	actions: function() {
+		return this._actions;
 	},
 
 	// #ifdef CLIENT
@@ -174,9 +184,9 @@ var BlockGrid = IgeEntity.extend({
 
 			var dropCoordinates = self.worldCoordinatesForBlock(drop);
 			var newDrop = new Drop({
-				owner: player.currentShip(),
-				translate: {x: dropCoordinates.x, y: dropCoordinates.y}
-			})
+					owner: owner,
+					translate: {x: dropCoordinates.x, y: dropCoordinates.y}
+				})
 				.block(drop)
 				.streamMode(1)
 				.mount(ige.server.spaceGameScene);
@@ -262,33 +272,43 @@ var BlockGrid = IgeEntity.extend({
 	 * @memberof BlockGrid
 	 * @instance
 	 */
-	processBlockActionClient: function(data) {
-		switch (data.action) {
-			case 'remove':
-				this.remove(new IgePoint2d(data.col, data.row));
-				if (this.count() === 0) {
-					this.destroy();
-				}
-				break;
-			case 'damage':
-				var block = this.get(new IgePoint2d(data.col, data.row))[0];
-				block.takeDamage(data.amount);
-				break;
-			// TODO: Remove this case and integrate it with 'put'
-			case 'add':
-				ige.client.metrics.track(
-					'cosmos:construct.existing',
-					{'type': data.selectedType});
-				this.put(Block.fromType(data.selectedType), new IgePoint2d(data.col, data.row), true);
-				ige.emit('cosmos:BlockGrid.processBlockActionClient.add', [data.selectedType, this]);
-				break;
-			case 'put':
-				var block = Block.fromJSON(data.block);
-				this.put(block, new IgePoint2d(block.gridData.loc.x, block.gridData.loc.y), true);
-				ige.emit('cosmos:BlockGrid.processBlockActionClient.put', [data.block.type, this]);
-				break;
-			default:
-				this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
+	processActionClient: function(data) {
+		// If an ID is provided, it should be the ID of a block that must perform some action.
+		if (data.id) {
+			var block = ige.$(data.id);
+
+			if (!block) {
+				return;
+			}
+
+			if (!(block instanceof Block)) {
+				this.log('BlockGrid#processActionClient: non-block entity ID received: '
+					+ block.classId(), 'error');
+			}
+
+			block.process(data);
+		}
+		// Otherwise, this is an action intended for the Grid itself, like a put or a remove.
+		else {
+			switch (data.action) {
+				case 'remove':
+					this.remove(new IgePoint2d(data.loc.x, data.loc.y));
+					if (this.count() === 0) {
+						this.destroy();
+					}
+					break;
+				case 'put':
+					var block = Block.fromJSON(data.block);
+					// TODO: Move this metrics tracking code elsewhere
+					/*ige.client.metrics.track(
+						'cosmos:construct.existing',
+						{'type': block.classId()});*/
+					this.put(block, new IgePoint2d(block.gridData.loc.x, block.gridData.loc.y), true);
+					ige.emit('cosmos:BlockGrid.processActionClient.put', [block.classId(), this]);
+					break;
+				default:
+					this.log('Cannot process block action ' + data.action + ' because no such action exists.', 'warning');
+			}
 		}
 	},
 
@@ -316,9 +336,16 @@ var BlockGrid = IgeEntity.extend({
 				// Blocks added as the result of a query from a client must be added to an existing
 				// contiguous structure.
 				if (this.hasNeighbors(location)) {
-					self.put(Block.fromType(data.selectedType), new IgePoint2d(data.col, data.row), false);
-					data.action = 'add';
-					ige.network.send('blockAction', data);
+					var block = Block.fromType(data.selectedType);
+					// If put returns null, it means there was already a block at the requested
+					// location.
+					if (self.put(block, new IgePoint2d(data.col, data.row), false) === null) {
+						return false;
+					}
+					self.actions().push({
+						action: "put",
+						block: block.toJSON()
+					});
 					return true;
 				}
 				else {
@@ -358,6 +385,8 @@ var BlockGrid = IgeEntity.extend({
 			return null;
 		}
 
+		block.actions(this.actions());
+
 		this.width(this.gridWidth() * Block.WIDTH);
 		this.height(this.gridHeight() * Block.HEIGHT);
 
@@ -372,6 +401,12 @@ var BlockGrid = IgeEntity.extend({
 		// #endif
 
 		this._translateContainers();
+
+		block.onPut();
+
+		if (ige.isClient) {
+			this._renderContainer.refresh(true);
+		}
 
 		return previousBlocks;
 	},
@@ -403,14 +438,18 @@ var BlockGrid = IgeEntity.extend({
 			// #ifdef SERVER
 			if (ige.isServer) {
 				self.physicsBody.destroyFixture(block);
+				block.actions(null);
 			}
 			// #else
 			else {
 				block.unMount();
 			}
 			// #endif
-			block.onRemoved();
 		});
+
+		if (ige.isClient && !this._putting) {
+			this._renderContainer.refresh();
+		}
 
 		return removedBlocks;
 	},
@@ -469,10 +508,36 @@ var BlockGrid = IgeEntity.extend({
 						this._rotate.toString(this._streamFloatPrecision) + ',';
 				}
 				break;
+			case 'actions':
+				if (ige.isClient) {
+					//console.log("BlockGrid#streamSectionData");
+				}
+				// Receiving actions data from the server.
+				if (data) {
+					var actions = JSON.parse(data);
+					//console.log("BlockGrid#streamSectionData: actions client: " + actions.length + " actions");
+					var self = this;
+					_.forEach(actions, function(action) {
+						self.processActionClient(action);
+					});
+				}
+				// Generating actions data on the server.
+				else {
+					var actionsJson = JSON.stringify(this._actions);
+					if (this._actions.length > 0) {
+						//console.log("BlockGrid#streamSectionData: actions server: " + actionsJson);
+					}
+					while (this._actions.length > 0) {
+						this._actions.pop();
+					}
+
+					return actionsJson;
+				}
+				break;
 			// We don't care about any other stream sections.
 			// We'll let IgeEntityBox2d handle them.
 			default:
-				IgeEntity.prototype.streamSectionData
+				return IgeEntity.prototype.streamSectionData
 					.call(this, sectionId, data, bypassTimeStream);
 				break;
 		}
@@ -552,7 +617,10 @@ var BlockGrid = IgeEntity.extend({
 				(2 * BlockGrid.BLOCK_FIXTURE_PADDING),
 			x: fixtureDef.x || coordinates.x + BlockGrid.BLOCK_FIXTURE_PADDING,
 			y: fixtureDef.y || coordinates.y + BlockGrid.BLOCK_FIXTURE_PADDING,
-			angle: fixtureDef.angle || 0.0
+			angle: fixtureDef.angle || 0.0,
+			categoryBits: this.physicsBody.fixtureFilter.categoryBits,
+			maskBits: this.physicsBody.fixtureFilter.maskBits,
+			groupIndex: this.physicsBody.fixtureFilter.groupIndex
 		}
 	},
 
@@ -656,6 +724,10 @@ var BlockGrid = IgeEntity.extend({
 
 		ige.emit('cosmos:block.mousedown', block);
 		this._blockClickHandler(block, event, control);
+	},
+
+	_blockClickHandler: function(block, event, control) {
+
 	},
 
 	/**

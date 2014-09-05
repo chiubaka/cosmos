@@ -53,13 +53,13 @@ var Server = IgeClass.extend({
 
 						/* This is called when a player clicks on a block */
 						ige.network.define('mineBlock', self._onMineBlock);
+						ige.network.define('cosmos:Weapon.fire', self._fire);
 						/* This is called when a player clicks on the background. */
 						ige.network.define('constructNew', self._onConstructNew);
 						/* Called when player clicks on a construction zone */
 						ige.network.define('constructionZoneClicked', self._onConstructionZoneClicked);
 
 						/* Define these commands so that we can use them on the client */
-						ige.network.define('blockAction');
 						ige.network.define('addEffect');
 						ige.network.define('removeEffect');
 
@@ -69,9 +69,7 @@ var Server = IgeClass.extend({
 						ige.network.define('confirm');
 
 						ige.network.define('shipEntity');
-
-						ige.network.define('cosmos:BlockStructure.processBlockActionServer.minedBlock');
-
+						
 						ige.network.define('cosmos:player.username.set.request', Player.onUsernameRequested);
 						ige.network.define('cosmos:player.username.set.approve');
 						ige.network.define('cosmos:player.username.set.error');

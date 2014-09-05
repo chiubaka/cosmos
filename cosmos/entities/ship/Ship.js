@@ -83,21 +83,29 @@ var Ship = BlockStructure.extend({
 	*/
 	_thrusters: undefined,
 
+	_firingWeapons: undefined,
 	_weapons: undefined,
 
 	init: function(data) {
-		// Note that these variables must be initialized before the superclass constructor can be called, because it will add things to them by calling add().
+		data = data || {};
+
+		// Note that these variables must be initialized before the superclass constructor can be
+		// called, because it will add things to them by calling add().
 		this._bridgeBlocks = [];
 		this._engines = [];
 		this._thrusters = [];
+		this._firingWeapons = [];
 		this._weapons = [];
 
-		this.category(Ship.BOX2D_CATEGORY);
-
 		if (ige.isServer) {
-			this.addComponent(TLPhysicsBodyComponent);
-			// Override default bodyDef properties
-			this.physicsBody.bodyDef['bodyCategory'] = Ship.BOX2D_CATEGORY;
+			this.category(Ship.BOX2D_CATEGORY_BITS);
+
+			data.physicsBody = {};
+			data.physicsBody.fixtureFilter = {
+				categoryBits: Ship.BOX2D_CATEGORY_BITS,
+				// Collide with everything, including drops.
+				maskBits: 0xffff
+			};
 		}
 
 		BlockStructure.prototype.init.call(this, data);
@@ -135,6 +143,16 @@ var Ship = BlockStructure.extend({
 		return data;
 	},
 
+	streamSectionData: function(sectionId, data, bypassTimeStream) {
+		if (data) {
+			if (sectionId === "actions") {
+				ige.hud.bottomToolbar.capBar.mineCap.cooldownActivated = false;
+			}
+		}
+		return BlockStructure.prototype.streamSectionData.call(this, sectionId, data,
+			bypassTimeStream);
+	},
+
 	destroy: function() {
 		if (ige.isClient && this.player()) {
 			this.player()._destroyUsernameLabel();
@@ -155,6 +173,10 @@ var Ship = BlockStructure.extend({
 	// Getter for the _thrusters property
 	thrusters: function() {
 		return this._thrusters;
+	},
+
+	firingWeapons: function() {
+		return this._firingWeapons;
 	},
 
 	weapons: function() {
@@ -306,6 +328,9 @@ var Ship = BlockStructure.extend({
 			restitution: 0.0,
 			density: 0.0,
 			isSensor: true,
+			categoryBits: Ship.ATTRACTOR_BOX2D_CATEGORY_BITS,
+			maskBits: 0xffff,
+
 			shapeType: 'CIRCLE',
 			radius: radius,
 			x: 0.0,
@@ -422,6 +447,9 @@ var Ship = BlockStructure.extend({
 		BlockStructure.prototype.update.call(this, ctx);
 
 		if (ige.isServer) {
+			/* Process Firing Weapons */
+			this.updateFiringWeapons();
+
 			/* Angular motion */
 			// Angular rotation speed depends on number of thrusters
 			if (this.controls().left || this.controls().right) {
@@ -509,6 +537,12 @@ var Ship = BlockStructure.extend({
 			// update
 			this._prev_controls = JSON.parse(JSON.stringify(this.controls()));
 		}
+	},
+
+	updateFiringWeapons: function() {
+		_.forEach(this.firingWeapons(), function(weapon) {
+			weapon.firingUpdate();
+		});
 	}
 });
 
@@ -526,8 +560,8 @@ Ship.SHIP_START_RADIUS = 4000;
 * @default
 * @memberof Ship
 */
-Ship.BOX2D_CATEGORY = 'ship';
-Ship.ATTRACTOR_BOX2D_CATEGORY = 'attractor';
+Ship.BOX2D_CATEGORY_BITS = 0x0001;
+Ship.ATTRACTOR_BOX2D_CATEGORY_BITS = 0x0002;
 /**
 * The default depth layer for {@link Ship}s when rendered to the screen. Should be rendered above other
 * {@link BlockGrid}s.
@@ -544,6 +578,8 @@ Ship.DEPTH = 2;
 */
 Ship.blockCollectListener = function (ship, blockClassId) {
 	ship.cargo.addBlock(blockClassId);
+	var player = ship.player();
+	player.emit('cosmos:Ship.blockCollectListener.blockCollected', [blockClassId]);
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Ship; }

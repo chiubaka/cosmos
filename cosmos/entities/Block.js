@@ -10,6 +10,13 @@
 var Block = IgeEntity.extend({
 	classId: 'Block',
 
+	// #ifdef SERVER
+	/**
+	 * Queue for block actions that need to be sent to the client.
+	 */
+	_actions: undefined,
+	// #endif
+
 	/**
 	 * An object used as a map to store data about the various effects on a {@link Block}. The map keys are the effect
 	 * types, and the values are typically objects. Each value can be specific to the effect, since different effects
@@ -49,6 +56,7 @@ var Block = IgeEntity.extend({
 			|| this.classId() === "EngineBlock"
 			|| this.classId() === "ThrusterBlock"
 			|| this.classId() === "Weapon"
+			|| this.classId() === "Laser"
 			|| this.classId() === "Resource"
 			// TODO: The Element class won't be abstract soon!
 			|| this.classId() === "Element";
@@ -159,9 +167,18 @@ var Block = IgeEntity.extend({
 			this._effects = {};
 
 			// Enable caching so that the smart textures aren't reevaluated every time.
-			this.compositeCache(true);
-			this.cacheSmoothing(true);
+			//this.compositeCache(true);
+			//this.cacheSmoothing(true);
 		}
+	},
+
+	actions: function(newActions) {
+		if (newActions !== undefined) {
+			this._actions = newActions;
+			return this;
+		}
+
+		return this._actions;
 	},
 
 	dataFromConfig: function(data, classId) {
@@ -210,30 +227,28 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	mouseDown: function(event, control) {
-		var self = this;
 		// TOOD: Synchronize block ID's between server and client so that we can uniquely identify
 		// a block without referring to its block grid, row, and col.
 		var data = {
-			blockGridId: this.blockGrid().id(),
-			row: this.gridData.loc.y,
-			col: this.gridData.loc.x
+			x: this.mousePosWorld().x,
+			y: this.mousePosWorld().y
 		};
 
-		// TODO: Expand when clientState supports multiple current capabilities
-		if (ige.isClient && ige.client !== undefined && ige.client.state !== undefined) {
-			ige.client.state.currentCapability().tryPerformAction(self, event, data);
+		// TODO: Extend when clientState supports multiple current capabilities
+		if (ige.client.state !== undefined) {
+			ige.client.state.currentCapability().tryPerformAction(this, event, data);
 		}
 	},
 
 	/**
-	 * Called just after this {@link Block} has been added to a {@link BlockGrid}. Default is just a stub since the
-	 * basic {@link Block} does nothing when added to a {@link BlockGrid}. Override this function in subclasses of
-	 * the {@link Block} to do things like add effects to all {@link Block}s of a certain type.
+	 * Called just after this {@link Block} has been placed in a {@link BlockGrid}.
 	 * @memberof BlockGrid
 	 * @instance
 	 */
-	onAdded: function() {
-
+	onPut: function() {
+		if (ige.isClient) {
+			this.addEffect({type: 'healthBar'});
+		}
 	},
 
 	/**
@@ -243,8 +258,16 @@ var Block = IgeEntity.extend({
 	 * @memberof BlockGrid
 	 * @instance
 	 */
-	onRemoved: function() {
+	onRemove: function() {
+		if (ige.isClient) {
+			this.removeEffect({type: 'healthBar'});
+		}
+	},
 
+	remove: function() {
+		if (this.gridData.grid) {
+			this.gridData.grid.remove(this.gridData.loc);
+		}
 	},
 
 	/**
@@ -273,20 +296,33 @@ var Block = IgeEntity.extend({
 		var loc = this.gridData.loc;
 		var grid = this.gridData.grid;
 
-		var data = {
-			blockGridId: grid.id(),
-			action: 'remove',
-			col: loc.x,
-			row: loc.y
-		};
+		this.actions().push({
+			action: "remove",
+			loc: {
+				x: loc.x,
+				y: loc.y
+			}
+		});
 
 		// Drop block server side, then send drop msg to client
 		grid.drop(player, new IgePoint2d(loc.x, loc.y));
 		if (grid.count() === 0) {
 			grid.destroy();
 		}
+	},
 
-		ige.network.send('blockAction', data);
+	process: function(data) {
+		if (data.component) {
+			if (this[data.component] === undefined) {
+				this.log("Block#process: received data for undefined component: " + data.component,
+					"error");
+			}
+
+			this[data.component].process(data);
+		}
+		else {
+			this.log("Block#process: received data without component.", "error");
+		}
 	},
 
 	/**
@@ -480,23 +516,20 @@ var Block = IgeEntity.extend({
 		return this._col;
 	},
 
-
 	/**
 	 * Decreases the block's health by the amount passed.
 	 * @param amount {number} The amount of health that this {@link Block} should lose.
 	 * @memberof Block
 	 * @instance
 	 */
-	takeDamage: function(amount) {
+	takeDamage: function(amount, player) {
 		this.health.decrease(amount);
 
-		if (!ige.isServer) {
-			if (this._healthBar === undefined) {
-				this.addEffect({type: 'healthBar'});
-			}
-		}
-
 		this.emit('cosmos:block.hp.changed', this.hp());
+
+		if (this.health.value <= 0 && ige.isServer) {
+			this.onDeath(player);
+		}
 	},
 
 	/**
@@ -518,6 +551,7 @@ var Block = IgeEntity.extend({
 
 	toJSON: function() {
 		return {
+			id: this.id(),
 			type: this.classId(),
 			gridData: this.gridData.toJSON()
 		}
@@ -596,7 +630,16 @@ Block.fromType = function(type) {
 
 Block.fromJSON = function(json) {
 	var block;
-	if (json.type === "Element") {
+	// In this case, we have received information about a block that already exists in the game.
+	// Just use that block instead, and make sure to remove it from any grid that it is currently
+	// a part of.
+	// This currently occurs frequently when blocks are moved from a BlockGrid to a Drop. The Drop
+	// will ask for a block that is already in a BlockGrid to be added to itself.
+	if (ige.$(json.id) instanceof Block) {
+		block = ige.$(json.id);
+		block.remove();
+	}
+	else if (json.type === "Element") {
 		block = new Element({
 			resource: json.resource,
 			purity: json.purity,
@@ -608,8 +651,11 @@ Block.fromJSON = function(json) {
 		block = Block.fromType(json.type);
 	}
 
+	block.id(json.id);
 	block.gridData.loc = new IgePoint2d(json.gridData.loc.x, json.gridData.loc.y);
 	return block;
 };
 
-if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Block; }
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
+	module.exports = Block;
+}

@@ -57,7 +57,6 @@ var CargoComponent = WindowComponent.extend({
 		// cargo model
 		this.cargoItems = cargoItems;
 		var numTypes = Object.keys(cargoItems).length;
-		console.log('Populating toolbar from server response: ' + numTypes + ' item(s) in inventory');
 
 		var rowsNeeded = Math.ceil(numTypes / WindowComponent.COLS_PER_ROW);
 		this.setNumRows(rowsNeeded);

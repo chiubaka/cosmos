@@ -50,5 +50,4 @@ GeneratedBlockStructure.MIN_RESPAWN_TIME = 60 * 1000 * 2; // 2 minutes
  */
 GeneratedBlockStructure.MAX_RESPAWN_TIME = 60 * 1000 * 52; // 52 minutes
 
-
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = GeneratedBlockStructure; }

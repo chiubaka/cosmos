@@ -6,6 +6,9 @@
  */
 
 var DbPlayer = {
+	// Indicates whether or not we should update the DB when update() is called
+	_noUpdate: false,
+
 	/**
 	 * Loads the player from the database with the specified playerId.
 	 * If the player is not in the database, the callback's ship and cargo
@@ -39,7 +42,8 @@ var DbPlayer = {
 	 */
 	update: function(playerId, player, callback) {
 		// Don't save players who are not logged in
-		if (player.loggedIn() === false) {
+		// Don't save when _noUpdate is true
+		if ((player.loggedIn() === false) || this._noUpdate) {
 			callback(undefined, undefined);
 			return;
 		}
@@ -82,6 +86,16 @@ var DbPlayer = {
 				callback(err, player);
 			})
 		})
+	},
+
+	// Makes update() a no-op. This is useful when loading a player from the DB.
+	// We don't want to update the DB when loading the player because if the
+	// loading is interrupted, the player's incomplete ship and cargo may be
+	// saved to the DB.
+	noUpdate: function(context, doWork, opts) {
+		this._noUpdate = true;
+		doWork.apply(context, opts);
+		this._noUpdate = false;
 	}
 };
 

@@ -4,6 +4,12 @@ var SparseGrid = IgeClass.extend({
 	_count: undefined,
 	_grid: undefined,
 	_lowerBound: undefined,
+	/**
+	 * Flag to indicate whether or not the SparseGrid is currently in the middle of a put operation.
+	 * Helpful to differentiate whether or not remove was called directly or if it was the result
+	 * of a put call.
+	 */
+	_putting: undefined,
 	_upperBound: undefined,
 
 	init: function(data) {
@@ -11,6 +17,7 @@ var SparseGrid = IgeClass.extend({
 		this._count = 0;
 		this._colCounts = {};
 		this._lowerBound = new IgePoint2d(0, 0);
+		this._putting = false;
 		this._upperBound = new IgePoint2d(0, 0);
 	},
 
@@ -269,10 +276,13 @@ var SparseGrid = IgeClass.extend({
 			return null;
 		}
 
+		this._putting = true;
+
 		var width = object.gridData.width;
 		var height = object.gridData.height;
 
 		var previousObjects = [];
+
 
 		// Not allowed to replace blocks
 		if (!replace) {
@@ -296,6 +306,8 @@ var SparseGrid = IgeClass.extend({
 
 		// Place the object in the grid.
 		this._setObject(object);
+
+		this._putting = false;
 
 		return previousObjects;
 	},
@@ -326,6 +338,9 @@ var SparseGrid = IgeClass.extend({
 		var self = this;
 		_.forEach(previousObjects, function(previousObject) {
 			self._unsetObject(previousObject);
+			if (previousObject.onRemove) {
+				previousObject.onRemove();
+			}
 			previousObject.gridData.grid = undefined;
 
 			var bounds = previousObject.gridData.bounds();

@@ -110,11 +110,12 @@ var Element = Block.extend({
 
 		grid.remove(new IgePoint2d(loc.x, loc.y));
 
-		ige.network.send('blockAction', {
-			blockGridId: grid.id(),
-			action: 'remove',
-			col: loc.x,
-			row: loc.y
+		grid.actions().push({
+			action: "remove",
+			loc: {
+				x: loc.x,
+				y: loc.y
+			}
 		});
 
 		// If this is a 1x1 element, we call
@@ -129,7 +130,8 @@ var Element = Block.extend({
 				.block(block)
 				.streamMode(1)
 				.mount(ige.server.spaceGameScene);
-
+			// Emit a new drop event
+			player.emit('cosmos:Element.onDeath.newDrop', [newDrop]);
 		}
 		else {
 			var numChildren = this._numChildren();
@@ -146,9 +148,8 @@ var Element = Block.extend({
 						true
 					);
 
-					ige.network.send('blockAction', {
-						blockGridId: grid.id(),
-						action: 'put',
+					grid.actions().push({
+						action: "put",
 						block: child.toJSON()
 					});
 				}

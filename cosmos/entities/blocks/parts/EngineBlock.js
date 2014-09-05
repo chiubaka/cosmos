@@ -19,7 +19,9 @@ var EngineBlock = Part.extend({
 	 * @memberof EngineBlock
 	 * @instance
 	 */
-	onAdded: function() {
+	onPut: function() {
+		Part.prototype.onPut.call(this);
+
 		if (!ige.isServer && this.blockGrid().classId() === 'Ship') {
 			this.addEffect(NetworkUtils.effect('engineParticles', this));
 		}

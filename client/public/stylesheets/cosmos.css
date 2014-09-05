@@ -386,7 +386,7 @@ h1, h2, h3, h4 {
   border-left: 1px solid #515151;
 }
 
-/* line 4, ../../sass/_mine-cap.scss */
+/* line 5, ../../sass/_mine-cap.scss */
 #mine-cap {
   height: 50px;
   width: 50px;
@@ -414,12 +414,30 @@ h1, h2, h3, h4 {
 #mine-cap:hover .tooltip {
   display: block;
 }
-/* line 8, ../../sass/_mine-cap.scss */
-#mine-cap.active {
+/* line 9, ../../sass/_mine-cap.scss */
+#mine-cap .icon {
+  position: absolute;
+  top: 0;
+  background-image: url("../images/icons/icon_mine.png");
+  background-repeat: no-repeat;
+  background-size: 70%;
+  background-position: center;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+/* line 19, ../../sass/_mine-cap.scss */
+#mine-cap.active .background {
+  position: absolute;
+  top: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
   background-color: #c82020;
 }
-/* line 10, ../../sass/_mine-cap.scss */
-#mine-cap.active:hover {
+/* line 29, ../../sass/_mine-cap.scss */
+#mine-cap.active:hover .background {
   background-color: #ff4040;
 }
 
