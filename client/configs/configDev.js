@@ -10,7 +10,7 @@ var config = {
 	// Node.js express server
 	expressServerPort: 2001, // "Security" through obscurity
 	expressServerUrl: 'http://dev.cosmos.teamleonine.com',
-	// Where to server ige/ and cosmos/ from
+	// Where to serve ige/ and cosmos/ from
 	igeDirectory: '.',
 	cosmosDirectory: '.',
 

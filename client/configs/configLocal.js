@@ -10,7 +10,7 @@ var config = {
 	// Node.js express server
 	expressServerPort: 2001,
 	expressServerUrl: 'http://tl-cosmos.localtest.me:2001',
-	// Where to server ige/ and cosmos/ from
+	// Where to serve ige/ and cosmos/ from
 	igeDirectory: '../ige',
 	cosmosDirectory: '../cosmos',
 
