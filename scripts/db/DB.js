@@ -116,6 +116,50 @@ var DB = function() {
 	};
 };
 
+DB.forEachBlockInCargo = function(cargo, action) {
+	var copy = JSON.parse(JSON.stringify(cargo));
+
+	_.forOwn(copy, function(quantity, type) {
+		action(type, quantity);
+	});
+};
+
+DB.forEachBlockInShip = function(ship, action) {
+	var copy = JSON.parse(JSON.stringify(ship));
+
+	for (var row = 0; row < copy.length; row++) {
+		var copyRow = copy[row];
+		for (var col = 0; col < copyRow.length; col++) {
+			action(copy[row][col], col, row);
+		}
+	}
+};
+
+DB.placeInCargo = function(cargo, type, quantity) {
+	cargo[type] = cargo[type] || 0;
+	cargo[type] += quantity;
+};
+
+DB.placeInShip = function(ship, type, x, y) {
+	ship[y][x] = type;
+};
+
+DB.removeFromCargo = function(cargo, type, quantity) {
+	// If type is not a property of the cargo, then none of this type is in the
+	// cargo anyway so return.
+	if (!cargo[type]) {
+		return;
+	}
+
+	cargo[type] -= quantity;
+
+	// If the quantity would now be less than or equal to 0, we don't need an
+	// entry so delete it.
+	if (cargo[type] <= 0) {
+		delete cargo[type];
+	}
+};
+
 DB.URL = "mongodb://cosmos-admin:CS210-l3on1ne!@ds030827.mongolab.com:30827/" +
 	"cosmos-dev-db";
 
