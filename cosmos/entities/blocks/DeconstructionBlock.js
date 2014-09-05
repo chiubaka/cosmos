@@ -11,7 +11,7 @@ var DeconstructionBlock = Block.extend({
 		if (!ige.isServer) {
 			this.backgroundColor = 0x11770000;
 			this.borderColor = 0x780000;
-			
+
 			this.iconFrame = 'construction_zone';
 			this.textureSvg = ige.client.textures.constructionZone;
 
@@ -26,6 +26,10 @@ var DeconstructionBlock = Block.extend({
 				} else {
 					self.hide();
 				}
+			});
+
+			var listener = ige.on("capbar cap cleared", function (classId) {
+				self.hide();
 			});
 		}
 
