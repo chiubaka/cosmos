@@ -68,14 +68,14 @@ var ExampleShips = {
 	*/
 	starterShipWithAllWeapons: function() {
 		return [
-			[undefined,           new RedLaserBlock(),		 new GreenLaserBlock(), 		new PurpleLaserBlock(),   undefined],
-			[undefined,           new SteelPlatingBlock(), new SteelPlatingBlock(),            new SteelPlatingBlock(), undefined],
-			[undefined,           new SteelPlatingBlock(), new BridgeBlock(),     new SteelPlatingBlock(), undefined],
-			[undefined,           new SteelPlatingBlock(), new PowerBlock(),       new SteelPlatingBlock(), undefined],
-			[new IronThrusterBlock(), new SteelPlatingBlock(), new CargoBlock,         new SteelPlatingBlock(), new IronThrusterBlock()],
-			[undefined,           new SteelPlatingBlock(), new CargoBlock,         new SteelPlatingBlock(), undefined],
-			[undefined,           new SteelPlatingBlock(), new FuelBlock,          new SteelPlatingBlock(), undefined],
-			[undefined,           new SteelPlatingBlock(), new IronEngineBlock(),      new SteelPlatingBlock(), undefined]
+			[undefined,           		new RedLaserBlock(),		 new GreenLaserBlock(), 		new PurpleLaserBlock(),  undefined],
+			[undefined,           		new SteelPlatingBlock(), new SteelPlatingBlock(),   new SteelPlatingBlock(), undefined],
+			[undefined,           		new SteelPlatingBlock(), new BridgeBlock(),     		new SteelPlatingBlock(), undefined],
+			[undefined,           		new SteelPlatingBlock(), new PowerBlock(),       		new SteelPlatingBlock(), undefined],
+			[new IronThrusterBlock(), new SteelPlatingBlock(), new CargoBlock,         		new SteelPlatingBlock(), new IronThrusterBlock()],
+			[undefined,           		new SteelPlatingBlock(), new CargoBlock,         		new SteelPlatingBlock(), undefined],
+			[undefined,           		new SteelPlatingBlock(), new FuelBlock,          		new SteelPlatingBlock(), undefined],
+			[undefined,           		new SteelPlatingBlock(), new IronEngineBlock(),     new SteelPlatingBlock(), undefined]
 		]
 	},
 
