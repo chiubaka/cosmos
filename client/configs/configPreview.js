@@ -8,7 +8,7 @@ var config = {
 	gameServerUrl: 'http://preview.srv.cosmos.teamleonine.com:443',
 
 	// Node.js express server
-	expressServerPort: 80, // Default http port
+	expressServerPort: 2001, // Port 80 will be redirected to 2001 via iptables
 	expressServerUrl: 'http://preview.cosmos.teamleonine.com',
 	// Where to serve ige/ and cosmos/ from
 	igeDirectory: '.',
