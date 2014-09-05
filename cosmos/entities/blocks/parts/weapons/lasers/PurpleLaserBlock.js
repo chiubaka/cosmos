@@ -11,8 +11,6 @@ var PurpleLaserBlock = Laser.extend({
   classId: 'PurpleLaserBlock',
 
   init: function(data) {
-    data = {MAX_HP: this.MAX_HP};
-
     if (!ige.isServer) {
       this.backgroundColor = 0xF2F2F2;
       this.borderColor = 0xD00FDC;
