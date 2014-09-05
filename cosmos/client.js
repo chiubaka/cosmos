@@ -71,8 +71,6 @@ var Client = IgeClass.extend({
 					'assets/backgrounds/starfield.png'),
 				fixtureDebuggingTexture: new IgeTexture(gameRoot +
 					'assets/debug/FixtureDebuggingTexture.js'),
-				//laserBeamTexture: new IgeTexture(gameRoot +
-					//'assets/effects/laser/laserbeam.png'),
 				rectangleTexture: new IgeTexture(gameRoot +
 					'assets/effects/particles/Rectangle.js'),
 				healthBar: new IgeTexture(gameRoot + 'assets/HealthBarTexture.js'),
