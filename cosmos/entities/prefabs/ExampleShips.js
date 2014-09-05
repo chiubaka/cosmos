@@ -62,10 +62,10 @@ var ExampleShips = {
 	},
 
 	/**
-	* A ship that has all the weapons. Purely for testing.
-	* @retruns {Array} A {@link Block} matrix that represents this ship.
-	* @memberof ExampleShips
-	*/
+	 * A ship that has all the weapons. Purely for testing.
+	 * @retruns {Array} A {@link Block} matrix that represents this ship.
+	 * @memberof ExampleShips
+	 */
 	starterShipWithAllWeapons: function() {
 		return [
 			[undefined,           		new RedLaserBlock(),		 new GreenLaserBlock(), 		new PurpleLaserBlock(),  undefined],
