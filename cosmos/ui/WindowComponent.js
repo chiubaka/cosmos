@@ -88,30 +88,30 @@ var WindowComponent = ButtonComponent.extend({
 	},
 
 	drawBlockInContainer: function(container, blockType) {
-		var blockCanvasContainerDiv = container.find('.block-canvas-container');
+		var blockTextureContainerDiv = container.find('.block-texture-container');
 		// If a container doesn't exist, create one
-		if (blockCanvasContainerDiv.length === 0) {
-			blockCanvasContainerDiv = $('<div></div>').addClass('block-canvas-container');
+		if (blockTextureContainerDiv.length === 0) {
+			blockTextureContainerDiv = $('<div></div>').addClass('block-texture-container');
 		}
 		// If a container already exists, empty it and recreate the elements inside of it
 		else {
-			blockCanvasContainerDiv.empty();
+			blockTextureContainerDiv.empty();
 		}
 
 		var block = Block.fromType(blockType);
 
 		// If this does not occur before the containerCanvas is appended, then the
 		// containerCanvas will have a height and width of 0.
-		container.append(blockCanvasContainerDiv);
+		container.append(blockTextureContainerDiv);
 
 		if (block instanceof Part) {
 			var img = $('<img/>')[0];
 			img.src = window.location + "/assets/sprites/" + block.iconFrame;
-			blockCanvasContainerDiv.append(img);
+			blockTextureContainerDiv.append(img);
 		}
 		else {
 			var containerCanvas = $('<canvas/>')[0];
-			blockCanvasContainerDiv.append(containerCanvas);
+			blockTextureContainerDiv.append(containerCanvas);
 
 			containerCanvas.width = $(containerCanvas).width();
 			containerCanvas.height = $(containerCanvas).height();
@@ -124,8 +124,7 @@ var WindowComponent = ButtonComponent.extend({
 			block.texture().render(ctx, block);
 		}
 
-
-		return blockCanvasContainerDiv;
+		return blockTextureContainerDiv;
 	},
 
 	select: function(container) {

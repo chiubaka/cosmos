@@ -25,7 +25,7 @@ $bottom-toolbar-z-index: $hud-layer-z-index + 1;
   }
 }
 
-.block-canvas-container, .block-texture-container {
+.block-texture-container {
 	position: relative;
 
 	span.quantity {

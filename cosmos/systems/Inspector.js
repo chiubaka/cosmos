@@ -103,7 +103,7 @@ var Inspector = IgeEventingClass.extend({
 			var img = this.blockInspectorTextureImg[0];
 			img.src = window.location + "/assets/sprites/" + block.iconFrame;
 		}
-		else if (block instanceof Element) {
+		else {
 			this.blockInspectorTextureCanvas.show();
 			this.blockInspectorTextureImg.hide();
 			var canvas = this.blockInspectorTextureCanvas[0];
@@ -117,7 +117,6 @@ var Inspector = IgeEventingClass.extend({
 			ctx.translate(block._bounds2d.x2, block._bounds2d.y2);
 			block.texture().render(ctx, block);
 		}
-
 
 		this.blockInspector.show();
 	},

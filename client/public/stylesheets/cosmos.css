@@ -147,11 +147,11 @@ h1, h2, h3, h4 {
 }
 
 /* line 28, ../../sass/_hud.scss */
-.block-canvas-container, .block-texture-container {
+.block-texture-container {
   position: relative;
 }
 /* line 31, ../../sass/_hud.scss */
-.block-canvas-container span.quantity, .block-texture-container span.quantity {
+.block-texture-container span.quantity {
   position: absolute;
   color: white;
   right: -2px;

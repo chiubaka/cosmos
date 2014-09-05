@@ -66,7 +66,7 @@ var CargoComponent = WindowComponent.extend({
 		containers.find('.tooltipstered').tooltipster('destroy');
 		containers.removeAttr('data-block-type');
 
-		var blockCanvasContainerDivs = this.table.find('.block-canvas-container');
+		var blockCanvasContainerDivs = this.table.find('.block-texture-container');
 		blockCanvasContainerDivs.remove();
 		// Destroy old tooltips
 		var tooltipsteredCells = this.table.find('.tooltipstered');
