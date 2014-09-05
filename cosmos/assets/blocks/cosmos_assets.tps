@@ -4,9 +4,9 @@
         <key>fileFormatVersion</key>
         <int>3</int>
         <key>texturePackerVersion</key>
-        <string>3.3.4</string>
+        <string>3.4.0</string>
         <key>fileName</key>
-        <string>/Users/dchiu/Developer/leonine/cosmos/cosmos/assets/blocks/cosmos_assets.tps</string>
+        <string>/Users/rafaelCosman/Documents/cosmos/cosmos/assets/blocks/cosmos_assets.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -149,6 +149,8 @@
         <true/>
         <key>trimSpriteNames</key>
         <true/>
+        <key>prependSmartFolderName</key>
+        <false/>
         <key>cleanTransparentPixels</key>
         <true/>
         <key>globalSpriteSettings</key>
@@ -178,10 +180,13 @@
             <filename>construction/construction_zone.png</filename>
             <filename>engines/engine.svg</filename>
             <filename>fuel/fuel.svg</filename>
-            <filename>laser/laser.svg</filename>
             <filename>playerctrl/playerctrl.svg</filename>
             <filename>power/power.svg</filename>
             <filename>thrusters/thruster.svg</filename>
+            <filename>laser/doomLaser.svg</filename>
+            <filename>laser/greenLaser.svg</filename>
+            <filename>laser/purpleLaser.svg</filename>
+            <filename>laser/redLaser.svg</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

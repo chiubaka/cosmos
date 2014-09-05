@@ -3,7 +3,7 @@ var Armor = Part.extend({
 
 	init: function(data) {
 		if (ige.isClient) {
-			this.iconFrame = 'plating';
+			this.iconFrame = 'plating.svg';
 			this.textureSvg = ige.client.textures.plating;
 		}
 

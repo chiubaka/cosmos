@@ -71,8 +71,6 @@ var Client = IgeClass.extend({
 					'assets/backgrounds/starfield.png'),
 				fixtureDebuggingTexture: new IgeTexture(gameRoot +
 					'assets/debug/FixtureDebuggingTexture.js'),
-				laserBeamTexture: new IgeTexture(gameRoot +
-					'assets/effects/laser/laserbeam.png'),
 				rectangleTexture: new IgeTexture(gameRoot +
 					'assets/effects/particles/Rectangle.js'),
 				healthBar: new IgeTexture(gameRoot + 'assets/HealthBarTexture.js'),
@@ -102,8 +100,17 @@ var Client = IgeClass.extend({
 					'assets/blocks/cargo/cargo.svg'),
 				control: new IgeTexture(gameRoot +
 					'assets/blocks/playerctrl/playerctrl.svg'),
-				miningLaser: new IgeTexture(gameRoot +
-					'assets/blocks/laser/laser.svg'),
+
+				//Lasers
+				redLaser: new IgeTexture(gameRoot +
+					'assets/blocks/laser/redLaser.svg'),
+				greenLaser: new IgeTexture(gameRoot +
+					'assets/blocks/laser/greenLaser.svg'),
+				purpleLaser: new IgeTexture(gameRoot +
+					'assets/blocks/laser/purpleLaser.svg'),
+				doomLaser: new IgeTexture(gameRoot +
+					'assets/blocks/laser/doomLaser.svg'),
+
 				plating: new IgeTexture(gameRoot +
 					'assets/blocks/armor/plating.svg')
 			}
