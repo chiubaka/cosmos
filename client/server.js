@@ -15,13 +15,13 @@ var express = require('express'),
 	FacebookStrategy = require('passport-facebook').Strategy;
 
 // Parse commmand line options
-if (argv.local) {
+if (argv['local']) {
 	global.config = require('./configs/configLocal');
 }
-else if (argv.dev) {
+else if (argv['dev']) {
 	global.config = require('./configs/configDev');
 }
-else if (argv.preview) {
+else if (argv['preview']) {
 	global.config = require('./configs/configPreview');
 }
 else {
