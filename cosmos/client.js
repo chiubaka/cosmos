@@ -69,8 +69,6 @@ var Client = IgeClass.extend({
 					'assets/backgrounds/helix_nebula.jpg'),
 				background_starfield: new IgeTexture(
 					'assets/backgrounds/starfield.png'),
-				fixtureDebuggingTexture: new IgeTexture(
-					'assets/debug/FixtureDebuggingTexture.js'),
 				laserBeamTexture: new IgeTexture(
 					'assets/effects/laser/laserbeam.png'),
 				rectangleTexture: new IgeTexture(
