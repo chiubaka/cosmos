@@ -24,7 +24,7 @@ DamageSources[GreenLaserBlock.prototype.classId()] = {
 	cooldown: 1000,
 	damage: 60,
 	duration: 2000,
-	range: 900
+	range: 800
 };
 
 /*
@@ -35,7 +35,7 @@ DamageSources[PurpleLaserBlock.prototype.classId()] = {
 	cooldown: 1000,
 	damage: 80,
 	duration: 2000,
-	range: 1200
+	range: 1000
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
