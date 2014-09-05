@@ -258,7 +258,7 @@ var Block = IgeEntity.extend({
 	 * @memberof BlockGrid
 	 * @instance
 	 */
-	onRemoved: function() {
+	onRemove: function() {
 		if (ige.isClient) {
 			this.removeEffect({type: 'healthBar'});
 		}
