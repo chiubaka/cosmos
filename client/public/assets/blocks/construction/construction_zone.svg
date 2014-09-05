@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   version="1.1"
+   width="78"
+   height="78"
+   id="svg6423">
+  <defs
+     id="defs6425">
+    <pattern
+       patternTransform="translate(4.8510437e-8,1012.3622)"
+       id="pattern6421"
+       xlink:href="#pattern3762" />
+    <pattern
+       patternUnits="userSpaceOnUse"
+       width="40"
+       height="40"
+       patternTransform="translate(0,1012.3621)"
+       id="pattern3762">
+      <path
+         d="M 0,40 40,0 40,20 20,40 z M 0,0 20,0 0,20 z"
+         style="fill:#026cd2;fill-opacity:1;stroke:none"
+         id="path2991" />
+    </pattern>
+  </defs>
+  <metadata
+     id="metadata6428">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(0,-974.3622)"
+     id="layer1"
+     style="display:inline">
+    <rect
+       width="40"
+       height="40"
+       x="7.3772888e-08"
+       y="1012.3622"
+       id="rect3765"
+       style="fill:#ffffff;fill-opacity:0.19417473;stroke:none" />
+  </g>
+  <g
+     transform="matrix(1.95,0,0,1.95,-1.4385714e-7,-1974.1063)"
+     id="g6489"
+     style="display:inline">
+    <rect
+       width="40"
+       height="40"
+       x="7.3772888e-08"
+       y="1012.3622"
+       id="rect6491"
+       style="fill:url(#pattern6421);stroke:none" />
+  </g>
+</svg>
