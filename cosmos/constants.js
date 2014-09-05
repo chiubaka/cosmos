@@ -2,7 +2,11 @@
  * Cosmos game constants should be stored in this central location
  */
 var Constants = {
-	RATIO_BETWEEN_GAME_THRUST_AND_DISPLAYED_THRUST: 10000,
+	/*
+	 * This is the ratio between thrusts as they actually are in the code and
+	 * thrusts as they are presented to the user.
+	 */
+	THRUST_DISPLAY_RATIO: 10000,
 
 	fps: {
 		CLIENT_FPS: 30,
