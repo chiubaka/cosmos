@@ -5,10 +5,10 @@ var config = {
 	gameJs: '/js/cosmos/game.js',
 
 	// Game server URL. This gets injected into the cosmos.jade file
-	gameServerUrl: 'http://dev.srv.cosmos.teamleonine.com:2000',
+	gameServerUrl: 'http://dev.srv.cosmos.teamleonine.com:443',
 
 	// Node.js express server
-	expressServerPort: 2001, // "Security" through obscurity
+	expressServerPort: 80,
 	expressServerUrl: 'http://dev.cosmos.teamleonine.com',
 	// Where to serve ige/ and cosmos/ from
 	igeDirectory: '.',
