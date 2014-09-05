@@ -59,11 +59,17 @@ $crafting-tooltip-background-color: #0c0a07;
 			height: $block-height;
 			margin-bottom: 10px;
 
-			div.block-canvas-container, span.block-type {
+			div.block-texture-container, span.block-type {
 				float: left;
 			}
-			div.block-canvas-container {
+
+			div.block-texture-container {
 				margin-right: 10px;
+
+				canvas, img {
+					width: 26px;
+					height: 26px;
+				}
 			}
 
 			span.block-type {

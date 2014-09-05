@@ -12,7 +12,7 @@ module.exports = function(grunt) {
 		dust: {
 			dist: {
 				files: {
-					'client/public/js/templates.dust.js': 'views/**/*.dust'
+					'public/js/templates.dust.js': 'views/**/*.dust'
 				},
 				options: {
 					wrapper: false,

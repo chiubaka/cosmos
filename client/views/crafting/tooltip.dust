@@ -6,8 +6,7 @@
 <ul class='reactants'>
 	{#reactants}
 		<li class='reactant'>
-			<div class='block-canvas-container'>
-				<canvas class='reactant' width='26' height='26'/>
+			<div class='block-texture-container'>
 				<span class='quantity'>{quantity}</span>
 			</div>
 			<span class='block-type'>{blockType}</span>

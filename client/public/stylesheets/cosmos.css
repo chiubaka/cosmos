@@ -147,11 +147,11 @@ h1, h2, h3, h4 {
 }
 
 /* line 28, ../../sass/_hud.scss */
-.block-canvas-container {
+.block-canvas-container, .block-texture-container {
   position: relative;
 }
 /* line 31, ../../sass/_hud.scss */
-.block-canvas-container span.quantity {
+.block-canvas-container span.quantity, .block-texture-container span.quantity {
   position: absolute;
   color: white;
   right: -2px;
@@ -672,7 +672,7 @@ h1, h2, h3, h4 {
   padding: 6px;
 }
 /* line 118, ../../sass/_window.scss */
-.window .body td canvas {
+.window .body td canvas, .window .body td img {
   height: 25.5px;
   width: 25.5px;
   display: block;
@@ -857,14 +857,19 @@ h1, h2, h3, h4 {
   margin-bottom: 10px;
 }
 /* line 62, ../../sass/_crafting.scss */
-.tooltip.crafting ul.reactants li.reactant div.block-canvas-container, .tooltip.crafting ul.reactants li.reactant span.block-type {
+.tooltip.crafting ul.reactants li.reactant div.block-texture-container, .tooltip.crafting ul.reactants li.reactant span.block-type {
   float: left;
 }
-/* line 65, ../../sass/_crafting.scss */
-.tooltip.crafting ul.reactants li.reactant div.block-canvas-container {
+/* line 66, ../../sass/_crafting.scss */
+.tooltip.crafting ul.reactants li.reactant div.block-texture-container {
   margin-right: 10px;
 }
 /* line 69, ../../sass/_crafting.scss */
+.tooltip.crafting ul.reactants li.reactant div.block-texture-container canvas, .tooltip.crafting ul.reactants li.reactant div.block-texture-container img {
+  width: 26px;
+  height: 26px;
+}
+/* line 75, ../../sass/_crafting.scss */
 .tooltip.crafting ul.reactants li.reactant span.block-type {
   line-height: 26px;
   height: 26px;

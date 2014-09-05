@@ -98,21 +98,32 @@ var WindowComponent = ButtonComponent.extend({
 			blockCanvasContainerDiv.empty();
 		}
 
-		var containerCanvas = $('<canvas/>')[0];
-		blockCanvasContainerDiv.append(containerCanvas);
-		container.append(blockCanvasContainerDiv);
-
 		var block = Block.fromType(blockType);
 
-		containerCanvas.width = $(containerCanvas).width();
-		containerCanvas.height = $(containerCanvas).height();
+		// If this does not occur before the containerCanvas is appended, then the
+		// containerCanvas will have a height and width of 0.
+		container.append(blockCanvasContainerDiv);
 
-		var scaleWidth = containerCanvas.width / block._bounds2d.x;
-		var scaleHeight = containerCanvas.height / block._bounds2d.y;
-		var ctx = containerCanvas.getContext("2d");
-		ctx.scale(scaleWidth, scaleHeight);
-		ctx.translate(block._bounds2d.x2, block._bounds2d.y2);
-		block.texture().render(ctx, block);
+		if (block instanceof Part) {
+			var img = $('<img/>')[0];
+			img.src = window.location + "/assets/sprites/" + block.iconFrame;
+			blockCanvasContainerDiv.append(img);
+		}
+		else {
+			var containerCanvas = $('<canvas/>')[0];
+			blockCanvasContainerDiv.append(containerCanvas);
+
+			containerCanvas.width = $(containerCanvas).width();
+			containerCanvas.height = $(containerCanvas).height();
+
+			var scaleWidth = containerCanvas.width / block._bounds2d.x;
+			var scaleHeight = containerCanvas.height / block._bounds2d.y;
+			var ctx = containerCanvas.getContext("2d");
+			ctx.scale(scaleWidth, scaleHeight);
+			ctx.translate(block._bounds2d.x2, block._bounds2d.y2);
+			block.texture().render(ctx, block);
+		}
+
 
 		return blockCanvasContainerDiv;
 	},

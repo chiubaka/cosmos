@@ -119,21 +119,34 @@ var CraftingUIComponent = WindowComponent.extend({
 				theme: 'tooltip crafting',
 				maxWidth: '200',
 				functionReady: function(origin, tooltip) {
-					var canvases = $(tooltip).find('canvas.reactant');
+					var textureContainers = $(tooltip).find('.block-texture-container');
 
-					_.forEach(_.zip(canvases, recipe.reactants), function(pair) {
-						var canvas = pair[0];
+					_.forEach(_.zip(textureContainers, recipe.reactants), function(pair) {
+						var textureContainer = pair[0];
 						var reactant = pair[1];
 
 						var block = cosmos.blocks.instances[reactant.blockType];
 
-						var scaleWidth = canvas.width / block._bounds2d.x;
-						var scaleHeight = canvas.height / block._bounds2d.y;
-						canvas.width = canvas.width;
-						var ctx = canvas.getContext("2d");
-						ctx.scale(scaleWidth, scaleHeight);
-						ctx.translate(block._bounds2d.x2, block._bounds2d.y2);
-						block.texture().render(ctx, block);
+						if (block instanceof Part) {
+							var imgs = $(textureContainer).find('img');
+							var img = (imgs.length === 0) ? $('<img/>')[0] : imgs[0];
+							img.src = window.location + '/assets/sprites/' + block.iconFrame;
+							$(textureContainer).prepend(img);
+						}
+						else {
+							var canvases = $(textureContainer).find('canvas');
+							var canvas = (canvases.length === 0) ?
+								$('<canvas></canvas>')[0] : canvases[0];
+							$(textureContainer).prepend(canvas);
+
+							var scaleWidth = canvas.width / block._bounds2d.x;
+							var scaleHeight = canvas.height / block._bounds2d.y;
+							canvas.width = canvas.width;
+							var ctx = canvas.getContext("2d");
+							ctx.scale(scaleWidth, scaleHeight);
+							ctx.translate(block._bounds2d.x2, block._bounds2d.y2);
+							block.texture().render(ctx, block);
+						}
 					});
 				}
 			});

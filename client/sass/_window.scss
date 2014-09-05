@@ -115,7 +115,7 @@ $window-height: $window-header-height + $window-tabs-height +
 			border-style: solid;
 			padding: $window-table-cell-padding;
 
-			canvas {
+			canvas, img {
 				height: $window-table-cell-size;
 				width: $window-table-cell-size;
 				display: block;
