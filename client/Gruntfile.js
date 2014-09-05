@@ -69,15 +69,16 @@ module.exports = function(grunt) {
 		var pm2 = require('pm2');
 		var exec = require('child_process').exec;
 
+		minify();
+
 		// Pack and uglify game into one JS file
-		exec(this.data.minifyCommand, {cwd: '../ige'}, function(err, stdout, stderr){
-			console.log('stdout: ' + stdout);
-			console.log('stderr: ' + stderr);
-			if (err !== null) {
-				console.log('exec error: ' + err);
-			}
-			startExpressServer();
-		});
+		function minify() {
+			exec(self.data.minifyCommand, {cwd: '../ige'}, function(err, stdout,
+				stderr){
+				printOutput(err, stdout, stderr);
+				startExpressServer();
+			});
+		}
 
 		// Start express server
 		function startExpressServer() {
@@ -96,6 +97,13 @@ module.exports = function(grunt) {
 			});
 		}
 	});
+
+function printOutput(err, stdout, stderr) {
+	if (stdout) console.log('stdout:\n' + stdout);
+	if (stderr) console.error('stderr:\n' + stderr);
+	if (err) console.error('exec error:\n' + err);
+}
+
 
 	// By default, auto compile sass and dust templates
 	grunt.registerTask('default', ['watch']);
