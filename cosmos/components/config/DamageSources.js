@@ -32,17 +32,6 @@ DamageSources[PurpleLaserBlock.prototype.classId()] = {
 	range: 1200
 };
 
-/*
-The doom lasers has a huge range and damage but a very large reload time.
-It is not craftable at the moment.
-*/
-DamageSources[DoomLaserBlock.prototype.classId()] = {
-	cooldown: 1000,
-	damage: 200,
-	duration: 2000,
-	range: 2000
-};
-
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
 	module.exports = DamageSources;
 }

@@ -129,10 +129,6 @@ Healths[PurpleLaserBlock.prototype.classId()] =
 {
 	max: 80
 };
-Healths[DoomLaserBlock.prototype.classId()] =
-{
-	max: 100
-};
 
 
 /* === ELEMENTS === */

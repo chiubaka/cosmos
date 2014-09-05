@@ -226,10 +226,6 @@ Types[PurpleLaserBlock.prototype.classId()] =
 {
 	text: 'Level 3 Laser'
 };
-Types[DoomLaserBlock.prototype.classId()] =
-{
-	text: 'Level 4 Laser'
-};
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
 	module.exports = Types

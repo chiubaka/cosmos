@@ -238,12 +238,6 @@ Descriptions[PurpleLaserBlock.prototype.classId()] =
 	text: 'This beautiful Amethyst-colored laser is one of the most powerful lasers known to man.' +
 		'It can cut through meter-thick steel like a hot knife through butter.'
 };
-Descriptions[DoomLaserBlock.prototype.classId()] =
-{
-	text: 'This frightning black laser is a piece of ancient alien technology. ' +
-		'Scientists theorize that the same principles that make this laser work ' +
-		'could also be used to make planet-busting weapons.'
-};
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
 	module.exports = Descriptions
