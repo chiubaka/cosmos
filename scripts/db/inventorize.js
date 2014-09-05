@@ -26,7 +26,7 @@ var starterShipTemplate =
 			"SteelPlatingBlock"
 		],
 		[
-			"MiningLaserBlock",
+			"RedLaserBlock",
 			"SteelPlatingBlock",
 			"BridgeBlock",
 			"PowerBlock",

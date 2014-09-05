@@ -32,15 +32,15 @@ NetworkUtils.block = function(block) {
 /**
  * Creates an effect object, which maintains information about what type of effect this is, what the source
  * {@link Block} of the effect is, and, optionally, the target of the effect. Target is only used for certain effects
- * like the mining laser effect which need to latch onto a second {@link Block}.
+ * like the laser effect which need to latch onto a second {@link Block}.
  * @param effectType {string} The type of this effect.
  * @param block {Block} The {@link Block} that is generating or associated with this effect.
- * @param targetBlock {Block} Optional argument. Specifies the target {@link Block} for effects like the mining laser
+ * @param targetBlock {Block} Optional argument. Specifies the target {@link Block} for effects like the laser
  * effect, which needs a second {@link Block} to latch onto.
  * @returns {{type: *, sourceBlock: *, targetBlock: *}} An effect object, which stores the effect type and two
  * network-converted {@link Block} objects as returned from {@link NetworkUtils#block}. The source block is the block
  * that the effect is being added to. The target block is a secondary block that is required for certain effects like
- * the mining laser effect.
+ * the laser effect.
  */
 NetworkUtils.effect = function(effectType, block, targetBlock) {
 	return {

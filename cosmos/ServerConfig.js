@@ -42,7 +42,9 @@ var config = {
 		/* Weapons */
 		{ name: 'Weapon', path: './entities/blocks/parts/Weapon' },
 		{ name: 'Laser', path: './entities/blocks/parts/weapons/Laser' },
-		{ name: 'MiningLaserBlock', path: './entities/blocks/parts/weapons/lasers/MiningLaserBlock' },
+		{ name: 'RedLaserBlock', path: './entities/blocks/parts/weapons/lasers/RedLaserBlock' },
+		{ name: 'GreenLaserBlock', path: './entities/blocks/parts/weapons/lasers/GreenLaserBlock' },
+		{ name: 'PurpleLaserBlock', path: './entities/blocks/parts/weapons/lasers/PurpleLaserBlock' },
 
 		/* Ship armor blocks */
 		{ name: 'Armor', path: './entities/blocks/parts/Armor' },

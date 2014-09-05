@@ -224,11 +224,19 @@ Descriptions[Weapon.prototype.classId()] =
 	text: 'A weapon block which can deal damage to other blocks.'
 };
 
-Descriptions[MiningLaserBlock.prototype.classId()] =
+Descriptions[RedLaserBlock.prototype.classId()] =
 {
-	text: 'The mining laser is the most basic weapon in the game. Use it to break blocks off of structures ' +
-		'and ships. If you lose your mining laser, you will not be able to shoot. Having more mining lasers will ' +
-		'increase your mining speed.'
+	text: 'This laser is the most basic weapon in the game. Use it to break blocks off of structures ' +
+		'and ships. If you lose your laser, you will not be able to shoot.'
+};
+Descriptions[GreenLaserBlock.prototype.classId()] =
+{
+	text: 'This bright emerald-colored laser is more powerful than the Red Laser.'
+};
+Descriptions[PurpleLaserBlock.prototype.classId()] =
+{
+	text: 'This beautiful Amethyst-colored laser is one of the most powerful lasers known to man.' +
+		'It can cut through meter-thick steel like a hot knife through butter.'
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {

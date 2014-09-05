@@ -69,8 +69,6 @@ var Client = IgeClass.extend({
 					'assets/backgrounds/helix_nebula.jpg'),
 				background_starfield: new IgeTexture(
 					'assets/backgrounds/starfield.png'),
-				laserBeamTexture: new IgeTexture(
-					'assets/effects/laser/laserbeam.png'),
 				rectangleTexture: new IgeTexture(
 					'assets/effects/particles/Rectangle.js'),
 				healthBar: new IgeTexture('assets/HealthBarTexture.js'),
@@ -100,9 +98,16 @@ var Client = IgeClass.extend({
 					'assets/blocks/cargo/cargo.svg'),
 				control: new IgeTexture(
 					'assets/blocks/playerctrl/playerctrl.svg'),
-				miningLaser: new IgeTexture(
-					'assets/blocks/laser/laser.svg'),
-				plating: new IgeTexture(
+
+				//Lasers
+				redLaser: new IgeTexture(
+					'assets/blocks/laser/redLaser.svg'),
+				greenLaser: new IgeTexture(
+					'assets/blocks/laser/greenLaser.svg'),
+				purpleLaser: new IgeTexture(
+					'assets/blocks/laser/purpleLaser.svg'),
+
+				plating: new IgeTexture(gameRoot +
 					'assets/blocks/armor/plating.svg')
 			}
 
