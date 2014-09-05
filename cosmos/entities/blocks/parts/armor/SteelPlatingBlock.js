@@ -3,6 +3,7 @@ var SteelPlatingBlock = Armor.extend({
 
 	init: function(data) {
 		if (!ige.isServer) {
+			this.iconFrame = "SteelPlating.png";
 			this.backgroundColor = 0xA0A0A0;
 			this.borderColor = 0xC9C9C9;
 			this.textureBackground = "rgb(160, 160, 160)";

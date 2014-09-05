@@ -7,6 +7,7 @@ var SteelThrusterBlock = ThrusterBlock.extend({
 		}
 
 		if (!ige.isServer) {
+			this.iconFrame = "HAV3200ThrusterArray.png";
 			this.backgroundColor = 0xA0A0A0;
 			this.borderColor = 0xFF4E00;
 			this.textureBackground = "rgb(160, 160, 160)";

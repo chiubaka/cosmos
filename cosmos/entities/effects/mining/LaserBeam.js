@@ -16,7 +16,7 @@ var LaserBeam = IgeEntity.extend({
 		IgeEntity.prototype.init.call(this);
 
 		this.addComponent(LaserBeamRenderableComponent, {createDisplayObject: function () {
-			var sprite = PIXI.Sprite.fromFrame('laserbeam');
+			var sprite = PIXI.Sprite.fromFrame('RedLaserBeam.png');
 			sprite.width = 10;
 			sprite.anchor.set(0.5);
 			return sprite;

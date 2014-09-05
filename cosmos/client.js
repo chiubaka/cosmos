@@ -54,7 +54,7 @@ var Client = IgeClass.extend({
 		textures['backgroundOverlay'] = gameRoot + 'assets/backgrounds/backgroundOverlay.png';
 
 		ige.rendering.loadTextures(textures);
-		ige.rendering.loadSpriteSheets([gameRoot + 'assets/blocks/spritesheet.json']);
+		ige.rendering.loadSpriteSheets([gameRoot + 'assets/sprites/sprites.json']);
 		ige.rendering.start();
 
 		ige.rendering.on('texturesLoaded', function() {
@@ -71,8 +71,8 @@ var Client = IgeClass.extend({
 					'assets/backgrounds/starfield.png'),
 				fixtureDebuggingTexture: new IgeTexture(gameRoot +
 					'assets/debug/FixtureDebuggingTexture.js'),
-				laserBeamTexture: new IgeTexture(gameRoot +
-					'assets/effects/laser/laserbeam.png'),
+				//laserBeamTexture: new IgeTexture(gameRoot +
+				//	'assets/effects/laser/laserbeam.png'),
 				rectangleTexture: new IgeTexture(gameRoot +
 					'assets/effects/particles/Rectangle.js'),
 				healthBar: new IgeTexture(gameRoot + 'assets/HealthBarTexture.js'),
@@ -86,7 +86,7 @@ var Client = IgeClass.extend({
 				baseCap_white: new IgeTexture(gameRoot + 'assets/ui/base/base-white.png'),
 
 				// Block textures
-				constructionZone: new IgeTexture(gameRoot +
+				/*constructionZone: new IgeTexture(gameRoot +
 					'assets/blocks/construction/construction_zone.svg'),
 				power: new IgeTexture(gameRoot +
 					'assets/blocks/power/power.svg'),
@@ -105,8 +105,8 @@ var Client = IgeClass.extend({
 				miningLaser: new IgeTexture(gameRoot +
 					'assets/blocks/laser/laser.svg'),
 				plating: new IgeTexture(gameRoot +
-					'assets/blocks/armor/plating.svg')
-			}
+					'assets/blocks/armor/plating.svg')*/
+			};
 
 			for (var gridX = 0; gridX < Constants.NUM_BACKGROUND_SQUARES.X; gridX++) {
 				for (var gridY = 0; gridY < Constants.NUM_BACKGROUND_SQUARES.Y; gridY++) {

@@ -3,6 +3,7 @@ var MythrilPlatingBlock = Armor.extend({
 
 	init: function(data) {
 		if (!ige.isServer) {
+			this.iconFrame = "MythrilPlating.png";
 			this.backgroundColor = 0x8CA5D9;
 			this.borderColor = 0x7891C8;
 			this.textureBackground = "rgb(140, 165, 217)";

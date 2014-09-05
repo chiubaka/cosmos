@@ -7,6 +7,7 @@ var KryptoniteThrusterBlock = ThrusterBlock.extend({
 		}
 
 		if (!ige.isServer) {
+			this.iconFrame = "HXV4600FusionRelayThruster.png";
 			this.backgroundColor = 0x404040;
 			this.borderColor = 0x6FA700;
 			this.textureBackground = "rgb(64, 64, 64)";

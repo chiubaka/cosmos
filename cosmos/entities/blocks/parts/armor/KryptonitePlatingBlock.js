@@ -3,6 +3,7 @@ var KryptonitePlatingBlock = Armor.extend({
 
 	init: function(data) {
 		if (!ige.isServer) {
+			this.iconFrame = "KryptonitePlating.png";
 			this.backgroundColor = 0xA9FF00;
 			this.borderColor = 0x6FA700;
 			this.backgroundAlpha = 0.8;

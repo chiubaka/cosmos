@@ -9,7 +9,6 @@ var EngineBlock = Part.extend({
 	classId: 'EngineBlock',
 
 	init: function (data) {
-		this.iconFrame = 'engine';
 		Part.prototype.init.call(this, data);
 	},
 
