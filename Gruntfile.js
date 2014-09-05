@@ -38,6 +38,7 @@ module.exports = function(grunt) {
 					'--clear true --clearClasses false'
 			}
 		},
+
 		jsbeautifier: {
 			test: {
 				src: ['cosmos/tests/game.js']
@@ -59,5 +60,24 @@ module.exports = function(grunt) {
 			]);
 		}
 	});
+	grunt.registerTask('preview', 'Runs the Cosmos game server as preview',
+		function() {
+		var done = this.async();
+		var pm2 = require('pm2');
+		pm2.connect(function(err) {
+			var gameServerPath = 'ige/server/ige.js';
+			var gameServerOpts = {
+				name: 'cosmos_game_server',
+				scriptArgs: ['--preview', '-g', 'cosmos'],
+				error: 'logs/error.log',
+				output: 'logs/output.log'
+			};
+			pm2.start(gameServerPath, gameServerOpts, function(err, proc) {
+				if(err) throw new Error('err');
+				done();
+			});
+		});
+	});
+
 	grunt.registerTask('default', ['test']);
 };
