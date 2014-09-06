@@ -32,12 +32,27 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+
 		exec: {
 			ige_deploy: {
-				cmd: 'cd ige; node server/ige.js -deploy ../cosmos -to ../cosmos/tests ' +
-					'-clear true -clearClasses false'
+				cmd: 'cd ige; node server/ige.js --deploy ../cosmos --to ../cosmos/tests ' +
+					'--clear true --clearClasses false'
 			}
 		},
+
+		production: {
+			// Arguments to server/ige.js to load cosmos
+			local: {
+				gameServerArgs: ['--local' , '-g', 'cosmos']
+			},
+			dev: {
+				gameServerArgs: ['--dev' , '-g', 'cosmos']
+			},
+			preview: {
+				gameServerArgs: ['--preview' , '-g', 'cosmos']
+			}
+		},
+
 		jsbeautifier: {
 			test: {
 				src: ['cosmos/tests/game.js']
@@ -47,6 +62,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-karma');
 	grunt.loadNpmTasks('grunt-exec');
 	grunt.loadNpmTasks('grunt-jsbeautifier');
+
 	grunt.registerTask('test', 'Runs tests for Cosmos.', function() {
 		if (grunt.option('no-compile') || grunt.option('nc')) {
 			grunt.task.run(['karma:unit']);
@@ -59,5 +75,28 @@ module.exports = function(grunt) {
 			]);
 		}
 	});
+
+	grunt.registerMultiTask('production', 'Run the Cosmos game server in' +
+		'production (either dev or preview)', function() {
+		// call done() when async stuff is done so Grunt can move on
+		var done = this.async();
+		var self = this;
+		var pm2 = require('pm2');
+		// Start the game server
+		pm2.connect(function(err) {
+			var gameServerPath = 'ige/server/ige.js';
+			var gameServerOpts = {
+				name: 'cosmos_game_server',
+				scriptArgs: self.data.gameServerArgs,
+				error: 'logs/error.log',
+				output: 'logs/output.log'
+			};
+			pm2.start(gameServerPath, gameServerOpts, function(err, proc) {
+				if(err) throw new Error('err');
+				done();
+			});
+		});
+	});
+
 	grunt.registerTask('default', ['test']);
 };

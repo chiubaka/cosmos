@@ -44,17 +44,17 @@ var Client = IgeClass.extend({
 
 		// Load textures
 		var textures = {};
-		textures.background_starfield = gameRoot + 'assets/backgrounds/starfield.png'
+		textures.background_starfield = 'assets/backgrounds/starfield.png'
 
 		for (var gridX = 0; gridX < Constants.NUM_BACKGROUND_SQUARES.X; gridX++) {
 			for (var gridY = 0; gridY < Constants.NUM_BACKGROUND_SQUARES.Y; gridY++) {
-				textures['background' + gridX + '-' + gridY] = gameRoot + 'assets/backgrounds/background' + gridX + '-' + gridY + '.jpg';
+				textures['background' + gridX + '-' + gridY] = 'assets/backgrounds/background' + gridX + '-' + gridY + '.jpg';
 			}
 		}
-		textures['backgroundOverlay'] = gameRoot + 'assets/backgrounds/backgroundOverlay.png';
+		textures['backgroundOverlay'] = 'assets/backgrounds/backgroundOverlay.png';
 
 		ige.rendering.loadTextures(textures);
-		ige.rendering.loadSpriteSheets([gameRoot + 'assets/blocks/spritesheet.json']);
+		ige.rendering.loadSpriteSheets(['assets/blocks/spritesheet.json']);
 		ige.rendering.start();
 
 		ige.rendering.on('texturesLoaded', function() {
@@ -63,64 +63,60 @@ var Client = IgeClass.extend({
 
 			// Load the textures we want to use
 			var textures = {
-				block: new IgeTexture(gameRoot + 'assets/BlockTexture.js'),
-				glow: new IgeTexture(gameRoot + 'assets/GlowEffectTexture.js'),
-				background_helix_nebula: new IgeTexture(gameRoot +
+				block: new IgeTexture('assets/BlockTexture.js'),
+				glow: new IgeTexture('assets/GlowEffectTexture.js'),
+				background_helix_nebula: new IgeTexture(
 					'assets/backgrounds/helix_nebula.jpg'),
-				background_starfield: new IgeTexture(gameRoot +
+				background_starfield: new IgeTexture(
 					'assets/backgrounds/starfield.png'),
-				fixtureDebuggingTexture: new IgeTexture(gameRoot +
-					'assets/debug/FixtureDebuggingTexture.js'),
-				rectangleTexture: new IgeTexture(gameRoot +
+				rectangleTexture: new IgeTexture(
 					'assets/effects/particles/Rectangle.js'),
-				healthBar: new IgeTexture(gameRoot + 'assets/HealthBarTexture.js'),
+				healthBar: new IgeTexture('assets/HealthBarTexture.js'),
 
 				// Cap textures
-				mineCap_color: new IgeTexture(gameRoot + 'assets/ui/mine/mine-color.png'),
-				mineCap_white: new IgeTexture(gameRoot + 'assets/ui/mine/mine-white.png'),
-				constructCap_color: new IgeTexture(gameRoot + 'assets/ui/construct/construct-color.png'),
-				constructCap_white: new IgeTexture(gameRoot + 'assets/ui/construct/construct-white.png'),
-				baseCap_color: new IgeTexture(gameRoot + 'assets/ui/base/base-color.png'),
-				baseCap_white: new IgeTexture(gameRoot + 'assets/ui/base/base-white.png'),
+				mineCap_color: new IgeTexture('assets/ui/mine/mine-color.png'),
+				mineCap_white: new IgeTexture('assets/ui/mine/mine-white.png'),
+				constructCap_color: new IgeTexture('assets/ui/construct/construct-color.png'),
+				constructCap_white: new IgeTexture('assets/ui/construct/construct-white.png'),
+				baseCap_color: new IgeTexture('assets/ui/base/base-color.png'),
+				baseCap_white: new IgeTexture('assets/ui/base/base-white.png'),
 
 				// Block textures
-				constructionZone: new IgeTexture(gameRoot +
+				constructionZone: new IgeTexture(
 					'assets/blocks/construction/construction_zone.svg'),
-				power: new IgeTexture(gameRoot +
+				power: new IgeTexture(
 					'assets/blocks/power/power.svg'),
-				engine: new IgeTexture(gameRoot +
+				engine: new IgeTexture(
 					'assets/blocks/engines/engine.svg'),
-				thruster: new IgeTexture(gameRoot +
+				thruster: new IgeTexture(
 					'assets/blocks/thrusters/thruster.svg'),
-				kryptoniteThruster: new IgeTexture(gameRoot +
+				kryptoniteThruster: new IgeTexture(
 					'assets/blocks/thrusters/kryptoniteThruster.svg'),
-				fuel: new IgeTexture(gameRoot +
+				fuel: new IgeTexture(
 					'assets/blocks/fuel/fuel.svg'),
-				cargo: new IgeTexture(gameRoot +
+				cargo: new IgeTexture(
 					'assets/blocks/cargo/cargo.svg'),
-				control: new IgeTexture(gameRoot +
+				control: new IgeTexture(
 					'assets/blocks/playerctrl/playerctrl.svg'),
 
 				//Lasers
-				redLaser: new IgeTexture(gameRoot +
+				redLaser: new IgeTexture(
 					'assets/blocks/laser/redLaser.svg'),
-				greenLaser: new IgeTexture(gameRoot +
+				greenLaser: new IgeTexture(
 					'assets/blocks/laser/greenLaser.svg'),
-				purpleLaser: new IgeTexture(gameRoot +
+				purpleLaser: new IgeTexture(
 					'assets/blocks/laser/purpleLaser.svg'),
-				doomLaser: new IgeTexture(gameRoot +
-					'assets/blocks/laser/doomLaser.svg'),
 
-				plating: new IgeTexture(gameRoot +
+				plating: new IgeTexture(
 					'assets/blocks/armor/plating.svg')
 			}
 
 			for (var gridX = 0; gridX < Constants.NUM_BACKGROUND_SQUARES.X; gridX++) {
 				for (var gridY = 0; gridY < Constants.NUM_BACKGROUND_SQUARES.Y; gridY++) {
-					textures['background' + gridX + '-' + gridY] = new IgeTexture(gameRoot + 'assets/backgrounds/background' + gridX + '-' + gridY + '.jpg');
+					textures['background' + gridX + '-' + gridY] = new IgeTexture('assets/backgrounds/background' + gridX + '-' + gridY + '.jpg');
 				}
 			}
-			textures['backgroundOverlay'] = new IgeTexture(gameRoot + 'assets/backgrounds/backgroundOverlay.png');
+			textures['backgroundOverlay'] = new IgeTexture('assets/backgrounds/backgroundOverlay.png');
 
 			self.textures = textures;
 
@@ -138,8 +134,8 @@ var Client = IgeClass.extend({
 						// a splash screen or a menu first? Then connect after you've
 						// got a username or something?
 
-						// Use DeploymentUtils to get the appropriate game server to connect to.
-						ige.network.start(DeploymentUtils.getServerUrl(), function () {
+						// Read the game server url injected by the cosmos.jade file
+						ige.network.start(window.config.gameServerUrl, function () {
 							ige.client.metrics.track('cosmos:network.connect');
 
 							// Setup the network command listeners
