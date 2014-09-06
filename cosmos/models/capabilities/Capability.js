@@ -1,14 +1,14 @@
-﻿/**  
+﻿/**
  * Capability.js
  * Capabilities are modules that encapsulate gameplay state, state-checking,
  * and functions that perform actions in a way that is easily extensible and
  * maintainable. Capabilities can also store info that's related to a particular
  * state.
  *
- * @author Derrick Liu 
+ * @author Derrick Liu
  * @class
  * @typedef {Object} Capability
- * @namespace  
+ * @namespace
  */
 var Capability = IgeClass.extend({
 	classId: "Capability",
@@ -34,8 +34,8 @@ var Capability = IgeClass.extend({
 			this.registeredEvents = {
 				'Block': {
 					'mousedown': {
-						// Note: Since calling this in either the conditionFunc or actionFunc will 
-						// refer to this object (the one this comment is in), we include 
+						// Note: Since calling this in either the conditionFunc or actionFunc will
+						// refer to this object (the one this comment is in), we include
 						// the capability field to allow easy access to the Capability object itself.
 						capability: this,
 						conditionFunc: this.Block_canMouseDown,
@@ -76,10 +76,10 @@ var Capability = IgeClass.extend({
 	/**
 	 * Selects a registered event from the registeredEvents list that is the most relevant
 	 * to the entity type / event type pair provided.
-	 * 
+	 *
 	 * If a registered event does not exactly match the entity classId, this method will
 	 * traverse up the entity class hierarchy in case a parent classId is registered.
-	 * 
+	 *
 	 * @param sender {Object} an entity upon which an event was triggered
 	 * @param event {Object} the triggering event
 	 * @returns {string} the classId of a registered event, or undefined if none can be found
@@ -116,9 +116,9 @@ var Capability = IgeClass.extend({
 
 	/**
 	 * Checks whether or not an event action can be performed in the current game state.
-	 * 
+	 *
 	 * Calls the conditionFunc associated with the registered event for this entity/event pair.
-	 * 
+	 *
 	 * @param sender {Object} an entity upon which an event was triggered
 	 * @param event {Object} the triggering event
 	 * @param data {Object} provided data that can be used in conditionFunc and actionFunc
@@ -140,7 +140,7 @@ var Capability = IgeClass.extend({
 
 	/**
 	 * Default stub for demonstrating a conditionFunc
-	 * 
+	 *
 	 * @param sender {Object} an entity upon which an event was triggered
 	 * @param event {Object} the triggering event
 	 * @param data {Object} provided data that can be used in conditionFunc
@@ -153,7 +153,7 @@ var Capability = IgeClass.extend({
 
 	/**
 	 * Default stub for demonstrating a conditionFunc
-	 * 
+	 *
 	 * @param sender {Object} an entity upon which an event was triggered
 	 * @param event {Object} the triggering event
 	 * @param data {Object} provided data that can be used in conditionFunc
@@ -166,7 +166,7 @@ var Capability = IgeClass.extend({
 
 	/**
 	 * Performs a registered event action for the entity/event pair.
-	 * 
+	 *
 	 * @param sender {Object} an entity upon which an event was triggered
 	 * @param event {Object} the triggering event
 	 * @param data {Object} provided data that can be used in actionFunc
@@ -186,7 +186,7 @@ var Capability = IgeClass.extend({
 
 	/**
 	 * Default stub for demonstrating an actionFunc
-	 * 
+	 *
 	 * @param sender {Object} an entity upon which an event was triggered
 	 * @param event {Object} the triggering event
 	 * @param data {Object} provided data that can be used in actionFunc
@@ -199,7 +199,7 @@ var Capability = IgeClass.extend({
 
 	/**
 	 * Default stub for demonstrating an actionFunc
-	 * 
+	 *
 	 * @param sender {Object} an entity upon which an event was triggered
 	 * @param event {Object} the triggering event
 	 * @param data {Object} provided data that can be used in actionFunc
@@ -212,7 +212,7 @@ var Capability = IgeClass.extend({
 
 	/**
 	 * Convenience function to test using canDo and act using performAction in one fell swoop.
-	 * 
+	 *
 	 * @param sender {Object} an entity upon which an event was triggered
 	 * @param event {Object} the triggering event
 	 * @param data {Object} provided data that can be used in conditionFunc and actionFunc

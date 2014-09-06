@@ -94,7 +94,13 @@ var Inspector = IgeEventingClass.extend({
 
 		if (block.thrust instanceof Thrust) {
 			this.blockInspector.find('#block-stat-thrust').show();
-			this.blockInspectorThrust.text(block.thrust.value);
+
+			/*
+			 * Note that Constants.THRUST_DISPLAY_RATIO is the ratio between thrusts
+			 * as they actually are in the code and
+			 * thrusts as they are presented to the user.
+			 */
+			this.blockInspectorThrust.text(Constants.THRUST_DISPLAY_RATIO * block.thrust.value);
 		}
 
 		if (block instanceof Part) {
