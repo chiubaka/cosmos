@@ -12,7 +12,7 @@ var ExampleShips = {
 	 */
 	starterShip: function() {
 		return [
-			[undefined,           undefined,   new MiningLaserBlock(), undefined,   undefined],
+			[undefined,           undefined,   new RedLaserBlock(), undefined,   undefined],
 			[undefined,           new IronPlatingBlock(), new IronPlatingBlock(),            new IronPlatingBlock(), undefined],
 			[undefined,           new IronPlatingBlock(), new BridgeBlock(),     new IronPlatingBlock(), undefined],
 			[undefined,           new IronPlatingBlock(), new PowerBlock(),       new IronPlatingBlock(), undefined],
@@ -21,7 +21,7 @@ var ExampleShips = {
 			[undefined,           new IronPlatingBlock(), new IronEngineBlock(),          new IronPlatingBlock(), undefined]
 		]
 	},
-	
+
 	/**
 	 * This is the ship in the middle of the video. It has two engines, but one of them is misplaced and unbalanced.
 	 * @returns {Array} A {@link Block} matrix that represents the starter ship with two, unbalanced engines.
@@ -29,7 +29,7 @@ var ExampleShips = {
 	 */
 	starterShipSingleMisplacedEngine: function() {
 		return [
-			[undefined,           undefined,         new MiningLaserBlock(), undefined,         undefined],
+			[undefined,           undefined,         new RedLaserBlock(), undefined,         undefined],
 			[undefined,           new SteelPlatingBlock(),       new SteelPlatingBlock(),            new SteelPlatingBlock(),       undefined],
 			[undefined,           new SteelPlatingBlock(),       new BridgeBlock(),     new SteelPlatingBlock(),       undefined],
 			[undefined,           new SteelPlatingBlock(),       new PowerBlock(),       new SteelPlatingBlock(),       undefined],
@@ -48,7 +48,7 @@ var ExampleShips = {
 	 */
 	starterShipDoubleEngines: function() {
 		return [
-			[undefined,           undefined,         new MiningLaserBlock(), undefined,         undefined],
+			[undefined,           undefined,         new RedLaserBlock(), undefined,         undefined],
 			[undefined,           new SteelPlatingBlock(),       new SteelPlatingBlock(),            new SteelPlatingBlock(),       undefined],
 			[undefined,           new SteelPlatingBlock(),       new BridgeBlock(),     new SteelPlatingBlock(),       undefined],
 			[undefined,           new SteelPlatingBlock(),       new PowerBlock(),       new SteelPlatingBlock(),       undefined],
@@ -57,6 +57,24 @@ var ExampleShips = {
 			[undefined,           new SteelPlatingBlock(),       new FuelBlock,          new SteelPlatingBlock(),       undefined],
 			[undefined,           new SteelPlatingBlock(),       undefined,              new SteelPlatingBlock(),       undefined],
 			[undefined,           new IronEngineBlock(), undefined,              new IronEngineBlock(), undefined]
+		]
+	},
+
+	/**
+	 * A ship that has all the weapons. Purely for testing.
+	 * @retruns {Array} A {@link Block} matrix that represents this ship.
+	 * @memberof ExampleShips
+	 */
+	starterShipWithAllWeapons: function() {
+		return [
+			[undefined,           		new RedLaserBlock(),		 new GreenLaserBlock(), 		new PurpleLaserBlock(),  undefined],
+			[undefined,           		new SteelPlatingBlock(), new SteelPlatingBlock(),   new SteelPlatingBlock(), undefined],
+			[undefined,           		new SteelPlatingBlock(), new BridgeBlock(),     		new SteelPlatingBlock(), undefined],
+			[undefined,           		new SteelPlatingBlock(), new PowerBlock(),       		new SteelPlatingBlock(), undefined],
+			[new IronThrusterBlock(), new SteelPlatingBlock(), new CargoBlock,         		new SteelPlatingBlock(), new IronThrusterBlock()],
+			[undefined,           		new SteelPlatingBlock(), new CargoBlock,         		new SteelPlatingBlock(), undefined],
+			[undefined,           		new SteelPlatingBlock(), new FuelBlock,          		new SteelPlatingBlock(), undefined],
+			[undefined,           		new SteelPlatingBlock(), new IronEngineBlock(),     new SteelPlatingBlock(), undefined]
 		]
 	},
 

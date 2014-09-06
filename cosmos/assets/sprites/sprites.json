@@ -1,115 +1,220 @@
-{
-"frames": {
-	"AdamantiumPlating.png": {
-		"frame": {"x":105, "y":105, "w":104, "h":104},
-		"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
-		"sourceSize": {"w":104,"h":104}
-	},
-	"Cargo.png": {
-		"frame": {"x":105, "y":840, "w":103, "h":103},
-		"spriteSourceSize": {"x":1,"y":1,"w":104,"h":104},
-		"sourceSize": {"w":104,"h":104}
-	},
-	"CelereImpulsorEngine.png": {
-		"frame": {"x":105, "y":735, "w":104, "h":104},
-		"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
-		"sourceSize": {"w":104,"h":104}
-	},
-	"CommandModule.png": {
-		"frame": {"x":105, "y":630, "w":104, "h":104},
-		"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
-		"sourceSize": {"w":104,"h":104}
-	},
-	"ConstructionZone.png": {
-		"frame": {"x":0, "y":945, "w":78, "h":78},
-		"spriteSourceSize": {"x":0,"y":0,"w":78,"h":78},
-		"sourceSize": {"w":78,"h":78}
-	},
-	"DaceloManeuveringThruster.png": {
-		"frame": {"x":105, "y":420, "w":104, "h":104},
-		"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
-		"sourceSize": {"w":104,"h":104}
-	},
-	"DragonPlating.png": {
-		"frame": {"x":105, "y":525, "w":104, "h":104},
-		"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
-		"sourceSize": {"w":104,"h":104}
-	},
-	"HAV3200ThrusterArray.png": {
-		"frame": {"x":105, "y":315, "w":104, "h":104},
-		"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
-		"sourceSize": {"w":104,"h":104}
-	},
-	"HXV4600FusionRelayThruster.png": {
-		"frame": {"x":0, "y":525, "w":104, "h":104},
-		"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
-		"sourceSize": {"w":104,"h":104}
-	},
-	"IronPlating.png": {
-		"frame": {"x":105, "y":210, "w":104, "h":104},
-		"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
-		"sourceSize": {"w":104,"h":104}
-	},
-	"KryptonitePlating.png": {
-		"frame": {"x":0, "y":420, "w":104, "h":104},
-		"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
-		"sourceSize": {"w":104,"h":104}
-	},
-	"MythrilPlating.png": {
-		"frame": {"x":105, "y":0, "w":104, "h":104},
-		"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
-		"sourceSize": {"w":104,"h":104}
-	},
-	"Reactor.png": {
-		"frame": {"x":0, "y":840, "w":104, "h":104},
-		"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
-		"sourceSize": {"w":104,"h":104}
-	},
-	"RedLaser.png": {
-		"frame": {"x":0, "y":735, "w":104, "h":104},
-		"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
-		"sourceSize": {"w":104,"h":104}
-	},
-	"RedLaserBase.png": {
-		"frame": {"x":0, "y":630, "w":104, "h":104},
-		"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
-		"sourceSize": {"w":104,"h":104}
-	},
-	"RedLaserBeam.png": {
-		"frame": {"x":135, "y":944, "w":20, "h":43},
-		"spriteSourceSize": {"x":0,"y":0,"w":20,"h":43},
-		"sourceSize": {"w":20,"h":43}
-	},
-	"RedLaserPivot.png": {
-		"frame": {"x":79, "y":945, "w":55, "h":64},
-		"spriteSourceSize": {"x":26,"y":20,"w":104,"h":104},
-		"sourceSize": {"w":104,"h":104}
-	},
-	"SteelPlating.png": {
-		"frame": {"x":0, "y":315, "w":104, "h":104},
-		"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
-		"sourceSize": {"w":104,"h":104}
-	},
-	"TitaniumPlating.png": {
-		"frame": {"x":0, "y":210, "w":104, "h":104},
-		"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
-		"sourceSize": {"w":104,"h":104}
-	},
-	"WallabyLightPropulsorEngine.png": {
-		"frame": {"x":0, "y":105, "w":104, "h":104},
-		"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
-		"sourceSize": {"w":104,"h":104}
-	},
-	"ZentrumFusionEngine.png": {
-		"frame": {"x":0, "y":0, "w":104, "h":104},
-		"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
-		"sourceSize": {"w":104,"h":104}
-	}
+{"frames": {
 
+"AdamantiumPlating.png":
+{
+	"frame": {"x":744,"y":108,"w":104,"h":104},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
+	"sourceSize": {"w":104,"h":104}
 },
+"Cargo.png":
+{
+	"frame": {"x":2,"y":214,"w":104,"h":104},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
+	"sourceSize": {"w":104,"h":104}
+},
+"CelereImpulsorEngine.png":
+{
+	"frame": {"x":638,"y":108,"w":104,"h":104},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
+	"sourceSize": {"w":104,"h":104}
+},
+"CommandModule.png":
+{
+	"frame": {"x":426,"y":108,"w":104,"h":104},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
+	"sourceSize": {"w":104,"h":104}
+},
+"ConstructionZone.png":
+{
+	"frame": {"x":158,"y":2,"w":78,"h":78},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":78,"h":78},
+	"sourceSize": {"w":78,"h":78}
+},
+"DaceloManeuveringThruster.png":
+{
+	"frame": {"x":108,"y":214,"w":104,"h":104},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
+	"sourceSize": {"w":104,"h":104}
+},
+"DragonPlating.png":
+{
+	"frame": {"x":320,"y":214,"w":104,"h":104},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
+	"sourceSize": {"w":104,"h":104}
+},
+"GreenLaser.png":
+{
+	"frame": {"x":638,"y":214,"w":104,"h":104},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
+	"sourceSize": {"w":104,"h":104}
+},
+"GreenLaserBeam.svg":
+{
+	"frame": {"x":106,"y":2,"w":50,"h":50},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
+	"sourceSize": {"w":50,"h":50}
+},
+"HAV3200ThrusterArray.png":
+{
+	"frame": {"x":532,"y":214,"w":104,"h":104},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
+	"sourceSize": {"w":104,"h":104}
+},
+"HXV4600FusionRelayThruster.png":
+{
+	"frame": {"x":744,"y":214,"w":104,"h":104},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
+	"sourceSize": {"w":104,"h":104}
+},
+"IronPlating.png":
+{
+	"frame": {"x":426,"y":214,"w":104,"h":104},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
+	"sourceSize": {"w":104,"h":104}
+},
+"KryptonitePlating.png":
+{
+	"frame": {"x":214,"y":214,"w":104,"h":104},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
+	"sourceSize": {"w":104,"h":104}
+},
+"LaserBase.png":
+{
+	"frame": {"x":320,"y":108,"w":104,"h":104},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
+	"sourceSize": {"w":104,"h":104}
+},
+"MythrilPlating.png":
+{
+	"frame": {"x":768,"y":2,"w":104,"h":104},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
+	"sourceSize": {"w":104,"h":104}
+},
+"PurpleLaser.png":
+{
+	"frame": {"x":238,"y":2,"w":104,"h":104},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
+	"sourceSize": {"w":104,"h":104}
+},
+"PurpleLaserBeam.svg":
+{
+	"frame": {"x":2,"y":2,"w":50,"h":50},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
+	"sourceSize": {"w":50,"h":50}
+},
+"Reactor.png":
+{
+	"frame": {"x":344,"y":2,"w":104,"h":104},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
+	"sourceSize": {"w":104,"h":104}
+},
+"RedLaser.png":
+{
+	"frame": {"x":450,"y":2,"w":104,"h":104},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
+	"sourceSize": {"w":104,"h":104}
+},
+"RedLaserBase.png":
+{
+	"frame": {"x":556,"y":2,"w":104,"h":104},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
+	"sourceSize": {"w":104,"h":104}
+},
+"RedLaserBeam.svg":
+{
+	"frame": {"x":54,"y":2,"w":50,"h":50},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
+	"sourceSize": {"w":50,"h":50}
+},
+"RedLaserPivot.png":
+{
+	"frame": {"x":108,"y":108,"w":104,"h":104},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
+	"sourceSize": {"w":104,"h":104}
+},
+"SteelPlating.png":
+{
+	"frame": {"x":214,"y":108,"w":104,"h":104},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
+	"sourceSize": {"w":104,"h":104}
+},
+"TitaniumPlating.png":
+{
+	"frame": {"x":2,"y":108,"w":104,"h":104},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
+	"sourceSize": {"w":104,"h":104}
+},
+"WallabyLightPropulsorEngine.png":
+{
+	"frame": {"x":662,"y":2,"w":104,"h":104},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
+	"sourceSize": {"w":104,"h":104}
+},
+"ZentrumFusionEngine.png":
+{
+	"frame": {"x":532,"y":108,"w":104,"h":104},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
+	"sourceSize": {"w":104,"h":104}
+}},
 "meta": {
+	"app": "http://www.codeandweb.com/texturepacker ",
+	"version": "1.0",
 	"image": "sprites.png",
-	"size": {"w": 256, "h": 1024},
-	"scale": "1"
+	"format": "RGBA8888",
+	"size": {"w":874,"h":320},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:8bfcd1ecd72dfbcb63c0249dee0c2fcf:74f2c5f04ac1d27a00738f03480e3ccd:1eabdf11f75e3a4fe3147baf7b5be24b$"
 }
 }

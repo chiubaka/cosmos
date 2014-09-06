@@ -43,7 +43,7 @@ var EngineBlock = Part.extend({
 	 * @param effect {Object} An effect object, which stores the effect type and two
 	 * network-converted {@link Block} objects as returned from {@link NetworkUtils#block}. The source block is the block
 	 * that the effect is being added to. The target block is a secondary block that is required for certain effects like
-	 * the mining laser effect.
+	 * the laser effect.
 	 * @memberof EngineBlock
 	 * @instance
 	 */

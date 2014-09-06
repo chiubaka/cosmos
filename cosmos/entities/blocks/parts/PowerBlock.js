@@ -4,7 +4,7 @@
  * @class
  * @typedef {PowerBlock}
  * @namespace
- * @todo Right now power blocks don't do anything. They should be necessary for powering mining lasers.
+ * @todo Right now power blocks don't do anything. They should be necessary for powering lasers.
  */
 var PowerBlock = Part.extend({
 	classId: 'PowerBlock',

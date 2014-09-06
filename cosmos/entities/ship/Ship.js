@@ -8,7 +8,7 @@ var Ship = BlockStructure.extend({
 	/**
 	 * Whether or not this {@link Ship} is mining. Used to restrict ships from mining more than one {@link Block}
 	 * at a time. I expect that at some later point Ships will be able to mine multiple blocks at once
-	 * (assuming the ship has >1 mining lasers). Right now ships can only mine one at a time.
+	 * (assuming the ship has >1 lasers). Right now ships can only mine one at a time.
 	 * @type {boolean}
 	 * @memberof Ship
 	 * @instance
@@ -393,18 +393,18 @@ var Ship = BlockStructure.extend({
 			return false;
 		}
 
-		// Do not start mining if ship has no mining lasers
+		// Do not start mining if ship has no lasers
 		return this.weapons().length > 0;
 	},
 
 	/**
-	 * Sends messages to clients to tell them to turn on all of the mining lasers for this ship.
-	 * @param targetBlock {Block} The {@link Block} that the mining lasers will be focused on.
+	 * Sends messages to clients to tell them to turn on all of the lasers for this ship.
+	 * @param targetBlock {Block} The {@link Block} that the lasers will be focused on.
 	 * @memberof Ship
 	 * @instance
 	 */
 	fireMiningLasers: function(targetBlock) {
-		// TODO: Change this when there are more weapons than just mining lasers.
+		// TODO: Change this when there are more weapons than just lasers.
 		var miningLasers = this.weapons();
 		for (var i = 0; i < miningLasers.length; i++) {
 			var miningLaser = miningLasers[i];
@@ -413,13 +413,13 @@ var Ship = BlockStructure.extend({
 	},
 
 	/**
-	 * Sends messages to clients to tell them to turn off all of the mining lasers for this ship.
-	 * @param targetBlock {Block} The {@link Block} that the mining lasers were focused on.
+	 * Sends messages to clients to tell them to turn off all of the lasers for this ship.
+	 * @param targetBlock {Block} The {@link Block} that the lasers were focused on.
 	 * @memberof Ship
 	 * @instance
 	 */
 	turnOffMiningLasers: function(targetBlock) {
-		// TODO: Change this when there are more weapons than just mining lasers.
+		// TODO: Change this when there are more weapons than just lasers.
 		var miningLasers = this.weapons();
 		for (var i = 0; i < miningLasers.length; i++) {
 			var miningLaser = miningLasers[i];
