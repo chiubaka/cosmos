@@ -63,9 +63,6 @@ var Server = IgeClass.extend({
 						ige.network.define('addEffect');
 						ige.network.define('removeEffect');
 
-						ige.network.define('cargoRequest', self._onCargoRequest);
-						ige.network.define('cargoUpdate');
-						ige.network.define('cargoResponse');
 						ige.network.define('confirm');
 
 						ige.network.define('shipEntity');

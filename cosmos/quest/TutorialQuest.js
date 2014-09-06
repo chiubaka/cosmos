@@ -356,7 +356,7 @@ var TutorialQuest = Quest.extend({
 		// Tells the client that a drop has been collected
 		// @server-side
 		server: function(player) {
-			player.on('cosmos:Ship.blockCollectListener.blockCollected', function(drop) {
+			player.on('cosmos:Ship.blockCollected', function(drop) {
 				ige.questSystem.eventToClient(this.keys['collect'], this, player.clientId());
 			}, this, true);
 		}

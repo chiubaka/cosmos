@@ -18,7 +18,7 @@ var ConstructionOverlayRenderableComponent = PixiRenderableComponent.extend({
 		for (var x = 0; x < constructionLocations.length; x++) {
 			for (var y = 0; y < constructionLocations[0].length; y++) {
 				if (constructionLocations[x][y] > 0) {
-					var sprite = PIXI.Sprite.fromFrame("construction_zone");
+					var sprite = PIXI.Sprite.fromFrame("ConstructionZone.png");
 
 					sprite.width = Block.WIDTH;
 					sprite.height = Block.HEIGHT;

@@ -87,8 +87,8 @@ var WindowComponent = ButtonComponent.extend({
 		}
 	},
 
-	drawBlockInContainer: function(container, blockType) {
-		var blockTextureContainerDiv = container.find('.block-texture-container');
+	drawBlockInCell: function(cell, blockType) {
+	var blockTextureContainerDiv = cell.find('.block-texture-container');
 		// If a container doesn't exist, create one
 		if (blockTextureContainerDiv.length === 0) {
 			blockTextureContainerDiv = $('<div></div>').addClass('block-texture-container');
@@ -102,7 +102,7 @@ var WindowComponent = ButtonComponent.extend({
 
 		// If this does not occur before the containerCanvas is appended, then the
 		// containerCanvas will have a height and width of 0.
-		container.append(blockTextureContainerDiv);
+		cell.append(blockTextureContainerDiv);
 
 		if (block instanceof Part) {
 			var img = $('<img/>')[0];
@@ -127,7 +127,7 @@ var WindowComponent = ButtonComponent.extend({
 		return blockTextureContainerDiv;
 	},
 
-	select: function(container) {
+	select: function(cell) {
 
 	},
 

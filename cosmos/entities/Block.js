@@ -61,12 +61,10 @@ var Block = IgeEntity.extend({
 			// TODO: The Element class won't be abstract soon!
 			|| this.classId() === "Element";
 
-		var isConstructionZone = this instanceof ConstructionZoneBlock;
-
 		if (data.health) {
 			this.addComponent(Health, data.health);
 		}
-		else if (!(isConstructionZone || isAbstractClass)) {
+		else if (!isAbstractClass) {
 			this.log("No health found for " + this.classId() + ". Health component is mandatory" +
 				" for all blocks.", "error");
 		}
@@ -74,7 +72,7 @@ var Block = IgeEntity.extend({
 		if (data.type) {
 			this.addComponent(Type, data.type);
 		}
-		else if (!(isConstructionZone || isAbstractClass)) {
+		else if (!isAbstractClass) {
 			this.log("No type found for " + this.classId() + ". The type component is mandatory" +
 				" for all blocks.", "error");
 		}
@@ -82,7 +80,7 @@ var Block = IgeEntity.extend({
 		if (data.description) {
 			this.addComponent(Description, data.description);
 		}
-		else if (!(isConstructionZone || isAbstractClass)) {
+		else if (!isAbstractClass) {
 			this.log("No description found for " + this.classId() + ". The description component " +
 				"is mandatory for all blocks.", "error");
 		}

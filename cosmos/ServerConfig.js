@@ -19,7 +19,6 @@ var config = {
 		{ name: 'BlockGrid', path: './entities/BlockGrid' },
 		{ name: 'BlockStructure', path: './entities/BlockStructure' },
 		{ name: 'GeneratedBlockStructure', path: './entities/GeneratedBlockStructure' },
-		{ name: 'ConstructionZoneBlock', path: 'entities/blocks/ConstructionZoneBlock' },
 		{ name: 'Drop', path: 'entities/Drop' },
 
 		/* Ship part blocks */
@@ -100,6 +99,7 @@ var config = {
 		{ name: 'Types', path: './components/config/Types' },
 
 		/* === COMPONENTS === */
+		{ name: 'Cargo', path: './components/Cargo' },
 		{ name: 'DamageSource', path: './components/DamageSource' },
 		{ name: 'Description', path: './components/Description'},
 		{ name: 'Type', path: './components/Type'},
@@ -111,11 +111,6 @@ var config = {
 		/* === PLAYER STATE === */
 		{ name: 'Player', path: './entities/player/Player' },
 		{ name: 'Ship', path: './entities/ship/Ship' },
-
-		/* Cargo */
-		{ name: 'Cargo', path: './models/cargo/Cargo' },
-		{ name: 'CargoContainer', path: './models/cargo/CargoContainer' },
-		{ name: 'CargoItem', path: './models/cargo/CargoItem' },
 
 		/* === Crafting === */
 		{ name: 'CraftingSystem', path: './crafting/CraftingSystem' },

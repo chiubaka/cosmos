@@ -9,6 +9,7 @@
   "author": "Daniel Chiu",
   "license": "ISC",
   "dependencies": {
-    "mongodb": "~1.4.7"
+    "mongodb": "~1.4.7",
+    "lodash": "~2.4.1"
   }
 }
