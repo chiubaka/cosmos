@@ -264,11 +264,13 @@ var BlockGrid = IgeEntity.extend({
 	 */
 	processBlockActionClient: function(data) {
 		switch (data.action) {
-			case 'remove':
-				this.remove(new IgePoint2d(data.col, data.row));
+			case 'remove'://TODO make these actions an enum
+				var result = this.remove(new IgePoint2d(data.col, data.row));
 				if (this.count() === 0) {
 					this.destroy();
 				}
+
+				return result;
 				break;
 			case 'damage':
 				var block = this.get(new IgePoint2d(data.col, data.row))[0];
@@ -305,11 +307,13 @@ var BlockGrid = IgeEntity.extend({
 
 		switch (data.action) {
 			case 'remove':
-				this.remove(new IgePoint2d(data.col, data.row));
+				var result = this.remove(new IgePoint2d(data.col, data.row));
 				if (this.count() === 0) {
 					this.destroy();
 				}
-				return true;
+
+				ige.network.send('blockAction', data);
+				return result;
 			case 'add':
 				var location = new IgePoint2d(data.col, data.row);
 
