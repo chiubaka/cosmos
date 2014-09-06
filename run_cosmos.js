@@ -1,6 +1,12 @@
 var argv = require('minimist')(process.argv.slice(2));
 var exec = require('child_process').exec;
 
+/*
+ * We remap port 2001 -> 80
+ * and      port 2000 -> 443,
+ * Because these are common ports that browsers expect.
+ * Note that 100 and 101 (below) are completely arbitrary numbers that Eric just made up.
+ */
 var osConfigs = {
 	osx: {
 		portRedirectCmd: 'sudo ipfw add 100 fwd 127.0.0.1,2001 tcp from any to ' +
