@@ -290,7 +290,6 @@ var ServerNetworkEvents = {
 			return;
 		}
 
-		// TODO: Extract this into a new method and call it with an event emission!
 		if (player.currentShip().cargo.remove(data.selectedType)) {
 			//console.log("Placing item: " + blockToPlace.classId(), 'info');
 			new BlockStructure()
