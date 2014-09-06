@@ -1,3 +1,7 @@
+/**
+ * Manages the UI for the Cargo Window.
+ * @author Daniel Chiu
+ */
 var CargoUI = WindowComponent.extend({
 	classId: 'CargoUI',
 	componentId: 'cargo',
