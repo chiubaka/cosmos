@@ -3,11 +3,9 @@
  * 
  * The Cargo class represents a player's entire cargo inventory. 
  * This class provides a high-level interface for managing cargo items.
- * 
- * In the future, other classes can extend the base CargoContainer and CargoItem classes
- * to provide additional functionality reasonably easily.
  *
- * @author Derrick Liu
+ *
+ * @author Daniel Chiu
  * @class
  * @typedef {Object} Cargo
  * @namespace  
@@ -36,6 +34,14 @@ var Cargo = TLEntityComponent.extend({
 		this._recentChanges = {};
 	},
 
+	/**
+	 * Adds an item type to the cargo.
+	 * @param type {string} A string representing the type of item to place in
+	 * cargo
+	 * @param quantity {number} An integer representing the number of items to
+	 * place in cargo. Can be negative, but it is better to use Cargo#remove when
+	 * trying to remove items.
+	 */
 	add: function(type, quantity) {
 		quantity = quantity || 1;
 
@@ -58,6 +64,11 @@ var Cargo = TLEntityComponent.extend({
 		this.updateFromChanges(data);
 	},
 
+	/**
+	 * Retrieves an object which contains the items of the cargo. Object is in the
+	 * format quantity = items[type].
+	 * @returns {*}
+	 */
 	items: function() {
 		return this._items;
 	},
@@ -77,10 +88,23 @@ var Cargo = TLEntityComponent.extend({
 		return this._numTypes;
 	},
 
+	/**
+	 * Retrieves the recent changes object. Recent include an aggregation of the
+	 * modifications made to the cargo since the last time
+	 * Cargo#resetRecentChanges was called.
+	 * Reset changes are in the format delta = recentChanges[type].
+	 * @returns {*}
+	 */
 	recentChanges: function() {
 		return this._recentChanges;
 	},
 
+	/**
+	 * Removes items of the specified type from the Cargo.
+	 * @param type {string} A string representing the type of item to remove
+	 * @param quantity {number} The number of items to remove.
+	 * @returns {boolean}
+	 */
 	remove: function(type, quantity) {
 		quantity = quantity || 1;
 
@@ -112,6 +136,9 @@ var Cargo = TLEntityComponent.extend({
 		return true;
 	},
 
+	/**
+	 * Resets the recent changes object so that there are no recent changes.
+	 */
 	resetRecentChanges: function() {
 		this._recentChanges = {};
 	},
@@ -120,6 +147,11 @@ var Cargo = TLEntityComponent.extend({
 		return this._items;
 	},
 
+	/**
+	 * Given a changes object in the format delta = changes[type], adds or removes
+	 * the necessary items from the cargo to apply the change.
+	 * @param changes
+	 */
 	updateFromChanges: function(changes) {
 		var self = this;
 

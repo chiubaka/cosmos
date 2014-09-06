@@ -1,3 +1,7 @@
+/**
+ * Manages the UI for the Cargo Window.
+ * @author Daniel Chiu
+ */
 var CargoUI = WindowComponent.extend({
 	classId: 'CargoUI',
 	componentId: 'cargo',
@@ -25,6 +29,9 @@ var CargoUI = WindowComponent.extend({
 		this._numCellsFilled = 0;
 	},
 
+	/**
+	 * Opens the cargo window.
+	 */
 	open: function() {
 		WindowComponent.prototype.open.call(this);
 		this.refresh();
@@ -34,6 +41,10 @@ var CargoUI = WindowComponent.extend({
 		}
 	},
 
+	/**
+	 * Refreshes the cargo window from the latest changes available by calling
+	 * Cargo#recentChanges.
+	 */
 	refresh: function() {
 		// Don't bother spending the time to update the cargo window if the window is not visible.
 		if (!this.window.is(':visible')) {
@@ -105,13 +116,20 @@ var CargoUI = WindowComponent.extend({
 			// No cell already exists. We must find one and fill one.
 			else {
 				cell = self.table.find('td').eq(self._numCellsFilled);
-				self.fillCell(cell, type, quantity);
+				self._fillCell(cell, type, quantity);
 				self._numCellsFilled++;
 				self._itemMap[type] = cell;
 			}
 		});
 	},
 
+	/**
+	 * Selects a cell in the cargo window. Also selects that type for use in
+	 * things like construction.
+	 * @param cell A jQuery object representing the table cell to select.
+	 * @returns {boolean} False if the specified cell is empty and cannot be
+	 * selected. True otherwise.
+	 */
 	select: function(cell) {
 		// If the user selects an empty cell, do nothing.
 		var blockType = cell.attr('data-block-type');
@@ -126,11 +144,14 @@ var CargoUI = WindowComponent.extend({
 		return true;
 	},
 
+	/**
+	 * Selects the first cell in the cargo window.
+	 */
 	selectFirst: function() {
 		this.select(this.table.find('td').first());
 	},
 
-	fillCell: function(cell, type, quantity) {
+	_fillCell: function(cell, type, quantity) {
 		var blockCanvasCellDiv = this.drawBlockInCell(cell, type);
 
 		// Don't add a label if there's only one block of this type
@@ -146,7 +167,7 @@ var CargoUI = WindowComponent.extend({
 			this.select($(cell));
 		}
 
-		this.fillTooltip(type, cell);
+		this._fillTooltip(type, cell);
 
 		cell.mouseover(function() {
 			ige.hud.inspector.inspect(cosmos.blocks.instances[type]);
@@ -157,7 +178,7 @@ var CargoUI = WindowComponent.extend({
 		});
 	},
 
-	fillTooltip: function(type, cell) {
+	_fillTooltip: function(type, cell) {
 		var content = Block.displayNameFromClassId(type);
 
 		cell.tooltipster({

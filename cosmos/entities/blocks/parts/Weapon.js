@@ -1,6 +1,6 @@
 /**
  * Subclass of the {@link Part}. A Weapon is an abstract super class for all {@link Block} types that can be used to
- * deal damage to other {@link Block}s. (e.g. {@link MiningLaserBlock}).
+ * deal damage to other {@link Block}s. (e.g. {@link RedLaserBlock}).
  *
  * Components: DamageComponent
  * @class

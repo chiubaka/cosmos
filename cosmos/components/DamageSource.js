@@ -59,8 +59,7 @@ var DamageSource = TLStreamedEntityComponent.extend({
 
 		if (this._intersectionPoint) {
 			if (laser.laserBeam === undefined) {
-				laser.laserBeam = new LaserBeam()
-					.setSource(laser)
+				laser.laserBeam = new LaserBeam({source: laser})
 					.setTarget(action.data.x, action.data.y);
 
 				laser._mountEffect(laser.laserBeam, true);

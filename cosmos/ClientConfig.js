@@ -50,7 +50,9 @@ var igeClientConfig = {
 		/* Weapons */
 		'./entities/blocks/parts/Weapon.js',
 		'./entities/blocks/parts/weapons/Laser.js',
-		'./entities/blocks/parts/weapons/lasers/MiningLaserBlock.js',
+		'./entities/blocks/parts/weapons/lasers/RedLaserBlock.js',
+		'./entities/blocks/parts/weapons/lasers/GreenLaserBlock.js',
+		'./entities/blocks/parts/weapons/lasers/PurpleLaserBlock.js',
 
 		/* Ship armor blocks */
 		'./entities/blocks/parts/Armor.js',
@@ -189,7 +191,6 @@ var igeClientConfig = {
 
 		/* Helper utilities */
 		'./utils/BlockGridPadding.js',
-		'./utils/DeploymentUtils.js',
 		'./utils/MathUtils.js',
 		'./utils/NetworkUtils.js',
 		'./utils/RandomInterval.js',
@@ -197,9 +198,6 @@ var igeClientConfig = {
 		'./utils/MathUtils.js',
 
 		/* === GAME SETUP === */
-		/* Configuration */
-		'./config/DeploymentConfig.js',
-
 		/* Network */
 		'./ClientNetworkEvents.js',
 

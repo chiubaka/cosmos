@@ -279,7 +279,7 @@ var ServerNetworkEvents = {
 		if(blockGrid.processBlockActionServer(data, player)) {
 			player.currentShip().mining = true;
 
-			// Activate mining lasers
+			// Activate lasers
 			player.currentShip().fireMiningLasers(targetBlock);
 		}
 	},
@@ -290,7 +290,6 @@ var ServerNetworkEvents = {
 			return;
 		}
 
-		// TODO: Extract this into a new method and call it with an event emission!
 		if (player.currentShip().cargo.remove(data.selectedType)) {
 			//console.log("Placing item: " + blockToPlace.classId(), 'info');
 			new BlockStructure()

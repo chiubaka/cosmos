@@ -10,7 +10,7 @@ var ThrusterBlock = Part.extend({
 	classId: 'ThrusterBlock',
 
 	init: function(data) {
-		this.iconFrame = 'thruster';
+		this.iconFrame = 'thruster.svg';
 		Part.prototype.init.call(this, data);
 	}
 });
