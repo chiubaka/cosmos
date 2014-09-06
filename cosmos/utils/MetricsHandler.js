@@ -53,6 +53,9 @@ var MetricsHandler = IgeEventingClass.extend({
 			"cosmos:construct.attempt.existing": true,
 			"cosmos:construct.existing": true,
 
+			"cosmos:construct.attempt.deconstruct": true,
+			"cosmos:construct.deconstruct": false,
+
 			/* ship */
 			"cosmos:ship.death": true,
 

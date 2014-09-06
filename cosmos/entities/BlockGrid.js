@@ -325,7 +325,6 @@ var BlockGrid = IgeEntity.extend({
 
 		switch (data.action) {
 			case 'remove':
-				this.remove(new IgePoint2d(data.col, data.row));
 				if (this.count() === 0) {
 					this.destroy();
 				}

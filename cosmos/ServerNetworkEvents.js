@@ -328,8 +328,41 @@ var ServerNetworkEvents = {
 
 			DbPlayer.update(player.id(), player, function() {});
 		}
-	}
+	},
 
+	_onDeconstructionZoneClicked: function(data, clientId) {
+		var player = ige.server.players[clientId];
+		if (player === undefined) {
+			console.log("Cannot deconstruct, player is undefined");
+			return;
+		}
+
+		var blockGrid = ige.$(data.blockGridId);
+		if (blockGrid === player.currentShip()) {
+			if (blockGrid.get(new IgePoint2d(data.col, data.row))[0].classId() !== "BridgeBlock") {
+
+				data.action = 'remove';
+				var blocksRemoved = blockGrid.processBlockActionServer(data, player);
+
+				DbPlayer.update(player.id(), player, function() {});
+
+				var extractedBlocks = player.currentShip().cargo.addBlock(blocksRemoved[0].classId());
+			}
+			else {
+				// Let the user know that they can't deconstruct their own bridge
+				ige.network.stream.queueCommand('notificationError',
+					NotificationDefinitions.errorKeys.constructing_deconstructing_bridge,
+					clientId);
+			}
+		}
+		else {
+			// Let the user know they they can't deconstruct other players or asteroids.
+			// They have to mine them.
+			ige.network.stream.queueCommand('notificationError',
+				NotificationDefinitions.errorKeys.constructing_deconstructing_otherBlockGrid,
+				clientId);
+		}
+	}
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = ServerNetworkEvents; }
