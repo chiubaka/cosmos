@@ -7,6 +7,7 @@ var CloakBlock = Armor.extend({
 			this.borderColor = 0xC8C8C8;
 			this.backgroundAlpha = 0.7;
 			this.borderAlpha = 0.5;
+			this.iconFrame = "TitaniumPlating.png";
 			this.textureBackground = "rgba(0, 0, 0, 0.7)";
 			this.textureOutline = "rgba(200, 200, 200, 0.5)"
 		}
