@@ -34,7 +34,7 @@ var Server = IgeClass.extend({
 		// Connect to MongoDB server
 		ige.mongo.connect(function(err,db) {
 			// Start the network server on a particular port
-			ige.network.start(process.env.PORT || 2000, function () {
+			ige.network.start(global.config.gameServerPort, function () {
 				// Networking has started so start the game engine
 				ige.start(function (success) {
 					// Check if the engine started successfully

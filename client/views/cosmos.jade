@@ -21,15 +21,6 @@ html
 		script(src='/vendor/tooltipster/jquery.tooltipster.js')
 		script(src='/vendor/dustjs-linkedin/dust-core.min.js')
 		script(src='/js/templates.dust.js')
-		//Isogenic Loader
-		if process.env.NODE_ENV === 'production'
-			script(type='text/javascript').
-				var igeRoot = './';
-				var gameRoot = './';
-		else
-			script(type='text/javascript').
-				var igeRoot = '/ige/engine/';
-				var gameRoot = '/cosmos/';
 		// Application Insights
 		script(type='text/javascript').
 			window.appInsights={queue:[],applicationInsightsId:null,accountId:null,appUserId:null,configUrl:null,start:function(n){function u(n,t){n[t]=function(){var i=arguments;n.queue.push(function(){n[t].apply(n,i)})}}function f(n){var t=document.createElement("script");return t.type="text/javascript",t.src=n,t.async=!0,t}function r(){i.appendChild(f("//az416426.vo.msecnd.net/scripts/ai.0.js"))}var i,t;this.applicationInsightsId=n;u(this,"logEvent");u(this,"logPageView");i=document.getElementsByTagName("script")[0].parentNode;this.configUrl===null?r():(t=f(this.configUrl),t.onload=r,t.onerror=r,i.appendChild(t));this.start=function(){}}};
@@ -94,7 +85,7 @@ html
 				#known-issues.news.col-lg-3
 					h2 Known Issues
 					ul
-						li Mining laser is positioned slightly incorrectly when players move while
+						li Laser is positioned slightly incorrectly when players move while
 							| mining.
 						li Drops no longer pass through asteroids and other players.
 						li Resizing the game window while playing sometimes breaks input controls.
@@ -126,7 +117,11 @@ html
 				| Loading...
 			#loadingProgress
 				#loadingProgressBar
-		if process.env.NODE_ENV === 'production'
-			script(type="text/javascript", src="/js/cosmos/game.js")
-		else
-			script(type='text/javascript', src='/ige/engine/loader.js')
+
+		// Isogenic loader
+		script(type='text/javascript').
+			window.igeRoot = '#{global.config.igeRoot}';
+			window.gameRoot = '#{global.config.gameRoot}';
+			window.config = {};
+			window.config.gameServerUrl = '#{global.config.gameServerUrl}';
+		script(type='text/javascript', src="#{global.config.gameJs}")

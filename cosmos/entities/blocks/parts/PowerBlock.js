@@ -4,7 +4,7 @@
  * @class
  * @typedef {PowerBlock}
  * @namespace
- * @todo Right now power blocks don't do anything. They should be necessary for powering mining lasers.
+ * @todo Right now power blocks don't do anything. They should be necessary for powering lasers.
  */
 var PowerBlock = Part.extend({
 	classId: 'PowerBlock',
@@ -13,7 +13,7 @@ var PowerBlock = Part.extend({
 		if (!ige.isServer) {
 			this.backgroundColor = 0xF2F2F2;
 			this.borderColor = 0xFFBE0D;
-			this.iconFrame = 'power';
+			this.iconFrame = 'power.svg';
 			this.textureBackground = "rgb(242, 242, 242)";
 			this.textureOutline = "rgb(255, 190, 13)";
 			this.textureSvg = ige.client.textures.power;
