@@ -87,8 +87,8 @@ var WindowComponent = ButtonComponent.extend({
 		}
 	},
 
-	drawBlockInContainer: function(container, blockType) {
-		var blockCanvasContainerDiv = container.find('.block-canvas-container');
+	drawBlockInCell: function(cell, blockType) {
+		var blockCanvasContainerDiv = cell.find('.block-canvas-container');
 		// If a container doesn't exist, create one
 		if (blockCanvasContainerDiv.length === 0) {
 			blockCanvasContainerDiv = $('<div></div>').addClass('block-canvas-container');
@@ -100,7 +100,7 @@ var WindowComponent = ButtonComponent.extend({
 
 		var containerCanvas = $('<canvas/>')[0];
 		blockCanvasContainerDiv.append(containerCanvas);
-		container.append(blockCanvasContainerDiv);
+		cell.append(blockCanvasContainerDiv);
 
 		var block = Block.fromType(blockType);
 
@@ -117,7 +117,7 @@ var WindowComponent = ButtonComponent.extend({
 		return blockCanvasContainerDiv;
 	},
 
-	select: function(container) {
+	select: function(cell) {
 
 	},
 

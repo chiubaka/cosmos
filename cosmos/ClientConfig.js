@@ -117,6 +117,7 @@ var igeClientConfig = {
 		'./components/config/Types.js',
 
 		/* === COMPONENTS === */
+		'./components/Cargo.js',
 		'./components/DamageSource.js',
 		'./components/Description.js',
 		'./components/Type.js',
@@ -169,7 +170,7 @@ var igeClientConfig = {
 		'./ui/FeedbackComponent.js',
 		'./ui/NewShipComponent.js',
 		'./ui/RelocateComponent.js',
-		'./ui/CargoComponent.js',
+		'./ui/CargoUI.js',
 		'./ui/CraftingUIComponent.js',
 		'./ui/NamePrompt.js',
 

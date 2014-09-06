@@ -48,8 +48,8 @@ var CraftingUIComponent = WindowComponent.extend({
 
 	populate: function(recipes, craftableBlocks) {
 		var self = this;
-		var containers = this.table.find('td');
-		containers.removeClass('active');
+		var cells = this.table.find('td');
+		cells.removeClass('active');
 
 		var canvases = this.table.find('canvas');
 		if (canvases.length > 0) {
@@ -63,42 +63,42 @@ var CraftingUIComponent = WindowComponent.extend({
 		var i = 0;
 		_.forOwn(craftableBlocks, function(canCraft, blockType) {
 			var block = cosmos.blocks.instances[blockType];
-			self.fillContainer(i, block);
+			self.fillCell(i, block);
 			i++;
 		});
 	},
 
-	fillContainer: function(index, block) {
+	fillCell: function(index, block) {
 		var self = this;
-		var container = this.table.find('td').eq(index);
+		var cell = this.table.find('td').eq(index);
 		var recipe = block.recipe;
 
 		// Add an onclick function
-		container.attr('recipe', recipe.name);
-		container.unbind('click');
-		container.click(function() {
+		cell.attr('recipe', recipe.name);
+		cell.unbind('click');
+		cell.click(function() {
 			ige.craftingSystem.craftClient(block.classId());
 		});
 
 		// Add the recipe DOM element to the recipe map
-		this.recipeDOMElements[block.classId()] = container;
+		this.recipeDOMElements[block.classId()] = cell;
 
 		// Generate tooltip content
-		this.fillTooltip(recipe, container, function(err, out) {
+		this.fillTooltip(recipe, cell, function(err, out) {
 			// Draw the block
-			self.drawBlockInContainer(container, block.classId());
+			self.drawBlockInCell(cell, block.classId());
 		});
 
-		container.mouseover(function() {
+		cell.mouseover(function() {
 			ige.hud.inspector.inspect(block);
 		});
 
-		container.mouseout(function() {
+		cell.mouseout(function() {
 			ige.hud.inspector.hide();
 		});
 	},
 
-	fillTooltip: function(recipe, container, callback) {
+	fillTooltip: function(recipe, cell, callback) {
 		dust.render('crafting/tooltip', recipe.tooltipData(), function(err, out) {
 			if (err) {
 				this.log('Error rendering crafting tooltip template.');
@@ -107,12 +107,12 @@ var CraftingUIComponent = WindowComponent.extend({
 			var tooltipContent = $(out);
 
 			// If tooltip exists, destroy it so we can set the right functionReady behavior
-			if (container.hasClass('tooltipstered')) {
-				container.tooltipster('destroy');
+			if (cell.hasClass('tooltipstered')) {
+				cell.tooltipster('destroy');
 			}
 
 			// If tooltip doesn't exist, create new tooltip
-			container.tooltipster({
+			cell.tooltipster({
 				content: tooltipContent,
 				delay: 0,
 				position: 'bottom-left',

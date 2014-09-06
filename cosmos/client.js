@@ -149,8 +149,6 @@ var Client = IgeClass.extend({
 							// Called when the server wants to remove an effect from a block
 							ige.network.define('removeEffect', self._onRemoveEffect);
 
-							ige.network.define('cargoResponse', self._onCargoResponse);
-							ige.network.define('cargoUpdate', self._onCargoUpdate);
 							ige.network.define('confirm', self._onConfirm);
 
 							ige.network.define('cosmos:player.username.set.approve', Player.onUsernameRequestApproved);

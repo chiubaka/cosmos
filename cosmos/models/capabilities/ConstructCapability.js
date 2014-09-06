@@ -49,10 +49,6 @@ var ConstructCapability = Capability.extend({
 	activate: function() {
 		this.log("Activating... registering event listener.", 'info');
 
-		var self = this;
-		this._toolbarListener = ige.on('toolbar tool selected', function(classId, toolName) {
-		});
-
 		return this;
 	},
 
@@ -63,7 +59,6 @@ var ConstructCapability = Capability.extend({
 	 */
 	deactivate: function() {
 		this.log("Deactivating... deregistering event listener.", 'info');
-		ige.off('toolbar tool selected', this._toolbarListener);
 
 		return this;
 	},

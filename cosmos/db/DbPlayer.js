@@ -56,7 +56,7 @@ var DbPlayer = {
 			var lowerCaseUsername = player.hasGuestUsername ? undefined : username.toLowerCase();
 
 			var ship = player.currentShip().toBlockTypeMatrix();
-			var cargo = player.currentShip().cargo.serializeCargo();
+			var cargo = player.currentShip().cargo.toJSON();
 
 			players.update(
 				{_id: playerId},
