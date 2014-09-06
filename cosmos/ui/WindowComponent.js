@@ -106,7 +106,7 @@ var WindowComponent = ButtonComponent.extend({
 
 		if (block instanceof Part) {
 			var img = $('<img/>')[0];
-			img.src = window.location + "/assets/sprites/" + block.iconFrame;
+			img.src = "/assets/sprites/" + block.iconFrame;
 			blockTextureContainerDiv.append(img);
 		}
 		else {

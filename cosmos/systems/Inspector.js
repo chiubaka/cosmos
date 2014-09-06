@@ -101,7 +101,7 @@ var Inspector = IgeEventingClass.extend({
 			this.blockInspectorTextureImg.show();
 			this.blockInspectorTextureCanvas.hide();
 			var img = this.blockInspectorTextureImg[0];
-			img.src = window.location + "/assets/sprites/" + block.iconFrame;
+			img.src = "/assets/sprites/" + block.iconFrame;
 		}
 		else {
 			this.blockInspectorTextureCanvas.show();

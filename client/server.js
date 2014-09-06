@@ -5,6 +5,7 @@
 var express = require('express'),
 	routes = require('./routes'),
 	http = require('http'),
+	argv = require('minimist')(process.argv.slice(2));
 	path = require('path'),
 	passport = require('passport'),
 	session = require('express-session'),
@@ -13,47 +14,29 @@ var express = require('express'),
 	GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
 	FacebookStrategy = require('passport-facebook').Strategy;
 
-var ENDPOINT_LAYER = process.env.ENDPOINT_LAYER || "local";
+// Parse commmand line options
+if (argv['local']) {
+	global.config = require('./configs/configLocal');
+}
+else if (argv['dev']) {
+	global.config = require('./configs/configDev');
+}
+else if (argv['preview']) {
+	global.config = require('./configs/configPreview');
+}
+else {
+	console.log('No configuration specified, defaulting to local no compile ' +
+		'configuration.');
+	console.log('Available configurations are: --local --dev --preview');
+	global.config = require('./configs/configLocalNoCompile');
+}
 
-// Local server
-// TODO: CHANGE THIS BASED ON LOCATION AND ENVIRONMENT
-var SERVER_HOST = {
-	local: "http://tl-cosmos.localtest.me:2001",
-	dev: "http://dev.cosmos.teamleonine.com",
-	preview: "http://preview.cosmos.teamleonine.com"
-};
-
-// Client secrets and callback URLs
 // Microsoft
-var MICROSOFT_CLIENT_ID = {
-	local: "000000004011FE88",
-	dev: "000000004C11BAB2",
-	preview: "000000004C11C46D"
-};
-
-var MICROSOFT_CLIENT_SECRET = {
-	local: "wpNliQi3hxndft-KdgzmAUrQABtJyD4r",
-	dev: "I5Mts54jjXJcvVCjmSZbLFhFYyJeoOAq",
-	preview: "7gLCN5eNz0xvOGtDyLJSXAedQmp-C9XO"
-};
-
 var MICROSOFT_SCOPE = ['wl.signin', 'wl.basic', 'wl.emails'];
 var MICROSOFT_AUTH_ROUTE = "/auth/msft";
 var MICROSOFT_CALLBACK = MICROSOFT_AUTH_ROUTE + "/callback";
 
 // Facebook
-var FACEBOOK_APP_ID = {
-	local: "1506916002863082",
-	dev: "1510324745855541",
-	preview: "1506885042866178"
-};
-
-var FACEBOOK_APP_SECRET = {
-	local: "adcf2894f7024a5d8afcce03201ce434",
-	dev: "2b9e9ad392bf334b4dfe52b70bc956f4",
-	preview: "a659dfec5c98fc5e0f1941da279d1202"
-};
-
 var FACEBOOK_AUTH_ROUTE = "/auth/fb";
 var FACEBOOK_CALLBACK = FACEBOOK_AUTH_ROUTE + "/callback";
 
@@ -80,9 +63,9 @@ passport.deserializeUser(function (obj, done) {
  * Use the Microsoft account login strategy
  */
 passport.use(new MicrosoftStrategy({
-		clientID: MICROSOFT_CLIENT_ID[ENDPOINT_LAYER],
-		clientSecret: MICROSOFT_CLIENT_SECRET[ENDPOINT_LAYER],
-		callbackURL: SERVER_HOST[ENDPOINT_LAYER] + MICROSOFT_CALLBACK
+		clientID: global.config.microsoftClientId,
+		clientSecret: global.config.microsoftClientSecret,
+		callbackURL: global.config.expressServerUrl + MICROSOFT_CALLBACK
 	},
 	function (accessToken, refreshToken, profile, done) {
 		// asynchronous verification, for effect...
@@ -99,9 +82,9 @@ passport.use(new MicrosoftStrategy({
 ));
 
 passport.use(new FacebookStrategy({
-		clientID: FACEBOOK_APP_ID[ENDPOINT_LAYER],
-		clientSecret: FACEBOOK_APP_SECRET[ENDPOINT_LAYER],
-		callbackURL: SERVER_HOST[ENDPOINT_LAYER] + FACEBOOK_CALLBACK
+		clientID: global.config.facebookAppId,
+		clientSecret: global.config.facebookAppSecret,
+		callbackURL: global.config.expressServerUrl + FACEBOOK_CALLBACK
 	},
 	function (accessToken, refreshToken, profile, done) {
 		// asynchronous verification, for effect...
@@ -120,7 +103,7 @@ passport.use(new FacebookStrategy({
 passport.use(new GoogleStrategy({
 		clientID: GOOGLE_CLIENT_ID,
 		clientSecret: GOOGLE_CLIENT_SECRET,
-		callbackURL: SERVER_HOST[ENDPOINT_LAYER] + GOOGLE_CALLBACK
+		callbackURL: global.config.expressServerUrl + GOOGLE_CALLBACK
 	},
 	function(accessToken, refreshToken, profile, done) {
 		process.nextTick(function () {
@@ -137,7 +120,7 @@ passport.use(new GoogleStrategy({
 var app = express();
 
 app.configure(function () {
-	app.set('port', process.env.PORT || 2001);
+	app.set('port', global.config.expressServerPort);
 	app.set('views', __dirname + '/views');
 	app.set('view engine', 'jade');
 	app.use(express.favicon());
@@ -167,20 +150,12 @@ app.configure(function () {
 	app.use(passport.session());
 	app.use(app.router);
 	app.use(express.static(path.join(__dirname, 'public')));
-});
-
-app.configure('development', function () {
-	console.log("Running in development mode.");
 	app.use(express.errorHandler({
 		dumpExceptions: true,
 		showStack: true,
 	}));
-	app.use('/ige', express.static('../ige'));
-	app.use('/cosmos', express.static('../cosmos'));
-});
-
-app.configure('production', function () {
-	console.log("Running in production mode.");
+	app.use('/ige', express.static(global.config.igeDirectory));
+	app.use('/cosmos', express.static(global.config.cosmosDirectory));
 });
 
 app.get('/', routes.index);

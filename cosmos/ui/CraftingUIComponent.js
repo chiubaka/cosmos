@@ -130,7 +130,7 @@ var CraftingUIComponent = WindowComponent.extend({
 						if (block instanceof Part) {
 							var imgs = $(textureContainer).find('img');
 							var img = (imgs.length === 0) ? $('<img/>')[0] : imgs[0];
-							img.src = window.location + '/assets/sprites/' + block.iconFrame;
+							img.src = '/assets/sprites/' + block.iconFrame;
 							$(textureContainer).prepend(img);
 						}
 						else {
