@@ -107,7 +107,7 @@ var Client = IgeClass.extend({
 				purpleLaser: new IgeTexture(
 					'assets/blocks/laser/purpleLaser.svg'),
 
-				plating: new IgeTexture(gameRoot +
+				plating: new IgeTexture(
 					'assets/blocks/armor/plating.svg')
 			}
 

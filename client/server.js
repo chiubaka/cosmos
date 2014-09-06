@@ -25,9 +25,10 @@ else if (argv['preview']) {
 	global.config = require('./configs/configPreview');
 }
 else {
-	console.log('No configuration specified, defaulting to local configuration.');
+	console.log('No configuration specified, defaulting to local no compile ' +
+		'configuration.');
 	console.log('Available configurations are: --local --dev --preview');
-	global.config = require('./configs/configLocal');
+	global.config = require('./configs/configLocalNoCompile');
 }
 
 // Microsoft
