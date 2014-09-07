@@ -292,7 +292,8 @@ var BlockGrid = IgeEntity.extend({
 		else {
 			switch (data.action) {
 				case 'remove':
-					this.remove(new IgePoint2d(data.loc.x, data.loc.y));// TODO repackaging this loc is unnecesary
+					this.remove(data.loc);
+
 					if (this.count() === 0) {
 						this.destroy();
 					}
@@ -303,7 +304,7 @@ var BlockGrid = IgeEntity.extend({
 					/*ige.client.metrics.track(
 						'cosmos:construct.existing',
 						{'type': block.classId()});*/
-					this.put(block, new IgePoint2d(block.gridData.loc.x, block.gridData.loc.y), true);
+					this.put(block, block.gridData.loc, true);
 					ige.emit('cosmos:BlockGrid.processActionClient.put', [block.classId(), this]);
 					break;
 				default:
