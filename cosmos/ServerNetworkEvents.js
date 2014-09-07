@@ -333,20 +333,20 @@ var ServerNetworkEvents = {
 	_onDeconstructionZoneClicked: function(data, clientId) {
 		var player = ige.server.players[clientId];
 		if (player === undefined) {
-			console.log("Cannot deconstruct, player is undefined");
+			this.log("Cannot deconstruct, player is undefined");
 			return;
 		}
 
 		var blockGrid = ige.$(data.blockGridId);
 		if (blockGrid === player.currentShip()) {
-			if (blockGrid.get(new IgePoint2d(data.col, data.row))[0].classId() !== "BridgeBlock") {
+			if (blockGrid.get(data.loc)[0].classId() !== "BridgeBlock") {
 
 				data.action = 'remove';
 				var blocksRemoved = blockGrid.processBlockActionServer(data, player);
 
 				DbPlayer.update(player.id(), player, function() {});
 
-				var extractedBlocks = player.currentShip().cargo.addBlock(blocksRemoved[0].classId());
+				var extractedBlocks = player.currentShip().cargo.add(blocksRemoved[0].classId());
 			}
 			else {
 				// Let the user know that they can't deconstruct their own bridge

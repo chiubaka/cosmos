@@ -230,10 +230,13 @@ var Block = IgeEntity.extend({
 		// a block without referring to its block grid, row, and col.
 		var data = {
 			x: this.mousePosWorld().x,
-			y: this.mousePosWorld().y
+			y: this.mousePosWorld().y,
+			loc: this.gridData.loc,
+			blockGridId: this.gridData.grid.id()
 		};
 
 		// TODO: Extend when clientState supports multiple current capabilities
+
 		if (ige.client.state !== undefined) {
 			ige.client.state.currentCapability().tryPerformAction(this, event, data);
 		}

@@ -292,7 +292,7 @@ var BlockGrid = IgeEntity.extend({
 		else {
 			switch (data.action) {
 				case 'remove':
-					this.remove(new IgePoint2d(data.loc.x, data.loc.y));
+					this.remove(new IgePoint2d(data.loc.x, data.loc.y));// TODO repackaging this loc is unnecesary
 					if (this.count() === 0) {
 						this.destroy();
 					}
@@ -325,10 +325,18 @@ var BlockGrid = IgeEntity.extend({
 
 		switch (data.action) {
 			case 'remove':
+				var result = self.remove(data.loc);
+
 				if (this.count() === 0) {
 					this.destroy();
 				}
-				return true;
+
+				self.actions().push({
+					action: "remove",
+					loc: data.loc
+				});
+
+				return result;
 			case 'add':
 				var location = new IgePoint2d(data.col, data.row);
 
