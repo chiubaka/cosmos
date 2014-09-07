@@ -67,7 +67,7 @@ var ExampleShips = {
 	 */
 	starterShipWithAllWeapons: function() {
 		return [
-			[undefined,           		new RedLaserBlock(),		 new GreenLaserBlock(), 		new PurpleLaserBlock(),  undefined],
+			[undefined,           		new RedLaserBlock(),		 new GreenLaserBlock(), 		new VioletLaserBlock(),  undefined],
 			[undefined,           		new SteelPlatingBlock(), new SteelPlatingBlock(),   new SteelPlatingBlock(), undefined],
 			[undefined,           		new SteelPlatingBlock(), new BridgeBlock(),     		new SteelPlatingBlock(), undefined],
 			[undefined,           		new SteelPlatingBlock(), new IronPlatingBlock(),       		new SteelPlatingBlock(), undefined],

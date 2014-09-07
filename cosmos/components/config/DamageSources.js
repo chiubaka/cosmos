@@ -28,10 +28,10 @@ DamageSources[GreenLaserBlock.prototype.classId()] = {
 };
 
 /*
- * The purple laser does more damage
+ * The violet laser does more damage
  * and has a slightly greater range than the green laser
  */
-DamageSources[PurpleLaserBlock.prototype.classId()] = {
+DamageSources[VioletLaserBlock.prototype.classId()] = {
 	cooldown: 1000,
 	damage: 80,
 	duration: 2000,

@@ -43,7 +43,7 @@ var config = {
 		{ name: 'Laser', path: './entities/blocks/parts/weapons/Laser' },
 		{ name: 'RedLaserBlock', path: './entities/blocks/parts/weapons/lasers/RedLaserBlock' },
 		{ name: 'GreenLaserBlock', path: './entities/blocks/parts/weapons/lasers/GreenLaserBlock' },
-		{ name: 'PurpleLaserBlock', path: './entities/blocks/parts/weapons/lasers/PurpleLaserBlock' },
+		{ name: 'VioletLaserBlock', path: './entities/blocks/parts/weapons/lasers/VioletLaserBlock' },
 
 		/* Ship armor blocks */
 		{ name: 'Armor', path: './entities/blocks/parts/Armor' },
