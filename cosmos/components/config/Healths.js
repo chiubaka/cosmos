@@ -125,7 +125,7 @@ Healths[GreenLaserBlock.prototype.classId()] =
 {
 	max: 60
 };
-Healths[PurpleLaserBlock.prototype.classId()] =
+Healths[VioletLaserBlock.prototype.classId()] =
 {
 	max: 80
 };

@@ -51,7 +51,7 @@ var igeClientConfig = {
 		'./entities/blocks/parts/weapons/Laser.js',
 		'./entities/blocks/parts/weapons/lasers/RedLaserBlock.js',
 		'./entities/blocks/parts/weapons/lasers/GreenLaserBlock.js',
-		'./entities/blocks/parts/weapons/lasers/PurpleLaserBlock.js',
+		'./entities/blocks/parts/weapons/lasers/VioletLaserBlock.js',
 
 		/* Ship armor blocks */
 		'./entities/blocks/parts/Armor.js',
