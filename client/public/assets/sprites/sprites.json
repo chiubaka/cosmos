@@ -120,7 +120,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
 	"sourceSize": {"w":104,"h":104}
 },
-"PurpleLaser.png":
+"VioletLaser.png":
 {
 	"frame": {"x":238,"y":2,"w":104,"h":104},
 	"rotated": false,
@@ -128,7 +128,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":104,"h":104},
 	"sourceSize": {"w":104,"h":104}
 },
-"PurpleLaserBeam.svg":
+"VioletLaserBeam.svg":
 {
 	"frame": {"x":2,"y":2,"w":50,"h":50},
 	"rotated": false,

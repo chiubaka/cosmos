@@ -80,35 +80,6 @@ var Client = IgeClass.extend({
 				constructCap_white: new IgeTexture('assets/ui/construct/construct-white.png'),
 				baseCap_color: new IgeTexture('assets/ui/base/base-color.png'),
 				baseCap_white: new IgeTexture('assets/ui/base/base-white.png'),
-
-				// Block textures
-				/*constructionZone: new IgeTexture(
-					'assets/blocks/construction/construction_zone.svg'),
-				power: new IgeTexture(
-					'assets/blocks/power/power.svg'),
-				engine: new IgeTexture(
-					'assets/blocks/engines/engine.svg'),
-				thruster: new IgeTexture(
-					'assets/blocks/thrusters/thruster.svg'),
-				kryptoniteThruster: new IgeTexture(
-					'assets/blocks/thrusters/kryptoniteThruster.svg'),
-				fuel: new IgeTexture(
-					'assets/blocks/fuel/fuel.svg'),
-				cargo: new IgeTexture(
-					'assets/blocks/cargo/cargo.svg'),
-				control: new IgeTexture(
-					'assets/blocks/playerctrl/playerctrl.svg'),
-
-				//Lasers
-				redLaser: new IgeTexture(
-					'assets/blocks/laser/redLaser.svg'),
-				greenLaser: new IgeTexture(
-					'assets/blocks/laser/greenLaser.svg'),
-				purpleLaser: new IgeTexture(
-					'assets/blocks/laser/purpleLaser.svg'),
-
-				plating: new IgeTexture(
-					'assets/blocks/armor/plating.svg')*/
 			}
 
 			for (var gridX = 0; gridX < Constants.NUM_BACKGROUND_SQUARES.X; gridX++) {

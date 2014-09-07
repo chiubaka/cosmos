@@ -235,7 +235,7 @@ Recipes[GreenLaserBlock.prototype.classId()] =
 };
 
 // LVL 3 Laser
-Recipes[PurpleLaserBlock.prototype.classId()] =
+Recipes[VioletLaserBlock.prototype.classId()] =
 {
 	reactants: [
 		{

@@ -222,7 +222,7 @@ Types[GreenLaserBlock.prototype.classId()] =
 {
 	text: 'Level 2 Laser'
 };
-Types[PurpleLaserBlock.prototype.classId()] =
+Types[VioletLaserBlock.prototype.classId()] =
 {
 	text: 'Level 3 Laser'
 };
