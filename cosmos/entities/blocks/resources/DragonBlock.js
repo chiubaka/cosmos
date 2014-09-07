@@ -3,7 +3,6 @@
 * @class
 * @typedef {DragonBlock}
 * @namespace
-* @todo Use this to craft things.
 */
 var DragonBlock = Resource.extend({
 	classId: 'DragonBlock',

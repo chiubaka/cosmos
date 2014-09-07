@@ -59,7 +59,7 @@ var BlockStructure = BlockGrid.extend({
 			this._needsRefresh = true;
 		}
 
-		return BlockGrid.prototype.processActionClient.call(this, data);
+		BlockGrid.prototype.processActionClient.call(this, data);
 	},
 
 	put: function(block, location, replace) {

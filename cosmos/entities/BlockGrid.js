@@ -297,6 +297,8 @@ var BlockGrid = IgeEntity.extend({
 					if (this.count() === 0) {
 						this.destroy();
 					}
+
+					return result;
 					break;
 				case 'put':
 					var block = Block.fromJSON(data.block);
@@ -332,11 +334,7 @@ var BlockGrid = IgeEntity.extend({
 					this.destroy();
 				}
 
-				self.actions().push({
-					action: "remove",
-					loc: data.loc
-				});
-
+				self.actions().push(data);
 				return result;
 			case 'add':
 				var location = new IgePoint2d(data.col, data.row);

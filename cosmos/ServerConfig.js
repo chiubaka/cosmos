@@ -21,6 +21,9 @@ var config = {
 		{ name: 'GeneratedBlockStructure', path: './entities/GeneratedBlockStructure' },
 		{ name: 'Drop', path: 'entities/Drop' },
 
+		/* Deconstruction */
+		{ name: 'DeconstructionBlock', path: 'entities/blocks/DeconstructionBlock' },
+
 		/* Ship part blocks */
 		{ name: 'Part', path: './entities/blocks/Part' },
 		{ name: 'PowerBlock', path: './entities/blocks/parts/PowerBlock' },
