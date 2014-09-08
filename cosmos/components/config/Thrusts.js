@@ -1,6 +1,6 @@
 var Thrusts = {};
 
-var BASE_ENGINE_POWER = 0.01;
+var BASE_ENGINE_POWER = 0.015;
 Thrusts[IronEngineBlock.prototype.classId()] =
 {
 	value: 1 * BASE_ENGINE_POWER
