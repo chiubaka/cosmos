@@ -373,16 +373,18 @@ var TutorialQuest = Quest.extend({
 			function clickCargoButton() {
 				var questLog = alertify.questLog("To see what's in your cargo, click the cargo button on the toolbar at the left side of the screen");
 				// Show the tooltip
-				ige.hud.leftToolbar.windows.cargo.pinButtonTooltip();
-				var listener = ige.on("cosmos:CargoComponent.buttonClicked", function (classId) {
-					questLog.close();
-					ige.off("cosmos:CargoComponent.buttonClicked", listener);
-					// Hide the tooltip
-					ige.hud.leftToolbar.windows.cargo.unpinButtonTooltip();
-					alertify.questLog("Your cargo holds everything you've mined",
-						"", msgTimeout);
-					setTimeout(done, msgTimeout / 2);
-				});
+				var cargoWindow = ige.hud.leftToolbar.windows.cargo;
+				cargoWindow.pinButtonTooltip();
+				var listener = cargoWindow.on("opened",
+					function() {
+						questLog.close();
+						cargoWindow.off("opened", listener);
+						cargoWindow.unpinButtonTooltip();
+						alertify.questLog("Your cargo holds everything you've mined",
+							"", msgTimeout);
+						setTimeout(done, msgTimeout / 2);
+					}
+				);
 			}
 
 			function done() {
@@ -412,12 +414,13 @@ var TutorialQuest = Quest.extend({
 			function clickCraftButton() {
 				var questLog = alertify.questLog("Click the crafting button");
 				// Show the tooltip
-				ige.hud.leftToolbar.windows.craftingUI.pinButtonTooltip();
-				var listener = ige.on("cosmos:CraftingUIComponent.buttonClicked", function (classId) {
+				var craftingWindow = ige.hud.leftToolbar.windows.craftingUI;
+				craftingWindow.pinButtonTooltip();
+				var listener = craftingWindow.on("opened", function () {
 					questLog.close();
-					ige.off("cosmos:CraftingUIComponent.buttonClicked", listener);
+					craftingWindow.off("opened", listener);
 					// Hide the tooltip
-					ige.hud.leftToolbar.windows.craftingUI.unpinButtonTooltip();
+					craftingWindow.unpinButtonTooltip();
 					alertify.questLog("Crafting allows you to make powerful new blocks",
 						"", msgTimeout);
 					setTimeout(waitForReactants, msgTimeout / 2);
@@ -431,7 +434,7 @@ var TutorialQuest = Quest.extend({
 				ige.hud.leftToolbar.windows.craftingUI.pinRecipeTooltip(recipeName);
 				// Autohide the crafting tooltip so it doesn't get in the way
 				setTimeout(function() {ige.hud.leftToolbar.windows.craftingUI.unpinRecipeTooltip(
-					recipeName)}, msgTimeout)
+					recipeName)}, msgTimeout);
 
 				// Inform the player what they need to collect
 				var responseListener = ige.on("cargo response", checkForReactants, this);
