@@ -22,7 +22,7 @@ var config = {
 		{ name: 'Drop', path: 'entities/Drop' },
 
 		/* Deconstruction */
-		{ name: 'DeconstructionBlock', path: 'entities/blocks/DeconstructionBlock' },
+		{ name: 'DeconstructionIndicator', path: 'entities/blocks/DeconstructionIndicator' },
 
 		/* Ship part blocks */
 		{ name: 'Part', path: './entities/blocks/Part' },

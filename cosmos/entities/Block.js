@@ -60,7 +60,7 @@ var Block = IgeEntity.extend({
 			|| this.classId() === "Resource"
 			// TODO: The Element class won't be abstract soon!
 			|| this.classId() === "Element"
-			|| this.classId() === "DeconstructionBlock";//TODO this isn't really an abstract class...
+			|| this.classId() === "DeconstructionIndicator";//TODO this isn't really an abstract class...
 
 		if (data.health) {
 			this.addComponent(Health, data.health);
@@ -181,8 +181,9 @@ var Block = IgeEntity.extend({
 			    // reference via the global reference:
 			    ige.input.stopPropagation();
 
-					ige.$("deconstructionEntity")
-						.mount(this);
+					this.addEffect({type: 'deconstructionIndicator'});
+					//ige.$("deconstructionEntity")
+					//	.mount(this);
 				}
 			});
 			this.mouseOut(function (event, control) {
@@ -191,8 +192,10 @@ var Block = IgeEntity.extend({
 					// reference via the global reference:
 					ige.input.stopPropagation();
 
-					ige.$("deconstructionEntity")
-						.unMount(this);
+
+					this.removeEffect({type: 'deconstructionIndicator'});
+					//ige.$("deconstructionEntity")
+					//	.unMount(this);
 				}
 			});
 		}
@@ -318,6 +321,10 @@ var Block = IgeEntity.extend({
 				break;
 			case 'healthBar':
 				this._addHealthBar();
+				break;
+			case 'deconstructionIndicator':
+				this._addDeconstructionIndicator();
+				break;
 		}
 	},
 
@@ -373,6 +380,9 @@ var Block = IgeEntity.extend({
 				break;
 			case 'healthBar':
 				this._removeHealthBar();
+				break;
+			case "deconstructionIndicator":
+				this._removeDeconstructionIndicator();
 				break;
 		}
 	},
@@ -471,6 +481,15 @@ var Block = IgeEntity.extend({
 		}
 	},
 
+	_addDeconstructionIndicator: function() {
+		if (this._effects['deconstructionIndicator'] === undefined) {
+			this._effects['deconstructionIndicator'] = new DeconstructionIndicator(this);
+			this._mountEffect(this._effects['deconstructionIndicator'], true);
+		}
+
+		console.log("Deconstruction indicator added");
+	},
+
 	/**
 	 * Removes mining particles effect from this {@link Block}. If there are multiple people mining this {@link Block},
 	 * then the counter in the mining particles effect state may not go down to zero during this call, in which case
@@ -498,6 +517,13 @@ var Block = IgeEntity.extend({
 	_removeHealthBar: function() {
 		this._effects['healthBar'].destroy();
 		delete this._effects['healthBar'];
+	},
+
+	_removeDeconstructionIndicator: function() {
+		this._effects['deconstructionIndicator'].destroy();
+		delete this._effects['deconstructionIndicator'];
+
+		console.log("Deconstruction indicator removed");
 	},
 
 	/**

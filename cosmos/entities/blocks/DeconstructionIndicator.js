@@ -2,11 +2,11 @@
  * This class is supposed to be instantiated exactly once on each client.
  * Subclass of the {@link Block} class.
  * @class
- * @typedef {DeconstructionBlock}
+ * @typedef {DeconstructionIndicator}
  * @namespace
  */
-var DeconstructionBlock = Block.extend({
-	classId: 'DeconstructionBlock',
+var DeconstructionIndicator = Block.extend({
+	classId: 'DeconstructionIndicator',
 
 	init: function(data) {
 		if (!ige.isServer) {
@@ -32,7 +32,7 @@ var DeconstructionBlock = Block.extend({
 			});
 
 			ige.on("capbar cap cleared", function (classId) {
-				// If the construction capability is deselected, hide the DeconstructionBlock.
+				// If the construction capability is deselected, hide the DeconstructionIndicator.
 				if (classId === ConstructCap.prototype.classId()) {
 					console.log("not actually hiding (cap cleared) classId: " + classId);
 					//self.hide();
@@ -46,5 +46,5 @@ var DeconstructionBlock = Block.extend({
 });
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') {
-	module.exports = DeconstructionBlock;
+	module.exports = DeconstructionIndicator;
 }

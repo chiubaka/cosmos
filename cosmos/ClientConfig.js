@@ -25,7 +25,7 @@ var igeClientConfig = {
 		'./entities/Drop.js',
 
 		/* Deconstruction zone */
-		'./entities/blocks/DeconstructionBlock.js',
+		'./entities/blocks/DeconstructionIndicator.js',
 
 		/* Ship part blocks */
 		'./entities/blocks/Part.js',

@@ -455,7 +455,7 @@ var GameInit = {
 	},
 
 	initDeconstructionEntity: function() {
-		new DeconstructionBlock()
+		new DeconstructionIndicator()
 			.id("deconstructionEntity")
 			.depth(1);
 	},
