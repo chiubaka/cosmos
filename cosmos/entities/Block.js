@@ -178,6 +178,11 @@ var Block = IgeEntity.extend({
 		}
 	},
 
+	/*
+	* When the mouse hovers over a block, add the deconstructionIndicator effect
+	* IF the block is part of the player's current ship
+	* AND the player is in construction mode.
+	*/
 	_mouseOverHandler: function (event, control) {
 		if (this.gridData.grid === ige.client.player.currentShip() &&
 			ige.client.state.currentCapability().classId() === ConstructCapability.prototype.classId())
@@ -185,19 +190,17 @@ var Block = IgeEntity.extend({
 			// Stop the event propagating further down the scenegraph
 			control.stopPropagation();
 
-			// You can ALSO stop propagation without the control object
-			// reference via the global reference:
-			ige.input.stopPropagation();
-
 			this.addEffect({type: 'deconstructionIndicator'});
 		}
 	},
 
+	/*
+	 * When the mouse leaves a block, remove the deconstructionIndicator effect
+	 */
 	_mouseOutHandler: function (event, control) {
 		if (this.gridData.grid === ige.client.player.currentShip()) {
-			// You can ALSO stop propagation without the control object
-			// reference via the global reference:
-			ige.input.stopPropagation();
+			// Stop the event propagating further down the scenegraph
+			control.stopPropagation();
 
 			this.removeEffect({type: 'deconstructionIndicator'});
 		}
