@@ -29,10 +29,7 @@ var WindowComponent = ButtonComponent.extend({
 				}
 				else {
 					self.open();
-					// cosmos:CargoComponent.buttonClicked
-					// cosmos:CraftingUIComponent.buttonClicked
-					this.emit('opened');
-					ige.emit('cosmos:' + self.classId() + '.buttonClicked');
+					self.emit('opened');
 				}
 			});
 
