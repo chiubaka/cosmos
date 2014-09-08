@@ -290,7 +290,6 @@ var ServerNetworkEvents = {
 		}
 
 		if (player.currentShip().cargo.remove(data.selectedType)) {
-			//ige.log("Placing item: " + blockToPlace.classId(), 'info');
 			new BlockStructure()
 				.streamMode(1)
 				.mount(ige.$("spaceGameScene"))
