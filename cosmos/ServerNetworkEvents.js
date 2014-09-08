@@ -241,7 +241,7 @@ var ServerNetworkEvents = {
 	_fire: function(data, clientId) {
 		var weapon = ige.$(data.id);
 		if (!weapon) {
-			console.log('ServerNetworkEvents#_fire: undefined weapon id: ' + data.id);
+			ige.log('ServerNetworkEvents#_fire: undefined weapon id: ' + data.id);
 			return;
 		}
 
@@ -290,7 +290,7 @@ var ServerNetworkEvents = {
 		}
 
 		if (player.currentShip().cargo.remove(data.selectedType)) {
-			//console.log("Placing item: " + blockToPlace.classId(), 'info');
+			//ige.log("Placing item: " + blockToPlace.classId(), 'info');
 			new BlockStructure()
 				.streamMode(1)
 				.mount(ige.$("spaceGameScene"))
@@ -332,7 +332,7 @@ var ServerNetworkEvents = {
 	_onDeconstructionZoneClicked: function(data, clientId) {
 		var player = ige.server.players[clientId];
 		if (player === undefined) {
-			console.log("Cannot deconstruct, player is undefined");
+			ige.log("Cannot deconstruct, player is undefined");
 			return;
 		}
 
