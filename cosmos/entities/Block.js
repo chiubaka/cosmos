@@ -193,9 +193,6 @@ var Block = IgeEntity.extend({
 			// That would be misleading to our users.
 			this.classId() !== BridgeBlock.prototype.classId())
 		{
-			// Stop the event propagating further down the scenegraph
-			control.stopPropagation();
-
 			this.addEffect({type: 'deconstructionIndicator'});
 		}
 	},
@@ -205,10 +202,6 @@ var Block = IgeEntity.extend({
 	 */
 	_mouseOutHandler: function (event, control) {
 		if (this.gridData.grid === ige.client.player.currentShip()) {
-			// You can ALSO stop propagation without the control object
-			// reference via the global reference:
-			ige.input.stopPropagation();
-
 			this.removeEffect({type: 'deconstructionIndicator'});
 		}
 	},
