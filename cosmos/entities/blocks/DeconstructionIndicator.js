@@ -14,11 +14,6 @@ var DeconstructionIndicator = Block.extend({
 			this.borderColor = 0xFF0000;
 
 			this.iconFrame = "ConstructionZone.png";
-			//this.textureSvg = ige.client.textures.constructionZone;
-
-			this.backgroundAlpha = 0.3;
-			this.textureBackground = "rgb(255, 0, 0, 0.3)";
-			this.textureOutline = "rgb(255, 0, 0)";
 		}
 
 		Resource.prototype.init.call(this, data);
