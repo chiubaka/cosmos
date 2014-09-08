@@ -63,7 +63,6 @@ var ServerNetworkEvents = {
 	 * @private
 	 */
 	_onPlayerEntity: function(data, clientId) {
-		var self = this;
 		/**
 		 * @callback onPlayerEntitySessionCallback
 		 * @param err {Error | null}
@@ -71,7 +70,7 @@ var ServerNetworkEvents = {
 		 */
 		DbSession.playerIdForSession(data.sid, function(err, playerId) {
 			if (err) {
-				self.log('Cannot load session from database!', 'error');
+				ige.log('Cannot load session from database!', 'error');
 			}
 			// No player associated with this session! Playing as a guest.
 			else if (playerId === undefined) {
@@ -85,7 +84,7 @@ var ServerNetworkEvents = {
 			 */
 			DbPlayer.load(playerId, function(err, username, ship, cargo) {
 				if (err) {
-					self.log('Cannot load player from database!', 'error');
+					ige.log('Cannot load player from database!', 'error');
 				}
 
 				ige.server._createPlayer(clientId, playerId, username, ship, cargo);
