@@ -292,7 +292,7 @@ var BlockGrid = IgeEntity.extend({
 		else {
 			switch (data.action) {
 				case 'remove':
-					this.remove(data.loc);
+					var result = this.remove(data.loc);
 
 					if (this.count() === 0) {
 						this.destroy();

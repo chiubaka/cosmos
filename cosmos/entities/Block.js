@@ -173,7 +173,9 @@ var Block = IgeEntity.extend({
 
 		if (ige.client) {
 			this.mouseOver(function (event, control) {
-				if (this.gridData.grid === ige.client.player.currentShip()) {
+				if (this.gridData.grid === ige.client.player.currentShip() &&
+					ige.client.state.currentCapability().classId() === ConstructCapability.prototype.classId())
+				{
 			    // Stop the event propagating further down the scenegraph
 			    control.stopPropagation();
 
@@ -182,8 +184,6 @@ var Block = IgeEntity.extend({
 			    ige.input.stopPropagation();
 
 					this.addEffect({type: 'deconstructionIndicator'});
-					//ige.$("deconstructionEntity")
-					//	.mount(this);
 				}
 			});
 			this.mouseOut(function (event, control) {
@@ -192,10 +192,7 @@ var Block = IgeEntity.extend({
 					// reference via the global reference:
 					ige.input.stopPropagation();
 
-
 					this.removeEffect({type: 'deconstructionIndicator'});
-					//ige.$("deconstructionEntity")
-					//	.unMount(this);
 				}
 			});
 		}
@@ -264,8 +261,6 @@ var Block = IgeEntity.extend({
 			loc: this.gridData.loc,
 			blockGridId: this.gridData.grid.id()
 		};
-
-		// TODO: Extend when clientState supports multiple current capabilities
 
 		if (ige.client.state !== undefined) {
 			ige.client.state.currentCapability().tryPerformAction(this, event, data);
@@ -486,8 +481,6 @@ var Block = IgeEntity.extend({
 			this._effects['deconstructionIndicator'] = new DeconstructionIndicator(this);
 			this._mountEffect(this._effects['deconstructionIndicator'], true);
 		}
-
-		console.log("Deconstruction indicator added");
 	},
 
 	/**
@@ -520,10 +513,10 @@ var Block = IgeEntity.extend({
 	},
 
 	_removeDeconstructionIndicator: function() {
-		this._effects['deconstructionIndicator'].destroy();
-		delete this._effects['deconstructionIndicator'];
-
-		console.log("Deconstruction indicator removed");
+		if (this._effects['deconstructionIndicator']) {
+			this._effects['deconstructionIndicator'].destroy();
+			delete this._effects['deconstructionIndicator'];
+		}
 	},
 
 	/**

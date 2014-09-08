@@ -10,35 +10,15 @@ var DeconstructionIndicator = Block.extend({
 
 	init: function(data) {
 		if (!ige.isServer) {
-			this.backgroundColor = 0x11770000;
-			this.borderColor = 0x780000;
+			this.backgroundColor = 0x11FF0000;
+			this.borderColor = 0xFF0000;
 
-			//this.iconFrame = 'construction_zone';
+			this.iconFrame = "ConstructionZone.png";
 			//this.textureSvg = ige.client.textures.constructionZone;
 
 			this.backgroundAlpha = 0.3;
-			this.textureBackground = "rgb(119, 0, 0, 0.3)";
-			this.textureOutline = "rgb(140, 0, 0)";
-			/*
-			var self = this;
-			ige.on("capbar cap selected", function (classId) {
-				if (classId === ConstructCap.prototype.classId()) {
-					console.log("showing (cap selected)");
-					self.show();
-				} else {
-					console.log("hiding (cap selected)");
-					self.hide();
-				}
-			});
-
-			ige.on("capbar cap cleared", function (classId) {
-				// If the construction capability is deselected, hide the DeconstructionIndicator.
-				if (classId === ConstructCap.prototype.classId()) {
-					console.log("not actually hiding (cap cleared) classId: " + classId);
-					//self.hide();
-				}
-			});
-			*/
+			this.textureBackground = "rgb(255, 0, 0, 0.3)";
+			this.textureOutline = "rgb(255, 0, 0)";
 		}
 
 		Resource.prototype.init.call(this, data);
