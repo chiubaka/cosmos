@@ -89,7 +89,8 @@ module.exports = function(grunt) {
 				name: 'cosmos_game_server',
 				scriptArgs: self.data.gameServerArgs,
 				error: 'logs/error.log',
-				output: 'logs/output.log'
+				output: 'logs/output.log',
+				logDateFormat: 'MMMM Do YYYY, h:mm:ss a'
 			};
 			pm2.start(gameServerPath, gameServerOpts, function(err, proc) {
 				if(err) throw new Error('err');
