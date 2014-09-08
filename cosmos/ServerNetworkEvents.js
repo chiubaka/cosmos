@@ -63,7 +63,6 @@ var ServerNetworkEvents = {
 	 * @private
 	 */
 	_onPlayerEntity: function(data, clientId) {
-		var self = this;
 		/**
 		 * @callback onPlayerEntitySessionCallback
 		 * @param err {Error | null}
@@ -71,7 +70,7 @@ var ServerNetworkEvents = {
 		 */
 		DbSession.playerIdForSession(data.sid, function(err, playerId) {
 			if (err) {
-				self.log('Cannot load session from database!', 'error');
+				ige.log('Cannot load session from database!', 'error');
 			}
 			// No player associated with this session! Playing as a guest.
 			else if (playerId === undefined) {
@@ -85,7 +84,7 @@ var ServerNetworkEvents = {
 			 */
 			DbPlayer.load(playerId, function(err, username, ship, cargo) {
 				if (err) {
-					self.log('Cannot load player from database!', 'error');
+					ige.log('Cannot load player from database!', 'error');
 				}
 
 				ige.server._createPlayer(clientId, playerId, username, ship, cargo);
@@ -242,7 +241,7 @@ var ServerNetworkEvents = {
 	_fire: function(data, clientId) {
 		var weapon = ige.$(data.id);
 		if (!weapon) {
-			console.log('ServerNetworkEvents#_fire: undefined weapon id: ' + data.id);
+			ige.log('ServerNetworkEvents#_fire: undefined weapon id: ' + data.id);
 			return;
 		}
 
@@ -291,7 +290,6 @@ var ServerNetworkEvents = {
 		}
 
 		if (player.currentShip().cargo.remove(data.selectedType)) {
-			//console.log("Placing item: " + blockToPlace.classId(), 'info');
 			new BlockStructure()
 				.streamMode(1)
 				.mount(ige.$("spaceGameScene"))
@@ -333,7 +331,7 @@ var ServerNetworkEvents = {
 	_onDeconstructionZoneClicked: function(data, clientId) {
 		var player = ige.server.players[clientId];
 		if (player === undefined) {
-			console.log("Cannot deconstruct, player is undefined");
+			ige.log("Cannot deconstruct, player is undefined");
 			return;
 		}
 
