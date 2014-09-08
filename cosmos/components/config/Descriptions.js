@@ -233,7 +233,7 @@ Descriptions[GreenLaserBlock.prototype.classId()] =
 {
 	text: 'This bright emerald-colored laser is more powerful than the Red Laser.'
 };
-Descriptions[PurpleLaserBlock.prototype.classId()] =
+Descriptions[VioletLaserBlock.prototype.classId()] =
 {
 	text: 'This beautiful Amethyst-colored laser is one of the most powerful lasers known to man.' +
 		'It can cut through meter-thick steel like a hot knife through butter.'
