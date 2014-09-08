@@ -1,22 +1,38 @@
 var argv = require('minimist')(process.argv.slice(2));
 var exec = require('child_process').exec;
+var spawn = require('child_process').spawn;
 
-/*
- * We remap port 2001 -> 80
- * and      port 2000 -> 443,
- * Because these are common ports that browsers expect.
- * Note that 100 and 101 (below) are completely arbitrary numbers that Eric just made up.
- */
 var osConfigs = {
 	osx: {
+		// Map port 80 -> 2001 and port 443 -> 2000
+		// Port 80 (HTTP) and 443(HTTPS) are common ports that are likely not
+		// firewalled. Note that 101 are 101 are arbitrary rule numbers.
 		portRedirectCmd: 'sudo ipfw add 100 fwd 127.0.0.1,2001 tcp from any to ' +
 			'any 80 in && sudo ipfw add 101 fwd 127.0.0.1,2000 tcp from any to ' +
-			'any 443 in'
+			'any 443 in',
+		// 1. Kills the express server and game server
+		// 2. If the physics server is running,
+		// 3. Kills the bash script responsible for restarting the physics server,
+		// 4. Kills the physics server
+		killGameCmd: 'pm2 delete all && ' +
+			// Bash ternary operator that finds if physics_server process exists
+			// If not, does nothing ":", else
+			'$([$(pgrep physics_server) == ""] && : || ' +
+			// Find the parent of the physics_server (a bash script) and kill it
+			// http://superuser.com/questions/150117/
+			// how-to-get-parent-pid-of-a-given-process-in-gnu-linux-from-command-line
+			'$(kill $(ps -p $(pgrep physics_server) -o ppid=) && ' +
+			// Find the physics_server and kill it
+			'kill $(pgrep physics_server)))'
 	},
 	linux: {
 		portRedirectCmd: 'sudo iptables -t nat -A PREROUTING -i eth0 -p tcp ' +
 			'--dport 80 -j REDIRECT --to-port 2001 && sudo iptables -t nat -A '+
-			'PREROUTING -i eth0 -p tcp --dport 443 -j REDIRECT --to-port 2000'
+			'PREROUTING -i eth0 -p tcp --dport 443 -j REDIRECT --to-port 2000',
+		killGameCmd: 'pm2 delete all && ' +
+			'$([$(pgrep physics_server) == ""] && : || ' +
+			'$(kill $(ps -p $(pgrep physics_server) -o ppid=) && ' +
+			'kill $(pgrep physics_server)))'
 	}
 }
 
@@ -46,11 +62,10 @@ function parseCommandLineOptions() {
 		console.error('Available configurations are: --local --dev --preview');
 		process.exit(1);
 	}
-	redirectPorts();
+	osDetect();
 }
 
-function redirectPorts() {
-	console.log('Changing firewall rules...');
+function osDetect() {
 	switch(process.platform) {
 		case 'darwin':
 			config['os'] = 'osx';
@@ -62,28 +77,41 @@ function redirectPorts() {
 			console.error('Error: Your OS is not supported!');
 			process.exit(1);
 	}
+	killExistingGame();
+}
 
+// Kill the existing express, game, and physics servers
+function killExistingGame() {
+	console.log('Killing existing game...');
+	exec(osConfigs[config.os].killGameCmd, function(err, stdout, stderr){
+		printOutput(err, stdout, stderr);
+		redirectPorts();
+	});
+}
+
+// Change firewall rules to map port 80 -> 2001 and port 443 -> 2000
+function redirectPorts() {
+	console.log('Changing firewall rules...');
 	exec(osConfigs[config.os].portRedirectCmd, function(err, stdout, stderr){
 		printOutput(err, stdout, stderr);
 		startPhysicsServer();
-		startGameServer();
 	});
 }
 
 // Start physics server
 function startPhysicsServer() {
 	console.log('Starting physics server...');
-	var cmd = __dirname + '/physics/scripts/start_physics_server.sh &';
+	var cmd = __dirname + '/physics/scripts/start_physics_server.sh';
 	var cwd = 'physics/bin/' + config.os;
-	exec(cmd, {cwd: cwd}, function(err, stdout, stderr){
-		printOutput(err, stdout, stderr);
-		startGameServer();
-	});
+	spawn(cmd, [], {cwd: cwd}); // Use spawn because bash script never exits
+	startGameServer();
+
 }
 
 // Start game server
 function startGameServer() {
-	var cmd = 'grunt production:' + config.productionMode + ' &';
+	console.log('Starting game server...');
+	var cmd = 'grunt production:' + config.productionMode;
 	var cwd = '.';
 	exec(cmd, {cwd: cwd}, function(err, stdout, stderr){
 		printOutput(err, stdout, stderr);
@@ -93,11 +121,13 @@ function startGameServer() {
 
 // Start express server
 function startExpressServer() {
-	var cmd = 'grunt production:' + config.productionMode + ' &';
+	console.log('Starting express server...');
+	var cmd = 'grunt production:' + config.productionMode;
 	var cwd = 'client';
 	exec(cmd, {cwd: cwd}, function(err, stdout, stderr){
 		printOutput(err, stdout, stderr);
 		console.log('Done launching Cosmos!');
+		process.exit(0);
 	});
 }
 
