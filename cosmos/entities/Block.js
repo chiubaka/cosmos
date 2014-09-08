@@ -171,30 +171,35 @@ var Block = IgeEntity.extend({
 			//this.cacheSmoothing(true);
 		}
 
+		// We only need to handle user input on the client.
 		if (ige.client) {
-			this.mouseOver(function (event, control) {
-				if (this.gridData.grid === ige.client.player.currentShip() &&
-					ige.client.state.currentCapability().classId() === ConstructCapability.prototype.classId())
-				{
-			    // Stop the event propagating further down the scenegraph
-			    control.stopPropagation();
+			this.mouseOver(this._mouseOverHandler);
+			this.mouseOut(this._mouseOutHandler);
+		}
+	},
 
-			    // You can ALSO stop propagation without the control object
-			    // reference via the global reference:
-			    ige.input.stopPropagation();
+	_mouseOverHandler: function (event, control) {
+		if (this.gridData.grid === ige.client.player.currentShip() &&
+			ige.client.state.currentCapability().classId() === ConstructCapability.prototype.classId())
+		{
+			// Stop the event propagating further down the scenegraph
+			control.stopPropagation();
 
-					this.addEffect({type: 'deconstructionIndicator'});
-				}
-			});
-			this.mouseOut(function (event, control) {
-				if (this.gridData.grid === ige.client.player.currentShip()) {
-					// You can ALSO stop propagation without the control object
-					// reference via the global reference:
-					ige.input.stopPropagation();
+			// You can ALSO stop propagation without the control object
+			// reference via the global reference:
+			ige.input.stopPropagation();
 
-					this.removeEffect({type: 'deconstructionIndicator'});
-				}
-			});
+			this.addEffect({type: 'deconstructionIndicator'});
+		}
+	},
+
+	_mouseOutHandler: function (event, control) {
+		if (this.gridData.grid === ige.client.player.currentShip()) {
+			// You can ALSO stop propagation without the control object
+			// reference via the global reference:
+			ige.input.stopPropagation();
+
+			this.removeEffect({type: 'deconstructionIndicator'});
 		}
 	},
 
