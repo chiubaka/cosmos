@@ -15,7 +15,10 @@ var express = require('express'),
 	FacebookStrategy = require('passport-facebook').Strategy;
 
 // Parse commmand line options
-if (argv['local']) {
+if (argv['localNoCompile']) {
+	global.config = require('./configs/configLocalNoCompile');
+}
+else if (argv['local']) {
 	global.config = require('./configs/configLocal');
 }
 else if (argv['dev']) {
@@ -27,7 +30,8 @@ else if (argv['preview']) {
 else {
 	console.log('No configuration specified, defaulting to local no compile ' +
 		'configuration.');
-	console.log('Available configurations are: --local --dev --preview');
+	console.log('Available configurations are: --localNoCompile --local --dev ' +
+		'--preview');
 	global.config = require('./configs/configLocalNoCompile');
 }
 

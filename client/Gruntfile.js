@@ -21,8 +21,12 @@ module.exports = function(grunt) {
 				}
 			}
 		},
-		production: {
+		cosmos: {
 			// Command to minify and pack game into one JS file
+			localNoCompile: {
+				minifyCommand: ':', // No-op, since we don't want to minify the game
+				expressServerArgs: '--localNoCompile'
+			},
 			local: {
 				minifyCommand: 'node server/ige.js --deploy ../cosmos --to ' +
 				 '../client/public/js/cosmos --clear true --clearClasses false',
@@ -58,8 +62,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-dust');
 
 	// Runs the compass, dust tasks and runs the Cosmos express server
-	grunt.registerMultiTask('production', 'Run the Cosmos express server in' +
-		'production (either dev or preview)', function() {
+	grunt.registerMultiTask('cosmos', 'Run the Cosmos express server in ' +
+		'localNoCompile, local, dev, or preview mode.', function() {
 		// Compile sass and dust templates
 		// TODO: grunt.task.run doesn't provide a callback so these tasks end up
 		// running last. Fix this when grunt is updated
