@@ -270,6 +270,7 @@ var Block = IgeEntity.extend({
 			blockGridId: this.gridData.grid.id()
 		};
 
+		// TODO: Extend when clientState supports multiple current capabilities
 		if (ige.client.state !== undefined) {
 			ige.client.state.currentCapability().tryPerformAction(this, event, data);
 		}
