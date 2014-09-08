@@ -61,6 +61,9 @@ var ChatComponent = ButtonComponent.extend({
 					else {
 						self.chatClient.show();
 						self.clearUnread();
+
+						self.scrollToBottom();
+
 						self.emit('cosmos:ChatComponent.show');
 					}
 				});
@@ -103,6 +106,12 @@ var ChatComponent = ButtonComponent.extend({
 			self.messageInputs.keydown(function(e) {
 				e.stopPropagation();
 			});
+
+			// Only scroll to the bottom if we've added a room and the number of rooms
+			// is one. This means we just added the main chat room.
+			if ($('.message-pane-wrapper').length === 1) {
+				self.scrollToBottom();
+			}
 		});
 	},
 
@@ -124,11 +133,19 @@ var ChatComponent = ButtonComponent.extend({
 
 		var numChars = this.numUnread.toString().length;
 		this.unreadLabel.css('font-size', '' + (85 - (numChars - 1) * 20) + '%');
+	},
+
+	scrollToBottom: function() {
+		var messagePaneWrappers = $('.message-pane-wrapper');
+
+		if (messagePaneWrappers.length > 0) {
+			messagePaneWrappers[0].scrollTop = messagePaneWrappers[0].scrollHeight;
+		}
 	}
 });
 
 ChatComponent.UI_ROOT = '/components/chat/';
-ChatComponent.CANDY_ROOT = '/vendor/candy/'
+ChatComponent.CANDY_ROOT = '/vendor/candy/';
 
 if (typeof(module) !== 'undefined' && typeof(module.expoerts) !== 'undefined') {
 	module.exports = ChatComponent;
