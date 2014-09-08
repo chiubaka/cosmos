@@ -333,7 +333,7 @@ var ServerNetworkEvents = {
 	_onDeconstructionZoneClicked: function(data, clientId) {
 		var player = ige.server.players[clientId];
 		if (player === undefined) {
-			this.log("Cannot deconstruct, player is undefined");
+			ige.log("Cannot deconstruct, player is undefined");
 			return;
 		}
 
