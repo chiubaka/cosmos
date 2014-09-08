@@ -57,7 +57,7 @@ var Cargo = TLEntityComponent.extend({
 		this._recentChanges[type] = this._recentChanges[type] || 0;
 		this._recentChanges[type] += quantity;
 
-		this.emit('add');
+		this.emit("add", [type, quantity]);
 	},
 
 	fromJSON: function(data) {
@@ -131,7 +131,7 @@ var Cargo = TLEntityComponent.extend({
 		this._recentChanges[type] = this._recentChanges[type] || 0;
 		this._recentChanges[type] -= quantity;
 
-		this.emit('remove');
+		this.emit("remove", [type, quantity]);
 
 		return true;
 	},
@@ -168,6 +168,7 @@ var Cargo = TLEntityComponent.extend({
 	}
 });
 
-if (typeof (module) !== 'undefined' && typeof (module.exports) !== 'undefined') {
+if (typeof (module) !== "undefined" && typeof (module.exports) !== "undefined")
+{
 	 module.exports = Cargo;
 }

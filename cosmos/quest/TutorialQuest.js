@@ -373,16 +373,18 @@ var TutorialQuest = Quest.extend({
 			function clickCargoButton() {
 				var questLog = alertify.questLog("To see what's in your cargo, click the cargo button on the toolbar at the left side of the screen");
 				// Show the tooltip
-				ige.hud.leftToolbar.windows.cargo.pinButtonTooltip();
-				var listener = ige.on("cosmos:CargoComponent.buttonClicked", function (classId) {
-					questLog.close();
-					ige.off("cosmos:CargoComponent.buttonClicked", listener);
-					// Hide the tooltip
-					ige.hud.leftToolbar.windows.cargo.unpinButtonTooltip();
-					alertify.questLog("Your cargo holds everything you've mined",
-						"", msgTimeout);
-					setTimeout(done, msgTimeout / 2);
-				});
+				var cargoWindow = ige.hud.leftToolbar.windows.cargo;
+				cargoWindow.pinButtonTooltip();
+				var listener = cargoWindow.on("opened",
+					function() {
+						questLog.close();
+						cargoWindow.off("opened", listener);
+						cargoWindow.unpinButtonTooltip();
+						alertify.questLog("Your cargo holds everything you've mined",
+							"", msgTimeout);
+						setTimeout(done, msgTimeout / 2);
+					}
+				);
 			}
 
 			function done() {
@@ -398,6 +400,9 @@ var TutorialQuest = Quest.extend({
 	// TODO: Skip this if the crafting window is already open
 	craft: {
 		clientOnce: function() {
+			var craftingWindow = ige.hud.leftToolbar.windows.craftingUI;
+			var playerCargo = ige.client.player.currentShip().cargo;
+
 			var self = this;
 			var msgTimeout = 5000;
 
@@ -412,12 +417,12 @@ var TutorialQuest = Quest.extend({
 			function clickCraftButton() {
 				var questLog = alertify.questLog("Click the crafting button");
 				// Show the tooltip
-				ige.hud.leftToolbar.windows.craftingUI.pinButtonTooltip();
-				var listener = ige.on("cosmos:CraftingUIComponent.buttonClicked", function (classId) {
+				craftingWindow.pinButtonTooltip();
+				var listener = craftingWindow.on("opened", function () {
 					questLog.close();
-					ige.off("cosmos:CraftingUIComponent.buttonClicked", listener);
+					craftingWindow.off("opened", listener);
 					// Hide the tooltip
-					ige.hud.leftToolbar.windows.craftingUI.unpinButtonTooltip();
+					craftingWindow.unpinButtonTooltip();
 					alertify.questLog("Crafting allows you to make powerful new blocks",
 						"", msgTimeout);
 					setTimeout(waitForReactants, msgTimeout / 2);
@@ -425,44 +430,47 @@ var TutorialQuest = Quest.extend({
 			}
 
 			function waitForReactants() {
-				var baseMessage = 'Now, let\'s craft an ' + recipeNameHuman + '. ';
+				var baseMessage = "Now, let's craft an " + recipeNameHuman + ".";
 				var questLog = alertify.questLog(baseMessage);
 				// Show the crafting tooltip for the desired block
-				ige.hud.leftToolbar.windows.craftingUI.pinRecipeTooltip(recipeName);
+				craftingWindow.pinRecipeTooltip(recipeName);
 				// Autohide the crafting tooltip so it doesn't get in the way
-				setTimeout(function() {ige.hud.leftToolbar.windows.craftingUI.unpinRecipeTooltip(
-					recipeName)}, msgTimeout)
+				setTimeout(function() {craftingWindow.unpinRecipeTooltip(
+					recipeName)}, msgTimeout);
 
 				// Inform the player what they need to collect
-				var responseListener = ige.on("cargo response", checkForReactants, this);
-				var updateListener = ige.on("cargo update", checkForReactants, this);
-				checkForReactants(ige.hud.leftToolbar.windows.cargo.cargoItems);
 
-				function checkForReactants(cargoItems) {
-					var collectionMessage = 'You\'ll need the following resources in addition to the resources already in your cargo:';
+				var cargoAddListener = playerCargo.on("add", updateReactantCounts,
+					this);
+				var cargoRemoveListener = playerCargo.on("remove", updateReactantCounts,
+					this);
+				updateReactantCounts();
+
+				function updateReactantCounts() {
 					var canCraft = true;
-					// Go through each of the recipe's reactants and see if we have
-					// enough in our cargo
-					for (var i = 0; i < reactants.length; i++) {
-						var blockType = reactants[i].blockType;
-						var quantityNeeded = reactants[i].quantity;
-						var quantityHave = 0;
-						if (cargoItems.hasOwnProperty(blockType)) {
-							quantityHave = cargoItems[blockType];
-						}
-						var quantityToCollect = quantityNeeded - quantityHave;
-						if (quantityToCollect > 0) {
+					var collectionMessage = "You'll need the following resources in " +
+						"addition to the resources already in your cargo:";
+
+					_.forEach(reactants, function (reactant) {
+						var reactantType = reactant.blockType;
+						var reactantQuantity = reactant.quantity;
+
+						var numOwned = playerCargo.numItemsOfType(reactantType);
+						var numRequired = Math.max(reactantQuantity - numOwned, 0);
+
+						if (numRequired > 0) {
 							canCraft = false;
+							collectionMessage += "<br />" + numRequired + " "
+								+ Block.displayNameFromClassId(reactantType);
 						}
-						collectionMessage += '<br />' + Math.max(0, quantityToCollect) + ' ' +
-							Block.displayNameFromClassId(blockType);
-					}
+					});
+
 					questLog.DOMElement.innerHTML = baseMessage + collectionMessage;
 
 					if (canCraft) {
 						questLog.close();
-						ige.off("cargo response", responseListener);
-						ige.off("cargo update", updateListener);
+						playerCargo.off("add", cargoAddListener);
+						playerCargo.off("remove", cargoRemoveListener);
 						alertify.questLog("Bravo! You've collected all necessary blocks!",
 							"success", msgTimeout);
 						setTimeout(craftBlock, msgTimeout / 2);
@@ -474,12 +482,12 @@ var TutorialQuest = Quest.extend({
 				var questLog = alertify.questLog("To craft the " + recipeNameHuman + ", click the " + recipeNameHuman +
 					" recipe in the crafting window");
 
-				ige.hud.leftToolbar.windows.craftingUI.pinRecipeTooltip(recipeName);
+				craftingWindow.pinRecipeTooltip(recipeName);
 				var listener = ige.craftingSystem.on("cosmos:CraftingSystem.craft.success",
 					function (serverRecipeName) {
 					if (serverRecipeName === recipeName) {
 						questLog.close();
-						ige.hud.leftToolbar.windows.craftingUI.unpinRecipeTooltip(recipeName);
+						craftingWindow.unpinRecipeTooltip(recipeName);
 						ige.craftingSystem.off("cosmos:CraftingSystem.craft.success", listener);
 						alertify.questLog("Woohoo! You've crafted one " + recipeNameHuman + "!",
 							"success", msgTimeout);
