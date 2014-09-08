@@ -252,7 +252,7 @@ var ServerNetworkEvents = {
 	// TODO: User access control. Restrict what players can do based on clientId
 	// TODO: Guard against undefined blocks (do not trust client) so server doesn't crash
 	_onMineBlock: function(data, clientId) {
-		var player = ige.server.players[clientId];
+		/*var player = ige.server.players[clientId];
 		if (player === undefined) {
 			return;
 		}
@@ -281,7 +281,7 @@ var ServerNetworkEvents = {
 
 			// Activate lasers
 			player.currentShip().fireMiningLasers(targetBlock);
-		}
+		}*/
 	},
 
 	_onConstructNew: function(data, clientId) {
@@ -337,9 +337,11 @@ var ServerNetworkEvents = {
 			return;
 		}
 
-		var blockGrid = ige.$(data.blockGridId);
+		var block = ige.$(data.blockId);
+		var blockGrid = block.gridData.grid;
+
 		if (blockGrid === player.currentShip()) {
-			if (blockGrid.get(data.loc)[0].classId() !== "BridgeBlock") {
+			if (block.classId() !== "BridgeBlock") {
 
 				data.action = 'remove';
 				var blocksRemoved = blockGrid.processBlockActionServer(data, player);

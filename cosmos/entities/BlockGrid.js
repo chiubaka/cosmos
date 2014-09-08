@@ -292,13 +292,15 @@ var BlockGrid = IgeEntity.extend({
 		else {
 			switch (data.action) {
 				case 'remove':
-					var result = this.remove(data.loc);
+					var block = ige.$(data.blockId)
+					if (block) {
+						this.remove(block.gridData.loc);
 
-					if (this.count() === 0) {
-						this.destroy();
+						if (this.count() === 0) {
+							this.destroy();
+						}
 					}
 
-					return result;
 					break;
 				case 'put':
 					var block = Block.fromJSON(data.block);
@@ -328,7 +330,7 @@ var BlockGrid = IgeEntity.extend({
 
 		switch (data.action) {
 			case 'remove':
-				var result = self.remove(data.loc);
+				var result = self.remove(ige.$(data.blockId).gridData.loc);
 
 				if (this.count() === 0) {
 					this.destroy();

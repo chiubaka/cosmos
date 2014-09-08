@@ -184,8 +184,14 @@ var Block = IgeEntity.extend({
 	* AND the player is in construction mode.
 	*/
 	_mouseOverHandler: function (event, control) {
-		if (this.gridData.grid === ige.client.player.currentShip() &&
-			ige.client.state.currentCapability().classId() === ConstructCapability.prototype.classId())
+		if (
+			// You can only deconstruct your own ship
+			this.gridData.grid === ige.client.player.currentShip() &&
+			// You can only deconstruct in Construct mode
+			ige.client.state.currentCapability().classId() === ConstructCapability.prototype.classId() &&
+			// You can't deconstruct bridge blocks. So it shouldn't look like you can.
+			// That would be misleading to our users.
+			this.classId() !== BridgeBlock.prototype.classId())
 		{
 			// Stop the event propagating further down the scenegraph
 			control.stopPropagation();
@@ -199,8 +205,9 @@ var Block = IgeEntity.extend({
 	 */
 	_mouseOutHandler: function (event, control) {
 		if (this.gridData.grid === ige.client.player.currentShip()) {
-			// Stop the event propagating further down the scenegraph
-			control.stopPropagation();
+			// You can ALSO stop propagation without the control object
+			// reference via the global reference:
+			ige.input.stopPropagation();
 
 			this.removeEffect({type: 'deconstructionIndicator'});
 		}
@@ -261,18 +268,28 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	mouseDown: function(event, control) {
-		// TOOD: Synchronize block ID's between server and client so that we can uniquely identify
-		// a block without referring to its block grid, row, and col.
-		var data = {
-			x: this.mousePosWorld().x,
-			y: this.mousePosWorld().y,
-			loc: this.gridData.loc,
-			blockGridId: this.gridData.grid.id()
-		};
-
 		// TODO: Extend when clientState supports multiple current capabilities
 		if (ige.client.state !== undefined) {
-			ige.client.state.currentCapability().tryPerformAction(this, event, data);
+			if (ige.client.state.currentCapability().classId() === ConstructCapability.prototype.classId()) {
+
+				var data = {
+					blockId: this.id()
+				};
+
+				ige.client.state.currentCapability().tryPerformAction(this, event, data);
+
+			} else if (ige.client.state.currentCapability().classId() === MineCapability.prototype.classId()) {
+
+				var data = {
+					x: this.mousePosWorld().x,
+					y: this.mousePosWorld().y
+				};
+
+				ige.client.state.currentCapability().tryPerformAction(this, event, data);
+
+			} else {
+				// No capability is selected. Do nothing.
+			}
 		}
 	},
 
