@@ -319,23 +319,11 @@ var BlockStructureGenerator = {
 	partDistributions: {
 		STANDARD: {
 			"IronEngineBlock": .1,
-			"FuelBlock": .2,
-			"PowerBlock": .1,
 			"IronThrusterBlock": .1,
-			"CargoBlock": .1,
 			"IronPlatingBlock": .3,
 			"RedLaserBlock": .1,
 			"TitaniumPlatingBlock": .1,
 			"CloakBlock": .1
-		},
-
-		HIGH_CARGO: {
-			"IronEngineBlock": .05,
-			"FuelBlock": .05,
-			"PowerBlock": .05,
-			"IronThrusterBlock": .05,
-			"CargoBlock": .5,
-			"IronPlatingBlock": .3
 		},
 
 		/**

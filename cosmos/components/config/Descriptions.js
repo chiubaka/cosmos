@@ -22,21 +22,6 @@ Descriptions[CloakBlock.prototype.classId()] =
 	text: Descriptions[Armor.prototype.classId()].text + " Doesn't actually cloak your ship."
 };
 
-Descriptions[CloakBlockLight.prototype.classId()] =
-{
-	text: Descriptions[Armor.prototype.classId()].text + " Doesn't actually cloak your ship."
-};
-
-Descriptions[CloakBlockViolet.prototype.classId()] =
-{
-	text: Descriptions[Armor.prototype.classId()].text + " Doesn't actually cloak your ship."
-};
-
-Descriptions[CloakBlockVioletLight.prototype.classId()] =
-{
-	text: Descriptions[Armor.prototype.classId()].text + " Doesn't actually cloak your ship."
-};
-
 Descriptions[DragonPlatingBlock.prototype.classId()] =
 {
 	text: Descriptions[Armor.prototype.classId()].text + " Forged from the hide of a space-dragon. Provides extra defense against fire."
@@ -158,11 +143,6 @@ Descriptions[Part.prototype.classId()] =
 	text: 'A ship part block with no special properties (yet).'
 };
 
-Descriptions[CargoBlock.prototype.classId()] =
-{
-	text: "Cargo doesn't currently do anything."
-};
-
 Descriptions[BridgeBlock.prototype.classId()] =
 {
 	text: "The Bridge is the most important block in your ship. If you lose your bridge you'll have to get a new ship."
@@ -187,16 +167,6 @@ Descriptions[DragonBreathEngineBlock.prototype.classId()] =
 {
 	text: 'Forged from the remains of a space dragon, this engine is a significant improvement over the basic Iron ' +
 		'Engine.'
-};
-
-Descriptions[FuelBlock.prototype.classId()] =
-{
-	text: "Fuel doesn't currently do anything."
-};
-
-Descriptions[PowerBlock.prototype.classId()] =
-{
-	text: "Power doesn't currently do anything."
 };
 
 /* Thrusters */

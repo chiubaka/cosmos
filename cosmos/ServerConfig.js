@@ -23,14 +23,11 @@ var config = {
 
 		/* Ship part blocks */
 		{ name: 'Part', path: './entities/blocks/Part' },
-		{ name: 'PowerBlock', path: './entities/blocks/parts/PowerBlock' },
 		/* Engines */
 		{ name: 'EngineBlock', path: './entities/blocks/parts/EngineBlock' },
 		{ name: 'IronEngineBlock', path: './entities/blocks/parts/engines/IronEngineBlock' },
 		{ name: 'SteelEngineBlock', path: './entities/blocks/parts/engines/SteelEngineBlock' },
 		{ name: 'DragonBreathEngineBlock', path: './entities/blocks/parts/engines/DragonBreathEngineBlock' },
-		{ name: 'FuelBlock', path: './entities/blocks/parts/FuelBlock' },
-		{ name: 'CargoBlock', path: './entities/blocks/parts/CargoBlock' },
 		{ name: 'BridgeBlock', path: './entities/blocks/parts/BridgeBlock' },
 		/* Thrusters */
 		{ name: 'ThrusterBlock', path: './entities/blocks/parts/ThrusterBlock' },
@@ -49,9 +46,6 @@ var config = {
 		{ name: 'Armor', path: './entities/blocks/parts/Armor' },
 		{ name: 'IronPlatingBlock', path: './entities/blocks/parts/armor/IronPlatingBlock' },
 		{ name: 'CloakBlock', path: './entities/blocks/parts/armor/CloakBlock' },
-		{ name: 'CloakBlockLight', path: './entities/blocks/parts/armor/CloakBlockLight' },
-		{ name: 'CloakBlockViolet', path: './entities/blocks/parts/armor/CloakBlockViolet' },
-		{ name: 'CloakBlockVioletLight', path: './entities/blocks/parts/armor/CloakBlockVioletLight' },
 		{ name: 'KryptonitePlatingBlock', path: './entities/blocks/parts/armor/KryptonitePlatingBlock' },
 		{ name: 'AdamantiumPlatingBlock', path: './entities/blocks/parts/armor/AdamantiumPlatingBlock' },
 		{ name: 'MythrilPlatingBlock', path: './entities/blocks/parts/armor/MythrilPlatingBlock' },
