@@ -12,38 +12,34 @@ var starterShipTemplate =
 			null,
 			"IronThrusterBlock",
 			null,
-			null,
 			null
 		],
 		[
 			null,
-			"SteelPlatingBlock",
-			"SteelPlatingBlock",
-			"SteelPlatingBlock",
-			"SteelPlatingBlock",
-			"SteelPlatingBlock",
-			"SteelPlatingBlock",
-			"SteelPlatingBlock"
+			"IronPlatingBlock",
+			"IronPlatingBlock",
+			"IronPlatingBlock",
+			"IronPlatingBlock",
+			"IronPlatingBlock",
+			"IronPlatingBlock"
 		],
 		[
 			"RedLaserBlock",
-			"SteelPlatingBlock",
+			"IronPlatingBlock",
 			"BridgeBlock",
-			"PowerBlock",
-			"CargoBlock",
-			"CargoBlock",
-			"FuelBlock",
+			"IronPlatingBlock",
+			"IronPlatingBlock",
+			"IronPlatingBlock",
 			"IronEngineBlock"
 		],
 		[
 			null,
-			"SteelPlatingBlock",
-			"SteelPlatingBlock",
-			"SteelPlatingBlock",
-			"SteelPlatingBlock",
-			"SteelPlatingBlock",
-			"SteelPlatingBlock",
-			"SteelPlatingBlock"
+			"IronPlatingBlock",
+			"IronPlatingBlock",
+			"IronPlatingBlock",
+			"IronPlatingBlock",
+			"IronPlatingBlock",
+			"IronPlatingBlock"
 		],
 		[
 			null,
@@ -52,10 +48,9 @@ var starterShipTemplate =
 			null,
 			"IronThrusterBlock",
 			null,
-			null,
 			null
 		]
-	]
+	];
 
 var cargoContainerTemplate =
 	{
@@ -64,7 +59,7 @@ var cargoContainerTemplate =
 		},
 		"containerData": {
 		}
-	}
+	};
 
 main();
 function main() {

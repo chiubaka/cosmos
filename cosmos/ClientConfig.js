@@ -34,9 +34,6 @@ var igeClientConfig = {
 		'./entities/blocks/parts/engines/DragonBreathEngineBlock.js',
 
 		/* Misc */
-		'./entities/blocks/parts/PowerBlock.js',
-		'./entities/blocks/parts/FuelBlock.js',
-		'./entities/blocks/parts/CargoBlock.js',
 		'./entities/blocks/parts/BridgeBlock.js',
 
 		/* Thrusters */
@@ -57,9 +54,6 @@ var igeClientConfig = {
 		'./entities/blocks/parts/Armor.js',
 		'./entities/blocks/parts/armor/IronPlatingBlock.js',
 		'./entities/blocks/parts/armor/CloakBlock.js',
-		'./entities/blocks/parts/armor/CloakBlockLight.js',
-		'./entities/blocks/parts/armor/CloakBlockViolet.js',
-		'./entities/blocks/parts/armor/CloakBlockVioletLight.js',
 		'./entities/blocks/parts/armor/KryptonitePlatingBlock.js',
 		'./entities/blocks/parts/armor/AdamantiumPlatingBlock.js',
 		'./entities/blocks/parts/armor/MythrilPlatingBlock.js',
