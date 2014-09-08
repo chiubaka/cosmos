@@ -15,8 +15,14 @@ var osConfigs = {
 		// 3. Kills the bash script responsible for restarting the physics server,
 		// 4. Kills the physics server
 		killGameCmd: 'pm2 delete all && ' +
+			// Bash ternary operator that finds if physics_server process exists
+			// If not, does nothing ":", else
 			'$([$(pgrep physics_server) == ""] && : || ' +
+			// Find the parent of the physics_server (a bash script) and kill it
+			// http://superuser.com/questions/150117/
+			// how-to-get-parent-pid-of-a-given-process-in-gnu-linux-from-command-line
 			'$(kill $(ps -p $(pgrep physics_server) -o ppid=) && ' +
+			// Find the physics_server and kill it
 			'kill $(pgrep physics_server)))'
 	},
 	linux: {
