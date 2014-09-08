@@ -346,7 +346,7 @@ var ServerNetworkEvents = {
 
 				DbPlayer.update(player.id(), player, function() {});
 
-				var extractedBlocks = player.currentShip().cargo.add(blocksRemoved[0].classId());
+				player.currentShip().cargo.add(blocksRemoved[0].classId());
 			}
 			else {
 				// Let the user know that they can't deconstruct their own bridge
