@@ -314,6 +314,7 @@ var Block = IgeEntity.extend({
 	onRemove: function() {
 		if (ige.isClient) {
 			this.removeEffect({type: 'healthBar'});
+			this.removeEffect({type: 'deconstructionIndicator'});
 		}
 	},
 
