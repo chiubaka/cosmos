@@ -332,11 +332,14 @@ var BlockGrid = IgeEntity.extend({
 			case 'remove':
 				var result = self.remove(ige.$(data.blockId).gridData.loc);
 
-				if (this.count() === 0) {
-					this.destroy();
-				}
+				if (result) {
+					if (this.count() === 0) {
+						this.destroy();
+					}
 
-				self.actions().push(data);
+					self.actions().push(data);
+				}
+				
 				return result;
 			case 'add':
 				var location = new IgePoint2d(data.col, data.row);
