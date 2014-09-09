@@ -294,7 +294,7 @@ var BlockGrid = IgeEntity.extend({
 				case 'remove':
 					var block = ige.$(data.blockId)
 					if (block) {
-						this.remove(block.gridData.loc);
+						this.remove(new IgePoint2d(block.gridData.loc.x, block.gridData.loc.y));
 
 						if (this.count() === 0) {
 							this.destroy();
@@ -308,7 +308,7 @@ var BlockGrid = IgeEntity.extend({
 					/*ige.client.metrics.track(
 						'cosmos:construct.existing',
 						{'type': block.classId()});*/
-					this.put(block, block.gridData.loc, true);
+					this.put(block, new IgePoint2d(block.gridData.loc.x, block.gridData.loc.y), true);
 					ige.emit('cosmos:BlockGrid.processActionClient.put', [block.classId(), this]);
 					break;
 				default:
@@ -339,7 +339,7 @@ var BlockGrid = IgeEntity.extend({
 
 					self.actions().push(data);
 				}
-				
+
 				return result;
 			case 'add':
 				var location = new IgePoint2d(data.col, data.row);
@@ -910,7 +910,7 @@ BlockGrid.BLOCK_FIXTURE_RESTITUTION = 0.5;
 BlockGrid.BLOCK_FIXTURE_PADDING = .1;
 
 BlockGrid.coordinatesForBlock = function(block) {
-	var loc = block.gridData.loc;
+	var loc = new IgePoint2d(block.gridData.loc.x, block.gridData.loc.y);
 
 	var coordinates = BlockGrid.coordinatesForLocation(loc);
 
