@@ -115,16 +115,6 @@ passport.use(new GoogleStrategy({
 			// and return that user instead.
 			profile.provider = "Google";
 
-			console.log("profile.emails[0].value:");
-			console.log(profile.emails[0].value);
-			console.log(profile);
-			console.log(accessToken);
-			console.log(refreshToken);
-			console.log(done);
-
-			console.log(express.session());
-			console.log(passport.session());
-
 			return done(null, profile);
 		});
 	}

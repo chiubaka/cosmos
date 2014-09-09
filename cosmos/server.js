@@ -1,6 +1,3 @@
-var Analytics = require('analytics-node');
-var analytics = new Analytics('sxucdidih4');
-
 var Server = IgeClass.extend({
 	classId: 'Server',
 	Server: true,
@@ -23,7 +20,6 @@ var Server = IgeClass.extend({
 
 		ige.addComponent(IgeMongoDbComponent, DbConfig.config);
 		ige.addComponent(IgeNetIoComponent);
-
 
 		// Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);

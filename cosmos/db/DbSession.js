@@ -26,6 +26,9 @@ var DbSession = {
 				if (session.passport && session.passport.user && session.passport.user.id) {
 					// Alias the user formerly referred to by his session id
 					// to now be referred to by his user id
+
+					var Analytics = require('analytics-node');
+					var analytics = new Analytics('sxucdidih4');
 					analytics.alias({
 					  previousId: sid,
 					  userId: session.passport.user.id,
