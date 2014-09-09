@@ -87,6 +87,12 @@ var ServerNetworkEvents = {
 					ige.log('Cannot load player from database!', 'error');
 				}
 
+				analytics.alias({
+				  previousId: username,
+				  userId: playerId,
+				  context: {}
+				});
+
 				ige.server._createPlayer(clientId, playerId, username, ship, cargo);
 			});
 		});

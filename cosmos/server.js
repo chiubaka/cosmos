@@ -1,3 +1,6 @@
+var Analytics = require('analytics-node');
+var analytics = new Analytics('sxucdidih4');
+
 var Server = IgeClass.extend({
 	classId: 'Server',
 	Server: true,
@@ -68,7 +71,7 @@ var Server = IgeClass.extend({
 						ige.network.define('confirm');
 
 						ige.network.define('shipEntity');
-						
+
 						ige.network.define('cosmos:player.username.set.request', Player.onUsernameRequested);
 						ige.network.define('cosmos:player.username.set.approve');
 						ige.network.define('cosmos:player.username.set.error');
