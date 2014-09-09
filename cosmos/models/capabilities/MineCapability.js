@@ -60,6 +60,11 @@ var MineCapability = Capability.extend({
 	 * @instance
 	 */
 	Block_mouseDown: function(sender, event, data) {
+		data = {
+			x: this.mousePosWorld().x,
+			y: this.mousePosWorld().y
+		};
+
 		_.forEach(ige.client.player.currentShip().weapons(), function(weapon) {
 			weapon.fireClient(data);
 		});

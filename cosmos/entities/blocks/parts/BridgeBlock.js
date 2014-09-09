@@ -14,6 +14,15 @@ var BridgeBlock = Part.extend({
 		}
 
 		Part.prototype.init.call(this, data);
+	},
+
+	/*
+	 * Override the Block's _mouseOverHandler to do nothing.
+	 * This is because you can't deconstruct a Bridge Block, so
+	 * it would be misleading for it to show a deconstruction indicator
+	 * when you mouse over it.
+	 */
+	_mouseOverHandler: function() {
 	}
 });
 

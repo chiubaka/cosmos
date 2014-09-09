@@ -188,10 +188,7 @@ var Block = IgeEntity.extend({
 			// You can only deconstruct your own ship
 			this.gridData.grid === ige.client.player.currentShip() &&
 			// You can only deconstruct in Construct mode
-			ige.client.state.currentCapability().classId() === ConstructCapability.prototype.classId() &&
-			// You can't deconstruct bridge blocks. So it shouldn't look like you can.
-			// That would be misleading to our users.
-			this.classId() !== BridgeBlock.prototype.classId())
+			ige.client.state.currentCapability().classId() === ConstructCapability.prototype.classId())
 		{
 			this.addEffect({type: 'deconstructionIndicator'});
 		}
@@ -263,26 +260,8 @@ var Block = IgeEntity.extend({
 	mouseDown: function(event, control) {
 		// TODO: Extend when clientState supports multiple current capabilities
 		if (ige.client.state !== undefined) {
-			if (ige.client.state.currentCapability().classId() === ConstructCapability.prototype.classId()) {
-
-				var data = {
-					blockId: this.id()
-				};
-
-				ige.client.state.currentCapability().tryPerformAction(this, event, data);
-
-			} else if (ige.client.state.currentCapability().classId() === MineCapability.prototype.classId()) {
-
-				var data = {
-					x: this.mousePosWorld().x,
-					y: this.mousePosWorld().y
-				};
-
-				ige.client.state.currentCapability().tryPerformAction(this, event, data);
-
-			} else {
-				// No capability is selected. Do nothing.
-			}
+			var data = undefined;
+			ige.client.state.currentCapability().tryPerformAction(this, event, data);
 		}
 	},
 

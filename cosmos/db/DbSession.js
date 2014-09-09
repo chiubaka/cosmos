@@ -1,7 +1,7 @@
 /**
  * Operations on the "sessions" collection.
  * Each document contains the session id, the session cookie, and the
- * expiry date of the session. 
+ * expiry date of the session.
  * @class
  * @namespace
  */
