@@ -59,7 +59,7 @@ passport.deserializeUser(function (obj, done) {
 	done(null, obj);
 });
 
-/**
+/*
  * Use the Microsoft account login strategy
  */
 passport.use(new MicrosoftStrategy({
@@ -81,6 +81,9 @@ passport.use(new MicrosoftStrategy({
 	}
 ));
 
+/*
+ * Use the Facebook account login strategy
+ */
 passport.use(new FacebookStrategy({
 		clientID: global.config.facebookAppId,
 		clientSecret: global.config.facebookAppSecret,
@@ -100,6 +103,9 @@ passport.use(new FacebookStrategy({
 	}
 ));
 
+/*
+ * Use the Google account login strategy
+ */
 passport.use(new GoogleStrategy({
 		clientID: GOOGLE_CLIENT_ID,
 		clientSecret: GOOGLE_CLIENT_SECRET,
