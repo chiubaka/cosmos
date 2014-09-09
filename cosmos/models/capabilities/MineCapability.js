@@ -68,9 +68,7 @@ var MineCapability = Capability.extend({
 			ige.client.metrics.track('cosmos:block.attack', {'type': sender.classId()});//note that this includes when you mine yourself
 		} else {
 			ige.client.metrics.track('cosmos:block.mine', {'type': sender.classId()});
-		}
-
-		ige.network.send('mineBlock', data);*/
+		}*/
 	},
 
 	/**

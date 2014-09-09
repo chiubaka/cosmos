@@ -51,8 +51,6 @@ var Server = IgeClass.extend({
 						/* This is called when a player clicks the new ship button */
 						ige.network.define('new ship', self._onNewShipRequest);
 
-						/* This is called when a player clicks on a block */
-						ige.network.define('mineBlock', self._onMineBlock);
 						ige.network.define('cosmos:Weapon.fire', self._fire);
 						/* This is called when a player clicks on the background. */
 						ige.network.define('constructNew', self._onConstructNew);
@@ -68,7 +66,7 @@ var Server = IgeClass.extend({
 						ige.network.define('confirm');
 
 						ige.network.define('shipEntity');
-						
+
 						ige.network.define('cosmos:player.username.set.request', Player.onUsernameRequested);
 						ige.network.define('cosmos:player.username.set.approve');
 						ige.network.define('cosmos:player.username.set.error');
