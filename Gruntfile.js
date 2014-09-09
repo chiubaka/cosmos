@@ -40,8 +40,11 @@ module.exports = function(grunt) {
 			}
 		},
 
-		production: {
+		cosmos: {
 			// Arguments to server/ige.js to load cosmos
+			localNoCompile: {
+				gameServerArgs: ['--local' , '-g', 'cosmos'] // Alias for local
+			},
 			local: {
 				gameServerArgs: ['--local' , '-g', 'cosmos']
 			},
@@ -76,8 +79,8 @@ module.exports = function(grunt) {
 		}
 	});
 
-	grunt.registerMultiTask('production', 'Run the Cosmos game server in' +
-		'production (either dev or preview)', function() {
+	grunt.registerMultiTask('cosmos', 'Run the Cosmos game server in ' +
+		'local, dev, or preview mode.', function() {
 		// call done() when async stuff is done so Grunt can move on
 		var done = this.async();
 		var self = this;
