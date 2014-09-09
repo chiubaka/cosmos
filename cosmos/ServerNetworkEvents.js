@@ -311,9 +311,11 @@ var ServerNetworkEvents = {
 				data.action = 'remove';
 				var blocksRemoved = blockGrid.processBlockActionServer(data, player);
 
-				DbPlayer.update(player.id(), player, function() {});
+				if (blocksRemoved && blocksRemoved.length > 0) {
+					DbPlayer.update(player.id(), player, function() {});
 
-				player.currentShip().cargo.add(blocksRemoved[0].classId());
+					player.currentShip().cargo.add(blocksRemoved[0].classId());
+				}
 			}
 			else {
 				// Let the user know that they can't deconstruct their own bridge
