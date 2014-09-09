@@ -73,9 +73,7 @@ var MetricsHandler = IgeEventingClass.extend({
 	},
 
 	track: function(event, data) {
-		if (!this.validStrings[event]) {
-			//this.log("The invalid event " + event + " was sent to the metrics handler. Prepare to die.", "error");
-		} else {
+		if (this.validStrings[event]) {
 			analytics.track(event, data);
 		}
 	},
