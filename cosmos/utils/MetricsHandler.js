@@ -47,11 +47,13 @@ var MetricsHandler = IgeEventingClass.extend({
 			"cosmos:network.connect": true,
 
 			/* construction */
-			"cosmos:construct.attempt.new": true,
-			"cosmos:construct.new": true,
+			"cosmos:construct.attempt.new": false,
+			"cosmos:construct.new": false,
 
-			"cosmos:construct.attempt.existing": true,
-			"cosmos:construct.existing": true,
+			"cosmos:construct.attempt.existing": false,
+
+			// This has been removed because it fired too many events.
+			"cosmos:construct.existing": false,
 
 			"cosmos:construct.attempt.deconstruct": true,
 			"cosmos:construct.deconstruct": false,
@@ -63,17 +65,17 @@ var MetricsHandler = IgeEventingClass.extend({
 			"cosmos:CraftingSystem.craft.success": true, // This is fired whenever a player successfully crafts something. The name of the recipe is passed to the analytics server.
 
 			/* misc */
-			"cosmos:block.mine": true,
+			// This has been removed because it fired too many events.
+			"cosmos:block.mine": false,
+
 			"cosmos:block.attack": true // Note that this includes when you mine yourself as well as when you mine other players
 		}
 	},
 
 	track: function(event, data) {
-		if (!this.validStrings[event]) {
-			this.log("The invalid event " + event + " was sent to the metrics handler. Prepare to die.", "error");
+		if (this.validStrings[event]) {
+			analytics.track(event, data);
 		}
-
-		analytics.track(event, data);
 	},
 
 	identify: function(userId, traits) {
