@@ -48,8 +48,11 @@ var MinimapComponent = IgeEventingClass.extend({
 			ige.addBehaviour('updateMinimap', self.updateMinimap);
 
 			// Set the internal size to match CSS values
-			self.canvas.width(self.canvas.css('width'));
-			self.canvas.height(self.canvas.css('height'));
+			self.ctx = self.canvas[0].getContext('2d');
+			self.width = parseInt(self.canvas.css('width'));
+			self.height = parseInt(self.canvas.css('height'));
+			self.ctx.canvas.width = self.width;
+			self.ctx.canvas.height = self.height;
 
 			// Offset the canvas draws so a draw to (0,0) is in the middle
 			self.offsetX = self.canvas.width() / 2;
@@ -84,13 +87,14 @@ var MinimapComponent = IgeEventingClass.extend({
 	},
 
 	updateMinimap: function() {
-		var ctx = ige.hud.minimap.canvas[0].getContext('2d');
-		var width = ige.hud.minimap.canvas.width();
-		var height = ige.hud.minimap.canvas.height();
-		var offsetX = ige.hud.minimap.offsetX;
-		var offsetY = ige.hud.minimap.offsetY;
-		var scaleX = ige.hud.minimap.scaleX;
-		var scaleY = ige.hud.minimap.scaleY;
+		var minimap = ige.hud.minimap;
+		var ctx = minimap.ctx;
+		var width = minimap.width;
+		var height = minimap.height;
+		var offsetX = minimap.offsetX;
+		var offsetY = minimap.offsetY;
+		var scaleX = minimap.scaleX;
+		var scaleY = minimap.scaleY;
 
 		// Clear the minimap canvas so we can redraw the minimap
 		ctx.clearRect(0, 0, width, height);
