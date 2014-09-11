@@ -52,11 +52,8 @@ html
 		.igeLoading.content
 			#headline.row
 				.col-lg-12
-					h2 Please note: ships and asteroids that are not connected will split apart
-						| in the next week!
-						br
-						| Ships that are not entirely connected at that
-						| time may experience issues.
+					h2 We aware of the game performance issues and are
+						| working actively to find a long-term solution!
 			#mail-list.row
 				.col-lg-12
 					h2
@@ -67,34 +64,50 @@ html
 				#new-features.news.col-lg-3
 					h2 New Features
 					ul
-						li None.
+						li Redesigned blocks. A fresh look makes a fresh game!
+						li New laser systems, including two new laser upgrades!
 				#improvements.news.col-lg-3
 					h2 Improvements
 					ul
-						li Reduced the size of asteroids such that they still have large blocks, but
-							| are generally smaller. This should alleviate most of the lag issues
-							| players experienced in&nbsp;
-							a(href='http://blog.teamleonine.com/?p=381', target='_blank') version
-								| 0.15.1
-							| .
+						li Thrust values are now displayed as integers.
+						li Players can no longer construct blocks on other
+							| players.
+						li Health bars for blocks have been restored to the
+							| game.
+						li Some performance improvements.
+						li Removed ship parts that don't do anything yet from
+							| the game.
 				#bug-fixes.news.col-lg-3
 					h2 Bug Fixes
 					ul
-						li None.
-
+						li Fixed issue where drops were colliding with
+							| asteroids and other objects.
+						li Fixed a bug where players could lose part of their
+							| ship or cargo by logging out while their ship
+							| is loading.
+						li Mining laser is now positioned correctly even when
+							| players move while shooting.
+						li Block inspector now shows the right block's health
+							| when a different block is clicked during the
+							| mining process.
 				#known-issues.news.col-lg-3
 					h2 Known Issues
 					ul
-						li Laser is positioned slightly incorrectly when players move while
-							| mining.
-						li Drops no longer pass through asteroids and other players.
-						li Resizing the game window while playing sometimes breaks input controls.
-						li The game doesn't correctly scale for higher resolution displays.
-						li Game takes lots of memory and seems to have memory leaks.
-						li Health of the wrong block is displayed when a new block is selected while
-							| mining.
-						li Tutorial prompts users to click the mining button even when it is already
-							| selected.
+						li Game performance drops dramatically when many
+							| lasers are fired.
+						li Very large ships cause performance issues for all
+							| players.
+						li Tutorial cannot advance past asking players to
+							| open cargo.
+						li Players cannot deconstruct blocks from their own
+							| ships.
+						li Occasionally, drops are not collected and placed in
+							| inventory.
+						li Rocky asteroids have "Ice" blocks in them instead of
+							| Pure/Impure/Very Impure Ice blocks.
+						li View the full list of known issues&nbsp;
+							a(href='http://blog.teamleonine.com/?p=591', target='_blank') here
+							| .
 			#loading-error.error An error occurred while loading the game. Please refresh the page
 				| or try again later. If the problem persists, email us at&nbsp;
 				a(href='mailto:team@teamleonine.com', target='_blank') team@teamleonine.com
@@ -107,7 +120,7 @@ html
 				#fullscreen-container
 					input(type='checkbox', name='fullscreen', value='true', checked)#fullscreen
 					label(for='fullscreen') Fullscreen
-			#last-updated Cosmos Version 0.15.2. Last updated: 8/22/2014, 9:40pm PST.&nbsp;
+			#last-updated Cosmos Version 0.16.0. Last updated: 9/5/2014, 6:30pm PST.&nbsp;
 				a(href='http://blog.teamleonine.com/?cat=31', target='_blank') See the full change
 					| log history.
 

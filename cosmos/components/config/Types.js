@@ -17,21 +17,6 @@ Types[CloakBlock.prototype.classId()] =
 	text: "Cloaking Armor"
 };
 
-Types[CloakBlockLight.prototype.classId()] =
-{
-	text: "Cloaking Armor"
-};
-
-Types[CloakBlockViolet.prototype.classId()] =
-{
-	text: "Cloaking Armor"
-};
-
-Types[CloakBlockVioletLight.prototype.classId()] =
-{
-	text: "Cloaking Armor"
-};
-
 Types[IronPlatingBlock.prototype.classId()] =
 {
 	text: "Level 1 Armor"
@@ -155,11 +140,6 @@ Types[Part.prototype.classId()] =
 	text: "Ship Part"
 };
 
-Types[CargoBlock.prototype.classId()] =
-{
-	text: "Cargo Hold"
-};
-
 Types[BridgeBlock.prototype.classId()] =
 {
 	text: "Command Center"
@@ -179,17 +159,6 @@ Types[SteelEngineBlock.prototype.classId()] =
 Types[DragonBreathEngineBlock.prototype.classId()] =
 {
 	text: 'Level 3 Engine'
-};
-
-
-Types[FuelBlock.prototype.classId()] =
-{
-	text: "Fuel"
-};
-
-Types[PowerBlock.prototype.classId()] =
-{
-	text: "Power"
 };
 
 /* Thrusters */

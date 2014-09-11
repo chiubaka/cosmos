@@ -4,25 +4,9 @@ var Healths = {};
 
 
 /* === PARTS === */
-
-Healths[CargoBlock.prototype.classId()] =
-{
-	max: 20
-};
-
 Healths[BridgeBlock.prototype.classId()] =
 {
 	max: 45
-};
-
-Healths[FuelBlock.prototype.classId()] =
-{
-	max: 10
-};
-
-Healths[PowerBlock.prototype.classId()] =
-{
-	max: 10
 };
 
 /* Armor */
@@ -37,21 +21,6 @@ Healths[SteelPlatingBlock.prototype.classId()] =
 };
 
 Healths[CloakBlock.prototype.classId()] =
-{
-	max: 60
-};
-
-Healths[CloakBlockLight.prototype.classId()] =
-{
-	max: 60
-};
-
-Healths[CloakBlockViolet.prototype.classId()] =
-{
-	max: 60
-};
-
-Healths[CloakBlockVioletLight.prototype.classId()] =
 {
 	max: 60
 };

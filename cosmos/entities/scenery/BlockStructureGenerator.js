@@ -84,7 +84,6 @@ var BlockStructureGenerator = {
 						} else {
 							var newBlock = self._getBlockType(blockStructure, block.row, block.col, blockDistribution, {gridWidth: currentSize, gridHeight: currentSize});
 						}
-						newBlock.physicsFixture.fixtureDef['groupIndex'] = -1;
 
 						// We will have a seperate variable for the actual location of the block.
 						// The idea here is that the location that needs to be filled, called 'block',
@@ -319,23 +318,11 @@ var BlockStructureGenerator = {
 	partDistributions: {
 		STANDARD: {
 			"IronEngineBlock": .1,
-			"FuelBlock": .2,
-			"PowerBlock": .1,
 			"IronThrusterBlock": .1,
-			"CargoBlock": .1,
 			"IronPlatingBlock": .3,
 			"RedLaserBlock": .1,
 			"TitaniumPlatingBlock": .1,
 			"CloakBlock": .1
-		},
-
-		HIGH_CARGO: {
-			"IronEngineBlock": .05,
-			"FuelBlock": .05,
-			"PowerBlock": .05,
-			"IronThrusterBlock": .05,
-			"CargoBlock": .5,
-			"IronPlatingBlock": .3
 		},
 
 		/**
