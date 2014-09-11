@@ -277,7 +277,7 @@ var TutorialQuest = Quest.extend({
 			}
 
 			function mineBlock() {
-				var questLog = alertify.questLog("Now, click on the edges of an asteroid and mine it");
+				var questLog = alertify.questLog("Now, click on an asteroid to mine it");
 				// First, set up listeners
 				self.on(self.keys['collect'], function() { // Listen for block collection
 					self.collect.collected = true;
