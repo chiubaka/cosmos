@@ -36,6 +36,8 @@ var EngineBlock = Part.extend({
 		if (!ige.isServer && this.blockGrid().classId() === 'Ship') {
 			this.removeEffect(NetworkUtils.effect('engineParticles', this));
 		}
+
+		Part.prototype.onRemove.call(this);
 	},
 
 	/**
