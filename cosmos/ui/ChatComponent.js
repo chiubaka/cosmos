@@ -6,7 +6,6 @@ var ChatComponent = ButtonComponent.extend({
 	chatClient: undefined,
 	numUnread: undefined,
 	unreadLabel: undefined,
-	messageInputs: undefined,
 
 	init: function() {
 		var self = this;
@@ -99,19 +98,18 @@ var ChatComponent = ButtonComponent.extend({
 		// events. Otherwise, the player will move in IGE while typing characters that are controls in the
 		// game.
 		$(Candy).on('candy:view.room.after-add', function() {
-			self.messageInputs = self.chatClient.find('input.field');
-			self.messageInputs.keydown(function(e) {
+			var newInput = self.chatClient.find('input.field').last();
+			newInput.keydown(function(e) {
 				e.stopPropagation();
 			});
 
-			var messageInputs = $('.message-form-wrapper input.field');
-			var newInput = messageInputs.last();
 			newInput.focus(function() {
 				var focusedInput = $(this);
 				$('#igeFrontBuffer').on('click.chatFocused', function() {
 					focusedInput.blur();
 				});
 			});
+
 			newInput.focusout(function() {
 				$('#igeFrontBuffer').off('click.chatFocused');
 			});
