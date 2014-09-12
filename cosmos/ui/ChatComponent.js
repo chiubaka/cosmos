@@ -6,7 +6,6 @@ var ChatComponent = ButtonComponent.extend({
 	chatClient: undefined,
 	numUnread: undefined,
 	unreadLabel: undefined,
-	messageInputs: undefined,
 
 	init: function() {
 		var self = this;
@@ -104,11 +103,6 @@ var ChatComponent = ButtonComponent.extend({
 		// events. Otherwise, the player will move in IGE while typing characters that are controls in the
 		// game.
 		$(Candy).on('candy:view.room.after-add', function() {
-			self.messageInputs = self.chatClient.find('input.field');
-			self.messageInputs.keydown(function(e) {
-				e.stopPropagation();
-			});
-
 			// If the room that was just added is the active room, then scroll to the
 			// bottom. Otherwise, don't scroll to the bottom because then we would be
 			// scrolling to the bottom in response to a new room being added even
@@ -119,6 +113,31 @@ var ChatComponent = ButtonComponent.extend({
 			{
 				self.scrollToBottom(activeRoomPane.find('.message-pane-wrapper').first());
 			}
+
+			var newInput = self.chatClient.find('input.field').last();
+			newInput.keydown(function(e) {
+				e.stopPropagation();
+			});
+
+			// When the message input is focused (e.g. user clicks in it), set up an
+			// event listener using jQuery that blurs (defocuses) the message input
+			// so that the player's key inputs go to the canvas instead of to the
+			// message box.
+			newInput.focus(function() {
+				var focusedInput = $(this);
+				// jQuery event "click" with additional namespace "chatFocused".
+				// namespaces for jQuery events are documented here:
+				// http://api.jquery.com/off/
+				$('#igeFrontBuffer').on('click.chatFocused', function() {
+					focusedInput.blur();
+				});
+			});
+
+			// In order to avoid extra overhead when clicking the canvas in general,
+			// remove the click event once the message box is no longer focused.
+			newInput.focusout(function() {
+				$('#igeFrontBuffer').off('click.chatFocused');
+			});
 		});
 	},
 
