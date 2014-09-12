@@ -119,13 +119,22 @@ var ChatComponent = ButtonComponent.extend({
 				e.stopPropagation();
 			});
 
+			// When the message input is focused (e.g. user clicks in it), set up an
+			// event listener using jQuery that blurs (defocuses) the message input
+			// so that the player's key inputs go to the canvas instead of to the
+			// message box.
 			newInput.focus(function() {
 				var focusedInput = $(this);
+				// jQuery event "click" with additional namespace "chatFocused".
+				// namespaces for jQuery events are documented here:
+				// http://api.jquery.com/off/
 				$('#igeFrontBuffer').on('click.chatFocused', function() {
 					focusedInput.blur();
 				});
 			});
 
+			// In order to avoid extra overhead when clicking the canvas in general,
+			// remove the click event once the message box is no longer focused.
 			newInput.focusout(function() {
 				$('#igeFrontBuffer').off('click.chatFocused');
 			});
