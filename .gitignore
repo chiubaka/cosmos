@@ -4,6 +4,9 @@
  github.com/github/gitignore
 ##############################
 
+# Ignore compiled game file
+game.js
+
 ### IGE Specific gitignore ###
 ##############################
 
