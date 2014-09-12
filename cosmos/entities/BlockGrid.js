@@ -14,8 +14,8 @@ var BlockGrid = IgeEntity.extend({
 		x: 0.0,
 		y: 0.0,
 		angle: 0.0,
-		linearDamping: 0.4,
-		angularDamping: 1.0,
+		linearDamping: 3,
+		angularDamping: 10,
 		bullet: false
 	},
 	_physicsContainer: undefined,
