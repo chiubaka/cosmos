@@ -6,7 +6,6 @@ var ChatComponent = ButtonComponent.extend({
 	chatClient: undefined,
 	numUnread: undefined,
 	unreadLabel: undefined,
-	messageInputs: undefined,
 
 	init: function() {
 		var self = this;
@@ -115,14 +114,18 @@ var ChatComponent = ButtonComponent.extend({
 				self.scrollToBottom(activeRoomPane.find('.message-pane-wrapper').first());
 			}
 
-			var messageInputs = $('.message-form-wrapper input.field');
-			var newInput = messageInputs.last();
+			var newInput = self.chatClient.find('input.field').last();
+			newInput.keydown(function(e) {
+				e.stopPropagation();
+			});
+
 			newInput.focus(function() {
 				var focusedInput = $(this);
 				$('#igeFrontBuffer').on('click.chatFocused', function() {
 					focusedInput.blur();
 				});
 			});
+
 			newInput.focusout(function() {
 				$('#igeFrontBuffer').off('click.chatFocused');
 			});
