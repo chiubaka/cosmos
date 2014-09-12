@@ -45,12 +45,12 @@ var GameInit = {
 		cosmos.blocks.constructors = {};
 		cosmos.blocks.instances = {};
 		for (var key in globalContext) {
-			if (globalContext.hasOwnProperty(key)
-				&& globalContext[key]
-				&& globalContext[key].prototype
-				&& globalContext[key].prototype instanceof Block
-				&& globalContext[key].prototype.classId() !== "Element"
-				&& globalContext[key].prototype.classId() !== "Laser")
+			if (globalContext.hasOwnProperty(key) &&
+				globalContext[key] &&
+				globalContext[key].prototype &&
+				globalContext[key].prototype instanceof Block &&
+				globalContext[key].prototype.classId() !== "Element" &&
+				globalContext[key].prototype.classId() !== "Laser")
 			{
 				cosmos.blocks.constructors[key] = globalContext[key];
 				var block = new globalContext[key]();
@@ -239,12 +239,12 @@ var GameInit = {
 		}
 
 		var NUM_NORMAL_ASTEROIDS = 10;
-		for (var asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
+		for (asteroidNumber = 0; asteroidNumber < NUM_NORMAL_ASTEROIDS; asteroidNumber++) {
 			this.spawnStructure([0, 0, 0, 1, 1, 1, 1, 1], BlockStructureGenerator.elementDistributions.randomDistribution());// Note that 8000 here doens't do anything. To modify the sizes of the asteroids, go to the asteroid generator.
 		}
 
 		var NUM_HUGE_ASTEROIDS = 5;
-		for (var asteroidNumber = 0; asteroidNumber < NUM_HUGE_ASTEROIDS; asteroidNumber++) {
+		for (asteroidNumber = 0; asteroidNumber < NUM_HUGE_ASTEROIDS; asteroidNumber++) {
 			this.spawnStructure([0, 0, 1, 1, 1, 1, 1, 1], BlockStructureGenerator.elementDistributions.randomDistribution());// Note that 8000 here doens't do anything. To modify the sizes of the asteroids, go to the asteroid generator.
 		}
 		// TODO: The procedural generation algorithm is causing strange problems with the new BlockGrid system. Leave
@@ -266,7 +266,7 @@ var GameInit = {
 			viableY: 0,
 			numRetries: 10,
 			callback: handleTransactionResult
-		}
+		};
 
 		var structure = BlockStructureGenerator
 			.genProceduralAsteroid(numLayers, blockDistribution, symmetric,
@@ -296,27 +296,27 @@ var GameInit = {
 			'shipDropEnd': 2,
 			'shipDropPreSolve': 3,
 			'dropPreSolve': 4
-		}
+		};
 
 		var beginContacts = [{
 			a_fixture_category: Ship.ATTRACTOR_BOX2D_CATEGORY_BITS,
 			b_fixture_category: Drop.BOX2D_CATEGORY_BITS,
 			disable_contact: true,
-			identifier: contactIdentifiers['shipDropBegin']
+			identifier: contactIdentifiers.shipDropBegin
 		}];
 
 		var endContacts = [{
 			a_fixture_category: Ship.ATTRACTOR_BOX2D_CATEGORY_BITS,
 			b_fixture_category: Drop.BOX2D_CATEGORY_BITS,
 			disable_contact:false,
-			identifier: contactIdentifiers['shipDropEnd']
+			identifier: contactIdentifiers.shipDropEnd
 		}];
 
 		var preSolveContacts = [{
 			a_fixture_category: Ship.BOX2D_CATEGORY_BITS,
 			b_fixture_category: Drop.BOX2D_CATEGORY_BITS,
 			disable_contact: true,
-			identifier: contactIdentifiers['shipDropPreSolve']
+			identifier: contactIdentifiers.shipDropPreSolve
 		}];
 
 		ige.physicsSystem.newCustomContacts({contacts: beginContacts, contactType:
