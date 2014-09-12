@@ -166,7 +166,7 @@ var Ship = BlockStructure.extend({
 		var currentMouseGridLocation = this.locationForClick(event, control);
 		console.log(currentMouseGridLocation);
 		console.log(this._prevGridLocationForMouse);
-		if (this._prevGridLocationForMouse !== currentMouseGridLocation) {
+		if (!(this._prevGridLocationForMouse.compare(currentMouseGridLocation))) {
 
 			if (this.get(this._prevGridLocationForMouse).length > 0) {
 				console.log("mouse out");
@@ -178,6 +178,8 @@ var Ship = BlockStructure.extend({
 			}
 
 			this._prevGridLocationForMouse = currentMouseGridLocation;
+		} else {
+			console.log("skipping stuff");
 		}
 	},
 
