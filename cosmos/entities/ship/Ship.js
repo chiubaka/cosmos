@@ -86,6 +86,8 @@ var Ship = BlockStructure.extend({
 	_firingWeapons: undefined,
 	_weapons: undefined,
 
+	_prevGridLocationForMouse: undefined,
+
 	init: function(data) {
 		data = data || {};
 
@@ -153,6 +155,28 @@ var Ship = BlockStructure.extend({
 			engines: this._engines.length,
 			thrusters: this._thrusters.length
 		};
+
+		if (ige.isClient) {
+			this._prevGridLocationForMouse = new IgePoint2d(0, 0);
+			this.mouseMove(this._mouseMoveHandler);
+		}
+	},
+
+	_mouseMoveHandler: function(event, control) {
+		var currentMouseGridLocation = this.locationForClick(event, control);
+		console.log(currentMouseGridLocation);
+		console.log(this._prevGridLocationForMouse);
+		if (this._prevGridLocationForMouse !== currentMouseGridLocation) {
+
+			if (this.get(this._prevGridLocationForMouse).length > 0) {
+				this.get(this._prevGridLocationForMouse)[0]._mouseOutHandler();
+			}
+			if (this.get(currentMouseGridLocation).length > 0) {
+				this.get(currentMouseGridLocation)[0]._mouseOverHandler();
+			}
+
+			this._prevGridLocationForMouse = currentMouseGridLocation;
+		}
 	},
 
 	streamCreateData: function() {

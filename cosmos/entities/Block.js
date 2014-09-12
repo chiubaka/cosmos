@@ -175,7 +175,12 @@ var Block = IgeEntity.extend({
 		if (ige.client) {
 			this.mouseOver(this._mouseOverHandler);
 			this.mouseOut(this._mouseOutHandler);
+			this.mouseMove(this._mouseMoveHandler);
 		}
+	},
+
+	_mouseMoveHandler: function (event, control) {
+		this.log("TEST");
 	},
 
 	/*
