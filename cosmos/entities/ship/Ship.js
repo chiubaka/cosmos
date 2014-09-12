@@ -169,9 +169,11 @@ var Ship = BlockStructure.extend({
 		if (this._prevGridLocationForMouse !== currentMouseGridLocation) {
 
 			if (this.get(this._prevGridLocationForMouse).length > 0) {
+				console.log("mouse out");
 				this.get(this._prevGridLocationForMouse)[0]._mouseOutHandler();
 			}
 			if (this.get(currentMouseGridLocation).length > 0) {
+				console.log("mouse over");
 				this.get(currentMouseGridLocation)[0]._mouseOverHandler();
 			}
 
