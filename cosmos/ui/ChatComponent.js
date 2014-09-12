@@ -62,7 +62,9 @@ var ChatComponent = ButtonComponent.extend({
 						self.chatClient.show();
 						self.clearUnread();
 
-						self.scrollToBottom();
+						self.scrollToBottom(
+							self.getActiveRoomPane().find('.message-pane-wrapper').first()
+						);
 
 						self.emit('cosmos:ChatComponent.show');
 					}
@@ -107,10 +109,15 @@ var ChatComponent = ButtonComponent.extend({
 				e.stopPropagation();
 			});
 
-			// Only scroll to the bottom if we've added a room and the number of rooms
-			// is one. This means we just added the main chat room.
-			if ($('.message-pane-wrapper').length === 1) {
-				self.scrollToBottom();
+			// If the room that was just added is the active room, then scroll to the
+			// bottom. Otherwise, don't scroll to the bottom because then we would be
+			// scrolling to the bottom in response to a new room being added even
+			// though we're not focused on that room.
+			var activeRoomPane = self.getActiveRoomPane();
+			if (activeRoomPane
+				&& activeRoomPane.index() === $('.room-pane').length - 1)
+			{
+				self.scrollToBottom(activeRoomPane.find('.message-pane-wrapper').first());
 			}
 		});
 	},
@@ -128,6 +135,20 @@ var ChatComponent = ButtonComponent.extend({
 		this.updateLabel();
 	},
 
+	/**
+	 * Gets the active room pane by finding the room pane that is visible. Only
+	 * one room can be visible at a time.
+	 * @returns {*}
+	 */
+	getActiveRoomPane: function() {
+		var roomPanes = $('.room-pane:visible');
+		if (roomPanes.length === 0) {
+			return null;
+		}
+
+		return roomPanes.eq(0);
+	},
+
 	updateLabel: function() {
 		this.unreadLabel.text(this.numUnread);
 
@@ -135,12 +156,18 @@ var ChatComponent = ButtonComponent.extend({
 		this.unreadLabel.css('font-size', '' + (85 - (numChars - 1) * 20) + '%');
 	},
 
-	scrollToBottom: function() {
-		var messagePaneWrappers = $('.message-pane-wrapper');
-
-		if (messagePaneWrappers.length > 0) {
-			messagePaneWrappers[0].scrollTop = messagePaneWrappers[0].scrollHeight;
+	/**
+	 * Scrolls the given messagePaneWrapper all the way to the bottom. The
+	 * messagePaneWrapper is the div that contains all of the chat messages for
+	 * a room.
+	 * @param messagePaneWrapper
+	 */
+	scrollToBottom: function(messagePaneWrapper) {
+		if (!messagePaneWrapper) {
+			return;
 		}
+
+		messagePaneWrapper[0].scrollTop = messagePaneWrapper[0].scrollHeight;
 	}
 });
 
