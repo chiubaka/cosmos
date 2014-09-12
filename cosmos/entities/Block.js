@@ -178,6 +178,7 @@ var Block = IgeEntity.extend({
 	 * AND the player is in construction mode.
 	 * Note that this handler is called by ship.js and it's *not* actually plugged
 	 * directly into IGE's input handler system
+	 * The reason for this is that IGE's mouse over and mouse out are axis-aligned
 	 */
 	_mouseOverHandler: function (event, control) {
 		if (
@@ -194,6 +195,7 @@ var Block = IgeEntity.extend({
 	 * When the mouse leaves a block, remove the deconstructionIndicator effect
 	 * Note that this handler is called by ship.js and it's *not* actually plugged
 	 * directly into IGE's input handler system
+	 * The reason for this is that IGE's mouse over and mouse out are axis-aligned
 	 */
 	_mouseOutHandler: function (event, control) {
 		if (this.gridData.grid === ige.client.player.currentShip()) {
