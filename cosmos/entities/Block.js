@@ -170,21 +170,15 @@ var Block = IgeEntity.extend({
 			//this.compositeCache(true);
 			//this.cacheSmoothing(true);
 		}
-
-		// We only need to handle user input on the client.
-		/*
-		if (ige.client) {
-			this.mouseOver(this._mouseOverHandler);
-			this.mouseOut(this._mouseOutHandler);
-		}
-		*/
 	},
 
 	/*
-	* When the mouse hovers over a block, add the deconstructionIndicator effect
-	* IF the block is part of the player's current ship
-	* AND the player is in construction mode.
-	*/
+	 * When the mouse hovers over a block, add the deconstructionIndicator effect
+	 * IF the block is part of the player's current ship
+	 * AND the player is in construction mode.
+	 * Note that this handler is called by ship.js and it's *not* actually plugged
+	 * directly into IGE's input handler system
+	 */
 	_mouseOverHandler: function (event, control) {
 		if (
 			// You can only deconstruct your own ship
@@ -198,6 +192,8 @@ var Block = IgeEntity.extend({
 
 	/*
 	 * When the mouse leaves a block, remove the deconstructionIndicator effect
+	 * Note that this handler is called by ship.js and it's *not* actually plugged
+	 * directly into IGE's input handler system
 	 */
 	_mouseOutHandler: function (event, control) {
 		if (this.gridData.grid === ige.client.player.currentShip()) {
