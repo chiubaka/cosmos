@@ -335,3 +335,5 @@ TODO.md
 *.ackrc
 
 cosmos/tests/game.js
+
+client/public/js/cosmos/game.js

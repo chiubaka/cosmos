@@ -48,7 +48,10 @@ parseCommandLineOptions();
 
 function parseCommandLineOptions() {
 	// Parse commmand line options
-	if (argv['local']) {
+	if (argv['localNoCompile']) {
+		config['productionMode'] = 'localNoCompile';
+	}
+	else if (argv['local']) {
 		config['productionMode'] = 'local';
 	}
 	else if (argv['dev']) {
@@ -59,7 +62,8 @@ function parseCommandLineOptions() {
 	}
 	else {
 		console.error('Error: No configuration specified.');
-		console.error('Available configurations are: --local --dev --preview');
+		console.error('Available configurations are: --localNoCompile --local ' +
+			'--dev --preview');
 		process.exit(1);
 	}
 	osDetect();
@@ -111,7 +115,7 @@ function startPhysicsServer() {
 // Start game server
 function startGameServer() {
 	console.log('Starting game server...');
-	var cmd = 'grunt production:' + config.productionMode;
+	var cmd = 'grunt cosmos:' + config.productionMode;
 	var cwd = '.';
 	exec(cmd, {cwd: cwd}, function(err, stdout, stderr){
 		printOutput(err, stdout, stderr);
@@ -122,7 +126,7 @@ function startGameServer() {
 // Start express server
 function startExpressServer() {
 	console.log('Starting express server...');
-	var cmd = 'grunt production:' + config.productionMode;
+	var cmd = 'grunt cosmos:' + config.productionMode;
 	var cwd = 'client';
 	exec(cmd, {cwd: cwd}, function(err, stdout, stderr){
 		printOutput(err, stdout, stderr);

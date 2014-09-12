@@ -15,7 +15,10 @@ var express = require('express'),
 	FacebookStrategy = require('passport-facebook').Strategy;
 
 // Parse commmand line options
-if (argv['local']) {
+if (argv['localNoCompile']) {
+	global.config = require('./configs/configLocalNoCompile');
+}
+else if (argv['local']) {
 	global.config = require('./configs/configLocal');
 }
 else if (argv['dev']) {
@@ -27,7 +30,8 @@ else if (argv['preview']) {
 else {
 	console.log('No configuration specified, defaulting to local no compile ' +
 		'configuration.');
-	console.log('Available configurations are: --local --dev --preview');
+	console.log('Available configurations are: --localNoCompile --local --dev ' +
+		'--preview');
 	global.config = require('./configs/configLocalNoCompile');
 }
 
@@ -59,7 +63,7 @@ passport.deserializeUser(function (obj, done) {
 	done(null, obj);
 });
 
-/**
+/*
  * Use the Microsoft account login strategy
  */
 passport.use(new MicrosoftStrategy({
@@ -81,6 +85,9 @@ passport.use(new MicrosoftStrategy({
 	}
 ));
 
+/*
+ * Use the Facebook account login strategy
+ */
 passport.use(new FacebookStrategy({
 		clientID: global.config.facebookAppId,
 		clientSecret: global.config.facebookAppSecret,
@@ -100,6 +107,9 @@ passport.use(new FacebookStrategy({
 	}
 ));
 
+/*
+ * Use the Google account login strategy
+ */
 passport.use(new GoogleStrategy({
 		clientID: GOOGLE_CLIENT_ID,
 		clientSecret: GOOGLE_CLIENT_SECRET,
