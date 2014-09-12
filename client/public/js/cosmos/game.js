@@ -21313,7 +21313,7 @@ var ConstructionOverlay = IgeEntity.extend({
 			return;
 		}
 
-		var clickLocation = this._structure.locationForClick(event, control);
+		var clickLocation = this._structure.gridLocationForEvent(event, control);
 
 		var location = {
 			x: clickLocation.x - this.lowerBound().x,
@@ -21566,21 +21566,16 @@ var Block = IgeEntity.extend({
 			//this.compositeCache(true);
 			//this.cacheSmoothing(true);
 		}
-
-		// We only need to handle user input on the client.
-		/*
-		if (ige.client) {
-			this.mouseOver(this._mouseOverHandler);
-			this.mouseOut(this._mouseOutHandler);
-		}
-		*/
 	},
 
 	/*
-	* When the mouse hovers over a block, add the deconstructionIndicator effect
-	* IF the block is part of the player's current ship
-	* AND the player is in construction mode.
-	*/
+	 * When the mouse hovers over a block, add the deconstructionIndicator effect
+	 * IF the block is part of the player's current ship
+	 * AND the player is in construction mode.
+	 * Note that this handler is called by ship.js and it's *not* actually plugged
+	 * directly into IGE's input handler system
+	 * The reason for this is that IGE's mouse over and mouse out are axis-aligned
+	 */
 	_mouseOverHandler: function (event, control) {
 		if (
 			// You can only deconstruct your own ship
@@ -21594,6 +21589,9 @@ var Block = IgeEntity.extend({
 
 	/*
 	 * When the mouse leaves a block, remove the deconstructionIndicator effect
+	 * Note that this handler is called by ship.js and it's *not* actually plugged
+	 * directly into IGE's input handler system
+	 * The reason for this is that IGE's mouse over and mouse out are axis-aligned
 	 */
 	_mouseOutHandler: function (event, control) {
 		if (this.gridData.grid === ige.client.player.currentShip()) {
@@ -23317,7 +23315,7 @@ if (typeof(module) !== "undefined" && typeof(module.exports) !== "undefined") {
 	 * @private
 	 * @instance
 	 */
-	locationForClick: function(event, control) {
+	gridLocationForEvent: function(event, control) {
 		// event.igeBaseX and event.igeBaseY give coordinates relative to the clicked entity's origin (center)
 
 		// The position of the click in world coordinates
@@ -23367,7 +23365,7 @@ if (typeof(module) !== "undefined" && typeof(module.exports) !== "undefined") {
 	},
 
 	_blockForClick: function(event, control) {
-		var location = this.locationForClick(event, control);
+		var location = this.gridLocationForEvent(event, control);
 
 		return this.get(location)[0];
 	},
@@ -28357,17 +28355,14 @@ var Ship = BlockStructure.extend({
 	},
 
 	_mouseMoveHandler: function(event, control) {
-		var currentMouseGridLocation = this.locationForClick(event, control);
-		console.log(currentMouseGridLocation);
-		console.log(this._prevGridLocationForMouse);
-		if (this._prevGridLocationForMouse !== currentMouseGridLocation) {
+		var currentMouseGridLocation = this.gridLocationForEvent(event, control);
+		
+		if (!(this._prevGridLocationForMouse.compare(currentMouseGridLocation))) {
 
 			if (this.get(this._prevGridLocationForMouse).length > 0) {
-				console.log("mouse out");
 				this.get(this._prevGridLocationForMouse)[0]._mouseOutHandler();
 			}
 			if (this.get(currentMouseGridLocation).length > 0) {
-				console.log("mouse over");
 				this.get(currentMouseGridLocation)[0]._mouseOverHandler();
 			}
 
