@@ -159,12 +159,23 @@ var Ship = BlockStructure.extend({
 		if (ige.isClient) {
 			this._prevGridLocationForMouse = new IgePoint2d(0, 0);
 			this.mouseMove(this._mouseMoveHandler);
+			this.mouseOut(this._mouseOutHandler);
+		}
+	},
+
+	/*
+	 * When you move your mouse off of the ship, let the block that has the
+	 * deconstruction indicator know that it should remove it.
+	 */
+	_mouseOutHandler: function(event, control) {
+		if (this.get(this._prevGridLocationForMouse).length > 0) {
+			this.get(this._prevGridLocationForMouse)[0]._mouseOutHandler();
 		}
 	},
 
 	_mouseMoveHandler: function(event, control) {
 		var currentMouseGridLocation = this.gridLocationForEvent(event, control);
-		
+
 		if (!(this._prevGridLocationForMouse.compare(currentMouseGridLocation))) {
 
 			if (this.get(this._prevGridLocationForMouse).length > 0) {
