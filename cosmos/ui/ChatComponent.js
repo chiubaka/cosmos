@@ -103,6 +103,18 @@ var ChatComponent = ButtonComponent.extend({
 			self.messageInputs.keydown(function(e) {
 				e.stopPropagation();
 			});
+
+			var messageInputs = $('.message-form-wrapper input.field');
+			var newInput = messageInputs.last();
+			newInput.focus(function() {
+				var focusedInput = $(this);
+				$('#igeFrontBuffer').on('click.chatFocused', function() {
+					focusedInput.blur();
+				});
+			});
+			newInput.focusout(function() {
+				$('#igeFrontBuffer').off('click.chatFocused');
+			});
 		});
 	},
 
