@@ -5,7 +5,7 @@
 ##############################
 
 # Ignore compiled game file
-game.js
+client/public/js/cosmos/game.js
 
 ### IGE Specific gitignore ###
 ##############################
