@@ -648,7 +648,7 @@ var BlockGrid = IgeEntity.extend({
 	 * @private
 	 * @instance
 	 */
-	locationForClick: function(event, control) {
+	gridLocationForEvent: function(event, control) {
 		// event.igeBaseX and event.igeBaseY give coordinates relative to the clicked entity's origin (center)
 
 		// The position of the click in world coordinates
@@ -698,7 +698,7 @@ var BlockGrid = IgeEntity.extend({
 	},
 
 	_blockForClick: function(event, control) {
-		var location = this.locationForClick(event, control);
+		var location = this.gridLocationForEvent(event, control);
 
 		return this.get(location)[0];
 	},

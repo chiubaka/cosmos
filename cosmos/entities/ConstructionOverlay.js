@@ -183,7 +183,7 @@ var ConstructionOverlay = IgeEntity.extend({
 			return;
 		}
 
-		var clickLocation = this._structure.locationForClick(event, control);
+		var clickLocation = this._structure.gridLocationForEvent(event, control);
 
 		var location = {
 			x: clickLocation.x - this.lowerBound().x,

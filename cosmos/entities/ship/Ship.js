@@ -163,7 +163,7 @@ var Ship = BlockStructure.extend({
 	},
 
 	_mouseMoveHandler: function(event, control) {
-		var currentMouseGridLocation = this.locationForClick(event, control);
+		var currentMouseGridLocation = this.gridLocationForEvent(event, control);
 		
 		if (!(this._prevGridLocationForMouse.compare(currentMouseGridLocation))) {
 
