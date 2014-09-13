@@ -29,26 +29,26 @@ var Drop = BlockGrid.extend({
 	 */
 	_attractedTo: undefined,
 
-	init: function(opts) {
-		opts = opts || {};
+	init: function(data) {
+		data = data || {};
 		var self = this;
 		// To change owner after initialization, use setOwner()
-		this._owner = opts.owner;
+		this._owner = data.owner;
 		this.category(Drop.BOX2D_CATEGORY_BITS);
 
 		if (ige.isServer) {
-			opts.physicsBody = {};
-			opts.physicsBody.bodyDef = {
+			data.physicsBody = {};
+			data.physicsBody.bodyDef = {
 				bodyCategory: Drop.BOX2d_CATEGORY,
-				linkedId: opts.owner.id()
+				linkedId: data.owner.id()
 			};
-			opts.physicsBody.fixtureFilter = {
+			data.physicsBody.fixtureFilter = {
 				categoryBits: Drop.BOX2D_CATEGORY_BITS,
 				maskBits: Ship.ATTRACTOR_BOX2D_CATEGORY_BITS | Ship.BOX2D_CATEGORY_BITS
 			};
 		}
 
-		BlockGrid.prototype.init.call(this, opts);
+		BlockGrid.prototype.init.call(this, data);
 
 		this.depth(Drop.DEPTH);
 		this.height(Block.HEIGHT);
