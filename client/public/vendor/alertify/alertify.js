@@ -82,8 +82,8 @@
 			 * @type {Object}
 			 */
 			labels : {
-				ok     : "OK",
-				cancel : "Cancel"
+				ok     : "Yes",
+				cancel : "No"
 			},
 
 			/**
@@ -96,7 +96,7 @@
 			 * Whether buttons are reversed (default is secondary/primary)
 			 * @type {Boolean}
 			 */
-			buttonReverse : false,
+			buttonReverse : true,
 
 			/**
 			 * Which button should be focused by default
