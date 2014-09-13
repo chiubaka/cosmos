@@ -66,7 +66,7 @@ var Drop = BlockGrid.extend({
 				if (self.alive()) {
 					self.setOwner(undefined);
 				}
-			}, Drop.OWNERSHIP_PERIOD)
+			}, Drop.OWNERSHIP_PERIOD);
 		}
 	},
 
