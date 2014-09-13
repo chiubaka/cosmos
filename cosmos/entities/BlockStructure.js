@@ -1,7 +1,9 @@
 /**
- * The BlockStructure extends the {@link BlockGrid} to provide functionality (like mining and constructing) for
+ * The BlockStructure extends the {@link BlockGrid} to provide functionality
+ * (like mining and constructing) for
  * structures made out of blocks in the game (e.g. ships, asteroids, etc.).
- * It is necessary that this functionality be separated out from the {@link BlockGrid} because the {@link BlockGrid}
+ * It is necessary that this functionality be separated out from the
+ * {@link BlockGrid} because the {@link BlockGrid}
  * is meant to act as just a data structure and nothing else.
  * @class
  * @typedef {BlockGrid} BlockStructure
@@ -11,7 +13,8 @@ var BlockStructure = BlockGrid.extend({
 	classId: 'BlockStructure',
 
 	/**
-	 * Construction zone overlay for showing and hiding locations that players can click on in order to place a block
+	 * Construction zone overlay for showing and hiding locations that players can
+	 * click on in order to place a block
 	 * on an existing structure.
 	 * @type {ConstructionOverlay}
 	 * @memberof BlockStructure
@@ -24,7 +27,8 @@ var BlockStructure = BlockGrid.extend({
 	 */
 	_enableRefresh: undefined,
 	/**
-	 * Controls whether or not Construction Overlay is refreshed during streamSectionData.
+	 * Controls whether or not Construction Overlay is
+	 * refreshed during streamSectionData.
 	 */
 	_needsRefresh: undefined,
 
@@ -37,11 +41,11 @@ var BlockStructure = BlockGrid.extend({
 			// These are default values for the category and mask of a BlockStructure.
 			// Subclasses can override these by setting their own.
 			data.physicsBody.fixtureFilter = data.physicsBody.fixtureFilter || {
-				categoryBits: data.physicsBody.categoryBits
-					|| BlockStructure.BOX2D_CATEGORY_BITS,
-				maskBits: data.physicsBody.maskBits
-					|| (0xffff & ~(1 << Drop.BOX2D_CATEGORY_BITS))
-			}
+				categoryBits: data.physicsBody.categoryBits ||
+					BlockStructure.BOX2D_CATEGORY_BITS,
+				maskBits: data.physicsBody.maskBits ||
+					(0xffff & ~(1 << Drop.BOX2D_CATEGORY_BITS))
+			};
 		}
 
 		BlockGrid.prototype.init.call(this, data);
@@ -110,16 +114,19 @@ var BlockStructure = BlockGrid.extend({
 	},
 
 	/**
-	 * Overrides {@link BlockGrid#_blockClickHandler}. Does logical checks to make sure that a {@link Block} can be
+	 * Overrides {@link BlockGrid#_blockClickHandler}. Does logical checks to make
+	 * sure that a {@link Block} can be
 	 * clicked before passing the click event down to the {@link Block} itself.
 	 * @param block {Block} The {@link Block} that has been clicked.
-	 * @param event {Object} The event data about the click. SHOULD NOT BE TRUSTED FOR POSITIONAL DATA because the
+	 * @param event {Object} The event data about the click.
+	 * SHOULD NOT BE TRUSTED FOR POSITIONAL DATA because the
 	 * {@link BlockGrid} does not update these before passing them down.
 	 * @param control {Object} The control object associated with the click.
 	 * @memberof BlockStructure
 	 * @private
 	 * @instance
-	 * @todo Don't make the assumption that mouseDown on a {@link BlockStructure} means mining a {@link Block}.
+	 * @todo Don't make the assumption that mouseDown on a {@link BlockStructure}
+	 * means mining a {@link Block}.
 	 */
 	_blockClickHandler: function(block, event, control) {
 		block.mouseDown(event, control);
