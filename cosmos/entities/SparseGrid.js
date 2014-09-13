@@ -496,7 +496,7 @@ var SparseGrid = IgeClass.extend({
 				var num = parseInt(key);
 				self._upperBound.y = Math.max(self._upperBound.y, num);
 				self._lowerBound.y = Math.min(self._lowerBound.y, num);
-			})
+			});
 		});
 	}
 });
