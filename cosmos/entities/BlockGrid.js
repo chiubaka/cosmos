@@ -114,8 +114,8 @@ var BlockGrid = IgeEntity.extend({
 
 			// Specify initial starting location of physics body
 			if (data && data.translate) {
-				this.physicsBody.bodyDef['x'] = data.translate.x;
-				this.physicsBody.bodyDef['y'] = data.translate.y;
+				this.physicsBody.bodyDef.x = data.translate.x;
+				this.physicsBody.bodyDef.y = data.translate.y;
 			}
 
 			// Add the BlockGrid's default body properties without overwriting
@@ -282,8 +282,9 @@ var BlockGrid = IgeEntity.extend({
 			}
 
 			if (!(block instanceof Block)) {
-				this.log('BlockGrid#processActionClient: non-block entity ID received: '
-					+ block.classId(), 'error');
+				this.log(
+					'BlockGrid#processActionClient: non-block entity ID received: ' +
+					block.classId(), 'error');
 			}
 
 			block.process(data);
@@ -350,6 +351,7 @@ var BlockGrid = IgeEntity.extend({
 				else {
 					return false;
 				}
+				break;
 			default:
 				return false;
 		}
@@ -538,7 +540,6 @@ var BlockGrid = IgeEntity.extend({
 			default:
 				return IgeEntity.prototype.streamSectionData
 					.call(this, sectionId, data, bypassTimeStream);
-				break;
 		}
 	},
 
@@ -620,7 +621,7 @@ var BlockGrid = IgeEntity.extend({
 			categoryBits: this.physicsBody.fixtureFilter.categoryBits,
 			maskBits: this.physicsBody.fixtureFilter.maskBits,
 			groupIndex: this.physicsBody.fixtureFilter.groupIndex
-		}
+		};
 	},
 
 	/**
@@ -820,8 +821,8 @@ var BlockGrid = IgeEntity.extend({
 		};
 
 		// Do nothing if nothing has changed.
-		if (this._oldGridCenter && this._oldGridCenter.x === this._gridCenter.x
-			&& this._oldGridCenter.y === this._gridCenter.y) {
+		if (this._oldGridCenter && this._oldGridCenter.x === this._gridCenter.x &&
+			this._oldGridCenter.y === this._gridCenter.y) {
 			return;
 		}
 
@@ -835,12 +836,9 @@ var BlockGrid = IgeEntity.extend({
 					y: this._gridCenter.y - this._oldGridCenter.y
 				};
 
-				var theta = this.rotate().z();
+				var rotatedPhysicsTranslation = MathUtils.rotate(physicsTranslation, this.rotate().z());
 
-				var rotatedEntityTranslation = MathUtils.rotate(physicsTranslation, theta);
-
-				this.translate().x(this.translate().x() + rotatedEntityTranslation.x);
-				this.translate().y(this.translate().y() + rotatedEntityTranslation.y);
+				this.translateBy(rotatedPhysicsTranslation.x, rotatedPhysicsTranslation.y, 0);
 			}
 		}
 		// #else
@@ -860,9 +858,7 @@ var BlockGrid = IgeEntity.extend({
 					y: -renderTranslation.y
 				};
 
-				var theta = this.rotate().z();
-
-				var rotatedEntityTranslation = MathUtils.rotate(entityTranslation, theta);
+				var rotatedEntityTranslation = MathUtils.rotate(entityTranslation, this.rotate().z());
 
 				this.translateBy(rotatedEntityTranslation.x, rotatedEntityTranslation.y, 0);
 			}
@@ -895,7 +891,7 @@ BlockGrid.BLOCK_FIXTURE_RESTITUTION = 0.5;
  * @constant {number}
  * @memberof BlockGrid
  */
-BlockGrid.BLOCK_FIXTURE_PADDING = .1;
+BlockGrid.BLOCK_FIXTURE_PADDING = 0.1;
 
 BlockGrid.coordinatesForBlock = function(block) {
 	var loc = block.gridData.loc;
@@ -918,7 +914,7 @@ BlockGrid.coordinatesForLocation = function(loc) {
 		x: Block.WIDTH * loc.x,
 		// Translates to the vertical center of the location.
 		y: Block.HEIGHT * loc.y
-	}
+	};
 };
 
 if (typeof(module) !== "undefined" && typeof(module.exports) !== "undefined") {
