@@ -438,6 +438,11 @@ var TutorialQuest = Quest.extend({
 				setTimeout(function() {craftingWindow.unpinRecipeTooltip(
 					recipeName)}, msgTimeout);
 
+				var listener = craftingWindow.on("closed", function () {
+					craftingWindow.unpinRecipeTooltip(recipeName);
+					craftingWindow.off("closed", listener);
+				});
+
 				// Inform the player what they need to collect
 
 				var cargoAddListener = playerCargo.on("add", updateReactantCounts,
