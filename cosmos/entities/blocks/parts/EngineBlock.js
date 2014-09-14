@@ -64,7 +64,7 @@ var EngineBlock = Part.extend({
 	 * @instance
 	 */
 	_addEngineParticlesEffect: function() {
-		this._effects['engineParticles'] = new IgeParticleEmitter()
+		this._effects.engineParticles = new IgeParticleEmitter()
 			// Set the particle entity to generate for each particle
 			.particle(EngineParticle)
 			// Set particle life to 300ms
@@ -81,7 +81,7 @@ var EngineBlock = Part.extend({
 			// Mount new particles to the object scene
 			.particleMountTarget(ige.client.spaceGameScene)
 			.start();
-		this._mountEffect(this._effects['engineParticles'], false);
+		this._mountEffect(this._effects.engineParticles, false);
 	},
 
 	/**
@@ -91,9 +91,9 @@ var EngineBlock = Part.extend({
 	 * @instance
 	 */
 	_removeEngineParticlesEffect: function() {
-		if (this._effects['engineParticles'] !== undefined) {
-			this._effects['engineParticles'].destroy();
-			delete this._effects['engineParticles'];
+		if (this._effects.engineParticles !== undefined) {
+			this._effects.engineParticles.destroy();
+			delete this._effects.engineParticles;
 		}
 	}
 });
