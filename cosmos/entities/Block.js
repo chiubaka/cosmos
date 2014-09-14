@@ -368,14 +368,14 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	_addGlowEffect: function(effect) {
-		if (this._effects['glow'] !== undefined) {
-			this._effects['glow'].destroy();
+		if (this._effects.glow !== undefined) {
+			this._effects.glow.destroy();
 		}
 
 		var effectsCenter = this._effectsCenter();
 
-		this._effects['glow'] = new GlowEffect(effect);
-		this._mountEffect(this._effects['glow'], false);
+		this._effects.glow = new GlowEffect(effect);
+		this._mountEffect(this._effects.glow, false);
 	},
 
 	_effectsAboveContainer: function() {
@@ -405,9 +405,9 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	_removeGlowEffect: function() {
-		if (this._effects['glow'] !== undefined) {
-			this._effects['glow'].destroy();
-			delete this._effects['glow'];
+		if (this._effects.glow !== undefined) {
+			this._effects.glow.destroy();
+			delete this._effects.glow;
 		}
 	},
 
@@ -420,24 +420,24 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	_addMiningParticles: function() {
-		if (this._effects['miningParticles'] === undefined) {
-			this._effects['miningParticles'] = {
+		if (this._effects.miningParticles === undefined) {
+			this._effects.miningParticles = {
 				counter: 0,
 				particleEmitter: undefined
 			};
 		}
 
-		this._effects['miningParticles'].counter++;
-		if (!this._effects['miningParticles'].particleEmitter) {
-			this._effects['miningParticles'].particleEmitter = new BlockParticleEmitter();
-			this._mountEffect(this._effects['miningParticles'].particleEmitter, true);
+		this._effects.miningParticles.counter++;
+		if (!this._effects.miningParticles.particleEmitter) {
+			this._effects.miningParticles.particleEmitter = new BlockParticleEmitter();
+			this._mountEffect(this._effects.miningParticles.particleEmitter, true);
 		}
 	},
 
 	_addHealthBar: function() {
-		if (this._effects['healthBar'] === undefined) {
-			this._effects['healthBar'] = new HealthBar(this);
-			this._mountEffect(this._effects['healthBar'], true);
+		if (this._effects.healthBar === undefined) {
+			this._effects.healthBar = new HealthBar(this);
+			this._mountEffect(this._effects.healthBar, true);
 		}
 	},
 
@@ -450,11 +450,11 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	_removeMiningParticles: function() {
-		this._effects['miningParticles'].counter--;
+		this._effects.miningParticles.counter--;
 
-		if (this._effects['miningParticles'].counter === 0) {
-			this._effects['miningParticles'].particleEmitter.destroy();
-			delete this._effects['miningParticles'];
+		if (this._effects.miningParticles.counter === 0) {
+			this._effects.miningParticles.particleEmitter.destroy();
+			delete this._effects.miningParticles;
 		}
 	},
 
@@ -466,8 +466,8 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	_removeHealthBar: function() {
-		this._effects['healthBar'].destroy();
-		delete this._effects['healthBar'];
+		this._effects.healthBar.destroy();
+		delete this._effects.healthBar;
 	},
 
 	/**
@@ -553,7 +553,7 @@ var Block = IgeEntity.extend({
 			id: this.id(),
 			type: this.classId(),
 			gridData: this.gridData.toJSON()
-		}
+		};
 	},
 
 	worldCoordinates: function() {
@@ -606,7 +606,7 @@ Block.displayNameFromClassId = function(classId) {
 	var displayName = "";
 	for (var i = 0; i < tokens.length - 1; i++) {
 		var token = tokens[i];
-		if (i != 0) {
+		if (i !== 0) {
 			displayName += " ";
 		}
 		displayName += token;
