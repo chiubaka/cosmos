@@ -26,6 +26,7 @@ var WindowComponent = ButtonComponent.extend({
 			self.button.click(function(event) {
 				if (self.button.hasClass('active')) {
 					self.close();
+					self.emit('closed');
 				}
 				else {
 					self.open();
