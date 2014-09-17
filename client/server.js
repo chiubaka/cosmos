@@ -223,18 +223,6 @@ app.get(GOOGLE_AUTH_ROUTE,
 app.get(GOOGLE_CALLBACK,
 	passport.authenticate('google', { failureRedirect: '/login' }),
 	function(req, res) {
-
-		// Note that the client could be sending us bogus information,
-		// because we're just trusting that his request has not been tampered with
-		analytics.identify({
-			userId: req.sessionID,
-		  traits: {
-		    //name: 'Michael Bolton',
-		    email: req.user.emails[0].value,
-		    createdAt: new Date()
-		  }
-		});
-
 		// Successful authentication, redirect home.
 		res.redirect(SUCCESS_REDIRECT_PATH);
 	}
