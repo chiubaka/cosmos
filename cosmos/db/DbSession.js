@@ -24,10 +24,7 @@ var DbSession = {
 				var session = JSON.parse(doc.session);
 
 				if (session.passport && session.passport.user && session.passport.user.id) {
-					// Alias the user formerly referred to by his session id
-					// to now be referred to by his user id
 					callback(err, session.passport.user.id);
-
 				} else {
 					callback(err);
 				}
