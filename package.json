@@ -10,7 +10,6 @@
     }
   ],
   "dependencies": {
-    "analytics-node": "^1.1.0",
     "grunt": "~0.4.5",
     "grunt-cli": "~0.1.13",
     "grunt-dust": "~0.9.1",
