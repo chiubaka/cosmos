@@ -87,14 +87,6 @@ var ServerNetworkEvents = {
 					ige.log('Cannot load player from database!', 'error');
 				}
 
-				var Analytics = require('analytics-node');
-				var analytics = new Analytics('sxucdidih4');
-				analytics.alias({
-				  previousId: username,
-				  userId: playerId,
-				  context: {}
-				});
-
 				ige.server._createPlayer(clientId, playerId, username, ship, cargo);
 			});
 		});
