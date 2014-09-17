@@ -1,8 +1,6 @@
 /**
  * Module dependencies.
  */
-var Analytics = require('analytics-node');
-var analytics = new Analytics('sxucdidih4');
 
 var express = require('express'),
 	routes = require('./routes'),
@@ -124,7 +122,6 @@ passport.use(new GoogleStrategy({
 			// to associate the Google account with a user record in your database,
 			// and return that user instead.
 			profile.provider = "Google";
-
 			return done(null, profile);
 		});
 	}
