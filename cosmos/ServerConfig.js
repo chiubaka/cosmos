@@ -7,9 +7,6 @@ var config = {
 		/* Initialization */
 		{ name: 'GameInit', path: './init/GameInit' },
 
-		/* Metrics */
-		{ name: 'MetricsHandler', path: './utils/MetricsHandler' },
-
 		/* Network */
 		{ name: 'ServerNetworkEvents', path: './ServerNetworkEvents' },
 
