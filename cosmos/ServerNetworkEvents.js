@@ -248,41 +248,6 @@ var ServerNetworkEvents = {
 		weapon.fireServer(data);
 	},
 
-	// TODO: User access control. Restrict what players can do based on clientId
-	// TODO: Guard against undefined blocks (do not trust client) so server doesn't crash
-	_onMineBlock: function(data, clientId) {
-		var player = ige.server.players[clientId];
-		if (player === undefined) {
-			return;
-		}
-
-		if (!player.currentShip().canMine()) {
-			return;
-		}
-
-		// TODO: Guard against bogus blockGridId from client
-		var blockGrid = ige.$(data.blockGridId);
-		if (blockGrid === undefined) {
-			return;
-		}
-
-		var targetBlock = blockGrid.get(new IgePoint2d(data.col, data.row))[0];
-
-		// don't let players mine their own bridge block
-		if (targetBlock === player.currentShip().bridgeBlocks()[0]) {
-			//TODO tell the player that they shouldn't mine their own bridge block
-			return;
-		}
-
-		data.action = 'mine';
-		if(blockGrid.processBlockActionServer(data, player)) {
-			player.currentShip().mining = true;
-
-			// Activate lasers
-			player.currentShip().fireMiningLasers(targetBlock);
-		}
-	},
-
 	_onConstructNew: function(data, clientId) {
 		var player = ige.server.players[clientId];
 		if (player === undefined) {
@@ -335,16 +300,20 @@ var ServerNetworkEvents = {
 			return;
 		}
 
-		var blockGrid = ige.$(data.blockGridId);
+		var block = ige.$(data.blockId);
+		var blockGrid = block.gridData.grid;
+
 		if (blockGrid === player.currentShip()) {
-			if (blockGrid.get(new IgePoint2d(data.col, data.row))[0].classId() !== "BridgeBlock") {
+			if (block.classId() !== "BridgeBlock") {
 
 				data.action = 'remove';
 				var blocksRemoved = blockGrid.processBlockActionServer(data, player);
 
-				DbPlayer.update(player.id(), player, function() {});
+				if (blocksRemoved && blocksRemoved.length > 0) {
+					DbPlayer.update(player.id(), player, function() {});
 
-				var extractedBlocks = player.currentShip().cargo.addBlock(blocksRemoved[0].classId());
+					player.currentShip().cargo.add(blocksRemoved[0].classId());
+				}
 			}
 			else {
 				// Let the user know that they can't deconstruct their own bridge

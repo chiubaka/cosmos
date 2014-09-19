@@ -50,8 +50,6 @@ var Server = IgeClass.extend({
 						/* This is called when a player clicks the new ship button */
 						ige.network.define('new ship', self._onNewShipRequest);
 
-						/* This is called when a player clicks on a block */
-						ige.network.define('mineBlock', self._onMineBlock);
 						ige.network.define('cosmos:Weapon.fire', self._fire);
 						/* This is called when a player clicks on the background. */
 						ige.network.define('constructNew', self._onConstructNew);

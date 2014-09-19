@@ -122,6 +122,10 @@ var ConstructCapability = Capability.extend({
 	*/
 	Block_mouseDown: function(sender, event, data) {
 		ige.client.metrics.track('cosmos:construct.attempt.deconstruct');
+
+		data = {
+			blockId: sender.id()
+		};
 		ige.network.send('deconstructionZoneClicked', data);
 	},
 

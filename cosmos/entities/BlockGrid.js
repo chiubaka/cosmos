@@ -273,6 +273,8 @@ var BlockGrid = IgeEntity.extend({
 	 * @instance
 	 */
 	processActionClient: function(data) {
+		var self = this;
+
 		// If an ID is provided, it should be the ID of a block that must perform some action.
 		if (data.id) {
 			var block = ige.$(data.id);
@@ -293,10 +295,18 @@ var BlockGrid = IgeEntity.extend({
 		else {
 			switch (data.action) {
 				case 'remove':
-					this.remove(new IgePoint2d(data.loc.x, data.loc.y));
-					if (this.count() === 0) {
-						this.destroy();
+					var block = ige.$(data.blockId);
+					
+					if (block) {
+						var result = self.remove(new IgePoint2d(block.gridData.loc.x, block.gridData.loc.y));
+
+						if (result) {
+							if (this.count() === 0) {
+								this.destroy();
+							}
+						}
 					}
+
 					break;
 				case 'put':
 					var block = Block.fromJSON(data.block);
@@ -326,10 +336,20 @@ var BlockGrid = IgeEntity.extend({
 
 		switch (data.action) {
 			case 'remove':
-				if (this.count() === 0) {
-					this.destroy();
+				var block = ige.$(data.blockId);
+				if (block) {
+					var result = self.remove(new IgePoint2d(block.gridData.loc.x, block.gridData.loc.y));
+
+					if (result) {
+						if (this.count() === 0) {
+							this.destroy();
+						}
+
+						self.actions().push(data);
+					}
 				}
-				return true;
+
+				return result;
 			case 'add':
 				var location = new IgePoint2d(data.col, data.row);
 
@@ -637,7 +657,7 @@ var BlockGrid = IgeEntity.extend({
 	 * @private
 	 * @instance
 	 */
-	locationForClick: function(event, control) {
+	gridLocationForEvent: function(event, control) {
 		// event.igeBaseX and event.igeBaseY give coordinates relative to the clicked entity's origin (center)
 
 		// The position of the click in world coordinates
@@ -687,7 +707,7 @@ var BlockGrid = IgeEntity.extend({
 	},
 
 	_blockForClick: function(event, control) {
-		var location = this.locationForClick(event, control);
+		var location = this.gridLocationForEvent(event, control);
 
 		return this.get(location)[0];
 	},
@@ -894,7 +914,7 @@ BlockGrid.BLOCK_FIXTURE_RESTITUTION = 0.5;
 BlockGrid.BLOCK_FIXTURE_PADDING = 0.1;
 
 BlockGrid.coordinatesForBlock = function(block) {
-	var loc = block.gridData.loc;
+	var loc = new IgePoint2d(block.gridData.loc.x, block.gridData.loc.y);
 
 	var coordinates = BlockGrid.coordinatesForLocation(loc);
 

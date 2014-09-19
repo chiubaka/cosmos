@@ -60,6 +60,11 @@ var MineCapability = Capability.extend({
 	 * @instance
 	 */
 	Block_mouseDown: function(sender, event, data) {
+		data = {
+			x: sender.mousePosWorld().x,
+			y: sender.mousePosWorld().y
+		};
+
 		_.forEach(ige.client.player.currentShip().weapons(), function(weapon) {
 			weapon.fireClient(data);
 		});
@@ -68,9 +73,7 @@ var MineCapability = Capability.extend({
 			ige.client.metrics.track('cosmos:block.attack', {'type': sender.classId()});//note that this includes when you mine yourself
 		} else {
 			ige.client.metrics.track('cosmos:block.mine', {'type': sender.classId()});
-		}
-
-		ige.network.send('mineBlock', data);*/
+		}*/
 	},
 
 	/**

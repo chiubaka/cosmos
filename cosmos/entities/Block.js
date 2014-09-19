@@ -59,7 +59,8 @@ var Block = IgeEntity.extend({
 			|| this.classId() === "Laser"
 			|| this.classId() === "Resource"
 			// TODO: The Element class won't be abstract soon!
-			|| this.classId() === "Element";
+			|| this.classId() === "Element"
+			|| this.classId() === "DeconstructionIndicator";//TODO this isn't really an abstract class...
 
 		if (data.health) {
 			this.addComponent(Health, data.health);
@@ -171,6 +172,37 @@ var Block = IgeEntity.extend({
 		}
 	},
 
+	/*
+	 * When the mouse hovers over a block, add the deconstructionIndicator effect
+	 * IF the block is part of the player's current ship
+	 * AND the player is in construction mode.
+	 * Note that this handler is called by ship.js and it's *not* actually plugged
+	 * directly into IGE's input handler system
+	 * The reason for this is that IGE's mouse over and mouse out are axis-aligned
+	 */
+	_mouseOverHandler: function (event, control) {
+		if (
+			// You can only deconstruct your own ship
+			this.gridData.grid === ige.client.player.currentShip() &&
+			// You can only deconstruct in Construct mode
+			ige.client.state.currentCapability().classId() === ConstructCapability.prototype.classId())
+		{
+			this.addEffect({type: 'deconstructionIndicator'});
+		}
+	},
+
+	/*
+	 * When the mouse leaves a block, remove the deconstructionIndicator effect
+	 * Note that this handler is called by ship.js and it's *not* actually plugged
+	 * directly into IGE's input handler system
+	 * The reason for this is that IGE's mouse over and mouse out are axis-aligned
+	 */
+	_mouseOutHandler: function (event, control) {
+		if (this.gridData.grid === ige.client.player.currentShip()) {
+			this.removeEffect({type: 'deconstructionIndicator'});
+		}
+	},
+
 	actions: function(newActions) {
 		if (newActions !== undefined) {
 			this._actions = newActions;
@@ -226,15 +258,9 @@ var Block = IgeEntity.extend({
 	 * @instance
 	 */
 	mouseDown: function(event, control) {
-		// TOOD: Synchronize block ID's between server and client so that we can uniquely identify
-		// a block without referring to its block grid, row, and col.
-		var data = {
-			x: this.mousePosWorld().x,
-			y: this.mousePosWorld().y
-		};
-
 		// TODO: Extend when clientState supports multiple current capabilities
 		if (ige.client.state !== undefined) {
+			var data = undefined;
 			ige.client.state.currentCapability().tryPerformAction(this, event, data);
 		}
 	},
@@ -260,6 +286,7 @@ var Block = IgeEntity.extend({
 	onRemove: function() {
 		if (ige.isClient) {
 			this.removeEffect({type: 'healthBar'});
+			this.removeEffect({type: 'deconstructionIndicator'});
 		}
 	},
 
@@ -288,6 +315,10 @@ var Block = IgeEntity.extend({
 				break;
 			case 'healthBar':
 				this._addHealthBar();
+				break;
+			case 'deconstructionIndicator':
+				this._addDeconstructionIndicator();
+				break;
 		}
 	},
 
@@ -297,10 +328,7 @@ var Block = IgeEntity.extend({
 
 		this.actions().push({
 			action: "remove",
-			loc: {
-				x: loc.x,
-				y: loc.y
-			}
+			blockId: this.id()
 		});
 
 		// Drop block server side, then send drop msg to client
@@ -343,6 +371,9 @@ var Block = IgeEntity.extend({
 				break;
 			case 'healthBar':
 				this._removeHealthBar();
+				break;
+			case "deconstructionIndicator":
+				this._removeDeconstructionIndicator();
 				break;
 		}
 	},
@@ -441,6 +472,13 @@ var Block = IgeEntity.extend({
 		}
 	},
 
+	_addDeconstructionIndicator: function() {
+		if (this._effects['deconstructionIndicator'] === undefined) {
+			this._effects['deconstructionIndicator'] = new DeconstructionIndicator(this);
+			this._mountEffect(this._effects['deconstructionIndicator'], true);
+		}
+	},
+
 	/**
 	 * Removes mining particles effect from this {@link Block}. If there are multiple people mining this {@link Block},
 	 * then the counter in the mining particles effect state may not go down to zero during this call, in which case
@@ -468,6 +506,13 @@ var Block = IgeEntity.extend({
 	_removeHealthBar: function() {
 		this._effects.healthBar.destroy();
 		delete this._effects.healthBar;
+	},
+
+	_removeDeconstructionIndicator: function() {
+		if (this._effects['deconstructionIndicator']) {
+			this._effects['deconstructionIndicator'].destroy();
+			delete this._effects['deconstructionIndicator'];
+		}
 	},
 
 	/**
