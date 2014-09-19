@@ -21,7 +21,6 @@ var Server = IgeClass.extend({
 		ige.addComponent(IgeMongoDbComponent, DbConfig.config);
 		ige.addComponent(IgeNetIoComponent);
 
-
 		// Add the server-side game methods / event handlers
 		this.implement(ServerNetworkEvents);
 
@@ -68,7 +67,7 @@ var Server = IgeClass.extend({
 						ige.network.define('confirm');
 
 						ige.network.define('shipEntity');
-						
+
 						ige.network.define('cosmos:player.username.set.request', Player.onUsernameRequested);
 						ige.network.define('cosmos:player.username.set.approve');
 						ige.network.define('cosmos:player.username.set.error');
