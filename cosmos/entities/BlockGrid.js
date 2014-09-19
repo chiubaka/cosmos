@@ -273,6 +273,8 @@ var BlockGrid = IgeEntity.extend({
 	 * @instance
 	 */
 	processActionClient: function(data) {
+		var self = this;
+
 		// If an ID is provided, it should be the ID of a block that must perform some action.
 		if (data.id) {
 			var block = ige.$(data.id);
@@ -292,12 +294,14 @@ var BlockGrid = IgeEntity.extend({
 		else {
 			switch (data.action) {
 				case 'remove':
-					var block = ige.$(data.blockId)
+					var block = ige.$(data.blockId);
 					if (block) {
-						this.remove(new IgePoint2d(block.gridData.loc.x, block.gridData.loc.y));
+						var result = self.remove(new IgePoint2d(block.gridData.loc.x, block.gridData.loc.y));
 
-						if (this.count() === 0) {
-							this.destroy();
+						if (result) {
+							if (this.count() === 0) {
+								this.destroy();
+							}
 						}
 					}
 
@@ -330,14 +334,17 @@ var BlockGrid = IgeEntity.extend({
 
 		switch (data.action) {
 			case 'remove':
-				var result = self.remove(ige.$(data.blockId).gridData.loc);
+				var block = ige.$(data.blockId);
+				if (block) {
+					var result = self.remove(new IgePoint2d(block.gridData.loc.x, block.gridData.loc.y));
 
-				if (result) {
-					if (this.count() === 0) {
-						this.destroy();
+					if (result) {
+						if (this.count() === 0) {
+							this.destroy();
+						}
+
+						self.actions().push(data);
 					}
-
-					self.actions().push(data);
 				}
 
 				return result;
