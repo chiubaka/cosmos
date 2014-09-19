@@ -295,6 +295,7 @@ var BlockGrid = IgeEntity.extend({
 			switch (data.action) {
 				case 'remove':
 					var block = ige.$(data.blockId);
+					
 					if (block) {
 						var result = self.remove(new IgePoint2d(block.gridData.loc.x, block.gridData.loc.y));
 

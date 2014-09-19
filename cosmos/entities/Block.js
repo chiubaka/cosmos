@@ -328,10 +328,7 @@ var Block = IgeEntity.extend({
 
 		this.actions().push({
 			action: "remove",
-			loc: {
-				x: loc.x,
-				y: loc.y
-			}
+			blockId: this.id()
 		});
 
 		// Drop block server side, then send drop msg to client

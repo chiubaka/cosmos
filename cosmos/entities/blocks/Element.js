@@ -112,10 +112,7 @@ var Element = Block.extend({
 
 		grid.actions().push({
 			action: "remove",
-			loc: {
-				x: loc.x,
-				y: loc.y
-			}
+			blockId: this.id()
 		});
 
 		// If this is a 1x1 element, we call
