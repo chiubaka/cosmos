@@ -139,7 +139,7 @@ var BlockStructureGenerator = {
 	_getBlockType: function(blockStructure, row, col, blockDistribution, dimensions) {
 		// Count up the neighbors
 		var valid = false;
-		var neighborCounts = [];
+		var neighborCounts = {};
 		for (var curRow = row - 1; curRow <= row + 1; curRow++) {
 			for (var curCol = col - 1; curCol <= col + 1; curCol++) {
 				if (curRow == row && curCol == col) {
@@ -149,7 +149,7 @@ var BlockStructureGenerator = {
 				if (blockStructure.get(new IgePoint2d(curCol, curRow)).length === 0) {
 					continue;
 				}
-				var blockType = blockStructure.get(new IgePoint2d(curCol, curRow))[0].classId()
+				var blockType = blockStructure.get(new IgePoint2d(curCol, curRow))[0].classId();
 
 				if (neighborCounts[blockType] === undefined) {
 					neighborCounts[blockType] = 0;
@@ -161,7 +161,7 @@ var BlockStructureGenerator = {
 		}
 
 		if (!valid) {
-			return this._getDefaultBlock();
+			return this._drawFromDistribution(blockDistribution, {gridWidth: 1, gridHeight: 1});
 		}
 
 		// Weight the block rarities so clusters of similar blocks are more likely.
@@ -237,16 +237,6 @@ var BlockStructureGenerator = {
 		} else {
 			return Block.fromType(type);
 		}
-	},
-
-	/**
-	 * Returns a new {@link Block} of the default type.
-	 * @returns {IceBlock} A new default block.
-	 * @memberof BlockStructureGenerator
-	 * @private
-	 */
-	_getDefaultBlock: function() {
-		return new IceBlock();
 	},
 
 	/**
