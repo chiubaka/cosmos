@@ -9,7 +9,8 @@ var express = require('express'),
 	path = require('path'),
 	passport = require('passport'),
 	session = require('express-session'),
-	MongoStore = require('connect-mongo')(session)
+	// TODO(ethong): Remove /es5 qualifier once we update nodejs version
+	MongoStore = require('connect-mongo/es5')(session)
 	MicrosoftStrategy = require('passport-windowslive').Strategy,
 	GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
 	FacebookStrategy = require('passport-facebook').Strategy;
@@ -140,7 +141,7 @@ app.configure(function () {
 	app.use(express.methodOverride());
 	app.use(express.session({
 		store: new MongoStore({
-			url: 'mongodb://cosmos-admin:CS210-l3on1ne!@ds030827.mongolab.com:30827/cosmos-dev-db'
+			url: 'mongodb://cosmos-admin:CS210-l3on1ne!@ds046939.mlab.com:46939/cosmos-dev-db'
 		}),
 		secret: "pleaseworkpleaseworkpleasework",
 		cookie: {

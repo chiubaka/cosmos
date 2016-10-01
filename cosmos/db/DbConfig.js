@@ -8,8 +8,8 @@ var DbConfig = {
 	config: {
 		user: 'cosmos-admin',
 		pass: 'CS210-l3on1ne!',
-		host: 'ds030827.mongolab.com',
-		port: '30827',
+		host: 'ds046939.mlab.com',
+		port: '46939',
 		dbName: 'cosmos-dev-db',
 		collection: 'players'
 	},
